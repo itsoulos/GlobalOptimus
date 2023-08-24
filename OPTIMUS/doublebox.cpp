@@ -1,6 +1,6 @@
 #include "doublebox.h"
 
-DoubleBox::DoubleBox()
+DoubleBox::DoubleBox(int min)
 {
     xx1= 0.0;
     xx2= 0.0;
@@ -9,6 +9,7 @@ DoubleBox::DoubleBox()
     oldBesty = 1e+100;
     variance = 0.0;
     stopat = 0.0;
+    miniters = min;
 }
 
 bool    DoubleBox::terminate(double value)
@@ -22,7 +23,7 @@ bool    DoubleBox::terminate(double value)
         stopat = variance/2.0;
     }
     iteration++;
-    return variance <=stopat;
+    return variance <=stopat && iteration>=miniters;
 }
 
 DoubleBox::~DoubleBox()

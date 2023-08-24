@@ -12,8 +12,9 @@ private:
     double oldBesty;
     double besty;
     int iteration;
+    int miniters;
 public:
-    DoubleBox();
+    DoubleBox(int miniters=5);
     bool terminate(double value);
     ~DoubleBox();
 };

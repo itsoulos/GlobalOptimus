@@ -13,6 +13,7 @@ private:
     Data bestx;
     double besty;
     int nsamples;
+    DoubleBox db;
 public:
     Multistart();
     virtual void init();
