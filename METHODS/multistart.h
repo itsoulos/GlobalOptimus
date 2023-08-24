@@ -3,7 +3,7 @@
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
-
+# include <OPTIMUS/doublebox.h>
 class Multistart : public Optimizer
 {
 private:

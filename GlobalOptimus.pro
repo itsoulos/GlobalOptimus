@@ -16,6 +16,7 @@ SOURCES += \
         LINESEARCH/linesearch.cpp \
         METHODS/multistart.cpp \
         OPTIMUS/collection.cpp \
+        OPTIMUS/doublebox.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     METHODS/gradientdescent.h \
     METHODS/multistart.h \
     OPTIMUS/collection.h \
+    OPTIMUS/doublebox.h \
     OPTIMUS/optimizer.h \
     OPTIMUS/parameter.h \
     OPTIMUS/problem.h \
