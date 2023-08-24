@@ -17,8 +17,8 @@ SOURCES += \
         optimizer.cpp \
         parameter.cpp \
         problem.cpp \
-        rastriginproblem.cpp \
-        test2nproblem.cpp
+        PROBLEMS/rastriginproblem.cpp \
+        PROBLEMS/test2nproblem.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -34,5 +34,5 @@ HEADERS += \
     optimizer.h \
     parameter.h \
     problem.h \
-    rastriginproblem.h \
-    test2nproblem.h
+    PROBLEMS/rastriginproblem.h \
+    PROBLEMS/test2nproblem.h
