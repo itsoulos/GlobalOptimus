@@ -1,6 +1,6 @@
 #ifndef TEST2NPROBLEM_H
 #define TEST2NPROBLEM_H
-# include <problem.h>
+# include <OPTIMUS/problem.h>
 
 class Test2nProblem : public Problem
 {

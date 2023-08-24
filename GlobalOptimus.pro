@@ -8,15 +8,18 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        armijosearch.cpp \
-        fibonaccisearch.cpp \
-        goldensearch.cpp \
-        gradientdescent.cpp \
-        linesearch.cpp \
+        LINESEARCH/armijosearch.cpp \
+        LINESEARCH/fibonaccisearch.cpp \
+        LINESEARCH/goldensearch.cpp \
+        METHODS/bfgs.cpp \
+        METHODS/gradientdescent.cpp \
+        LINESEARCH/linesearch.cpp \
+        METHODS/multistart.cpp \
+        OPTIMUS/collection.cpp \
         main.cpp \
-        optimizer.cpp \
-        parameter.cpp \
-        problem.cpp \
+        OPTIMUS/optimizer.cpp \
+        OPTIMUS/parameter.cpp \
+        OPTIMUS/problem.cpp \
         PROBLEMS/rastriginproblem.cpp \
         PROBLEMS/test2nproblem.cpp
 
@@ -26,13 +29,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    armijosearch.h \
-    fibonaccisearch.h \
-    goldensearch.h \
-    gradientdescent.h \
-    linesearch.h \
-    optimizer.h \
-    parameter.h \
-    problem.h \
+    LINESEARCH/armijosearch.h \
+    LINESEARCH/fibonaccisearch.h \
+    LINESEARCH/goldensearch.h \
+    LINESEARCH/linesearch.h \
+    METHODS/bfgs.h \
+    METHODS/gradientdescent.h \
+    METHODS/multistart.h \
+    OPTIMUS/collection.h \
+    OPTIMUS/optimizer.h \
+    OPTIMUS/parameter.h \
+    OPTIMUS/problem.h \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/test2nproblem.h

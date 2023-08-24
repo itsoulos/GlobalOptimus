@@ -1,6 +1,6 @@
 #ifndef RASTRIGINPROBLEM_H
 #define RASTRIGINPROBLEM_H
-# include <problem.h>
+# include <OPTIMUS/problem.h>
 
 class RastriginProblem : public Problem
 {
