@@ -31,7 +31,7 @@ bool    Multistart::terminated()
     double besty,worsty;
     minima.getBestWorstValues(besty,worsty);
 
-    if(db.terminate(besty)) return true;
+    if(doubleBox.terminate(besty)) return true;
     if(iteration>=maxiters) return true;
     return false;
 }

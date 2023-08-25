@@ -1654,8 +1654,6 @@ int Bfgs::zbfgs_(integer *n, double *x, integer *nact,
     integer i__1, i__2;
     double d__1, d__2;
 
-    /* Builtin functions */
-    double sqrt(double);
 
     /* Local variables */
      double temp, wcos, wsin;
@@ -1975,8 +1973,7 @@ int Bfgs::addcon_(integer *n, integer *m, double *a, integer *
     integer a_dim1, a_offset, i__1, i__2;
     double d__1, d__2;
 
-    /* Builtin functions */
-    double sqrt(double);
+
 
     /* Local variables */
      integer icon;

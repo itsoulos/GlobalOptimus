@@ -56,6 +56,7 @@ SOURCES       = LINESEARCH/armijosearch.cpp \
 		LINESEARCH/fibonaccisearch.cpp \
 		LINESEARCH/goldensearch.cpp \
 		METHODS/bfgs.cpp \
+		METHODS/genetic.cpp \
 		METHODS/gradientdescent.cpp \
 		LINESEARCH/linesearch.cpp \
 		METHODS/multistart.cpp \
@@ -71,6 +72,7 @@ OBJECTS       = armijosearch.o \
 		fibonaccisearch.o \
 		goldensearch.o \
 		bfgs.o \
+		genetic.o \
 		gradientdescent.o \
 		linesearch.o \
 		multistart.o \
@@ -234,6 +236,7 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		LINESEARCH/goldensearch.h \
 		LINESEARCH/linesearch.h \
 		METHODS/bfgs.h \
+		METHODS/genetic.h \
 		METHODS/gradientdescent.h \
 		METHODS/multistart.h \
 		OPTIMUS/collection.h \
@@ -246,6 +249,7 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		LINESEARCH/fibonaccisearch.cpp \
 		LINESEARCH/goldensearch.cpp \
 		METHODS/bfgs.cpp \
+		METHODS/genetic.cpp \
 		METHODS/gradientdescent.cpp \
 		LINESEARCH/linesearch.cpp \
 		METHODS/multistart.cpp \
@@ -580,8 +584,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /../lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h PROBLEMS/rastriginproblem.h PROBLEMS/test2nproblem.h $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h PROBLEMS/rastriginproblem.h PROBLEMS/test2nproblem.h $(DISTDIR)/
+	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -649,6 +653,11 @@ bfgs.o: METHODS/bfgs.cpp METHODS/bfgs.h \
 		OPTIMUS/problem.h \
 		OPTIMUS/parameter.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bfgs.o METHODS/bfgs.cpp
+
+genetic.o: METHODS/genetic.cpp METHODS/genetic.h \
+		OPTIMUS/collection.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o genetic.o METHODS/genetic.cpp
 
 gradientdescent.o: METHODS/gradientdescent.cpp METHODS/gradientdescent.h \
 		OPTIMUS/optimizer.h \

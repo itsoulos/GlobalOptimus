@@ -21,8 +21,10 @@ bool    DoubleBox::terminate(double value)
     if(iteration == 0 || value<oldBesty)
     {
         stopat = variance/2.0;
+        oldBesty = value;
     }
     iteration++;
+
     return variance <=stopat && iteration>=miniters;
 }
 

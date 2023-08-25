@@ -1,6 +1,7 @@
 #ifndef BFGS_H
 #define BFGS_H
 # include <OPTIMUS/optimizer.h>
+# include <math.h>
 #define totcal_1 totcal_
 #define units_1 units_
 #define integer long

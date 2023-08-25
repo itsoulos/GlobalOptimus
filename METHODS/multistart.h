@@ -3,7 +3,6 @@
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
-# include <OPTIMUS/doublebox.h>
 class Multistart : public Optimizer
 {
 private:
@@ -13,7 +12,6 @@ private:
     Data bestx;
     double besty;
     int nsamples;
-    DoubleBox db;
 public:
     Multistart();
     virtual void init();

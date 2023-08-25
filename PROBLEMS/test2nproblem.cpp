@@ -7,7 +7,7 @@ Test2nProblem::Test2nProblem()
 
 void Test2nProblem::init(QJsonObject &params)
 {
-    int n = params["dimension"].toString().toInt();
+    int n = params["opt_dimension"].toString().toInt();
     setDimension(n);
     Data l, r;
     l.resize(n);
