@@ -5,6 +5,8 @@
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
 # include <METHODS/bfgs.h>
+# include <METHODS/differentialevolution.h>
+# include <OPTIMUS/statistics.h>
 
 
 QVector<Optimizer*> method;
@@ -26,9 +28,10 @@ void printOption(QString fullName,
 void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
-    mainParams<<Parameter("opt_method","Multistart","Used Optimization method");
+    mainParams<<Parameter("opt_method","Genetic","Used Optimization method");
     mainParams<<Parameter("opt_problem","rastrigin","Used Optimization problem");
     mainParams<<Parameter("opt_seed","1","Random Seed");
+    mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
 }
 void loadMethods()
@@ -41,6 +44,8 @@ void loadMethods()
     methodName<<"Multistart";
     method<<new Genetic;
     methodName<<"Genetic";
+    method<<new DifferentialEvolution;
+    methodName<<"DifferentialEvolution";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }
@@ -149,7 +154,6 @@ void parseCmdLine(QStringList args)
         {
             for(int j=0;j<method.size();j++)
             {
-                if(found) break;
                 for(int k=0;k<methodParams[j].size();k++)
                 {
                     Parameter pt = method[j]->getParam(methodParams[j][k]);
@@ -191,6 +195,17 @@ void runMethod()
     method[index]->setProblem(mainProblem);
     method[index]->solve();
 }
+
+int getIters()
+{
+    for(int i=0;i<mainParams.size();i++)
+    {
+        Parameter p = mainParams[i];
+        if(p.getName()=="opt_iters")
+            return p.getValue().toInt();
+    }
+    return 0;
+}
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc,argv);
@@ -198,9 +213,23 @@ int main(int argc, char *argv[])
     makeMainParams();
     loadMethods();
     parseCmdLine(app.arguments());
-    loadProblem();
-    runMethod();
-    unloadMethods();
+
+
     unloadProblem();
+    Statistics stat;
+    int times = getIters();
+
+    for(int t=1;t<=times;t++)
+    {
+        srand(t);
+        loadProblem();
+        runMethod();
+        stat.addProblem(mainProblem);
+        unloadProblem();
+    }
+
+
+    stat.printStatistics();
+    unloadMethods();
     return 0;
 }

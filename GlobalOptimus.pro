@@ -12,10 +12,12 @@ SOURCES += \
         LINESEARCH/fibonaccisearch.cpp \
         LINESEARCH/goldensearch.cpp \
         METHODS/bfgs.cpp \
+        METHODS/differentialevolution.cpp \
         METHODS/genetic.cpp \
         METHODS/gradientdescent.cpp \
         LINESEARCH/linesearch.cpp \
         METHODS/multistart.cpp \
+        OPTIMUS/statistics.cpp \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
         OPTIMUS/similarity.cpp \
@@ -37,9 +39,11 @@ HEADERS += \
     LINESEARCH/goldensearch.h \
     LINESEARCH/linesearch.h \
     METHODS/bfgs.h \
+    METHODS/differentialevolution.h \
     METHODS/genetic.h \
     METHODS/gradientdescent.h \
     METHODS/multistart.h \
+    OPTIMUS/statistics.h \
     OPTIMUS/collection.h \
     OPTIMUS/doublebox.h \
     OPTIMUS/optimizer.h \

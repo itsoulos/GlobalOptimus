@@ -31,8 +31,9 @@ bool    Multistart::terminated()
 {
     double besty,worsty;
     minima.getBestWorstValues(besty,worsty);
-
-    if(doubleBox.terminate(besty)) return true;
+    QString termination = getParam("ms_termination").getValue();
+    if(termination == "doublebox" && doubleBox.terminate(besty)) return true;
+    if(termination == "similarity" && similarity.terminate(besty)) return true;
     if(iteration>=maxiters) return true;
     return false;
 }

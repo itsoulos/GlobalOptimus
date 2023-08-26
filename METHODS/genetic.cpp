@@ -6,7 +6,7 @@ Genetic::Genetic()
     addParam(Parameter("gen_maxiters","200","Maximum number of generations"));
     addParam(Parameter("gen_srate","0.10","Selection rate"));
     addParam(Parameter("gen_mrate","0.05","Mutation rate"));
-    addParam(Parameter("gen_lrate","0.00","Localsearch rate"));
+    addParam(Parameter("gen_lrate","0.01","Localsearch rate"));
     addParam(Parameter("gen_tsize","8","Tournament size"));
     addParam(Parameter("gen_selection","roulette","Selection method. Available values roulette,tournament"));
     addParam(Parameter("gen_crossover","uniform","Crossover method. Available values uniform, onepoint, double"));
@@ -55,7 +55,7 @@ bool    Genetic::terminated()
         return doubleBox.terminate(besty);
     else
         if(terminationMethod=="similarity")
-        ;
+        return similarity.terminate(besty);
     return false;
 }
 
@@ -346,7 +346,8 @@ void    Genetic::done()
     double ypoint;
     chromosomes.getPoint(0,xpoint,ypoint);
     ypoint = localSearch(xpoint);
-    printf("terminate: %lf \n",ypoint);
+    if(getParam("opt_debug").getValue()=="yes")
+        printf("GENETIC. terminate: %lf \n",ypoint);
 }
 Genetic::~Genetic()
 {

@@ -36,6 +36,8 @@ bool    Similarity::terminate(double value)
     {
         similarityCount++;
     }
+    else similarityCount=0;
+    oldBest =value;
     if(iteration<minimumIters) return false;
     if(similarityCount>=similarityIterations)
         return true;
