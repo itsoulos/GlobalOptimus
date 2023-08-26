@@ -21,6 +21,15 @@ SOURCES += \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
         OPTIMUS/similarity.cpp \
+        PROBLEMS/bf1.cpp \
+        PROBLEMS/bf2.cpp \
+        PROBLEMS/branin.cpp \
+        PROBLEMS/camel.cpp \
+        PROBLEMS/cm.cpp \
+        PROBLEMS/diffpower.cpp \
+        PROBLEMS/easom.cpp \
+        PROBLEMS/elp.cpp \
+        PROBLEMS/exp.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -50,5 +59,14 @@ HEADERS += \
     OPTIMUS/parameter.h \
     OPTIMUS/problem.h \
     OPTIMUS/similarity.h \
+    PROBLEMS/bf1.h \
+    PROBLEMS/bf2.h \
+    PROBLEMS/branin.h \
+    PROBLEMS/camel.h \
+    PROBLEMS/cm.h \
+    PROBLEMS/diffpower.h \
+    PROBLEMS/easom.h \
+    PROBLEMS/elp.h \
+    PROBLEMS/exp.h \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/test2nproblem.h

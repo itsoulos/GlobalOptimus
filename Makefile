@@ -65,6 +65,15 @@ SOURCES       = LINESEARCH/armijosearch.cpp \
 		OPTIMUS/collection.cpp \
 		OPTIMUS/doublebox.cpp \
 		OPTIMUS/similarity.cpp \
+		PROBLEMS/bf1.cpp \
+		PROBLEMS/bf2.cpp \
+		PROBLEMS/branin.cpp \
+		PROBLEMS/camel.cpp \
+		PROBLEMS/cm.cpp \
+		PROBLEMS/diffpower.cpp \
+		PROBLEMS/easom.cpp \
+		PROBLEMS/elp.cpp \
+		PROBLEMS/exp.cpp \
 		main.cpp \
 		OPTIMUS/optimizer.cpp \
 		OPTIMUS/parameter.cpp \
@@ -84,6 +93,15 @@ OBJECTS       = armijosearch.o \
 		collection.o \
 		doublebox.o \
 		similarity.o \
+		bf1.o \
+		bf2.o \
+		branin.o \
+		camel.o \
+		cm.o \
+		diffpower.o \
+		easom.o \
+		elp.o \
+		exp.o \
 		main.o \
 		optimizer.o \
 		parameter.o \
@@ -253,6 +271,15 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		OPTIMUS/parameter.h \
 		OPTIMUS/problem.h \
 		OPTIMUS/similarity.h \
+		PROBLEMS/bf1.h \
+		PROBLEMS/bf2.h \
+		PROBLEMS/branin.h \
+		PROBLEMS/camel.h \
+		PROBLEMS/cm.h \
+		PROBLEMS/diffpower.h \
+		PROBLEMS/easom.h \
+		PROBLEMS/elp.h \
+		PROBLEMS/exp.h \
 		PROBLEMS/rastriginproblem.h \
 		PROBLEMS/test2nproblem.h LINESEARCH/armijosearch.cpp \
 		LINESEARCH/fibonaccisearch.cpp \
@@ -267,6 +294,15 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		OPTIMUS/collection.cpp \
 		OPTIMUS/doublebox.cpp \
 		OPTIMUS/similarity.cpp \
+		PROBLEMS/bf1.cpp \
+		PROBLEMS/bf2.cpp \
+		PROBLEMS/branin.cpp \
+		PROBLEMS/camel.cpp \
+		PROBLEMS/cm.cpp \
+		PROBLEMS/diffpower.cpp \
+		PROBLEMS/easom.cpp \
+		PROBLEMS/elp.cpp \
+		PROBLEMS/exp.cpp \
 		main.cpp \
 		OPTIMUS/optimizer.cpp \
 		OPTIMUS/parameter.cpp \
@@ -596,8 +632,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /../lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/rastriginproblem.h PROBLEMS/test2nproblem.h $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/rastriginproblem.h PROBLEMS/test2nproblem.h $(DISTDIR)/
+	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -726,9 +762,54 @@ doublebox.o: OPTIMUS/doublebox.cpp OPTIMUS/doublebox.h \
 similarity.o: OPTIMUS/similarity.cpp OPTIMUS/similarity.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o similarity.o OPTIMUS/similarity.cpp
 
+bf1.o: PROBLEMS/bf1.cpp PROBLEMS/bf1.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bf1.o PROBLEMS/bf1.cpp
+
+bf2.o: PROBLEMS/bf2.cpp PROBLEMS/bf2.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bf2.o PROBLEMS/bf2.cpp
+
+branin.o: PROBLEMS/branin.cpp PROBLEMS/branin.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o branin.o PROBLEMS/branin.cpp
+
+camel.o: PROBLEMS/camel.cpp PROBLEMS/camel.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camel.o PROBLEMS/camel.cpp
+
+cm.o: PROBLEMS/cm.cpp PROBLEMS/cm.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cm.o PROBLEMS/cm.cpp
+
+diffpower.o: PROBLEMS/diffpower.cpp PROBLEMS/diffpower.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o diffpower.o PROBLEMS/diffpower.cpp
+
+easom.o: PROBLEMS/easom.cpp PROBLEMS/easom.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o easom.o PROBLEMS/easom.cpp
+
+elp.o: PROBLEMS/elp.cpp PROBLEMS/elp.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o elp.o PROBLEMS/elp.cpp
+
+exp.o: PROBLEMS/exp.cpp PROBLEMS/exp.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o exp.o PROBLEMS/exp.cpp
+
 main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		OPTIMUS/problem.h \
 		PROBLEMS/test2nproblem.h \
+		PROBLEMS/bf1.h \
+		PROBLEMS/bf2.h \
+		PROBLEMS/branin.h \
+		PROBLEMS/camel.h \
+		PROBLEMS/cm.h \
+		PROBLEMS/diffpower.h \
+		PROBLEMS/easom.h \
+		PROBLEMS/elp.h \
+		PROBLEMS/exp.h \
 		METHODS/gradientdescent.h \
 		OPTIMUS/optimizer.h \
 		OPTIMUS/parameter.h \
@@ -742,7 +823,8 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		OPTIMUS/collection.h \
 		METHODS/genetic.h \
 		METHODS/bfgs.h \
-		METHODS/differentialevolution.h
+		METHODS/differentialevolution.h \
+		OPTIMUS/statistics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 optimizer.o: OPTIMUS/optimizer.cpp OPTIMUS/optimizer.h \

@@ -1,6 +1,15 @@
 #include <QCoreApplication>
 # include <PROBLEMS/rastriginproblem.h>
 # include <PROBLEMS/test2nproblem.h>
+# include <PROBLEMS/bf1.h>
+# include <PROBLEMS/bf2.h>
+# include <PROBLEMS/branin.h>
+# include <PROBLEMS/camel.h>
+# include <PROBLEMS/cm.h>
+# include <PROBLEMS/diffpower.h>
+# include <PROBLEMS/easom.h>
+# include <PROBLEMS/elp.h>
+# include <PROBLEMS/exp.h>
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
@@ -28,8 +37,8 @@ void printOption(QString fullName,
 void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
-    mainParams<<Parameter("opt_method","Genetic","Used Optimization method");
-    mainParams<<Parameter("opt_problem","rastrigin","Used Optimization problem");
+    mainParams<<Parameter("opt_method","DifferentialEvolution","Used Optimization method");
+    mainParams<<Parameter("opt_problem","easom","Used Optimization problem");
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
@@ -66,6 +75,30 @@ void loadProblem()
     else
         if(problemName=="test2n")
         mainProblem = new Test2nProblem();
+    else
+        if(problemName=="bf1")
+        mainProblem  = new Bf1();
+    else
+        if(problemName=="bf2")
+        mainProblem = new Bf2();
+    else
+        if(problemName=="branin")
+        mainProblem = new Branin();
+    else
+        if(problemName=="camel")
+        mainProblem = new Camel();
+    else
+        if(problemName=="diffpower")
+        mainProblem = new DiffPower();
+    else
+        if(problemName == "easom")
+        mainProblem = new Easom();
+    else
+        if(problemName == "elp")
+        mainProblem  = new Elp();
+    else
+        if(problemName == "exp")
+        mainProblem = new Exp();
               mainProblem->init(problemParams);
 
 }
