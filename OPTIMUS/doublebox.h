@@ -15,6 +15,8 @@ private:
     int miniters;
 public:
     DoubleBox(int miniters=5);
+    void init();
+    void setMinIters(int m);
     bool terminate(double value);
     ~DoubleBox();
 };

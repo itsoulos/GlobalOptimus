@@ -18,6 +18,7 @@ SOURCES += \
         METHODS/multistart.cpp \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
+        OPTIMUS/similarity.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -44,5 +45,6 @@ HEADERS += \
     OPTIMUS/optimizer.h \
     OPTIMUS/parameter.h \
     OPTIMUS/problem.h \
+    OPTIMUS/similarity.h \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/test2nproblem.h

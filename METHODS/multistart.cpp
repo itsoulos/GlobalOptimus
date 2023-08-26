@@ -3,6 +3,7 @@ Multistart::Multistart()
 {
     addParam(Parameter("ms_samples","100","Number of samples"));
     addParam(Parameter("ms_maxiters","100","Maximum number of iterations"));
+    addParam(Parameter("ms_termination","doublebox","Termination rule. Values: maxiters,doublebox,similarity"));
 }
 
 void    Multistart::init()

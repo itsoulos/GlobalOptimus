@@ -2,6 +2,12 @@
 
 DoubleBox::DoubleBox(int min)
 {
+    init();
+    miniters = min;
+}
+
+void    DoubleBox::init()
+{
     xx1= 0.0;
     xx2= 0.0;
     iteration = 0;
@@ -9,7 +15,10 @@ DoubleBox::DoubleBox(int min)
     oldBesty = 1e+100;
     variance = 0.0;
     stopat = 0.0;
-    miniters = min;
+}
+void    DoubleBox::setMinIters(int m)
+{
+    miniters = m;
 }
 
 bool    DoubleBox::terminate(double value)

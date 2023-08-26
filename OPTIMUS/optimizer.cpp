@@ -6,6 +6,9 @@ Optimizer::Optimizer()
     myProblem = NULL;
     addParam(Parameter("opt_debug","yes","Set it to yes to show messages"));
     addParam(Parameter("opt_localsearch","bfgs","The method used in localsearch"));
+    addParam(Parameter("opt_doubleboxminiters","5","Minimum iters to terminate the doublebox"));
+    addParam(Parameter("opt_similarityminiters","5","Minimum number of iters for similarity stopping rule"));
+    addParam(Parameter("opt_similaritycriterion","5","Number of iterations for same value in the similarity stopping rule"));
 }
 
 void        Optimizer::setProblem(Problem *p)
@@ -64,6 +67,11 @@ void    Optimizer::showDebug()
 void    Optimizer::solve()
 {
     bool debug = getParam("opt_debug").getValue()=="yes"?true:false;
+    doubleBox.setMinIters(getParam("opt_doubleboxminiters").getValue().toInt());
+    similarity.setMinIters(getParam("opt_similarityminiters").getValue().toInt());
+    similarity.setSimilarityIterations(getParam("opt_similaritycriterion").getValue().toInt());
+    doubleBox.init();
+    similarity.init();
     init();
     do
     {

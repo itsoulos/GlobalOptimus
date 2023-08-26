@@ -3,6 +3,7 @@
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/parameter.h>
 # include <OPTIMUS/doublebox.h>
+# include <OPTIMUS/similarity.h>
 # include <QJsonArray>
 
 /**
@@ -14,8 +15,9 @@ class Optimizer
 protected:
    QJsonObject       params;
    QJsonObject       paramsHelp;
-    Problem         *myProblem;
+   Problem          *myProblem;
    DoubleBox        doubleBox;
+   Similarity       similarity;
 public:
     /**
      * @brief Optimizer  the constructor of the class
