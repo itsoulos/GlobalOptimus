@@ -10,6 +10,7 @@
 # include <PROBLEMS/easom.h>
 # include <PROBLEMS/elp.h>
 # include <PROBLEMS/exp.h>
+# include <PROBLEMS/gkls250.h>
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
@@ -38,7 +39,7 @@ void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
     mainParams<<Parameter("opt_method","DifferentialEvolution","Used Optimization method");
-    mainParams<<Parameter("opt_problem","easom","Used Optimization problem");
+    mainParams<<Parameter("opt_problem","gkls250","Used Optimization problem");
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
@@ -99,6 +100,9 @@ void loadProblem()
     else
         if(problemName == "exp")
         mainProblem = new Exp();
+    else
+       if(problemName == "gkls250")
+          mainProblem = new Gkls250();
               mainProblem->init(problemParams);
 
 }

@@ -30,6 +30,8 @@ SOURCES += \
         PROBLEMS/easom.cpp \
         PROBLEMS/elp.cpp \
         PROBLEMS/exp.cpp \
+        PROBLEMS/gkls.cpp \
+        PROBLEMS/gkls250.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -68,5 +70,7 @@ HEADERS += \
     PROBLEMS/easom.h \
     PROBLEMS/elp.h \
     PROBLEMS/exp.h \
+    PROBLEMS/gkls.h \
+    PROBLEMS/gkls250.h \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/test2nproblem.h
