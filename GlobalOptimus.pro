@@ -37,6 +37,16 @@ SOURCES += \
         PROBLEMS/goldstein.cpp \
         PROBLEMS/griewank10.cpp \
         PROBLEMS/griewank2.cpp \
+        PROBLEMS/hansen.cpp \
+        PROBLEMS/hartman3.cpp \
+        PROBLEMS/hartman6.cpp \
+        PROBLEMS/potential.cpp \
+        PROBLEMS/rosenbrock.cpp \
+        PROBLEMS/shekel10.cpp \
+        PROBLEMS/shekel5.cpp \
+        PROBLEMS/shekel7.cpp \
+        PROBLEMS/sinu.cpp \
+        PROBLEMS/test30n.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -82,5 +92,15 @@ HEADERS += \
     PROBLEMS/goldstein.h \
     PROBLEMS/griewank10.h \
     PROBLEMS/griewank2.h \
+    PROBLEMS/hansen.h \
+    PROBLEMS/hartman3.h \
+    PROBLEMS/hartman6.h \
+    PROBLEMS/potential.h \
     PROBLEMS/rastriginproblem.h \
-    PROBLEMS/test2nproblem.h
+    PROBLEMS/rosenbrock.h \
+    PROBLEMS/shekel10.h \
+    PROBLEMS/shekel5.h \
+    PROBLEMS/shekel7.h \
+    PROBLEMS/sinu.h \
+    PROBLEMS/test2nproblem.h \
+    PROBLEMS/test30n.h

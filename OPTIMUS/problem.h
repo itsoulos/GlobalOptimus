@@ -149,6 +149,8 @@ public:
     virtual QJsonObject done(Data &x);
     void    getleftmargin(double *x);
     void    getrightmargin(double *x);
+    int     getDimension();
+    int     getdimension();
     ~Problem();
 };
 

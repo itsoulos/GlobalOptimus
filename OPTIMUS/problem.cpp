@@ -10,6 +10,15 @@ Problem::Problem()
     setDimension(1);
 }
 
+int Problem::getdimension()
+{
+    return dimension;
+}
+int     Problem::getDimension()
+{
+    return dimension;
+}
+
 void    Problem::getleftmargin(double *x)
 {
     for(int i=0;i<dimension;i++)

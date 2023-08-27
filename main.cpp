@@ -16,6 +16,16 @@
 # include <PROBLEMS/goldstein.h>
 # include <PROBLEMS/griewank2.h>
 # include <PROBLEMS/griewank10.h>
+# include <PROBLEMS/hansen.h>
+# include <PROBLEMS/hartman3.h>
+# include <PROBLEMS/hartman6.h>
+# include <PROBLEMS/potential.h>
+# include <PROBLEMS/rosenbrock.h>
+# include <PROBLEMS/shekel5.h>
+# include <PROBLEMS/shekel7.h>
+# include <PROBLEMS/shekel10.h>
+# include <PROBLEMS/sinu.h>
+# include <PROBLEMS/test30n.h>
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
@@ -44,7 +54,7 @@ void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
     mainParams<<Parameter("opt_method","Genetic","Used Optimization method");
-    mainParams<<Parameter("opt_problem","griewank10","Used Optimization problem");
+    mainParams<<Parameter("opt_problem","rastrigin","Used Optimization problem");
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
@@ -123,6 +133,36 @@ void loadProblem()
     else
         if(problemName == "griewank10")
             mainProblem = new Griewank10();
+    else
+            if(problemName == "hansen")
+            mainProblem =new Hansen();
+    else
+            if(problemName == "hartman3")
+            mainProblem = new Hartman3();
+    else
+            if(problemName == "hartman6")
+            mainProblem = new Hartman6();
+    else
+            if(problemName == "potential")
+            mainProblem =new Potential();
+    else
+            if(problemName == "rosenbrock")
+            mainProblem = new Rosenbrock();
+    else
+            if(problemName == "shekel5")
+            mainProblem = new Shekel5();
+    else
+            if(problemName == "shekel7")
+            mainProblem = new Shekel7();
+    else
+            if(problemName == "shekel10")
+            mainProblem = new Shekel10();
+    else
+            if(problemName == "sinu")
+            mainProblem = new Sinu();
+    else
+            if(problemName == "test30n")
+            mainProblem = new Test30n();
     else
             error("Undefined function "+problemName);
               mainProblem->init(problemParams);
