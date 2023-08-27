@@ -75,7 +75,12 @@ SOURCES       = LINESEARCH/armijosearch.cpp \
 		PROBLEMS/elp.cpp \
 		PROBLEMS/exp.cpp \
 		PROBLEMS/gkls.cpp \
+		PROBLEMS/gkls2100.cpp \
 		PROBLEMS/gkls250.cpp \
+		PROBLEMS/gkls350.cpp \
+		PROBLEMS/goldstein.cpp \
+		PROBLEMS/griewank10.cpp \
+		PROBLEMS/griewank2.cpp \
 		main.cpp \
 		OPTIMUS/optimizer.cpp \
 		OPTIMUS/parameter.cpp \
@@ -105,7 +110,12 @@ OBJECTS       = armijosearch.o \
 		elp.o \
 		exp.o \
 		gkls.o \
+		gkls2100.o \
 		gkls250.o \
+		gkls350.o \
+		goldstein.o \
+		griewank10.o \
+		griewank2.o \
 		main.o \
 		optimizer.o \
 		parameter.o \
@@ -223,7 +233,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/elp.h \
 		PROBLEMS/exp.h \
 		PROBLEMS/gkls.h \
+		PROBLEMS/gkls2100.h \
 		PROBLEMS/gkls250.h \
+		PROBLEMS/gkls350.h \
+		PROBLEMS/goldstein.h \
+		PROBLEMS/griewank10.h \
+		PROBLEMS/griewank2.h \
 		PROBLEMS/rastriginproblem.h \
 		PROBLEMS/test2nproblem.h LINESEARCH/armijosearch.cpp \
 		LINESEARCH/fibonaccisearch.cpp \
@@ -248,7 +263,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/elp.cpp \
 		PROBLEMS/exp.cpp \
 		PROBLEMS/gkls.cpp \
+		PROBLEMS/gkls2100.cpp \
 		PROBLEMS/gkls250.cpp \
+		PROBLEMS/gkls350.cpp \
+		PROBLEMS/goldstein.cpp \
+		PROBLEMS/griewank10.cpp \
+		PROBLEMS/griewank2.cpp \
 		main.cpp \
 		OPTIMUS/optimizer.cpp \
 		OPTIMUS/parameter.cpp \
@@ -454,8 +474,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/gkls.h PROBLEMS/gkls250.h PROBLEMS/rastriginproblem.h PROBLEMS/test2nproblem.h $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls250.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/rastriginproblem.h PROBLEMS/test2nproblem.h $(DISTDIR)/
+	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -623,9 +643,32 @@ exp.o: PROBLEMS/exp.cpp PROBLEMS/exp.h \
 gkls.o: PROBLEMS/gkls.cpp PROBLEMS/gkls.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls.o PROBLEMS/gkls.cpp
 
+gkls2100.o: PROBLEMS/gkls2100.cpp PROBLEMS/gkls2100.h \
+		OPTIMUS/problem.h \
+		PROBLEMS/gkls.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls2100.o PROBLEMS/gkls2100.cpp
+
 gkls250.o: PROBLEMS/gkls250.cpp PROBLEMS/gkls250.h \
-		OPTIMUS/problem.h
+		OPTIMUS/problem.h \
+		PROBLEMS/gkls.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls250.o PROBLEMS/gkls250.cpp
+
+gkls350.o: PROBLEMS/gkls350.cpp PROBLEMS/gkls350.h \
+		OPTIMUS/problem.h \
+		PROBLEMS/gkls.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls350.o PROBLEMS/gkls350.cpp
+
+goldstein.o: PROBLEMS/goldstein.cpp PROBLEMS/goldstein.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o goldstein.o PROBLEMS/goldstein.cpp
+
+griewank10.o: PROBLEMS/griewank10.cpp PROBLEMS/griewank10.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o griewank10.o PROBLEMS/griewank10.cpp
+
+griewank2.o: PROBLEMS/griewank2.cpp PROBLEMS/griewank2.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o griewank2.o PROBLEMS/griewank2.cpp
 
 main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		OPTIMUS/problem.h \
@@ -639,6 +682,12 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		PROBLEMS/easom.h \
 		PROBLEMS/elp.h \
 		PROBLEMS/exp.h \
+		PROBLEMS/gkls250.h \
+		PROBLEMS/gkls2100.h \
+		PROBLEMS/gkls350.h \
+		PROBLEMS/goldstein.h \
+		PROBLEMS/griewank2.h \
+		PROBLEMS/griewank10.h \
 		METHODS/gradientdescent.h \
 		OPTIMUS/optimizer.h \
 		OPTIMUS/parameter.h \

@@ -31,7 +31,12 @@ SOURCES += \
         PROBLEMS/elp.cpp \
         PROBLEMS/exp.cpp \
         PROBLEMS/gkls.cpp \
+        PROBLEMS/gkls2100.cpp \
         PROBLEMS/gkls250.cpp \
+        PROBLEMS/gkls350.cpp \
+        PROBLEMS/goldstein.cpp \
+        PROBLEMS/griewank10.cpp \
+        PROBLEMS/griewank2.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -71,6 +76,11 @@ HEADERS += \
     PROBLEMS/elp.h \
     PROBLEMS/exp.h \
     PROBLEMS/gkls.h \
+    PROBLEMS/gkls2100.h \
     PROBLEMS/gkls250.h \
+    PROBLEMS/gkls350.h \
+    PROBLEMS/goldstein.h \
+    PROBLEMS/griewank10.h \
+    PROBLEMS/griewank2.h \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/test2nproblem.h

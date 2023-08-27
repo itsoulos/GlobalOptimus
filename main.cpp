@@ -11,6 +11,11 @@
 # include <PROBLEMS/elp.h>
 # include <PROBLEMS/exp.h>
 # include <PROBLEMS/gkls250.h>
+# include <PROBLEMS/gkls2100.h>
+# include <PROBLEMS/gkls350.h>
+# include <PROBLEMS/goldstein.h>
+# include <PROBLEMS/griewank2.h>
+# include <PROBLEMS/griewank10.h>
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
@@ -18,7 +23,7 @@
 # include <METHODS/differentialevolution.h>
 # include <OPTIMUS/statistics.h>
 
-
+void error(QString message);
 QVector<Optimizer*> method;
 QStringList methodName;
 QVector<QStringList> methodParams;
@@ -38,8 +43,8 @@ void printOption(QString fullName,
 void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
-    mainParams<<Parameter("opt_method","DifferentialEvolution","Used Optimization method");
-    mainParams<<Parameter("opt_problem","gkls250","Used Optimization problem");
+    mainParams<<Parameter("opt_method","Genetic","Used Optimization method");
+    mainParams<<Parameter("opt_problem","griewank10","Used Optimization problem");
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
@@ -103,6 +108,23 @@ void loadProblem()
     else
        if(problemName == "gkls250")
           mainProblem = new Gkls250();
+    else
+        if(problemName=="gkls2100")
+            mainProblem = new Gkls2100();
+    else
+        if(problemName == "gkls350")
+            mainProblem = new Gkls350();
+    else
+        if(problemName == "goldstein")
+            mainProblem = new Goldstein();
+    else
+        if(problemName == "griewank2")
+            mainProblem = new Griewank2();
+    else
+        if(problemName == "griewank10")
+            mainProblem = new Griewank10();
+    else
+            error("Undefined function "+problemName);
               mainProblem->init(problemParams);
 
 }
