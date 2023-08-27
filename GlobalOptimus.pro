@@ -8,6 +8,8 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        AIMODELS/mlpproblem.cpp \
+        AIMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
         LINESEARCH/fibonaccisearch.cpp \
         LINESEARCH/goldensearch.cpp \
@@ -47,6 +49,7 @@ SOURCES += \
         PROBLEMS/shekel7.cpp \
         PROBLEMS/sinu.cpp \
         PROBLEMS/test30n.cpp \
+        AIMODELS/dataset.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -60,6 +63,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    AIMODELS/mlpproblem.h \
+    AIMODELS/model.h \
     LINESEARCH/armijosearch.h \
     LINESEARCH/fibonaccisearch.h \
     LINESEARCH/goldensearch.h \
@@ -103,4 +108,5 @@ HEADERS += \
     PROBLEMS/shekel7.h \
     PROBLEMS/sinu.h \
     PROBLEMS/test2nproblem.h \
-    PROBLEMS/test30n.h
+    PROBLEMS/test30n.h \
+    AIMODELS/dataset.h

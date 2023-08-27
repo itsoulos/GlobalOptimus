@@ -2,6 +2,13 @@
 #define STATISTICS_H
 
 # include "OPTIMUS/problem.h"
+
+struct Metric
+{
+    QString name;
+    double value;
+};
+
 class Statistics
 {
 private:
@@ -14,6 +21,7 @@ private:
      * ektelseis.
      */
     vector<int> fcallsValue;
+    vector<Metric> functionMetric;
 public:
     /**
      * @brief Statistics i synartisi dimioyrgias

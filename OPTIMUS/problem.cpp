@@ -127,7 +127,7 @@ void    Problem::init(QJsonObject &params)
 
 QJsonObject Problem::done(Data &x)
 {
-    //nothing here
+    return QJsonObject();
 }
 Problem::~Problem()
 {

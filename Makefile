@@ -52,7 +52,9 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = LINESEARCH/armijosearch.cpp \
+SOURCES       = AIMODELS/mlpproblem.cpp \
+		AIMODELS/model.cpp \
+		LINESEARCH/armijosearch.cpp \
 		LINESEARCH/fibonaccisearch.cpp \
 		LINESEARCH/goldensearch.cpp \
 		METHODS/bfgs.cpp \
@@ -91,13 +93,16 @@ SOURCES       = LINESEARCH/armijosearch.cpp \
 		PROBLEMS/shekel7.cpp \
 		PROBLEMS/sinu.cpp \
 		PROBLEMS/test30n.cpp \
+		AIMODELS/dataset.cpp \
 		main.cpp \
 		OPTIMUS/optimizer.cpp \
 		OPTIMUS/parameter.cpp \
 		OPTIMUS/problem.cpp \
 		PROBLEMS/rastriginproblem.cpp \
 		PROBLEMS/test2nproblem.cpp 
-OBJECTS       = armijosearch.o \
+OBJECTS       = mlpproblem.o \
+		model.o \
+		armijosearch.o \
 		fibonaccisearch.o \
 		goldensearch.o \
 		bfgs.o \
@@ -136,6 +141,7 @@ OBJECTS       = armijosearch.o \
 		shekel7.o \
 		sinu.o \
 		test30n.o \
+		dataset.o \
 		main.o \
 		optimizer.o \
 		parameter.o \
@@ -289,7 +295,9 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		/../lib64/qt5/mkspecs/features/exceptions.prf \
 		/../lib64/qt5/mkspecs/features/yacc.prf \
 		/../lib64/qt5/mkspecs/features/lex.prf \
-		GlobalOptimus.pro LINESEARCH/armijosearch.h \
+		GlobalOptimus.pro AIMODELS/mlpproblem.h \
+		AIMODELS/model.h \
+		LINESEARCH/armijosearch.h \
 		LINESEARCH/fibonaccisearch.h \
 		LINESEARCH/goldensearch.h \
 		LINESEARCH/linesearch.h \
@@ -332,7 +340,10 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/shekel7.h \
 		PROBLEMS/sinu.h \
 		PROBLEMS/test2nproblem.h \
-		PROBLEMS/test30n.h LINESEARCH/armijosearch.cpp \
+		PROBLEMS/test30n.h \
+		AIMODELS/dataset.h AIMODELS/mlpproblem.cpp \
+		AIMODELS/model.cpp \
+		LINESEARCH/armijosearch.cpp \
 		LINESEARCH/fibonaccisearch.cpp \
 		LINESEARCH/goldensearch.cpp \
 		METHODS/bfgs.cpp \
@@ -371,6 +382,7 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/shekel7.cpp \
 		PROBLEMS/sinu.cpp \
 		PROBLEMS/test30n.cpp \
+		AIMODELS/dataset.cpp \
 		main.cpp \
 		OPTIMUS/optimizer.cpp \
 		OPTIMUS/parameter.cpp \
@@ -700,8 +712,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /../lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h $(DISTDIR)/
-	$(COPY_FILE) --parents LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents AIMODELS/mlpproblem.h AIMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h AIMODELS/dataset.h $(DISTDIR)/
+	$(COPY_FILE) --parents AIMODELS/mlpproblem.cpp AIMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp AIMODELS/dataset.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -748,6 +760,17 @@ compiler_lex_clean:
 compiler_clean: compiler_moc_predefs_clean 
 
 ####### Compile
+
+mlpproblem.o: AIMODELS/mlpproblem.cpp AIMODELS/mlpproblem.h \
+		AIMODELS/dataset.h \
+		OPTIMUS/problem.h \
+		AIMODELS/model.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mlpproblem.o AIMODELS/mlpproblem.cpp
+
+model.o: AIMODELS/model.cpp AIMODELS/model.h \
+		AIMODELS/dataset.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o model.o AIMODELS/model.cpp
 
 armijosearch.o: LINESEARCH/armijosearch.cpp LINESEARCH/armijosearch.h \
 		LINESEARCH/linesearch.h \
@@ -936,6 +959,10 @@ test30n.o: PROBLEMS/test30n.cpp PROBLEMS/test30n.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test30n.o PROBLEMS/test30n.cpp
 
+dataset.o: AIMODELS/dataset.cpp AIMODELS/dataset.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dataset.o AIMODELS/dataset.cpp
+
 main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		OPTIMUS/problem.h \
 		PROBLEMS/test2nproblem.h \
@@ -964,6 +991,9 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		PROBLEMS/shekel10.h \
 		PROBLEMS/sinu.h \
 		PROBLEMS/test30n.h \
+		AIMODELS/mlpproblem.h \
+		AIMODELS/dataset.h \
+		AIMODELS/model.h \
 		METHODS/gradientdescent.h \
 		OPTIMUS/optimizer.h \
 		OPTIMUS/parameter.h \

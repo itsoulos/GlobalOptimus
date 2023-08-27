@@ -26,6 +26,7 @@
 # include <PROBLEMS/shekel10.h>
 # include <PROBLEMS/sinu.h>
 # include <PROBLEMS/test30n.h>
+# include <AIMODELS/mlpproblem.h>
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
@@ -54,7 +55,7 @@ void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
     mainParams<<Parameter("opt_method","Genetic","Used Optimization method");
-    mainParams<<Parameter("opt_problem","rastrigin","Used Optimization problem");
+    mainParams<<Parameter("opt_problem","test2n","Used Optimization problem");
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
@@ -163,6 +164,9 @@ void loadProblem()
     else
             if(problemName == "test30n")
             mainProblem = new Test30n();
+    else
+            if(problemName == "mlp")
+            mainProblem = new MlpProblem();
     else
             error("Undefined function "+problemName);
               mainProblem->init(problemParams);
