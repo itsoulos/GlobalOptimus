@@ -6,6 +6,13 @@ Model::Model()
     testDataset = NULL;
 }
 
+double      Model::getDistance(Data &x1,Data &x2)
+{
+    double sum = 0.0;
+    for(int i=0;i<x1.size();i++) sum+=(x1[i]-x2[i])*(x1[i]-x2[i]);
+    return sqrt(sum/x1.size());
+}
+
 double  Model::getTrainError()
 {
     double error = 0.0;

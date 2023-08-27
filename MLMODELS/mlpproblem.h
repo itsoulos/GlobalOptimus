@@ -1,8 +1,8 @@
 #ifndef MLPPROBLEM_H
 #define MLPPROBLEM_H
 
-# include <AIMODELS/dataset.h>
-# include <AIMODELS/model.h>
+# include <MLMODELS/dataset.h>
+# include <MLMODELS/model.h>
 # include <OPTIMUS/problem.h>
 
 class MlpProblem : public Problem, Model

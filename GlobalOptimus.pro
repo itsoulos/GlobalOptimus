@@ -8,8 +8,9 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        AIMODELS/mlpproblem.cpp \
-        AIMODELS/model.cpp \
+        METHODS/lbfgs.cpp \
+        MLMODELS/mlpproblem.cpp \
+        MLMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
         LINESEARCH/fibonaccisearch.cpp \
         LINESEARCH/goldensearch.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
         METHODS/gradientdescent.cpp \
         LINESEARCH/linesearch.cpp \
         METHODS/multistart.cpp \
+        MLMODELS/rbfproblem.cpp \
         OPTIMUS/statistics.cpp \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
@@ -49,7 +51,7 @@ SOURCES += \
         PROBLEMS/shekel7.cpp \
         PROBLEMS/sinu.cpp \
         PROBLEMS/test30n.cpp \
-        AIMODELS/dataset.cpp \
+        MLMODELS/dataset.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
@@ -63,8 +65,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    AIMODELS/mlpproblem.h \
-    AIMODELS/model.h \
+    METHODS/lbfgs.h \
+    MLMODELS/mlpproblem.h \
+    MLMODELS/model.h \
     LINESEARCH/armijosearch.h \
     LINESEARCH/fibonaccisearch.h \
     LINESEARCH/goldensearch.h \
@@ -74,6 +77,7 @@ HEADERS += \
     METHODS/genetic.h \
     METHODS/gradientdescent.h \
     METHODS/multistart.h \
+    MLMODELS/rbfproblem.h \
     OPTIMUS/statistics.h \
     OPTIMUS/collection.h \
     OPTIMUS/doublebox.h \
@@ -109,4 +113,4 @@ HEADERS += \
     PROBLEMS/sinu.h \
     PROBLEMS/test2nproblem.h \
     PROBLEMS/test30n.h \
-    AIMODELS/dataset.h
+    MLMODELS/dataset.h

@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+
 # include <PROBLEMS/rastriginproblem.h>
 # include <PROBLEMS/test2nproblem.h>
 # include <PROBLEMS/bf1.h>
@@ -26,11 +27,14 @@
 # include <PROBLEMS/shekel10.h>
 # include <PROBLEMS/sinu.h>
 # include <PROBLEMS/test30n.h>
-# include <AIMODELS/mlpproblem.h>
+# include <MLMODELS/mlpproblem.h>
+# include <MLMODELS/rbfproblem.h>
+
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
 # include <METHODS/bfgs.h>
+# include <METHODS/lbfgs.h>
 # include <METHODS/differentialevolution.h>
 # include <OPTIMUS/statistics.h>
 
@@ -66,6 +70,8 @@ void loadMethods()
     methodName<<"GradientDescent";
     method<<new Bfgs;
     methodName<<"Bfgs";
+    method<<new Lbfgs;
+    methodName<<"Lbfgs";
     method<<new Multistart;
     methodName<<"Multistart";
     method<<new Genetic;

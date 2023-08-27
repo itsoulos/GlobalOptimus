@@ -1,6 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
-# include <AIMODELS/dataset.h>
+# include <MLMODELS/dataset.h>
 
 class Model
 {
@@ -13,6 +13,7 @@ public:
     double      getTrainError();
     double      getTestError(Dataset *test) ;
     double      getClassTestError(Dataset *test) ;
+    double      getDistance(Data &x1,Data &x2);
     ~Model();
 };
 

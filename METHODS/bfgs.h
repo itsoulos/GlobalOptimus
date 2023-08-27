@@ -2,13 +2,7 @@
 #define BFGS_H
 # include <OPTIMUS/optimizer.h>
 # include <math.h>
-#define totcal_1 totcal_
-#define units_1 units_
-#define integer long
-#define double double
-//#define real float
-typedef long int ftnlen;
-typedef long int logical;
+
 
 class Bfgs : public Optimizer
 {

@@ -1,6 +1,7 @@
 #include "optimizer.h"
 # include <METHODS/gradientdescent.h>
 # include <METHODS/bfgs.h>
+# include <METHODS/lbfgs.h>
 Optimizer::Optimizer()
 {
     myProblem = NULL;
@@ -111,7 +112,11 @@ double  Optimizer::localSearch(Data &x)
     else
     if(localMethod == "lbfgs")
     {
-
+        local = new Lbfgs();
+        local->setProblem(myProblem);
+        ((Lbfgs *)local)->setPoint(x,y);
+        local->solve();
+        ((Lbfgs *)local)->getPoint(x,y);
     }
     if(local!=NULL) delete local;
     return y;
