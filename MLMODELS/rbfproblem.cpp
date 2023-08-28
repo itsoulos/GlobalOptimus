@@ -10,6 +10,9 @@ double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 {
     double arg = getDistance(x,center);
     arg = pow(arg,2.0)/(variance * variance);
+   //printf("Arg = %lf \n",arg);
+   // if(isnan(arg) || isinf(arg)) return 0.0;
+   // if(arg>10) return 0.0;
     return exp(-arg);
 }
 
@@ -53,13 +56,13 @@ void    RbfProblem::getWeightDerivative(int index,Data &x,double &g)
     g=val;
 }
 
-void    RbfProblem::getCenterDerivative(int index,Data &x,double &g)
+void    RbfProblem::getVarianceDerivative(int index,Data &x,double &g)
 {
     double val = gaussian(x,centers[index],variances[index]);
     g =weight[index]* val * (-2.0) * (-pow(getDistance(x,centers[index]),2.0)/pow(variances[index],3.0));
 }
 
-void    RbfProblem::getVarianceDerivative(int index,Data &x,Data &g)
+void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
 {
     double val = gaussian(x,centers[index],variances[index]);
     for(int j=0;j<trainDataset->dimension();j++)
@@ -83,25 +86,46 @@ static double dmax(double a,double b)
 Data    RbfProblem::gradient(Data &x)
 {
     Data g;
-    weight = x;
-    g.resize(weight.size());
-    for(int i=0;i<g.size();i++)
+    setParameters(x);
+    g.resize(x.size());
+   for(int i=0;i<g.size();i++)
         g[i]=0.0;
     Data gtemp ;
     gtemp.resize(dimension);
-
+    Data g1;
+    int d = trainDataset->dimension();
+    int nodes = weight.size();
+    g1.resize(d );
     for(int i=0;i<trainDataset->count();i++)
     {
         Data xx = trainDataset->getXPoint(i);
-
         double per=getOutput(xx)-trainDataset->getYPoint(i);
+        int icount = 0;
+        for(int j=0;j<nodes;j++)
+        {
+            getCenterDerivative(j,xx,g1);
+            for(int l=0;l<g1.size();l++)
+                gtemp[icount++]=g1[l];
+        }
+        for(int j=0;j<nodes;j++)
+        {
+            double gx;
+            getVarianceDerivative(j,xx,gx);
+            gtemp[icount++]=gx;
+        }
+        for(int j=0;j<nodes;j++)
+        {
+            double gx;
+            getWeightDerivative(j,xx,gx);
+            gtemp[icount++]=gx;
+        }
         for(int j=0;j<g.size();j++)	g[j]+=gtemp[j]*per;
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
     return g;
-    /*
-    Data g;
-    g.resize(dimension);
+
+    //Data g;
+    //g.resize(dimension);
     for(int i=0;i<dimension;i++)
     {
         double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -112,7 +136,7 @@ Data    RbfProblem::gradient(Data &x)
         g[i]=(v1-v2)/(2.0 * eps);
         x[i]+=eps;
     }
-    return g;*/
+    return g;
 }
 
 double  RbfProblem::getOutput(Data &x)
@@ -230,14 +254,32 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
     {
         variances[i]=0.0;
     }
-        for(int j=0;j<point.size();j++)
-        {
-            for(int k=0;k<d;k++)
-                variances[belong[j]]+=pow(point[j][k]-centers[belong[j]][k],2.0);
-        }
 
+    Data dvar;
+    dvar.resize(d);
+    for(int i=0;i<K;i++)
+    {
+        for(int j=0;j<d;j++)
+            dvar[j]=0.0;
+        for(int j=0;j<belong.size();j++)
+        {
+            if(belong[j]==i)
+            {
+               for(int l=0;l<d;l++)
+                    dvar[l]+=pow(point[j][l]-centers[i][l],2.0);
+            }
+        }
+        for(int j=0;j<d;j++)
+            variances[i]+=dvar[j]/teamElements[i];
+    }
     for(int i=0;i<variances.size();i++)
+        {
+            if(teamElements[i]==0)
+                variances[i]=sqrt(variances[i]);
+            else
+
         variances[i]=sqrt(variances[i]/teamElements[i]);
+    }
 }
 
 
@@ -276,10 +318,18 @@ void    RbfProblem::init(QJsonObject &params)
             icount++;
         }
     }
+    double dmin=1e+100,dmax=0;
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=0.001;
-        right[icount]=scale_factor * fabs(variances[i]);
+        if(isnan(variances[i]) || isinf(variances[i]))
+            variances[i]=0.001;
+            dmax += variances[i];
+    }
+
+    for(int i=0;i<nodes;i++)
+    {
+        left[icount]= -scale_factor *dmax;
+        right[icount]= scale_factor * dmax;
         if(right[icount]<0.001) right[icount]=0.001;
         icount++;
     }
@@ -293,7 +343,8 @@ void    RbfProblem::init(QJsonObject &params)
 
 QJsonObject RbfProblem::done(Data &x)
 {
-    double tr=funmin(x);
+    setParameters(x);
+    double tr=getTrainError();
     QJsonObject xx;
     double tt=getTestError(testDataset);
     double tc=getClassTestError(testDataset);

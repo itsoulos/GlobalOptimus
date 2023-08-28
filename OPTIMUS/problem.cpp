@@ -35,8 +35,9 @@ void    Problem::setDimension(int n)
     dimension = n;
     left.resize(dimension);
     right.resize(dimension);
-    besty = 1e+100;
     functionCalls = 0;
+    bestx.resize(n);
+
 }
 bool    Problem::isPointIn(Data &x)
 {
@@ -50,7 +51,7 @@ bool    Problem::isPointIn(Data &x)
 double    Problem::statFunmin(Data &x)
 {
     double y = funmin(x);
-    if(y<besty)
+    if(y<besty || functionCalls ==0)
     {
         besty = y;
         bestx = x;

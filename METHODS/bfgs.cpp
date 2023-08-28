@@ -9,7 +9,12 @@ Bfgs::Bfgs()
 void    Bfgs::init()
 {
 
-    if(!haveInitialized) return;
+    if(!haveInitialized)
+    {
+        xpoint.resize(myProblem->getDimension());
+        xpoint = myProblem->getSample();
+        ypoint = myProblem->statFunmin(xpoint);
+    }
     ifail=0;
     c__0=0;
     long n=myProblem->getDimension();
@@ -33,7 +38,9 @@ void    Bfgs::step()
     for(int i=0;i<n;i++)
     {
         xp[i]=xpoint[i];
+
     }
+
     double acc=1e-19;
     long nact;
     long iprint=0;
@@ -42,10 +49,8 @@ void    Bfgs::step()
     long meq=0;
     long ia=n;
     getmin_(&n,&m,&meq,a,&ia,b,xl,xu,xp,&acc,iact,&nact,par,&iprint,&info,w);
-
     for(int i=0;i<n;i++) xpoint[i]=xp[i];
-    ypoint=myProblem->funmin(xpoint);
-    if(!myProblem->isPointIn(xpoint)) ypoint=1e+100;
+    ypoint=myProblem->statFunmin(xpoint);
 }
 
 bool    Bfgs::terminated()
@@ -1839,7 +1844,10 @@ int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
     tempg.resize(*n);
     for(int i=0;i<*n;i++)
         tempx[i]=x[i];
-    *f=myProblem->funmin(tempx);
+    *f=myProblem->statFunmin(tempx);
+   // printf("BFGS ITER=%4d  Value = %20.10lg\n",
+   //        totcal_1.itnocs,
+   //        *f);
     tempg = myProblem->gradient(tempx);
     for(int i=0;i<*n;i++)
     {

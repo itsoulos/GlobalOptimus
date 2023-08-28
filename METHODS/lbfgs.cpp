@@ -13,7 +13,12 @@ void    Lbfgs::init()
 
 void    Lbfgs::step()
 {
-    if(!haveInitialized) return;
+    if(!haveInitialized)
+    {
+        xpoint.resize(myProblem->getDimension());
+        xpoint = myProblem->getSample();
+        ypoint = myProblem->statFunmin(xpoint);
+    }
     integer iprint=0;
     double factr=1e7;
     double pgtol = 1e-5;

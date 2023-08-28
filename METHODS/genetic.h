@@ -7,10 +7,10 @@
 class Genetic : public Optimizer
 {
 private:
-    /** try
+
     vector<Data> population;
     vector<Data> childrenArray;
-    Data         fitnessArray;**/
+    Data         fitnessArray;
 
     Collection chromosomes;
     Collection children;

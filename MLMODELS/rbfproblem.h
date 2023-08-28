@@ -12,14 +12,14 @@ private:
     vector<Data> centers;
     Data variances;
     void    getWeightDerivative(int index,Data &x,double &g);
-    void    getCenterDerivative(int index,Data &x,double &g);
-    void    getVarianceDerivative(int index,Data &x,Data &g);
+    void    getVarianceDerivative(int index,Data &x,double &g);
+    void    getCenterDerivative(int index,Data &x,Data &g);
 public:
     RbfProblem();
     void    setParameters(Data &x);
     void    getParameters(Data &x);
-    double  funmin(Data &x);
-    Data    gradient(Data &x);
+    virtual double  funmin(Data &x);
+    virtual Data    gradient(Data &x);
     double  getOutput(Data &x);
     void    runKmeans(vector<Data> &point, int K,vector<Data> &centers,
                                 Data &variances);

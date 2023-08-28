@@ -120,7 +120,7 @@ double  Optimizer::localSearch(Data &x)
     }
     if(local!=NULL)
     {
-        y = myProblem->funmin(x);
+        y = myProblem->statFunmin(x);
         delete local;
     }
     return y;
