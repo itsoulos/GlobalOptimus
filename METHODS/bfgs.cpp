@@ -1840,7 +1840,6 @@ int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
     for(int i=0;i<*n;i++)
         tempx[i]=x[i];
     *f=myProblem->funmin(tempx);
-
     tempg = myProblem->gradient(tempx);
     for(int i=0;i<*n;i++)
     {

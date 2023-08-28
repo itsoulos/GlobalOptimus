@@ -174,6 +174,9 @@ void loadProblem()
             if(problemName == "mlp")
             mainProblem = new MlpProblem();
     else
+            if(problemName == "rbf")
+            mainProblem = new RbfProblem();
+    else
             error("Undefined function "+problemName);
               mainProblem->init(problemParams);
 

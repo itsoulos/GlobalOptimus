@@ -148,6 +148,7 @@ public:
      * @return
      */
     double  getClass(double value)const;
+    vector<Data> getAllXpoint();
 };
 
 #endif // DATASET_H

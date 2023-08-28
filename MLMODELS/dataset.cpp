@@ -225,6 +225,11 @@ double  Dataset::getClass(double value) const
     return patternClass[imin];
 }
 
+vector<Data>    Dataset::getAllXpoint()
+{
+    return xpoint;
+}
+
 double  Dataset::getClass(int pos) const
 {
     double y=ypoint[pos];

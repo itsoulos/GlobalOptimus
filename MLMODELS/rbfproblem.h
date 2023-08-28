@@ -11,6 +11,9 @@ private:
     Data weight;
     vector<Data> centers;
     Data variances;
+    void    getWeightDerivative(int index,Data &x,double &g);
+    void    getCenterDerivative(int index,Data &x,double &g);
+    void    getVarianceDerivative(int index,Data &x,Data &g);
 public:
     RbfProblem();
     void    setParameters(Data &x);
@@ -18,6 +21,8 @@ public:
     double  funmin(Data &x);
     Data    gradient(Data &x);
     double  getOutput(Data &x);
+    void    runKmeans(vector<Data> &point, int K,vector<Data> &centers,
+                                Data &variances);
     double  gaussian(Data &x,Data &center,double variance);
     virtual void init(QJsonObject &params);
     virtual QJsonObject done(Data &x);

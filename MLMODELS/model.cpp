@@ -10,7 +10,7 @@ double      Model::getDistance(Data &x1,Data &x2)
 {
     double sum = 0.0;
     for(int i=0;i<x1.size();i++) sum+=(x1[i]-x2[i])*(x1[i]-x2[i]);
-    return sqrt(sum/x1.size());
+    return sqrt(sum);
 }
 
 double  Model::getTrainError()
@@ -23,6 +23,7 @@ double  Model::getTrainError()
         double per = getOutput(xx);
         error+= (per-yy)*(per-yy);
     }
+
     return error;
 }
 /** kanei oti kai i getTrainError() alla gia to test set **/

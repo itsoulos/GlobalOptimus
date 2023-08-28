@@ -118,7 +118,11 @@ double  Optimizer::localSearch(Data &x)
         local->solve();
         ((Lbfgs *)local)->getPoint(x,y);
     }
-    if(local!=NULL) delete local;
+    if(local!=NULL)
+    {
+        y = myProblem->funmin(x);
+        delete local;
+    }
     return y;
 }
 

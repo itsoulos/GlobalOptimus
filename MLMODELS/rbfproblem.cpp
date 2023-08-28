@@ -8,7 +8,9 @@ RbfProblem::RbfProblem()
 
 double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 {
-    return exp(-pow(getDistance(x,center),2.0)/(variance * variance));
+    double arg = getDistance(x,center);
+    arg = pow(arg,2.0)/(variance * variance);
+    return exp(-arg);
 }
 
 void    RbfProblem::setParameters(Data &x)
@@ -45,10 +47,32 @@ void    RbfProblem::getParameters(Data &x)
         x[icount++]=weight[i];
 }
 
+void    RbfProblem::getWeightDerivative(int index,Data &x,double &g)
+{
+    double val = gaussian(x,centers[index],variances[index]);
+    g=val;
+}
+
+void    RbfProblem::getCenterDerivative(int index,Data &x,double &g)
+{
+    double val = gaussian(x,centers[index],variances[index]);
+    g =weight[index]* val * (-2.0) * (-pow(getDistance(x,centers[index]),2.0)/pow(variances[index],3.0));
+}
+
+void    RbfProblem::getVarianceDerivative(int index,Data &x,Data &g)
+{
+    double val = gaussian(x,centers[index],variances[index]);
+    for(int j=0;j<trainDataset->dimension();j++)
+    {
+        g[j]=val * 2.0 * (x[j]-centers[index][j])*(-1.0)*(-1.0/(variances[index]*variances[index]));
+    }
+}
+
 double  RbfProblem::funmin(Data &x)
 {
     setParameters(x);
-    return getTrainError();
+    double f =  getTrainError();
+    return f;
 }
 
 static double dmax(double a,double b)
@@ -58,6 +82,24 @@ static double dmax(double a,double b)
 
 Data    RbfProblem::gradient(Data &x)
 {
+    Data g;
+    weight = x;
+    g.resize(weight.size());
+    for(int i=0;i<g.size();i++)
+        g[i]=0.0;
+    Data gtemp ;
+    gtemp.resize(dimension);
+
+    for(int i=0;i<trainDataset->count();i++)
+    {
+        Data xx = trainDataset->getXPoint(i);
+
+        double per=getOutput(xx)-trainDataset->getYPoint(i);
+        for(int j=0;j<g.size();j++)	g[j]+=gtemp[j]*per;
+    }
+    for(int j=0;j<x.size();j++) g[j]*=2.0;
+    return g;
+    /*
     Data g;
     g.resize(dimension);
     for(int i=0;i<dimension;i++)
@@ -70,17 +112,134 @@ Data    RbfProblem::gradient(Data &x)
         g[i]=(v1-v2)/(2.0 * eps);
         x[i]+=eps;
     }
-    return g;
+    return g;*/
 }
 
 double  RbfProblem::getOutput(Data &x)
 {
     int nodes = weight.size();
     double sum = 0.0;
+
     for(int i=0;i<nodes;i++)
+    {
         sum+=weight[i]*gaussian(x,centers[i],variances[i]);
+    }
     return sum;
 }
+
+
+void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
+                            Data &variances)
+{
+   int pop = point.size();
+    centers.resize(K);
+    vector<Data> copyCenter;
+    copyCenter.resize(K);
+
+    vector<int> belong;
+    belong.resize(pop);
+    vector<int> teamElements;
+    teamElements.resize(K);
+    variances.resize(K);
+
+ for(int i=0;i<K;i++)
+ {
+
+     teamElements[i]=0;
+ }
+
+    for(int i=0;i<pop;i++)
+    {
+        belong[i]=rand() % K;
+        teamElements[belong[i]]++;
+    }
+    int d = trainDataset->dimension();
+    for(int i=0;i<K;i++)
+    {
+
+        centers[i].resize(d);
+        for(int j=0;j<d;j++)
+            centers[i][j]=0.0;
+    }
+    for(int j=0;j<point.size();j++)
+        {
+         for(int k=0;k<d;k++)
+         {
+             centers[belong[j]][k]+=point[j][k];
+         }
+     }
+    for(int i=0;i<K;i++)
+    {
+        for(int j=0;j<d;j++)
+            centers[i][j]/=teamElements[i]>1?teamElements[i]:1;
+    }
+
+    int iteration = 1;
+    double oldDist = 1e+100;
+    while(true)
+    {
+        copyCenter = centers;
+        for(int i=0;i<K;i++) teamElements[i]=0;
+
+        for(int i=0;i<point.size();i++)
+        {
+            int minCenterIndex = -1;
+            double minCenterDist = 1e+100;
+            for(int j=0;j<K;j++)
+            {
+                double dist = getDistance(point[i],centers[j]);
+                if(dist<minCenterDist)
+                {
+                    minCenterDist = dist;
+                    minCenterIndex = j;
+                }
+            }
+            belong[i]=minCenterIndex;
+            teamElements[minCenterIndex]++;
+
+        }
+
+        for(int i=0;i<K;i++)
+        {
+           for(int j=0;j<d;j++)
+               centers[i][j]=0.0;
+        }
+           for(int j=0;j<point.size();j++)
+           {
+            for(int k=0;k<d;k++)
+            {
+                centers[belong[j]][k]+=point[j][k];
+            }
+           }
+
+           for(int i=0;i<K;i++)
+            for(int k=0;k<d;k++)
+               centers[i][k]/=teamElements[i]>1?teamElements[i]:1;
+
+        double totalDistance = 0.0;
+        for(int i=0;i<K;i++)
+        {
+            totalDistance+=getDistance(centers[i],copyCenter[i]);
+        }
+        if(totalDistance<1e-6) break;
+        if(iteration>1 && fabs(totalDistance-oldDist)<1e-8) break;
+        iteration++;
+        oldDist = totalDistance;
+    }
+    for(int i=0;i<variances.size();i++)
+    {
+        variances[i]=0.0;
+    }
+        for(int j=0;j<point.size();j++)
+        {
+            for(int k=0;k<d;k++)
+                variances[belong[j]]+=pow(point[j][k]-centers[belong[j]][k],2.0);
+        }
+
+    for(int i=0;i<variances.size();i++)
+        variances[i]=sqrt(variances[i]/teamElements[i]);
+}
+
 
 void    RbfProblem::init(QJsonObject &params)
 {
@@ -89,14 +248,47 @@ void    RbfProblem::init(QJsonObject &params)
     int nodes        = 1;
     if(params.contains("rbf_nodes"))
         nodes = params["rbf_nodes"].toString().toInt();
+    weight.resize(nodes);
     trainDataset=new Dataset(trainName);
+    int d = trainDataset->dimension();
     testDataset = new Dataset(testName);
-    int k = (trainDataset->dimension()*nodes)+
+    int k = (d*nodes)+
             nodes+nodes;
     setDimension(k);
     left.resize(k);
     right.resize(k);
+
     //kmeans to estimate the range of margins
+    vector<Data> xpoint = trainDataset->getAllXpoint();
+    runKmeans(xpoint,nodes,centers,variances);
+    double scale_factor = 5.0;
+    if(params.contains("rbf_factor"))
+    {
+        scale_factor = params["rbf_factor"].toString().toDouble();
+    }
+    int icount = 0;
+    for(int i=0;i<nodes;i++)
+    {
+        for(int j=0;j<d;j++)
+        {
+            left[icount]= -scale_factor * fabs(centers[i][j]);
+            right[icount]= scale_factor * fabs(centers[i][j]);
+            icount++;
+        }
+    }
+    for(int i=0;i<nodes;i++)
+    {
+        left[icount]=0.001;
+        right[icount]=scale_factor * fabs(variances[i]);
+        if(right[icount]<0.001) right[icount]=0.001;
+        icount++;
+    }
+    for(int i=0;i<nodes;i++)
+    {
+        left[icount]=-scale_factor * 10.0;
+        right[icount] = scale_factor * 10.0;
+        icount++;
+    }
  }
 
 QJsonObject RbfProblem::done(Data &x)
