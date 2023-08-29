@@ -32,15 +32,10 @@ void    Genetic::init()
     population.resize(chromosomeCount);
     fitnessArray.resize(chromosomeCount);
     childrenArray.resize(chromosomeCount);
+    sampleFromProblem(chromosomeCount,population,fitnessArray);
     for(int i=0;i<chromosomeCount;i++)
     {
-        Data x=myProblem->getSample();
-        double y = myProblem->statFunmin(x);
-        population[i].resize(myProblem->getDimension());
         childrenArray[i].resize(myProblem->getDimension());
-        population[i]=x;
-        fitnessArray[i]=y;
-        //    chromosomes.addPointNoCheck(x,y);
     }
 }
 
@@ -112,9 +107,7 @@ int     Genetic::selectWithTournament(int size)
     for(int i=0;i<size;i++)
     {
         int randPos = rand() %chromosomeCount;
-  //      Data x;
         double y=fitnessArray[randPos];
-        //chromosomes.getPoint(randPos,x,y);
         if(y<minValue || i==0)
         {
             minValue = y;
@@ -213,7 +206,9 @@ void    Genetic::CalcFitnessArray()
         {
             double r = rand()*1.0/RAND_MAX;
             if(r<localsearchRate)
-            fitnessArray[i]=localSearch(population[i]);
+            {
+                fitnessArray[i]=localSearch(population[i]);
+            }
         }
         /*
         Data x;

@@ -5,6 +5,23 @@ Dataset::Dataset()
     xpoint.resize(0);
     ypoint.resize(0);
 }
+Dataset::Dataset(Problem *p,int N)
+{
+    xpoint.resize(N);
+    ypoint.resize(N);
+    for(int i=0;i<N;i++)
+    {
+        xpoint[i].resize(p->getDimension());
+        xpoint[i]=p->getSample();
+        ypoint[i]=p->statFunmin(xpoint[i]);
+    }
+}
+
+void Dataset::addPoint(Data &x,double y)
+{
+    xpoint.push_back(x);
+    ypoint.push_back(y);
+}
 //arff
 Dataset::Dataset(QString filename)
 {

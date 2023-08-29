@@ -4,6 +4,10 @@
 # include <OPTIMUS/parameter.h>
 # include <OPTIMUS/doublebox.h>
 # include <OPTIMUS/similarity.h>
+# include <SAMPLER/maxwellsampler.h>
+# include <SAMPLER/neuralsampler.h>
+# include <SAMPLER/triangularsampler.h>
+# include <SAMPLER/uniformsampler.h>
 # include <QJsonArray>
 
 /**
@@ -18,6 +22,7 @@ protected:
    Problem          *myProblem;
    DoubleBox        doubleBox;
    Similarity       similarity;
+   ProblemSampler   *problemSampler;
 public:
     /**
      * @brief Optimizer  the constructor of the class
@@ -36,6 +41,13 @@ public:
     double  localSearch(Data &x);
     Problem     *getProblem();
     QStringList getParameterNames() const;
+    /**
+     * @brief sampleFromProblem, samples from the objective function a series of samples.
+     * @param N, the number of samples.
+     * @param xsample, the vector holding the samples.
+     * @param ysample, the function values of the samples.
+     */
+    void        sampleFromProblem(int &N,Matrix &xsample,Data &ysample);
     ~Optimizer();
 };
 

@@ -18,10 +18,13 @@ void    Multistart::step()
 {
     ++iteration;
     double y;
+    Matrix xpoint;
+    Data ypoint;
+    sampleFromProblem(nsamples,xpoint,ypoint);
     for(int i=0;i<nsamples;i++)
     {
-        Data x = myProblem->getSample();
-        y = myProblem->statFunmin(x);
+        Data x = xpoint[i];
+        y = ypoint[i];
         y = localSearch(x);
         minima.addPoint(x,y);
     }

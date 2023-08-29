@@ -22,6 +22,7 @@ private:
      */
     void makePatternClass();
 public:
+    Dataset(Problem *p,int N);
     /**
      * @brief Dataset, i prokathorismeni synartisi dimioyrgias
      */
@@ -38,6 +39,7 @@ public:
      * @param y, oi exodoi gia kathe protypo
      */
     void    setData(Matrix &x,Data &y);
+    void    addPoint(Data &x,double y);
 
     /**
      * @brief saveData Apothikeyei ta protypa kai tis exodous se arxeio.

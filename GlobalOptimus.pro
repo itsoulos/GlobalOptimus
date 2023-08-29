@@ -60,12 +60,17 @@ SOURCES += \
         PROBLEMS/sinu.cpp \
         PROBLEMS/test30n.cpp \
         MLMODELS/dataset.cpp \
+        SAMPLER/maxwellsampler.cpp \
+        SAMPLER/neuralsampler.cpp \
+        SAMPLER/triangularsampler.cpp \
+        SAMPLER/uniformsampler.cpp \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
         OPTIMUS/problem.cpp \
         PROBLEMS/rastriginproblem.cpp \
-        PROBLEMS/test2nproblem.cpp
+        PROBLEMS/test2nproblem.cpp \
+        SAMPLER/problemsampler.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -121,4 +126,9 @@ HEADERS += \
     PROBLEMS/sinu.h \
     PROBLEMS/test2nproblem.h \
     PROBLEMS/test30n.h \
-    MLMODELS/dataset.h
+    MLMODELS/dataset.h \
+    SAMPLER/maxwellsampler.h \
+    SAMPLER/neuralsampler.h \
+    SAMPLER/problemsampler.h \
+    SAMPLER/triangularsampler.h \
+    SAMPLER/uniformsampler.h
