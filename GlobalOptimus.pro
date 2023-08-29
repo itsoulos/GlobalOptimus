@@ -62,6 +62,7 @@ SOURCES += \
         MLMODELS/dataset.cpp \
         SAMPLER/maxwellsampler.cpp \
         SAMPLER/neuralsampler.cpp \
+        SAMPLER/rbfsampler.cpp \
         SAMPLER/triangularsampler.cpp \
         SAMPLER/uniformsampler.cpp \
         main.cpp \
@@ -130,5 +131,6 @@ HEADERS += \
     SAMPLER/maxwellsampler.h \
     SAMPLER/neuralsampler.h \
     SAMPLER/problemsampler.h \
+    SAMPLER/rbfsampler.h \
     SAMPLER/triangularsampler.h \
     SAMPLER/uniformsampler.h

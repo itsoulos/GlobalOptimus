@@ -96,6 +96,12 @@ void    Optimizer::solve()
         int w = getParam("opt_mlpweights").getValue().toInt();
         problemSampler=new NeuralSampler(myProblem,w);
     }
+    else
+    if(sampling == "rbf")
+    {
+        int w = getParam("opt_rbfweights").getValue().toInt();
+        problemSampler=new RbfSampler(myProblem,w);
+    }
 
     init();
     do

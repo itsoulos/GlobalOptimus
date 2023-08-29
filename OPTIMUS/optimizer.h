@@ -8,6 +8,7 @@
 # include <SAMPLER/neuralsampler.h>
 # include <SAMPLER/triangularsampler.h>
 # include <SAMPLER/uniformsampler.h>
+# include <SAMPLER/rbfsampler.h>
 # include <QJsonArray>
 
 /**
