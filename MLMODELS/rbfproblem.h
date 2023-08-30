@@ -14,6 +14,9 @@ private:
     void    getWeightDerivative(int index,Data &x,double &g);
     void    getVarianceDerivative(int index,Data &x,double &g);
     void    getCenterDerivative(int index,Data &x,Data &g);
+    /** test
+     */
+    Data lastGaussianValues;
 public:
     RbfProblem();
     void    setParameters(Data &x);

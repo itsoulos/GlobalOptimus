@@ -1604,8 +1604,7 @@ int Lbfgs::dcstep(double *stx, double *fx, double *dx,
     /* System generated locals */
     double d__1, d__2, d__3;
 
-    /* Builtin functions */
-    double sqrt(double);
+
 
     /* Local variables */
     double p, q, r__, s, sgnd, stpc, stpf, stpq, gamma, theta;
@@ -1884,8 +1883,7 @@ int Lbfgs::dpofa(double *a, integer *lda, integer *n, integer *
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
 
-    /* Builtin functions */
-    double sqrt(double);
+
 
     /* Local variables */
     integer j, k;
@@ -2955,8 +2953,7 @@ int Lbfgs::bmv(integer *m, double *sy, double *wt, integer
     /* System generated locals */
     integer sy_dim1, sy_offset, wt_dim1, wt_offset, i__1, i__2;
 
-    /* Builtin functions */
-    double sqrt(double);
+
 
     /* Local variables */
     integer i__, k, i2;

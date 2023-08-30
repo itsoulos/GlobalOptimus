@@ -9,10 +9,9 @@ RbfProblem::RbfProblem()
 double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 {
     double arg = getDistance(x,center);
-    arg = pow(arg,2.0)/(variance * variance);
-   //printf("Arg = %lf \n",arg);
-   // if(isnan(arg) || isinf(arg)) return 0.0;
-   // if(arg>10) return 0.0;
+    arg = (arg * arg)/(variance * variance);
+//    if(isnan(arg) || isinf(arg)) return 0.0;
+ //   if(arg>10) return 0.0;
     return exp(-arg);
 }
 
@@ -52,20 +51,24 @@ void    RbfProblem::getParameters(Data &x)
 
 void    RbfProblem::getWeightDerivative(int index,Data &x,double &g)
 {
-    double val = gaussian(x,centers[index],variances[index]);
+    double val =lastGaussianValues[index];// gaussian(x,centers[index],variances[index]);
     g=val;
 }
 
 void    RbfProblem::getVarianceDerivative(int index,Data &x,double &g)
 {
-    double val = gaussian(x,centers[index],variances[index]);
-    g =weight[index]* val * (-2.0) * (-pow(getDistance(x,centers[index]),2.0)/pow(variances[index],3.0));
+    double val = lastGaussianValues[index];// gaussian(x,centers[index],variances[index]);
+    double v3 = variances[index]*variances[index]*variances[index];
+    double d2 = getDistance(x,centers[index]);
+    d2 = d2 * d2;
+    g =weight[index]* val * (-2.0) * (-d2/v3);
 }
 
 void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
 {
-    double val = gaussian(x,centers[index],variances[index]);
-    for(int j=0;j<trainDataset->dimension();j++)
+    double val = lastGaussianValues[index];// gaussian(x,centers[index],variances[index]);
+    int d = trainDataset->dimension();
+    for(int j=0;j<d;j++)
     {
         g[j]=val * 2.0 * (x[j]-centers[index][j])*(-1.0)*(-1.0/(variances[index]*variances[index]));
     }
@@ -96,7 +99,8 @@ Data    RbfProblem::gradient(Data &x)
     int d = trainDataset->dimension();
     int nodes = weight.size();
     g1.resize(d );
-    for(int i=0;i<trainDataset->count();i++)
+    int tcount = trainDataset->count();
+    for(int i=0;i<tcount;i++)
     {
         Data xx = trainDataset->getXPoint(i);
         double per=getOutput(xx)-trainDataset->getYPoint(i);
@@ -104,7 +108,7 @@ Data    RbfProblem::gradient(Data &x)
         for(int j=0;j<nodes;j++)
         {
             getCenterDerivative(j,xx,g1);
-            for(int l=0;l<g1.size();l++)
+            for(int l=0;l<d;l++)
                 gtemp[icount++]=g1[l];
         }
         for(int j=0;j<nodes;j++)
@@ -119,7 +123,7 @@ Data    RbfProblem::gradient(Data &x)
             getWeightDerivative(j,xx,gx);
             gtemp[icount++]=gx;
         }
-        for(int j=0;j<g.size();j++)	g[j]+=gtemp[j]*per;
+        for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
     return g;
@@ -146,7 +150,9 @@ double  RbfProblem::getOutput(Data &x)
 
     for(int i=0;i<nodes;i++)
     {
-        sum+=weight[i]*gaussian(x,centers[i],variances[i]);
+        double val = gaussian(x,centers[i],variances[i]);
+        lastGaussianValues[i]=val;
+        sum+=weight[i]*val;
     }
     return sum;
 }
@@ -339,6 +345,7 @@ void    RbfProblem::init(QJsonObject &params)
         right[icount] = scale_factor * 10.0;
         icount++;
     }
+    lastGaussianValues.resize(nodes);
  }
 
 QJsonObject RbfProblem::done(Data &x)

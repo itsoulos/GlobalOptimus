@@ -16,9 +16,11 @@ double      Model::getDistance(Data &x1,Data &x2)
 double  Model::getTrainError()
 {
     double error = 0.0;
-    for(int i=0;i<trainDataset->count();i++)
+    Matrix xall = trainDataset->getAllXpoint();
+    int xallsize  = xall.size();
+    for(int i=0;i<xallsize;i++)
     {
-        Data xx = trainDataset->getXPoint(i);
+        Data xx = xall[i];
         double yy = trainDataset->getYPoint(i);
         double per = getOutput(xx);
         error+= (per-yy)*(per-yy);
