@@ -9,7 +9,7 @@ then
 	METHODPARAMS="--minfinder_samples=25 --minfinder_sampling=repulsion"
 elif [ $METHOD = "Genetic" ]
 then
-	METHODPARAMS="--gen_count=200 --gen_maxiters=200 --gen_termination=similarity --gen_lrate=0.01 --gen_selection=tournament "
+	METHODPARAMS="--gen_count=200 --gen_maxiters=200 --gen_termination=similarity --gen_lrate=0.01 --gen_selection=tournament --opt_debug=no"
 elif [ $METHOD = "Pso" ]
 then
 	METHODPARAMS="--pso_localsearch_rate=0.01"
