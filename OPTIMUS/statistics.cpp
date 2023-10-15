@@ -14,7 +14,6 @@ void Statistics::addProblem(Problem *p)
     Data xv = p->getBestx();
     QJsonObject xx =p->done(xv);
     if(xx.isEmpty()) return;
-    qDebug()<<"Stats. OBJECT = "<<xx<<endl;
     QStringList list = xx.keys();
     for(int i=0;i<list.size();i++)
     {

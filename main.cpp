@@ -231,7 +231,7 @@ void checkParameter(
 
 void error(QString message)
 {
-    qDebug().noquote()<<QString("Fatal Error: %1").arg(message,40)<<endl;
+	printf("Fatal error %s \n",message.toStdString().c_str());
     qApp->exit(0);
     exit(0);
 }
