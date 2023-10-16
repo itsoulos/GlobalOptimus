@@ -2,6 +2,10 @@
 #define GOLDENSEARCH_H
 # include <LINESEARCH/linesearch.h>
 
+/**
+ * @brief The GoldenSearch class implements the Golden Search
+ * linesearch algorithm.
+ */
 class GoldenSearch : public LineSearch
 {
 private:

@@ -2,6 +2,10 @@
 #define ARMIJOSEARCH_H
 # include <LINESEARCH/linesearch.h>
 
+/**
+ * @brief The ArmijoSearch class implements the Armijo
+ * line search algorithm.
+ */
 class ArmijoSearch : public LineSearch
 {
 private:

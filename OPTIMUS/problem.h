@@ -157,6 +157,8 @@ public:
     void    getrightmargin(double *x);
     int     getDimension();
     int     getdimension();
+    double  randomDouble();
+    bool     getGradientCriterion(Data &x1,Data &x2);
     ~Problem();
 };
 

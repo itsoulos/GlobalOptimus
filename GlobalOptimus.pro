@@ -16,6 +16,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 
 QMAKE_LFLAGS += -O3
 SOURCES += \
+        METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
         MLMODELS/mlpproblem.cpp \
         MLMODELS/model.cpp \
@@ -60,6 +61,7 @@ SOURCES += \
         PROBLEMS/sinu.cpp \
         PROBLEMS/test30n.cpp \
         MLMODELS/dataset.cpp \
+        PROBLEMS/userproblem.cpp \
         SAMPLER/maxwellsampler.cpp \
         SAMPLER/neuralsampler.cpp \
         SAMPLER/rbfsampler.cpp \
@@ -79,6 +81,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    METHODS/ipso.h \
     METHODS/lbfgs.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
@@ -128,6 +131,7 @@ HEADERS += \
     PROBLEMS/test2nproblem.h \
     PROBLEMS/test30n.h \
     MLMODELS/dataset.h \
+    PROBLEMS/userproblem.h \
     SAMPLER/maxwellsampler.h \
     SAMPLER/neuralsampler.h \
     SAMPLER/problemsampler.h \

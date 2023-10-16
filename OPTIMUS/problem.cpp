@@ -126,6 +126,24 @@ void    Problem::init(QJsonObject &params)
     //nothing here
 }
 
+double  Problem::randomDouble()
+{
+    return rand()*1.0/RAND_MAX;
+}
+
+bool     Problem::getGradientCriterion(Data &x1,Data &x2)
+{
+    Data g1,g2;
+    g1.resize(x1.size());
+    g2.resize(x2.size());
+    g1=gradient(x1);
+    g2=gradient(x2);
+    double s=0.0;
+    for(int i=0;i<x1.size();i++)
+        s+=(x1[i]-x2[i])*(g1[i]-g2[i]);
+    return s>=0;
+}
+
 QJsonObject Problem::done(Data &x)
 {
     return QJsonObject();

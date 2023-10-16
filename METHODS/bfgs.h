@@ -3,7 +3,10 @@
 # include <OPTIMUS/optimizer.h>
 # include <math.h>
 
-
+/**
+ * @brief The Bfgs class implements the BFGS
+ * local optimization method as modified by Powell.
+ */
 class Bfgs : public Optimizer
 {
 private:

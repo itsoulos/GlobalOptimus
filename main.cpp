@@ -29,6 +29,7 @@
 # include <PROBLEMS/test30n.h>
 # include <MLMODELS/mlpproblem.h>
 # include <MLMODELS/rbfproblem.h>
+# include <PROBLEMS/userproblem.h>
 
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
@@ -36,6 +37,7 @@
 # include <METHODS/bfgs.h>
 # include <METHODS/lbfgs.h>
 # include <METHODS/differentialevolution.h>
+# include <METHODS/ipso.h>
 # include <OPTIMUS/statistics.h>
 
 void error(QString message);
@@ -78,6 +80,8 @@ void loadMethods()
     methodName<<"Genetic";
     method<<new DifferentialEvolution;
     methodName<<"DifferentialEvolution";
+    method<<new iPso;
+    methodName<<"iPso";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }
@@ -176,6 +180,9 @@ void loadProblem()
     else
             if(problemName == "rbf")
             mainProblem = new RbfProblem();
+    else
+            if(problemName == "UserProblem")
+            mainProblem = new UserProblem();
     else
             error("Undefined function "+problemName);
               mainProblem->init(problemParams);

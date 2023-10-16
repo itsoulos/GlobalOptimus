@@ -2,6 +2,10 @@
 #define FIBONACCISEARCH_H
 # include <LINESEARCH/linesearch.h>
 
+/**
+ * @brief The FibonacciSearch class implements
+ * the Fibonacci line search algorithm.
+ */
 class FibonacciSearch : public LineSearch
 {
 private:

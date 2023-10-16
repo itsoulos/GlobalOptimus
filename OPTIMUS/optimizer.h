@@ -18,8 +18,17 @@
 class Optimizer
 {
 protected:
+    /**
+    * @brief params, these are the method parameters
+    */
    QJsonObject       params;
+    /**
+    * @brief paramsHelp, the help info for every parameter
+    */
    QJsonObject       paramsHelp;
+   /**
+    * @brief myProblem the objective problem
+    */
    Problem          *myProblem;
    DoubleBox        doubleBox;
    Similarity       similarity;
