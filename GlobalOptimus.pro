@@ -18,6 +18,7 @@ QMAKE_LFLAGS += -O3
 SOURCES += \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
+        METHODS/neuralminimizer.cpp \
         MLMODELS/mlpproblem.cpp \
         MLMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
@@ -62,6 +63,7 @@ SOURCES += \
         PROBLEMS/test30n.cpp \
         MLMODELS/dataset.cpp \
         PROBLEMS/userproblem.cpp \
+        SAMPLER/kmeanssampler.cpp \
         SAMPLER/maxwellsampler.cpp \
         SAMPLER/neuralsampler.cpp \
         SAMPLER/rbfsampler.cpp \
@@ -83,6 +85,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
+    METHODS/neuralminimizer.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
     LINESEARCH/armijosearch.h \
@@ -132,6 +135,7 @@ HEADERS += \
     PROBLEMS/test30n.h \
     MLMODELS/dataset.h \
     PROBLEMS/userproblem.h \
+    SAMPLER/kmeanssampler.h \
     SAMPLER/maxwellsampler.h \
     SAMPLER/neuralsampler.h \
     SAMPLER/problemsampler.h \

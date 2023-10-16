@@ -5,7 +5,9 @@ DifferentialEvolution::DifferentialEvolution()
     addParam(Parameter("de_np","10n","The number of agents. Default value 10n"));
     addParam(Parameter("de_f","0.8","De factor value"));
     addParam(Parameter("de_cr","0.9","DE CR parameter"));
+    addParam(Parameter("de_tsize","8","Tournament size"));
     addParam(Parameter("de_maxiters","1000","DE maximum iters"));
+    addParam(Parameter("de_selection","random","Selection method. Available values: random, tournament"));
     addParam(Parameter("de_termination","maxiters","De termination. Available values: maxiters,doublebox,similarity"));
 }
 
@@ -34,9 +36,29 @@ void    DifferentialEvolution::init()
     }
 }
 
+int     DifferentialEvolution::tournament()
+{
+    int tsize=params["de_tsize"].toString().toInt();
+    int minindex=-1;
+    double minvalue=1e+100;
+    for(int i=0;i<tsize;i++)
+    {
+        int pos = rand()  % NP;
+        Data xx;
+        double yy;
+        agent.getPoint(pos,xx,yy);
+        if(i==0 || yy<minvalue)
+        {
+            minindex=pos;
+            minvalue=yy;
+        }
+    }
+    return minindex;
+}
 void    DifferentialEvolution::step()
 {
     ++iter;
+    QString selection=params["de_selection"].toString();
     for(int i=0;i<NP;i++)
     {
         Data x;
@@ -45,9 +67,18 @@ void    DifferentialEvolution::step()
         int randomA,randomB,randomC;
         do
         {
-            randomA = rand() % NP;
-            randomB = rand() % NP;
-            randomC = rand() % NP;
+            if(selection == "random")
+            {
+                randomA = rand() % NP;
+                randomB = rand() % NP;
+                randomC = rand() % NP;
+            }
+            else
+            {
+                randomA=tournament();
+                randomB=tournament();
+                randomC=tournament();
+            }
         }while(randomA == randomB || randomB == randomC || randomA == randomC);
         Data xa,xb,xc;
         double ya,yb,yc;

@@ -14,6 +14,7 @@ private:
     int iter;
     Data bestx;
     double besty;
+    int tournament();
 public:
     DifferentialEvolution();
     virtual void init();

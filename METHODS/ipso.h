@@ -8,6 +8,7 @@ class iPso : public Optimizer
 
 private:
     bool centerPso;
+    int ipso_particles;
     double sum,newSum, besty_tmp,zeta;
     int n,sumn;
     int countn;

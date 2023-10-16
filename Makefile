@@ -54,6 +54,7 @@ OBJECTS_DIR   = ./
 
 SOURCES       = METHODS/ipso.cpp \
 		METHODS/lbfgs.cpp \
+		METHODS/neuralminimizer.cpp \
 		MLMODELS/mlpproblem.cpp \
 		MLMODELS/model.cpp \
 		LINESEARCH/armijosearch.cpp \
@@ -98,6 +99,7 @@ SOURCES       = METHODS/ipso.cpp \
 		PROBLEMS/test30n.cpp \
 		MLMODELS/dataset.cpp \
 		PROBLEMS/userproblem.cpp \
+		SAMPLER/kmeanssampler.cpp \
 		SAMPLER/maxwellsampler.cpp \
 		SAMPLER/neuralsampler.cpp \
 		SAMPLER/rbfsampler.cpp \
@@ -112,6 +114,7 @@ SOURCES       = METHODS/ipso.cpp \
 		SAMPLER/problemsampler.cpp 
 OBJECTS       = ipso.o \
 		lbfgs.o \
+		neuralminimizer.o \
 		mlpproblem.o \
 		model.o \
 		armijosearch.o \
@@ -156,6 +159,7 @@ OBJECTS       = ipso.o \
 		test30n.o \
 		dataset.o \
 		userproblem.o \
+		kmeanssampler.o \
 		maxwellsampler.o \
 		neuralsampler.o \
 		rbfsampler.o \
@@ -255,6 +259,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		GlobalOptimus.pro METHODS/ipso.h \
 		METHODS/lbfgs.h \
+		METHODS/neuralminimizer.h \
 		MLMODELS/mlpproblem.h \
 		MLMODELS/model.h \
 		LINESEARCH/armijosearch.h \
@@ -304,6 +309,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/test30n.h \
 		MLMODELS/dataset.h \
 		PROBLEMS/userproblem.h \
+		SAMPLER/kmeanssampler.h \
 		SAMPLER/maxwellsampler.h \
 		SAMPLER/neuralsampler.h \
 		SAMPLER/problemsampler.h \
@@ -311,6 +317,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h METHODS/ipso.cpp \
 		METHODS/lbfgs.cpp \
+		METHODS/neuralminimizer.cpp \
 		MLMODELS/mlpproblem.cpp \
 		MLMODELS/model.cpp \
 		LINESEARCH/armijosearch.cpp \
@@ -355,6 +362,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/test30n.cpp \
 		MLMODELS/dataset.cpp \
 		PROBLEMS/userproblem.cpp \
+		SAMPLER/kmeanssampler.cpp \
 		SAMPLER/maxwellsampler.cpp \
 		SAMPLER/neuralsampler.cpp \
 		SAMPLER/rbfsampler.cpp \
@@ -566,8 +574,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents METHODS/ipso.h METHODS/lbfgs.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h $(DISTDIR)/
-	$(COPY_FILE) --parents METHODS/ipso.cpp METHODS/lbfgs.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents METHODS/ipso.h METHODS/lbfgs.h METHODS/neuralminimizer.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neuralminimizer.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -628,7 +636,8 @@ ipso.o: METHODS/ipso.cpp METHODS/ipso.h \
 		MLMODELS/dataset.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ipso.o METHODS/ipso.cpp
 
 lbfgs.o: METHODS/lbfgs.cpp METHODS/lbfgs.h \
@@ -643,8 +652,26 @@ lbfgs.o: METHODS/lbfgs.cpp METHODS/lbfgs.h \
 		MLMODELS/dataset.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lbfgs.o METHODS/lbfgs.cpp
+
+neuralminimizer.o: METHODS/neuralminimizer.cpp METHODS/neuralminimizer.h \
+		OPTIMUS/collection.h \
+		OPTIMUS/problem.h \
+		OPTIMUS/optimizer.h \
+		OPTIMUS/parameter.h \
+		OPTIMUS/doublebox.h \
+		OPTIMUS/similarity.h \
+		SAMPLER/maxwellsampler.h \
+		SAMPLER/problemsampler.h \
+		SAMPLER/neuralsampler.h \
+		MLMODELS/dataset.h \
+		SAMPLER/triangularsampler.h \
+		SAMPLER/uniformsampler.h \
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o neuralminimizer.o METHODS/neuralminimizer.cpp
 
 mlpproblem.o: MLMODELS/mlpproblem.cpp MLMODELS/mlpproblem.h \
 		MLMODELS/dataset.h \
@@ -684,7 +711,8 @@ bfgs.o: METHODS/bfgs.cpp METHODS/bfgs.h \
 		MLMODELS/dataset.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bfgs.o METHODS/bfgs.cpp
 
 differentialevolution.o: METHODS/differentialevolution.cpp METHODS/differentialevolution.h \
@@ -700,7 +728,8 @@ differentialevolution.o: METHODS/differentialevolution.cpp METHODS/differentiale
 		MLMODELS/dataset.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o differentialevolution.o METHODS/differentialevolution.cpp
 
 genetic.o: METHODS/genetic.cpp METHODS/genetic.h \
@@ -716,7 +745,8 @@ genetic.o: METHODS/genetic.cpp METHODS/genetic.h \
 		MLMODELS/dataset.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o genetic.o METHODS/genetic.cpp
 
 gradientdescent.o: METHODS/gradientdescent.cpp METHODS/gradientdescent.h \
@@ -732,6 +762,7 @@ gradientdescent.o: METHODS/gradientdescent.cpp METHODS/gradientdescent.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
 		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
 		LINESEARCH/linesearch.h \
 		LINESEARCH/fibonaccisearch.h \
 		LINESEARCH/goldensearch.h \
@@ -755,7 +786,8 @@ multistart.o: METHODS/multistart.cpp METHODS/multistart.h \
 		MLMODELS/dataset.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o multistart.o METHODS/multistart.cpp
 
 rbfproblem.o: MLMODELS/rbfproblem.cpp MLMODELS/rbfproblem.h \
@@ -893,6 +925,11 @@ userproblem.o: PROBLEMS/userproblem.cpp PROBLEMS/userproblem.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o userproblem.o PROBLEMS/userproblem.cpp
 
+kmeanssampler.o: SAMPLER/kmeanssampler.cpp SAMPLER/kmeanssampler.h \
+		SAMPLER/problemsampler.h \
+		OPTIMUS/problem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o kmeanssampler.o SAMPLER/kmeanssampler.cpp
+
 maxwellsampler.o: SAMPLER/maxwellsampler.cpp SAMPLER/maxwellsampler.h \
 		SAMPLER/problemsampler.h \
 		OPTIMUS/problem.h
@@ -911,6 +948,7 @@ neuralsampler.o: SAMPLER/neuralsampler.cpp SAMPLER/neuralsampler.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
 		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
 		METHODS/lbfgs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o neuralsampler.o SAMPLER/neuralsampler.cpp
 
@@ -974,6 +1012,7 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
 		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
 		LINESEARCH/linesearch.h \
 		LINESEARCH/fibonaccisearch.h \
 		LINESEARCH/goldensearch.h \
@@ -984,6 +1023,8 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		METHODS/bfgs.h \
 		METHODS/lbfgs.h \
 		METHODS/differentialevolution.h \
+		METHODS/ipso.h \
+		METHODS/neuralminimizer.h \
 		OPTIMUS/statistics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
@@ -999,6 +1040,7 @@ optimizer.o: OPTIMUS/optimizer.cpp OPTIMUS/optimizer.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
 		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
 		METHODS/gradientdescent.h \
 		LINESEARCH/linesearch.h \
 		LINESEARCH/fibonaccisearch.h \

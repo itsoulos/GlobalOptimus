@@ -56,7 +56,7 @@ L111:
                                                                         iprint, csave, lsave, isave, dsave);
     if ( IS_FG(*task) ) {
         for(int i=0;i<n;i++) xpoint[i]=xx[i];
-        f=myProblem->funmin(xpoint);
+        f=myProblem->statFunmin(xpoint);
         //printf("LBFGS: %10.5lf TASK: %d\n",f,*task);
         gg = myProblem->gradient(xpoint);
         for(int i=0;i<n;i++)

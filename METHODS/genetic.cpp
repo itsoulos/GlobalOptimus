@@ -31,8 +31,9 @@ void    Genetic::init()
    // chromosomes.clear();
     population.resize(chromosomeCount);
     fitnessArray.resize(chromosomeCount);
-    childrenArray.resize(chromosomeCount);
+
     sampleFromProblem(chromosomeCount,population,fitnessArray);
+     childrenArray.resize(chromosomeCount);
     for(int i=0;i<chromosomeCount;i++)
     {
         childrenArray[i].resize(myProblem->getDimension());

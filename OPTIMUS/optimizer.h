@@ -9,6 +9,7 @@
 # include <SAMPLER/triangularsampler.h>
 # include <SAMPLER/uniformsampler.h>
 # include <SAMPLER/rbfsampler.h>
+# include <SAMPLER/kmeanssampler.h>
 # include <QJsonArray>
 
 /**

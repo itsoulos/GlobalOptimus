@@ -38,6 +38,7 @@
 # include <METHODS/lbfgs.h>
 # include <METHODS/differentialevolution.h>
 # include <METHODS/ipso.h>
+# include <METHODS/neuralminimizer.h>
 # include <OPTIMUS/statistics.h>
 
 void error(QString message);
@@ -82,6 +83,8 @@ void loadMethods()
     methodName<<"DifferentialEvolution";
     method<<new iPso;
     methodName<<"iPso";
+    method<<new NeuralMinimizer;
+    methodName<<"NeuralMinimizer";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }
@@ -218,6 +221,7 @@ void    printHelp()
         for(int j=0;j<methodParams[i].size();j++)
         {
             Parameter pt = method[i]->getParam(methodParams[i][j]);
+            if(pt.getName().startsWith("opt_")) continue;
             printOption(pt.getName(),pt.getHelp(),pt.getValue());
         }
         qDebug()<<header;

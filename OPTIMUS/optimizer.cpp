@@ -16,6 +16,7 @@ Optimizer::Optimizer()
     addParam(Parameter("opt_mlpweights","10","Number of MLP weights"));
     addParam(Parameter("opt_rbfsamples","10","Number of RBF samples"));
     addParam(Parameter("opt_rbfweights","10","Number of RBF weights"));
+    addParam(Parameter("opt_kmeansamples","1000","Number of samples for k-means sampling"));
 }
 
 void        Optimizer::setProblem(Problem *p)
@@ -102,6 +103,16 @@ void    Optimizer::solve()
         int w = getParam("opt_rbfweights").getValue().toInt();
         problemSampler=new RbfSampler(myProblem,w);
     }
+    else
+    if(sampling=="kmeans")
+    {
+        problemSampler=new KmeansSampler(myProblem);
+    }
+    else
+    {
+        problemSampler=new UniformSampler(myProblem);
+
+    }
 
     init();
     do
@@ -118,6 +129,12 @@ void    Optimizer::sampleFromProblem(int &N,Matrix &xsample,Data &ysample)
     if(sampling=="rbf")
     {
         int M = getParam("opt_rbfsamples").getValue().toInt();
+        problemSampler->sampleFromProblem(M,xsample,ysample);
+    }
+    else
+    if(sampling=="kmeans")
+    {
+        int M = getParam("opt_kmeansamples").getValue().toInt();
         problemSampler->sampleFromProblem(M,xsample,ysample);
     }
     else

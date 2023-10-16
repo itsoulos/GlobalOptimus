@@ -19,7 +19,7 @@ double  iPso::fitness(Data &x)
 {
     if (!myProblem->isPointIn(x))
         return 1e+100;
-    return myProblem->funmin(x);
+    return myProblem->statFunmin(x);
 }
 
 double getDistance(Data &x1,Data &x2)
@@ -59,7 +59,6 @@ bool    iPso::checkGradientCriterion(Data &x)
 
 void    iPso::calcFitnessArray()
 {
-    int genome_count = params["ipso_particles"].toString().toInt();
     double wmin = params["ipso_inertia_start"].toString().toDouble();
     double wmax = params["ipso_inertia_end"].toString().toDouble();
     int maxGenerations = params["ipso_generations"].toString().toInt();
@@ -169,7 +168,7 @@ void    iPso::calcFitnessArray()
     }
 
     double localsearch_rate = params["ipso_localsearch_rate"].toString().toDouble();
-    for (int i = 0; i < genome_count; i++)
+    for (int i = 0; i < ipso_particles; i++)
     {
         double R = myProblem->randomDouble();
         if (inertia_type == 0)
@@ -181,8 +180,7 @@ void    iPso::calcFitnessArray()
         {
             double r1 = myProblem->randomDouble();
             double r2 = myProblem->randomDouble();
-            //double r1 = drand48();
-            //double r2 = drand48();
+
 
             double tj = velocity[i][j];              //αποθήκευση παλιάς ταχύτητας
             double part1 = inertia * velocity[i][j]; //πολλαπλασιαστής ταχύτητας(inecria weight)
@@ -210,9 +208,8 @@ void    iPso::calcFitnessArray()
         distances.push_back(getDistance(particle[i], oldg)); // αποθήκευση της απόστασης => παλιά με καινούργια
     }
 
-    //#pragma omp parallel for num_threads(threads)
     double oldMinValue=1e+100;
-    for (int i = 0; i < genome_count; i++)
+    for (int i = 0; i < ipso_particles; i++)
     {
         if (distances[i] > 1e-6)
         {
@@ -222,7 +219,6 @@ void    iPso::calcFitnessArray()
                 fitness_array[i] = localSearch(particle[i]);
                 RC += getDistance(dg, particle[i]);
                 localSearchCount++;
-                //#pragma omp critical
                 {
                     bool found = false;
                     for (int j = 0; j < minimax.size(); j++)
@@ -265,7 +261,7 @@ void    iPso::calcFitnessArray()
 }
 void	iPso::updateCenter()
 {
-    int ipso_particles = params["ipso_particles"].toString().toInt();
+
     for(int j=0;j<myProblem->getDimension();j++) center[j]=0.0;
     for(int i=0;i<ipso_particles;i++)
     {
@@ -284,11 +280,10 @@ void	iPso::updateCenter()
 
 void    iPso::updateBest()
 {
-    int genome_count = params["ipso_particles"].toString().toInt();
 
     int mod = 10;
 
-    for (int i = 0; i < genome_count; i++)
+    for (int i = 0; i < ipso_particles; i++)
     {
 
         /*
@@ -348,7 +343,7 @@ void    iPso::updateBest()
     }
     if(centerPso)
     {
-        double centerValue = myProblem->funmin(center);
+        double centerValue = myProblem->statFunmin(center);
         if(centerValue<besty)
         {
             besty = centerValue;
@@ -357,20 +352,17 @@ void    iPso::updateBest()
     }
     worsty = *max_element (bestFitness_array.begin(), bestFitness_array.end());
     newSum = accumulate(bestFitness_array.begin(), bestFitness_array.end(), 0);
-    newSum = newSum / genome_count;
+    newSum = newSum / ipso_particles;
 }
 
 
 
 void    iPso::init()
 {
-    int ipso_particles = params["ipso_particles"].toString().toInt();
+    ipso_particles = params["ipso_particles"].toString().toInt();
     center.resize(myProblem->getDimension());
     particle.resize(ipso_particles);
-    bestParticle.resize(ipso_particles);
-    velocity.resize(ipso_particles);
-    fitness_array.resize(ipso_particles);
-    bestFitness_array.resize(ipso_particles);
+
     bestx.resize(myProblem->getDimension());
     lmargin = myProblem->getLeftMargin();
     rmargin = myProblem->getRightMargin();
@@ -388,14 +380,17 @@ void    iPso::init()
     minimax.clear();
     sumn=0;
 
+    sampleFromProblem(ipso_particles,particle,fitness_array);
+
+    bestParticle.resize(ipso_particles);
+    velocity.resize(ipso_particles);
+    fitness_array.resize(ipso_particles);
+    bestFitness_array.resize(ipso_particles);
     for (int i = 0; i < ipso_particles; i++)
     {
-        particle[i].resize(myProblem->getDimension());
         bestParticle[i].resize(myProblem->getDimension());
         velocity[i].resize(myProblem->getDimension());
-        particle[i] = myProblem->getSample();
         bestParticle[i] = particle[i];
-        fitness_array[i] = fitness(particle[i]);
         bestFitness_array[i] = fitness_array[i];
 
         for (int j = 0; j < myProblem->getDimension(); j++)
@@ -494,27 +489,7 @@ bool    iPso::terminated()
             }
             else
             {
-
-                double fmin = fabs(1.0 + fabs(besty));
-                if (generation <= 1)
-                {
-                    x1 = 0.0;
-                    x2 = 0.0;
-                }
-                x1 += fmin;
-                x2 += fmin * fmin;
-                variance = x2 / (generation + 1) - (x1 / (generation + 1)) * (x1 / (generation + 1));
-                variance = fabs(variance);
-                if (besty < oldbesty)
-                {
-                    oldbesty = besty;
-                    stopat = variance / 2.0;
-                }
-                if (stopat < 1e-8 && !isnan(variance))
-                    stopat = variance / 2.0;
-                printf("Generations %d value: %lf variance: %lf stopat: %lf\n", generation, besty,
-                       variance, stopat);
-                return generation >= max_generations || (variance <= stopat && generation >= 20);
+                return doubleBox.terminate(besty);
             }
 }
 
