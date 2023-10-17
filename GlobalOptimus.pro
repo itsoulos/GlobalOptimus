@@ -8,11 +8,11 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 LIBS+=  -lm -fopenmp
 
-QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread -fopt-info-optimized-vec-loop-omp
-QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread -fopt-info-optimized-vec-loop-omp
+QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
+QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
 
-QMAKE_CXXFLAGS += -O3  -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread -fopt-info-optimized-vec-loop-omp
-QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread -fopt-info-optimized-vec-loop-omp
+QMAKE_CXXFLAGS += -O3  -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
+QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
 
 QMAKE_LFLAGS += -O3
 SOURCES += \
@@ -20,6 +20,7 @@ SOURCES += \
         METHODS/lbfgs.cpp \
         METHODS/neuralminimizer.cpp \
         METHODS/parallelde.cpp \
+        METHODS/parallelpso.cpp \
         MLMODELS/mlpproblem.cpp \
         MLMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
@@ -88,6 +89,7 @@ HEADERS += \
     METHODS/lbfgs.h \
     METHODS/neuralminimizer.h \
     METHODS/parallelde.h \
+    METHODS/parallelpso.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
     LINESEARCH/armijosearch.h \
