@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Bfgs,Lbfgs,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
-METHOD=ParallelPso
+METHOD=Lbfgs
 #Available local search methods: bfgs, lbfgs, gradient
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans

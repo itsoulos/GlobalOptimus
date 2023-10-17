@@ -43,6 +43,7 @@ SOURCES += \
         PROBLEMS/camel.cpp \
         PROBLEMS/cm.cpp \
         PROBLEMS/diffpower.cpp \
+        PROBLEMS/diracproblem.cpp \
         PROBLEMS/easom.cpp \
         PROBLEMS/elp.cpp \
         PROBLEMS/exp.cpp \
@@ -115,6 +116,7 @@ HEADERS += \
     PROBLEMS/camel.h \
     PROBLEMS/cm.h \
     PROBLEMS/diffpower.h \
+    PROBLEMS/diracproblem.h \
     PROBLEMS/easom.h \
     PROBLEMS/elp.h \
     PROBLEMS/exp.h \

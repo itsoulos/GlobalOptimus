@@ -29,6 +29,7 @@
 # include <PROBLEMS/test30n.h>
 # include <MLMODELS/mlpproblem.h>
 # include <MLMODELS/rbfproblem.h>
+# include <PROBLEMS/diracproblem.h>
 # include <PROBLEMS/userproblem.h>
 
 # include <METHODS/gradientdescent.h>
@@ -189,6 +190,9 @@ void loadProblem()
     else
             if(problemName == "rbf")
             mainProblem = new RbfProblem();
+    else
+            if(problemName == "DiracProblem")
+            mainProblem = new DiracProblem();
     else
             if(problemName == "UserProblem")
             mainProblem = new UserProblem();

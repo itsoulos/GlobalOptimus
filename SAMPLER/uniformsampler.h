@@ -1,4 +1,4 @@
-#ifndef UNIFORMSAMPLER_H
+ #ifndef UNIFORMSAMPLER_H
 #define UNIFORMSAMPLER_H
 #include "SAMPLER/problemsampler.h"
 /**
