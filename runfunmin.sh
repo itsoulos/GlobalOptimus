@@ -1,4 +1,4 @@
-#Available optimization methods: Bfgs,Lbfgs,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
+#Available optimization methods: GradientDescent,Bfgs,Lbfgs,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
 METHOD=ParallelPso
 #Available local search methods: bfgs, lbfgs, gradient
 LOCALSEARCH=bfgs
@@ -9,7 +9,19 @@ TERMINATION=similarity
 
 if [ $METHOD = "Bfgs" ]
 then
+
+#bfgs_iters: the maximum number of allowed iterations
+
 	METHODPARAMS="--bfgs_iters=200"
+elif [ $METHOD = "GradientDescent" ]
+then
+
+#gd_maxiters: maximum number of allowed iterations
+#gd_linesearch: the linesearch method used (none|golden|fibonacci|armijo)
+#gd_epsilon: the epsilon value used in comparisons
+#gd_rate: the line search rate
+
+	METHODPARAMS="--gd_maxiters=200 --gd_linesearch=armijo --gd_epsilon=0.000001 --gd_rate=0.001"
 elif [ $METHOD = "Genetic" ]
 then
 
@@ -35,6 +47,9 @@ then
 	METHODPARAMS="--ms_samples=50 --opt_sampler=$SAMPLER --ms_maxiters=100 --opt_localsearch=$LOCALSEARCH -ms_termination=$TERMINATION"
 elif [ $METHOD = "Lbfgs" ]
 then
+
+#lbfgs_iters: the maximum number of allowed iterations
+
 	METHODPARAMS="--lbfgs_iters=200"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
@@ -68,7 +83,7 @@ then
 #neural_trainmethod: the local search procedure used to train the method
 
 	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=500 --neural_iterations=200 --neural_start_samples=500  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
-elif [ $METHOD= = "ParallelDe" ]
+elif [ $METHOD = "ParallelDe" ]
 then
 
 #parde_termination: termination rule (maxiters|doublebox|similarity)
@@ -83,6 +98,10 @@ then
 #parde_islands: The number of parallel islands for the method.
 
 	METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=5 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --pade_islands_enable=1 --opt_localsearch=$LOCALSEARCH"
+
+elif [ $METHOD = "ParallelPso" ]
+then
+	METHODPARAMS="--parallelPso_particles=200 --parallelPso_generations=200 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=15 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=1 --parallelPso_subClusterEnable=1 --parallelPso_pnumber=1 --opt_localsearch=$LOCALSEARCH"
 fi
 
 

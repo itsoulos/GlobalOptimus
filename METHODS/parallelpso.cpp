@@ -5,17 +5,17 @@
 ParallelPso::ParallelPso()
 {
     before = std::chrono::system_clock::now();
-    addParam(Parameter("parallelPsoParticles", "100", "Number of pso particles"));
-    addParam(Parameter("parallelPsoGenerations", "200", "Maximum number of pso generations"));
-    addParam(Parameter("parallelPsoC1", "0.5", "Pso c1 parameter"));
-    addParam(Parameter("parallelPsoC2", "0.5", "Pso c2 parameter"));
+    addParam(Parameter("parallelPso_particles", "100", "Number of pso particles"));
+    addParam(Parameter("parallelPso_generations", "200", "Maximum number of pso generations"));
+    addParam(Parameter("parallelPso_c1", "0.5", "Pso c1 parameter"));
+    addParam(Parameter("parallelPso_c2", "0.5", "Pso c2 parameter"));
     addParam(Parameter("similarityMaxCount", "15", "Maximum allowed itearations for Similarity Stopping rule"));
-    addParam(Parameter("propagateRate", "15", "The number of generations before the propagation takes place"));
-    addParam(Parameter("parallelPropagateMethod", "1to1", "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
-    addParam(Parameter("subCluster", "5", "number of subclusters for pso"));
-    addParam(Parameter("subClusterEnable", "1", "the number of subclusters that play a role in the termination rule: [1, islands]"));
+    addParam(Parameter("parallelPso_propagateRate", "15", "The number of generations before the propagation takes place"));
+    addParam(Parameter("parallelPso_propagateMethod", "1to1", "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
+    addParam(Parameter("parallelPso_subCluster", "5", "number of subclusters for pso"));
+    addParam(Parameter("parallelPso_subClusterEnable", "1", "the number of subclusters that play a role in the termination rule: [1, islands]"));
     //addParameter("pRate", "0", "the rate of particles for propagation"));
-    addParam(Parameter("pNuber", "0", "the number of particles for propagation"));
+    addParam(Parameter("parallelPso_pNumber", "0", "the number of particles for propagation"));
 }
 
 void ParallelPso::getBestValue(int &index, double &value)
@@ -373,16 +373,16 @@ void ParallelPso::step()
 void ParallelPso::init()
 {
     //pRate = params["pRate"].toString().toInt();
-    pNumber = params["pNumber"].toString().toInt();
-    subCluster = params["subCluster"].toString().toInt();
-    subClusterEnable = params["subClusterEnable"].toString().toInt();
-    parallelPsoParticles = params["parallelPsoParticles"].toString().toInt();
-    parallelPsoGenerations = params["parallelPsoGenerations"].toString().toInt();
-    parallelPsoC1 = params["parallelPsoC1"].toString().toDouble();
-    parallelPsoC2 = params["parallelPsoC2"].toString().toDouble();
-    parallelPropagateMethod = params["parallelPropagateMethod"].toString();
+    pNumber = params["parallelPso_pNumber"].toString().toInt();
+    subCluster = params["parallelPso_subCluster"].toString().toInt();
+    subClusterEnable = params["parallelPso_subClusterEnable"].toString().toInt();
+    parallelPsoParticles = params["parallelPso_particles"].toString().toInt();
+    parallelPsoGenerations = params["parallelPso_generations"].toString().toInt();
+    parallelPsoC1 = params["parallelPso_c1"].toString().toDouble();
+    parallelPsoC2 = params["parallelPso_c2"].toString().toDouble();
+    parallelPropagateMethod = params["parallelPso_propagateMethod"].toString();
     similarityMaxCount = params["similarityMaxCount"].toString().toInt();
-    propagateRate = params["propagateRate"].toString().toInt();
+    propagateRate = params["parallelPso_propagateRate"].toString().toInt();
 
     //pNumber = round((double) pRate * parallelPsoParticles / 100);
 
