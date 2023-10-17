@@ -23,16 +23,16 @@ void    DifferentialEvolution::init()
     iter = 0;
 
     //sampling
+    sampleFromProblem(NP,agentx,agenty);
     for(int i=0;i<NP;i++)
     {
-        Data x= myProblem->getSample();
-        double y = myProblem->statFunmin(x);
+        Data x= agentx[i];
+        double y = agenty[i];
         if(i==0 || y<besty)
         {
             besty = y;
             bestx = x;
         }
-        agent.addPoint(x,y);
     }
 }
 
@@ -44,9 +44,8 @@ int     DifferentialEvolution::tournament()
     for(int i=0;i<tsize;i++)
     {
         int pos = rand()  % NP;
-        Data xx;
-        double yy;
-        agent.getPoint(pos,xx,yy);
+
+        double yy=agenty[pos];
         if(i==0 || yy<minvalue)
         {
             minindex=pos;
@@ -63,7 +62,8 @@ void    DifferentialEvolution::step()
     {
         Data x;
         double y;
-        agent.getPoint(i,x,y);
+        x= agentx[i];
+        y=agenty[i];
         int randomA,randomB,randomC;
         do
         {
@@ -81,15 +81,14 @@ void    DifferentialEvolution::step()
             }
         }while(randomA == randomB || randomB == randomC || randomA == randomC);
         Data xa,xb,xc;
-        double ya,yb,yc;
-        agent.getPoint(randomA,xa,ya);
-        agent.getPoint(randomB,xb,yb);
-        agent.getPoint(randomC,xc,yc);
+        xa = agentx[randomA];
+        xb = agentx[randomB];
+        xc = agentx[randomC];
         int R = rand() % myProblem->getDimension();
         Data trialx = x;
         for(int j=0;j<myProblem->getDimension();j++)
         {
-            double rj = rand() *1.0/RAND_MAX;
+            double rj = myProblem->randomDouble();
             if(rj<CR || j==R)
             {
                 trialx[j]=xa[j]+F*(xb[j]-xc[j]);
@@ -100,7 +99,8 @@ void    DifferentialEvolution::step()
         double ft = myProblem->statFunmin(trialx);
         if(ft<y)
         {
-            agent.replacePoint(i,trialx,ft);
+            agentx[i]=trialx;
+            agenty[i]=ft;
             if(ft<besty)
             {
                 besty = ft;
@@ -121,6 +121,7 @@ bool    DifferentialEvolution::terminated()
     else
         if(term == "similarity")
         return similarity.terminate(besty);
+    return false;
 }
 
 void    DifferentialEvolution::showDebug()

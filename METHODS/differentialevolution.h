@@ -6,7 +6,8 @@
 class DifferentialEvolution : public Optimizer
 {
 private:
-    Collection agent;
+    vector<Data> agentx;
+    Data agenty;
     int NP;
     double F;
     double CR;

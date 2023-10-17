@@ -39,6 +39,7 @@
 # include <METHODS/differentialevolution.h>
 # include <METHODS/ipso.h>
 # include <METHODS/neuralminimizer.h>
+# include <METHODS/parallelde.h>
 # include <OPTIMUS/statistics.h>
 
 void error(QString message);
@@ -85,6 +86,8 @@ void loadMethods()
     methodName<<"iPso";
     method<<new NeuralMinimizer;
     methodName<<"NeuralMinimizer";
+    method<<new ParallelDe;
+    methodName<<"ParallelDe";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }

@@ -1,11 +1,11 @@
-#Available optimization methods: Bfgs,Lbfgs,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution
-METHOD=Genetic
+#Available optimization methods: Bfgs,Lbfgs,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
+METHOD=ParallelDe
 #Available local search methods: bfgs, lbfgs, gradient
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=similarity
 
 if [ $METHOD = "Bfgs" ]
 then
@@ -49,11 +49,40 @@ then
 elif [ $METHOD = "iPso" ]
 then
 #ipso_particles: number of pso particles
+#ipso_maxgenerations: maximum number of generations allowed
+#ipso_localsearch_rate: the rate of local search applications
+#ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
+#ipso_gradientcheck: usage of gradient rejection rule (true|false)
+#ipso_inertiatype: selection of inertia calcuation mechanism
+
 	METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=true --ipso_inertiatype=2 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "NeuralMinimizer" ]
 then
-	METHODPARAMS="--neural_model=neural --neural_trainmethod=bfgs"
+
+#neural_model: the model used in the method (neural|rbf)
+#neural_weights:  the weights used in the model 
+#neural_samples: the samples taken from the model
+#neural_iterations: the maximum number of allowed iterations
+#neural_start_samples: the samples used to construct initially the model
+#neural_trainmethod: the local search procedure used to train the method
+
+	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=500 --neural_iterations=200 --neural_start_samples=500  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
+elif [ $METHOD= = "ParallelDe" ]
+then
+
+#parde_termination: termination rule (maxiters|doublebox|similarity)
+#parde_agents: the number of agents per island
+#parde_generations: maximum number of allowed generations
+#parde_cr: crossover rate
+#parde_f:  f factor
+#parde_weight_method: The differential weight method. (random|ali|constant)
+#parde_propagate_rate: The number of generations before the propagation starts.
+#parde_selection_method:  parde_selection_method: The selection method used to select atoms in crossover (random|tournament)
+#parde_propagate_method: The used propagation method between islands (to1|1toN|Nto1|NtoN)
+#parde_islands: The number of parallel islands for the method.
+
+	METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=5 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --pade_islands_enable=1 --opt_localsearch=$LOCALSEARCH"
 fi
 
 

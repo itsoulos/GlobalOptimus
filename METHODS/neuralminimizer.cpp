@@ -15,48 +15,22 @@ NeuralMinimizer::NeuralMinimizer()
 
 bool    NeuralMinimizer::terminated()
 {
-
+    ++iter;
     int neural_iterations =params["neural_iterations"].toString().toInt();
-    int neural_samples  = params["neural_samples"].toString().toInt();
-
-    double fmin=fabs(1.0+fabs(besty));
-    double avg_minima = 0.0;
-    for(int i=0;i<minima.size();i++)
-        avg_minima+=minima[i];
-    avg_minima/=minima.size();
-    // fmin=fabs(1.0+fabs(avg_minima));
-    doublebox_xx1+=fmin;
-    doublebox_xx2+=fmin * fmin;
-
-    iter++;
-    doublebox_variance = doublebox_xx2/(iter+1) -(doublebox_xx1/(iter+1))*(doublebox_xx1/(iter+1));
-
-    if(fabs(besty-doublebox_oldBesty)>1e-6)
-    {
-        doublebox_oldBesty=besty;
-        doublebox_stopat=doublebox_variance/2.0;
-    }
-
     QString neural_termination = params["neural_termination"].toString();
-    if(neural_termination == "similarity")
-    {
-        if(fabs(besty-similarity_best_value)>1e-5)
-        {
-            similarity_best_value = besty;
-            similarity_current_count = 0;
-        }
-        else similarity_current_count++;
-        return iter>=neural_iterations || similarity_current_count>=similarity_max_count;
-    }
-    printf("Iter = %d Value =%20.10lg VARIANCE=%20.10lg STOPAT=%20.10lg MINIMA=%20.10lg\n",
-           iter,besty,doublebox_variance,doublebox_stopat,avg_minima);
-    return iter>=neural_iterations|| (doublebox_variance<=doublebox_stopat && iter>=20);
+    if(neural_termination=="maxiters")
+        return iter>=neural_iterations;
+    else
+        if(neural_termination=="doublebox")
+        return doubleBox.terminate(besty);
+    else
+        if(neural_termination=="similarity")
+        return similarity.terminate(besty);
+    return false;
 }
 
 void    NeuralMinimizer::step()
 {
-
-
     int neural_samples=params["neural_samples"].toString().toInt();
     QString neural_model = params["neural_model"].toString();
     if(neural_model == "neural")
@@ -69,7 +43,7 @@ void    NeuralMinimizer::step()
     xsample.clear();
     ysample.clear();
     sampler->sampleFromModel(neural_samples,xsample,ysample);
-    for(int i=0;i<xsample.size();i++)
+    for(int i=0;i<(int)xsample.size();i++)
     {
 
         double y = localSearch(xsample[i]);
@@ -115,7 +89,7 @@ void    NeuralMinimizer::init()
 void    NeuralMinimizer::done()
 {
     besty = localSearch(bestx);
-    printf("Terminating with %20.10lg\n",besty);
+    printf("Neural Minimizer: Terminating with %20.10lg\n",besty);
 }
 
 NeuralMinimizer::~NeuralMinimizer()

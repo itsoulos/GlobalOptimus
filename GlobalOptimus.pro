@@ -19,6 +19,7 @@ SOURCES += \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
         METHODS/neuralminimizer.cpp \
+        METHODS/parallelde.cpp \
         MLMODELS/mlpproblem.cpp \
         MLMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
@@ -86,6 +87,7 @@ HEADERS += \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
     METHODS/neuralminimizer.h \
+    METHODS/parallelde.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
     LINESEARCH/armijosearch.h \
