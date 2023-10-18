@@ -31,6 +31,7 @@
 # include <MLMODELS/rbfproblem.h>
 # include <PROBLEMS/diracproblem.h>
 # include <PROBLEMS/userproblem.h>
+# include <PROBLEMS/fuchss.h>
 
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
@@ -193,6 +194,9 @@ void loadProblem()
     else
             if(problemName == "DiracProblem")
             mainProblem = new DiracProblem();
+    else
+            if(problemName == "FuchsS")
+            mainProblem =new FuchsS();
     else
             if(problemName == "UserProblem")
             mainProblem = new UserProblem();
