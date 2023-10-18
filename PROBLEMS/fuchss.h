@@ -8,8 +8,8 @@ class FuchsS :public Problem
 private:
     double e1(double omega);
     double e2(double omega);
-    double q1(double q,double omega);
-    double q2(double q,double omega);
+    double q1(double q,double omega,double d);
+    double q2(double q,double omega,double d);
 public:
     FuchsS();
     double funmin(Data &x);

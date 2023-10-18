@@ -14,7 +14,7 @@ FuchsS::FuchsS()
 
 double FuchsS::e1(double omega)
 {
-        const double hbar= 6.62606896e-34;
+    const double hbar= 6.5821*1e-16;
     const double einf1=8.16;
     const double omegal1=50.09/hbar;
     const double omegat1=44.88/hbar;
@@ -24,7 +24,7 @@ double FuchsS::e1(double omega)
 
 double FuchsS::e2(double omega)
 {
-    const double hbar= 6.62606896e-34;
+    const double hbar= 6.5821*1e-16;
 
     const double einf2=10.89;
     const double omegal2=36.25/hbar;
@@ -32,30 +32,47 @@ double FuchsS::e2(double omega)
     return einf2 * (omegal2*omegal2-omega*omega)/(omegat2*omegat2-omega*omega);
 }
 
-double FuchsS::q1(double q,double omega)
-{
+double FuchsS::q1(double q,double omega,double d)
+{    const double hbar= 6.5821*1e-16;
+
     const double c = 3*1.0e+8;
-    return sqrt(q*q-omega*omega*e1(omega)/(c*c));
+    double omegat2 = 33.29*1e+3/hbar;
+     const double omegat1=44.88*1e+3/hbar;
+    double omegatilde = omega/omegat2;
+    double qtilde = q * d;
+    return sqrt(qtilde *qtilde+omegatilde*d*d*omegat1*e1(omegatilde)/(c*c));
 }
 
-double FuchsS::q2(double q,double omega)
+double FuchsS::q2(double q,double omega,double d)
 {
+    const double hbar= 6.5821*1e-16;
     const double c = 3*1.0e+8;
-    return sqrt(q*q-omega*omega*e2(omega)/(c*c));
+    double omegat2 = 33.29*1e+3/hbar;
+    const double omegat1=44.88*1e+3/hbar;
+    double omegatilde = omega/omegat2;
+    double qtilde = q * d;
+    return sqrt(qtilde *qtilde+omegatilde*d*d*omegat1*e2(omegatilde)/(c*c));
 }
 
 double coth(double x)
 {
-    return (exp(2.0*x)+1)/(exp(2.0*x)+1);
+    return (exp(2.0*x)+1)/(exp(2.0*x)-1);
 }
 double FuchsS::funmin(Data &x)
 {
     double dv=0.0;
     double q = x[0];
     double omega = x[1];
-    const double d = 150.0;
-    dv = e2(omega)*q1(q,omega)/(e1(omega)*q2(q,omega))+coth(q2(q,omega)*d/2.0);
-    return dv * dv;
+    double d=150.0;
+    const double hbar= 6.5821*1e-16;
+    const double c = 3*1.0e+8;
+    double omegat2 = 33.29*1e+3/hbar;
+    const double omegat1=44.88*1e+3/hbar;
+    double omegatilde = omega/omegat2;
+    double qtilde = q * d;
+    dv = e2(omegatilde)*q1(q,omega,d)/(e1(omegatilde)*q2(q,omega,d))+coth(q2(q,omega,d)/2.0);
+    printf("dv = %lf \n",dv);
+    return dv ;
 }
 
 Data    FuchsS::gradient(Data &x)
@@ -83,6 +100,8 @@ void FuchsS::init(QJsonObject &params)
 QJsonObject FuchsS::done(Data &x)
 {
     QJsonObject t;
+    t["q"]=x[0];
+    t["omega"]=x[1];
     return t;
 }
 
