@@ -1,7 +1,7 @@
-#Available optimization methods: GradientDescent,Bfgs,Lbfgs,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
-METHOD=Lbfgs
-#Available local search methods: bfgs, lbfgs, gradient
-LOCALSEARCH=bfgs
+#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
+METHOD=Genetic
+#Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
+LOCALSEARCH=adam
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
@@ -13,6 +13,26 @@ then
 #bfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--bfgs_iters=200"
+elif [ $METHOD = "NelderMead" ]
+then
+
+#nm_population: number of items in simplex
+#nm_alpha: the alpha parameter
+#nm_gamma: the gamma parameter
+#nm_rho:   the rho parameter
+#nm_sigma: the sigma parameter
+#nm_maxiters: maximum number of iterations allowed
+
+	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
+elif [ $METHOD = "Adam" ]
+then
+
+#adam_rate: adam learning rate
+#adam_linesearch: linesearch method used. Possible values (none|golden|fibonacci|armijo)
+#adam_maxiters: maximum number of iterations allowed
+#adam_b1: the b1 parameter
+#adam_b2: the b2 parameter
+	METHODPARAMS="--adam_rate=0.001 --adam_linesearch=armijo --adam_maxiters=10000 --adam_b1=0.9 --adam_b2=0.999"
 elif [ $METHOD = "GradientDescent" ]
 then
 

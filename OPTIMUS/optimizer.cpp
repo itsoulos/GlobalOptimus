@@ -2,6 +2,8 @@
 # include <METHODS/gradientdescent.h>
 # include <METHODS/bfgs.h>
 # include <METHODS/lbfgs.h>
+# include <METHODS/neldermead.h>
+# include <METHODS/adam.h>
 Optimizer::Optimizer()
 {
     problemSampler=NULL;
@@ -190,6 +192,25 @@ double  Optimizer::localSearch(Data &x)
         ((Lbfgs *)local)->setPoint(x,y);
         local->solve();
         ((Lbfgs *)local)->getPoint(x,y);
+    }
+    else
+    if(localMethod == "nelderMead")
+    {
+        local = new NelderMead();
+        local->setProblem(myProblem);
+        ((NelderMead *)local)->setPoint(x,y);
+        local->solve();
+        ((NelderMead *)local)->getPoint(x,y);
+    }
+    else
+    if(localMethod=="adam")
+    {
+        local = new Adam();
+        local->setProblem(myProblem);
+        ((Adam *)local)->setPoint(x,y);
+        local->solve();
+        ((Adam *)local)->getPoint(x,y);
+
     }
     if(local!=NULL)
     {

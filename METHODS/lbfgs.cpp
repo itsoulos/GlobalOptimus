@@ -19,6 +19,7 @@ void    Lbfgs::step()
         xpoint = myProblem->getSample();
         ypoint = myProblem->statFunmin(xpoint);
     }
+    haveInitialized = false;
     integer iprint=0;
     double factr=1e7;
     double pgtol = 1e-5;

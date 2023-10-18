@@ -16,8 +16,10 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 
 QMAKE_LFLAGS += -O3
 SOURCES += \
+        METHODS/adam.cpp \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
+        METHODS/neldermead.cpp \
         METHODS/neuralminimizer.cpp \
         METHODS/parallelde.cpp \
         METHODS/parallelpso.cpp \
@@ -87,8 +89,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    METHODS/adam.h \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
+    METHODS/neldermead.h \
     METHODS/neuralminimizer.h \
     METHODS/parallelde.h \
     METHODS/parallelpso.h \

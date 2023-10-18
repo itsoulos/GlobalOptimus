@@ -15,6 +15,7 @@ void    Bfgs::init()
         xpoint = myProblem->getSample();
         ypoint = myProblem->statFunmin(xpoint);
     }
+    haveInitialized = false;
     ifail=0;
     c__0=0;
     long n=myProblem->getDimension();
