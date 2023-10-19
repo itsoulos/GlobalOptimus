@@ -1318,6 +1318,8 @@ literal "false"
 \end_inset
 
 .
+ In the existing distribution for convenience, all objective problems are
+ in the folder PROBLEMS.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1351,7 +1353,16 @@ with
 \end_inset
 
 .
- The functions shown in the figure 
+ In all methods the user defined type
+\end_layout
+
+\begin_layout LyX-Code
+typedef vector<double> Data;
+\end_layout
+
+\begin_layout Standard
+Is used to define vectors of double precision numbers.
+ The methods of the class RastriginProblem shown in the figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:A-typical-representation"
@@ -1365,70 +1376,9 @@ noprefix "false"
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
-void
-\series default
- init(QJsonObject data).
- The function init() is called before the objective function is executed
- and its purpose is to pass parameters from the execution environment to
- the objective function.
- For example, for the Lennard Jones potential 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "originalJones"
-literal "false"
-
-\end_inset
-
-, the user can pass the number of atoms in the potential using an assignment
- as follows
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-        natoms=data["natoms"].toString().toInt(); 
-\end_layout
-
-\end_inset
-
-If the objective problem does not need a parameter, then this function can
- be empty.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-int
-\series default
- getDimension().
- This function returns the dimension of the objective problem.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-void
-\series default
-    getmargins(vector<Interval> &x).
- The getmargins() functions returns in the vector x the bounds of the objective
- problem.
- The class Interval is a simple class located in the folder 
-\emph on
-PROBLEMS
-\emph default
- of the distribution, that represents double precision intervals eg the
- value 
-\begin_inset Formula $[2,4$
-\end_inset
-
-] is an interval with left bound the value 2 and right bound the value 4.
+The constructor method RastriginProblem, used to initialize the dimension
+ of the problem and the corresponding bounds with the methods setLeftMargin()
+ and setRightMargin().
 \end_layout
 
 \begin_layout Enumerate
@@ -1436,11 +1386,7 @@ PROBLEMS
 \series bold
 double
 \series default
-	funmin(vector<
-\series bold
-double
-\series default
-> &x).
+	funmin(Data &x).
  This function returns the objective problem 
 \begin_inset Formula $f(x)$
 \end_inset
@@ -1450,59 +1396,25 @@ double
 \end_inset
 
 .
- The number of elements of the vector x must be the same in number as the
- return value of the function getDimension().
+ 
 \end_layout
 
 \begin_layout Enumerate
 
 \series bold
-void
+Data
 \series default
-    granal(vector<
-\series bold
-double
-\series default
-> &x,vector<
-\series bold
-double
-\series default
-> &g).
- This functions stores in vector g the gradient 
+ gradient(Data &x).
+ This functions returns the gradient 
 \begin_inset Formula $\nabla f(x)$
 \end_inset
 
  for a given point x.
 \end_layout
 
-\begin_layout Enumerate
-QJsonObject  done(vector<
-\series bold
-double
-\series default
-> &x).
- This function is executed after the objective function optimization process
- is completed.
- The point x is the global minimum for the function 
-\begin_inset Formula $f(x)$
-\end_inset
-
-.
- This function can be used in various cases, such as to generate a graph
- after the optimization is finished or even in the case of artificial neural
- networks 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "nn1,nn2"
-literal "false"
-
-\end_inset
-
- to apply the resulting trained network to the test set of the problem.
-\end_layout
-
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status collapsed
@@ -1535,82 +1447,67 @@ status open
 
 \begin_layout Plain Layout
 
-# include <math.h> 
+#include "rastriginproblem.h"
 \end_layout
 
 \begin_layout Plain Layout
 
-# include <interval.h> 
+RastriginProblem::RastriginProblem(): Problem(2) 
 \end_layout
 
 \begin_layout Plain Layout
 
-# include <vector> 
+{     
 \end_layout
 
 \begin_layout Plain Layout
 
-# include <stdio.h> 
+	Data l, r;     
 \end_layout
 
 \begin_layout Plain Layout
 
-# include <iostream> 
+	l.resize(2);     
 \end_layout
 
 \begin_layout Plain Layout
 
-# include <QJsonObject> 
+	r.resize(2);     
 \end_layout
 
 \begin_layout Plain Layout
 
-using namespace std;
+	for (int i = 0; i < 2; i++)     
 \end_layout
 
 \begin_layout Plain Layout
 
-extern "C" {
+	{         
 \end_layout
 
 \begin_layout Plain Layout
 
-void    init(QJsonObject data) {
+		l[i] = -1.0;         
 \end_layout
 
 \begin_layout Plain Layout
 
-}
+		r[i] = 1.0;     
 \end_layout
 
 \begin_layout Plain Layout
 
-int	getdimension() { 	
+	}     
 \end_layout
 
 \begin_layout Plain Layout
 
-	return 2; 
+	setLeftMargin(l);     
 \end_layout
 
 \begin_layout Plain Layout
 
-} 
-\end_layout
-
-\begin_layout Plain Layout
-
-void    getmargins(vector<Interval> &x) {         
-\end_layout
-
-\begin_layout Plain Layout
-
-  for(int i=0;i<x.size();i++)                 
-\end_layout
-
-\begin_layout Plain Layout
-
-	x[i]=Interval(-1,1); 
+	setRightMargin(r); 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1620,32 +1517,18 @@ void    getmargins(vector<Interval> &x) {
 
 \begin_layout Plain Layout
 
-double	funmin(vector<double> &x) {    
+double RastriginProblem::funmin(Data &x) 
 \end_layout
 
 \begin_layout Plain Layout
 
-	return (x[0]*x[0])+(x[1]*x[1])-cos(18.0*x[0])-cos(18.0*x[1]); 
+{     
 \end_layout
 
 \begin_layout Plain Layout
 
-}
-\end_layout
-
-\begin_layout Plain Layout
-
-void    granal(vector<double> &x,vector<double> &g) {       
-\end_layout
-
-\begin_layout Plain Layout
-
-	g[0]=2.0*x[0]+18.0*sin(18.0*x[0]);       
-\end_layout
-
-\begin_layout Plain Layout
-
-	g[1]=2.0*x[1]+18.0*sin(18.0*x[1]); 
+  return x[0] * x[0] + x[1] * x[1] - cos(18.0 * x[0]) - cos(18.0 * x[1]);
+ 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1655,22 +1538,42 @@ void    granal(vector<double> &x,vector<double> &g) {
 
 \begin_layout Plain Layout
 
-QJsonObject    done(vector<double> &x) {     
+Data RastriginProblem::gradient(Data &x) 
 \end_layout
 
 \begin_layout Plain Layout
 
-return QJsonObject(); 
+{     
+\end_layout
+
+\begin_layout Plain Layout
+
+  Data g;     
+\end_layout
+
+\begin_layout Plain Layout
+
+  g.resize(2);      
+\end_layout
+
+\begin_layout Plain Layout
+
+  g[0] = 2.0 * x[0] + 18.0 * sin(18.0 * x[0]);      
+\end_layout
+
+\begin_layout Plain Layout
+
+  g[1] = 2.0 * x[1] + 18.0 * sin(18.0 * x[1]);     
+\end_layout
+
+\begin_layout Plain Layout
+
+  return g; 
 \end_layout
 
 \begin_layout Plain Layout
 
 }
-\end_layout
-
-\begin_layout Plain Layout
-
-} 
 \end_layout
 
 \end_inset
@@ -1684,15 +1587,18 @@ return QJsonObject();
 \end_layout
 
 \begin_layout Subsubsection
-Objective function compilation 
+User defined problem
 \end_layout
 
 \begin_layout Standard
-In order to build the objective function the user should create an accompaniment
- project file as demonstrated in Figure 
+For convenience all objective problems have been stored in the PROBLEMS
+ folder of the existing distribution, although the programmer can easily
+ create his own objective function simply by overriding the class Problem.
+ The user can also implement the methods of class UserProblem found in PROBLEMS
+ subdirectory with contents shown in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:proFile"
+reference "fig:The-user-defined"
 plural "false"
 caps "false"
 noprefix "false"
@@ -1700,51 +1606,36 @@ noprefix "false"
 \end_inset
 
 .
- The first line of this project file determines the a shared library will
- be build by the compilation.
- The second line lists the number of source files that will be compiled
- and the last line contains the names of the header files.
- The software incorporates the utility qmake of the QT library to compile
- the objective function.
- The compilation is performed with the following series of commands in the
- terminal:
+ The class has two additional methods that may be used by the user:
 \end_layout
 
 \begin_layout Enumerate
-qmake 
-\emph on
-file.pro
+void init(QJsonObject &params).
 \end_layout
 
 \begin_layout Enumerate
-make
-\end_layout
-
-\begin_layout Standard
-where
-\emph on
- file.pro 
-\emph default
-stands for the name of the project file.
- The final outcome of this compilation will be the shared library 
-\emph on
-libfile.so
+QJsonObject done(Data &x).
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The associated project file for the Rastrigin problem.
+The user defined problem UserProblem.
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:proFile"
+name "fig:The-user-defined"
 
 \end_inset
 
@@ -1758,22 +1649,115 @@ name "fig:proFile"
 
 \begin_layout Plain Layout
 \begin_inset listings
+lstparams "language={C++}"
 inline false
 status open
 
 \begin_layout Plain Layout
 
-TEMPLATE=lib 
+#include "userproblem.h" 
 \end_layout
 
 \begin_layout Plain Layout
 
-SOURCES+=rastrigin.cc interval.cpp
+# include <stdio.h> 
 \end_layout
 
 \begin_layout Plain Layout
 
-HEADERS += interval.h
+UserProblem::UserProblem() :Problem(1) 
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+double  UserProblem::funmin(Data &x) 
+\end_layout
+
+\begin_layout Plain Layout
+
+{     
+\end_layout
+
+\begin_layout Plain Layout
+
+	printf("This is a simple test function.
+\backslash
+n");     
+\end_layout
+
+\begin_layout Plain Layout
+
+	return 0.0; 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+Data UserProblem::gradient(Data &x) 
+\end_layout
+
+\begin_layout Plain Layout
+
+{     
+\end_layout
+
+\begin_layout Plain Layout
+
+	Data g;     
+\end_layout
+
+\begin_layout Plain Layout
+
+	g.resize(x.size());     
+\end_layout
+
+\begin_layout Plain Layout
+
+	return g; 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+void    UserProblem::init(QJsonObject &params) 
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+UserProblem::~UserProblem() {
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \end_inset
@@ -1784,6 +1768,12 @@ HEADERS += interval.h
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(OK)
 \end_layout
 
 \begin_layout Subsubsection
@@ -7539,6 +7529,19 @@ ics
 \series default
 , pp.
  45-51, 1975.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Adam"
+literal "false"
+
+\end_inset
+
+D.P.
+ Kingma, J.
+ Ba, Adam: A Method for Stochastic Optimization, ICLR (Poster), 2015.
 \end_layout
 
 \begin_layout Bibliography
