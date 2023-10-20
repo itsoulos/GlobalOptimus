@@ -29,6 +29,7 @@ public:
      */
     Data gradient(Data &x);
     virtual void init(QJsonObject &params);
+    virtual QJsonObject done(Data &x);
     ~UserProblem();
 };
 

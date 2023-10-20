@@ -1611,10 +1611,22 @@ noprefix "false"
 
 \begin_layout Enumerate
 void init(QJsonObject &params).
+ The function init() is called before the objective function is executed
+ and its purpose is to pass parameters from the execution environment to
+ the objective function.
+ 
 \end_layout
 
 \begin_layout Enumerate
 QJsonObject done(Data &x).
+ This function is executed after the objective function optimization process
+ is completed.
+ The point x is the global minimum for the function 
+\begin_inset Formula $f(x)$
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1785,12 +1797,6 @@ UserProblem::~UserProblem() {
 
 \end_layout
 
-\begin_layout Standard
-
-\series bold
-(OK)
-\end_layout
-
 \begin_layout Subsubsection
 Objective function execution
 \end_layout
@@ -1799,7 +1805,7 @@ Objective function execution
 A full working command for the Rastrigin problem using the utility program
  
 \emph on
-OptimusApp
+GlobalOptimus
 \emph default
  is shown below
 \end_layout
@@ -1812,16 +1818,8 @@ status open
 
 \begin_layout Plain Layout
 
-./OptimusApp --filename=librastrigin.so --opt_method=Pso
-\backslash
- --pso_particles=100 --pso_generations=10
-\backslash
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-    --localsearch_method=bfgs
+./GlobalOptimus --opt_problem=rastrigin --opt_method=Genetic --opt_iters=1
+ --opt_localsearch=bfgs --gen_lrate=0.05  
 \end_layout
 
 \end_inset
@@ -1834,7 +1832,10 @@ The argument of the option
 \begin_inset Formula $--$
 \end_inset
 
-filename determines the objective problem in shared library format.
+opt_problem determines the objective problem.
+ The objective problems are stored in the PROBLEMS subdirectory of the distribut
+ion.
+ 
 \end_layout
 
 \begin_layout Enumerate
@@ -1843,24 +1844,26 @@ The argument of the command line option
 \end_inset
 
 opt_method sets the used global optimization procedure.
- For this case, the Particle Swarm Optimizer was used.
+ For this case, the Genetic algorithm was used.
  
 \end_layout
 
 \begin_layout Enumerate
-The argument of the option 
+The argument of 
 \begin_inset Formula $--$
 \end_inset
 
-pso_particles sets the number of particles of the PESO optimizer.
+opt_iters determines the number of executions of the global optimization
+ method.
 \end_layout
 
 \begin_layout Enumerate
-The argument for the command line option 
+The argument of 
 \begin_inset Formula $--$
 \end_inset
 
-pso_generations sets the maximum number of generations allowed.
+gen_lrate determines the frequency of application of the local minimization
+ method to the chromosomes of the genetic algorithm.
 \end_layout
 
 \begin_layout Enumerate
@@ -1868,8 +1871,7 @@ The argument
 \begin_inset Formula $--$
 \end_inset
 
-localsearch_method sets the used local optimization procedure, that will
- be applied on the best particle of the PESO procedure when it finishes.
+opt_localsearch sets the used local optimization procedure.
 \end_layout
 
 \begin_layout Standard
@@ -1896,13 +1898,14 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Output for the minimization of the Rastrigin function using the PESO optimizer.
+Output for the minimization of the Rastrigin function using the Genetic
+ optimizer.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:rastrigin_output"
@@ -1924,57 +1927,80 @@ status open
 
 \begin_layout Plain Layout
 
-Generation     1 value:   -1.7464048
+GENETIC.
+ GENERATION=   1 BEST VALUE=        -1.845998656 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     2 value:   -1.8619942
+GENETIC.
+ GENERATION=   2 BEST VALUE=          -1.9458481 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     3 value:   -1.8852439
+GENETIC.
+ GENERATION=   3 BEST VALUE=          -1.9458481 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     4 value:   -1.9490074
+GENETIC.
+ GENERATION=   4 BEST VALUE=          -1.9458481 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     5 value:   -1.9490074
+GENETIC.
+ GENERATION=   5 BEST VALUE=          -1.9458481 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     6 value:   -1.9490074
+GENETIC.
+ GENERATION=   6 BEST VALUE=          -1.9458481 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     7 value:   -1.9490074
+GENETIC.
+ GENERATION=   7 BEST VALUE=          -1.9458481 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     8 value:   -1.9775267
+GENETIC.
+ terminate: -2.000000  
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation     9 value:   -1.9972928
+Executions:    1 =================== 
 \end_layout
 
 \begin_layout Plain Layout
 
-Generation    10 value:   -1.9977027
+RUN:    1 BEST VALUE:                   -2 
 \end_layout
 
 \begin_layout Plain Layout
 
-Minimum:       -2.0000000000  Function calls:    1028
+FUNCTION CALLS: 3459 
+\end_layout
+
+\begin_layout Plain Layout
+
+Average Function calls:              3459.00 
+\end_layout
+
+\begin_layout Plain Layout
+
+Minimum Function Value:                   -2 
+\end_layout
+
+\begin_layout Plain Layout
+
+Percent Minimum  Found:               100.00%
 \end_layout
 
 \end_inset
@@ -1984,7 +2010,9 @@ Minimum:       -2.0000000000  Function calls:    1028
 
 \end_inset
 
-
+ 
+\series bold
+(NA GINEI ANAFORA STA RUNFUNMIN scripts pou exei to logismiko)
 \end_layout
 
 \begin_layout Section
@@ -1999,6 +2027,10 @@ name "sec:Experiments"
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+(OK)
+\series default
 To assess the ability of the software package to adapt to different problems,
  a series of experiments were performed under different conditions.
  In the first series of experiments different global optimization techniques

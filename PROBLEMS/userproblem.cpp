@@ -24,6 +24,12 @@ void    UserProblem::init(QJsonObject &params)
 
 }
 
+QJsonObject UserProblem::done(Data &x)
+{
+    QJsonObject t;
+    return t;
+}
+
 UserProblem::~UserProblem()
 {
 
