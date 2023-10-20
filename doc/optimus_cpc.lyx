@@ -2029,10 +2029,8 @@ name "sec:Experiments"
 \begin_layout Standard
 
 \series bold
-(OK)
-\series default
-To assess the ability of the software package to adapt to different problems,
- a series of experiments were performed under different conditions.
+(OK)To assess the ability of the software package to adapt to different
+ problems, a series of experiments were performed under different conditions.
  In the first series of experiments different global optimization techniques
  were applied to a series of objective functions that one can locate in
  the relevant literature.
@@ -2064,6 +2062,26 @@ Some of the proposed methods are tested on a series of well - known test
 \begin_layout Itemize
 
 \series bold
+Exponential
+\series default
+ function, defined as: 
+\begin_inset Formula 
+\[
+f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1
+\]
+
+\end_inset
+
+ The values 
+\begin_inset Formula $n=32,64$
+\end_inset
+
+ were used in the executed experiments.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
 Griewank2
 \series default
  function.
@@ -2076,6 +2094,27 @@ f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\s
 \end_inset
 
 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Griewank10
+\series default
+ function.
+ The function is given by the equation 
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $n=10$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
@@ -2266,12 +2305,14 @@ This objective function has
 \end_layout
 
 \begin_layout Standard
+
+\series bold
 The experiments were performed using the above objective functions and ran
  30 times using a different seed for the random number generator each time.
  During the execution of the experiments, the genetic algorithm (DoubleGenetic
  method) was used as a global optimizer in two versions: one without a local
  optimization method and one with periodic application of the bfgs method
- at a rate of 5% on the chromosomes in every generation.
+ at a rate of 1% on the chromosomes in every generation.
  The execution parameters for the genetic algorithm are listed in Table
  
 \begin_inset CommandInset ref
@@ -2311,6 +2352,8 @@ noprefix "false"
  the chromosomes drastically increases the required execution time, but
  the large reduction in the total number of calls required is a big advantage
  of its application.
+\series default
+
 \begin_inset Float table
 wide false
 sideways false
@@ -2507,7 +2550,7 @@ name "tab:results"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="11" columns="3">
+<lyxtabular version="3" rows="14" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top" width="33text%">
 <column alignment="center" valignment="top" width="33text%">
@@ -2561,16 +2604,103 @@ GRIEWANK2
 \begin_inset Text
 
 \begin_layout Plain Layout
-9298(0.97)
+3610
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-10684
+4575
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GRIEWANK10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12604(0.07)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6542
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+EXP32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16743
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3564
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+EXP64
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11254
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3883
 \end_layout
 
 \end_inset
@@ -2590,7 +2720,7 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8967
+3334
 \end_layout
 
 \end_inset
@@ -2599,7 +2729,7 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-11038
+4358
 \end_layout
 
 \end_inset
@@ -2619,7 +2749,7 @@ SHEKEl5
 \begin_inset Text
 
 \begin_layout Plain Layout
-19403(0.70)
+5791(0.60)
 \end_layout
 
 \end_inset
@@ -2628,7 +2758,7 @@ SHEKEl5
 \begin_inset Text
 
 \begin_layout Plain Layout
-9222
+3343
 \end_layout
 
 \end_inset
@@ -2648,7 +2778,7 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-16376(0.80)
+5425(0.73)
 \end_layout
 
 \end_inset
@@ -2657,7 +2787,7 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-8836
+3370
 \end_layout
 
 \end_inset
@@ -2677,7 +2807,7 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-19829(0.77)
+5533(0.73)
 \end_layout
 
 \end_inset
@@ -2686,7 +2816,7 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-8729
+3496
 \end_layout
 
 \end_inset
@@ -2706,7 +2836,7 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-17109
+4953
 \end_layout
 
 \end_inset
@@ -2715,7 +2845,7 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-7786
+3345
 \end_layout
 
 \end_inset
@@ -2735,7 +2865,7 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-19464
+6041
 \end_layout
 
 \end_inset
@@ -2744,7 +2874,7 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-8264
+3805
 \end_layout
 
 \end_inset
@@ -2764,7 +2894,7 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-24217
+7042(0.90)
 \end_layout
 
 \end_inset
@@ -2773,7 +2903,7 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-8868
+4299
 \end_layout
 
 \end_inset
@@ -2793,7 +2923,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-26824
+7895(0.90)
 \end_layout
 
 \end_inset
@@ -2802,7 +2932,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-9376
+4969(0.97)
 \end_layout
 
 \end_inset
@@ -2826,7 +2956,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
-161487(0.92)
+90225(0.83)
 \end_layout
 
 \end_inset
@@ -2837,7 +2967,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
-82803
+49549(0.99)
 \end_layout
 
 \end_inset
@@ -2878,12 +3008,11 @@ V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{
 
 \end_inset
 
-For testing purposes the method 
+
 \series bold
-NeuralMinimizer
-\series default
- of the package was applied to the above problem for a variety of number
- of atoms and the results are shown in Table 
+For testing purposes the method NeuralMinimizer of the package was applied
+ to the above problem for a variety of number of atoms and the results are
+ shown in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:potential"
@@ -2903,6 +3032,8 @@ noprefix "false"
  other two, while its reliability in finding the global minimum for the
  potential remains high even when the number of atoms participating in the
  potential increases significantly.
+\series default
+
 \begin_inset Float table
 placement H
 wide false
@@ -2931,9 +3062,8 @@ name "tab:potential"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="15" columns="4">
+<lyxtabular version="3" rows="15" columns="3">
 <features tabularvalignment="middle">
-<column alignment="center" valignment="top" width="24text%">
 <column alignment="center" valignment="top" width="24text%">
 <column alignment="center" valignment="top" width="24text%">
 <column alignment="center" valignment="top" width="24text%">
@@ -2955,7 +3085,7 @@ ATOMS
 \begin_layout Plain Layout
 
 \series bold
-GENETIC
+GENETIC(lrate=5%)
 \end_layout
 
 \end_inset
@@ -2966,18 +3096,7 @@ GENETIC
 \begin_layout Plain Layout
 
 \series bold
-PSO
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\series bold
-NEURALMINIMIZER
+iPSO
 \end_layout
 
 \end_inset
@@ -2997,7 +3116,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-18902
+3637
 \end_layout
 
 \end_inset
@@ -3006,16 +3125,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-9936
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1192
+6814
 \end_layout
 
 \end_inset
@@ -3035,7 +3145,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-17806
+5492
 \end_layout
 
 \end_inset
@@ -3044,16 +3154,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-12560
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1964
+9484
 \end_layout
 
 \end_inset
@@ -3073,7 +3174,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-18477
+6501
 \end_layout
 
 \end_inset
@@ -3082,16 +3183,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-12385
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2399
+11542
 \end_layout
 
 \end_inset
@@ -3111,7 +3203,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-19069(0.20)
+16826(0.67)
 \end_layout
 
 \end_inset
@@ -3120,16 +3212,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-9683
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3198
+12956(0.80)
 \end_layout
 
 \end_inset
@@ -3149,7 +3232,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-16390(0.33)
+8802
 \end_layout
 
 \end_inset
@@ -3158,16 +3241,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-10533(0.17)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3311(0.97)
+14584
 \end_layout
 
 \end_inset
@@ -3187,7 +3261,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-15924(0.50)
+9642
 \end_layout
 
 \end_inset
@@ -3196,16 +3270,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-8053(0.50)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3526
+17259
 \end_layout
 
 \end_inset
@@ -3225,7 +3290,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-15041(0.27)
+20331
 \end_layout
 
 \end_inset
@@ -3234,16 +3299,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-9276(0.17)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4338
+18052
 \end_layout
 
 \end_inset
@@ -3263,7 +3319,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-14817(0.03)
+41588
 \end_layout
 
 \end_inset
@@ -3272,16 +3328,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-7548(0.17)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-5517(0.87)
+18384
 \end_layout
 
 \end_inset
@@ -3301,7 +3348,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-13885(0.03)
+34326(0.97)
 \end_layout
 
 \end_inset
@@ -3310,16 +3357,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-6864(0.13)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-6588(0.80)
+18655
 \end_layout
 
 \end_inset
@@ -3339,7 +3377,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-14435(0.17)
+41278(0.97)
 \end_layout
 
 \end_inset
@@ -3348,16 +3386,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-12182(0.07)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-7508(0.83)
+20258(0.97)
 \end_layout
 
 \end_inset
@@ -3377,7 +3406,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-14457(0.07)
+55367(0.90)
 \end_layout
 
 \end_inset
@@ -3386,16 +3415,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-10748(0.03)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-6717(0.77)
+21185(0.97)
 \end_layout
 
 \end_inset
@@ -3415,7 +3435,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-13906(0.07)
+18314
 \end_layout
 
 \end_inset
@@ -3424,16 +3444,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-14235(0.13)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-6201(0.93)
+23016
 \end_layout
 
 \end_inset
@@ -3453,7 +3464,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-12832(0.10)
+39088
 \end_layout
 
 \end_inset
@@ -3462,16 +3473,7 @@ NEURALMINIMIZER
 \begin_inset Text
 
 \begin_layout Plain Layout
-12980(0.10)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-7802(0.90)
+24037
 \end_layout
 
 \end_inset
@@ -3494,8 +3496,6 @@ AVERAGE
 
 \begin_layout Plain Layout
 
-\series bold
-205941(0.37)
 \end_layout
 
 \end_inset
@@ -3505,19 +3505,6 @@ AVERAGE
 
 \begin_layout Plain Layout
 
-\series bold
-137134(0.42)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" bottomline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\series bold
-60258(0.93)
 \end_layout
 
 \end_inset
@@ -3912,7 +3899,7 @@ GENETIC
 \begin_layout Plain Layout
 
 \series bold
-PESO
+PSO
 \end_layout
 
 \end_inset

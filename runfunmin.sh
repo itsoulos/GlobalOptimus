@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe
-METHOD=Genetic
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
-LOCALSEARCH=adam
+LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+TERMINATION=doublebox
 
 if [ $METHOD = "Bfgs" ]
 then
@@ -56,7 +56,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.01 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_termination=$TERMINATION --gen_count=200 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.05 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_termination=$TERMINATION --gen_count=200 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
 
@@ -90,7 +90,7 @@ then
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
 
-	METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=true --ipso_inertiatype=2 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=true --ipso_inertiatype=1 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "NeuralMinimizer" ]
 then
@@ -102,7 +102,7 @@ then
 #neural_start_samples: the samples used to construct initially the model
 #neural_trainmethod: the local search procedure used to train the method
 
-	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=500 --neural_iterations=200 --neural_start_samples=500  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=200 --neural_iterations=200 --neural_start_samples=1000  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "ParallelDe" ]
 then
 
