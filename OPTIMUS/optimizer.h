@@ -11,6 +11,7 @@
 # include <SAMPLER/rbfsampler.h>
 # include <SAMPLER/kmeanssampler.h>
 # include <QJsonArray>
+# include <QStringList>
 
 /**
  * @brief The Optimizer class implements a general class

@@ -1,4 +1,5 @@
 #include <PROBLEMS/diracproblem.h>
+# include <QVector>
 DiracProblem::DiracProblem()
 {
     xpm=938.27;

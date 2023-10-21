@@ -47,6 +47,9 @@
 # include <METHODS/adam.h>
 # include <OPTIMUS/statistics.h>
 
+# include <QVector>
+# include <QDebug>
+# include <QStringList>
 void error(QString message);
 QVector<Optimizer*> method;
 QStringList methodName;

@@ -1,7 +1,12 @@
 #ifndef PROBLEM_H
 #define PROBLEM_H
 
-
+#include <functional>
+#include <iostream>
+#include <numeric>
+#include <string>
+#include <vector>
+#include <chrono>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
