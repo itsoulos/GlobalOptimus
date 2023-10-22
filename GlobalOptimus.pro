@@ -23,6 +23,7 @@ SOURCES += \
         METHODS/neuralminimizer.cpp \
         METHODS/parallelde.cpp \
         METHODS/parallelpso.cpp \
+        METHODS/simanmethod.cpp \
         MLMODELS/mlpproblem.cpp \
         MLMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     METHODS/neuralminimizer.h \
     METHODS/parallelde.h \
     METHODS/parallelpso.h \
+    METHODS/simanmethod.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
     LINESEARCH/armijosearch.h \

@@ -45,6 +45,7 @@
 # include <METHODS/parallelpso.h>
 # include <METHODS/neldermead.h>
 # include <METHODS/adam.h>
+# include <METHODS/simanmethod.h>
 # include <OPTIMUS/statistics.h>
 
 # include <QVector>
@@ -102,6 +103,8 @@ void loadMethods()
     methodName<<"NelderMead";
     method<<new Adam;
     methodName<<"Adam";
+    method<<new SimanMethod;
+    methodName<<"Simman";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }

@@ -1181,6 +1181,23 @@ ParallelPso
  in the Optimus package.
 \end_layout
 
+\begin_layout Enumerate
+Simulated annealing optimizer.
+ A Simulated Annealing optimizer as proposed by Corana et al 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "corana"
+literal "false"
+
+\end_inset
+
+ is included in the software under the name 
+\series bold
+Simman
+\series default
+.
+\end_layout
+
 \begin_layout Subsection
 Implemented local optimization methods
 \end_layout
@@ -2313,14 +2330,12 @@ This objective function has
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 The experiments were performed using the above objective functions and ran
  30 times using a different seed for the random number generator each time.
- During the execution of the experiments, the genetic algorithm (DoubleGenetic
+ During the execution of the experiments, the genetic algorithm (Genetic
  method) was used as a global optimizer in two versions: one without a local
  optimization method and one with periodic application of the bfgs method
- at a rate of 1% on the chromosomes in every generation.
+ at a rate of 5% on the chromosomes in every generation.
  The execution parameters for the genetic algorithm are listed in Table
  
 \begin_inset CommandInset ref
@@ -2360,8 +2375,6 @@ noprefix "false"
  the chromosomes drastically increases the required execution time, but
  the large reduction in the total number of calls required is a big advantage
  of its application.
-\series default
-
 \begin_inset Float table
 wide false
 sideways false
@@ -3016,11 +3029,9 @@ V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{
 
 \end_inset
 
-
-\series bold
-For testing purposes the method NeuralMinimizer of the package was applied
- to the above problem for a variety of number of atoms and the results are
- shown in Table 
+For testing purposes the method iPSO of the package was applied to the above
+ problem for a variety of number of atoms and the results are shown in Table
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:potential"
@@ -3031,17 +3042,14 @@ noprefix "false"
 \end_inset
 
 .
- This method was experimentally compared with two other techniques in the
- software package, the method DoubleGenetic and the method Pso.
- In all cases the number of chromosomes (or particles) was set to 100 and
+ This method was experimentally compared with the Genetic algorithm.
+ In all cases the number of chromosomes (or particles) was set to 200 and
  the maximum number of allowed iterations was set to 200.
- As can be seen from the experimental results, the method NeuralMinimizer
- requires a significantly reduced number of function calls compared to the
- other two, while its reliability in finding the global minimum for the
- potential remains high even when the number of atoms participating in the
- potential increases significantly.
-\series default
-
+ As can be seen from the experimental results, the method iPSO requires
+ a significantly reduced number of function calls compared to Genetic algorithm,
+ while its reliability in finding the global minimum for the potential remains
+ high even when the number of atoms participating in the potential increases
+ significantly.
 \begin_inset Float table
 placement H
 wide false
@@ -3550,7 +3558,7 @@ f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}
  is used as a test case to measure the scalability of the parallel global
  optimization technique denoted as ParallelDe.
  This method was applied to the problem with dimension increasing from 2
- to 15 and for a different number of processing threads.
+ to 20 and for a different number of processing threads.
  The experimental results are shown in diagram form in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -7481,6 +7489,29 @@ V.
 4
 \series default
 , 766, 2023.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "corana"
+literal "false"
+
+\end_inset
+
+A.
+ Corana, M.
+ Marchesi, C.
+ Martini, S.
+ Ridella, Minimizing multimodal functions of continuous variables with the
+ “Simulated Annealing” algo- rithm, ACM Trans.
+ Math.
+ Software 
+\series bold
+13
+\series default
+, pp.
+ 262–280, 1987.
 \end_layout
 
 \begin_layout Bibliography
