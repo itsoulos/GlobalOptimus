@@ -495,7 +495,7 @@ bool    iPso::terminated()
 
 void    iPso::showDebug()
 {
-
+	printf("ipso. besty = %lf \n",besty);
 }
 
 void    iPso::done()

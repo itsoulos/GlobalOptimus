@@ -10,7 +10,7 @@ double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 {
     double arg = getDistance(x,center);
     arg = (arg * arg)/(variance * variance);
-//    if(isnan(arg) || isinf(arg)) return 0.0;
+  //  if(isnan(arg) || isinf(arg)) return 0.0;
  //   if(arg>10) return 0.0;
     return exp(-arg);
 }
@@ -91,6 +91,7 @@ Data    RbfProblem::gradient(Data &x)
     Data g;
     setParameters(x);
     g.resize(x.size());
+    
    for(int i=0;i<g.size();i++)
         g[i]=0.0;
     Data gtemp ;
@@ -309,7 +310,7 @@ void    RbfProblem::init(QJsonObject &params)
     //kmeans to estimate the range of margins
     vector<Data> xpoint = trainDataset->getAllXpoint();
     runKmeans(xpoint,nodes,centers,variances);
-    double scale_factor = 5.0;
+    double scale_factor = 3.0;
     if(params.contains("rbf_factor"))
     {
         scale_factor = params["rbf_factor"].toString().toDouble();
@@ -329,14 +330,15 @@ void    RbfProblem::init(QJsonObject &params)
     {
         if(isnan(variances[i]) || isinf(variances[i]))
             variances[i]=0.001;
+
             dmax += variances[i];
     }
 
     for(int i=0;i<nodes;i++)
     {
-        left[icount]= -scale_factor *dmax;
+        left[icount]= 0.01;//-scale_factor *dmax;
         right[icount]= scale_factor * dmax;
-        if(right[icount]<0.001) right[icount]=0.001;
+        //if(right[icount]<0.001) right[icount]=0.001;
         icount++;
     }
     for(int i=0;i<nodes;i++)

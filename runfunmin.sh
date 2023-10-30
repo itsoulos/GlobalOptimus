@@ -1,9 +1,9 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Multistart
+METHOD=NeuralMinimizer
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=rbf
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 
@@ -102,7 +102,7 @@ then
 #neural_start_samples: the samples used to construct initially the model
 #neural_trainmethod: the local search procedure used to train the method
 
-	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=200 --neural_iterations=200 --neural_start_samples=1000  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=200 --neural_iterations=200 --neural_start_samples=1000  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "ParallelDe" ]
 then
 
