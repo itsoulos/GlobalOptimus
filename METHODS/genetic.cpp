@@ -67,7 +67,7 @@ void    Genetic::showDebug()
 {
     double besty,worsty;
     besty = fitnessArray[0];
-    //chromosomes.getBestWorstValues(besty,worsty);
+     if(getParam("opt_debug").getValue()=="yes")
     printf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg\n",
            generation,besty);
 }

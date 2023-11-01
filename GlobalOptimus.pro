@@ -8,6 +8,14 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 LIBS+=  -lm -fopenmp
 
+## ARMADILLO DEFINITIONS (ONLY FOR FUNCTIONAL RBF)
+DEFINES +=OPTIMUS_ARMADILLO
+
+contains(DEFINES,OPTIMUS_ARMADILLO){
+    DEFINES += ADEPT_RECORDING_PAUSABLE ADEPTSTORAGETHREADSAFE
+    LIBS+=-larmadillo
+    LIBS+=-ladept
+}
 QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
 QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
 
@@ -84,6 +92,9 @@ SOURCES += \
         PROBLEMS/test2nproblem.cpp \
         SAMPLER/problemsampler.cpp
 
+contains(DEFINES,OPTIMUS_ARMADILLO){
+    SOURCES+=MLMODELS/functionalrbf.cpp
+}
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
@@ -156,3 +167,7 @@ HEADERS += \
     SAMPLER/rbfsampler.h \
     SAMPLER/triangularsampler.h \
     SAMPLER/uniformsampler.h
+
+    contains(DEFINES,OPTIMUS_ARMADILLO){
+        HEADERS+=MLMODELS/functionalrbf.h
+    }

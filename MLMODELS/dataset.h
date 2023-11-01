@@ -151,6 +151,7 @@ public:
      */
     double  getClass(double value)const;
     vector<Data> getAllXpoint();
+    Data         getAllYpoint();
 };
 
 #endif // DATASET_H

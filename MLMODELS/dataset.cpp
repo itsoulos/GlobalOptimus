@@ -247,6 +247,11 @@ vector<Data>    Dataset::getAllXpoint()
     return xpoint;
 }
 
+Data Dataset::getAllYpoint()
+{
+    return ypoint;
+}
+
 double  Dataset::getClass(int pos) const
 {
     double y=ypoint[pos];

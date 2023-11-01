@@ -47,6 +47,9 @@
 # include <METHODS/adam.h>
 # include <METHODS/simanmethod.h>
 # include <OPTIMUS/statistics.h>
+#ifdef OPTIMUS_ARMADILLO
+    # include <MLMODELS/functionalrbf.h>
+#endif
 
 # include <QVector>
 # include <QDebug>
@@ -212,6 +215,11 @@ void loadProblem()
     else
             if(problemName == "UserProblem")
             mainProblem = new UserProblem();
+#ifdef OPTIMUS_ARMADILLO
+    else
+            if(problemName == "FunctionalRbf")
+            mainProblem = new FunctionalRbf();
+#endif
     else
             error("Undefined function "+problemName);
               mainProblem->init(problemParams);
