@@ -67,7 +67,7 @@ void    Genetic::showDebug()
 {
     double besty,worsty;
     besty = fitnessArray[0];
-     if(getParam("opt_debug").getValue()=="yes")
+     if(getParam("opt_debug").getValue()=="yes" && generation%50==0)
     printf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg\n",
            generation,besty);
 }
