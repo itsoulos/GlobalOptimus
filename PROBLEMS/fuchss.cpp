@@ -4,8 +4,8 @@ FuchsS::FuchsS()
     setDimension(1);
     left.resize(1);
     right.resize(1);
-    left[0]=0.01;
-    right[0]=100;
+    left[0]=1.0;
+    right[0]=35.5;
 }
 
 double FuchsS::e1(double omega)
@@ -57,10 +57,10 @@ double coth(double x)
 double FuchsS::funmin(Data &x)
 {
     double dv=0.0;
-    double q=1.5;
+    double q=0.1;
     double omega = x[0];
     double d=50.0*1e-10;
-    const double qtilde = 10.3;
+    const double qtilde = 0.2;
     dv = e2(omega)*q1(qtilde,omega,d)/(e1(omega)*q2(qtilde,omega,d))+coth(q2(qtilde,omega,d)/2.0);
     printf("Omega = %lf Dv = %lf \n",omega,dv);
     return dv*dv ;

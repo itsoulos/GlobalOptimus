@@ -15,8 +15,8 @@ void    FunctionalRbf::init(QJsonObject &params)
     /*****/
     trainx = trainDataset->getAllXpoint();
     trainy = trainDataset->getAllYpoint();
-    testx  = trainDataset->getAllXpoint();
-    testy  = trainDataset->getAllYpoint();
+    testx  = testDataset->getAllXpoint();
+    testy  = testDataset->getAllYpoint();
 
     //setdimension?
     setDimension(  (d+1) * nodes);
