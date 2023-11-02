@@ -4,8 +4,9 @@ FuchsS::FuchsS()
     setDimension(1);
     left.resize(1);
     right.resize(1);
-    left[0]=1.0;
-    right[0]=35.5;
+    const double omegat2=33.29;
+    left[0]=0.0*omegat2;
+    right[0]=1.5*omegat2;
 }
 
 double FuchsS::e1(double omega)
@@ -54,15 +55,20 @@ double coth(double x)
 {
     return (exp(2.0*x)+1)/(exp(2.0*x)-1);
 }
+
+double tanh(double x)
+{
+	return (exp(2*x)-1)/(exp(2*x)+1);
+}
+
 double FuchsS::funmin(Data &x)
 {
     double dv=0.0;
     double q=0.1;
     double omega = x[0];
     double d=50.0*1e-10;
-    const double qtilde = 0.2;
-    dv = e2(omega)*q1(qtilde,omega,d)/(e1(omega)*q2(qtilde,omega,d))+coth(q2(qtilde,omega,d)/2.0);
-    printf("Omega = %lf Dv = %lf \n",omega,dv);
+    const double qtilde = 3.0;
+    dv = e2(omega)*q1(qtilde,omega,d)/(e1(omega)*q2(qtilde,omega,d))+tanh(q2(qtilde,omega,d)/2.0);
     return dv*dv ;
 }
 
@@ -91,7 +97,8 @@ void FuchsS::init(QJsonObject &params)
 QJsonObject FuchsS::done(Data &x)
 {
     QJsonObject t;
-    t["omega"]=x[0];
+    const double omegat2=33.29;
+    t["omega_tilde"]=x[0]/omegat2;
 
     return t;
 }
