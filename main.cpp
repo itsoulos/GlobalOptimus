@@ -32,6 +32,9 @@
 # include <PROBLEMS/diracproblem.h>
 # include <PROBLEMS/userproblem.h>
 # include <PROBLEMS/fuchss.h>
+# include <PROBLEMS/levy.h>
+# include <PROBLEMS/salkin.h>
+# include <PROBLEMS/hess.h>
 
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
@@ -212,6 +215,15 @@ void loadProblem()
     else
             if(problemName == "FuchsS")
             mainProblem =new FuchsS();
+    else
+            if(problemName == "Levy")
+            mainProblem = new Levy();
+    else
+            if(problemName == "Salkin")
+            mainProblem = new Salkin();
+    else
+            if(problemName == "Hess")
+            mainProblem = new Hess();
     else
             if(problemName == "UserProblem")
             mainProblem = new UserProblem();

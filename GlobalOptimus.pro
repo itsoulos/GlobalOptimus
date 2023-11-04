@@ -66,8 +66,11 @@ SOURCES += \
         PROBLEMS/hansen.cpp \
         PROBLEMS/hartman3.cpp \
         PROBLEMS/hartman6.cpp \
+        PROBLEMS/hess.cpp \
+        PROBLEMS/levy.cpp \
         PROBLEMS/potential.cpp \
         PROBLEMS/rosenbrock.cpp \
+        PROBLEMS/salkin.cpp \
         PROBLEMS/shekel10.cpp \
         PROBLEMS/shekel5.cpp \
         PROBLEMS/shekel7.cpp \
@@ -146,9 +149,12 @@ HEADERS += \
     PROBLEMS/hansen.h \
     PROBLEMS/hartman3.h \
     PROBLEMS/hartman6.h \
+    PROBLEMS/hess.h \
+    PROBLEMS/levy.h \
     PROBLEMS/potential.h \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/rosenbrock.h \
+    PROBLEMS/salkin.h \
     PROBLEMS/shekel10.h \
     PROBLEMS/shekel5.h \
     PROBLEMS/shekel7.h \

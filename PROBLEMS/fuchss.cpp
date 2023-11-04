@@ -39,7 +39,7 @@ double FuchsS::q1(double qtilde,double omega,double d)
     const double c = 3*1.0e+8;
     double omegat2 = 33.29;
     double omegatilde = omega/omegat2;
-    return sqrt(qtilde *qtilde+omegatilde*d*d*((omegat2/1e+3)/(hbar))/((omegat2/1e+3)/(hbar))*e1(omega)/(c*c));
+    return sqrt(qtilde *qtilde-omegatilde*omegatilde*d*d*((omegat2/1e+3)/(hbar))/((omegat2/1e+3)/(hbar))*e1(omega)/(c*c));
 }
 
 double FuchsS::q2(double qtilde,double omega,double d)
@@ -48,7 +48,7 @@ double FuchsS::q2(double qtilde,double omega,double d)
     const double c = 3*1.0e+8;
     double omegat2 = 33.29;
     double omegatilde = omega/omegat2;
-    return sqrt(qtilde *qtilde+omegatilde*d*d*((omegat2/1e+3)/(hbar))/((omegat2/1e+3)/(hbar))*e2(omega)/(c*c));
+    return sqrt(qtilde *qtilde-omegatilde*omegatilde*d*d*((omegat2/1e+3)/(hbar))/((omegat2/1e+3)/(hbar))*e2(omega)/(c*c));
 }
 
 double coth(double x)
@@ -64,7 +64,6 @@ double tanh(double x)
 double FuchsS::funmin(Data &x)
 {
     double dv=0.0;
-    double q=0.1;
     double omega = x[0];
     double d=50.0*1e-10;
     const double qtilde = 3.0;
