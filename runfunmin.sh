@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Genetic
+METHOD=NeuralMinimizer
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=kmeans
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+TERMINATION=doublebox
 
 if [ $METHOD = "Bfgs" ]
 then
@@ -89,7 +89,7 @@ then
 #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
-
+Gradient
 	METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=true --ipso_inertiatype=1 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "NeuralMinimizer" ]
@@ -102,7 +102,7 @@ then
 #neural_start_samples: the samples used to construct initially the model
 #neural_trainmethod: the local search procedure used to train the method
 
-	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=200 --neural_iterations=200 --neural_start_samples=1000  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "ParallelDe" ]
 then
 

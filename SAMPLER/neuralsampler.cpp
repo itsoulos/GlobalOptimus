@@ -164,7 +164,7 @@ static double dmax(double a,double b)
 Data        NeuralProblem::gradient(Data &x)
 {
     Data g;
-    g.resize(dimension);
+    g.resize(x.size());
     thisSampler->setWeights(x);
     g = thisSampler->evalDeriv();
     return g;
@@ -206,12 +206,13 @@ void    NeuralSampler::trainModel(QString method)
     {
         weight[i]=0.1*(2.0*rand()*1.0/RAND_MAX-1.0);
     }
+        double value;
+    value = problem->funmin(weight);
     Optimizer *local=NULL;
     if(method=="lbfgs")
     {
         local = new Lbfgs();
         local->setProblem(problem);
-        double value;
         ((Lbfgs *)local)->setPoint(weight,value);
         local->solve();
         ((Lbfgs *)local)->getPoint(weight,value);
@@ -221,7 +222,6 @@ void    NeuralSampler::trainModel(QString method)
 
         local = new Bfgs();
         local->setProblem(problem);
-        double value;
         ((Bfgs *)local)->setPoint(weight,value);
         local->solve();
         ((Bfgs *)local)->getPoint(weight,value);
