@@ -102,7 +102,7 @@ then
 #neural_start_samples: the samples used to construct initially the model
 #neural_trainmethod: the local search procedure used to train the method
 
-	METHODPARAMS="--neural_model=rbf --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "ParallelDe" ]
 then
 
