@@ -238,67 +238,14 @@ int ParallelDe::tournament(int islandIndex, int tsize)
 }
 bool ParallelDe::checkIsland(int islandName)
 {
-    double bestValue;
-    int bestIndex;
 
-    getBestValue(islandName, bestIndex, bestValue);
-    //printf("Generation=%d Value=%20.10lf\n", generation, bestValue);
-    if (parde_termination == "similarity")
-    {
-        //---------------------SIMILARITY CASE 1 AVERAGE TERMS
-
-        double difference = fabs(newMO.at(islandName) - MO.at(islandName));
-        //printf("%d] newMO.at(%d) : %f MO.at(%d) : %f different  : %lf\n", generation, islandName, newMO.at(islandName), islandName, MO.at(islandName), islandName, difference );
-        MO.at(islandName) = newMO.at(islandName);
-
-        if (difference < 1e-5)
-            similarity_current_count.at(islandName)++;
-        else
-            similarity_current_count.at(islandName) = 0;
-        if (similarity_current_count.at(islandName) >= similarity_max_count)
-            return true;
-
-        //---------------------SIMILARITY CASE 2 QUANTITIES
-        /*
-        double difference = fabs(newSum.at(islandName) - sum.at(islandName));
-        printf("%d] neWsum.at(%d) : %f Sum.at(%d) : %f different  : %lf\n", generation, islandName, newSum.at(islandName), islandName, sum.at(islandName), islandName, difference );
-        sum.at(islandName) = newSum.at(islandName);
-
-        if (difference < 1e-5)
-            similarity_current_count.at(islandName)++;
-        else
-            similarity_current_count.at(islandName) = 0;
-        if (similarity_current_count.at(islandName) >= similarity_max_count)
-            return true;
-*/
-        //---------------------SIMILARITY CASE 3
-        /*
-        if (fabs(bestValue - similarity_best_value.at(islandName)) > 1e-5)
-        {
-            similarity_best_value.at(islandName) = bestValue;
-            similarity_current_count.at(islandName) = 0;
-        }
-        else
-            similarity_current_count.at(islandName)++;
-        return similarity_current_count.at(islandName) >= similarity_max_count;
-*/
-    }
-    else if (parde_termination == "doublebox")
-    {
-        double v1 = fabs(1.0+bestValue);
-        doublebox_xx1.at(islandName) += v1;
-        doublebox_xx2.at(islandName) += v1 * v1;
-        doublebox_variance.at(islandName) = doublebox_xx2.at(islandName) / (generation+1) - (doublebox_xx1.at(islandName) / (generation+1)) * (doublebox_xx1.at(islandName) / (generation+1));
-        if (bestValue < doublebox_best_value.at(islandName))
-        {
-            doublebox_best_value.at(islandName) = bestValue;
-            doublebox_stopat.at(islandName) = doublebox_variance.at(islandName) / 2.0;
-        }
-        printf("%4d] doublebox_variance.at(%d) : %f doublebox_stopat.at(%d) : %f different  : %lf\n", generation,islandName, doublebox_variance.at(islandName),islandName, doublebox_stopat.at(islandName),islandName,fabs(doublebox_variance.at(islandName) - doublebox_stopat.at(islandName)));
-        return doublebox_variance.at(islandName) <= doublebox_stopat.at(islandName) && generation>=10;
-    }
+    if(parde_termination == "doublebox" && doubleBox.terminate(similarity_best_value.at(islandName))) return true;
+    //if(parde_termination == "similarity" && similarity.terminate(similarity_best_value.at(islandName))) return true; //similarity
+    if(parde_termination == "similarity" && similarity.terminate(fabs(newSum.at(islandName) - sum.at(islandName)))) return true;                             //sum similarity
+    if(generation>=parde_generations) return true;
 
     return false;
+
 }
 bool ParallelDe::terminated()
 {
@@ -325,6 +272,7 @@ bool ParallelDe::terminated()
     //printf("c = %d islands = %d \n",c,islands);
     //printf("c = %d islands = %d parde_islands_enable = %d\n",c,islands,parde_islands_enable);
     return generation >= parde_generations || c >= parde_islands_enable;
+
 }
 
 double ParallelDe::getDifferentialWeight()

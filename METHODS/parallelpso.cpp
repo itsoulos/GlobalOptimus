@@ -5,6 +5,7 @@
 ParallelPso::ParallelPso()
 {
     before = std::chrono::system_clock::now();
+    addParam(Parameter("parallelPso_termination", "similarity", "Termination rule. Available values: maxiters,doublebox,similarity"));
     addParam(Parameter("parallelPso_particles", "100", "Number of pso particles"));
     addParam(Parameter("parallelPso_generations", "200", "Maximum number of pso generations"));
     addParam(Parameter("parallelPso_c1", "0.5", "Pso c1 parameter"));
@@ -234,7 +235,12 @@ bool ParallelPso::terminated()
 
 bool ParallelPso::checkSubCluster(int subClusterName)
 {
+    //double difference = fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName));
+    if(parallelPso_termination == "doublebox" && doubleBox.terminate(fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName)))) return true;
+    if(parallelPso_termination == "similarity" && similarity.terminate(fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName)))) return true; //similarity
+    if(generation>=parallelPsoGenerations) return true;
 
+    return false;
     /*
         getBestValue(subClusterName, bestIndex, bestValue);
         //---------------------SIMILARITY CASE 1 QUANTITIES------------------------------
@@ -372,6 +378,7 @@ void ParallelPso::step()
 
 void ParallelPso::init()
 {
+    parallelPso_termination =params["parallelPso_termination"].toString();
     //pRate = params["pRate"].toString().toInt();
     pNumber = params["parallelPso_pNumber"].toString().toInt();
     subCluster = params["parallelPso_subCluster"].toString().toInt();

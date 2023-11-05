@@ -12,7 +12,7 @@ private:
 
     double besty, parallelPsoC1, parallelPsoC2;
 
-    QString parallelPropagateMethod;
+    QString parallelPropagateMethod,parallelPso_termination;
 
     vector<int> similarityCurrentCount, bestF2xInClusterIndex;
 
