@@ -13,33 +13,17 @@ NeuralMinimizer::NeuralMinimizer()
     sampler= NULL;
 }
 
-double doublebox_xx1=0.0,doublebox_xx2=0.0,doublebox_variance=0.0,
-       doublebox_stopat=0.0,doublebox_oldBesty=1e+10;
 bool    NeuralMinimizer::terminated()
 {
     ++iter;
     int neural_iterations =params["neural_iterations"].toString().toInt();
     QString neural_termination = params["neural_termination"].toString();
-    double fmin=fabs(1.0+fabs(besty));
-    doublebox_xx1+=fmin;
-    doublebox_xx2+=fmin * fmin;
-
-    iter++;
-    doublebox_variance = doublebox_xx2/(iter+1) -(doublebox_xx1/(iter+1))*(doublebox_xx1/(iter+1));
-
-    if(fabs(besty-doublebox_oldBesty)>1e-6)
-    {
-        doublebox_oldBesty=besty;
-        doublebox_stopat=doublebox_variance/2.0;
-    }
-    return iter>=neural_iterations|| (doublebox_variance<=doublebox_stopat && iter>=20);
-
 
     if(neural_termination=="maxiters")
         return iter>=neural_iterations;
     else
         if(neural_termination=="doublebox")
-        return doubleBox.terminate(besty);
+        return doubleBox.terminate(besty,iter);
     else
         if(neural_termination=="similarity")
         return similarity.terminate(besty);
@@ -100,7 +84,7 @@ void    NeuralMinimizer::init()
     minima.clear();
     int neural_start_samples  = params["neural_start_samples"].toString().toInt();
     sampler->sampleFromProblem(neural_start_samples,xsample,ysample);
-
+    doubleBox.setMinIters(20);
 }
 
 void    NeuralMinimizer::done()

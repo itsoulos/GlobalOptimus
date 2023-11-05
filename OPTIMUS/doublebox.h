@@ -39,6 +39,14 @@ public:
      * @return
      */
     bool terminate(double value);
+    /**
+     * @brief terminate, it is the same as the previous function,
+     * except that the user provide the terminate iteration.
+     * @param value
+     * @param userIter
+     * @return
+     */
+    bool terminate(double value,int userIter);
     ~DoubleBox();
 };
 

@@ -37,6 +37,21 @@ bool    DoubleBox::terminate(double value)
     return variance <=stopat && iteration>=miniters;
 }
 
+bool    DoubleBox::terminate(double value,int userIter)
+{
+    double v = fabs(1.0+value);
+    xx1+=v;
+    xx2+=v * v;
+    variance=xx2/(userIter+1)-(xx1/(userIter+1))*(xx1/(userIter+1));
+    if(userIter == 0 || value<oldBesty)
+    {
+        stopat = variance/2.0;
+        oldBesty = value;
+    }
+
+    return variance <=stopat && userIter>=miniters;
+}
+
 DoubleBox::~DoubleBox()
 {
     //nothing here
