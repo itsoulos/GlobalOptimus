@@ -9,6 +9,7 @@ protected:
     Dataset *testDataset;
 public:
     Model();
+    void        setTrainSet(Dataset *tr);
     virtual     double  getOutput(Data &x)=0;
     double      getTrainError();
     double      getTestError(Dataset *test) ;

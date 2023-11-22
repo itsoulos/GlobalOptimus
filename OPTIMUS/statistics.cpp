@@ -20,6 +20,7 @@ void Statistics::addProblem(Problem *p)
         Metric mt;
         mt.name = list[i];
         mt.value = xx[mt.name].toDouble();
+        mt.fvalue= p->getBesty();
         functionMetric.push_back(mt);
      }
 }
@@ -57,6 +58,7 @@ void Statistics::printStatistics()
     for(int i=0;i<uniqueNames.size();i++)
     {
         double minValue = 1e+100;
+        double maxValue = -1e+100;
         double avgValue =  0.0;
         int    times    = 0;
         QString name = uniqueNames[i];
@@ -66,14 +68,17 @@ void Statistics::printStatistics()
             {
                 double dv = functionMetric[j].value;
                 if(dv<minValue) minValue = dv;
+                if(dv>maxValue) maxValue = dv;
                 avgValue+=dv;
                 times++;
             }
         }
-        printf("METRIC: %10s MIN VALUE: %20.10lg AVG VALUE: %20.10lg\n",
+        printf("METRIC: %10s MIN VALUE: %20.10lg MAX VALUE: %20.10lg AVG VALUE: %20.10lg\n",
                name.toStdString().c_str(),
-               minValue,avgValue/times);
+               minValue,maxValue,avgValue/times);
     }
+    //full report
+
 }
 
 Statistics::~Statistics()

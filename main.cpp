@@ -35,6 +35,7 @@
 # include <PROBLEMS/levy.h>
 # include <PROBLEMS/salkin.h>
 # include <PROBLEMS/hess.h>
+# include <PROBLEMS/fuch1.h>
 
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
@@ -215,6 +216,9 @@ void loadProblem()
     else
             if(problemName == "FuchsS")
             mainProblem =new FuchsS();
+    else
+            if(problemName == "Fuch1")
+            mainProblem = new Fuch1();
     else
             if(problemName == "Levy")
             mainProblem = new Levy();

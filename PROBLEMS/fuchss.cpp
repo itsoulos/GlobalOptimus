@@ -1,12 +1,18 @@
 #include <PROBLEMS/fuchss.h>
 FuchsS::FuchsS()
 {
-    setDimension(1);
-    left.resize(1);
-    right.resize(1);
+
+    setDimension(2);
+    left.resize(2);
+    right.resize(2);
+
+    //original [0.0,1.5]
     const double omegat2=33.29;
-    left[0]=0.0*omegat2;
-    right[0]=1.5*omegat2;
+    left[0]=0.9*omegat2;
+    right[0]=1.25*omegat2;
+
+    left[1]=0.9*omegat2;
+    right[1]=1.25*omegat2;
 }
 
 double FuchsS::e1(double omega)
@@ -66,9 +72,15 @@ double FuchsS::funmin(Data &x)
     double dv=0.0;
     double omega = x[0];
     double d=50.0*1e-10;
-    const double qtilde = 3.0;
-    dv = e2(omega)*q1(qtilde,omega,d)/(e1(omega)*q2(qtilde,omega,d))+tanh(q2(qtilde,omega,d)/2.0);
-    return dv*dv ;
+    const double qtilde = 1.0;
+    double S = x[0];
+    double A = x[1];
+    double d1 = e2(S)*q1(qtilde,S,d)/(e1(S)*q2(qtilde,S,d))+coth(q2(qtilde,S,d)/2.0);
+    double d2 = e2(A)*q1(qtilde,A,d)/(e1(A)*q2(qtilde,A,d))+tanh(q2(qtilde,A,d)/2.0);
+    dv = d1 * d1 + d2*d2;
+    //dv = e2(omega)*q1(qtilde,omega,d)/(e1(omega)*q2(qtilde,omega,d))+tanh(q2(qtilde,omega,d)/2.0);
+    //dv = dv * dv;
+    return dv ;
 }
 
 Data    FuchsS::gradient(Data &x)
@@ -97,8 +109,8 @@ QJsonObject FuchsS::done(Data &x)
 {
     QJsonObject t;
     const double omegat2=33.29;
-    t["omega_tilde"]=x[0]/omegat2;
-
+    t["omega_S"]=x[0]/omegat2;
+    t["omega_A"]=x[1]/omegat2;
     return t;
 }
 

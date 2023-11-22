@@ -55,6 +55,7 @@ SOURCES += \
         PROBLEMS/easom.cpp \
         PROBLEMS/elp.cpp \
         PROBLEMS/exp.cpp \
+        PROBLEMS/fuch1.cpp \
         PROBLEMS/fuchss.cpp \
         PROBLEMS/gkls.cpp \
         PROBLEMS/gkls2100.cpp \
@@ -138,6 +139,7 @@ HEADERS += \
     PROBLEMS/easom.h \
     PROBLEMS/elp.h \
     PROBLEMS/exp.h \
+    PROBLEMS/fuch1.h \
     PROBLEMS/fuchss.h \
     PROBLEMS/gkls.h \
     PROBLEMS/gkls2100.h \

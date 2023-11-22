@@ -86,6 +86,7 @@ SOURCES       = METHODS/adam.cpp \
 		PROBLEMS/easom.cpp \
 		PROBLEMS/elp.cpp \
 		PROBLEMS/exp.cpp \
+		PROBLEMS/fuch1.cpp \
 		PROBLEMS/fuchss.cpp \
 		PROBLEMS/gkls.cpp \
 		PROBLEMS/gkls2100.cpp \
@@ -156,6 +157,7 @@ OBJECTS       = adam.o \
 		easom.o \
 		elp.o \
 		exp.o \
+		fuch1.o \
 		fuchss.o \
 		gkls.o \
 		gkls2100.o \
@@ -314,6 +316,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/easom.h \
 		PROBLEMS/elp.h \
 		PROBLEMS/exp.h \
+		PROBLEMS/fuch1.h \
 		PROBLEMS/fuchss.h \
 		PROBLEMS/gkls.h \
 		PROBLEMS/gkls2100.h \
@@ -379,6 +382,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		PROBLEMS/easom.cpp \
 		PROBLEMS/elp.cpp \
 		PROBLEMS/exp.cpp \
+		PROBLEMS/fuch1.cpp \
 		PROBLEMS/fuchss.cpp \
 		PROBLEMS/gkls.cpp \
 		PROBLEMS/gkls2100.cpp \
@@ -614,8 +618,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents METHODS/adam.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/diracproblem.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/fuchss.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/hess.h PROBLEMS/levy.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/salkin.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h $(DISTDIR)/
-	$(COPY_FILE) --parents METHODS/adam.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/diracproblem.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/fuchss.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/hess.cpp PROBLEMS/levy.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/salkin.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents METHODS/adam.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/diracproblem.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/fuch1.h PROBLEMS/fuchss.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/hess.h PROBLEMS/levy.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/salkin.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents METHODS/adam.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/diracproblem.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/fuch1.cpp PROBLEMS/fuchss.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/hess.cpp PROBLEMS/levy.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/salkin.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp main.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -979,6 +983,13 @@ exp.o: PROBLEMS/exp.cpp PROBLEMS/exp.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o exp.o PROBLEMS/exp.cpp
 
+fuch1.o: PROBLEMS/fuch1.cpp PROBLEMS/fuch1.h \
+		OPTIMUS/problem.h \
+		MLMODELS/mlpproblem.h \
+		MLMODELS/dataset.h \
+		MLMODELS/model.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fuch1.o PROBLEMS/fuch1.cpp
+
 fuchss.o: PROBLEMS/fuchss.cpp PROBLEMS/fuchss.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fuchss.o PROBLEMS/fuchss.cpp
@@ -1154,6 +1165,7 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		PROBLEMS/levy.h \
 		PROBLEMS/salkin.h \
 		PROBLEMS/hess.h \
+		PROBLEMS/fuch1.h \
 		METHODS/gradientdescent.h \
 		OPTIMUS/optimizer.h \
 		OPTIMUS/parameter.h \

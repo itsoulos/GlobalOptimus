@@ -85,8 +85,8 @@ double  MlpProblem::getOutput(Data  &x)
 {
     double arg=0.0;
     double per=0.0;
-    int nodes = weight.size()/(trainDataset->dimension()+2);
-    int d = trainDataset->dimension();
+    int nodes = weight.size()/(x.size()+2);
+    int d = x.size();
     for(int i=1;i<=nodes;i++)
     {
         arg=0.0;

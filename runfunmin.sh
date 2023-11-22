@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=NeuralMinimizer
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=maxiters
 
 if [ $METHOD = "Bfgs" ]
 then
@@ -64,7 +64,7 @@ then
 #ms_maxiters: maximum number of iterations
 #ms_termination: termination rule (maxiters|doublebox|similarity)
 
-	METHODPARAMS="--ms_samples=50 --opt_sampler=$SAMPLER --ms_maxiters=100 --opt_localsearch=$LOCALSEARCH -ms_termination=$TERMINATION"
+	METHODPARAMS="--ms_samples=50 --opt_sampler=$SAMPLER --ms_maxiters=100 --opt_localsearch=$LOCALSEARCH --ms_termination=$TERMINATION"
 elif [ $METHOD = "Lbfgs" ]
 then
 
@@ -89,7 +89,6 @@ then
 #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
-Gradient
 	METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=true --ipso_inertiatype=1 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "NeuralMinimizer" ]
@@ -135,7 +134,7 @@ fi
 
 if [ -z "$DIMENSION" ] 
 then
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $METHODPARAMS --opt_iters=30
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $METHODPARAMS --opt_iters=1 --opt_debug=yes
 else
 	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION  $METHODPARAMS --iterations=30
 fi

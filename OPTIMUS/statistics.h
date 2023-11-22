@@ -7,6 +7,7 @@ struct Metric
 {
     QString name;
     double value;
+    double fvalue;
 };
 
 class Statistics

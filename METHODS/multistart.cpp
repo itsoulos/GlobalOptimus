@@ -53,6 +53,21 @@ void    Multistart::done()
 {
     minima.sort();
     minima.getPoint(0,bestx,besty);
+    double minx0=1e+100,maxx0=-1e+100;
+    for(int i=0;i<minima.getSize();i++)
+    {
+        Data x;
+        double y;
+         minima.getPoint(i,x,y);
+       // if(y<1e-1)
+        {
+             if(x[0]<minx0) minx0=x[0];
+             if(x[0]>maxx0) maxx0=x[0];
+         //printf("MINIMA X=[ %lf, %lf] Y=%lf\n",x[0]/33.29,x[1]/33.29,y);
+        }
+    }
+    printf("MIN[0]=%lf MAX[0]=%lf \n",
+           minx0/33.29,maxx0/33.29);
 }
 
 void    Multistart::getBest(Data &x,double &y)

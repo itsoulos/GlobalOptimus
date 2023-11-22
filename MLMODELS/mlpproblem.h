@@ -5,7 +5,7 @@
 # include <MLMODELS/model.h>
 # include <OPTIMUS/problem.h>
 
-class MlpProblem : public Problem, Model
+class MlpProblem : public Problem, public Model
 {
 private:
     /** weight=> einai oi parametroi tou neuronikou, to dianysma w **/

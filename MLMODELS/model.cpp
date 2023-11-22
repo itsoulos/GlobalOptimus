@@ -13,6 +13,11 @@ double      Model::getDistance(Data &x1,Data &x2)
     return sqrt(sum);
 }
 
+void        Model::setTrainSet(Dataset *tr)
+{
+    trainDataset = tr;
+}
+
 double  Model::getTrainError()
 {
     double error = 0.0;
@@ -21,8 +26,10 @@ double  Model::getTrainError()
     for(int i=0;i<xallsize;i++)
     {
         Data xx = xall[i];
+
         double yy = trainDataset->getYPoint(i);
         double per = getOutput(xx);
+
         error+= (per-yy)*(per-yy);
     }
 
