@@ -6,11 +6,13 @@ class Fuch1 : public Problem
 {
 private:
     int patternDimension=1;
-    int nodes=5;
+    int nodes=10;
     int npoints=100;
 
     Dataset *trainSet;
     MlpProblem *mlp;
+
+    MlpProblem *mlp1,*mlp2;
 
     double e1(double omega);
     double e2(double omega);

@@ -4,19 +4,17 @@ Fuch1::Fuch1()
 {
     trainSet = NULL;
     mlp = NULL;
-    int dim = (patternDimension+2)*nodes;//for omega
+    mlp1= NULL;
+    mlp2= NULL;
+    int dim = 2*(patternDimension+2)*nodes;
     setDimension(dim);
     left.resize(dim);
     right.resize(dim);
-    //original [0.0,1.5]
-    const double omegat2=33.29;
-    for(int i=0;i<dim-1;i++)
+    for(int i=0;i<dim;i++)
     {
         left[i]=-100.0;
         right[i]=100.0;
     }
-    //left[dim-1]=0.0*omegat2;
-    //right[dim-1]=1.5*omegat2;
 }
 static double coth2(double x)
 {
@@ -106,13 +104,30 @@ double Fuch1::q2(double qtilde,double omega,double d)
 
 double Fuch1::funmin(Data &x)
 {
-    if(mlp==NULL)
+/*    if(mlp==NULL)
         mlp=new MlpProblem();
     mlp->setDimension(x.size());
-    mlp->setWeights(x);
+    mlp->setWeights(x);*/
+    if(mlp1==NULL)
+    {
+        mlp1= new MlpProblem();
+        mlp2= new MlpProblem();
+    }
+    mlp1->setDimension(x.size()/2);
+    mlp2->setDimension(x.size()/2);
+    Data w1,w2;
+    w1.resize(x.size()/2);
+    w2.resize(x.size()/2);
+    for(int i=0;i<x.size()/2;i++)
+    {
+        w1[i]=x[i];
+        w2[i]=x[x.size()/2+i];
+    }
+    mlp1->setWeights(w1);
+    mlp2->setWeights(w2);
     Data xx;
     xx.resize(1);
-    const double q00=0.0;
+    const double q00=0.1;
     const double q01=3.0;
     const double d=50.0*1e-10;
 
@@ -122,12 +137,17 @@ double Fuch1::funmin(Data &x)
     {
         q = q00+i*(q01-q00)/npoints;
         xx[0]=q;
-        double omega = mlp->getOutput(xx);
-
-        double dv = e2(omega)*q1(q,omega,d)/(e1(omega)*q2(q,omega,d))+tanh2(q2(q,omega,d)/2.0);
-        if(isnan(dv)) dv = 100.0;
-       // printf("Omega = %lf Dv=%lf  \n",omega,dv);
-        sum+=dv * dv;
+        //double omega = mlp->getOutput(xx);
+        double omega1=mlp1->getOutput(xx);
+        double omega2=mlp2->getOutput(xx);
+        double d1 = e2(omega1)*q1(q,omega1,d)/(e1(omega1)*q2(q,omega1,d))+coth2(q2(q,omega1,d)/2.0);
+        if(isnan(d1)) d1=100;
+        double d2 = e2(omega2)*q1(q,omega2,d)/(e1(omega2)*q2(q,omega2,d))+tanh2(q2(q,omega2,d)/2.0);
+        if(isnan(d2)) d2=100;
+        sum+=d1*d1+d2*d2;
+        //double dv = e2(omega)*q1(q,omega,d)/(e1(omega)*q2(q,omega,d))+tanh2(q2(q,omega,d)/2.0);
+        //if(isnan(dv)) dv = 100.0;
+        //sum+=dv * dv;
     }
     return sum;
      /* double omega = x[0];
@@ -180,7 +200,7 @@ QJsonObject Fuch1::done(Data &x)
     funmin(x);
     Data xx;
     xx.resize(1);
-    const double q00=0.0;
+    const double q00=0.1;
     const double q01=3.0;
     const double d=50.0*1e-10;
 
@@ -189,9 +209,12 @@ QJsonObject Fuch1::done(Data &x)
     {
         q = q00+i*(q01-q00)/npoints;
         xx[0]=q;
-        double omega = mlp->getOutput(xx);
+        double omega1=mlp1->getOutput(xx);
+        double omega2=mlp2->getOutput(xx);
+        printf("%lf %lf %lf\n",q,fabs(omega1)/33.29,fabs(omega2)/33.29);
+        //double omega = mlp->getOutput(xx);
 
-        printf("%lf %lf\n",q,fabs(omega/33.29));
+        //printf("%lf %lf\n",q,fabs(omega/33.29));
         //if(isnan(omega)) continue;
         //printf("Omega = %lf Dv=%lf  \n",omega,dv);
 
@@ -204,5 +227,6 @@ QJsonObject Fuch1::done(Data &x)
 
 Fuch1::~Fuch1()
 {
-    delete mlp;
+    delete mlp1;
+    delete mlp2;
 }
