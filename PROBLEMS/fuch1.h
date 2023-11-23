@@ -6,7 +6,7 @@ class Fuch1 : public Problem
 {
 private:
     int patternDimension=1;
-    int nodes=10;
+    int nodes=5;
     int npoints=100;
 
     Dataset *trainSet;

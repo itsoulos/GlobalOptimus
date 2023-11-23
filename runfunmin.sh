@@ -134,7 +134,7 @@ fi
 
 if [ -z "$DIMENSION" ] 
 then
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $METHODPARAMS --opt_iters=1 --opt_debug=yes
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $METHODPARAMS --opt_iters=30 --opt_debug=yes
 else
 	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION  $METHODPARAMS --iterations=30
 fi
