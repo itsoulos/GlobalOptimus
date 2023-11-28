@@ -1,18 +1,18 @@
-#ifndef MYMETHOD_H
-#define MYMETHOD_H
+#ifndef USERMETHOD_H
+#define USERMETHOD_H
 # include <OPTIMUS/optimizer.h>
-class MyMethod : public Optimizer
+
+class UserMethod :public Optimizer
 {
 private:
-   int paramValue;
+    int paramValue;
 public:
-    MyMethod();
+    UserMethod();
     virtual void init();
     virtual void step();
     virtual bool terminated();
-    virtual void showDebug();
     virtual void done();
-    ~MyMethod();
+    ~UserMethod();
 };
 
-#endif
+#endif // USERMETHOD_H

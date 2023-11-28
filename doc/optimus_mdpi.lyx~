@@ -1355,6 +1355,205 @@ literal "false"
 \end_layout
 
 \begin_layout Subsection
+Implementing a user - defined optimization method
+\end_layout
+
+\begin_layout Standard
+The software can be extended by implementing optimization techniques by
+ the user himself.
+ For this purpose there is the optimization method named UserMethod and
+ the user can implement the provided functions according to the requirements
+ of the method.
+ The header file of this method is outlined in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:User-defined-optimization"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The functions in the class 
+\emph on
+UserMethod
+\emph default
+ have the following meaning:
+\end_layout
+
+\begin_layout Enumerate
+UserMethod().
+ The constructor of the method.
+ 
+\series bold
+(.arxikopoihsh parametron...)
+\end_layout
+
+\begin_layout Enumerate
+init() 
+\series bold
+(auti i methodos trexei kathe fora pou ksekina apo tin arxi i methodos beltistop
+oiisis)
+\end_layout
+
+\begin_layout Enumerate
+step() 
+\series bold
+(to pragmatiko bima tis methodou)
+\end_layout
+
+\begin_layout Enumerate
+terminated() 
+\series bold
+(epistrefei true otan prepei na termatistei i methodos beltistopoiisis.
+ Pithani anafora se doublebox kai similarity)
+\end_layout
+
+\begin_layout Enumerate
+done() 
+\series bold
+(kaleitai kathe fora pou teleionei i methodos beltistopoihshs.
+ Edo px mporoume na kalesoume tin localSearch()).
+\end_layout
+
+\begin_layout Enumerate
+~UserMethod() 
+\series bold
+(the destructor of the optimization method)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+User defined optimization method (header file).
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:User-defined-optimization"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+#ifndef USERMETHOD_H
+\end_layout
+
+\begin_layout Plain Layout
+
+#define USERMETHOD_H
+\end_layout
+
+\begin_layout Plain Layout
+
+# include <OPTIMUS/optimizer.h>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class UserMethod :public Optimizer
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+private:
+\end_layout
+
+\begin_layout Plain Layout
+
+    int paramValue;
+\end_layout
+
+\begin_layout Plain Layout
+
+public:
+\end_layout
+
+\begin_layout Plain Layout
+
+    UserMethod();
+\end_layout
+
+\begin_layout Plain Layout
+
+    virtual void init();
+\end_layout
+
+\begin_layout Plain Layout
+
+    virtual void step();
+\end_layout
+
+\begin_layout Plain Layout
+
+    virtual bool terminated();
+\end_layout
+
+\begin_layout Plain Layout
+
+    virtual void done();
+\end_layout
+
+\begin_layout Plain Layout
+
+    ~UserMethod();
+\end_layout
+
+\begin_layout Plain Layout
+
+};
+\end_layout
+
+\begin_layout Plain Layout
+
+#endif // USERMETHOD_H
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 Objective problem deployment 
 \end_layout
 
@@ -1691,7 +1890,7 @@ QJsonObject done(Data &x).
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard

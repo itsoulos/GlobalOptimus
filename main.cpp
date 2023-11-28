@@ -50,6 +50,8 @@
 # include <METHODS/neldermead.h>
 # include <METHODS/adam.h>
 # include <METHODS/simanmethod.h>
+# include <METHODS/usermethod.h>
+
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
     # include <MLMODELS/functionalrbf.h>
@@ -112,6 +114,8 @@ void loadMethods()
     methodName<<"Adam";
     method<<new SimanMethod;
     methodName<<"Simman";
+    method<<new UserMethod;
+    methodName<<"UserMethod";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }
