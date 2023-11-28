@@ -1384,43 +1384,100 @@ UserMethod
 
 \begin_layout Enumerate
 UserMethod().
- The constructor of the method.
+ This is the constructor of the class.
+ Critical parameters of the optimization method can also take place in it,
+ as shown in the following code.
  
 \series bold
-(.arxikopoihsh parametron...)
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+UserMethod::UserMethod() 
+\end_layout
+
+\begin_layout Plain Layout
+
+{     
+\end_layout
+
+\begin_layout Plain Layout
+
+	addParam(Parameter("userParam","1",
+\end_layout
+
+\begin_layout Plain Layout
+
+		"Example user parameter")); 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\series default
+The method addParam() adds a new parameter to the command line program GlobalOpt
+imus, that can be used with the notation 
+\begin_inset Formula $--$
+\end_inset
+
+userParam=value.
 \end_layout
 
 \begin_layout Enumerate
-init() 
-\series bold
-(auti i methodos trexei kathe fora pou ksekina apo tin arxi i methodos beltistop
-oiisis)
+init().
+ This function is called every time the optimization method starts and will
+ only be executed once before the optimization method steps.
+ In it the user can initialize method parameters, create arrays or even
+ generate samples from the objective function.
 \end_layout
 
 \begin_layout Enumerate
-step() 
-\series bold
-(to pragmatiko bima tis methodou)
+step().
+ This function implements the actual step of the optimization method.
 \end_layout
 
 \begin_layout Enumerate
-terminated() 
-\series bold
-(epistrefei true otan prepei na termatistei i methodos beltistopoiisis.
- Pithani anafora se doublebox kai similarity)
+terminated().
+ This function is used as the termination step of the optimization method.
+ It returns true when the method should terminate and false otherwise.
 \end_layout
 
 \begin_layout Enumerate
-done() 
-\series bold
-(kaleitai kathe fora pou teleionei i methodos beltistopoihshs.
- Edo px mporoume na kalesoume tin localSearch()).
+done().
+ This function will be called when the optimization method terminates.
+ 
 \end_layout
 
 \begin_layout Enumerate
-~UserMethod() 
-\series bold
-(the destructor of the optimization method)
+~UserMethod().
+ This is the destructor of the optimization method.
+\end_layout
+
+\begin_layout Standard
+A flowchart of any used optimization method is outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-flowchart-of"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1551,8 +1608,49 @@ public:
 \end_inset
 
  
-\series bold
-(na mpei kai ena diagramma rois pos trexei mia optimization method)
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename usermethod.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The flowchart of the execution steps of the optimization methods.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-flowchart-of"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
