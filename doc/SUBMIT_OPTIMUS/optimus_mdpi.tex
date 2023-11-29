@@ -59,6 +59,10 @@ of global optimization methods using user-defined parameters.}
 \DeclareTextSymbolDefault{\textquotedbl}{T1}
 %% Because html converters don't know tabularnewline
 \providecommand{\tabularnewline}{\\}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
 \newenvironment{lyxcode}
@@ -421,6 +425,81 @@ and it is denoted as \textbf{nelderMead}.
 \item The \textbf{adam} method. The adam local optimizer \citep{Adam} is
 implemented also.
 \end{enumerate}
+
+\subsection{Implementing a user - defined optimization method}
+
+The software can be extended by implementing optimization techniques
+by the user himself. For this purpose there is the optimization method
+named UserMethod and the user can implement the provided functions
+according to the requirements of the method. The header file of this
+method is outlined in Algorithm \ref{alg:User-defined-optimization}.
+The functions in the class \emph{UserMethod} have the following meaning:
+\begin{enumerate}
+\item UserMethod(). This is the constructor of the class. Critical parameters
+of the optimization method can also take place in it, as shown in
+the following code. \textbf{}\\
+\textbf{}\inputencoding{latin9}
+\begin{lstlisting}[language={C++}]
+UserMethod::UserMethod() 
+{     
+	addParam(Parameter("userParam","1",
+		"Example user parameter")); 
+}
+\end{lstlisting}
+\inputencoding{utf8}The method addParam() adds a new parameter to the command line program
+GlobalOptimus, that can be used with the notation $--$userParam=value.
+\item init(). This function is called every time the optimization method
+starts and will only be executed once before the optimization method
+steps. In it the user can initialize method parameters, create arrays
+or even generate samples from the objective function.
+\item step(). This function implements the actual step of the optimization
+method.
+\item terminated(). This function is used as the termination step of the
+optimization method. It returns true when the method should terminate
+and false otherwise.
+\item done(). This function will be called when the optimization method
+terminates. At this point in the code, the \emph{localSearch} function
+can be called in order to drive the optimization method with greater
+certainty to some local minimum of the objective function.
+\item \textasciitilde UserMethod(). This is the destructor of the optimization
+method.
+\end{enumerate}
+A flowchart of any used optimization method is outlined in Figure
+\ref{fig:The-flowchart-of}.
+
+\begin{algorithm}[H]
+
+\caption{User defined optimization method (header file).\label{alg:User-defined-optimization}}
+
+\inputencoding{latin9}\begin{lstlisting}[language={C++}]
+#ifndef USERMETHOD_H
+#define USERMETHOD_H
+# include <OPTIMUS/optimizer.h>
+
+class UserMethod :public Optimizer
+{
+private:
+    int paramValue;
+public:
+    UserMethod();
+    virtual void init();
+    virtual void step();
+    virtual bool terminated();
+    virtual void done();
+    ~UserMethod();
+};
+#endif // USERMETHOD_H
+\end{lstlisting}
+\inputencoding{utf8}\end{algorithm}
+ 
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{usermethod}
+\par\end{centering}
+\caption{The flowchart of the execution steps of the optimization methods.\label{fig:The-flowchart-of}}
+
+\end{figure}
+
 
 \subsection{Objective problem deployment }
 
@@ -790,6 +869,17 @@ TEST2N7 & 7895(0.90) & 4969(0.97)\tabularnewline
 \hline 
 \end{tabular}
 \end{table}
+Also, a statistical comparion using boxplots for these results is
+shown in Figure \ref{fig:boxplot}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{boxplot}
+\par\end{centering}
+\caption{Comparison using boxplots for the results with the genetic algorithm
+method.\label{fig:boxplot}}
+
+\end{figure}
 
 
 \subsection{The Lennard Jones potential}
@@ -836,6 +926,17 @@ of atoms participating in the potential increases significantly.
 \hline 
 \end{tabular}
 \end{table}
+The experimental results for the potential problem are also graphically
+demonstrated in Figure \ref{fig:potentialGraphical}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{potential}
+\par\end{centering}
+\caption{Graphical representation of the experimental results for the Potential
+problem.\label{fig:potentialGraphical}}
+
+\end{figure}
 
 
 \subsection{Parallel optimization}
