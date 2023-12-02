@@ -3,11 +3,11 @@ DATAPATH=~/Desktop/ERGASIES/FeatureConstruction2/datasets/tenfolding/
 NODES=10
 
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=NeuralMinimizer
+METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=rbf
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 
@@ -132,6 +132,6 @@ fi
 PROBLEM=mlp
 NODES=10
 
-MLPARAMS="--mlp_trainfile=$DATAPATH/$1.train --mlp_testfile=$DATAPATH/$1.test --mlp_nodes=$NODES"
-./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD   $METHODPARAMS  $MLPARAMS --opt_iters=30
+MLPARAMS="--mlp_trainfile=$DATAPATH/$1.train --mlp_testfile=$DATAPATH/$1.test --mlp_nodes=$NODES --mlp_initmethod=xavier"
+ ./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD   $METHODPARAMS  $MLPARAMS --opt_iters=30
 

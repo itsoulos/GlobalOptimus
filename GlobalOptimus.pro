@@ -21,6 +21,14 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 
 QMAKE_LFLAGS += -O3
 SOURCES += \
+        GE/cprogram.cc \
+        GE/doublestack.cc \
+        GE/fparser.cc \
+        GE/fpoptimizer.cc \
+        GE/population.cc \
+        GE/program.cc \
+        GE/rule.cc \
+        GE/symbol.cc \
         METHODS/adam.cpp \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
@@ -30,6 +38,7 @@ SOURCES += \
         METHODS/parallelpso.cpp \
         METHODS/simanmethod.cpp \
         METHODS/usermethod.cpp \
+        MLMODELS/gdfmodel.cpp \
         MLMODELS/mlpproblem.cpp \
         MLMODELS/model.cpp \
         LINESEARCH/armijosearch.cpp \
@@ -42,6 +51,7 @@ SOURCES += \
         LINESEARCH/linesearch.cpp \
         METHODS/multistart.cpp \
         MLMODELS/rbfproblem.cpp \
+        OPTIMUS/parameterlist.cpp \
         OPTIMUS/statistics.cpp \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
@@ -103,6 +113,15 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    GE/cprogram.h \
+    GE/doublestack.h \
+    GE/fparser.hh \
+    GE/fpconfig.hh \
+    GE/fptypes.hh \
+    GE/population.h \
+    GE/program.h \
+    GE/rule.h \
+    GE/symbol.h \
     METHODS/adam.h \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
@@ -112,6 +131,7 @@ HEADERS += \
     METHODS/parallelpso.h \
     METHODS/simanmethod.h \
     METHODS/usermethod.h \
+    MLMODELS/gdfmodel.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
     LINESEARCH/armijosearch.h \
@@ -124,6 +144,7 @@ HEADERS += \
     METHODS/gradientdescent.h \
     METHODS/multistart.h \
     MLMODELS/rbfproblem.h \
+    OPTIMUS/parameterlist.h \
     OPTIMUS/statistics.h \
     OPTIMUS/collection.h \
     OPTIMUS/doublebox.h \

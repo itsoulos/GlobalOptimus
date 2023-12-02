@@ -5,7 +5,7 @@
 # include <MLMODELS/model.h>
 # include <OPTIMUS/problem.h>
 # include <math.h>
-class RbfProblem :public Problem, Model
+class RbfProblem :public Problem, public Model
 {
 private:
     Data weight;

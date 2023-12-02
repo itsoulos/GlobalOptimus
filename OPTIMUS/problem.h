@@ -79,7 +79,7 @@ public:
      * @brief getSample
      * @return a sample from the objective problem using uniform distribution
      */
-    Data getSample();
+    virtual Data getSample();
     /**
      * @brief setLeftMargin, changes the left bound of the objective problem
      * @param x

@@ -1,38 +1,92 @@
 #include "mlpproblem.h"
-#include "mlpproblem.h"
 
-  MlpProblem::MlpProblem()
+MlpProblem::MlpProblem()
     :Problem(1)
 {
+      addParam(Parameter("mlp_nodes","1","Number of weights"));
+      addParam(Parameter("mlp_leftmargin","-10.0","Initial left margin"));
+      addParam(Parameter("mlp_rightmargin","10.0","Initial right margin"));
+      addParam(Parameter("mlp_initmethod","smallvalues","Possible values: smallvalues,xavier"));
+}
+
+Data    MlpProblem::getSample()
+{
+      //init weights
+      Data xx;
+      xx.resize(dimension);
+      double leftMargin = getParam("mlp_leftmargin").getValue().toDouble();
+      double rightMargin = getParam("mlp_rightmargin").getValue().toDouble();
+      QString initmethod = getParam("mlp_initmethod").getValue();
+      if(initmethod == "smallvalues")
+      {
+          double a = -0.01;
+          double b = 0.01;
+          if(a<leftMargin) a= leftMargin;
+          if(b>rightMargin) b= rightMargin;
+          for(int i=0;i<dimension;i++)
+          {
+              xx[i]=a+(b-a)*randomDouble();
+          }
+      }
+      else
+          if(initmethod=="xavier")
+          {
+              double a = -1.0/trainDataset->dimension();
+              double b = 1.0/trainDataset->dimension();
+              if(a<leftMargin) a= leftMargin;
+              if(b>rightMargin) b= rightMargin;
+              for(int i=0;i<dimension;i++)
+              {
+                  xx[i]=a+(b-a)*randomDouble();
+              }
+          }
+          else
+          {
+              return Problem::getSample();
+          }
+          return xx;
+}
+void    MlpProblem::initWeights()
+{
+      int nodes = getParam("mlp_nodes").getValue().toInt();
+      int k = (trainDataset->dimension()+2)*nodes;
+      setDimension(k);
+      left.resize(k);
+      right.resize(k);
+      double leftMargin = getParam("mlp_leftmargin").getValue().toDouble();
+      double rightMargin = getParam("mlp_rightmargin").getValue().toDouble();
+      for(int i=0;i<k;i++)
+      {
+          left[i]=leftMargin;
+          right[i]=rightMargin;
+      }
+      weight.resize(k);
 
 }
-void    MlpProblem::init(QJsonObject &params)
+
+void    MlpProblem::init(QJsonObject &pt)
 {
-    QString trainName = params["mlp_trainfile"].toString();
-    QString testName =  params["mlp_testfile"].toString();
-    int nodes        = 1;
-    if(params.contains("mlp_nodes"))
-        nodes = params["mlp_nodes"].toString().toInt();
-    double leftMargin = -10.0;
-    double rightMargin = 10.0;
-    if(params.contains("mlp_leftmargin"))
-        leftMargin=params["mlp_leftmargin"].toString().toDouble();
-    if(params.contains("mlp_rightmargin"))
-       rightMargin = params["mlp_rightmargin"].toString().toDouble();
+    QString trainName = pt["mlp_trainfile"].toString();
+    QString testName =  pt["mlp_testfile"].toString();
+    if(pt.contains("mlp_nodes"))
+    {
+        setParam("mlp_nodes",pt["mlp_nodes"].toString());
+    }
+    if(pt.contains("mlp_leftmargin"))
+    {
+        setParam("mlp_leftmargin",pt["mlp_leftmargin"].toString());
+    }
+    if(pt.contains("mlp_rightmargin"))
+    {
+        setParam("mlp_rightmargin",pt["mlp_rightmargin"].toString());
+    }
+    if(pt.contains("mlp_initmethod"))
+    {
+        setParam("mlp_initmethod",pt["mlp_initmethod"].toString());
+    }
     trainDataset=new Dataset(trainName);
     testDataset = new Dataset(testName);
-    int k = (trainDataset->dimension()+2)*nodes;
-    setDimension(k);
-    left.resize(k);
-    right.resize(k);
-    /** edo bazo ta oria ton
-     *  parametron tou neuronikou diktyou **/
-    for(int i=0;i<k;i++)
-    {
-        left[i]=leftMargin;
-        right[i]=rightMargin;
-    }
-    weight.resize(k);
+    initWeights();
 }
 
 void    MlpProblem::setWeights(Data &w)

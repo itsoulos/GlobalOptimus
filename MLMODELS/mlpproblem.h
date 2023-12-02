@@ -58,6 +58,8 @@ public:
 
     virtual void init(QJsonObject &params);
     virtual QJsonObject done(Data &x);
+    void    initWeights();
+    virtual Data getSample();
     ~MlpProblem();
 };
 #endif // MLPPROBLEM_H

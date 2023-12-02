@@ -1,8 +1,8 @@
 #ifndef MODEL_H
 #define MODEL_H
 # include <MLMODELS/dataset.h>
-
-class Model
+# include <OPTIMUS/parameterlist.h>
+class Model : public ParameterList
 {
 protected:
     Dataset *trainDataset;
