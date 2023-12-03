@@ -3,9 +3,11 @@
 # include <GE/rule.h>
 # include <GE/fparser.hh>
 # include <GE/program.h>
+# include <MLMODELS/model.h>
 class Cprogram : public Program
 {
 	protected:
+        Model       *currrentModel;
 		string		vars;
 		FunctionParser 	parser;
 		int			dimension;
@@ -19,18 +21,20 @@ class Cprogram : public Program
 		vector<Symbol>	Digit;
 		vector<Symbol>	XX;
 		int			newRule();
-		void			makeTerminals();
-		void			makeNonTerminals();
-		void			makeRules();
+        virtual void			makeTerminals();
+        virtual void			makeNonTerminals();
+        virtual void			makeRules();
 	public:
-		Cprogram(int dim);
+        Cprogram(int dim,Model *m);
+        void makeGrammar();
 		int	Parse(string expr);
 		double	Eval(const double *X);
         double  EvalDeriv(const double *X,int pos);
         double  EvalDeriv2(const double *X,int pos);
 		int	EvalError();
 		Symbol	*getStartSymbol();
-		~Cprogram();
+        virtual double	fitness(vector<int> &genome);
+        virtual ~Cprogram();
 };
 # define __CPROGRAM__H
 # endif

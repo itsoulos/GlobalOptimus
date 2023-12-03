@@ -11,6 +11,7 @@ void    Bfgs::init()
 
     if(!haveInitialized)
     {
+
         xpoint.resize(myProblem->getDimension());
         xpoint = myProblem->getSample();
         ypoint = myProblem->statFunmin(xpoint);
@@ -36,6 +37,7 @@ void    Bfgs::step()
 {
 
     long n=myProblem->getDimension();
+
     for(int i=0;i<n;i++)
     {
         xp[i]=xpoint[i];
@@ -64,6 +66,7 @@ void    Bfgs::setPoint(Data &x,double &y)
     haveInitialized = true;
     xpoint = x;
     ypoint = y;
+
 }
 
 void    Bfgs::getPoint(Data &x,double &y)
@@ -1846,9 +1849,9 @@ int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
     for(int i=0;i<*n;i++)
         tempx[i]=x[i];
     *f=myProblem->statFunmin(tempx);
-   // printf("BFGS ITER=%4d  Value = %20.10lg\n",
-   //        totcal_1.itnocs,
-   //        *f);
+    //printf("BFGS ITER=%4d  Value = %20.10lg\n",
+    //       totcal_1.itnocs,
+    //       *f);
     tempg = myProblem->gradient(tempx);
     for(int i=0;i<*n;i++)
     {

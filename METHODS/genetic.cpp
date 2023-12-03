@@ -1,7 +1,7 @@
 #include "genetic.h"
 Genetic::Genetic()
 {
-
+    hasInitialized =false;
     addParam(Parameter("gen_count","200","Number of chromosomes"));
     addParam(Parameter("gen_maxiters","200","Maximum number of generations"));
     addParam(Parameter("gen_srate","0.10","Selection rate"));
@@ -12,6 +12,14 @@ Genetic::Genetic()
     addParam(Parameter("gen_crossover","double","Crossover method. Available values uniform, onepoint, double"));
     addParam(Parameter("gen_mutation","double","Mutation method. Available values random, double"));
     addParam(Parameter("gen_termination","doublebox","Termination method. Avaible values: maxiters,similarity,doublebox"));
+}
+
+
+void    Genetic::setBest(Data &xx,double y)
+{
+    bestx = xx;
+    besty = y;
+    hasInitialized = true;
 }
 
 void    Genetic::init()
@@ -37,6 +45,12 @@ void    Genetic::init()
     for(int i=0;i<chromosomeCount;i++)
     {
         childrenArray[i].resize(myProblem->getDimension());
+    }
+    if(hasInitialized)
+    {
+        population[0]=bestx;
+        fitnessArray[0]=besty;
+        hasInitialized=false;
     }
 }
 

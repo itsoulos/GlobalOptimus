@@ -2,13 +2,19 @@
 # include <stdio.h>
 # include <math.h>
 
-Cprogram::Cprogram(int dim)
+Cprogram::Cprogram(int dim,Model *m)
 {
+    currrentModel = m;
 	parser.AddConstant("pi",M_PI);
 	dimension = dim;
-	makeTerminals();
-	makeNonTerminals();
-	makeRules();
+
+}
+
+void    Cprogram::makeGrammar()
+{
+    makeTerminals();
+    makeNonTerminals();
+    makeRules();
 }
 
 int	Cprogram::newRule()
@@ -60,6 +66,21 @@ void	Cprogram::makeTerminals()
 		sprintf(str,"%d",i);
 		Digit[i].set(str,1);
 	}
+    int r;
+    for(int i=0;i<dimension;i++)
+    {
+        r=newRule();
+        rule[r]->addSymbol(&XX[i]);
+        XXlist.addRule(rule[r]);
+    }
+
+    for(int i=0;i<10;i++)
+    {
+        r=newRule();
+        rule[r]->addSymbol(&Digit[i]);
+        Digit0.addRule(rule[r]);
+        if(i) Digit1.addRule(rule[r]);
+    }
 }
 
 void	Cprogram::makeNonTerminals()
@@ -213,20 +234,16 @@ void	Cprogram::makeRules()
 	terminal.addRule(rule[r]);
 
 
-	for(int i=0;i<dimension;i++)
-	{
-		r=newRule();
-		rule[r]->addSymbol(&XX[i]);
-		XXlist.addRule(rule[r]);
-	}
 
-	for(int i=0;i<10;i++)
-	{
-		r=newRule();
-		rule[r]->addSymbol(&Digit[i]);
-		Digit0.addRule(rule[r]);
-		if(i) Digit1.addRule(rule[r]);
-	}
+}
+
+double	Cprogram::fitness(vector<int> &genome)
+{
+    int redo = 0;
+    string st = printRandomProgram(genome,redo);
+    if(redo>=REDO_MAX) return 1e+100;
+    if(!Parse(st)) return 1e+100;
+    return currrentModel->getTrainError();
 }
 
 int		Cprogram::Parse(string expr)

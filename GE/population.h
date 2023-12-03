@@ -7,9 +7,7 @@ class Population
 {
 	private:
 		int	**children;
-		int	**trialx;
 		int	**genome;
-		int	*valid;
 		double *fitness_array;
 		double	mutation_rate,selection_rate;
 		int	genome_count;
@@ -39,6 +37,8 @@ class Population
 		double	getBestFitness() const;
 		double	evaluateBestFitness();
 		vector<int> getBestGenome() const;
+        void    getChromosome(int pos,vector<int> &x,double &y);
+        void    setChromosome(int pos,vector<int> &x,double y);
 		void	reset();
 		~Population();
 		

@@ -20,7 +20,7 @@ class Program
 		void	updatePositive(vector<int> &genome);
 		void	updateNegative(vector<int> &genome);
 		void	updateAll(vector<int> &genome1,vector<int> &genome2);
-		~Program();
+        virtual ~Program();
 };
 
 # define __PROGRAM__H

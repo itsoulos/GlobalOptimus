@@ -44,13 +44,29 @@ void	Population::reset()
 		for(int j=0;j<genome_size;j++)
 				genome[i][j]=rand()%MAX_RULE;
 	for(int i=0;i<genome_count;i++)
-			fitness_array[i]=-1e+100;
+            fitness_array[i]=1e+100;
 }
 
 /* Return the fitness of a genome */
 double 	Population::fitness(vector<int> &g)
 {
 	return program->fitness(g);
+}
+
+
+void    Population::getChromosome(int pos,vector<int> &x,double &y)
+{
+    x.resize(genome_size);
+    for(int i=0;i<(int)x.size();i++)
+        x[i]=genome[pos][i];
+    y=fitness_array[pos];
+}
+
+void    Population::setChromosome(int pos,vector<int> &x,double y)
+{
+   for(int i=0;i<genome_size;i++)
+    genome[pos][i]=x[i];
+   fitness_array[pos]=y;
 }
 
 /* The selection of the chromosomes according to the fitness value is performed */
@@ -61,7 +77,7 @@ void	Population::select()
 	{
 		for(int j=0;j<genome_count-1;j++)
 		{
-			if(fitness_array[j+1]>fitness_array[j])
+            if(fitness_array[j+1]<fitness_array[j])
 			{
 				double dtemp;
 				dtemp=fitness_array[j];
@@ -93,14 +109,14 @@ void	Population::crossover()
 		// The two parents are selected here according to the tournament selection procedure
                 for(int i=0;i<2;i++)
                 {
-                        double max_fitness=-1e+10;
+                        double max_fitness=1e+10;
                         int    max_index=-1;
 			int r;
 			// Select the best parents of  the candidates 
                         for(int j=0;j<tournament_size;j++)
                         {
 				r=rand() % (genome_count);
-                                if(j==0 || fitness_array[r]>max_fitness)
+                                if(j==0 || fitness_array[r]<max_fitness)
                                 {
                                         max_index=r;
                                         max_fitness=fitness_array[r];
@@ -180,13 +196,13 @@ void	Population::calcFitnessArray()
 		{
 			dmin=fabs(fitness_array[i]);
 		}
-		if(fabs(fitness_array[i])>=1e+100) icount++;	
-		/*
-		if((i+1)%10==0)
+        if(fabs(fitness_array[i])>=1e+100) icount++;
+
+        /*if((i+1)%10==0)
 		{
 			printf(" %d:%.5lg ",i+1,dmin);
 			fflush(stdout);
-		}*/
+        }*/
 		
 	}
 	return;
@@ -307,6 +323,7 @@ vector<int> Population::getBestGenome() const
 
 void	Population::localSearch(int pos)
 {
+
 	vector<int> g;
 	g.resize(genome_size);
 
@@ -325,7 +342,6 @@ void	Population::localSearch(int pos)
 		double f=fitness(g);
 		if(fabs(f)<fabs(fitness_array[pos]))
 		{
-			printf("NEW MIN[%4d]=%10.4lg\n",pos,f);
 			for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
 			fitness_array[pos]=f;
 //			return;
@@ -337,7 +353,6 @@ void	Population::localSearch(int pos)
 			double f=fitness(g);
 			if(fabs(f)<fabs(fitness_array[pos]))
 			{
-			printf("NEW MIN[%4d]=%10.4lg\n",pos,f);
 				for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
 				fitness_array[pos]=f;
 //			return;

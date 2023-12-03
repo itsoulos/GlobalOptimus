@@ -3,7 +3,8 @@
 RbfProblem::RbfProblem()
     :Problem(1)
 {
-
+    addParam(Parameter("rbf_nodes","1","Number of rbf nodes"));
+    addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
 }
 
 double  RbfProblem::gaussian(Data &x,Data &center,double variance)
@@ -290,17 +291,22 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 }
 
 
-void    RbfProblem::init(QJsonObject &params)
+void    RbfProblem::init(QJsonObject &px)
 {
-    QString trainName = params["rbf_trainfile"].toString();
-    QString testName =  params["rbf_testfile"].toString();
-    int nodes        = 1;
+    QString trainName = px["model_trainfile"].toString();
+    QString testName =  px["model_testfile"].toString();
+    setParam("model_trainfile",trainName);
+    setParam("model_testfile",testName);
+    int nodes        = getParam("rbf_nodes").getValue().toInt();
     if(params.contains("rbf_nodes"))
-        nodes = params["rbf_nodes"].toString().toInt();
+    {
+        nodes = px["rbf_nodes"].toString().toInt();
+        setParam("rbf_nodes",px["rbf_nodes"].toString());
+    }
     weight.resize(nodes);
-    trainDataset=new Dataset(trainName);
+    loadTrainSet();
+    loadTestSet();
     int d = trainDataset->dimension();
-    testDataset = new Dataset(testName);
     int k = (d*nodes)+
             nodes+nodes;
     setDimension(k);

@@ -4,6 +4,34 @@ Model::Model()
 {
     trainDataset = NULL;
     testDataset = NULL;
+    addParam(Parameter("model_trainfile","","The trainfile used"));
+    addParam(Parameter("model_testfile","","The test file used"));
+}
+
+void        Model::loadTrainSet()
+{
+    QString tr = getParam("model_trainfile").getValue();
+    if(tr=="") return;
+    if(trainDataset!=NULL) delete trainDataset;
+    trainDataset = new Dataset(tr);
+}
+
+void        Model::loadTestSet()
+{
+    QString tt = getParam("model_testfile").getValue();
+    if(tt=="") return;
+    if(testDataset!=NULL) delete testDataset;
+    testDataset = new Dataset(tt);
+}
+
+double      Model::getTestError()
+{
+    return getTestError(testDataset);
+}
+
+double      Model::getClassTestError()
+{
+    return getClassTestError(testDataset);
 }
 
 double      Model::getDistance(Data &x1,Data &x2)
@@ -66,11 +94,22 @@ double  Model::getClassTestError(Dataset *test)
     /** to metatrepoume se pososto **/
     return error*100.0/test->count();
 }
+void        Model::disableRemoveData()
+{
+    noRemoveData=true;
+}
 
 Model::~Model()
 {
+if(noRemoveData) return;
     if(trainDataset!=NULL)
+    {
         delete trainDataset;
-    if(testDataset)
+        trainDataset = NULL;
+        }
+    if(testDataset!=NULL)
+    {
         delete testDataset;
+        testDataset = NULL;
+        }
 }

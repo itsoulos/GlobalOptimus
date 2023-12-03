@@ -10,6 +10,12 @@ Problem::Problem()
     setDimension(1);
 }
 
+void    Problem::resetFunctionCalls()
+{
+    functionCalls=0;
+    besty=1e+100;
+}
+
 int Problem::getdimension()
 {
     return dimension;

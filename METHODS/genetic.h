@@ -12,6 +12,10 @@ private:
     vector<Data> childrenArray;
     Data         fitnessArray;
 
+    Data bestx;
+    double besty;
+    bool hasInitialized;
+
     Collection chromosomes;
     Collection children;
     QString selectionMethod;
@@ -43,6 +47,7 @@ public:
     void    Selection();
     void    Crossover();
     void    Mutate();
+    void    setBest(Data &xx,double y);
     double deltaIter(int iter,double y);
     ~Genetic();
 };

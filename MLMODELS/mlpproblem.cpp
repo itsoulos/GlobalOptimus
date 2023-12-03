@@ -66,8 +66,10 @@ void    MlpProblem::initWeights()
 
 void    MlpProblem::init(QJsonObject &pt)
 {
-    QString trainName = pt["mlp_trainfile"].toString();
-    QString testName =  pt["mlp_testfile"].toString();
+    QString trainName = pt["model_trainfile"].toString();
+    QString testName =  pt["model_testfile"].toString();
+    setParam("model_trainfile",trainName);
+    setParam("model_testfile",testName);
     if(pt.contains("mlp_nodes"))
     {
         setParam("mlp_nodes",pt["mlp_nodes"].toString());
@@ -84,8 +86,8 @@ void    MlpProblem::init(QJsonObject &pt)
     {
         setParam("mlp_initmethod",pt["mlp_initmethod"].toString());
     }
-    trainDataset=new Dataset(trainName);
-    testDataset = new Dataset(testName);
+    loadTrainSet();
+    loadTestSet();
     initWeights();
 }
 

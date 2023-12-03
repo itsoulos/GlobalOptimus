@@ -29,7 +29,7 @@ public:
     double  gaussian(Data &x,Data &center,double variance);
     virtual void init(QJsonObject &params);
     virtual QJsonObject done(Data &x);
-    ~RbfProblem();
+    virtual ~RbfProblem();
 };
 
 #endif // RBFPROBLEM_H
