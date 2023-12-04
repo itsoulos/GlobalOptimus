@@ -2,6 +2,7 @@
 #define PARAMETERLIST_H
 # include <OPTIMUS/parameter.h>
 # include <QJsonObject>
+# include <QStringList>
 class ParameterList
 {
 protected:
