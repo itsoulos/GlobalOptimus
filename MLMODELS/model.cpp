@@ -14,6 +14,7 @@ void        Model::loadTrainSet()
     if(tr=="") return;
     if(trainDataset!=NULL) delete trainDataset;
     trainDataset = new Dataset(tr);
+    xall = trainDataset->getAllXpoint();
 }
 
 void        Model::loadTestSet()
@@ -44,12 +45,12 @@ double      Model::getDistance(Data &x1,Data &x2)
 void        Model::setTrainSet(Dataset *tr)
 {
     trainDataset = tr;
+    xall = trainDataset->getAllXpoint();
 }
 
 double  Model::getTrainError()
 {
     double error = 0.0;
-    Matrix xall = trainDataset->getAllXpoint();
     int xallsize  = xall.size();
     for(int i=0;i<xallsize;i++)
     {

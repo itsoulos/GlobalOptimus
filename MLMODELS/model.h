@@ -8,6 +8,7 @@ protected:
     Dataset *trainDataset;
     Dataset *testDataset;
     bool    noRemoveData=false;
+    Matrix xall;
 public:
     Model();
     void        disableRemoveData();
