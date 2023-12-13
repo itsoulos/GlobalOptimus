@@ -21,7 +21,7 @@ class Population
 		void	calcFitnessArray();
 		void	replaceWorst();
 		int	elitism;
-		void	localSearch(int gpos);
+
 	public:
 		Population(int gcount,int gsize,Program *p);
 		double 	fitness(vector<int> &g);
@@ -40,6 +40,7 @@ class Population
         void    getChromosome(int pos,vector<int> &x,double &y);
         void    setChromosome(int pos,vector<int> &x,double y);
 		void	reset();
+        void	localSearch(int gpos);
 		~Population();
 		
 };

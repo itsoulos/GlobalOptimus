@@ -353,6 +353,7 @@ void	Population::localSearch(int pos)
 			double f=fitness(g);
 			if(fabs(f)<fabs(fitness_array[pos]))
 			{
+
 				for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
 				fitness_array[pos]=f;
 //			return;

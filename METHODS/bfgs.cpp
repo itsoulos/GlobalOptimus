@@ -41,7 +41,6 @@ void    Bfgs::step()
     for(int i=0;i<n;i++)
     {
         xp[i]=xpoint[i];
-
     }
 
     double acc=1e-19;

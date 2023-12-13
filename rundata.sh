@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 #Available values: mlp, rbf, gdf, nnc
-MODEL=mlp
+MODEL=nnc
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -24,7 +24,7 @@ then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
 elif [ $MODEL = "nnc" ]
 then
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=200 --nnc_popsize=100 --nnc_popgens=200 --nnc_popsrate=0.9 --nnc_popmrate=0.05 -nnc_lsearchiters=10 --nnc_lsearchitems=5 --nnc_lsearchmethod=bfgs"
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=200 --nnc_popsrate=0.1 --nnc_popmrate=0.05 -nnc_lsearchiters=10 --nnc_lsearchitems=5 --nnc_lsearchmethod=random"
 fi
 
 if [ $METHOD = "Bfgs" ]

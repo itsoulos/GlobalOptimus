@@ -10,7 +10,7 @@ NNCModel::NNCModel()
     addParam(Parameter("nnc_popcount","200","Population count"));
     addParam(Parameter("nnc_popsize","100","NNC chromosome size"));
     addParam(Parameter("nnc_popgens","200","Maximum generations for NNC"));
-    addParam(Parameter("nnc_popsrate","0.90","NNC selection rate"));
+    addParam(Parameter("nnc_popsrate","0.10","NNC selection rate"));
     addParam(Parameter("nnc_popmrate","0.05","NNC mutation rate"));
     addParam(Parameter("nnc_lsearchiters","10","Number of iters before local search"));
     addParam(Parameter("nnc_lsearchitems","1","Number of items in local search"));
@@ -69,13 +69,18 @@ void    NNCModel::trainModel()
        }
 
     pop->evaluateBestFitness();
-
+    setParam("nnc_lsearchmethod","bfgs");
+    localSearchItem(0);
 }
 
 void        NNCModel::localSearchItem(int pos)
 {
-
-
+       QString Lmethod = getParam("nnc_lsearchmethod").getValue();
+       if(Lmethod == "random")
+       {
+        pop->localSearch(pos);
+        return;
+       }
         vector<int> xx;
         double yy;
         pop->getChromosome(pos,xx,yy);
@@ -85,7 +90,6 @@ void        NNCModel::localSearchItem(int pos)
         if(!program->Parse(st)) return;
         parser->makeVector(st);
         string pt = parser->print();
-    QString Lmethod = getParam("nnc_lsearchmethod").getValue();
 
        Data w;
         parser->getWeights(w);
@@ -97,8 +101,8 @@ void        NNCModel::localSearchItem(int pos)
         xl.resize(w.size());
         for(int j=0;j<w.size();j++)
         {
-            xl[j]=-2.0*fabs(w[j]);
-            xu[j]= 2.0*fabs(w[j]);
+            xl[j]=-4.0*fabs(w[j]);
+            xu[j]= 4.0*fabs(w[j]);
 
         }
         trialProblem->setLeftMargin(xl);
