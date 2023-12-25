@@ -424,8 +424,8 @@ void ParallelPso::init()
         {
             double left = -(rmargin[j] - lmargin[j]) / 20.0;
             double right = (rmargin[j] - lmargin[j]) / 20.0;
-            // velocitys[i][j] = left + myProblem->randomDouble() * (right - left);
-            velocitys[i][j] = 0;
+            velocitys[i][j] = left + myProblem->randomDouble() * (right - left);
+            //velocitys[i][j] = 0;
         }
     }
     similarityBestValue.resize(subCluster);
