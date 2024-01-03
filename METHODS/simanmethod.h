@@ -15,12 +15,15 @@ private:
     int neps;
     double eps;
     int k;
+    bool hasInitialized;
     void    updateTemp();
 public:
     SimanMethod();
     virtual bool terminated();
     virtual void step();
     virtual void init();
+    void    setPoint(Data &x,double &y);
+    void    getPoint(Data &x,double &y);
     virtual void done();
     ~SimanMethod();
 };

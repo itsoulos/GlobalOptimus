@@ -4,6 +4,7 @@
 # include <MLMODELS/rbfproblem.h>
 # include <MLMODELS/gdfmodel.h>
 # include <MLMODELS/nncmodel.h>
+# include <MLMODELS/rulemodel.h>
 
 
 # include <METHODS/gradientdescent.h>
@@ -112,6 +113,9 @@ void loadProblem()
     else
     if(modelName == "nnc")
         mainModel = new NNCModel();
+    else
+    if(modelName == "rule")
+        mainModel = new RuleModel();
     QStringList modelParams = mainModel->getParameterNames();
     for(int i=0;i<problemParams.keys().size();i++)
     {
@@ -293,6 +297,12 @@ void runMethod()
     if(modelName == "nnc")
     {
         NNCModel *p=(NNCModel *)mainModel;
+        p->trainModel();
+    }
+    else
+    if(modelName == "rule")
+    {
+        RuleModel *p=(RuleModel *)mainModel;
         p->trainModel();
     }
 }

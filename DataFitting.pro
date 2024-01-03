@@ -29,6 +29,7 @@ SOURCES += \
         GE/population.cc \
         GE/program.cc \
         GE/rule.cc \
+        GE/ruleprogram.cpp \
         GE/symbol.cc \
         METHODS/adam.cpp \
         METHODS/ipso.cpp \
@@ -55,6 +56,7 @@ SOURCES += \
         MLMODELS/neuralparser.cc \
         MLMODELS/nncmodel.cpp \
         MLMODELS/rbfproblem.cpp \
+        MLMODELS/rulemodel.cpp \
         OPTIMUS/parameterlist.cpp \
         OPTIMUS/statistics.cpp \
         OPTIMUS/collection.cpp \
@@ -92,6 +94,7 @@ HEADERS += \
     GE/population.h \
     GE/program.h \
     GE/rule.h \
+    GE/ruleprogram.h \
     GE/symbol.h \
     METHODS/adam.h \
     METHODS/ipso.h \
@@ -118,6 +121,7 @@ HEADERS += \
     MLMODELS/neuralparser.h \
     MLMODELS/nncmodel.h \
     MLMODELS/rbfproblem.h \
+    MLMODELS/rulemodel.h \
     OPTIMUS/parameterlist.h \
     OPTIMUS/statistics.h \
     OPTIMUS/collection.h \

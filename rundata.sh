@@ -6,7 +6,7 @@ LOCALSEARCH=bfgs
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
-#Available values: mlp, rbf, gdf, nnc
+#Available values: mlp, rbf, gdf, nnc, rule
 MODEL=nnc
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
@@ -22,9 +22,12 @@ then
 elif [ $MODEL = "gdf" ]
 then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
+elif [ $MODEL = "rule" ]
+then
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=200 --rule_popsize=200 --rule_popgens=500 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_lsearchiters=20 --rule_lsearchitems=20 --nnc_lsearchmethod=crossover"
 elif [ $MODEL = "nnc" ]
 then
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=200 --nnc_popsrate=0.1 --nnc_popmrate=0.05 -nnc_lsearchiters=10 --nnc_lsearchitems=5 --nnc_lsearchmethod=random"
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_lsearchmethod=bfgs"
 fi
 
 if [ $METHOD = "Bfgs" ]
@@ -152,4 +155,4 @@ then
 	exit
 fi
 
-./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $METHODPARAMS $MODELPARAMS --opt_iters=30
+./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $METHODPARAMS $MODELPARAMS --opt_iters=1

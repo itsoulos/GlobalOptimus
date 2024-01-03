@@ -6,13 +6,30 @@ SimanMethod::SimanMethod()
     addParam(Parameter("siman_neps","100","Number of iterations"));
     addParam(Parameter("siman_eps","0.00001","Small value for termination"));
     addParam(Parameter("siman_coolmethod","exp","The cooling method. Available values: exp,log,linear,quad"));
+    hasInitialized = false;
+}
+void    SimanMethod::setPoint(Data &x,double &y)
+{
+    hasInitialized = true;
+    xpoint =x ;
+    ypoint = y;
+    bestx = x;
+    besty = y;
+}
 
+void    SimanMethod::getPoint(Data &x,double &y)
+{
+    x = bestx;
+    y = besty;
 }
 
 bool    SimanMethod::terminated()
 {
-    if(T0<=eps) return true;
-    printf("Temperature: %20.10lg Value: %20.10lg\n",T0,besty);
+    if(T0<=eps)
+    {
+        return true;
+    }
+ //   printf("Temperature: %20.10lg Value: %20.10lg\n",T0,besty);
     return false;
 }
 
@@ -82,8 +99,12 @@ void    SimanMethod::step()
 void    SimanMethod::init()
 {
     k=1;
+    if(!hasInitialized)
+    {
     xpoint = myProblem->getSample();
     ypoint = myProblem->statFunmin(xpoint);
+    }
+    else hasInitialized = false;
     bestx = xpoint;
     besty = ypoint;
     T0=getParam("siman_t0").getValue().toDouble();
@@ -94,7 +115,9 @@ void    SimanMethod::init()
 
 void    SimanMethod::done()
 {
+    if(getParam("opt_localsearch").getValue()!="none")
     besty = localSearch(bestx);
+
 }
 
 SimanMethod::~SimanMethod()

@@ -53,11 +53,28 @@ void    NNCModel::trainModel()
     LC= getParam("nnc_lsearchitems").getValue().toInt();
     if(parser!=NULL) delete parser;
     parser =new NeuralParser(trainDataset->dimension());
+    QString Lmethod = getParam("nnc_lsearchmethod").getValue();
+    if(Lmethod == "none")
+        pop->setLocalMethod(GELOCAL_NONE);
+    else
+        if(Lmethod == "crossover")
+        pop->setLocalMethod(GELOCAL_CROSSOVER);
+    else
+        if(Lmethod == "mutate")
+        pop->setLocalMethod(GELOCAL_MUTATE);
+    else
+        if(Lmethod == "bfgs")
+        pop->setLocalMethod(GELOCAL_BFGS);
+    else
+        pop->setLocalMethod(GELOCAL_SIMAN);
+    pop->setLocalSearchGenerations(LI);
+    pop->setLocalSearchItems(LC);
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
+        if(g%50==0)
         printf(" generation = %d best value= %20.10lg\n",g,pop->getBestFitness());
-        if(g%LI==0)
+        /*if(g%LI==0)
             {
                 for(int i=1;i<=LC;i++)
                 {
@@ -65,7 +82,7 @@ void    NNCModel::trainModel()
 
                     localSearchItem(pos);
                 }
-        }
+        }*/
        }
 
     pop->evaluateBestFitness();

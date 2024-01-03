@@ -60,7 +60,7 @@ string	Rule::printRule(vector<int> genome,int &pos,int &redo)
 		{
             if(pos>=genome.size()) {return str; redo++;pos=0;}
             if(s->getCountRules()==0 && !s->getTerminalStatus())
-                return "NONE";
+                return "NONE"+s->getName();
 
 			r=s->getRule((genome[pos]%s->getCountRules()));
 			pos++;

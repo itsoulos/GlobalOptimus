@@ -3,8 +3,9 @@
 # include <string.h>
 # include <math.h>
 # include <iostream>
-
-
+# include <OPTIMUS/problem.h>
+# include <METHODS/bfgs.h>
+# include <METHODS/simanmethod.h>
 # define MAX_RULE	256
 
 /* Population constructor */
@@ -18,7 +19,9 @@ Population::Population(int gcount,int gsize,Program *p)
 	genome_size    = gsize;
 	generation     = 0;
 	program        = p;
-
+    localMethod = GELOCAL_NONE;
+    localsearch_generations=50;
+    localsearch_items = 20;
 	/* Create the population and based on genome count and size */
 	/* Initialize the genomes to random */
 	double f;
@@ -54,6 +57,10 @@ double 	Population::fitness(vector<int> &g)
 }
 
 
+void    Population::setLocalMethod(int m)
+{
+    localMethod =m;
+}
 void    Population::getChromosome(int pos,vector<int> &x,double &y)
 {
     x.resize(genome_size);
@@ -241,17 +248,28 @@ int	Population::getSize() const
 	return genome_size;
 }
 
+
+void    Population::setLocalSearchGenerations(int g)
+{
+    localsearch_generations = g;
+}
+void    Population::setLocalSearchItems(int i)
+{
+    localsearch_items = i;
+}
+
 /* Evolve the next generation */
 void	Population::nextGeneration()
 {
 	calcFitnessArray();
 	
-	const int mod=20;
-	const int count=20;	
+    const int mod=localsearch_generations;
+    const int count=localsearch_items;
 	if((generation+1) % mod==0) 
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
+        localSearch(0);
 	}
 	
 	select();
@@ -320,19 +338,75 @@ vector<int> Population::getBestGenome() const
 }
 
 
+class PopulationProblem: public Problem
+{
+private:
+    Population *pop;
+    vector<int> currentGenome;
+public:
+    PopulationProblem(Population *p,vector<int> &x)
+        :Problem(x.size())
+    {
+        pop = p;
+        currentGenome.resize(x.size());
+        //currentGenome = x;
+        setDimension(x.size());
+        left.resize(x.size());
+        right.resize(x.size());
+        for(int i=0;i<x.size();i++)
+        {
+        left[i]=0;
+        right[i]=MAX_RULE;
+        }
+        setLeftMargin(left);
+        setRightMargin(right);
+    }
+
+    double dmax(double a,double b){return a>b?a:b;}
+    virtual double funmin(Data &x)
+    {
+        for(int i=0;i<(int)x.size();i++) {
+        currentGenome[i]=(int)fabs(x[i]);
+      if(isnan(x[i]) || isinf(x[i])) return 1e+100;
+        //printf("xsize =%d c = %d x= %lf\n",x.size(),currentGenome[i],x[i]);
+    //   if(currentGenome[i]<0) currentGenome[i]=0;
+        }
+        double f= pop->fitness(currentGenome);
+        return f;
+
+    }
+    virtual Data	gradient(Data &x)
+    {
+
+        Data g;
+        g.resize(x.size());
+        for(int i=0;i<(int)x.size();i++)
+        {
+        double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
+        x[i]+=eps;
+        double v1=funmin(x);
+        x[i]-=2.0 *eps;
+        double v2=funmin(x);
+        g[i]=(v1-v2)/(2.0 * eps);
+
+        x[i]+=eps;
+        }
+        return g;
+    }
+
+};
 
 void	Population::localSearch(int pos)
 {
 
+    if(localMethod == GELOCAL_NONE) return;
 	vector<int> g;
 	g.resize(genome_size);
 
 	for(int i=0;i<genome_size;i++) g[i]=genome[pos][i];
 
-		
-
-
-	
+    if(localMethod == GELOCAL_CROSSOVER)
+    {
 	for(int iters=1;iters<=100;iters++)
 	{
 		int gpos=rand() % genome_count;
@@ -343,8 +417,7 @@ void	Population::localSearch(int pos)
 		if(fabs(f)<fabs(fitness_array[pos]))
 		{
 			for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
-			fitness_array[pos]=f;
-//			return;
+            fitness_array[pos]=f;
 		}
 		else
 		{
@@ -355,13 +428,14 @@ void	Population::localSearch(int pos)
 			{
 
 				for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
-				fitness_array[pos]=f;
-//			return;
+                fitness_array[pos]=f;
 			}
 		}
 	}
-		
-	return;	
+    }
+    else
+    if(localMethod==GELOCAL_MUTATE)
+    {
 		
 	for(int i=0;i<genome_size;i++)
 	{
@@ -377,12 +451,52 @@ void	Population::localSearch(int pos)
 		if(fabs(trial_fitness)<fabs(fitness_array[pos]))
 		{
 			fitness_array[pos]=trial_fitness;
-			printf("NEW BEST VALUE[%4d] = %20.10lg \n",pos,fitness_array[pos]);
 			return;
 		}
 		else	genome[pos][ipos]=old_value;
 		}
 	}
+    }
+    else
+    if(localMethod == GELOCAL_BFGS || localMethod==GELOCAL_SIMAN)
+    {
+    PopulationProblem *pr=new PopulationProblem(this,g);
+    double y;
+    Data x;
+    x.resize(genome_size);
+    y=fitness_array[pos];
+    for(int i=0;i<genome_size;i++) x[i]=g[i];
+    Optimizer *method=NULL;
+    if(localMethod == GELOCAL_BFGS)
+     method=new Bfgs();
+    else
+     method = new SimanMethod();
+    method->setParam("opt_localsearch","none");
+    method->setProblem(pr);
+    if(localMethod == GELOCAL_BFGS)
+
+    ((Bfgs *)method)->setPoint(x,y);
+    else
+    ((SimanMethod *)method)->setPoint(x,y);
+
+    method->solve();
+    x = pr->getBestx();
+    y = pr->funmin(x);
+    delete method;
+    double ff = fitness_array[pos];
+    if(fabs(y)<=fabs(ff))
+    {
+        fitness_array[pos]=y;
+      //  printf("New value [%lg]->[%lg]\n",ff,y);
+        for(int i=0;i<genome_size;i++)
+        {
+        genome[pos][i]=(int)fabs(x[i]);
+            if(genome[pos][i]<0) genome[pos][i]=0;
+        }
+    }
+    //else printf("FAILED VALUES[%lg]=>[%lg]\n",ff,y);
+    delete pr;
+    }
 
 }
 
