@@ -643,7 +643,23 @@ population.o: GE/population.cc GE/population.h \
 		GE/program.h \
 		GE/symbol.h \
 		GE/rule.h \
-		GE/doublestack.h
+		GE/doublestack.h \
+		OPTIMUS/problem.h \
+		METHODS/bfgs.h \
+		OPTIMUS/optimizer.h \
+		OPTIMUS/parameter.h \
+		OPTIMUS/doublebox.h \
+		OPTIMUS/similarity.h \
+		SAMPLER/maxwellsampler.h \
+		SAMPLER/problemsampler.h \
+		SAMPLER/neuralsampler.h \
+		MLMODELS/dataset.h \
+		SAMPLER/triangularsampler.h \
+		SAMPLER/uniformsampler.h \
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
+		METHODS/simanmethod.h \
+		OPTIMUS/collection.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o population.o GE/population.cc
 
 program.o: GE/program.cc GE/program.h \

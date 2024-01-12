@@ -329,21 +329,21 @@ int main(int argc, char *argv[])
     double average_test_error   = 0.0;
     double average_class_error  = 0.0;
 
-        loadProblem();
     for(int t=1;t<=times;t++)
     {
         srand(t);
+        loadProblem();
         runMethod();
         average_train_error+=mainModel->getTrainError();
         average_test_error+=mainModel->getTestError();
         average_class_error+=mainModel->getClassTestError();
+        unloadProblem();
 
     }
     printf("Average Train Error: %20.10lg\n",average_train_error/times);
     printf("Average Test  Error: %20.10lg\n",average_test_error/times);
     printf("Average Class Error: %20.10lg%%\n",average_class_error/times);
 
-        unloadProblem();
     unloadMethods();
     return 0;
 }
