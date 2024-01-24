@@ -16,6 +16,7 @@ NeuralMinimizer::NeuralMinimizer()
 bool    NeuralMinimizer::terminated()
 {
     ++iter;
+    printf("Neural Minimizer: ITER: %4d BESTY %20.10lg\n",iter,besty);
     int neural_iterations =params["neural_iterations"].toString().toInt();
     QString neural_termination = params["neural_termination"].toString();
 
