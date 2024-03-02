@@ -56,6 +56,7 @@ SOURCES       = GE/cprogram.cc \
 		GE/doublestack.cc \
 		GE/fparser.cc \
 		GE/fpoptimizer.cc \
+		GE/integeranneal.cpp \
 		GE/nncprogram.cpp \
 		GE/population.cc \
 		GE/program.cc \
@@ -110,6 +111,7 @@ OBJECTS       = cprogram.o \
 		doublestack.o \
 		fparser.o \
 		fpoptimizer.o \
+		integeranneal.o \
 		nncprogram.o \
 		population.o \
 		program.o \
@@ -249,6 +251,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		GE/fparser.hh \
 		GE/fpconfig.hh \
 		GE/fptypes.hh \
+		GE/integeranneal.h \
 		GE/nncprogram.h \
 		GE/population.h \
 		GE/program.h \
@@ -301,6 +304,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		GE/doublestack.cc \
 		GE/fparser.cc \
 		GE/fpoptimizer.cc \
+		GE/integeranneal.cpp \
 		GE/nncprogram.cpp \
 		GE/population.cc \
 		GE/program.cc \
@@ -548,8 +552,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.h GE/doublestack.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/nncprogram.h GE/population.h GE/program.h GE/rule.h GE/ruleprogram.h GE/symbol.h METHODS/adam.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/usermethod.h MLMODELS/converter.h MLMODELS/gdfmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/neuralparser.h MLMODELS/nncmodel.h MLMODELS/rbfproblem.h MLMODELS/rulemodel.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.cc GE/doublestack.cc GE/fparser.cc GE/fpoptimizer.cc GE/nncprogram.cpp GE/population.cc GE/program.cc GE/rule.cc GE/ruleprogram.cpp GE/symbol.cc METHODS/adam.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/converter.cc MLMODELS/gdfmodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/neuralparser.cc MLMODELS/nncmodel.cpp MLMODELS/rbfproblem.cpp MLMODELS/rulemodel.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.h GE/doublestack.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/integeranneal.h GE/nncprogram.h GE/population.h GE/program.h GE/rule.h GE/ruleprogram.h GE/symbol.h METHODS/adam.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/usermethod.h MLMODELS/converter.h MLMODELS/gdfmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/neuralparser.h MLMODELS/nncmodel.h MLMODELS/rbfproblem.h MLMODELS/rulemodel.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.cc GE/doublestack.cc GE/fparser.cc GE/fpoptimizer.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/population.cc GE/program.cc GE/rule.cc GE/ruleprogram.cpp GE/symbol.cc METHODS/adam.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/converter.cc MLMODELS/gdfmodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/neuralparser.cc MLMODELS/nncmodel.cpp MLMODELS/rbfproblem.cpp MLMODELS/rulemodel.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -621,6 +625,22 @@ fpoptimizer.o: GE/fpoptimizer.cc GE/fpconfig.hh \
 		GE/fparser.hh \
 		GE/fptypes.hh
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fpoptimizer.o GE/fpoptimizer.cc
+
+integeranneal.o: GE/integeranneal.cpp GE/integeranneal.h \
+		OPTIMUS/problem.h \
+		OPTIMUS/optimizer.h \
+		OPTIMUS/parameter.h \
+		OPTIMUS/doublebox.h \
+		OPTIMUS/similarity.h \
+		SAMPLER/maxwellsampler.h \
+		SAMPLER/problemsampler.h \
+		SAMPLER/neuralsampler.h \
+		MLMODELS/dataset.h \
+		SAMPLER/triangularsampler.h \
+		SAMPLER/uniformsampler.h \
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o integeranneal.o GE/integeranneal.cpp
 
 nncprogram.o: GE/nncprogram.cpp GE/nncprogram.h \
 		GE/cprogram.h \

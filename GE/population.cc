@@ -6,6 +6,7 @@
 # include <OPTIMUS/problem.h>
 # include <METHODS/bfgs.h>
 # include <METHODS/simanmethod.h>
+# include <GE/integeranneal.h>
 # define MAX_RULE	256
 
 /* Population constructor */
@@ -439,7 +440,27 @@ void	Population::localSearch(int pos)
 		
 	for(int i=0;i<genome_size;i++)
 	{
-		int ipos = rand() % genome_size;
+        int ipos = rand() % genome_size;
+                int new_value;
+                for(int k=0;k<20;k++)
+                {
+                int old_value = genome[pos][ipos];
+                int range = 10;
+                int direction = rand() % 2==1?1:-1;
+                new_value =  old_value + direction * (rand() % range);
+                if(new_value<0) new_value=0;
+                genome[pos][ipos]=new_value;
+                for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
+                double trial_fitness=fitness(g);
+                if(fabs(trial_fitness)<fabs(fitness_array[pos]))
+                {
+                    //printf("MUTATE[%d] %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
+
+                    fitness_array[pos]=trial_fitness;
+                }
+                else	genome[pos][ipos]=old_value;
+                }
+        /*int ipos = rand() % genome_size;
 		int new_value;
 		for(int k=0;k<20;k++)
 		{
@@ -454,11 +475,24 @@ void	Population::localSearch(int pos)
 			return;
 		}
 		else	genome[pos][ipos]=old_value;
-		}
+        }*/
 	}
     }
     else
-    if(localMethod == GELOCAL_BFGS || localMethod==GELOCAL_SIMAN)
+    if(localMethod == GELOCAL_SIMAN)
+    {
+        PopulationProblem *pr=new PopulationProblem(this,g);
+        double f = fitness_array[pos];
+        IntegerAnneal lt(pr);
+        lt.setPoint(g,fitness_array[pos]);
+        lt.Solve();
+        lt.getPoint(g,fitness_array[pos]);
+        for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
+        delete pr;
+        printf("SIMAN[%d] %lf=>%lf\n",pos,f,fitness_array[pos]);
+    }
+    else
+    if(localMethod == GELOCAL_BFGS)
     {
     PopulationProblem *pr=new PopulationProblem(this,g);
     double y;
@@ -496,6 +530,8 @@ void	Population::localSearch(int pos)
     }
     //else printf("FAILED VALUES[%lg]=>[%lg]\n",ff,y);
     delete pr;
+    printf("BFGS[%d] %lf=>%lf\n",pos,ff,fitness_array[pos]);
+
     }
 
 }

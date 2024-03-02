@@ -86,8 +86,8 @@ void    NNCModel::trainModel()
        }
 
     pop->evaluateBestFitness();
-    setParam("nnc_lsearchmethod","bfgs");
-    localSearchItem(0);
+   // setParam("nnc_lsearchmethod","bfgs");
+   // localSearchItem(0);
 }
 
 void        NNCModel::localSearchItem(int pos)
