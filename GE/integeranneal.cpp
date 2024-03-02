@@ -1,7 +1,7 @@
 #include "integeranneal.h"
 
 
-IntegerAnneal::IntegerAnneal(Problem *pr)
+IntegerAnneal::IntegerAnneal(Program *pr)
 {
     T0=1e+8;
     neps=200;
@@ -42,8 +42,7 @@ void    IntegerAnneal::Solve()
     int i;
     k=1;
     vector<int> y;
-    Data yy;
-    yy.resize(bestx.size());
+
     y.resize(bestx.size());
     while(true)
     {
@@ -51,19 +50,18 @@ void    IntegerAnneal::Solve()
         {
         double fy;
         for(int j=0;j<bestx.size();j++)
-		yy[j]=xpoint[j];
+        y[j]=xpoint[j];
 	for(int j=0;j<10;j++)
 	{
 	int randPos = rand() % bestx.size();
 		int range = 10;
 		int direction = rand() % 2==1?1:-1;
-		int newValue =  yy[randPos] + direction * (rand() % range);
+        int newValue =  y[randPos] + direction * (rand() % range);
         if(newValue<0) newValue = 0;
-	yy[randPos]=newValue;
+    y[randPos]=newValue;
 	}
-        fy = myProblem->funmin(yy);
-        for(int j=0;j<bestx.size();j++)
-            y[j]=(int)yy[j];
+        fy = myProblem->fitness(y);
+
         if(isnan(fy) || isinf(fy)) continue;
 
         if(fy<ypoint)

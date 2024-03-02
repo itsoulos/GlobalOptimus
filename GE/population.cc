@@ -481,15 +481,14 @@ void	Population::localSearch(int pos)
     else
     if(localMethod == GELOCAL_SIMAN)
     {
-        PopulationProblem *pr=new PopulationProblem(this,g);
         double f = fitness_array[pos];
-        IntegerAnneal lt(pr);
+        IntegerAnneal lt(program);
         lt.setPoint(g,fitness_array[pos]);
         lt.Solve();
         lt.getPoint(g,fitness_array[pos]);
         for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
-        delete pr;
-        printf("SIMAN[%d] %lf=>%lf\n",pos,f,fitness_array[pos]);
+
+      //  printf("SIMAN[%d] %lf=>%lf\n",pos,f,fitness_array[pos]);
     }
     else
     if(localMethod == GELOCAL_BFGS)

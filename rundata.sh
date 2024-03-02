@@ -27,7 +27,7 @@ then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=200 --rule_popsize=200 --rule_popgens=500 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_lsearchiters=20 --rule_lsearchitems=20 --nnc_lsearchmethod=crossover"
 elif [ $MODEL = "nnc" ]
 then
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_lsearchmethod=mutate"
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_lsearchmethod=siman"
 fi
 
 if [ $METHOD = "Bfgs" ]

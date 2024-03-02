@@ -639,7 +639,11 @@ integeranneal.o: GE/integeranneal.cpp GE/integeranneal.h \
 		SAMPLER/triangularsampler.h \
 		SAMPLER/uniformsampler.h \
 		SAMPLER/rbfsampler.h \
-		SAMPLER/kmeanssampler.h
+		SAMPLER/kmeanssampler.h \
+		GE/program.h \
+		GE/symbol.h \
+		GE/rule.h \
+		GE/doublestack.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o integeranneal.o GE/integeranneal.cpp
 
 nncprogram.o: GE/nncprogram.cpp GE/nncprogram.h \
@@ -676,7 +680,8 @@ population.o: GE/population.cc GE/population.h \
 		SAMPLER/rbfsampler.h \
 		SAMPLER/kmeanssampler.h \
 		METHODS/simanmethod.h \
-		OPTIMUS/collection.h
+		OPTIMUS/collection.h \
+		GE/integeranneal.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o population.o GE/population.cc
 
 program.o: GE/program.cc GE/program.h \

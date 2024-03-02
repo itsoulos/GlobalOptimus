@@ -2,11 +2,12 @@
 #define INTEGERANNEAL_H
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/optimizer.h>
+# include <GE/program.h>
 class IntegerAnneal
 {
 private:
 
-    Problem *myProblem;
+    Program *myProblem;
     vector<int> xpoint;
     double ypoint;
     vector<int> bestx;
@@ -15,7 +16,7 @@ private:
     double T0;
     int k;
 public:
-    IntegerAnneal(Problem *pr);
+    IntegerAnneal(Program *pr);
     void    setNeps(int n);
     void    setT0(double t);
     void setPoint(vector<int> &g,double &y);
