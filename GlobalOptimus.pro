@@ -29,6 +29,7 @@ SOURCES += \
         GE/program.cc \
         GE/rule.cc \
         GE/symbol.cc \
+	GE/integeranneal.cpp \
         METHODS/adam.cpp \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
@@ -122,6 +123,7 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    GE/integeranneal.h\
     METHODS/adam.h \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
