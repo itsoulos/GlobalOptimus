@@ -1,9 +1,9 @@
 #include "armadillo1.h"
 
 Armadillo1::Armadillo1()  {
-    addParam(Parameter("gao_count","200","Number of chromosomes"));
+    addParam(Parameter("gao_count","100","Number of chromosomes"));
     addParam(Parameter("gao_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("gao_lrate","0.01","Localsearch rate"));
+    addParam(Parameter("gao_lrate","0.1","Localsearch rate"));
     addParam(Parameter("gao_iters","1","Number of iters"));
     addParam(Parameter("gen_termination","doublebox","Termination method. Avaible values: maxiters,similarity,doublebox"));
 }
@@ -59,7 +59,7 @@ void     Armadillo1::Selection()
 
 
 // Αντικειμενική συνάρτηση
-double Armadillo1::evaluate(const vector<double>& solution, double& worstSpeed)
+double Armadillo1::evaluate(const vector<double>& solution,double ff, double& worstSpeed)
 {
     if (solution.empty()) {
         worstSpeed = numeric_limits<double>::lowest();
@@ -69,7 +69,7 @@ double Armadillo1::evaluate(const vector<double>& solution, double& worstSpeed)
     solutionCopy = solution;
 
     // Υπολογισμός της τιμής της Rastrigin συνάρτησης με τη χρήση της funmin
-    fitness1 =myProblem->statFunmin(solutionCopy);
+    fitness1 =ff;//myProblem->statFunmin(solutionCopy);
 
     for (size_t i = 0; i < solution.size(); ++i) {
         speed = solution[i];
@@ -105,13 +105,14 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
     // GAO iterations
     for (int t = 1; t <= iters; ++t) {
         for (int i = 0; i < GaoCount; ++i) {
+		fitness[i]=myProblem->statFunmin(population[i]);
             // Φάση 1: Επίθεση σε αναχώματα τερμιτών (φάση εξερεύνησης)
             vector<vector<double>> TM;
             for (int k = 0; k < GaoCount; k++) {
                 if (k != i) {
-                    fitness_k = myProblem->statFunmin(population[k]);
-		    fitness[i]=fitness_k;
-                    if (fitness_k < evaluate(population[i], worstSpeedBest)) {
+                    fitness_k = fitness[k];//myProblem->statFunmin(population[k]);
+		    fitness[k]=fitness_k;
+                    if (fitness_k < evaluate(population[i], fitness[i],worstSpeedBest)) {
                         worstSpeedBest = worstSpeed;
                         TM.push_back(population[k]);
                     }
@@ -132,9 +133,12 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
 
                 // Update ith GAO member
 
-                if (evaluate(newThesi, worstSpeedNew) < evaluate(population[i], worstSpeedBest)) {
+		double ff = myProblem->statFunmin(newThesi);
+                if (evaluate(newThesi, ff,worstSpeedNew) < 
+				evaluate(population[i], fitness[i],worstSpeedBest)) {
                     worstSpeedBest = worstSpeedNew;
                     population[i] = newThesi;
+		    fitness[i]=ff;
                 }
             }
 
@@ -143,8 +147,8 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
             for (int k = 0; k < GaoCount; ++k) {
                 if (k != i) {
 
-                    fitness_k = evaluate(population[k], worstSpeed);
-                    if (fitness_k < evaluate(population[i], worstSpeedWorst)) {
+                    fitness_k = evaluate(population[k], fitness[k],worstSpeed);
+                    if (fitness_k < evaluate(population[i],fitness[i], worstSpeedWorst)) {
                         worstSpeedWorst = worstSpeed;
                         candidateMounds.push_back(population[k]);
                     }
@@ -159,7 +163,8 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
                 for (unsigned long j = 0; j < candidateMounds.size(); j++) {
                     vector<double>& candidate = candidateMounds[j];
 
-                    fitness1 = evaluate(candidate, worstSpeed);
+		    double ff=myProblem->funmin(candidate);
+                    fitness1 = evaluate(candidate, ff,worstSpeed);
                     if (fitness1 < bestCF) {
                         bestCF = fitness1;
                         bestCM = candidate;
@@ -175,7 +180,7 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
                 }
             }
 
-            double Value = evaluate(population[i], worstSpeedWorst);
+            double Value = evaluate(population[i], fitness[i],worstSpeedWorst);
 
             // Ενημέρωση για best solution
             if (Value < bestValues[t - 1]) {
@@ -202,7 +207,7 @@ void  Armadillo1::CalcFitnessArray()
     for(int i=0;i<GaoCount;i++)
     {
 
-        fitness[i]=myProblem->statFunmin(population[i]);
+      //  fitness[i]=myProblem->statFunmin(population[i]);
         if(localsearchRate>0.0)
         {
             double r = rand()*1.0/RAND_MAX;
@@ -216,7 +221,7 @@ void  Armadillo1::CalcFitnessArray()
 
 void Armadillo1::step() {
     ++generation;
-    //CalcFitnessArray();
+    CalcFitnessArray();
     Selection();
     GAO(GaoCount, bestValues);
 

@@ -47,7 +47,7 @@ private:
 
 public:
     Armadillo1();
-    double evaluate(const vector<double>& solution, double& worstSpeed) ;
+    double evaluate(const vector<double>& solution,double f, double& worstSpeed) ;
     void initialize(vector<vector<double>>& population, int GaoCount);
     void GAO(int GaoCount, vector<double>& bestValues);
     virtual void init();
