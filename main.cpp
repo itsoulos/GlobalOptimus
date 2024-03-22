@@ -49,6 +49,7 @@
 # include <METHODS/parallelpso.h>
 # include <METHODS/neldermead.h>
 # include <METHODS/adam.h>
+# include <METHODS/armadillo1.h>
 # include <METHODS/simanmethod.h>
 # include <METHODS/usermethod.h>
 
@@ -114,6 +115,8 @@ void loadMethods()
     methodName<<"Adam";
     method<<new SimanMethod;
     methodName<<"Simman";
+    method<<new Armadillo1;
+    methodName<<"armadillo1";
     method<<new UserMethod;
     methodName<<"UserMethod";
     for(int i=0;i<method.size();i++)

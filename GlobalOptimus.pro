@@ -31,6 +31,7 @@ SOURCES += \
         GE/symbol.cc \
 	GE/integeranneal.cpp \
         METHODS/adam.cpp \
+	METHODS/armadillo1.cpp \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
         METHODS/neldermead.cpp \
@@ -133,6 +134,7 @@ HEADERS += \
     METHODS/parallelpso.h \
     METHODS/simanmethod.h \
     METHODS/usermethod.h \
+    METHODS/armadillo1.h\
     MLMODELS/gdfmodel.h \
     MLMODELS/mlpproblem.h \
     MLMODELS/model.h \
