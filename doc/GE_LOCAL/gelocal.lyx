@@ -2591,24 +2591,15 @@ https://github.com/itsoulos/OPTIMUS/
 \end_inset
 
 ( accessed on 20 March 2024 ).
- 
-\series bold
-(OK)
-\series default
-All the experiments were conducted 30 times with different initialization
- for the random generator each time.
- Also, the drand48() function of the C++ was used to produce random numbers.
- To validate the experimental results the 10 - fold validation method was
- utilized.
-
-\series bold
- 
-\series default
-For the case of classification datasets, the average classification error
- as measured on the test set is reported.
- The average regression error as measured on the test set is reported for
- the case of regression datasets.
- The values for the experimental parameters are shown in Table 
+ The experiments were conducted 30 times using different initialization
+ for the random seed each time.
+ The used random generator was the function drand48() of the C programming
+ language.
+ The experimental results were validated using 10 - fold cross validation.
+ The average classification error is reported for the case of classification
+ datasets and the average regression error for the case of regression datasets.
+ These errors are measured on the corresponding test set.
+ The values for the experimental parameters are displayed in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:experValues"
@@ -2619,7 +2610,8 @@ noprefix "false"
 \end_inset
 
 .
- The results for the classification datasets are listed in Table 
+ The experimental results for the classification datasets are outlined in
+ Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:tableClass"
@@ -2629,7 +2621,7 @@ noprefix "false"
 
 \end_inset
 
- and the results for the regression datasets ae shown in Table 
+ and the results for the regression datasets are shown in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:tabRegression"
@@ -2641,6 +2633,82 @@ noprefix "false"
 
 .
  The following applies to the tables with the experimental results:
+\end_layout
+
+\begin_layout Enumerate
+The column DATASET denotes the used dataset.
+\end_layout
+
+\begin_layout Enumerate
+The column ADAM denotes the application of the ADAM optimization method
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Adam"
+literal "false"
+
+\end_inset
+
+ in an artificial neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column NEAT stands for the usage of NEAT method (NeuroEvolution of Augmentin
+g Topologies ) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "neat"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column MLP represents the results obtained by the training of an artificial
+ neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+ The neural network was trained using a genetic algorithm and the BFGS local
+ optimization method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+The column RBF stands for the results obtained by an RBF network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column NNC denotes the application of the original Neural Construction
+ technique performed with the assistance of Grammatical Evolution.
+\end_layout
+
+\begin_layout Enumerate
+The column NNC-S denotes the application of the proposed local optimization
+ procedure in the Neural Construction technique.
+\end_layout
+
+\begin_layout Enumerate
+The line AVERAGE denotes the average classification or regression error.
 \end_layout
 
 \begin_layout Standard
@@ -3049,7 +3117,7 @@ name "tab:experValues"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -5141,7 +5209,7 @@ AVERAGE
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -6253,7 +6321,39 @@ AVERAGE
 
 \end_inset
 
+As it is evident, the proposed modification improves the efficiency of the
+ proposed method in the majority of used datasets.
+ This improvement on some datasets can be as much as 80% percent error reduction
+ on the test set.
+\end_layout
 
+\begin_layout Standard
+Additionally, the effectiveness and the robustness of the proposed method
+ was evaluated by performing additional experiments with different values
+ for the critical parameter 
+\begin_inset Formula $g$
+\end_inset
+
+ of the proposes Simulated Annealing variant.
+ This parameter is used to control the number of random changes performed
+ on any given chromosome.
+ The experimetal results in the classification datasets are shown in Table
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:g_experiments"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ Clearly, no significant variation in the performance of the proposed technique
+ occurs when this critical parameter is varied.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 wide false
@@ -7797,6 +7897,33 @@ AVERAGE
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Furthermore, an additional experiment was performed by varying the parameter
+ 
+\begin_inset Formula $R$
+\end_inset
+
+ of the proposed Simulated Annealing variant.
+ This parameter controls the range of changes performed in any given chromosome.
+ The results for this experiment are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:r_exper"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ And this time the method appears quite robust in its performance, without
+ large variations in the error as measured in the test set.
+ 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 wide false
@@ -9358,12 +9485,64 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
-Apply the method to other Grammatical Evolution problems.
-\begin_inset Newline newline
+In the current work an extension of the original Grammatical Evolution has
+ been proposed, which was applied in the Neural Construction method.
+ In this extension an application of a modified optimization algorithm was
+ suggested, in order to improve the efficiency of the underlying technique.
+ The proposed optimization algorithm was a variant of the Simulated Annealing
+ method, that was applied on randomly selected chromosomes of the Grammatical
+ Evolution procedure.
+ This method was chosen because of its widespread use in many applications
+ but because of its ability to handle integer representations, since the
+ chromosomes in Grammatical Evolution are vectors of integers.
+ Of course, other local optimization techniques could be incorporated such
+ as tabu search 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "tabu"
+literal "false"
+
 \end_inset
 
-Use other local search techniques (tabu search?, hill climbing?) robustness
- of the method (does not depend heavily on the selection of critical parameters).
+ or hill climbing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "hill"
+literal "false"
+
+\end_inset
+
+ in feature extensions of the proposed method.
+\end_layout
+
+\begin_layout Standard
+The proposed modification was applied on the Neural Network Construction
+ method and its efficiency was measured on a wide series of classification
+ and regression datasets from the relevant literature.
+ Based on the experimental results, it became clear that the proposed variant
+ significantly improves the performance of the technique both on classification
+ datasets and on data fitting datasets.
+ Also, the effectiveness and the robustness of the proposed modification
+ were measure using experiments with different values of some critical parameter
+s of the current Simulated Annealing variant.
+ These experiments indicated that the method does not depend heavily on
+ the selection of any critical parameter of the Simulated Annealing variant.
+\end_layout
+
+\begin_layout Standard
+Future work may include application of the local search procedure in other
+ Grammatical Evolution applications, such as feature construction, creation
+ of classification rules etc.
+ Also, the proposed process can be significantly accelerated by the use
+ of parallel optimization techniques 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psa"
+literal "false"
+
+\end_inset
+
+, which take advantage of modern computational structures.
 \end_layout
 
 \begin_layout Standard
@@ -11167,6 +11346,118 @@ D.
 \series default
 , pp.
  81-102, 1978.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Adam"
+literal "false"
+
+\end_inset
+
+D.
+ P.
+ Kingma, J.
+ L.
+ Ba, ADAM: a method for stochastic optimization, in: Proceedings of the
+ 3rd International Conference on Learning Representations (ICLR 2015), pp.
+ 1–15, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "neat"
+literal "false"
+
+\end_inset
+
+K.
+ O.
+ Stanley, R.
+ Miikkulainen, Evolving Neural Networks through Augmenting Topologies, Evolution
+ary Computation 
+\series bold
+10
+\series default
+, pp.
+ 99-127, 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "powell"
+literal "true"
+
+\end_inset
+
+M.J.D Powell, A Tolerant Algorithm for Linearly Constrained Optimization Calculati
+ons, Mathematical Programming 
+\series bold
+45
+\series default
+, pp.
+ 547-566, 1989.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "tabu"
+literal "false"
+
+\end_inset
+
+F.
+ Glover, Parametric tabu-search for mixed integer programs.
+ Computers & Operations Research 
+\series bold
+33
+\series default
+, pp.
+ 2449-2494, 2006.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "hill"
+literal "false"
+
+\end_inset
+
+A.
+ Lim, B.
+ Rodrigues, X.
+ Zhang, A simulated annealing and hill-climbing algorithm for the traveling
+ tournament problem.
+ European Journal of Operational Research 
+\series bold
+174
+\series default
+, pp.1459-1478, 2006.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psa"
+literal "false"
+
+\end_inset
+
+A.
+ Bevilacqua, A methodological approach to parallel simulated annealing on
+ an SMP system.
+ Journal of Parallel and Distributed Computing 
+\series bold
+62
+\series default
+, pp.
+ 1548-1570, 2002.
 \end_layout
 
 \begin_layout Standard
