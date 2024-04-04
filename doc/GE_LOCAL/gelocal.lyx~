@@ -703,6 +703,15 @@ literal "false"
 \end_inset
 
  and hence more suitable methods should be adopted.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+In this paper, an attempt is made to improve upon the excellent results
+ shown by Grammatical Evolution in the past on a variety of problems by
+ applying local optimization techniques, periodically applied to randomly
+ selected chromosomes of Grammatical Evolution.
  The current work utilizes a modified version of the Simulated Annealing
  method 
 \begin_inset CommandInset citation
@@ -713,7 +722,9 @@ literal "false"
 \end_inset
 
  as a local search procedure.
- The method of Simulated Annealing has been utilized in various cases, such
+ 
+\series default
+The method of Simulated Annealing has been utilized in various cases, such
  as image processing 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -755,15 +766,42 @@ literal "false"
 \end_inset
 
  etc.
- In this paper, the modified Simulated Annealing method was repeatedly applied
- to randomly chosen chromosomes of Grammatical Evolution for the problem
- of constructing artificial neural networks.
- The proposed method was tested on a wide series of classification and regressio
-n problems from the relevant literature and the results seem to be promising.
+ 
+\series bold
+To verify the possibility of the proposed methodology to improve the results
+ of Grammatical Evolution, the Neural Networks construction technique was
+ chosen.
+
+\series default
+ 
+\series bold
+This method was initally provided in 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_tsoulos"
+literal "false"
+
+\end_inset
+
+
+\series default
+ 
+\series bold
+and it can estimate the topology and the weights of neural networks using
+ the Grammatical Evolution procedure.
+ This method was chosen to test the present methodology because of its many
+ applications.
+ However, the technique proposed in this paper will be able to be applied
+ in the future in other cases of using Grammatical Evolution.
+ To evaluate the performance of the modified technique it was evaluated
+ on 
+\series default
+a extended series of classification and regression problems found in the
+ relevant literature and the results seem to be promising.
 \end_layout
 
 \begin_layout Standard
-The rest of this article is divided as follows: in section 
+This paper has the following sections: section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:The-proposed-method"
@@ -774,7 +812,7 @@ noprefix "false"
 \end_inset
 
  the Grammatical Evolution procedure is discussed and the proposed modification
- is outlined in detail, in section 
+ is described, the section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Results"
@@ -784,8 +822,8 @@ noprefix "false"
 
 \end_inset
 
- the datasets used in the experiments are listed and the experimental results
- are presented and finally in section 
+ presents the datasets used in the experiments as well as the results from
+ the conducted experimentsand finally the section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Conclusions"
@@ -795,7 +833,7 @@ noprefix "false"
 
 \end_inset
 
- some conclusions are presented.
+ provides some conclusions and guidelines for future work.
 \end_layout
 
 \begin_layout Section
@@ -829,9 +867,9 @@ name "subsec:The-Grammatical-Evolution"
 \end_layout
 
 \begin_layout Standard
-The chromosomes of Grammatical Evolution represent production rules of the
- provided BNF grammar.
- These grammars are usually defined as a set 
+The chromosomes of Grammatical Evolution stand for production rules of the
+ given BNF grammar.
+ BNF grammars are usually defined as a tuple 
 \series bold
 
 \begin_inset Formula $G=\left(N,T,S,P\right)$
@@ -924,23 +962,24 @@ N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1
 
 \end_inset
 
-where 
+where the parameter 
 \begin_inset Formula $H$
 \end_inset
 
- stands the number of processing units of the neural network and 
+ represents the number of processing units (hidden noes) for the neural
+ network and the value 
 \begin_inset Formula $d$
 \end_inset
 
- is the dimension of vector 
-\begin_inset Formula $\overrightarrow{x}$
+ represents the of the vector 
+\begin_inset Formula $\overrightarrow{x}.$
 \end_inset
 
- and the vector 
+ Also, the vector 
 \begin_inset Formula $\overrightarrow{w}$
 \end_inset
 
- defines the weight vector of the neural network.
+ represents the vector of parameters for the neural network.
  The function sig(x) represents the sigmoid function 
 \begin_inset Formula $\sigma(x)$
 \end_inset
@@ -960,7 +999,7 @@ where
 The notation <> is used for the non - terminal symbols of the grammar.
  The sequence numbers of the production rules are inside the parentheses
  of the extended grammar.
- The constant d denotes the dimension of the input data.
+ The constant d stands for the dimension of the provided dataset.
  The production of valid expressions initiates from the symbol 
 \begin_inset Formula $S$
 \end_inset
@@ -972,12 +1011,20 @@ The notation <> is used for the non - terminal symbols of the grammar.
 \end_layout
 
 \begin_layout Itemize
-Get the next element V from the given chromosome.
+Obtain the next element V from the provided chromosome.
 \end_layout
 
 \begin_layout Itemize
-Select the next rule using the equation Rule = V mod NR, where NR is the
- number of production rules for the current non – terminal symbol.
+The production rule is selected according to the scheme 
+\begin_inset Formula 
+\begin{equation}
+\mbox{Rule} =V\ \mbox{mod}\ \mbox{NR}
+\end{equation}
+
+\end_inset
+
+where NR is the total number of production rules for the current non – terminal
+ symbol.
  
 \end_layout
 
@@ -1530,7 +1577,7 @@ Define
 \begin_inset Formula $L_{c}$
 \end_inset
 
- the number of chromosomes that will participate in local search procedure.
+ the number of chromosomes involved in the local search procedure.
 \end_layout
 
 \begin_layout Enumerate
@@ -1538,8 +1585,8 @@ Define
 \series bold
 Initialize
 \series default
- the chromosomes as vectors of random integers.
- 
+ the chromosomes.
+ Each chromosome is considered as a series of randomly initialized integers.
 \end_layout
 
 \begin_layout Enumerate
@@ -1688,9 +1735,10 @@ Perform
 \begin_inset Formula $(z,w)$
 \end_inset
 
- are selected using tournament selection.
- The new offsprings are produced using the one - point crossover procedure,
- which is graphically shown in Figure 
+.
+ The selection is performed using tournament selection.
+ The new offsprings are produced using the one - point crossover procedure.
+ An example of the one - point crossover procedure is shown in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:onePoint"
@@ -1857,7 +1905,8 @@ Evaluation
 
 \begin_deeper
 \begin_layout Enumerate
-Obtain the best chromosome and create the associated neural network 
+Get the chromosome with the lowest fitness value and create the associated
+ neural network 
 \begin_inset Formula $C^{*}$
 \end_inset
 
@@ -1869,7 +1918,7 @@ Evaluate the neural network
 \begin_inset Formula $C^{*}$
 \end_inset
 
- in the test set of the objective problem and report the results.
+ in the test set of the underlying dataset and report the results.
 \end_layout
 
 \begin_layout Standard
@@ -1877,7 +1926,7 @@ Evaluate the neural network
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1894,7 +1943,8 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The one - point crossover used in Grammatical Evolution.
+An example of the one - point crossover method, used in the Grammatical
+ Evolution procedure.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:onePoint"
@@ -1931,9 +1981,10 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Standard
-The current work was applied to a wide series of datasets from different
- areas and the experimental results were compared with other machine learning
- techniques.
+The current work was evaluated by executing a series of experiments on some
+ classification and regression datasets, commonly used in the relevant literatur
+e.
+ The obtained results were compared with other machine learning techniques.
  These datasets can be downloaded freely from the following websites:
 \end_layout
 
@@ -2070,7 +2121,7 @@ Circular
 \series bold
 Cleveland
 \series default
- dataset, which is a medical dataset 
+ dataset, a medical dataset used in a series of papers 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "cleveland1,cleveland2"
@@ -2167,7 +2218,7 @@ literal "false"
 
 \end_inset
 
-, related to votes in the U.S.
+, related to votes collected from U.S.
  House of Representatives Congressmen.
  
 \end_layout
@@ -2225,7 +2276,7 @@ literal "false"
 \series bold
 Parkinsons
 \series default
- dataset, a medical dataset about the Parkinson's disease (PD)
+ dataset, a medical dataset related to the Parkinson's disease (PD)
 \begin_inset CommandInset citation
 LatexCommand cite
 key "parkinsons"
@@ -2298,7 +2349,8 @@ literal "false"
 
 \end_inset
 
-, a medical dataset related to heart diseases.
+.
+ This dataset is used to detect heart diseases.
 \end_layout
 
 \begin_layout Enumerate
@@ -2314,7 +2366,7 @@ literal "false"
 
 \end_inset
 
-, an image processing dataset.
+, related to image processing.
 \end_layout
 
 \begin_layout Enumerate
@@ -2364,8 +2416,7 @@ literal "false"
 
 \end_inset
 
-, a medical dataset related to breast tumors.
- 
+, a medical dataset related cancer detection.
 \end_layout
 
 \begin_layout Enumerate
@@ -2373,7 +2424,9 @@ literal "false"
 \series bold
 Wine
 \series default
- dataset, used to detect the origin of wines 
+ dataset.
+ This is a dataset used to detect the quality of a series of wines.
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "wine1,wine2"
@@ -2389,7 +2442,7 @@ literal "false"
 \series bold
 Eeg
 \series default
- datasets, a medical dataset related to EEG measurements 
+ datasets, a dataset related to EEG measurements 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "eeg"
@@ -2398,7 +2451,7 @@ literal "true"
 \end_inset
 
 .
- There are 4 different cases from this dataset: Z_F_S, Z_O_N_F_S, ZO_NF_S
+ From this dataset the following cases were used: Z_F_S, Z_O_N_F_S, ZO_NF_S
  and ZONF_S.
 \end_layout
 
@@ -2463,7 +2516,7 @@ literal "false"
 \series bold
 Baseball
 \series default
- dataset, It was used to predict the income of baseball players.
+ dataset, related with the income of baseball players.
  
 \end_layout
 
@@ -2488,7 +2541,8 @@ literal "false"
 \series bold
 Dee
 \series default
- dataset, related to the price of electricity.
+ dataset.
+ This dataset has measures from the price of electricity.
 \end_layout
 
 \begin_layout Enumerate
@@ -2520,8 +2574,7 @@ literal "true"
 \series bold
 Laser
 \series default
- dataset, which is related to laser experiments.
- 
+ dataset.This is a dataset related to laser experiments
 \end_layout
 
 \begin_layout Enumerate
@@ -2578,8 +2631,8 @@ Experimental results
 
 \begin_layout Standard
 For the execution of the experiments, code written in ANSI C++ was used
- and, with the help of the programming environment Optimus, that can be
- downloaded freely from 
+ and, with the help of the programming environment Optimus.
+ The software is freely available from 
 \begin_inset Flex URL
 status collapsed
 
@@ -2591,11 +2644,11 @@ https://github.com/itsoulos/OPTIMUS/
 \end_inset
 
 ( accessed on 20 March 2024 ).
- The experiments were conducted 30 times using different initialization
- for the random seed each time.
- The used random generator was the function drand48() of the C programming
- language.
- The experimental results were validated using 10 - fold cross validation.
+ The experiments were conducted 30 times.
+ In every execution different seed was used for the random number generator
+ and the function drand48() of the C programming language was used.
+ The validation of the results was performed using the technique of 10 -
+ fold cross validation.
  The average classification error is reported for the case of classification
  datasets and the average regression error for the case of regression datasets.
  These errors are measured on the corresponding test set.
@@ -2670,8 +2723,8 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The column MLP represents the results obtained by the training of an artificial
- neural network with 
+The column MLP stands for the experimental results of an artificial neural
+ network with 
 \begin_inset Formula $H=10$
 \end_inset
 
@@ -2690,21 +2743,21 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The column RBF stands for the results obtained by an RBF network with 
+The column RBF represents the application of an RBF network with 
 \begin_inset Formula $H=10$
 \end_inset
 
- processing nodes.
+ processing nodes in each dataset.
 \end_layout
 
 \begin_layout Enumerate
-The column NNC denotes the application of the original Neural Construction
- technique performed with the assistance of Grammatical Evolution.
+The column NNC denotes the usage of the original Neural Construction technique,
+ that was constructed with Grammatical Evolution.
 \end_layout
 
 \begin_layout Enumerate
-The column NNC-S denotes the application of the proposed local optimization
- procedure in the Neural Construction technique.
+The column NNC-S denotes the usage of the proposed local optimization procedure
+ in the Neural Construction technique.
 \end_layout
 
 \begin_layout Enumerate
@@ -3123,8 +3176,9 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Experimental results for the classification datasets.
- The numbers in cells represent average classification error as measured
+Experimental results for the series of machine learning methods for the
+ classification datasets.
+ Each number in cells stands for the average classification error as measured
  in the test set.
 \begin_inset CommandInset label
 LatexCommand label
@@ -5215,9 +5269,9 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Experimental results for the regression datasets.
- The numbers in cells stand for the average regression error as measured
- on the test set.
+Experimental results as measured on the regression datasets.
+ Each number in cells denote the average regression error for the associated
+ machine learning method, as measured on the test set.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:tabRegression"
@@ -6448,7 +6502,7 @@ This plot reveals that the NNC-S method maintains its superior performance
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -6501,7 +6555,7 @@ Additionally, the effectiveness and the robustness of the proposed method
 \begin_inset Formula $g$
 \end_inset
 
- of the proposed Simulated Annealing variant.
+ of the suggested Simulated Annealing variant.
  This parameter is used to control the number of random changes performed
  on any given chromosome.
  The experimental results in the classification datasets are shown in Table
@@ -8149,8 +8203,7 @@ name "fig:scatter_g"
 \end_layout
 
 \begin_layout Standard
-Furthermore, an additional experiment was performed by varying the parameter
- 
+Furthermore, another experiment was executed by varying the parameter 
 \begin_inset Formula $R$
 \end_inset
 
@@ -9736,11 +9789,11 @@ name "sec:Conclusions"
 \begin_layout Standard
 In the current work, an extension of the original Grammatical Evolution
  has been proposed, which was applied in the Neural Construction method.
- In this extension, an application of a modified optimization algorithm
- was suggested, in order to improve the efficiency of the underlying technique.
+ In this extension, an application of a modified optimization method was
+ suggested, in order to improve the efficiency of the underlying technique.
  The proposed optimization algorithm was a variant of the Simulated Annealing
- method, that was applied on randomly selected chromosomes of the Grammatical
- Evolution procedure.
+ method, that was applied on a series of chromosomes, that was randomly
+ from the Grammatical Evolution procedure.
  This method was chosen because of its widespread use in many applications
  but because of its ability to handle integer representations, since the
  chromosomes in Grammatical Evolution are vectors of integers.
@@ -9765,17 +9818,18 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-The proposed modification was applied on the Neural Network Construction
- method and its efficiency was measured on a wide series of classification
- and regression datasets from the relevant literature.
- Based on the experimental results, it became clear that the proposed variant
- significantly improves the performance of the technique both on classification
- datasets and on data fitting datasets.
+The proposed modification was applied to the Neural Network Construction
+ method and its efficiency was measured on some classification and regression
+ datasets commonly used.
+ Based on the experimental results, it has become clear that the proposed
+ variant significantly improves the performance of the technique both on
+ classification datasets and on data fitting datasets.
  Also, the effectiveness and the robustness of the proposed modification
- were measure using experiments with different values of some critical parameter
-s of the current Simulated Annealing variant.
- These experiments indicated that the method does not depend heavily on
- the selection of any critical parameter of the Simulated Annealing variant.
+ were measured using experiments with different values of some critical
+ parameters of the current Simulated Annealing variant.
+ These experiments indicated that the method tends to be rubost, since the
+ experimental results does not depend on the selection of any critical parameter
+ of the Simulated Annealing variant.
 \end_layout
 
 \begin_layout Standard
@@ -10932,6 +10986,26 @@ L.M.
 \series default
 , pp.
  137-144, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_tsoulos"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, D.
+ Gavrilis, E.
+ Glavas, Neural network construction and training using grammatical evolution.
+ Neurocomputing 
+\series bold
+72
+\series default
+, pp.
+ 269-277, 2008.
 \end_layout
 
 \begin_layout Bibliography
