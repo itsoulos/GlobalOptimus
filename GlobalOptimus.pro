@@ -87,6 +87,7 @@ SOURCES += \
         PROBLEMS/salkin.cpp \
         PROBLEMS/shekel10.cpp \
         PROBLEMS/shekel5.cpp \
+	PROBLEMS/gross.cpp\
         PROBLEMS/shekel7.cpp \
         PROBLEMS/sinu.cpp \
         PROBLEMS/test30n.cpp \
@@ -172,6 +173,7 @@ HEADERS += \
     PROBLEMS/gkls2100.h \
     PROBLEMS/gkls250.h \
     PROBLEMS/gkls350.h \
+    PROBLEMS/gross.h \
     PROBLEMS/goldstein.h \
     PROBLEMS/griewank10.h \
     PROBLEMS/griewank2.h \

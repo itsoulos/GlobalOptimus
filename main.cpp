@@ -22,6 +22,7 @@
 # include <PROBLEMS/hartman6.h>
 # include <PROBLEMS/potential.h>
 # include <PROBLEMS/rosenbrock.h>
+# include <PROBLEMS/gross.h>
 # include <PROBLEMS/shekel5.h>
 # include <PROBLEMS/shekel7.h>
 # include <PROBLEMS/shekel10.h>
@@ -224,8 +225,8 @@ void loadProblem()
             if(problemName == "FuchsS")
             mainProblem =new FuchsS();
     else
-            if(problemName == "Fuch1")
-            mainProblem = new Fuch1();
+            if(problemName == "Gross")
+            mainProblem = new Gross();
     else
             if(problemName == "Levy")
             mainProblem = new Levy();

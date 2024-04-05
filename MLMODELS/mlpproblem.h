@@ -55,7 +55,7 @@ public:
      * @return
      */
     Data    getDerivative(Data &x);
-
+    double	getDerivative2(vector<double> xpoint,int pos);
     virtual void init(QJsonObject &params);
     virtual QJsonObject done(Data &x);
     void    initWeights();

@@ -190,6 +190,27 @@ Data    MlpProblem::getDerivative(Data &x)
 }
 
 
+double	MlpProblem::getDerivative2(vector<double> xpoint,int pos)
+{
+    int nodes=weight.size()/ (dimension + 2);
+        double per=0.0;
+        for(int i=1;i<=nodes;i++)
+        {
+            double arg=0.0;
+            for(int j=1;j<=dimension;j++)
+            {
+                int mypos=(dimension+2)*i-(dimension+1)+j;
+                arg+=xpoint[j-1]*weight[mypos-1];
+            }
+            arg+=weight[(dimension+2)*i-1];
+            double s=sig(arg);
+            double w1=weight[(dimension+2)*i-(dimension+1)-1];
+            double w2=weight[(dimension+2)*i-(dimension+1)+pos-1];
+            per+=w1*w2*w2*s*(1.0-s)*(1.0-2*s);
+        }
+        return per;
+}
+
 QJsonObject MlpProblem::done(Data &x)
 {
     double tr=funmin(x);

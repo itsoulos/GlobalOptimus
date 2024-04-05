@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=armadillo1
+METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -134,7 +134,7 @@ fi
 
 if [ -z "$DIMENSION" ] 
 then
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $METHODPARAMS --opt_iters=30 --opt_debug=yes
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $METHODPARAMS --opt_iters=1 --opt_debug=yes
 else
 	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION  $METHODPARAMS --opt_iters=30
 fi
