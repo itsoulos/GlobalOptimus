@@ -6,6 +6,45 @@ RbfProblem::RbfProblem()
     addParam(Parameter("rbf_nodes","1","Number of rbf nodes"));
     addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
 }
+double  RbfProblem::getDerivative(Data &x,int pos)
+{
+
+    double sum = 0.0;
+    for(int i=0;i<weight.size();i++)
+    {
+        double px = gaussianDerivative(x,centers[i],variances[i],pos);
+        sum = sum + weight[i]*px;
+    }
+    return sum;
+}
+double      RbfProblem::gaussianDerivative(Data &x,Data &m,double v,int pos)
+{
+
+
+
+    double hx = gaussian(x,m,v);
+    return hx * (-2.0/v)*(x[pos]-m[pos]);
+}
+
+double      RbfProblem::gaussianSecondDerivative(Data &x,Data &m,double v,int pos)
+{
+
+
+    double hx = gaussian(x,m,v);
+    double phixx = (-2.0/v)*(x[pos]-m[pos]);
+    return hx *(phixx  * phixx +(-2.0/v));
+}
+double  RbfProblem::getSecondDerivative(Data &x,int pos)
+{
+
+    double sum = 0.0;
+    for(int i=0;i<weight.size();i++)
+    {
+        double px = gaussianSecondDerivative(x,centers[i],variances[i],pos);
+        sum = sum + weight[i]*px;
+    }
+    return sum;
+}
 
 double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 {
@@ -19,7 +58,13 @@ double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 void    RbfProblem::setParameters(Data &x)
 {
     int icount =0;
-    int d = trainDataset->dimension();
+    weight.resize(5);
+    centers.resize(5);
+    for(int i=0;i<centers.size();i++)
+        centers[i].resize(1);
+    variances.resize(5);
+    lastGaussianValues.resize(5);
+    int d = trainDataset==NULL?1:trainDataset->dimension();
     int nodes = weight.size();
     for(int i=0;i<nodes;i++)
     {

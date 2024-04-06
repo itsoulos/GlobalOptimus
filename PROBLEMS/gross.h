@@ -2,6 +2,7 @@
 #define FUCH1_H
 # include <OPTIMUS/problem.h>
 # include <MLMODELS/mlpproblem.h>
+# include <MLMODELS//rbfproblem.h>
 class Gross : public Problem
 {
 private:
@@ -10,6 +11,7 @@ private:
     int npoints=100;
 
     MlpProblem *mlp;
+    RbfProblem *rbf;
     double gamma;
 
     double vext(double x);

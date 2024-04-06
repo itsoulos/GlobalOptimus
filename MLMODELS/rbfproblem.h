@@ -11,6 +11,9 @@ private:
     Data weight;
     vector<Data> centers;
     Data variances;
+    double      gaussianDerivative(Data &x,Data &m,double v,int pos);
+    double      gaussianSecondDerivative(Data &x,Data &m,double v,int pos);
+
     void    getWeightDerivative(int index,Data &x,double &g);
     void    getVarianceDerivative(int index,Data &x,double &g);
     void    getCenterDerivative(int index,Data &x,Data &g);
@@ -19,6 +22,8 @@ private:
     Data lastGaussianValues;
 public:
     RbfProblem();
+    double  getDerivative(Data &x,int pos);
+    double  getSecondDerivative(Data &x,int pos);
     void    setParameters(Data &x);
     void    getParameters(Data &x);
     virtual double  funmin(Data &x);
