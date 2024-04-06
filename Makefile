@@ -259,7 +259,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
@@ -524,7 +523,6 @@ Makefile: GlobalOptimus.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
@@ -611,7 +609,6 @@ Makefile: GlobalOptimus.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri:
@@ -1263,7 +1260,7 @@ shekel5.o: PROBLEMS/shekel5.cpp PROBLEMS/shekel5.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o shekel5.o PROBLEMS/shekel5.cpp
 
-gross.o: PROBLEMS/gross.cpp PROBLEMS/fuch1.h \
+gross.o: PROBLEMS/gross.cpp PROBLEMS/gross.h \
 		OPTIMUS/problem.h \
 		MLMODELS/mlpproblem.h \
 		MLMODELS/dataset.h \
@@ -1358,16 +1355,17 @@ main.o: main.cpp PROBLEMS/rastriginproblem.h \
 		PROBLEMS/hartman6.h \
 		PROBLEMS/potential.h \
 		PROBLEMS/rosenbrock.h \
-		PROBLEMS/shekel5.h \
-		PROBLEMS/shekel7.h \
-		PROBLEMS/shekel10.h \
-		PROBLEMS/sinu.h \
-		PROBLEMS/test30n.h \
+		PROBLEMS/gross.h \
 		MLMODELS/mlpproblem.h \
 		MLMODELS/dataset.h \
 		MLMODELS/model.h \
 		OPTIMUS/parameterlist.h \
 		OPTIMUS/parameter.h \
+		PROBLEMS/shekel5.h \
+		PROBLEMS/shekel7.h \
+		PROBLEMS/shekel10.h \
+		PROBLEMS/sinu.h \
+		PROBLEMS/test30n.h \
 		MLMODELS/rbfproblem.h \
 		PROBLEMS/diracproblem.h \
 		PROBLEMS/userproblem.h \

@@ -4,7 +4,7 @@
 Gross::Gross()
 {
     mlp = NULL;
-    int dim = 2*(patternDimension+2)*nodes;
+    int dim = (patternDimension+2)*nodes;
     setDimension(dim);
     left.resize(dim);
     right.resize(dim);
@@ -15,7 +15,18 @@ Gross::Gross()
     }
 
 }
+double Gross::model(Data &x)
+{
+    return x[0]*(x[0]-1)*mlp->getOutput(x);
+}
 
+double Gross::modelDeriv2(Data &x)
+{
+
+    return 2.0 * mlp->getOutput(x)+
+            (4.0*x[0]-2.0)*mlp->getDerivative1(x,0)+
+            (x[0]*x[0]-x[0])*mlp->getDerivative2(x,0);
+}
 double Gross::vext(double x)
 {
     return 0.0;
@@ -33,29 +44,24 @@ double Gross::funmin(Data &x)
     double sum = 0.0;
     const double x0=0.0;
     const double x1=1.0;
-    gamma =0.0;//9.1865;
+    gamma =0;//9.1865;
     bool allZero = true;
 
     for(int i=0;i<npoints;i++)
     {
           xx[0]=x0+i*(x1-x0)/(npoints-1.0);
-        double dder = mlp->getDerivative2(xx,0);
-        double dval = mlp->getOutput(xx);
+        double dder = modelDeriv2(xx);
+        double dval = model(xx);
         double vextvalue = vext(xx[0])*dval;
         double gammavalue = gamma *pow(dval,3.0);
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
-        if(fabs(dval)>1e-1) allZero = false;
+       if(fabs(dval)>1e-1) allZero = false;
+
         sum+=pow(leftPart-rightPart,2.0);
     }
-    xx[0]=x0;
-    double dval0=mlp->getOutput(xx);
-    double penalty1 = 100.0 *pow(dval0-0.0,2.0);
-    xx[0]=x1;
-    double dval1=mlp->getOutput(xx);
-    double penalty2 = 100.0 *pow(dval1-0.0,2.0);
     if(allZero) sum+=1000.0;
-    return sum+penalty1+penalty2;
+    return sum;
 }
 
 Data    Gross::gradient(Data &x)
@@ -94,12 +100,11 @@ QJsonObject Gross::done(Data &x)
     for(int i=0;i<npoints;i++)
     {
         xx[0]=x0+i*(x1-x0)/(npoints-1.0);
-        double dval = mlp->getOutput(xx);
+        double dval = model(xx);
         st<<xx[0]<<"\t"<<dval<<"\n";
     }
     fp.close();
-    double en = x[x.size()-1];
-    printf("EN = %lf \n",en);
+
     return t;
 }
 

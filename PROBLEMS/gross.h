@@ -6,13 +6,15 @@ class Gross : public Problem
 {
 private:
     int patternDimension=1;
-    int nodes=10;
+    int nodes=5;
     int npoints=100;
 
     MlpProblem *mlp;
     double gamma;
 
     double vext(double x);
+    double model(Data &x);
+    double modelDeriv2(Data &x);
 public:
     Gross();
     double funmin(Data &x);
