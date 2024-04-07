@@ -6,29 +6,29 @@ Gross::Gross()
     mlp = NULL;
     rbf = NULL;
     int dim = (patternDimension+2)*nodes;
-    dim = nodes * patternDimension+nodes+nodes;
+   // dim = nodes * patternDimension+nodes+nodes;
     setDimension(dim);
     left.resize(dim);
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=0.01;
-        right[i]=20.0;
+        left[i]=-1.0;
+        right[i]=1.0;
     }
 
 }
 double Gross::model(Data &x)
 {
-    return x[0]*(x[0]-1)*rbf->getOutput(x);
+  //  return x[0]*(x[0]-1)*rbf->getOutput(x);
     return x[0]*(x[0]-1)*mlp->getOutput(x);
 }
 
 double Gross::modelDeriv2(Data &x)
 {
-    return 2.0 * rbf->getOutput(x)+
+   /* return 2.0 * rbf->getOutput(x)+
            (4.0*x[0]-2.0)*rbf->getDerivative(x,0)+
            (x[0]*x[0]-x[0])*rbf->getSecondDerivative(x,0);
-
+*/
     return 2.0 * mlp->getOutput(x)+
             (4.0*x[0]-2.0)*mlp->getDerivative1(x,0)+
             (x[0]*x[0]-x[0])*mlp->getDerivative2(x,0);
@@ -43,12 +43,12 @@ double Gross::funmin(Data &x)
         mlp=new MlpProblem();
     if(rbf==NULL)
         rbf= new RbfProblem();
-    rbf->setDimension(x.size());
-    rbf->setParameters(x);
-   // mlp->setDimension(x.size());
+   // rbf->setDimension(x.size());
+   // rbf->setParameters(x);
+    mlp->setDimension(x.size());
     const double n=1.0;
     double en = n *n* M_PI*M_PI;
-    //mlp->setWeights(x);
+    mlp->setWeights(x);
     Data xx;
     xx.resize(1);
     Data xx2;
@@ -56,7 +56,7 @@ double Gross::funmin(Data &x)
     double sum = 0.0;
     const double x0=0.0;
     const double x1=1.0;
-    gamma =0.0;//9.1865;
+    gamma =9.1865;
     int countZero = 0;
 
     for(int i=0;i<npoints;i++)
@@ -69,11 +69,11 @@ double Gross::funmin(Data &x)
         double gammavalue = gamma *dval*dval*dval;
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
-        if(fabs(dval)<1e-2&&i!=0 && i!=npoints-1) countZero++;
+        if(fabs(dval)<1e-3&&i!=0 && i!=npoints-1) countZero++;
 
         sum+=pow(leftPart-rightPart,2.0);
     }
-
+    if(countZero<=npoints/4) countZero = 0;
 
     return sum+1000.0 * countZero;
 }
