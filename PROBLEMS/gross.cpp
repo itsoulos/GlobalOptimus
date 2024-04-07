@@ -12,15 +12,16 @@ Gross::Gross()
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=-1.0;
-        right[i]=1.0;
+        left[i]=-10.0;
+        right[i]=10.0;
     }
 
 }
 double Gross::model(Data &x)
 {
   //  return x[0]*(x[0]-1)*rbf->getOutput(x);
-    return x[0]*(x[0]-1)*mlp->getOutput(x);
+  double alpha = 1.0;
+    return alpha*x[0]*(x[0]-1)*mlp->getOutput(x);
 }
 
 double Gross::modelDeriv2(Data &x)
@@ -29,9 +30,10 @@ double Gross::modelDeriv2(Data &x)
            (4.0*x[0]-2.0)*rbf->getDerivative(x,0)+
            (x[0]*x[0]-x[0])*rbf->getSecondDerivative(x,0);
 */
-    return 2.0 * mlp->getOutput(x)+
-            (4.0*x[0]-2.0)*mlp->getDerivative1(x,0)+
-            (x[0]*x[0]-x[0])*mlp->getDerivative2(x,0);
+  double alpha = 1.0;
+    return 2.0 * alpha*mlp->getOutput(x)+
+            (4.0*x[0]-2.0)*alpha*mlp->getDerivative1(x,0)+
+            (x[0]*x[0]-x[0])*alpha*mlp->getDerivative2(x,0);
 }
 double Gross::vext(double x)
 {
@@ -69,11 +71,11 @@ double Gross::funmin(Data &x)
         double gammavalue = gamma *dval*dval*dval;
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
-        if(fabs(dval)<1e-3&&i!=0 && i!=npoints-1) countZero++;
+     //   if(fabs(dval)<1e-3&&i!=0 && i!=npoints-1) countZero++;
 
         sum+=pow(leftPart-rightPart,2.0);
     }
-    if(countZero<=npoints/4) countZero = 0;
+    if(countZero<=npoints/10) countZero = 0;
 
     return sum+1000.0 * countZero;
 }

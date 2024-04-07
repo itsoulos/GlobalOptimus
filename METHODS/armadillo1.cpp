@@ -3,9 +3,9 @@
 Armadillo1::Armadillo1()  {
     addParam(Parameter("gao_count","100","Number of chromosomes"));
     addParam(Parameter("gao_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("gao_lrate","0.1","Localsearch rate"));
+    addParam(Parameter("gao_lrate","0.05","Localsearch rate"));
     addParam(Parameter("gao_iters","1","Number of iters"));
-    addParam(Parameter("gen_termination","doublebox","Termination method. Avaible values: maxiters,similarity,doublebox"));
+    addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 }
 
 
@@ -105,13 +105,12 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
     // GAO iterations
     for (int t = 1; t <= iters; ++t) {
         for (int i = 0; i < GaoCount; ++i) {
-		fitness[i]=myProblem->statFunmin(population[i]);
+	//	fitness[i]=myProblem->statFunmin(population[i]);
             // Φάση 1: Επίθεση σε αναχώματα τερμιτών (φάση εξερεύνησης)
             vector<vector<double>> TM;
             for (int k = 0; k < GaoCount; k++) {
                 if (k != i) {
                     fitness_k = fitness[k];//myProblem->statFunmin(population[k]);
-		    fitness[k]=fitness_k;
                     if (fitness_k < evaluate(population[i], fitness[i],worstSpeedBest)) {
                         worstSpeedBest = worstSpeed;
                         TM.push_back(population[k]);
@@ -124,12 +123,14 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
                 x = rand() % TM.size();
                 vector<double> STM = TM[x];
 
+again:
                 // υπολογισμός νέας θέσης
-                r = ((double)rand() / RAND_MAX);
+                r = ((double)rand()*1.0 / RAND_MAX);
                 vector<double> newThesi(M);
                 for (int d = 0; d < M; ++d) {
                     newThesi[d] = population[i][d] + r * (STM[d] - population[i][d]);
                 }
+		if(!myProblem->isPointIn(newThesi)) continue;
 
                 // Update ith GAO member
 
@@ -144,6 +145,7 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
 
             // Φάση 2: Σκάψιμο τερμιτών (φάση εκμετάλλευσης)
             vector<vector<double>> candidateMounds;
+	    vector<int> indexMounds;
             for (int k = 0; k < GaoCount; ++k) {
                 if (k != i) {
 
@@ -151,6 +153,7 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
                     if (fitness_k < evaluate(population[i],fitness[i], worstSpeedWorst)) {
                         worstSpeedWorst = worstSpeed;
                         candidateMounds.push_back(population[k]);
+			indexMounds.push_back(k);
                     }
                 }
             }
@@ -163,7 +166,7 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
                 for (unsigned long j = 0; j < candidateMounds.size(); j++) {
                     vector<double>& candidate = candidateMounds[j];
 
-		    double ff=myProblem->funmin(candidate);
+		    double ff= fitness[indexMounds[j]];// myProblem->statFunmin(candidate);
                     fitness1 = evaluate(candidate, ff,worstSpeed);
                     if (fitness1 < bestCF) {
                         bestCF = fitness1;
@@ -174,10 +177,21 @@ void Armadillo1::GAO(int GaoCount,  vector<double>& bestValues) {
                 // Update ith GAO member using Equation
                 r = 1.0 - pow(((double)rand() / RAND_MAX), 2.0);
                 double t = 0.9999;
+		bool noupdate=false;
+		int countfail = 0;
                 for (int d = 0; d < M; ++d) {
 
+			double oldx = population[i][d];
                     population[i][d] = population[i][d] + (i -  2* r) * (upper[d] - lower[d]) / t;
+		    if(population[i][d]<lower[d] || population[i][d]>upper[d])
+		    {
+			    population[i][d]=oldx;
+			    countfail++;
+		    }
                 }
+		if(countfail == M) noupdate = true;
+		if(!noupdate)
+		fitness[i]=myProblem->statFunmin(population[i]);
             }
 
             double Value = evaluate(population[i], fitness[i],worstSpeedWorst);
