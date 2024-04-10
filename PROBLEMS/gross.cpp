@@ -1,6 +1,7 @@
 #include <PROBLEMS/gross.h>
 # include <QFile>
 # include <QTextStream>
+double param ;
 Gross::Gross()
 {
     mlp = NULL;
@@ -12,16 +13,37 @@ Gross::Gross()
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=-10.0;
-        right[i]=10.0;
+        left[i]=-100.0;
+        right[i]=100.0;
     }
 
 }
+double Gross::neural(Data &x)
+{
+	return mlp->getOutput(x);
+	return 1.0/mlp->getOutput(x);
+}
+
+double Gross::neuralDeriv(Data &x)
+{
+	return mlp->getDerivative1(x,0);
+	return -1.0/(pow(mlp->getOutput(x),2.0))*mlp->getDerivative1(x,0);
+}
+
+double Gross::neuralDeriv2(Data &x)
+{
+	return mlp->getDerivative2(x,0);
+	double d0=mlp->getOutput(x);
+	double d1=mlp->getDerivative1(x,0);
+	double d2=mlp->getDerivative2(x,0);
+	return 2*d0*d1*1.0/pow(d0,4)*d1+d2*(-1.0/(d0*d0));
+}
+
 double Gross::model(Data &x)
 {
   //  return x[0]*(x[0]-1)*rbf->getOutput(x);
-  double alpha = 1.0;
-    return alpha*x[0]*(x[0]-1)*mlp->getOutput(x);
+  
+    return x[0]*(x[0]-1)*neural(x);
 }
 
 double Gross::modelDeriv2(Data &x)
@@ -30,10 +52,10 @@ double Gross::modelDeriv2(Data &x)
            (4.0*x[0]-2.0)*rbf->getDerivative(x,0)+
            (x[0]*x[0]-x[0])*rbf->getSecondDerivative(x,0);
 */
-  double alpha = 1.0;
-    return 2.0 * alpha*mlp->getOutput(x)+
-            (4.0*x[0]-2.0)*alpha*mlp->getDerivative1(x,0)+
-            (x[0]*x[0]-x[0])*alpha*mlp->getDerivative2(x,0);
+
+    return 2.0 * neural(x)+
+            (4.0*x[0]-2.0)*neuralDeriv(x)+
+            (x[0]*x[0]-x[0])*neuralDeriv2(x);
 }
 double Gross::vext(double x)
 {
@@ -47,14 +69,16 @@ double Gross::funmin(Data &x)
         rbf= new RbfProblem();
    // rbf->setDimension(x.size());
    // rbf->setParameters(x);
-    mlp->setDimension(x.size());
+    mlp->setDimension(1);//x.size());
     const double n=1.0;
+    param = x[0];
     double en = n *n* M_PI*M_PI;
-    mlp->setWeights(x);
+    Data w;
+    w.resize(x.size());
+    for(int i=0;i<w.size();i++) w[i]=x[i];
+    mlp->setWeights(w);
     Data xx;
     xx.resize(1);
-    Data xx2;
-    xx2.resize(1);
     double sum = 0.0;
     const double x0=0.0;
     const double x1=1.0;
@@ -64,20 +88,18 @@ double Gross::funmin(Data &x)
     for(int i=0;i<npoints;i++)
     {
           xx[0]=x0+i*(x1-x0)/(npoints-1.0);
-        xx2[0]=x[0]*x[0];
         double dder = modelDeriv2(xx);
         double dval = model(xx);
         double vextvalue = vext(xx[0])*dval;
         double gammavalue = gamma *dval*dval*dval;
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
-     //   if(fabs(dval)<1e-3&&i!=0 && i!=npoints-1) countZero++;
+        if(fabs(neural(xx))<1e-3&&i!=0 && i!=npoints-1) countZero++;
 
         sum+=pow(leftPart-rightPart,2.0);
     }
-    if(countZero<=npoints/10) countZero = 0;
+    return sum+1000.0 *countZero;
 
-    return sum+1000.0 * countZero;
 }
 
 Data    Gross::gradient(Data &x)
@@ -117,10 +139,12 @@ QJsonObject Gross::done(Data &x)
     {
         xx[0]=x0+i*(x1-x0)/(npoints-1.0);
         double dval = model(xx);
-        st<<xx[0]<<"\t"<<dval<<"\n";
+        st<<xx[0]<<"\t"<<neural(xx)<<"\t"<<dval<<"\n";
     }
     fp.close();
 
+    for(int i=0;i<x.size();i++) printf("%lf ",x[i]);
+    printf("\n");
     return t;
 }
 

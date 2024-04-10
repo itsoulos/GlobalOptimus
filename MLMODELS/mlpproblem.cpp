@@ -191,7 +191,8 @@ Data    MlpProblem::getDerivative(Data &x)
 
 double  MlpProblem::getDerivative1(vector<double> xpoint,int pos)
 {
-    int nodes=weight.size()/ (dimension + 2);
+    int nodes=weight.size()/ (xpoint.size() + 2);
+    int dimension = xpoint.size();
     double per=0.0;
     for(int i=1;i<=nodes;i++)
     {
@@ -200,7 +201,6 @@ double  MlpProblem::getDerivative1(vector<double> xpoint,int pos)
         {
             int mypos=(dimension+2)*i-(dimension+1)+j;
             arg+=xpoint[j-1]*weight[mypos-1];
-            if(fabs(weight[mypos-1])>100) return 1e+100;
         }
         arg+=weight[(dimension+2)*i-1];
         double s=sig(arg);
@@ -211,7 +211,8 @@ double  MlpProblem::getDerivative1(vector<double> xpoint,int pos)
 
 double	MlpProblem::getDerivative2(vector<double> xpoint,int pos)
 {
-    int nodes=weight.size()/ (dimension + 2);
+    int nodes=weight.size()/ (xpoint.size() + 2);
+    int dimension = xpoint.size();
         double per=0.0;
         for(int i=1;i<=nodes;i++)
         {
