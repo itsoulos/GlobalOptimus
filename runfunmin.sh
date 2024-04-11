@@ -1,7 +1,7 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
 METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
-LOCALSEARCH=lbfgs
+LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity

@@ -136,6 +136,18 @@ double  MlpProblem::sigder(double x)
     return s*(1.0-s);
 }
 
+void	MlpProblem::resetViolationPercent(double limit)
+{
+	violcount=0;
+	sigcount=0;
+	viollimit=limit;
+}
+
+double  MlpProblem::getViolationPercent()
+{
+	return violcount*100.0/sigcount;
+}
+
 /** einai i exodos tou neuronikou gia to protypo x**/
 double  MlpProblem::getOutput(Data  &x)
 {
@@ -146,12 +158,18 @@ double  MlpProblem::getOutput(Data  &x)
     for(int i=1;i<=nodes;i++)
     {
         arg=0.0;
+	sigcount++;
         for(int j=1;j<=d;j++)
         {
             int pos=(d+2)*i-(d+1)+j-1;
             arg+=weight[pos]*x[j-1];
+
         }
         arg+=weight[(d+2)*i-1];
+	    if(fabs(arg)>=viollimit)
+	    {
+		    violcount++;
+	    }
         per+=weight[(d+2)*i-(d+1)-1]*sig(arg);
     }
     return per;

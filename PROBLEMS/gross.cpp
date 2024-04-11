@@ -13,8 +13,21 @@ Gross::Gross()
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=-100.0;
-        right[i]=100.0;
+        left[i]=0.1;
+        right[i]=10.0;
+    }
+    for(int i=1;i<=nodes;i++)
+    {
+	    for(int j=1;j<=patternDimension;j++)
+	    {
+		    int pos = (patternDimension+2)*i-(patternDimension+1)+j-1;
+		    left[pos]=-10;
+		    right[pos]=10;
+	    }
+	    //bias
+	    int pos = (patternDimension+2)*i-1;
+	    left[pos]=-1;
+	    right[pos]=1;
     }
 
 }
@@ -43,7 +56,7 @@ double Gross::model(Data &x)
 {
   //  return x[0]*(x[0]-1)*rbf->getOutput(x);
   
-    return x[0]*(x[0]-1)*neural(x);
+    return x[0]*(1-x[0])*neural(x);
 }
 
 double Gross::modelDeriv2(Data &x)
@@ -53,9 +66,9 @@ double Gross::modelDeriv2(Data &x)
            (x[0]*x[0]-x[0])*rbf->getSecondDerivative(x,0);
 */
 
-    return 2.0 * neural(x)+
-            (4.0*x[0]-2.0)*neuralDeriv(x)+
-            (x[0]*x[0]-x[0])*neuralDeriv2(x);
+    return -2.0 * neural(x)+
+            (2.0-4.0*x[0])*neuralDeriv(x)+
+            (x[0]-x[0]*x[0])*neuralDeriv2(x);
 }
 double Gross::vext(double x)
 {
@@ -85,6 +98,7 @@ double Gross::funmin(Data &x)
     gamma =9.1865;
     int countZero = 0;
 
+    mlp->resetViolationPercent(10.0);
     for(int i=0;i<npoints;i++)
     {
           xx[0]=x0+i*(x1-x0)/(npoints-1.0);
@@ -94,11 +108,11 @@ double Gross::funmin(Data &x)
         double gammavalue = gamma *dval*dval*dval;
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
-        if(fabs(neural(xx))<1e-3&&i!=0 && i!=npoints-1) countZero++;
+       // if(fabs(neural(xx))<1e-3&&i!=0 && i!=npoints-1) countZero++;
 
         sum+=pow(leftPart-rightPart,2.0);
     }
-    return sum+1000.0 *countZero;
+    return sum+10.0 *mlp->getViolationPercent();
 
 }
 
