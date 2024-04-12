@@ -13,8 +13,8 @@ Gross::Gross()
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=-1000.0;
-        right[i]=1000.0;
+        left[i]=-100.0;
+        right[i]=100.0;
     }
 
 }
@@ -72,7 +72,7 @@ double Gross::funmin(Data &x)
     mlp->setDimension(1);//x.size());
     const double n=1.0;
     param = x[0];
-    double en = 500.0;// n *n* M_PI*M_PI;
+    double en = 54;//23.0;// n *n* M_PI*M_PI;
     Data w;
     w.resize(x.size());
     for(int i=0;i<w.size();i++) w[i]=x[i];
@@ -82,7 +82,7 @@ double Gross::funmin(Data &x)
     double sum = 0.0;
     const double x0=0.0;
     const double x1=1.0;
-    gamma =436.7686;
+    gamma = 9.8271;//9.1865;
     int countZero = 0;
 
     mlp->resetViolationPercent(10.0);
