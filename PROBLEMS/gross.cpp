@@ -13,7 +13,7 @@ Gross::Gross()
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=0.1;
+        left[i]=-10.0;
         right[i]=10.0;
     }
     for(int i=1;i<=nodes;i++)
@@ -26,8 +26,8 @@ Gross::Gross()
 	    }
 	    //bias
 	    int pos = (patternDimension+2)*i-1;
-	    left[pos]=-1;
-	    right[pos]=1;
+	    left[pos]=-10;
+	    right[pos]=10;
     }
 
 }
@@ -95,7 +95,7 @@ double Gross::funmin(Data &x)
     double sum = 0.0;
     const double x0=0.0;
     const double x1=1.0;
-    gamma =9.1865;
+    gamma =0.0;//9.1865;
     int countZero = 0;
 
     mlp->resetViolationPercent(10.0);
@@ -108,11 +108,14 @@ double Gross::funmin(Data &x)
         double gammavalue = gamma *dval*dval*dval;
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
-       // if(fabs(neural(xx))<1e-3&&i!=0 && i!=npoints-1) countZero++;
+ //       if(fabs(neural(xx))<1e-3&&i!=0 && i!=npoints-1) countZero++;
 
-        sum+=pow(leftPart-rightPart,2.0);
+//	printf("Factor: %lf / %lf \n",leftPart,rightPart);
+	double div = leftPart/rightPart;
+	if(isinf(div)) continue;
+        sum+=pow(div-1.0,2.0);
     }
-    return sum+10.0 *mlp->getViolationPercent();
+    return sum+100.0 * mlp->getViolationPercent();
 
 }
 
