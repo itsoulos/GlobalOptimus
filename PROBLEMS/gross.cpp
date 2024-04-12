@@ -13,21 +13,8 @@ Gross::Gross()
     right.resize(dim);
     for(int i=0;i<dim;i++)
     {
-        left[i]=-10.0;
-        right[i]=10.0;
-    }
-    for(int i=1;i<=nodes;i++)
-    {
-	    for(int j=1;j<=patternDimension;j++)
-	    {
-		    int pos = (patternDimension+2)*i-(patternDimension+1)+j-1;
-		    left[pos]=-10;
-		    right[pos]=10;
-	    }
-	    //bias
-	    int pos = (patternDimension+2)*i-1;
-	    left[pos]=-10;
-	    right[pos]=10;
+        left[i]=-1000.0;
+        right[i]=1000.0;
     }
 
 }
@@ -85,7 +72,7 @@ double Gross::funmin(Data &x)
     mlp->setDimension(1);//x.size());
     const double n=1.0;
     param = x[0];
-    double en = n *n* M_PI*M_PI;
+    double en = 500.0;// n *n* M_PI*M_PI;
     Data w;
     w.resize(x.size());
     for(int i=0;i<w.size();i++) w[i]=x[i];
@@ -95,11 +82,11 @@ double Gross::funmin(Data &x)
     double sum = 0.0;
     const double x0=0.0;
     const double x1=1.0;
-    gamma =0.0;//9.1865;
+    gamma =436.7686;
     int countZero = 0;
 
     mlp->resetViolationPercent(10.0);
-    for(int i=0;i<npoints;i++)
+    for(int i=1;i<npoints-1;i++)
     {
           xx[0]=x0+i*(x1-x0)/(npoints-1.0);
         double dder = modelDeriv2(xx);
@@ -108,14 +95,11 @@ double Gross::funmin(Data &x)
         double gammavalue = gamma *dval*dval*dval;
         double leftPart =(-dder+vextvalue+gammavalue);
         double rightPart = en *dval;
- //       if(fabs(neural(xx))<1e-3&&i!=0 && i!=npoints-1) countZero++;
 
-//	printf("Factor: %lf / %lf \n",leftPart,rightPart);
 	double div = leftPart/rightPart;
-	if(isinf(div)) continue;
         sum+=pow(div-1.0,2.0);
     }
-    return sum+100.0 * mlp->getViolationPercent();
+    return sum;//+100.0 * mlp->getViolationPercent();
 
 }
 
