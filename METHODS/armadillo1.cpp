@@ -5,7 +5,7 @@ Armadillo1::Armadillo1()  {
     addParam(Parameter("gao_maxiters","200","Maximum number of generations"));
     addParam(Parameter("gao_lrate","0.05","Localsearch rate"));
     addParam(Parameter("gao_iters","1","Number of iters"));
-    addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
+    addParam(Parameter("gao_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 }
 
 
@@ -15,7 +15,7 @@ void Armadillo1::init()
     GaoCount=getParam("gao_count").getValue().toInt();
     maxGenerations=getParam("gao_maxiters").getValue().toInt();
     localsearchRate=getParam("gao_lrate").getValue().toDouble();
-    terminationMethod=getParam("gen_termination").getValue();
+    terminationMethod=getParam("gao_termination").getValue();
     iters=getParam("gao_iters").getValue().toInt();
 
     generation=0;
