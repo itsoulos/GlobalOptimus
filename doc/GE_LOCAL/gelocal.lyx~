@@ -348,7 +348,7 @@ literal "false"
  
 \series default
 Chromosomes in the Grammatical Evolution process are rules for generating
- a BNF grammar 
+ a Backus–Naur form (BNF) grammar 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "bnf1"
@@ -703,11 +703,10 @@ literal "false"
 \end_inset
 
  and hence more suitable methods should be adopted.
-\end_layout
-
-\begin_layout Standard
 
 \series bold
+ 
+\series default
 In this paper, an attempt is made to improve upon the excellent results
  shown by Grammatical Evolution in the past on a variety of problems by
  applying local optimization techniques, periodically applied to randomly
@@ -722,9 +721,7 @@ literal "false"
 \end_inset
 
  as a local search procedure.
- 
-\series default
-The method of Simulated Annealing has been utilized in various cases, such
+ The method of Simulated Annealing has been utilized in various cases, such
  as image processing 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -766,16 +763,10 @@ literal "false"
 \end_inset
 
  etc.
- 
-\series bold
-To verify the possibility of the proposed methodology to improve the results
+ To verify the possibility of the proposed methodology to improve the results
  of Grammatical Evolution, the Neural Networks construction technique was
  chosen.
-
-\series default
- 
-\series bold
-This method was initally provided in 
+ This method was initally provided in 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nnc_tsoulos"
@@ -783,21 +774,85 @@ literal "false"
 
 \end_inset
 
-
-\series default
- 
-\series bold
-and it can estimate the topology and the weights of neural networks using
+ and it can estimate the topology and the weights of neural networks using
  the Grammatical Evolution procedure.
  This method was chosen to test the present methodology because of its many
  applications.
  However, the technique proposed in this paper will be able to be applied
  in the future in other cases of using Grammatical Evolution.
  To evaluate the performance of the modified technique it was evaluated
- on 
+ on a extended series of classification and regression problems found in
+ the relevant literature and the results seem to be promising.
+\end_layout
+
+\begin_layout Standard
+In the same direction many researchers have published papers in neural network
+ initialization or construction, such as the usage of decision trees to
+ initialize the weights of a neural network
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninit1"
+literal "false"
+
+\end_inset
+
+,
+\series bold
+ 
 \series default
-a extended series of classification and regression problems found in the
- relevant literature and the results seem to be promising.
+initialization of the weights using Cauchy's inequality 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "weight_init2"
+literal "false"
+
+\end_inset
+
+, application of discriminant learning 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "weight_init3"
+literal "false"
+
+\end_inset
+
+.
+ Also, the issue of constructing the structure of artificial neural networks
+ have been discussed in various papers, such as incorporation of genetic
+ algorithms
+\series bold
+ 
+\series default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nngencon"
+literal "false"
+
+\end_inset
+
+,
+\series bold
+ 
+\series default
+construction and prunning of the weights 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnprunncon"
+literal "false"
+
+\end_inset
+
+, application of of cellular automata 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nncell"
+literal "false"
+
+\end_inset
+
+ etc.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1018,7 +1073,7 @@ Obtain the next element V from the provided chromosome.
 The production rule is selected according to the scheme 
 \begin_inset Formula 
 \begin{equation}
-\mbox{Rule} =V\ \mbox{mod}\ \mbox{NR}
+\mbox{Rule}=V\ \mbox{mod}\ \mbox{NR}
 \end{equation}
 
 \end_inset
@@ -1137,7 +1192,21 @@ The modified Simulated Annealing algorithm
 \begin_layout Standard
 The current work utilizes a modified version of the Simulated Annealing
  algorithm as a local search procedure.
- The main steps of this procedure are shown in Algorithm 
+ Simulated Annealing was chosen as a local search method, since it offers
+ the possibility of representing the considered solutions in an integer
+ form, which is critical for the Grammatical Evolution representation of
+ chromosomes.
+ In addition, this method has been distinguished for its easy adaptation
+ to a multitude of problems but also for its ability to find the total minimum
+ of functions through the point acceptance mechanism at high temperatures.
+ In the present work, the Simulated Annealing will initiate from the current
+ representation of a chromosome and gradually try to find other nearby represent
+ations that might lead to lower values of the fitness value.
+ 
+\end_layout
+
+\begin_layout Standard
+The main steps of this procedure are shown in Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:siman"
@@ -6375,8 +6444,19 @@ AVERAGE
 
 \end_inset
 
-As it is evident, the proposed modification improves the efficiency of the
- proposed method in the majority of used datasets.
+The above techniques were used in the experiments as they are widespread
+ in machine learning, such as the Adam method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "adam1,adam2"
+literal "false"
+
+\end_inset
+
+ and because they have a similar complexity to the present technique such
+ as Genetic Algorithms.
+ As it is evident, the proposed modification improves the efficiency of
+ the proposed method in the majority of used datasets.
  This improvement on some datasets could be as much as an 80% percent error
  reduction on the test set.
  Figure 
@@ -8158,7 +8238,7 @@ t differences in performance (denoted by "ns").
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -8182,6 +8262,80 @@ s, as indicated by the statistical significance annotations.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:scatter_g"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+In addition, in the graph of the figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Timecomparison"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, a comparison is made for the average execution time of each experiment
+ for the classification datasets.
+ The comparison was made between the initial method (denoted as NNC in the
+ graph) as well as the various cases of the proposed technique by changing
+ the parameter 
+\begin_inset Formula $g$
+\end_inset
+
+ to 5, 10 and 20.
+ As expected, adding the local minimization technique to the Grammatical
+ Evolution method significantly increases the execution time of the method,
+ however this increase remains almost constant for different values of the
+ critical parameter 
+\begin_inset Formula $g$
+\end_inset
+
+.
+ Moreover, by using parallel techniques that appear in the relevant literature
+ this increase in execution time could be reduced.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ifc_time.eps
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time comparison between the initial method and the proposed modifications.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Timecomparison"
 
 \end_inset
 
@@ -11009,6 +11163,149 @@ I.G.
 \end_layout
 
 \begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninit1"
+literal "false"
+
+\end_inset
+
+I.
+ Ivanova, M.
+ Kubat, Initialization of neural networks by means of decision trees, Knowledge-
+Based Systems 
+\series bold
+8
+\series default
+, pp.
+ 333-344, 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "weight_init2"
+literal "false"
+
+\end_inset
+
+J.Y.F.
+ Yam, T.W.S.
+ Chow, A weight initialization method for improving training speed in feedforwar
+d neural network, Neurocomputing 
+\series bold
+30
+\series default
+, pp.
+ 219-232, 2000.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "weight_init3"
+literal "false"
+
+\end_inset
+
+K.
+ Chumachenko, A.
+ Iosifidis, M.
+ Gabbouj, Feedforward neural networks initialization based on discriminant
+ learning, Neural Networks 
+\series bold
+146
+\series default
+, pp.
+ 220-229, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nngencon"
+literal "false"
+
+\end_inset
+
+F.
+ H.
+ F.
+ Leung, H.
+ K.
+ Lam, S.
+ H.
+ Ling, P.
+ K.
+ S.
+ Tam, Tuning of the structure and parameters of a neural network using an
+ improved genetic algorithm, IEEE Transactions on Neural Networks 
+\series bold
+14
+\series default
+, pp.
+ 79-88, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "mainGe"
+literal "true"
+
+\end_inset
+
+M.
+ O’Neill, C.
+ Ryan, Grammatical evolution, IEEE Trans.
+ Evol.
+ Comput.
+ 
+\series bold
+5
+\series default
+, pp.
+ 349–358, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnprunncon"
+literal "false"
+
+\end_inset
+
+H.G.
+ Han, J.F.
+ Qiao, A structure optimisation algorithm for feedforward neural network
+ construction, Neurocomputing 
+\series bold
+99
+\series default
+, pp 347-357, 2013.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nncell"
+literal "false"
+
+\end_inset
+
+K.J.
+ Kim, S.B.
+ Cho, Evolved neural networks based on cellular automata for sensory-motor
+ controller, Neurocomputing 
+\series bold
+69
+\series default
+, pp.
+ 2193-2207, 2006.
+\end_layout
+
+\begin_layout Bibliography
 \labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
@@ -11724,6 +12021,45 @@ ons, Mathematical Programming
 , pp.
  547-566, 1989.
  
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "adam1"
+literal "false"
+
+\end_inset
+
+D.
+ Yi, J.
+ Ahn, S.Ji, An effective optimization method for machine learning based on
+ ADAM, Applied Sciences 
+\series bold
+10
+\series default
+, 1073, 2020.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "adam2"
+literal "false"
+
+\end_inset
+
+N.
+ Xiao, X.
+ Hu, X.
+ Liu, K.C.
+ Toh, Adam-family methods for nonsmooth optimization with convergence guarantees.
+ Journal of Machine Learning Research 
+\series bold
+25
+\series default
+, pp.
+ 1-53, 2024.
 \end_layout
 
 \begin_layout Bibliography
