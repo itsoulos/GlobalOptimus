@@ -30,6 +30,7 @@ SOURCES += \
         GE/rule.cc \
         GE/symbol.cc \
 	GE/integeranneal.cpp \
+	METHODS/ofalgorithm.cpp \
         METHODS/adam.cpp \
 	METHODS/armadillo1.cpp \
         METHODS/ipso.cpp \
@@ -134,6 +135,7 @@ HEADERS += \
     METHODS/parallelde.h \
     METHODS/parallelpso.h \
     METHODS/simanmethod.h \
+    METHODS/ofalgorithm.h \
     METHODS/usermethod.h \
     METHODS/armadillo1.h\
     MLMODELS/gdfmodel.h \

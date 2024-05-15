@@ -53,6 +53,7 @@
 # include <METHODS/armadillo1.h>
 # include <METHODS/simanmethod.h>
 # include <METHODS/usermethod.h>
+# include <METHODS/ofalgorithm.h>
 
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
@@ -118,6 +119,8 @@ void loadMethods()
     methodName<<"Simman";
     method<<new Armadillo1;
     methodName<<"armadillo1";
+    method<<new OFAlgorithm;
+    methodName<<"Ofa";
     method<<new UserMethod;
     methodName<<"UserMethod";
     for(int i=0;i<method.size();i++)
