@@ -30,6 +30,7 @@ SOURCES += \
         GE/rule.cc \
         GE/symbol.cc \
 	GE/integeranneal.cpp \
+    METHODS/gwooptimizer.cpp \
 	METHODS/ofalgorithm.cpp \
         METHODS/adam.cpp \
 	METHODS/armadillo1.cpp \
@@ -128,6 +129,7 @@ HEADERS += \
     GE/symbol.h \
     GE/integeranneal.h\
     METHODS/adam.h \
+    METHODS/gwooptimizer.h \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
     METHODS/neldermead.h \

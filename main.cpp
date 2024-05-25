@@ -54,7 +54,7 @@
 # include <METHODS/simanmethod.h>
 # include <METHODS/usermethod.h>
 # include <METHODS/ofalgorithm.h>
-
+# include <METHODS/gwooptimizer.h>
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
     # include <MLMODELS/functionalrbf.h>
@@ -121,6 +121,8 @@ void loadMethods()
     methodName<<"armadillo1";
     method<<new OFAlgorithm;
     methodName<<"Ofa";
+    method<<new GWOoptimizer;
+    methodName<<"Gwo";
     method<<new UserMethod;
     methodName<<"UserMethod";
     for(int i=0;i<method.size();i++)
