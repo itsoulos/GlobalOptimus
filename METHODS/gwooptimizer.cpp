@@ -3,7 +3,7 @@ GWOoptimizer::GWOoptimizer()
 {
     addParam(Parameter("gwo_agents", "100", "Number of gwo agents"));
     addParam(Parameter("gwo_maxiters", "200", "Number of gwo max iters"));
-    addParam(Parameter("gwo_termination", "doublebox", "Termination method for gwo"));
+    addParam(Parameter("gwo_termination", "similarity", "Termination method for gwo"));
 }
 
 void    GWOoptimizer::init()

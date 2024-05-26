@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=similarity
 
 if [ $METHOD = "Bfgs" ]
 then
