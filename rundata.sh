@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=NeuralMinimizer
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 #Available values: mlp, rbf, gdf, nnc, rule
-MODEL=nnc
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -15,7 +15,7 @@ DATAFILE=$1
 
 if [ $MODEL = "mlp" ]
 then
-	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smalvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+	MODELPARAMS="--mlp_nodes=3 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smalvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "rbf" ]
 then
 	MODELPARAMS="--rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
@@ -79,7 +79,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.005 --gen_srate=0.9 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_termination=$TERMINATION --gen_count=200 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.9 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_termination=$TERMINATION --gen_count=100 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
 
@@ -112,7 +112,7 @@ then
 #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
-	METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=true --ipso_inertiatype=1 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+METHODPARAMS="--ipso_particles=100 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.00 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "NeuralMinimizer" ]
 then

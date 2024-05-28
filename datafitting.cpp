@@ -21,6 +21,8 @@
 # include <METHODS/adam.h>
 # include <METHODS/simanmethod.h>
 # include <METHODS/usermethod.h>
+# include <METHODS/armadillo1.h>
+# include <METHODS/gwooptimizer.h>
 
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
@@ -84,6 +86,10 @@ void loadMethods()
     methodName<<"Adam";
     method<<new SimanMethod;
     methodName<<"Simman";
+    method<<new Armadillo1;
+    methodName<<"armadillo1";
+    method<<new GWOoptimizer;
+    methodName<<"Gwo";
     method<<new UserMethod;
     methodName<<"UserMethod";
     for(int i=0;i<method.size();i++)

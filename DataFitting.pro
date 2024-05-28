@@ -33,6 +33,8 @@ SOURCES += \
         GE/ruleprogram.cpp \
         GE/symbol.cc \
         METHODS/adam.cpp \
+	METHODS/gwooptimizer.cpp \
+        METHODS/armadillo1.cpp \
         METHODS/ipso.cpp \
         METHODS/lbfgs.cpp \
         METHODS/neldermead.cpp \
@@ -99,8 +101,10 @@ HEADERS += \
     GE/ruleprogram.h \
     GE/symbol.h \
     METHODS/adam.h \
+    METHODS/armadillo1.h \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
+    METHODS/gwooptimizer.h \
     METHODS/neldermead.h \
     METHODS/neuralminimizer.h \
     METHODS/parallelde.h \
