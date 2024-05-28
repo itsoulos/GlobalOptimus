@@ -3,6 +3,10 @@
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
 
+# define LOCAL_NONE "none"
+# define LOCAL_CROSS "crossover"
+# define LOCAL_MUTATE "mutate"
+# define LOCAL_SIMAN "siman"
 
 class Genetic : public Optimizer
 {
@@ -15,6 +19,7 @@ private:
     Data bestx;
     double besty;
     bool hasInitialized;
+    int lsearchItems,lsearchGens;
 
     Collection chromosomes;
     Collection children;
@@ -22,6 +27,7 @@ private:
     QString crossoverMethod;
     QString mutationMethod;
     QString terminationMethod;
+    QString localSearchMethod;
     double selectionRate;
     double mutationRate;
     double localsearchRate;
@@ -29,6 +35,10 @@ private:
     int    maxGenerations;
     int    generation;
     int    tournamentSize;
+    void    localCrossover(int pos);
+    void    localMutate(int pos);
+    void    localSiman(int pos);
+
 public:
     Genetic();
     virtual void init();
@@ -47,6 +57,7 @@ public:
     void    Selection();
     void    Crossover();
     void    Mutate();
+    void    LocalSearch(int pos);
     void    setBest(Data &xx,double y);
     double deltaIter(int iter,double y);
     ~Genetic();

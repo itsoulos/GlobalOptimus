@@ -11,6 +11,9 @@ Genetic::Genetic()
     addParam(Parameter("gen_selection","roulette","Selection method. Available values roulette,tournament"));
     addParam(Parameter("gen_crossover","double","Crossover method. Available values uniform, onepoint, double"));
     addParam(Parameter("gen_mutation","double","Mutation method. Available values random, double"));
+    addParam(Parameter("gen_lsearchmethod","none","Available methods: none,crossover,mutate,siman"));
+    addParam(Parameter("gen_lsearchitems","20","Number of items for local search"));
+    addParam(Parameter("gen_lsearchgens","20","Generations for local search"));
     addParam(Parameter("gen_termination","doublebox","Termination method. Avaible values: maxiters,similarity,doublebox"));
 }
 
@@ -34,9 +37,11 @@ void    Genetic::init()
     mutationMethod=getParam("gen_mutation").getValue();
     terminationMethod=getParam("gen_termination").getValue();
     localsearchRate=getParam("gen_lrate").getValue().toDouble();
+    lsearchGens=getParam("gen_lsearchgens").getValue().toInt();
+    lsearchItems=getParam("gen_lsearchitems").getValue().toInt();
+    localSearchMethod = getParam("gen_lsearchmethod").getValue();
     generation = 0;
     //init process
-   // chromosomes.clear();
     population.resize(chromosomeCount);
     fitnessArray.resize(chromosomeCount);
 
@@ -52,6 +57,7 @@ void    Genetic::init()
         fitnessArray[0]=besty;
         hasInitialized=false;
     }
+
 }
 
 void    Genetic::step()
@@ -61,13 +67,20 @@ void    Genetic::step()
     Selection();
     Crossover();
     Mutate();
+    if(generation%lsearchGens==0 &&  localSearchMethod!=LOCAL_NONE)
+    {
+        for(int i=0;i<lsearchItems;i++)
+        {
+            int pos = rand()  % population.size();
+            LocalSearch(pos);
+        }
+    }
 }
 
 bool    Genetic::terminated()
 {
-    double besty,worsty;
+    double besty;
     besty = fitnessArray[0];
-    //chromosomes.getBestWorstValues(besty,worsty);
     if(generation>=maxGenerations) return true;
     if(terminationMethod=="doublebox")
         return doubleBox.terminate(besty);
@@ -79,7 +92,7 @@ bool    Genetic::terminated()
 
 void    Genetic::showDebug()
 {
-    double besty,worsty;
+    double besty;
     besty = fitnessArray[0];
      if(getParam("opt_debug").getValue()=="yes" )
     printf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg\n",
@@ -265,7 +278,65 @@ for (int i = 0; i < population.size(); i++)
             }
         }
 }
-   // chromosomes.sort();
+
+}
+void    Genetic::localCrossover(int pos)
+{
+    Data g;
+    g.resize(myProblem->getDimension());
+    for(int iters=1;iters<=100;iters++)
+    {
+         int gpos=rand() % chromosomeCount;
+         int cutpoint=rand() % population[0].size();
+         for(int j=0;j<g.size();j++) g[j]=population[pos][j];
+        double alpha = rand() *1.0/RAND_MAX;
+        alpha = -0.5 + 2.0 * alpha;//[-0.5,1.5]
+        g[cutpoint]=alpha * population[pos][cutpoint]+
+                (1.0-alpha)*population[gpos][cutpoint];
+    double f=myProblem->statFunmin(g);
+    if(f<fitnessArray[pos])
+    {
+        for(int j=0;j<(int)g.size();j++) population[pos][j]=g[j];
+        fitnessArray[pos]=f;
+        printf("Crossover. New local[%d]=%10.5lf\n",pos,f);
+    }
+    else
+    {
+        g[cutpoint]=alpha * population[gpos][cutpoint]+
+                (1.0-alpha)*population[pos][cutpoint];
+        double f=myProblem->statFunmin(g);
+        if(f<fitnessArray[pos])
+        {
+
+            for(int j=0;j<(int)g.size();j++) population[pos][j]=g[j];
+            fitnessArray[pos]=f;
+            printf("Crossover. New local[%d]=%10.5lf\n",pos,f);
+
+        }
+    }
+    }
+}
+
+void    Genetic::localMutate(int pos)
+{
+
+}
+
+void    Genetic::localSiman(int pos)
+{
+
+}
+
+void    Genetic::LocalSearch(int pos)
+{
+    if(localSearchMethod == LOCAL_CROSS)
+        localCrossover(pos);
+    else
+    if(localSearchMethod == LOCAL_MUTATE)
+        localMutate(pos);
+    else
+    if(localSearchMethod == LOCAL_SIMAN)
+        localSiman(pos);
 }
 
 void    Genetic::Crossover()
@@ -391,15 +462,11 @@ void    Genetic::Mutate()
 
 void    Genetic::done()
 {
-    Data xpoint;
-    double ypoint;
-   // chromosomes.sort();
-   // chromosomes.getPoint(0,xpoint,ypoint);
-   // ypoint = localSearch(xpoint);
     fitnessArray[0]=localSearch(population[0]);
     if(getParam("opt_debug").getValue()=="yes")
         printf("GENETIC. terminate: %lf \n",fitnessArray[0]);
 }
+
 Genetic::~Genetic()
 {
 

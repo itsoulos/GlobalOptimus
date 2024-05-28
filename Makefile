@@ -1255,7 +1255,6 @@ datafitting.o: datafitting.cpp MLMODELS/mlpproblem.h \
 		METHODS/simanmethod.h \
 		METHODS/usermethod.h \
 		METHODS/armadillo1.h \
-		METHODS/ofalgorithm.h \
 		METHODS/gwooptimizer.h \
 		OPTIMUS/statistics.h \
 		MLMODELS/functionalrbf.h
