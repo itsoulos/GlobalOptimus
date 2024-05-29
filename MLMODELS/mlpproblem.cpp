@@ -21,8 +21,6 @@ Data    MlpProblem::getSample()
       {
           double a = -0.01;
           double b = 0.01;
-          if(a<leftMargin) a= leftMargin;
-          if(b>rightMargin) b= rightMargin;
           for(int i=0;i<dimension;i++)
           {
               xx[i]=a+(b-a)*randomDouble();

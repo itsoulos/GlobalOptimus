@@ -69,11 +69,13 @@ void    Genetic::step()
     Mutate();
     if(generation%lsearchGens==0 &&  localSearchMethod!=LOCAL_NONE)
     {
+        LocalSearch(0);
         for(int i=0;i<lsearchItems;i++)
         {
             int pos = rand()  % population.size();
             LocalSearch(pos);
         }
+	Selection();
     }
 }
 
@@ -94,7 +96,7 @@ void    Genetic::showDebug()
 {
     double besty;
     besty = fitnessArray[0];
-     if(getParam("opt_debug").getValue()=="yes" )
+     if(getParam("opt_debug").getValue()=="yes" && generation%20==0)
     printf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg\n",
            generation,besty);
 }
@@ -238,24 +240,7 @@ void    Genetic::CalcFitnessArray()
                 fitnessArray[i]=localSearch(population[i]);
             }
         }
-        /*
-        Data x;
-        double y;
-        chromosomes.getPoint(i,x,y);
-
-        y = myProblem->statFunmin(x);
-        if(localsearchRate>0.0)
-        {
-            double r = rand()*1.0/RAND_MAX;
-            if(r<localsearchRate)
-            {
-                y = localSearch(x);
-            }
-        }
-        if(isnan(y) || isinf(y)) y = 1e+10;
-            chromosomes.replacePoint(i,x,y);
-    */
-}
+    }
 }
 
 void    Genetic::Selection()
@@ -288,30 +273,30 @@ void    Genetic::localCrossover(int pos)
     {
          int gpos=rand() % chromosomeCount;
          int cutpoint=rand() % population[0].size();
-         for(int j=0;j<g.size();j++) g[j]=population[pos][j];
+         for(int j=0;j<(int)g.size();j++) g[j]=population[pos][j];
         double alpha = rand() *1.0/RAND_MAX;
         alpha = -0.5 + 2.0 * alpha;//[-0.5,1.5]
         g[cutpoint]=alpha * population[pos][cutpoint]+
                 (1.0-alpha)*population[gpos][cutpoint];
+        if(!myProblem->isPointIn(g)) continue;
     double f=myProblem->statFunmin(g);
+
     if(f<fitnessArray[pos])
     {
-        for(int j=0;j<(int)g.size();j++) population[pos][j]=g[j];
+        population[pos][cutpoint]=g[cutpoint];
         fitnessArray[pos]=f;
-        printf("Crossover. New local[%d]=%10.5lf\n",pos,f);
     }
     else
     {
         g[cutpoint]=alpha * population[gpos][cutpoint]+
                 (1.0-alpha)*population[pos][cutpoint];
+        if(!myProblem->isPointIn(g)) continue;
         double f=myProblem->statFunmin(g);
         if(f<fitnessArray[pos])
         {
 
-            for(int j=0;j<(int)g.size();j++) population[pos][j]=g[j];
+            population[pos][cutpoint]=g[cutpoint];
             fitnessArray[pos]=f;
-            printf("Crossover. New local[%d]=%10.5lf\n",pos,f);
-
         }
     }
     }
@@ -319,7 +304,29 @@ void    Genetic::localCrossover(int pos)
 
 void    Genetic::localMutate(int pos)
 {
-
+   int s = myProblem->getDimension();
+   for(int i=0;i<s;i++)
+   {
+       double gold = population[pos][i];
+       double delta = 0.05 * gold;
+       double direction = rand() % 2==1?1.0:-1.0;
+       double gnew = gold+direction * delta;
+       population[pos][i]=gnew;
+       if(!myProblem->isPointIn(population[pos]))
+       {
+           population[pos][i]=gold;
+           continue;
+       }
+       double f = myProblem->funmin(population[pos]);
+       if(f<fitnessArray[pos])
+       {
+           fitnessArray[pos]=f;
+       }
+       else
+       {
+           population[pos][i]=gold;
+       }
+   }
 }
 
 void    Genetic::localSiman(int pos)
@@ -463,7 +470,7 @@ void    Genetic::Mutate()
 void    Genetic::done()
 {
     fitnessArray[0]=localSearch(population[0]);
-    if(getParam("opt_debug").getValue()=="yes")
+    if(getParam("opt_debug").getValue()=="yes" )
         printf("GENETIC. terminate: %lf \n",fitnessArray[0]);
 }
 
