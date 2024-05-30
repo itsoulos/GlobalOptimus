@@ -1,5 +1,5 @@
 #include "uniformsampler.h"
-
+# include <QDebug>
 
 UniformSampler::UniformSampler(Problem *p)
     :ProblemSampler("uniform",p)
@@ -26,6 +26,7 @@ void    UniformSampler::sampleFromProblem(int N,Matrix &xsample,Data &ysample)
    {
        xpoint[i].resize(myProblem->getDimension());
        xpoint[i]=myProblem->getSample();
+    //   qDebug()<<"New sample "<<xpoint[i];
        ypoint[i]=myProblem->statFunmin(xpoint[i]);
    }
    xsample = xpoint;

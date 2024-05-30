@@ -308,7 +308,7 @@ void    Genetic::localMutate(int pos)
    for(int i=0;i<s;i++)
    {
        double gold = population[pos][i];
-       double delta = 0.05 * gold;
+       double delta = 0.05 * rand()*1.0/RAND_MAX*gold;
        double direction = rand() % 2==1?1.0:-1.0;
        double gnew = gold+direction * delta;
        population[pos][i]=gnew;
@@ -331,7 +331,76 @@ void    Genetic::localMutate(int pos)
 
 void    Genetic::localSiman(int pos)
 {
+    double T0=1e+8;
+    Data bestx;
+    double besty;
+    bestx = population[pos];
+    besty = fitnessArray[pos];
+    int i;
+    int k=1;
+    Data y;
+    const int neps = 100;
+    y.resize(bestx.size());
+    Data xpoint = population[pos];
+    double ypoint = fitnessArray[pos];
+    while(true)
+    {
+        for(i=1;i<=neps;i++)
+        {
+        double fy;
+        for(int j=0;j<bestx.size();j++)
+        y[j]=xpoint[j];
+    for(int j=0;j<10;j++)
+    {
+    int randPos = rand() % bestx.size();
+        double range = 10;
+        int direction = rand() % 2==1?1:-1;
+        int newValue =  y[randPos] + direction * rand()*1.0/RAND_MAX*range;
+        if(newValue<0) newValue = 0;
+    y[randPos]=newValue;
+    }
+        fy = myProblem->statFunmin(y);
 
+        if(isnan(fy) || isinf(fy)) continue;
+
+        if(fy<ypoint)
+        {
+            xpoint = y;
+            ypoint = fy;
+            if(ypoint<besty)
+            {
+                bestx = xpoint;
+                besty = ypoint;
+            }
+        }
+        else
+        {
+            double r = fabs((rand()*1.0)/RAND_MAX);
+            double ratio = exp(-(fy-ypoint)/T0);
+            double xmin = ratio<1?ratio:1;
+            if(r<xmin)
+            {
+                xpoint = y;
+                ypoint = fy;
+                if(ypoint<besty)
+                {
+                    bestx = xpoint;
+                    besty = ypoint;
+                }
+            }
+        }
+        }
+        const double alpha = 0.8;
+
+        T0 =T0 * pow(alpha,k);
+        k=k+1;
+        if(T0<=1e-6) break;
+       // printf("Iteration: %4d Temperature: %20.10lg Value: %20.10lg\n",
+         //      k,T0,besty);
+
+    }
+    population[pos]=bestx;
+    fitnessArray[pos]=besty;
 }
 
 void    Genetic::LocalSearch(int pos)

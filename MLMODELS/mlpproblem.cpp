@@ -1,5 +1,5 @@
 #include "mlpproblem.h"
-
+# include <QDebug>
 MlpProblem::MlpProblem()
     :Problem(1)
 {
@@ -11,12 +11,14 @@ MlpProblem::MlpProblem()
 
 Data    MlpProblem::getSample()
 {
+
       //init weights
       Data xx;
       xx.resize(dimension);
       double leftMargin = getParam("mlp_leftmargin").getValue().toDouble();
       double rightMargin = getParam("mlp_rightmargin").getValue().toDouble();
       QString initmethod = getParam("mlp_initmethod").getValue();
+
       if(initmethod == "smallvalues")
       {
           double a = -0.01;
