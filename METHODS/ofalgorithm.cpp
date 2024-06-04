@@ -3,10 +3,10 @@
 
 
 OFAlgorithm::OFAlgorithm() {
-    addParam(Parameter("ofa_count","200","Number of chromosomes"));
+    addParam(Parameter("ofa_count","500","Number of chromosomes"));
     addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("ofa_lrate","0.05","Localsearch rate"));
-    addParam(Parameter("ofa_iters","30","Number of iters"));
+    addParam(Parameter("ofa_lrate","0.005","Localsearch rate"));
+    addParam(Parameter("ofa_iters","100","Number of iters"));
     addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
@@ -94,7 +94,7 @@ void OFAlgorithm::CalcFitnessArray()
     for(int i=0;i<N;i++)
     {
 
-
+        fitness[i]=myProblem->statFunmin(population[i]);
         if(localsearchRate>0.0)
         {
             double r = rand()*1.0/RAND_MAX;
@@ -194,12 +194,13 @@ void OFAlgorithm::UpdatePopulation() {
 
     double c = 0.5;
 // Στη συνάρτηση Step() εκτελούνται τα βήματα του αλγορίθμου
-void OFAlgorithm::Step() {
+void OFAlgorithm::step() {
     generation++;
     CalcFitnessArray();
     vector<double>MergeFitness;
     for (int i = 0; i < N; ++i) {
-        MergeFitness.push_back(evaluate(population[i], bestFitness));
+        MergeFitness.push_back(fitness[i]);
+        //MergeFitness.push_back(evaluate(population[i], bestFitness));
         QOP.push_back(CalculateQOS(population[i], c, N));
     }
 
@@ -217,18 +218,11 @@ void OFAlgorithm::Step() {
                 fitness[i] = newFitness;
             }
         } else {
-            population[i] = myProblem->getSample();
-            fitness[i] = evaluate(population[i], bestFitness);
+           /* population[i] = myProblem->getSample();
+            fitness[i] = evaluate(population[i], bestFitness);*/
         }
     }
 
-    if (terminated()) {
-        printf("Best Solution: ");
-        for (int i = 0; i < D; ++i) {
-            printf("%lf ", population[0][i]);
-        }
-
-    }
 }
 
 
@@ -245,7 +239,7 @@ void OFAlgorithm::CalculateFitness() {
 vector<double> OFAlgorithm::CalculateQOS(const vector<double>& xo, double c, int N) {
     vector<double> xq(N);
     for (int i = 0; i < N; ++i) {
-        xq[i] = c * rand() + (1 - c) * xo[i];
+        xq[i] = c * rand()*1.0/RAND_MAX + (1 - c) * xo[i];
     }
     return xq;
 }
@@ -272,6 +266,9 @@ vector<vector<double>>  OFAlgorithm::selectOptimalSolutions(const vector<vector<
 bool OFAlgorithm::terminated() {
     double besty;
     besty = fitness[0];
+    for(int i=0;i<fitness.size();i++)
+	    if(fitness[i]<besty) besty = fitness[i];
+    printf("iter = %d  besty = %lf maxGenerations = %d \n",generation,besty,maxGenerations);
     if(generation>=maxGenerations) return true;
     if(terminationMethod=="doublebox")
         return doubleBox.terminate(besty);
@@ -283,7 +280,18 @@ bool OFAlgorithm::terminated() {
 
 void OFAlgorithm:: done()
 {
-    fitness[0]=localSearch(population[0]);
+	int bestindex=0;
+    double besty;
+    besty = fitness[0];
+    for(int i=0;i<fitness.size();i++)
+    {
+	    if(fitness[i]<besty)
+	    {
+		    besty = fitness[i];
+		    bestindex = i;
+	    }
+    }
+    besty = localSearch(population[bestindex]);
     if(getParam("opt_debug").getValue()=="yes")
-        printf("GENETIC. terminate: %lf \n",fitness[0]);
+        printf("OFA. terminate: %lf \n",besty);
 }

@@ -40,7 +40,7 @@ public:
     bool BetterSolution(double fitness_xt, double fitness_xt1, int iters);
     bool CheckFeasibility(const vector<double>& solution);
     void CalcFitnessArray();
-    virtual void Step();
+    virtual void step();
     virtual void   done();
     virtual bool terminated();
     void Selection();
