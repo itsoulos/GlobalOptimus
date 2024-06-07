@@ -3,10 +3,9 @@
 
 
 OFAlgorithm::OFAlgorithm() {
-    addParam(Parameter("ofa_count","500","Number of chromosomes"));
+    addParam(Parameter("ofa_count","200","Number of chromosomes"));
     addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("ofa_lrate","0.005","Localsearch rate"));
-    addParam(Parameter("ofa_iters","100","Number of iters"));
+    addParam(Parameter("ofa_lrate","0.0005","Localsearch rate"));
     addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
@@ -19,7 +18,6 @@ void OFAlgorithm::init()
     maxGenerations=getParam("ofa_maxiters").getValue().toInt();
     localsearchRate=getParam("ofa_lrate").getValue().toDouble();
     terminationMethod=getParam("gen_termination").getValue();
-    iters=getParam("ofa_iters").getValue().toInt();
     generation=0;
 
     population.resize(N);
@@ -205,7 +203,8 @@ void OFAlgorithm::step() {
     }
 
     vector<vector<double>> MergePopulation = selectOptimalSolutions(population, QOP);
-    double K_t = calculateK(iters, maxGenerations);
+    double K_t = calculateK(generation, maxGenerations);
+    int out = 0;
     for (int i = 0; i < N; ++i) {
         vector<double> newX = calculateChildren( MergePopulation[i],  MergePopulation[0], K_t, D);
         bool feasible = CheckFeasibility(newX);
@@ -213,15 +212,17 @@ void OFAlgorithm::step() {
         if (feasible) {
             double newFitness = evaluate(newX, bestFitness);
 
-            if (BetterSolution(fitness[i], newFitness, iters)) {
+            if (BetterSolution(fitness[i], newFitness, generation)) {
                 population[i] = newX;
                 fitness[i] = newFitness;
             }
         } else {
+            out++;
            /* population[i] = myProblem->getSample();
             fitness[i] = evaluate(population[i], bestFitness);*/
         }
     }
+    printf("out of range percentage %.2lf%%\n",out *100.0/N);
 
 }
 
