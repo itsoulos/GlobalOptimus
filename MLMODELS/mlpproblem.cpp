@@ -21,8 +21,8 @@ Data    MlpProblem::getSample()
 
       if(initmethod == "smallvalues")
       {
-          double a = -0.01;
-          double b = 0.01;
+          double a = -10;
+          double b = 10;
           for(int i=0;i<dimension;i++)
           {
               xx[i]=a+(b-a)*randomDouble();

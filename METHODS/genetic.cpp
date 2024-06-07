@@ -350,14 +350,15 @@ void    Genetic::localSiman(int pos)
         double fy;
         for(int j=0;j<bestx.size();j++)
         y[j]=xpoint[j];
-    for(int j=0;j<10;j++)
+    for(int j=0;j<30;j++)
     {
     int randPos = rand() % bestx.size();
-        double range = 10;
+        double range = 0.1;
+	double old = y[randPos];
         int direction = rand() % 2==1?1:-1;
-        int newValue =  y[randPos] + direction * rand()*1.0/RAND_MAX*range;
-        if(newValue<0) newValue = 0;
+        double newValue =  y[randPos] + direction * rand()*1.0/RAND_MAX*range*y[randPos];
     y[randPos]=newValue;
+    if(!myProblem->isPointIn(y)) y[randPos]=old;
     }
         fy = myProblem->statFunmin(y);
 
@@ -394,9 +395,11 @@ void    Genetic::localSiman(int pos)
 
         T0 =T0 * pow(alpha,k);
         k=k+1;
-        if(T0<=1e-6) break;
-       // printf("Iteration: %4d Temperature: %20.10lg Value: %20.10lg\n",
-         //      k,T0,besty);
+        if(T0<=1e-6) {
+        //printf("Iteration: %4d Temperature: %20.10lg Value: %20.10lg\n",
+          //     k,T0,besty);
+		break;
+	}
 
     }
     population[pos]=bestx;

@@ -58,14 +58,15 @@ double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 void    RbfProblem::setParameters(Data &x)
 {
     int icount =0;
-    weight.resize(5);
-    centers.resize(5);
-    for(int i=0;i<centers.size();i++)
-        centers[i].resize(1);
-    variances.resize(5);
-    lastGaussianValues.resize(5);
+    int nodes        = getParam("rbf_nodes").getValue().toInt();
     int d = trainDataset==NULL?1:trainDataset->dimension();
-    int nodes = weight.size();
+
+    weight.resize(nodes);
+    centers.resize(nodes);
+    for(int i=0;i<centers.size();i++)
+        centers[i].resize(d);
+    variances.resize(nodes);
+    lastGaussianValues.resize(nodes);
     for(int i=0;i<nodes;i++)
     {
         for(int j=0;j<d;j++)
@@ -116,7 +117,7 @@ void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
     int d = trainDataset->dimension();
     for(int j=0;j<d;j++)
     {
-        g[j]=val * 2.0 * (x[j]-centers[index][j])*(-1.0)*(-1.0/(variances[index]*variances[index]));
+        g[j]=(-1.0)*val * 2.0 * (x[j]-centers[index][j])*(1.0/(variances[index]*variances[index]));
     }
 }
 
@@ -173,10 +174,10 @@ Data    RbfProblem::gradient(Data &x)
         for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
-    return g;
+   // return g;
 
-    //Data g;
-    //g.resize(dimension);
+    Data g2;
+    g2.resize(dimension);
     for(int i=0;i<dimension;i++)
     {
         double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -184,7 +185,19 @@ Data    RbfProblem::gradient(Data &x)
         double v1=funmin(x);
         x[i]-=2.0 *eps;
         double v2=funmin(x);
-        g[i]=(v1-v2)/(2.0 * eps);
+        g2[i]=(v1-v2)/(2.0 * eps);
+        if(fabs(g[i]-g2[i])>1e-3)
+        {
+            g[i]=g2[i];/*
+            printf("DIFFERENCE[%4d]=%.8lf\n",i,fabs(g[i]-g2[i]));
+            if(i<nodes*d)
+                printf("Center difference \n");
+            else
+                if(i>=nodes *d && i<nodes*d+nodes)
+                printf("Varince difference \n");
+            else
+                printf("Weight difference\n");*/
+        }
         x[i]+=eps;
     }
     return g;
@@ -389,6 +402,12 @@ void    RbfProblem::init(QJsonObject &px)
     {
         left[icount]= 0.01;//-scale_factor *dmax;
         right[icount]= scale_factor * dmax;
+        if(right[icount]<left[icount])
+        {
+            double t = right[icount];
+            right[icount]=left[icount];
+            left[icount]=t;
+        }
         //if(right[icount]<0.001) right[icount]=0.001;
         icount++;
     }
