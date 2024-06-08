@@ -1,11 +1,11 @@
 #include "ofalgorithm.h"
-#include <algorithm>
+# include <METHODS/gradientdescent.h>
 
 
 OFAlgorithm::OFAlgorithm() {
     addParam(Parameter("ofa_count","200","Number of chromosomes"));
     addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("ofa_lrate","0.0005","Localsearch rate"));
+    addParam(Parameter("ofa_lrate","0.0000","Localsearch rate"));
     addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
@@ -37,7 +37,7 @@ void OFAlgorithm::init()
 double OFAlgorithm::evaluate( vector<double>& solution, double& bestFitness) {
     double fitness = myProblem->statFunmin(solution);
 
-    // έλεγχος καλύτερης φυσικής κατάστασης
+    // έλεγχος  bestFitness
     if (fitness < bestFitness) {
         bestFitness = fitness;
     }
@@ -104,13 +104,13 @@ void OFAlgorithm::CalcFitnessArray()
     }
 }
 
-bool OFAlgorithm::BetterSolution(double fitness_xt, double fitness_xt1, int iters) {
+bool OFAlgorithm::BetterSolution(double fitness_xt, double fitness_xt1, int generation) {
     // Υπολογισμός της τυχαίας τιμής λάμδα
     double lambda = (double) rand() / RAND_MAX;
 
     // Υπολογισμός των τιμών των εξισώσεων (2)
-    double eq1 = lambda * fitness_xt1 / (1 + (iters + 1) * lambda);
-    double eq2 = fitness_xt / (iters);
+    double eq1 = lambda * fitness_xt1 / (1 + (generation + 1) * lambda);
+    double eq2 = fitness_xt / (generation);
 
     // Επιστροφή true αν η λύση x1 είναι καλύτερη από την x2, αλλιώς επιστροφή false
     return eq1 < eq2;
@@ -118,15 +118,15 @@ bool OFAlgorithm::BetterSolution(double fitness_xt, double fitness_xt1, int iter
 
 
 // Υπολογισμός του παράγοντα K(t)
-double OFAlgorithm::calculateK(int iters, int maxiters) {
-    return cos(M_PI / 2 * iters / maxiters);
+double OFAlgorithm::calculateK(int generation, int  maxGenerations) {
+    return cos(M_PI / 2 * generation /  maxGenerations);
 }
 
 // Υπολογισμός νέας λύσης xt+1
 vector<double> OFAlgorithm::calculateChildren(const vector<double>& xt, const vector<double>& x_best, double K_t, int D) {
     vector<double> xt_1(D); // Νέα λύση xt+1
-    double r1 = static_cast<double> (rand()) / static_cast<double> (RAND_MAX); // Τυχαίος αριθμός r1
-    double r2 = static_cast<double> (rand()) / static_cast<double> (RAND_MAX); // Τυχαίος αριθμός r2
+    double r1 = rand() / (double)RAND_MAX; // Τυχαίος αριθμός r1
+    double r2 = rand() / (double)RAND_MAX; // Τυχαίος αριθμός r2
 
 
     // Υπολογισμός της νέας λύσης xt+1 με βάση το Eq. (6)
@@ -190,40 +190,71 @@ void OFAlgorithm::UpdatePopulation() {
     return true;
 }
 
-    double c = 0.5;
+    // Επιλέγει έναν τυχαίο αριθμό στο διάστημα [a, b]
+    //double OFAlgorithm::randomInRange() {
+        // Ρύθμιση του seed της rand() με τη χρήση του τρέχοντος χρόνου
+       // srand(time(0));
+       // for (int i = 0; i < N; ++i) {
+           // for (int j = 0; j < D; ++j) {
+         //       if (population[i][j] < a[j] || population[i][j] > b[j]) {
+                //return population[i][j] = a[j] + (b[j] - a[j]) * (rand() / (double)RAND_MAX);
+//
+    //}
+           // }
+       // }
+    //}
+
+
+
 // Στη συνάρτηση Step() εκτελούνται τα βήματα του αλγορίθμου
 void OFAlgorithm::step() {
     generation++;
     CalcFitnessArray();
-    vector<double>MergeFitness;
+    vector<double> MergeFitness;
     for (int i = 0; i < N; ++i) {
         MergeFitness.push_back(fitness[i]);
-        //MergeFitness.push_back(evaluate(population[i], bestFitness));
-        QOP.push_back(CalculateQOS(population[i], c, N));
+        QOP.push_back(CalculateQOS(population[i], N));
     }
 
     vector<vector<double>> MergePopulation = selectOptimalSolutions(population, QOP);
     double K_t = calculateK(generation, maxGenerations);
-    int out = 0;
-    for (int i = 0; i < N; ++i) {
-        vector<double> newX = calculateChildren( MergePopulation[i],  MergePopulation[0], K_t, D);
-        bool feasible = CheckFeasibility(newX);
+    for (int i = 0; i < MergePopulation.size(); ++i) {
+        vector<double> newX;
+        bool feasible = false;
 
-        if (feasible) {
-            double newFitness = evaluate(newX, bestFitness);
 
-            if (BetterSolution(fitness[i], newFitness, generation)) {
-                population[i] = newX;
-                fitness[i] = newFitness;
+        //  δημιουργούμε νέες λύσεις μέχρι να βρούμε μια εφικτή
+        while (!feasible) {
+            newX = calculateChildren(MergePopulation[i], MergePopulation[0], K_t, D);
+            feasible = CheckFeasibility(newX);
+            if (!feasible) 
+	    {
+                // Αν η λύση δεν είναι εφικτή, χρησιμοποιούμε το GradientDescent
+                GradientDescent* local = new GradientDescent();
+                local->setProblem(myProblem);
+                local->setParam("opt_debug", "no");
+                ((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
+                   ((GradientDescent*)local)->setParam("gd_maxiters","3");
+                double y = myProblem->statFunmin(MergePopulation[i]);
+                ((GradientDescent*)local)->setPoint(MergePopulation[i], y);
+                local->solve();
+                ((GradientDescent*)local)->getPoint(newX, y);
+            feasible = CheckFeasibility(newX);
+	    if(feasible)
+	    printf("new point %lf \n",y);
+	    	delete local;
+
+
             }
-        } else {
-            out++;
-           /* population[i] = myProblem->getSample();
-            fitness[i] = evaluate(population[i], bestFitness);*/
+        }
+
+        double newFitness = evaluate(newX, bestFitness);
+
+        if (BetterSolution(fitness[i], newFitness, generation)) {
+            population[i] = newX;
+            fitness[i] = newFitness;
         }
     }
-    printf("out of range percentage %.2lf%%\n",out *100.0/N);
-
 }
 
 
@@ -237,11 +268,22 @@ void OFAlgorithm::CalculateFitness() {
 
 
 //Υπολογισμός quasi-opposite ( οιονεί αντίθετη λύση) με βάση της εξίσωση Eq. (3)
-vector<double> OFAlgorithm::CalculateQOS(const vector<double>& xo, double c, int N) {
-    vector<double> xq(N);
+vector<double> OFAlgorithm::CalculateQOS(vector<double>& xi, int N) {
+ vector<double> xq(N);
+ vector<double> c(N);
+ vector<double> xo(N);
+
+
+
     for (int i = 0; i < N; ++i) {
-        xq[i] = c * rand()*1.0/RAND_MAX + (1 - c) * xo[i];
+        c[i] = (a[i] + b[i]) / 2.0;
     }
+
+    for (int i = 0; i < N; ++i) {
+        xo[i] = a[i] + b[i] - xi[i];
+        xq[i] = c[i] * rand() / (double)RAND_MAX + (1 - c[i]) * xo[i];
+    }
+
     return xq;
 }
 
@@ -267,7 +309,7 @@ vector<vector<double>>  OFAlgorithm::selectOptimalSolutions(const vector<vector<
 bool OFAlgorithm::terminated() {
     double besty;
     besty = fitness[0];
-    for(int i=0;i<fitness.size();i++)
+    for(unsigned long i=0;i<fitness.size();i++)
 	    if(fitness[i]<besty) besty = fitness[i];
     printf("iter = %d  besty = %lf maxGenerations = %d \n",generation,besty,maxGenerations);
     if(generation>=maxGenerations) return true;
@@ -284,7 +326,7 @@ void OFAlgorithm:: done()
 	int bestindex=0;
     double besty;
     besty = fitness[0];
-    for(int i=0;i<fitness.size();i++)
+    for(unsigned long i=0;i<fitness.size();i++)
     {
 	    if(fitness[i]<besty)
 	    {
