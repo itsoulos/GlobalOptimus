@@ -26,10 +26,14 @@ private:
     int similarityCount;
     double bestFitness;
     vector<vector<double>> QOP;
+    int M;
+    vector<vector<double>>  MergePopulation;
     int generation;
     vector<double> CalculateQOS(vector<double>& xi, int N);
     vector<double> calculateChildren(const vector<double>& xt, const vector<double>& x_best, double K_t, int D);
-    vector<vector<double>> selectOptimalSolutions(const vector<vector<double>>& P, const vector<vector<double>>& QOP);
+    vector<vector<double>> selectOptimalSolutions(const vector<vector<double>>& P,
+
+                                                  const vector<vector<double>>& QOP);
     vector<vector<double>> newPopulation;
 public:
     OFAlgorithm();
