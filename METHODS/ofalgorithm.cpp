@@ -29,8 +29,8 @@ void OFAlgorithm::init()
     sampleFromProblem(N,population,fitness);
     a = myProblem->getLeftMargin();
     b = myProblem->getRightMargin();
+    /** GIANNIS: Auto den xreiazetai to kanei i step () **/
    // population = selectOptimalSolutions(population, QOP);
-    CalcFitnessArray();
 }
 
 
@@ -139,99 +139,28 @@ vector<double> OFAlgorithm::calculateChildren(const vector<double>& xt, const ve
     return xt_1;
 }
 
-// Ενημέρωση πληθυσμού με βάση τη σύγκριση των παιδιών με τους γονείς
-void OFAlgorithm::updatePopulationByComparison(vector<vector<double>>& population, vector<double>& fitness,  vector<vector<double>>& children) {
-    for (size_t i = 0; i < population.size(); ++i) {
-        // Συγκριση παιδί με γονέα
-        if (children[i] < population[i]) {
-            //Εάν το παιδί είναι καλύτερο, αντικαταστήστε τον γονέα με το παιδί
-            population[i] = children[i];
-            fitness[i] = myProblem->statFunmin(children[i]);
-        }
-
-    }
-}
-
-
-// απόγονοι
-void OFAlgorithm::ChildrenArray() {
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < D; ++j) {
-            if (population[i][j] < a[j] || population[i][j] > b[j]) {
-                population[i][j] = a[j] + (b[j] - a[j]) * (rand() / (double)RAND_MAX);
-            }
-        }
-    }
-}
-
-// ενημέρωση πληθυσμού
-void OFAlgorithm::UpdatePopulation() {
-    double bestFitness = fitness[0];
-    for (int i = 0; i < N; ++i) {
-        double fitness_children = evaluate(population[i], bestFitness);
-        if (fitness_children < fitness[i]) {
-            fitness[i] = fitness_children;
-        }
-    }
-
-    // Εκτύπωση της bestSolution
-    printf("Best Solution: ");
-    for (int i = 0; i < D; ++i) {
-        printf("%lf ", population[0][i]);
-    }
-
-}
-
-// Έλεγχος της εφικτότητας των νέων λύσεων και ανανέωση του πληθυσμού
-bool OFAlgorithm::CheckFeasibility(const vector<double>& solution) {
-    for (int i = 0; i < D; ++i) {
-        if (solution[i] < a[i] || solution[i] > b[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Επιλέγει έναν τυχαίο αριθμό στο διάστημα [a, b]
-//double OFAlgorithm::randomInRange() {
-// Ρύθμιση του seed της rand() με τη χρήση του τρέχοντος χρόνου
-// srand(time(0));
-// for (int i = 0; i < N; ++i) {
-// for (int j = 0; j < D; ++j) {
-//       if (population[i][j] < a[j] || population[i][j] > b[j]) {
-//return population[i][j] = a[j] + (b[j] - a[j]) * (rand() / (double)RAND_MAX);
-//
-//}
-// }
-// }
-//}
-
-
-
 // Στη συνάρτηση Step() εκτελούνται τα βήματα του αλγορίθμου
 void OFAlgorithm::step() {
     generation++;
-  //  CalcFitnessArray();
+    /** GIANNIS: Auto den xreiazetai. Ginetai mesa sto loop **/
+   // CalcFitnessArray();
     vector<double> MergeFitness;
-        for(int j=0;j<M;j++) {
-        MergeFitness.push_back(fitness[j]);
-        QOP.push_back(CalculateQOS(population[j], M));
+    for(int i = 0; i <N; i++) {
+        MergeFitness.push_back(fitness[i]);
+        QOP.push_back(CalculateQOS(population[i], N));
     }
 
-    vector<vector<double>> MergePopulation = selectOptimalSolutions(
-                population,QOP);
+    vector<vector<double>> MergePopulation = selectOptimalSolutions(population, QOP);
     double K_t = calculateK(generation, maxGenerations);
     for (int j = 0; j < M; ++j) {
-        vector<double> newX;
+        vector<double> newX = MergePopulation[j];  // Αρχική τιμή από MergePopulation
         bool feasible = false;
 
 
-        //  δημιουργούμε νέες λύσεις μέχρι να βρούμε μια εφικτή
         while (!feasible) {
             newX = calculateChildren(MergePopulation[j], MergePopulation[0], K_t, D);
-            feasible = CheckFeasibility(newX);
+            feasible = myProblem->isPointIn(newX);
             if (!feasible) {
-                // Αν η λύση δεν είναι εφικτή, χρησιμοποιούμε το GradientDescent
                 GradientDescent* local = new GradientDescent();
                 local->setProblem(myProblem);
                 local->setParam("opt_debug", "no");
@@ -241,35 +170,20 @@ void OFAlgorithm::step() {
                 ((GradientDescent*)local)->setPoint(MergePopulation[j], y);
                 local->solve();
                 ((GradientDescent*)local)->getPoint(newX, y);
-
                 delete local;
-
+                feasible = myProblem->isPointIn(newX);  // Έλεγχος μετά την GradientDescent
             }
         }
 
+        /** GIANNIS. auto edo na mpei se ena tyxaio simio ston plithismo
+         *  me ypsiloteri timi **/
         double newFitness = evaluate(newX, bestFitness);
 
-        if (BetterSolution(fitness[j], newFitness, generation)) {
+        if (newFitness<fitness[j]) {
             population[j] = newX;
             fitness[j] = newFitness;
-            if(localsearchRate>0.0)
-            {
-                double r = rand()*1.0/RAND_MAX;
-                if(r<localsearchRate)
-                {
-                    fitness[j]=localSearch(population[j]);
-                }
-            }
+            //GIANNIS. local search here with probability
         }
-    }
-}
-
-
-// Υπολογισμός των τιμών καταλληλότητας για τον αρχικό πληθυσμό
-void OFAlgorithm::CalculateFitness() {
-    double bestFitness = fitness[0];
-    for (int i = 0; i < N; ++i) {
-        fitness[i] = evaluate(population[i], bestFitness);
     }
 }
 
@@ -294,10 +208,7 @@ vector<double> OFAlgorithm::CalculateQOS(vector<double>& xi, int N) {
     return xq;
 }
 
-vector<vector<double>>  OFAlgorithm::selectOptimalSolutions(
-        const vector<vector<double>>& P,
-
-        const vector<vector<double>>& QOP) {
+vector<vector<double>>  OFAlgorithm::selectOptimalSolutions(const vector<vector<double>>& P, const vector<vector<double>>& QOP) {
     // Συνδυασμός λύσεων από P και QOP
     vector<vector<double>>  MergePopulation = P;
     MergePopulation.insert( MergePopulation.end(), QOP.begin(), QOP.end());
@@ -322,7 +233,8 @@ bool OFAlgorithm::terminated() {
     for(unsigned long i=0;i<fitness.size();i++)
         if(fitness[i]<besty) besty = fitness[i];
     if(getParam("opt_debug").getValue()=="yes")
-        printf("OFA. iter = %d  besty = %lf maxGenerations = %d \n",generation,besty,maxGenerations);
+        printf("OFA. iter = %d  besty = %lf maxGenerations = %d \n",
+               generation,besty,maxGenerations);
     if(generation>=maxGenerations) return true;
     if(terminationMethod=="doublebox")
         return doubleBox.terminate(besty);
