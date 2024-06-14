@@ -156,7 +156,7 @@ void FunctionalRbf::Kmeans(double * data_vectors,
     for(i=0; i<K; i++)
     {
         do{
-            random_centers[i]=(int)((m-1) * drand48());
+            random_centers[i]=(int)((m-1) * rand()*1.0/RAND_MAX);
         }while(random_centers[i]>m);
 
     }

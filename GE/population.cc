@@ -288,7 +288,7 @@ void	Population::replaceWorst()
 	for(int i=0;i<genome_size;i++)
 	{
 		double gamma;
-		gamma=-0.5+2.0*drand48();
+        gamma=-0.5+2.0*rand()*1.0/RAND_MAX;
 		xtrial[i]=(int)(fabs((1.0+gamma)*genome[0][i]-gamma*genome[randpos][i]));
 	}
 	double ftrial = fitness(xtrial);

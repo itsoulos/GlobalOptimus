@@ -90,22 +90,22 @@ void    GWOoptimizer::step()
         for (int j=0;j<dim;j++)
         {
             //	cout<<" Inside for loop 3.1 \n";
-            double r1=drand48();  //r1 is random number in [0,1]
-            double r2=drand48();  //r1 is random number in [0,1]
+            double r1=rand()*1.0/RAND_MAX;
+            double r2=rand()*1.0/RAND_MAX;
             double A1=2*a*r1-a; //Equation (3.3)
             double C1=2*r2; //Equation (3.4)
             double D_alpha=fabs(C1*Alpha_pos[j]-Positions[i][j]);//Equation (3.5)-part 1
             double X1=Alpha_pos[j]-A1*D_alpha; //Equation (3.6)-part 1
 
-            r1=drand48();
-            r2=drand48();
+            r1=rand()*1.0/RAND_MAX;
+            r2=rand()*1.0/RAND_MAX;
             double A2=2*a*r1-a; //Equation (3.3)
             double C2=2*r2; //Equation (3.4)
             double D_beta=fabs(C2*Beta_pos[j]-Positions[i][j]); //Equation (3.5)-part 2
             double X2=Beta_pos[j]-A2*D_beta; //Equation (3.6)-part 2
 
-            r1=drand48();
-            r2=drand48();
+            r1=rand()*1.0/RAND_MAX;
+            r2=rand()*1.0/RAND_MAX;
             double A3=2*a*r1-a; //Equation (3.3)
             double C3=2*r2; //Equation (3.4)
             double D_delta=fabs(C3*Delta_pos[j]-Positions[i][j]); //Equation (3.5)-part 3
