@@ -39,6 +39,7 @@
 # include <PROBLEMS/salkin.h>
 # include <PROBLEMS/hess.h>
 # include <PROBLEMS/fuch1.h>
+# include <OPTIMUS/optimizer.h>
 class ProblemLoader
 {
 private:
@@ -46,6 +47,7 @@ private:
     QJsonObject myParams;
     QStringList problemList;
     QString selectedProblem;
+
 public:
     ProblemLoader();
     QStringList     getProblemList() const;

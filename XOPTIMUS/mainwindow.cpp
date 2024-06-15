@@ -26,8 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
     empty->setFixedHeight(3*this->height()/100);
 
     problemLoader  = new ProblemLoader();
+    myMethod = NULL;
+    methodLoader   = new MethodLoader();
     srand(randomSeed);
-
+    myStat = NULL;
     //make menu
     problemMenu = new QMenu("PROBLEM");
     problemMenu->addAction("LOAD");
@@ -52,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(problemMenu,SIGNAL(triggered(QAction*)),this,SLOT(problemSlot(QAction*)));
     connect(methodMenu,SIGNAL(triggered(QAction*)),this,SLOT(methodSlot(QAction*)));
     connect(helpMenu,SIGNAL(triggered(QAction*)),this,SLOT(helpSlot(QAction*)));
+    watcher = new QFileSystemWatcher(this);
+    connect(watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChanged(QString)));
 }
 
 void    MainWindow::addMessage(QString message)
@@ -63,7 +67,30 @@ void    MainWindow::unload()
 {
     if(problemLoader!=NULL)
         delete problemLoader;
+    if(methodLoader!=NULL)
+        delete methodLoader;
+    if(myStat!=NULL)
+        delete myStat;
 }
+
+void    MainWindow::noProblemLoaded()
+{
+    QMessageBox::warning(this, tr("XOPTIMUS"),
+                                   tr("No problem loaded."),
+                                   QMessageBox::Ok
+                                  ,
+                                   QMessageBox::Ok);
+}
+
+void    MainWindow::noMethodLoaded()
+{
+    QMessageBox::warning(this, tr("XOPTIMUS"),
+                                   tr("No method loaded."),
+                                   QMessageBox::Ok
+                                  ,
+                                   QMessageBox::Ok);
+}
+
 void    MainWindow::problemSlot(QAction *action)
 {
     if(action->text()=="LOAD")
@@ -92,6 +119,8 @@ void    MainWindow::problemSlot(QAction *action)
     else
     if(action->text()=="TEST")
     {
+        if(myProblem == NULL) noProblemLoaded();
+        else
         addMessage(""+problemLoader->getProblemReport());
     }
     else
@@ -110,14 +139,7 @@ void    MainWindow::problemSlot(QAction *action)
     else
     if(action->text()=="PARAMS")
     {
-        if(myProblem == NULL)
-        {
-            QMessageBox::warning(this, tr("XOPTIMUS"),
-                                           tr("No problem loaded."),
-                                           QMessageBox::Ok
-                                          ,
-                                           QMessageBox::Ok);
-        }
+        if(myProblem == NULL) noProblemLoaded();
         else
         {
             ParameterDialog *d = new ParameterDialog(
@@ -146,13 +168,127 @@ void    MainWindow::problemSlot(QAction *action)
 
 void    MainWindow::methodSlot(QAction  *action)
 {
+    if(action->text()=="LOAD")
+    {
+        if(myProblem == NULL) noProblemLoaded();
+        else
+        {
+            SelectMethodDialog *dialog = new
+                    SelectMethodDialog(
+                        methodLoader->getMethodList(),
+                        this
+                        );
+            dialog->setModal(true);
+            int d = dialog->exec();
+            if(d==QDialog::Accepted)
+            {
+                methodName =dialog->getSelectedMethod();
+                addMessage("Method loaded "+methodName);
+                myMethod=methodLoader->getSelectedMethod(methodName);
+            }
+        }
+    }
+    else
+    if(action->text()=="PARAMS")
+    {
+        if(myMethod == NULL) noMethodLoaded();
+        else
+        {
+            QJsonObject params = methodLoader->getMethodParams(
+                        methodName);
+            ParameterDialog *d = new ParameterDialog(
+                        params,
+                        methodName,this);
+            d->setModal(true);
+            int v=d->exec();
+            if(v == QDialog::Accepted)
+            {
+                QJsonObject params = d->getParams();
+                QJsonDocument doc(params);
+                QString strJson(doc.toJson(QJsonDocument::Compact));
+                addMessage("Method params "+strJson);
+                myMethod->setParams(params);
+            }
+        }
+    }
+    else
+    if(action->text()=="STATISTICS")
+    {
+        if(myStat==NULL) noMethodLoaded();
+        else
+            addMessage(myStat->getStatistics());
+    }
+    else
+    if(action->text()=="RUN")
+    {
+        if(myMethod == NULL) noMethodLoaded();
+        else
+        {
+             ntimes = 1;
+            bool ok;
+            int i = QInputDialog::getInt(this, tr("Enter number of times"),
+                                         tr("Number of times:"), ntimes, 0, 100, 1, &ok);
+            if(ok)
+            {
+                ntimes =i;
+                if(myStat!=NULL) delete myStat;
 
+                startRunning();
+            }
+        }
+    }
+}
+
+void    MainWindow::startRunning()
+{
+    menuBar()->setEnabled(false);
+    std_fd = dup(fileno(stdout));
+    freopen("xoptimus.txt","w",stdout);
+    watcher->addPath("xoptimus.txt");
+    myStat = new Statistics;
+    for(int t=1;t<=ntimes;t++)
+    {
+        srand(randomSeed+t);
+        myProblem->resetFunctionCalls();
+        myMethod->setProblem(myProblem);
+        QJsonObject p = problemLoader->getParams();
+        myProblem->init(p);
+        myMethod->solve();
+        myStat->addProblem(myProblem);
+    }
+    endRunning();
+}
+void    MainWindow::endRunning()
+{
+    myStat->printStatistics();
+    fflush(stdout);
+
+    ::close(std_fd);
+    menuBar()->setEnabled(true);
+
+}
+void    MainWindow::fileChanged(QString path)
+{
+    QFile f(path);
+    if( f.open(QIODevice::ReadOnly) ){
+        f.seek(0);
+        const QByteArray ba = f.readAll();
+        QString t(ba);
+        addMessage(t);
+    } else {
+        QMessageBox::critical(this,"stdout","can't open!");
+    }
 }
 
 void    MainWindow::helpSlot(QAction *action)
 {
 
 }
+void    MainWindow::closeEvent(QCloseEvent *event)
+{
+      unload();
+}
+
 MainWindow::~MainWindow()
 {
     unload();

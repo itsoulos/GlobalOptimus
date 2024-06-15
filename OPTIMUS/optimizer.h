@@ -44,6 +44,8 @@ public:
     void        addParam(Parameter p);
     void        setParam(QString name,QString value,QString help="");
     Parameter   getParam(QString name);
+    QJsonObject getParams() const;
+    void        setParams(QJsonObject &x);
     virtual void init();
     virtual void step();
     virtual bool terminated();

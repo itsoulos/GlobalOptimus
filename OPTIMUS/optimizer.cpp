@@ -21,6 +21,22 @@ Optimizer::Optimizer()
     addParam(Parameter("opt_kmeansamples","1000","Number of samples for k-means sampling"));
 }
 
+QJsonObject Optimizer::getParams() const
+{
+    return params;
+}
+
+void        Optimizer::setParams(QJsonObject &x)
+{
+    for(QString name : x.keys())
+    {
+        if(params.keys().contains(name))
+        {
+            params[name]=x[name];
+        }
+    }
+}
+
 void        Optimizer::setProblem(Problem *p)
 {
     myProblem = p;

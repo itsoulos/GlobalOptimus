@@ -37,6 +37,7 @@ public:
      * @brief printStatistics ektyponei stin othoni tis metriseis
      */
     void printStatistics();
+    QString getStatistics();
     ~Statistics();
 };
 

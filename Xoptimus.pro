@@ -70,6 +70,7 @@ SOURCES += \
     OPTIMUS/parameter.cpp \
     OPTIMUS/parameterlist.cpp \
     OPTIMUS/problem.cpp \
+    XOPTIMUS/methodloader.cpp \
     XOPTIMUS/parameterdialog.cpp \
     XOPTIMUS/problemloader.cpp \
     OPTIMUS/similarity.cpp \
@@ -117,6 +118,7 @@ SOURCES += \
     SAMPLER/rbfsampler.cpp \
     SAMPLER/triangularsampler.cpp \
     SAMPLER/uniformsampler.cpp \
+    XOPTIMUS/selectmethoddialog.cpp \
     XOPTIMUS/selectproblemdialog.cpp \
     XOPTIMUS/xoptimusmain.cpp \
     XOPTIMUS/mainwindow.cpp
@@ -173,6 +175,7 @@ HEADERS += \
     OPTIMUS/parameter.h \
     OPTIMUS/parameterlist.h \
     OPTIMUS/problem.h \
+    XOPTIMUS/methodloader.h \
     XOPTIMUS/parameterdialog.h \
     XOPTIMUS/problemloader.h \
     OPTIMUS/similarity.h \
@@ -221,6 +224,7 @@ HEADERS += \
     SAMPLER/triangularsampler.h \
     SAMPLER/uniformsampler.h \
     XOPTIMUS/mainwindow.h \
+    XOPTIMUS/selectmethoddialog.h \
     XOPTIMUS/selectproblemdialog.h
 
 # Default rules for deployment.

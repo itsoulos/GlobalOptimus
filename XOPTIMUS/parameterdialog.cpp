@@ -7,19 +7,20 @@ ParameterDialog::ParameterDialog(
 {
 
     QDesktopWidget wd;
-    WIDTH = wd.width()/2;
-    HEIGHT =wd.height()/2;
+    WIDTH = 3*wd.width()/4;
+    HEIGHT =3*wd.height()/4;
     problemName=name;
     obj = params;
     this->setWindowTitle("Problem settings for function "+name);
     this->setFixedSize(WIDTH,HEIGHT);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,wd.width()/2,wd.height()/2);
+    w1->setGeometry(0,0,WIDTH,HEIGHT);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
 
     table=new QTableWidget();
     l1->addWidget(table);
+    table->setFixedWidth(95 *WIDTH/100);
     QStringList m_TableHeader;
 
     m_TableHeader<<tr("Name")<<tr("Value")<<tr("Add/Update")<<tr("Remove");
@@ -30,6 +31,9 @@ ParameterDialog::ParameterDialog(
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
     table->setSelectionMode(QAbstractItemView::SingleSelection);
     table->setShowGrid(true);
+    table->horizontalHeader()->setStretchLastSection(true);
+
+
     updateTable();
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -93,7 +97,6 @@ void    ParameterDialog::updateTable()
 
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
-
 }
 
 void    ParameterDialog::okSlot()
