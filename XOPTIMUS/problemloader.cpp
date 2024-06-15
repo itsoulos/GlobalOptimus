@@ -11,6 +11,12 @@ ProblemLoader::ProblemLoader()
        <<"sinu"<<"test30n"<<"mlpproblem"<<"rbfproblem"
        <<"userproblem";
     myParams["dummy"]=1;
+    selectedProblem = "";
+}
+
+QString         ProblemLoader::getSelectedProblemName() const
+{
+    return selectedProblem;
 }
 
 QStringList     ProblemLoader::getProblemList() const
@@ -18,11 +24,53 @@ QStringList     ProblemLoader::getProblemList() const
     return problemList;
 }
 
+QString ProblemLoader::getProblemReport() const
+{
+    if(myProblem == NULL) return "";
+    QString ret ="\nProblem Name: "+selectedProblem+"\n";
+    //random sample
+    Data x = myProblem->getBestx();
+    if(x.size()==0)
+        x=myProblem->getSample();
+    double fx = myProblem->statFunmin(x);
+    QString header="============================================";
+    ret+="Current Point.\n"+header+"\n";
+    for(int i=0;i<(int)x.size();i++)
+    {
+        ret+="x["+QString::asprintf("%d",i)+"]="+
+                QString::asprintf("%10.5lf",x[i])+"\n";
+    }
+    ret+="F(X)="+QString::asprintf("%10.5lf\n",fx);
+    ret+="\nFunction Margins\n"+header+"\n";
+    Data xl = myProblem->getLeftMargin();
+    Data xr = myProblem->getRightMargin();
+    for(int i=0;i<(int)xl.size();i++)
+    {
+        ret+="Left["+QString::asprintf("%d",i)+"]="+
+                QString::asprintf("%8.4lf",xl[i])+
+                " Right["+QString::asprintf("%d",i)+"]="+
+                QString::asprintf("%8.4lf",xr[i])+"\n";
+    }
+    Data g = myProblem->gradient(x);
+    ret+="\nGradient info\n"+header+"\n";
+    for(int i=0;i<(int)g.size();i++)
+    {
+        ret+="Grad["+QString::asprintf("%d",i)+"]="+
+                QString::asprintf("%10.5lf",g[i])+"\n";
+    }
+    ret+="GRMS(X)="+QString::asprintf("%10.5lf",
+                                      myProblem->grms(x))+"\n";
+
+    return ret;
+}
+
 Problem         *ProblemLoader::loadProblem(QString name)
 {
+    selectedProblem="";
     if(myProblem!=NULL) delete myProblem;
-    if(problemList.contains("name")==false)
+    if(problemList.contains(name)==false)
         return NULL;
+    selectedProblem = name;
     if(name == "rastrigin")
         myProblem = new RastriginProblem();
     else
@@ -118,6 +166,8 @@ Problem         *ProblemLoader::loadProblem(QString name)
 void            ProblemLoader::setParams(QJsonObject &p)
 {
     myParams= p;
+    if(myProblem!=NULL)
+        myProblem->init(myParams);
 }
 
 QJsonObject     ProblemLoader::getParams() const

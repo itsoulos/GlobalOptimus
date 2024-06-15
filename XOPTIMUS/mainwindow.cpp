@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 {
     QDesktopWidget qd;
-    setFixedSize(4*qd.width()/5,4*qd.height()/5);
+    setFixedSize(4*qd.width()/5,7*qd.height()/8);
     setWindowTitle("XOPTIMUS");
     mainWidget=new QWidget;
     setCentralWidget(mainWidget);
@@ -15,7 +15,15 @@ MainWindow::MainWindow(QWidget *parent)
     mainWidget->setLayout(mainLayout);
     mainEdit=new QTextEdit;
     mainLayout->addWidget(mainEdit);
+    mainEdit->setGeometry(2*this->width()/100,
+                          2*this->height()/100,
+                          97*this->width()/100,
+                          95*this->height()/100);
     mainEdit->setReadOnly(true);
+    QLabel *empty = new QLabel();
+    empty->setText("  ");
+    mainLayout->addWidget(empty);
+    empty->setFixedHeight(3*this->height()/100);
 
     problemLoader  = new ProblemLoader();
     srand(randomSeed);
@@ -46,6 +54,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(helpMenu,SIGNAL(triggered(QAction*)),this,SLOT(helpSlot(QAction*)));
 }
 
+void    MainWindow::addMessage(QString message)
+{
+    mainEdit->append(message);
+}
+
 void    MainWindow::unload()
 {
     if(problemLoader!=NULL)
@@ -53,20 +66,75 @@ void    MainWindow::unload()
 }
 void    MainWindow::problemSlot(QAction *action)
 {
+    if(action->text()=="LOAD")
+    {
+        SelectProblemDialog *dialog = new SelectProblemDialog(
+                    problemLoader->getSelectedProblemName(),
+                    problemLoader->getProblemList(),
+                    this
+                    );
+        dialog->setModal(true);
+        dialog->exec();
+        if(dialog->getSelectedName()!="")
+        {
+            myProblem=problemLoader->loadProblem(dialog->getSelectedName());
+            addMessage("Load problem "+dialog->getSelectedName());
+            //clear params
+            QString s="{}";
+            QJsonDocument doc = QJsonDocument::fromJson(s.toUtf8());
+            QJsonObject obj=doc.object();
+            problemLoader->setParams(obj);
+
+        }
+        else
+            addMessage("None selected");
+    }
+    else
+    if(action->text()=="TEST")
+    {
+        addMessage(""+problemLoader->getProblemReport());
+    }
+    else
     if(action->text()=="SEED")
     {
         bool ok;
             int i = QInputDialog::getInt(this, tr("Enter seed value"),
                                          tr("Random Seed:"), randomSeed, 0, INT_MAX, 1, &ok);
         if(ok)
+        {
             randomSeed = i;
+            addMessage("Set seed "+QString::number(randomSeed));
+        }
         srand(randomSeed);
     }
     else
     if(action->text()=="PARAMS")
     {
-        ParameterDialog *d = new ParameterDialog("",this);
-        d->show();
+        if(myProblem == NULL)
+        {
+            QMessageBox::warning(this, tr("XOPTIMUS"),
+                                           tr("No problem loaded."),
+                                           QMessageBox::Ok
+                                          ,
+                                           QMessageBox::Ok);
+        }
+        else
+        {
+            ParameterDialog *d = new ParameterDialog(
+                        problemLoader->getParams(),
+                        problemLoader->getSelectedProblemName(),this);
+            d->setModal(true);
+            int v=d->exec();
+
+            if(v==QDialog::Accepted)
+            {
+                QJsonObject params = d->getParams();
+                QJsonDocument doc(params);
+                QString strJson(doc.toJson(QJsonDocument::Compact));
+                addMessage("Problem params: "+strJson);
+                problemLoader->setParams(params);
+            }
+        }
     }
     else
     if(action->text()=="QUIT")

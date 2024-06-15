@@ -1,19 +1,17 @@
 #include "parameterdialog.h"
 # include <QDesktopWidget>
-int WIDTH,HEIGHT;
-ParameterDialog::ParameterDialog(QString name,QWidget *parent)
+ParameterDialog::ParameterDialog(
+        QJsonObject params,
+        QString name,QWidget *parent)
     :QDialog(parent)
 {
 
     QDesktopWidget wd;
-WIDTH = wd.width()/2;
-HEIGHT =wd.height()/2;
+    WIDTH = wd.width()/2;
+    HEIGHT =wd.height()/2;
     problemName=name;
-    QString s="{}";
-    QJsonDocument doc = QJsonDocument::fromJson(s.toUtf8());
-
-    obj=doc.object();
-    this->setWindowTitle(tr("Problem settings"));
+    obj = params;
+    this->setWindowTitle("Problem settings for function "+name);
     this->setFixedSize(WIDTH,HEIGHT);
     QWidget *w1=new QWidget(this);
     w1->setGeometry(0,0,wd.width()/2,wd.height()/2);
@@ -50,6 +48,11 @@ HEIGHT =wd.height()/2;
     cancel->setText(tr("CANCEL"));
     connect(cancel,SIGNAL(clicked(bool)),this,SLOT(cancelSlot()));
     buttonLayout->addWidget(cancel);
+}
+
+QJsonObject ParameterDialog::getParams() const
+{
+    return obj;
 }
 
 void    ParameterDialog::updateTable()
@@ -103,6 +106,9 @@ void    ParameterDialog::okSlot()
 
 void    ParameterDialog::cancelSlot()
 {
+    QString s="{}";
+    QJsonDocument doc = QJsonDocument::fromJson(s.toUtf8());
+    obj=doc.object();
     reject();
 }
 

@@ -43,6 +43,7 @@ void    Problem::setDimension(int n)
     right.resize(dimension);
     functionCalls = 0;
     bestx.resize(n);
+    bestx = getSample();
 
 }
 bool    Problem::isPointIn(Data &x)
@@ -66,8 +67,9 @@ double    Problem::statFunmin(Data &x)
     return y;
 }
 
-Data    Problem::getBestx() const
+Data    Problem::getBestx()
 {
+
     return bestx;
 }
 

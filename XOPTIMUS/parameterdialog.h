@@ -28,12 +28,14 @@ private:
     QTableWidget *table;
     QPushButton *ok,*cancel;
     QPushButton *loadParameterButton;
+    int WIDTH,HEIGHT;
 
      QJsonObject obj;
      void   updateTable();
      QString problemName;
 public:
-    ParameterDialog(QString name,QWidget *parent=0);
+    ParameterDialog(QJsonObject params,QString name,QWidget *parent=0);
+    QJsonObject getParams() const;
     ~ParameterDialog();
 public slots:
     void    okSlot();

@@ -117,6 +117,7 @@ SOURCES += \
     SAMPLER/rbfsampler.cpp \
     SAMPLER/triangularsampler.cpp \
     SAMPLER/uniformsampler.cpp \
+    XOPTIMUS/selectproblemdialog.cpp \
     XOPTIMUS/xoptimusmain.cpp \
     XOPTIMUS/mainwindow.cpp
     contains(DEFINES,OPTIMUS_ARMADILLO){
@@ -219,7 +220,8 @@ HEADERS += \
     SAMPLER/rbfsampler.h \
     SAMPLER/triangularsampler.h \
     SAMPLER/uniformsampler.h \
-    XOPTIMUS/mainwindow.h
+    XOPTIMUS/mainwindow.h \
+    XOPTIMUS/selectproblemdialog.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

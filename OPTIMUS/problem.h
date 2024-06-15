@@ -129,7 +129,7 @@ public:
      * @brief getBestx
      * @return the best located point with the minimum function value
      */
-    Data    getBestx() const;
+    Data    getBestx() ;
     /**
      * @brief getBesty
      * @return the minimum function value

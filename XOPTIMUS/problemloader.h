@@ -45,12 +45,15 @@ private:
     Problem *myProblem;
     QJsonObject myParams;
     QStringList problemList;
+    QString selectedProblem;
 public:
     ProblemLoader();
     QStringList     getProblemList() const;
     Problem         *loadProblem(QString name);
     void            setParams(QJsonObject &p);
     QJsonObject     getParams() const;
+    QString         getSelectedProblemName() const;
+    QString getProblemReport() const;
     ~ProblemLoader();
 };
 
