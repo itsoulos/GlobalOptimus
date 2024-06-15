@@ -20,6 +20,7 @@ public:
     void        setParam(QString name,QString value,QString help="");
     Parameter   getParam(QString name);
     QStringList getParameterNames() const;
+    QJsonObject getParams() ;
     ~ParameterList();
 };
 

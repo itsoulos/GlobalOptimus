@@ -166,7 +166,9 @@ Problem         *ProblemLoader::loadProblem(QString name)
 void            ProblemLoader::setParams(QJsonObject &p)
 {
     myParams= p;
-    if(myProblem!=NULL)
+    if(myProblem!=NULL &&
+            selectedProblem!="mlpproblem"
+            && selectedProblem!="rbfproblem")
         myProblem->init(myParams);
 }
 

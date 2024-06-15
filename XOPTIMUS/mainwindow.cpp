@@ -142,8 +142,20 @@ void    MainWindow::problemSlot(QAction *action)
         if(myProblem == NULL) noProblemLoaded();
         else
         {
+            QJsonObject pt ;
+            if(problemLoader->getSelectedProblemName()=="mlpproblem")
+            {
+                pt = ((MlpProblem *)myProblem)->getParams();
+            }
+            else
+            if(problemLoader->getSelectedProblemName()=="rbfproblem")
+            {
+                pt = ((RbfProblem *)myProblem)->getParams();
+
+            }
+            else pt = problemLoader->getParams();
             ParameterDialog *d = new ParameterDialog(
-                        problemLoader->getParams(),
+                        pt,
                         problemLoader->getSelectedProblemName(),this);
             d->setModal(true);
             int v=d->exec();

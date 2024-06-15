@@ -11,6 +11,11 @@ void        ParameterList::addParam(Parameter p)
     paramsHelp[p.getName()]=p.getHelp();
 }
 
+QJsonObject ParameterList::getParams()
+{
+    return params;
+}
+
 void        ParameterList::setParam(QString name,QString value,QString help)
 {
     params[name]=value;
