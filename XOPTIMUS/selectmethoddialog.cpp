@@ -1,5 +1,6 @@
 #include "selectmethoddialog.h"
 # include <QScreen>
+# include <QGuiApplication>
 
 SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
     :QDialog(parent)

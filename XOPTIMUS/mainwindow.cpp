@@ -304,6 +304,6 @@ void    MainWindow::closeEvent(QCloseEvent *event)
 
 MainWindow::~MainWindow()
 {
-    unload();
+    //unload();
 }
 

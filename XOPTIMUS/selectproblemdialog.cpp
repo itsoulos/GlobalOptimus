@@ -1,6 +1,7 @@
 #include "selectproblemdialog.h"
 # include <QDebug>
 # include <QScreen>
+# include <QGuiApplication>
 SelectProblemDialog::SelectProblemDialog(QString sname,
                                          QStringList list,QWidget *parent)
     :QDialog(parent)
