@@ -1,11 +1,12 @@
 #include "mainwindow.h"
-# include <QDesktopWidget>
 # include <QApplication>
+# include <QScreen>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 
 {
-    QDesktopWidget qd;
+	QScreen *screen = QGuiApplication::primaryScreen();
+	QRect qd = screen->geometry();
     setFixedSize(4*qd.width()/5,7*qd.height()/8);
     setWindowTitle("XOPTIMUS");
     mainWidget=new QWidget;

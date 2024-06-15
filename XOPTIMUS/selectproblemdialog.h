@@ -7,7 +7,6 @@
 # include <QPushButton>
 # include <QLabel>
 # include <QVBoxLayout>
-# include <QDesktopWidget>
 # include <QGridLayout>
 # include <QHBoxLayout>
 class SelectProblemDialog : public QDialog

@@ -1,9 +1,11 @@
 #include "selectmethoddialog.h"
+# include <QScreen>
 
 SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
     :QDialog(parent)
 {
-    QDesktopWidget wd;
+	QScreen *screen = QGuiApplication::primaryScreen();
+	QRect wd = screen->geometry();
     width = wd.width()/2;
     height =3*wd.height()/4;
     methodList = list;

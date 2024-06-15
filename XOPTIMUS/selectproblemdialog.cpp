@@ -1,10 +1,12 @@
 #include "selectproblemdialog.h"
 # include <QDebug>
+# include <QScreen>
 SelectProblemDialog::SelectProblemDialog(QString sname,
                                          QStringList list,QWidget *parent)
     :QDialog(parent)
 {
-    QDesktopWidget wd;
+	QScreen *screen = QGuiApplication::primaryScreen();
+	QRect wd = screen->geometry();
     width = wd.width()/2;
     height =3*wd.height()/4;
     problemName = sname;

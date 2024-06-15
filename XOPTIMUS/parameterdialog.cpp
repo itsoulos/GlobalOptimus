@@ -1,12 +1,13 @@
 #include "parameterdialog.h"
-# include <QDesktopWidget>
+# include <QScreen>
 ParameterDialog::ParameterDialog(
         QJsonObject params,
         QString name,QWidget *parent)
     :QDialog(parent)
 {
 
-    QDesktopWidget wd;
+	QScreen *screen = QGuiApplication::primaryScreen();
+	QRect wd = screen->geometry();
     WIDTH = 3*wd.width()/4;
     HEIGHT =3*wd.height()/4;
     problemName=name;
