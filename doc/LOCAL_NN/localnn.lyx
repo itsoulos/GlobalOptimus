@@ -327,8 +327,356 @@ Artificial neural networks; Evolutionary techniques; Genetic algorithms;
 Introduction
 \end_layout
 
+\begin_layout Standard
+Artificial Neural networks (ANNs) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nn1,nn2"
+literal "true"
+
+\end_inset
+
+ are widely used parametric tools, where a series of methods have been developed
+ to identify the optimal set of these parameters, commonly called weights
+ or processing units.
+ ANNs have been used in a variety of scientific problems, such as problems
+ from physics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnphysics1,nnphysics2,nnphysics3"
+literal "false"
+
+\end_inset
+
+, chemistry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnchem1,nnchem2,nnchem3"
+literal "false"
+
+\end_inset
+
+, economics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnecon1,nnecon2,nncecon3"
+literal "false"
+
+\end_inset
+
+, medicine 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnmed1,nnmed2"
+literal "false"
+
+\end_inset
+
+ etc.
+ Furthermore, in recent years, neural networks have been incorporated in
+ a variety of practical problems, such as flood simulation 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_flood"
+literal "false"
+
+\end_inset
+
+, solar radiation prediction 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_solar"
+literal "false"
+
+\end_inset
+
+, agricultual problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_agro"
+literal "false"
+
+\end_inset
+
+, solution of problems in wireless communications 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_wireless"
+literal "false"
+
+\end_inset
+
+ etc.
+\end_layout
+
+\begin_layout Standard
+Commonly, a neural network is expressed as function 
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{w})$
+\end_inset
+
+, where the vector 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+ expresses the input pattern and the vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ represents the weight vector of the neural network.
+ The methods aimed at training the artificial neural network deal with the
+ efficient adjustment of the weight vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ to minimize the training error defined as: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+E\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\end{equation}
+
+\end_inset
+
+The set set 
+\begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
+\end_inset
+
+ defines the train set for the neural network, where the value 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ represent the the actual output for pattern 
+\begin_inset Formula $\overrightarrow{x_{i}}$
+\end_inset
+
+ .
+ Neural networks can be expressed also in close analytic form, as show in
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnc"
+literal "false"
+
+\end_inset
+
+.
+ As it was shown any neural network can be expressed as function
+\begin_inset Formula 
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+
+\end_inset
+
+The parameter 
+\begin_inset Formula $H$
+\end_inset
+
+ defines the the number of processing units and the constant 
+\begin_inset Formula $d$
+\end_inset
+
+ represents the dimension of patetrn 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+.
+ The function 
+\begin_inset Formula $\sigma(x)$
+\end_inset
+
+ is called sigmoid function and it is defined as: 
+\begin_inset Formula 
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
+\end{equation}
+
+\end_inset
+
+The number of elements in the weight vector are calculated as: 
+\begin_inset Formula $n=(d+2)H$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In the recent bibliography, a series of methods have been proposed to minimize
+ the equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:eq1"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, such as the Back Propagation method 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bpnn,bpnn2"
+literal "false"
+
+\end_inset
+
+, the Levenberg-Marquardt method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_leve"
+literal "false"
+
+\end_inset
+
+, the RPROP method 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rpropnn,rpropnn3,rpropnn2"
+literal "false"
+
+\end_inset
+
+, Quasi Newton methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "quasinn,quasinn2"
+literal "false"
+
+\end_inset
+
+, Particle Swarm Optimization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psonn,psonn2"
+literal "false"
+
+\end_inset
+
+, the Differential Evolution method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_de"
+literal "false"
+
+\end_inset
+
+, etc A survey of stochastic methods for training neural networks can be
+ found in the work of Zhang and Suganthan 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_survey"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Due to the wide application of artificial neural networks in various fields
+ but also due to the difficulties faced by traditional optimization techniques
+ in minimizing the training error, a series of hybrid techniques have been
+ developed to more effectively reduce this error.
+ Among these methods there is the method of
+\series bold
+ 
+\series default
+Yaghini et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnhybrid1"
+literal "false"
+
+\end_inset
+
+ that combines Particle Swarm Optimization and the Back Propagation technique.
+ Also, Chen at al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnhybrid2"
+literal "false"
+
+\end_inset
+
+ has proposed a hybrid method that incrorporates particle swarm optimization
+ and Cuckoo Search 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "csmethod"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Another important issue of neural networks that has been thorougly studied
+ in the recent literature is the initialization of the weights for the network.
+ The methods developed for the initialization issue include utilization
+ of decision trees
+\series bold
+ 
+\series default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninit1"
+literal "false"
+
+\end_inset
+
+, an initialization technique base on the Cauchy's inequality 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "weight_init2"
+literal "false"
+
+\end_inset
+
+, discriminant learning 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "weight_init3"
+literal "false"
+
+\end_inset
+
+ etc.
+ A recent paper by Narkhede et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninitreview"
+literal "false"
+
+\end_inset
+
+ presents various techniques for the initialization of the weights.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Due to the complexity of the training techniques but also due to the fact
+ that the number of required parameters increases with the increase in the
+ dimension of the problem, a number of training techniques have been developed
+ that take advantage of modern parallel computing structures.(GPU NEURAL
+ NETWORKS)!!
+\end_layout
+
+\begin_layout Standard
+This paper suggests...
+\end_layout
+
+\begin_layout Standard
+The rest of this article ...
+\end_layout
+
 \begin_layout Section
-Materials and Methods
+The proposed method
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Materials-and-Methods"
@@ -5896,7 +6244,7 @@ AVERAGE
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -7121,7 +7469,7 @@ AVERAGE
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -7360,6 +7708,720 @@ Keep empty!
 
 \begin_layout References Title
 References
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn1"
+literal "true"
+
+\end_inset
+
+C.
+ Bishop, Neural Networks for Pattern Recognition, Oxford University Press,
+ 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn2"
+literal "true"
+
+\end_inset
+
+G.
+ Cybenko, Approximation by superpositions of a sigmoidal function, Mathematics
+ of Control Signals and Systems 
+\series bold
+2
+\series default
+, pp.
+ 303-314, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics1"
+literal "false"
+
+\end_inset
+
+P.
+ Baldi, K.
+ Cranmer, T.
+ Faucett et al, Parameterized neural networks for high-energy physics, Eur.
+ Phys.
+ J.
+ C 
+\series bold
+76
+\series default
+, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics2"
+literal "true"
+
+\end_inset
+
+J.
+ J.
+ Valdas and G.
+ Bonham-Carter, Time dependent neural network models for detecting changes
+ of state in complex processes: Applications in earth sciences and astronomy,
+ Neural Networks 
+\series bold
+19
+\series default
+, pp.
+ 196-207, 2006
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics3"
+literal "false"
+
+\end_inset
+
+G.
+ Carleo,M.
+ Troyer, Solving the quantum many-body problem with artificial neural networks,
+ Science 
+\series bold
+355
+\series default
+, pp.
+ 602-606, 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem1"
+literal "false"
+
+\end_inset
+
+Lin Shen, Jingheng Wu, and Weitao Yang, Multiscale Quantum Mechanics/Molecular
+ Mechanics Simulations with Neural Networks, Journal of Chemical Theory
+ and Computation 
+\series bold
+12
+\series default
+, pp.
+ 4934-4946, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem2"
+literal "false"
+
+\end_inset
+
+Sergei Manzhos, Richard Dawes, Tucker Carrington, Neural network‐based approache
+s for building high dimensional and quantum dynamics‐friendly potential
+ energy surfaces, Int.
+ J.
+ Quantum Chem.
+ 
+\series bold
+115
+\series default
+, pp.
+ 1012-1020, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem3"
+literal "false"
+
+\end_inset
+
+Jennifer N.
+ Wei, David Duvenaud, and Alán Aspuru-Guzik, Neural Networks for the Prediction
+ of Organic Chemistry Reactions, ACS Central Science 
+\series bold
+2
+\series default
+, pp.
+ 725-732, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon1"
+literal "false"
+
+\end_inset
+
+Lukas Falat and Lucia Pancikova, Quantitative Modelling in Economics with
+ Advanced Artificial Neural Networks, Procedia Economics and Finance 
+\series bold
+34
+\series default
+, pp.
+ 194-201, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon2"
+literal "false"
+
+\end_inset
+
+Mohammad Namazi, Ahmad Shokrolahi, Mohammad Sadeghzadeh Maharluie, Detecting
+ and ranking cash flow risk factors via artificial neural networks technique,
+ Journal of Business Research 
+\series bold
+69
+\series default
+, pp.
+ 1801-1806, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nncecon3"
+literal "false"
+
+\end_inset
+
+G.
+ Tkacz, Neural network forecasting of Canadian GDP growth, International
+ Journal of Forecasting 
+\series bold
+17
+\series default
+, pp.
+ 57-69, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnmed1"
+literal "false"
+
+\end_inset
+
+Igor I.
+ Baskin, David Winkler and Igor V.
+ Tetko, A renaissance of neural networks in drug discovery, Expert Opinion
+ on Drug Discovery 
+\series bold
+11
+\series default
+, pp.
+ 785-795, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnmed2"
+literal "false"
+
+\end_inset
+
+Ronadl Bartzatt, Prediction of Novel Anti-Ebola Virus Compounds Utilizing
+ Artificial Neural Network (ANN), Chemistry Faculty Publications 
+\series bold
+49
+\series default
+, pp.
+ 16-34, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_flood"
+literal "false"
+
+\end_inset
+
+M.B.
+ Kia, S.
+ Pirasteh, B.
+ Pradhan B.
+ et al, An artificial neural network model for flood simulation using GIS:
+ Johor River Basin, Malaysia, Environ Earth Sci 
+\series bold
+67
+\series default
+, pp.
+ 251–264, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_solar"
+literal "false"
+
+\end_inset
+
+A.K.
+ Yadav, S.S.
+ Chandel, Solar radiation prediction using Artificial Neural Network techniques:
+ A review, Renewable and Sustainable Energy Reviews 
+\series bold
+33
+\series default
+, pp.
+ 772-781, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_agro"
+literal "false"
+
+\end_inset
+
+M.A.
+ Getahun, S.M.
+ Shitote, C.
+ Zachary, Artificial neural network based modelling approach for strength
+ prediction of concrete incorporating agricultural and construction wastes,
+ Construction and Building Materials 
+\series bold
+190
+\series default
+, pp.
+ 517-525, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_wireless"
+literal "false"
+
+\end_inset
+
+M.
+ Chen, U.
+ Challita, W.
+ Saad, C.
+ Yin and M.
+ Debbah, Artificial Neural Networks-Based Machine Learning for Wireless
+ Networks: A Tutorial, IEEE Communications Surveys & Tutorials 
+\series bold
+21
+\series default
+, pp.
+ 3039-3071, 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, D.
+ Gavrilis, E.
+ Glavas, Neural network construction and training using grammatical evolution,
+ Neurocomputing 
+\series bold
+72
+\series default
+, pp.
+ 269-277, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bpnn"
+literal "false"
+
+\end_inset
+
+D.E.
+ Rumelhart, G.E.
+ Hinton and R.J.
+ Williams, Learning representations by back-propagating errors, Nature 
+\series bold
+323
+\series default
+, pp.
+ 533 - 536 , 1986.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bpnn2"
+literal "false"
+
+\end_inset
+
+T.
+ Chen and S.
+ Zhong, Privacy-Preserving Backpropagation Neural Network Learning, IEEE
+ Transactions on Neural Networks 
+\series bold
+20
+\series default
+, , pp.
+ 1554-1564, 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_leve"
+literal "false"
+
+\end_inset
+
+B.
+ M.
+ Wilamowski, S.
+ Iplikci, O.
+ Kaynak and M.
+ O.
+ Efe, "An algorithm for fast convergence in training neural networks," IJCNN'01.
+ International Joint Conference on Neural Networks.
+ Proceedings (Cat.
+ No.01CH37222), Washington, DC, USA, 2001, pp.
+ 1778-1782 vol.3, doi: 10.1109/IJCNN.2001.938431.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rpropnn"
+literal "false"
+
+\end_inset
+
+M.
+ Riedmiller and H.
+ Braun, A Direct Adaptive Method for Faster Backpropagation Learning: The
+ RPROP algorithm, Proc.
+ of the IEEE Intl.
+ Conf.
+ on Neural Networks, San Francisco, CA, pp.
+ 586–591, 1993.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rpropnn3"
+literal "false"
+
+\end_inset
+
+T.
+ Pajchrowski, K.
+ Zawirski and K.
+ Nowopolski, Neural Speed Controller Trained Online by Means of Modified
+ RPROP Algorithm, IEEE Transactions on Industrial Informatics 
+\series bold
+11
+\series default
+, pp.
+ 560-568, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rpropnn2"
+literal "false"
+
+\end_inset
+
+Rinda Parama Satya Hermanto, Suharjito, Diana, Ariadi Nugroho, Waiting-Time
+ Estimation in Bank Customer Queues using RPROP Neural Networks, Procedia
+ Computer Science 
+\series bold
+ 135
+\series default
+, pp.
+ 35-42, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "quasinn"
+literal "false"
+
+\end_inset
+
+B.
+ Robitaille and B.
+ Marcos and M.
+ Veillette and G.
+ Payre, Modified quasi-Newton methods for training neural networks, Computers
+ & Chemical Engineering 
+\series bold
+20
+\series default
+, pp.
+ 1133-1140, 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "quasinn2"
+literal "false"
+
+\end_inset
+
+Q.
+ Liu, J.
+ Liu, R.
+ Sang, J.
+ Li, T.
+ Zhang and Q.
+ Zhang, Fast Neural Network Training on FPGA Using Quasi-Newton Optimization
+ Method,IEEE Transactions on Very Large Scale Integration (VLSI) Systems
+ 
+\series bold
+26
+\series default
+, pp.
+ 1575-1579, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psonn"
+literal "false"
+
+\end_inset
+
+C.
+ Zhang, H.
+ Shao and Y.
+ Li, Particle swarm optimisation for evolving artificial neural network,
+ IEEE International Conference on Systems, Man, and Cybernetics, , pp.
+ 2487-2490, 2000.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psonn2"
+literal "false"
+
+\end_inset
+
+Jianbo Yu, Shijin Wang, Lifeng Xi, Evolving artificial neural networks using
+ an improved PSO and DPSO 
+\series bold
+71
+\series default
+, pp.
+ 1054-1060, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_de"
+literal "false"
+
+\end_inset
+
+J.
+ Ilonen, J.K.
+ Kamarainen, J.
+ Lampinen, Differential Evolution Training Algorithm for Feed-Forward Neural
+ Networks.
+ Neural Processing Letters 
+\series bold
+17
+\series default
+, pp.
+ 93–105, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_survey"
+literal "false"
+
+\end_inset
+
+Le Zhang and P.N.
+ Suganthan, A survey of randomized algorithms for training neural networks,
+ Information Sciences 
+\series bold
+364-365
+\series default
+, pp.
+ 146-155, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnhybrid1"
+literal "false"
+
+\end_inset
+
+M.
+ Yaghini, M.M.
+ Khoshraftar, M.
+ Fallahi, A hybrid algorithm for artificial neural network training, Engineering
+ Applications of Artificial Intelligence 
+\series bold
+26
+\series default
+, pp 293-301, 2013.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnhybrid2"
+literal "false"
+
+\end_inset
+
+J.F.
+ Chen, Q.H.
+ Do,H.N.
+ Hsieh, Training Artificial Neural Networks by a Hybrid PSO-CS Algorithm,
+ Algorithms 
+\series bold
+8
+\series default
+, pp.
+ 292-308, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "csmethod"
+literal "false"
+
+\end_inset
+
+X.S.
+ Yang, S.
+ Deb, Engineering Optimisation by Cuckoo Search, Int.
+ J.
+ Math.
+ Model.
+ Numer.
+ Optim.
+ 
+\series bold
+1
+\series default
+, 330–343, 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninit1"
+literal "false"
+
+\end_inset
+
+I.
+ Ivanova, M.
+ Kubat, Initialization of neural networks by means of decision trees, Knowledge-
+Based Systems 
+\series bold
+8
+\series default
+, pp.
+ 333-344, 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "weight_init2"
+literal "false"
+
+\end_inset
+
+J.Y.F.
+ Yam, T.W.S.
+ Chow, A weight initialization method for improving training speed in feedforwar
+d neural network, Neurocomputing 
+\series bold
+30
+\series default
+, pp.
+ 219-232, 2000.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "weight_init3"
+literal "false"
+
+\end_inset
+
+K.
+ Chumachenko, A.
+ Iosifidis, M.
+ Gabbouj, Feedforward neural networks initialization based on discriminant
+ learning, Neural Networks 
+\series bold
+146
+\series default
+, pp.
+ 220-229, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninitreview"
+literal "false"
+
+\end_inset
+
+M.V.
+ Narkhede, P.P.
+ Bartakke, M.S.
+ Sutaone, A review on weight initialization strategies for neural networks,
+ Artif Intell Rev 
+\series bold
+55
+\series default
+, pp.
+ 291–322, 2022.
 \end_layout
 
 \begin_layout Bibliography
