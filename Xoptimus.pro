@@ -11,25 +11,21 @@ contains(DEFINES,OPTIMUS_ARMADILLO){
     LIBS+=-ladept
 }
 
-unix{
-    macx{
+win32:{
+    QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -fomit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
+    QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
+    LIBS+=  -lm -fopenmp
+}
+unix:!macx{
+    QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -fomit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
+    QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
+    LIBS+=  -lm -fopenmp
+}
+macx{
         INCLUDEPATH+=/opt/homebrew/opt/libomp/include/
         QMAKE_CXXFLAGS_RELEASE += -O3  -Xpreprocessor  -fopenmp -unroll-loops -fomit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
         QMAKE_CFLAGS_RELEASE += -O3 -march=native   -Xpreprocessor  -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
         LIBS+=  -lm  -Xpreprocessor  -fopenmp -L/opt/homebrew/opt/libomp/lib/  -lomp
-    }
-    else
-    {
-        QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -fomit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
-        QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
-        LIBS+=  -lm -fopenmp
-
-    }
-}
-win32{
-    QMAKE_CXXFLAGS_RELEASE += -O3 -fopenmp -unroll-loops -fomit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
-    QMAKE_CFLAGS_RELEASE += -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
-    LIBS+=  -lm -fopenmp
 }
 QMAKE_LFLAGS += -O3
 CONFIG += c++17
