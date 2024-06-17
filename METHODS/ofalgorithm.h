@@ -21,8 +21,12 @@ private:
     int N;
     vector<double> a;
     vector<double> b;
+    int similaritySize;
+    double similarityValue;
+    int similarityCount;
     double bestFitness;
     vector<vector<double>> QOP;
+    vector<double> MergeFitness;
     int M;
     vector<vector<double>>  MergePopulation;
     int generation;
@@ -37,13 +41,18 @@ public:
     virtual void init();
     double randomInRange();
     void quicksort(vector<vector<double>>& population, vector<double>& fitness, int left, int right);
+    void updatePopulationByComparison(vector<vector<double>>& population, vector<double>& fitness,  vector<vector<double>>& children);
     int PartitionPopulation(vector<vector<double>>& population, vector<double>& fitness, int left, int right);
     bool BetterSolution(double fitness_xt, double fitness_xt1, int generation);
+    bool CheckFeasibility(const vector<double>& solution);
     void CalcFitnessArray();
     virtual void step();
     virtual void   done();
     virtual bool terminated();
     void Selection();
+    void ChildrenArray();
+    void UpdatePopulation();
+    void CalculateFitness();
     ~OFAlgorithm();
 };
 

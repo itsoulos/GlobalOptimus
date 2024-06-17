@@ -29,8 +29,8 @@ void OFAlgorithm::init()
     sampleFromProblem(N,population,fitness);
     a = myProblem->getLeftMargin();
     b = myProblem->getRightMargin();
-    /** GIANNIS: Auto den xreiazetai to kanei i step () **/
-   // population = selectOptimalSolutions(population, QOP);
+    population = selectOptimalSolutions(population, QOP);
+
 }
 
 
@@ -108,14 +108,14 @@ void OFAlgorithm::CalcFitnessArray()
 
 bool OFAlgorithm::BetterSolution(double fitness_xt, double fitness_xt1, int generation) {
     // Υπολογισμός της τυχαίας τιμής λάμδα
-    double lambda = (double) rand() / RAND_MAX;
+    double l = (double) rand() / RAND_MAX;
 
     // Υπολογισμός των τιμών των εξισώσεων (2)
-    double eq1 = lambda * fitness_xt1 / (1 + (generation + 1) * lambda);
-    double eq2 = fitness_xt / (generation);
+    double xt = l * fitness_xt1 / (1 + (generation + 1) * l);
+    double xt1 = fitness_xt / (generation);
 
-    // Επιστροφή true αν η λύση x1 είναι καλύτερη από την x2, αλλιώς επιστροφή false
-    return eq1 < eq2;
+    // Επιστροφή true αν η λύση xt είναι καλύτερη από την xt1, αλλιώς επιστροφή false
+    return xt < xt1;
 }
 
 
@@ -139,51 +139,78 @@ vector<double> OFAlgorithm::calculateChildren(const vector<double>& xt, const ve
     return xt_1;
 }
 
-// Στη συνάρτηση Step() εκτελούνται τα βήματα του αλγορίθμου
-void OFAlgorithm::step() {
-    generation++;
-    /** GIANNIS: Auto den xreiazetai. Ginetai mesa sto loop **/
-   // CalcFitnessArray();
-    vector<double> MergeFitness;
-    for(int i = 0; i <N; i++) {
-        MergeFitness.push_back(fitness[i]);
-        QOP.push_back(CalculateQOS(population[i], N));
+// Ενημέρωση πληθυσμού με βάση τη σύγκριση των παιδιών με τους γονείς
+void OFAlgorithm::updatePopulationByComparison(vector<vector<double>>& population, vector<double>& fitness,  vector<vector<double>>& children) {
+    for (size_t i = 0; i < population.size(); ++i) {
+        // Συγκριση παιδί με γονέα
+        if (children[i] < population[i]) {
+            //Εάν το παιδί είναι καλύτερο, αντικαταστήστε τον γονέα με το παιδί
+            population[i] = children[i];
+            fitness[i] = myProblem->statFunmin(children[i]);
+        }
+
     }
-
-    vector<vector<double>> MergePopulation = selectOptimalSolutions(population, QOP);
-    double K_t = calculateK(generation, maxGenerations);
-    for (int j = 0; j < M; ++j) {
-        vector<double> newX = MergePopulation[j];  // Αρχική τιμή από MergePopulation
-        bool feasible = false;
+}
 
 
-        while (!feasible) {
-            newX = calculateChildren(MergePopulation[j], MergePopulation[0], K_t, D);
-            feasible = myProblem->isPointIn(newX);
-            if (!feasible) {
-                GradientDescent* local = new GradientDescent();
-                local->setProblem(myProblem);
-                local->setParam("opt_debug", "no");
-                ((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
-                ((GradientDescent*)local)->setParam("gd_maxiters","3");
-                double y = myProblem->statFunmin(MergePopulation[j]);
-                ((GradientDescent*)local)->setPoint(MergePopulation[j], y);
-                local->solve();
-                ((GradientDescent*)local)->getPoint(newX, y);
-                delete local;
-                feasible = myProblem->isPointIn(newX);  // Έλεγχος μετά την GradientDescent
+// απόγονοι
+void OFAlgorithm::ChildrenArray() {
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < D; ++j) {
+            if (population[i][j] < a[j] || population[i][j] > b[j]) {
+                population[i][j] = a[j] + (b[j] - a[j]) * (rand() / (double)RAND_MAX);
             }
         }
+    }
+}
 
-        /** GIANNIS. auto edo na mpei se ena tyxaio simio ston plithismo
-         *  me ypsiloteri timi **/
-        double newFitness = evaluate(newX, bestFitness);
-
-        if (newFitness<fitness[j]) {
-            population[j] = newX;
-            fitness[j] = newFitness;
-            //GIANNIS. local search here with probability
+// ενημέρωση πληθυσμού
+void OFAlgorithm::UpdatePopulation() {
+    double bestFitness = fitness[0];
+    for (int i = 0; i < N; ++i) {
+        double fitness_children = evaluate(population[i], bestFitness);
+        if (fitness_children < fitness[i]) {
+            fitness[i] = fitness_children;
         }
+    }
+
+    // Εκτύπωση της bestSolution
+    printf("Best Solution: ");
+    for (int i = 0; i < D; ++i) {
+        printf("%lf ", population[0][i]);
+    }
+
+}
+
+// Έλεγχος της εφικτότητας των νέων λύσεων και ανανέωση του πληθυσμού
+bool OFAlgorithm::CheckFeasibility(const vector<double>& solution) {
+    for (int i = 0; i < D; ++i) {
+        if (solution[i] < a[i] || solution[i] > b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Επιλέγει έναν τυχαίο αριθμό στο διάστημα [a, b]
+//double OFAlgorithm::randomInRange() {
+// Ρύθμιση του seed της rand() με τη χρήση του τρέχοντος χρόνου
+// srand(time(0));
+// for (int i = 0; i < N; ++i) {
+// for (int j = 0; j < D; ++j) {
+//       if (population[i][j] < a[j] || population[i][j] > b[j]) {
+//return population[i][j] = a[j] + (b[j] - a[j]) * (rand() / (double)RAND_MAX);
+//
+//}
+// }
+// }
+//}
+
+// Υπολογισμός των τιμών καταλληλότητας για τον αρχικό πληθυσμό
+void OFAlgorithm::CalculateFitness() {
+    double bestFitness = fitness[0];
+    for (int i = 0; i < N; ++i) {
+        fitness[i] = evaluate(population[i], bestFitness);
     }
 }
 
@@ -213,12 +240,12 @@ vector<vector<double>>  OFAlgorithm::selectOptimalSolutions(const vector<vector<
     vector<vector<double>>  MergePopulation = P;
     MergePopulation.insert( MergePopulation.end(), QOP.begin(), QOP.end());
 
-    // Ταξινόμηση συνδυασμένου πληθυσμού με βάση τις τιμές φυσικής κατάστασης
+    // Ταξινόμηση συνδυασμένου πληθυσμού με βάση τις τιμές fitness
     sort( MergePopulation.begin(),  MergePopulation.end(), [](const auto& a, const auto& b) {
         return a.back() < b.back();
     });
 
-    // Επιλέξτε τις N πιο προσαρμοσμένες λύσεις(N fittest solutions)
+    // Επελέξε τις N πιο προσαρμοσμένες λύσεις
     vector<vector<double>> newPopulation;
     for (unsigned long i = 0;  i <  MergePopulation.size(); ++i) {
         newPopulation.push_back( MergePopulation[i]);
@@ -227,14 +254,86 @@ vector<vector<double>>  OFAlgorithm::selectOptimalSolutions(const vector<vector<
     return newPopulation;
 }
 
+// Στη συνάρτηση step() εκτελούνται τα βήματα του αλγορίθμου
+void OFAlgorithm::step() {
+    generation++;
+    CalcFitnessArray();
+
+    // Προετοιμασε  τη συγχώνευση του τρέχοντος πληθυσμού με τον  αντίθετο πληθυσμό
+    for (int i = 0; i < N; i++) {
+        MergeFitness.push_back(fitness[i]);
+        QOP.push_back(CalculateQOS(population[i], N));
+    }
+
+
+    vector<vector<double>> MergePopulation = selectOptimalSolutions(population, QOP);
+
+    double K_t = calculateK(generation, maxGenerations);
+
+    // Αρχικοποιησε έναν νέο πληθυσμό για την επόμενη επανάληψη
+    vector<vector<double>> newPopulation(M, vector<double>(D));
+    vector<double> newFitness(M);
+
+    for (int j = 0; j < M; ++j) {
+        vector<double> newX = MergePopulation[j];
+        bool feasible = false;
+        while (!feasible && !terminated()) {
+            newX = calculateChildren(MergePopulation[j], MergePopulation[0], K_t, D);  // Generate new solution
+            feasible = CheckFeasibility(newX);
+
+            if (!feasible) {
+                GradientDescent* local = new GradientDescent();
+                local->setProblem(myProblem);
+                local->setParam("opt_debug", "no");
+                ((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
+                ((GradientDescent*)local)->setParam("gd_maxiters","3");
+                double y = myProblem->statFunmin(MergePopulation[j]);
+                ((GradientDescent*)local)->setPoint(MergePopulation[j], y);
+                local->solve();
+                ((GradientDescent*)local)->getPoint(newX, y);
+                feasible = CheckFeasibility(newX);
+            }
+        }
+
+        double currentFitness = evaluate(MergePopulation[j], bestFitness);
+        newFitness[j] = evaluate(newX, bestFitness);
+
+        //Συγκρινε τη νέα λύση με τον γονέα
+        if (BetterSolution(currentFitness, newFitness[j], generation)) {
+            newPopulation[j] = newX;  // κρατα νέα λύση
+        } else {
+            newPopulation[j] = MergePopulation[j];  // κρατα γονιό
+        }
+    }
+
+    // Ταξινόμηση του νέου πληθυσμού με βάση τo fitness
+    vector<pair<double, vector<double>>> sortPopulationByFitness;
+    for (int j = 0; j < M; ++j) {
+        sortPopulationByFitness.push_back({newFitness[j], newPopulation[j]});
+    }
+
+    sort(sortPopulationByFitness.begin(), sortPopulationByFitness.end());
+
+    // Ενημέρωση Population και fitness μετά την ταξινόμηση
+    for (int j = 0; j < M; ++j) {
+        fitness[j] = sortPopulationByFitness[j].first;
+        population[j] = sortPopulationByFitness[j].second;
+
+    }
+
+    if (terminated()) {
+        done();
+}
+
+}
+
+
 bool OFAlgorithm::terminated() {
     double besty;
     besty = fitness[0];
     for(unsigned long i=0;i<fitness.size();i++)
         if(fitness[i]<besty) besty = fitness[i];
-    if(getParam("opt_debug").getValue()=="yes")
-        printf("OFA. iter = %d  besty = %lf maxGenerations = %d \n",
-               generation,besty,maxGenerations);
+    printf("iter = %d  besty = %lf maxGenerations = %d \n",generation,besty,maxGenerations);
     if(generation>=maxGenerations) return true;
     if(terminationMethod=="doublebox")
         return doubleBox.terminate(besty);

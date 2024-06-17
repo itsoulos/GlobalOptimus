@@ -59,7 +59,6 @@ void ranf_start(long seed)  /* do this before using ranf_array */
 
 #include <math.h>
 #include <stdlib.h>
-#include <malloc.h>
 
 /*---------------- Variables accessible by the user -------------------- */
 double *GKLS_domain_left; /* left boundary vector of D  */
