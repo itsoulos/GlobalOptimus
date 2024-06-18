@@ -23,9 +23,11 @@ unix:!macx{
 }
 macx{
         INCLUDEPATH+=/opt/homebrew/opt/libomp/include/
+        INCLUDEPATH+=/usr/local/opt/libomp/include
         QMAKE_CXXFLAGS_RELEASE += -O3  -Xpreprocessor  -fopenmp -unroll-loops -fomit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native  -pthread
         QMAKE_CFLAGS_RELEASE += -O3 -march=native   -Xpreprocessor  -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread
-        LIBS+=  -lm  -Xpreprocessor  -fopenmp -L/opt/homebrew/opt/libomp/lib/  -lomp
+        #LIBS+=  -lm  -Xpreprocessor  -fopenmp -L/opt/homebrew/opt/libomp/lib/  -lomp
+        LIBS+=  -lm  -Xpreprocessor  -fopenmp -L/usr/local/opt/libomp/lib  -lomp
 }
 QMAKE_LFLAGS += -O3
 CONFIG += c++17
