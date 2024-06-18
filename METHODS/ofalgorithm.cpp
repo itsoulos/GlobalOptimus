@@ -4,6 +4,7 @@
 
 OFAlgorithm::OFAlgorithm() {
     addParam(Parameter("ofa_count","500","Number of chromosomes"));
+    addParam(Parameter("ofa_count1","250","Number of chromosomes"));
     addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
     addParam(Parameter("ofa_lrate","0.05","Localsearch rate"));
     addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
@@ -13,13 +14,13 @@ OFAlgorithm::OFAlgorithm() {
 
 void OFAlgorithm::init()
 {
-    M=getParam("ofa_count").getValue().toInt();
+    M=getParam("ofa_count1").getValue().toInt();
     N=getParam("ofa_count").getValue().toInt();
     maxGenerations=getParam("ofa_maxiters").getValue().toInt();
     localsearchRate=getParam("ofa_lrate").getValue().toDouble();
     terminationMethod=getParam("gen_termination").getValue();
     generation=0;
-     M= N/2;
+    M= N/2;
     population.resize(N);
     MergePopulation.resize(M);
     fitness.resize(N);
@@ -32,7 +33,6 @@ void OFAlgorithm::init()
     population = selectOptimalSolutions(population, QOP);
 
 }
-
 
 
 // Αντικειμενική συνάρτηση
@@ -286,29 +286,31 @@ void OFAlgorithm::step() {
                 local->setProblem(myProblem);
                 local->setParam("opt_debug", "no");
                 ((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
-                ((GradientDescent*)local)->setParam("gd_maxiters","5");
+                ((GradientDescent*)local)->setParam("gd_maxiters","3");
                 double y = myProblem->statFunmin(MergePopulation[j]);
                 ((GradientDescent*)local)->setPoint(MergePopulation[j], y);
                 local->solve();
                 ((GradientDescent*)local)->getPoint(newX, y);
                 feasible = CheckFeasibility(newX);
             }
-        
-	    if(!feasible) continue;
-	}
+        }
 
         double currentFitness = evaluate(MergePopulation[j], bestFitness);
         newFitness[j] = evaluate(newX, bestFitness);
 
         //Συγκρινε τη νέα λύση με τον γονέα
-        if (BetterSolution(currentFitness, newFitness[j], generation)) 
-	{
+        if (BetterSolution(currentFitness, newFitness[j], generation)) {
             newPopulation[j] = newX;  // κρατα νέα λύση
         } else {
             newPopulation[j] = MergePopulation[j];  // κρατα γονιό
         }
     }
 
+
+
+    if (terminated()) {
+        done();
+}
     // Ταξινόμηση του νέου πληθυσμού με βάση τo fitness
     vector<pair<double, vector<double>>> sortPopulationByFitness;
     for (int j = 0; j < M; ++j) {
@@ -323,11 +325,6 @@ void OFAlgorithm::step() {
         population[j] = sortPopulationByFitness[j].second;
 
     }
-
-    if (terminated()) {
-        done();
-}
-
 }
 
 

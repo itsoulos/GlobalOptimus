@@ -13,6 +13,7 @@ private:
     long D;
     vector<double> newX;
     Data x;
+    double **temp;
     double y=1e+10;
     Optimizer *local=NULL;
     double besty;

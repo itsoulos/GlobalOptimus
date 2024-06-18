@@ -703,15 +703,65 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
+In this work, the use of a hybrid optimization technique is proposed for
+ the training of artificial neural networks.
+ In this hybrid technique, Genetic Algorithms are used as a basic technique
+ for training neural networks.
+ Genetic algorithms, was initially suggested by John Holland 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Holland"
+literal "false"
 
-\series bold
-This paper suggests...methodos hybrid...
- axiopistoi genetikoi
-\end_layout
+\end_inset
 
-\begin_layout Standard
-The current work utilizes a modified version of the Simulated Annealing
- method 
+, are insipired by biology and they are form trial solutions of any optimization
+ problem.
+ These solutions are improved gradually by process that mimics the natural
+ evolution, such as mutation, natural selection, and crossover 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stender,Goldberg,Michaelewicz"
+literal "false"
+
+\end_inset
+
+.
+ Genetic algorithms have proven their efficiency and they have been applied
+ on a wide series of problems, such as networking 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga_problem1"
+literal "false"
+
+\end_inset
+
+, robotics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga_problem2,ga_problem3"
+literal "false"
+
+\end_inset
+
+, energy problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga_problem4,ga_problem5"
+literal "false"
+
+\end_inset
+
+ etc.
+ Although Genetic Algorithms can satisfactorily train an artificial neural
+ network, in many cases they get trapped in local minima of the training
+ error and this results in poor performance of the neural network when applied
+ to the test set.
+ To improve the performance of genetic algorithms, it is proposed to periodicall
+y apply a minimization technique to randomly selected chromosomes of the
+ genetic population.
+ This minimization method that applied here, is a modified version of the
+ Simulated Annealing method 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "siman_main"
@@ -719,54 +769,74 @@ literal "false"
 
 \end_inset
 
- as a local search procedure.
- The method of Simulated Annealing has been utilized in various cases, such
- as image processing 
+.
+ Simulated annealing has been applied in many cases, such as police district
+ design 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "siman_image"
+key "siman_problem1"
 literal "false"
 
 \end_inset
 
-, protein structure optimization 
+, portfolio problems 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "siman_protein"
+key "siman_problem2"
 literal "false"
 
 \end_inset
 
-, resource allocation 
+, energy problems 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "siman_resource"
-literal "false"
-
-\end_inset
-
-, convex optimization 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "siman_convex"
-literal "false"
-
-\end_inset
-
-, deep learning 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "siman_deep"
+key "siman_problem3"
 literal "false"
 
 \end_inset
 
  etc.
- 
+ The new method was tested on a wide series of classification and regression
+ problems and it was compared against other optimization methods.
+ From the experimental comparison of the results, it appeared that the proposed
+ technique significantly improves the performance of genetic algorithms
+ in the training of artificial neural networks.
 \end_layout
 
 \begin_layout Standard
-The rest of this article ...
+The rest of this article is divided as follows: in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Materials-and-Methods"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the proposed method is discussed in detail, in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the used datasets are presented as well as the experimental results and
+ finally in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the results are discussed thoroughly and some guidelines for future research
+ are listed.
 \end_layout
 
 \begin_layout Section
@@ -780,6 +850,947 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
+\begin_layout Standard
+The new Simulated Annealing variant is described in this section as well
+ as the overall algorithm, that will be used to train artificial neural
+ networks for classification and regression problems.
+\end_layout
+
+\begin_layout Subsection
+The new Simulated Annealing variant 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-new-Simulated"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A new variant of the Simulated Annealing method is utilized as local search
+ procedure in the Genetic Algorithm.
+ This method has been applied to many problems and is distinguished for
+ its adaptability but also for the ability to aim for lower values of the
+ objective function, especially if combined with intelligent techniques
+ to reduce the temperature factor.
+ In the proposed modification of the method, the optimization procedure
+ initiates from the current state of a chromosome and by applying stochastic
+ techniques a search is made for nearby representations with lower values
+ of the error function.
+ The steps of the proposed method are illustrated in Algorithm
+\series bold
+ 
+\series default
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:siman"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The used variant of the Simulated Annealing algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:siman"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+procedure 
+\series default
+siman
+\series bold
+
+\begin_inset Formula $\left(x_{0}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $k=0$
+\end_inset
+
+, 
+\begin_inset Formula $T_{0}>0,\ \epsilon>0,$
+\end_inset
+
+
+\begin_inset Formula $r_{T}>0,\ r_{T}<1$
+\end_inset
+
+
+\series default
+.
+
+\series bold
+ 
+\series default
+The parameter 
+\begin_inset Formula $T_{0}$
+\end_inset
+
+ defines the initial temperature of the algorithm.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\series default
+
+\begin_inset Formula $N_{eps}>0$
+\end_inset
+
+, a positive integer number.
+ This number defines the number of samples that will be created in every
+ iteration.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\series default
+the parameter 
+\begin_inset Formula $F\in[0,1]$
+\end_inset
+
+.
+ This value specifies the range of changes that can be made to an element
+ of a chromosome, as a percentage of its original value.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the positive integer parameter 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+.
+ This parameter indicates the number of possible random changes in the chromosom
+e.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $x_{b}=x_{0},f_{b}=f\left(x_{b}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For 
+\begin_inset Formula $i=1\ldots N_{\mbox{eps}}$
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:For-"
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $x^{t}=x_{k}$
+\end_inset
+
+ 
+\series default
+as a candidate point.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For 
+\begin_inset Formula $j=1\ldots N_{R}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $p=\mbox{rand}\left(1,\mbox{size}\left(x^{t}\right)\right)$
+\end_inset
+
+
+\series default
+, a randomly selected position in the chromosome.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $x_{p}^{t}=x_{p}^{t}+\mbox{rand}\left(-F,F\right)x_{p}^{t}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If 
+\begin_inset Formula $f\left(x^{t}\right)\le f\left(x_{k}\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $x_{k+1}=x^{t}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Else Set 
+\begin_inset Formula $x_{k+1}=x^{t}$
+\end_inset
+
+ 
+\series default
+with probability
+\series bold
+ 
+\begin_inset Formula $\min\left\{ 1,\exp\left(-\frac{f\left(x^{t}\right)-f\left(x_{k}\right)}{T_{k}}\right)\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If 
+\begin_inset Formula $f\left(x^{t}\right)<f_{b}$
+\end_inset
+
+ then 
+\begin_inset Formula $x_{b}=x^{t},f_{b}=f\left(x^{t}\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $T_{k+1}=T_{k}r_{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If 
+\begin_inset Formula $T_{k}\le\epsilon$
+\end_inset
+
+ stop.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Goto step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:For-"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Return 
+\begin_inset Formula $x_{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+end 
+\series default
+siman
+\end_layout
+
+\end_inset
+
+
+\series default
+The method initiates frome chromosome 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ and in every iteration and it produces random points near to the original
+ chromosome.
+ The integer parameter 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+ defines the number of changes that will be made in the chromosome and the
+ double precision parameter 
+\begin_inset Formula $F$
+\end_inset
+
+ controls the magnitude of changes.
+ The algorithm starts from high values of the temperature 
+\begin_inset Formula $T_{0}$
+\end_inset
+
+, which is linerarly decreased in each iteration.
+ At high temperatures the algorithm more readily accepts values that it
+ can with higher function values to more efficiently explore the search
+ space, but at lower values the algorithm focuses on improving the best
+ function value it has discovered.
+\end_layout
+
+\begin_layout Subsection
+The overall algorithm
+\end_layout
+
+\begin_layout Standard
+A genetic algorithm is used as the base algorithm for neural network training.
+ Genetic algorithms have been used also in the recent bibliography for neural
+ network training in various cases, such as for drug design 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga_drug"
+literal "false"
+
+\end_inset
+
+, gear fault detection 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga_gear"
+literal "false"
+
+\end_inset
+
+, forecasting models 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga_forecasting"
+literal "false"
+
+\end_inset
+
+ etc.
+ The genetic algorithm is enchanced by the addition of a periodical application
+ of the new Simulated Annealing variant, described in the previous subsection.
+ The main steps of the overall algorithm are listed below.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization Step
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Define 
+\series default
+as 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ the number of chromosomes and as 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ the maximum number of generations.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Define 
+\series default
+the selection rate 
+\begin_inset Formula $p_{s}$
+\end_inset
+
+ and the mutation rate 
+\begin_inset Formula $p_{m}$
+\end_inset
+
+ with 
+\begin_inset Formula $p_{s}\in[0,1]$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{m}\in[0,1]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\series default
+as
+\series bold
+ 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+
+\series default
+ the number of generations passed before the modified Simulated Algorithm
+ will be applied.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\series default
+as
+\series bold
+ 
+\begin_inset Formula $N_{K}$
+\end_inset
+
+ 
+\series default
+the number of chromosomes that will be altered by the modified Simulated
+ Annealing algorithm.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Perform 
+\series default
+a random initialization of the 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ chromosomes.
+ Each chromosome represents a different set of randomly initialized weights
+ for the neural network.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=0$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ each chromosome
+\series bold
+ 
+\series default
+
+\begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Formulate 
+\series default
+a neural network
+\series bold
+ 
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{g_{i}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ the fitness 
+\begin_inset Formula $f_{i}=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}$
+\end_inset
+
+ of chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ and for the given dataset.
+\series bold
+
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:Fitness-calculation-Step"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Genetic operations step
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Selection procedure.
+
+\series default
+ The chromosomes are sorted with respect to the associated fitness values.
+ The first 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
+\end_inset
+
+ chromosomes having the lowest fitness values are copied to the next generation.
+ The rest of the chromosomes are replaced by offspings produced in the crossover
+ procedure.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Crossover procedure
+\series default
+: In the crossover procedure pairs of chromosomes are selcected from the
+ population using tournament selection.
+ For each pair 
+\begin_inset Formula $(z,w)$
+\end_inset
+
+ of selected parents two new chromosomes 
+\begin_inset Formula $\tilde{z}$
+\end_inset
+
+ and 
+\begin_inset Formula $\tilde{w}$
+\end_inset
+
+ are formulated using the following scheme
+\begin_inset Formula 
+\begin{eqnarray}
+\tilde{z_{i}} & = & a_{i}z_{i}+\left(1-a_{i}\right)w_{i}\nonumber \\
+\tilde{w_{i}} & = & a_{i}w_{i}+\left(1-a_{i}\right)z_{i}\label{eq:crossover_ali-1}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $i=1,\ldots,n$
+\end_inset
+
+.
+ The randomly selected values 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ are chosen in the range 
+\begin_inset Formula $[-0.5,1.5]$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kaelo"
+literal "true"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Mutation procedure
+\series default
+:
+\series bold
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ each chromosome 
+\begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
+\end_inset
+
+ do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every element 
+\begin_inset Formula $\ j=1,\ldots,n$
+\end_inset
+
+ of 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ a random number 
+\begin_inset Formula $r\in\left[0,1\right]$
+\end_inset
+
+ is produced.
+ The corresponding element is altered randomly if 
+\begin_inset Formula $r\le p_{m}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\series default
+ 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Local method step
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\ \mbox{mod}\ N_{I}=0$
+\end_inset
+
+ 
+\series bold
+then
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{K}$
+\end_inset
+
+ do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ a random chromosome 
+\begin_inset Formula $g^{r}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the siman algorithm: 
+\begin_inset Formula $g^{r}=\mbox{siman}\left(g^{r}\right)$
+\end_inset
+
+ of subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:The-new-Simulated"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFo
+\series default
+r
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Endif
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination Check Step
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\ge N_{g}$
+\end_inset
+
+ then goto 
+\series bold
+Termination
+\series default
+ Step, else goto 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:Fitness-calculation-Step"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination step 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Denote 
+\series default
+as
+\series bold
+ 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+ 
+\series default
+the chromosome with the lowest fitness value.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Formulate 
+\series default
+the neural network
+\series bold
+ 
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{g^{*}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ a local search procedure to 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+.
+ The local search method used in the current work is a BFGS variant of Powell
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Powell"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the neural network 
+\series bold
+
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{g^{*}})$
+\end_inset
+
+ 
+\series default
+on the test of the objective problem and report the result.
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -802,7 +1813,7 @@ e.
 \begin_layout Enumerate
 The UCI dataset repository, 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -825,7 +1836,7 @@ literal "false"
 \begin_layout Enumerate
 The Keel repository, 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -848,7 +1859,7 @@ literal "false"
 \begin_layout Enumerate
 The Statlib URL 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1254,22 +2265,6 @@ Regression datasets
 
 \begin_layout Standard
 The following regression datasets were used in the conducted experiments:
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Abalone
-\series default
- dataset 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "abalone"
-literal "false"
-
-\end_inset
-
-, a dataset related to the prediction of age of abalones.
 \end_layout
 
 \begin_layout Enumerate
@@ -2882,7 +3877,7 @@ name "fig:statClass"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7622,6 +8617,23 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
+1) parallel techniques
+\end_layout
+
+\begin_layout Standard
+2) different scheme for temperature reduction
+\end_layout
+
+\begin_layout Standard
+3) application to RBF
+\end_layout
+
+\begin_layout Standard
+4) alter the Genetic Algorithm with other evolutionary techniques such as
+ PSO
+\end_layout
+
+\begin_layout Standard
 \begin_inset VSpace 6pt
 \end_inset
 
@@ -7732,19 +8744,6 @@ yes
 \end_inset
 
 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Start of Appendix
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Keep empty!
 \end_layout
 
 \end_inset
@@ -8586,7 +9585,370 @@ Pallipuram, V.K., Bhuiyan, M.
  & Smith, M.C.
  A comparative study of GPU programming models and architectures using neural
  networks.
- J Supercomput 61, 673–718 (2012)
+ J Supercomput 
+\series bold
+61
+\series default
+, 673–718, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Holland"
+literal "false"
+
+\end_inset
+
+ Holland, J.H.
+ Genetic algorithms.
+ Sci.
+ Am.
+ 
+\series bold
+267
+\series default
+, 66–73, 1992.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Stender"
+literal "false"
+
+\end_inset
+
+ Stender, J.
+ Parallel Genetic Algorithms: Theory & Applications; IOS Press: Amsterdam,
+ The Netherlands, 1993.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Goldberg"
+literal "false"
+
+\end_inset
+
+ Goldberg, D.
+ Genetic Algorithms in Search, Optimization and Machine Learning; Addison-Wesley
+ Publishing Company: Reading, MA, USA, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Michaelewicz"
+literal "false"
+
+\end_inset
+
+ Michaelewicz, Z.
+ Genetic Algorithms + Data Structures = Evolution Programs; Springer: Berlin/Hei
+delberg, Germany, 1996.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_problem1"
+literal "false"
+
+\end_inset
+
+Y.H.
+ Santana, R.M.
+ Alonso, G.G.
+ Nieto, L.
+ Martens, W.
+ Joseph, D.
+ Plets, Indoor genetic algorithm-based 5G network planning using a machine
+ learning model for path loss estimation, Appl.
+ Sci.
+ 
+\series bold
+12
+\series default
+, 3923.
+ 2022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_problem2"
+literal "false"
+
+\end_inset
+
+X.
+ Liu, D.
+ Jiang, B.
+ Tao, G.
+ Jiang, Y.
+ Sun, J.
+ Kong, B.
+ Chen, Genetic algorithm-based trajectory optimization for digital twin
+ robots, Front.
+ Bioeng.
+ Biotechnol 
+\series bold
+9
+\series default
+, 793782, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_problem3"
+literal "false"
+
+\end_inset
+
+K.
+ Nonoyama, Z.Liu, T.
+ Fujiwara, M.M.
+ Alam, T.
+ Nishi, Energy-efficient robot configuration and motion planning using genetic
+ algorithm and particle swarm optimization, Energies 
+\series bold
+15
+\series default
+, 2074, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_problem4"
+literal "false"
+
+\end_inset
+
+K.
+ Liu, B.
+ Deng, Q.
+ Shen, J.
+ Yang, Y.
+ Li, Optimization based on genetic algorithms on energy conservation potential
+ of a high speed SI engine fueled with butanol–gasoline blends, Energy Rep.
+ 
+\series bold
+8
+\series default
+, pp.
+ 69–80, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_problem5"
+literal "false"
+
+\end_inset
+
+G.
+ Zhou, S.
+ Zhu, S.
+ Luo, Location optimization of electric vehicle charging stations: Based
+ on cost model and genetic algorithm, Energy 
+\series bold
+247
+\series default
+, 123437, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "siman_main"
+literal "false"
+
+\end_inset
+
+S.
+ Kirkpatrick, C.D.
+ Gelatt Jr, M.P.
+ Vecchi, Optimization by simulated annealing, Science 
+\series bold
+220
+\series default
+, pp.
+ 671-680, 1983.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "siman_problem1"
+literal "false"
+
+\end_inset
+
+S.J.
+ D'Amico, S-J.
+ Wang, R.
+ Batta, C.M.
+ Rump, A simulated annealing approach to police district design Computers
+ & Operations Research 
+\series bold
+29
+\series default
+, pp.
+ 667-684, 2002.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "siman_problem2"
+literal "false"
+
+\end_inset
+
+Y.
+ Crama, M.
+ Schyns, Simulated annealing for complex portfolio selection problems},
+ journal = {European Journal of Operational Research 
+\series bold
+150
+\series default
+, pp.
+ 546-571, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "siman_problem3"
+literal "false"
+
+\end_inset
+
+K.M.
+ El-Naggar, M.R.
+ AlRashidi, M.F.
+ AlHajri, A.K.
+ Al-Othman, Simulated Annealing algorithm for photovoltaic parameters identifica
+tion, Solar Energy 
+\series bold
+86
+\series default
+, pp.
+ 266-274, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_drug"
+literal "false"
+
+\end_inset
+
+L.
+ Terfloth, J.
+ Gasteiger, Neural networks and genetic algorithms in drug design, Drug
+ Discovery Today 
+\series bold
+6
+\series default
+, pp.
+ 102-108, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_gear"
+literal "false"
+
+\end_inset
+
+B.
+ Samanta, Artificial neural networks and genetic algorithms for gear fault
+ detection, Mechanical Systems and Signal Processing 
+\series bold
+18
+\series default
+, pp.
+ 1273-1282, 2004.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga_forecasting"
+literal "false"
+
+\end_inset
+
+F.
+ Yu, X.
+ Xu, A short-term load forecasting model of natural gas based on optimized
+ genetic algorithm and improved BP neural network, Applied Energy 
+\series bold
+134
+\series default
+, pp.
+ 102-113, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kaelo"
+literal "true"
+
+\end_inset
+
+P.
+ Kaelo, M.M.
+ Ali, Integrated crossover rules in real coded genetic algorithms, European
+ Journal of Operational Research 
+\series bold
+176
+\series default
+, pp.
+ 60-76, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Powell"
+literal "true"
+
+\end_inset
+
+M.J.D Powell, A Tolerant Algorithm for Linearly Constrained Optimization Calculati
+ons, Mathematical Programming 
+\series bold
+45
+\series default
+, pp.
+ 547-566, 1989.
+ 
 \end_layout
 
 \begin_layout Bibliography
@@ -9139,27 +10501,6 @@ M.
 \series default
 , pp.
  549–573, 2004.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "abalone"
-literal "false"
-
-\end_inset
-
-W.
- J Nash, T.L.
- Sellers, S.R.
- Talbot, A.J.
- Cawthor, W.B.
- Ford, The Population Biology of Abalone (_Haliotis_ species) in Tasmania.
- I.
- Blacklip Abalone (_H.
- rubra_) from the North Coast and Islands of Bass Strait, Sea Fisheries
- Division, Technical Report No.
- 48 (ISSN 1034-3288), 1994.
 \end_layout
 
 \begin_layout Bibliography

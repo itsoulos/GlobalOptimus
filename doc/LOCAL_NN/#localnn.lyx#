@@ -858,13 +858,6 @@ The new Simulated Annealing variant is described in this section as well
 
 \begin_layout Subsection
 The new Simulated Annealing variant 
-\begin_inset CommandInset label
-LatexCommand label
-name "subsec:The-new-Simulated"
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -1331,41 +1324,12 @@ the selection rate
 \begin_layout Enumerate
 
 \series bold
-Set 
-\series default
-as
-\series bold
- 
+Set as 
 \begin_inset Formula $N_{I}$
 \end_inset
 
-
-\series default
- the number of generations passed before the modified Simulated Algorithm
- will be applied.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Set 
-\series default
-as
-\series bold
+ the number of generations passed before the modified Simulated AlgoePerform
  
-\begin_inset Formula $N_{K}$
-\end_inset
-
- 
-\series default
-the number of chromosomes that will be altered by the modified Simulated
- Annealing algorithm.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Perform 
 \series default
 a random initialization of the 
 \begin_inset Formula $N_{c}$
@@ -1392,9 +1356,9 @@ Set
 \begin_layout Enumerate
 
 \series bold
-For
+(OK)For
 \series default
- each chromosome
+ every chromosome
 \series bold
  
 \series default
@@ -1403,37 +1367,18 @@ For
 \end_inset
 
  
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
-Formulate 
-\series default
-a neural network
-\series bold
- 
-\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{g_{i}})$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-
 \series bold
 Calculate
 \series default
  the fitness 
-\begin_inset Formula $f_{i}=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}$
+\begin_inset Formula $f_{i}=f\left(g_{i}\right)$
 \end_inset
 
  of chromosome 
 \begin_inset Formula $g_{i}$
 \end_inset
 
- and for the given dataset.
+.
 \series bold
 
 \begin_inset CommandInset label
@@ -1445,7 +1390,6 @@ name "enu:Fitness-calculation-Step"
 
 \end_layout
 
-\end_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -1459,14 +1403,21 @@ Genetic operations step
 Selection procedure.
 
 \series default
- The chromosomes are sorted with respect to the associated fitness values.
- The first 
+ The chromosomes are sorted according to their fitness values.
+ Denote as 
+\begin_inset Formula $N_{b}$
+\end_inset
+
+ the integer part of 
 \begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
 \end_inset
 
- chromosomes having the lowest fitness values are copied to the next generation.
- The rest of the chromosomes are replaced by offspings produced in the crossover
+ chromosomes with the lowest fitness values are transferred intact to the
+ next generation.
+ The remain chromosomes are substituted by offspings created in the crossover
  procedure.
+ During the selection process for each offspring two parents are selected
+ from the population using the tournament selection.
  
 \end_layout
 
@@ -1475,13 +1426,11 @@ Selection procedure.
 \series bold
 Crossover procedure
 \series default
-: In the crossover procedure pairs of chromosomes are selcected from the
- population using tournament selection.
- For each pair 
+: For every pair 
 \begin_inset Formula $(z,w)$
 \end_inset
 
- of selected parents two new chromosomes 
+ of selected parents two additional chromosomes 
 \begin_inset Formula $\tilde{z}$
 \end_inset
 
@@ -1489,7 +1438,7 @@ Crossover procedure
 \begin_inset Formula $\tilde{w}$
 \end_inset
 
- are formulated using the following scheme
+ are produced using the following equations
 \begin_inset Formula 
 \begin{eqnarray}
 \tilde{z_{i}} & = & a_{i}z_{i}+\left(1-a_{i}\right)w_{i}\nonumber \\
@@ -1503,12 +1452,12 @@ where
 \end_inset
 
 .
- The randomly selected values 
+ The values 
 \begin_inset Formula $a_{i}$
 \end_inset
 
- are chosen in the range 
-\begin_inset Formula $[-0.5,1.5]$
+ are uniformly distributed random numbers, with 
+\begin_inset Formula $a_{i}\in[-0.5,1.5]$
 \end_inset
 
  
@@ -1526,6 +1475,55 @@ literal "true"
 \begin_layout Enumerate
 
 \series bold
+Replacement procedure
+\series default
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=N_{b}+1$
+\end_inset
+
+ to 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Replace
+\series default
+ 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ using the next offspring created in the crossover procedure.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
 Mutation procedure
 \series default
 :
@@ -1539,7 +1537,7 @@ Mutation procedure
 \series bold
 For
 \series default
- each chromosome 
+ every chromosome 
 \begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
 \end_inset
 
@@ -1552,7 +1550,7 @@ For
 \series bold
 For
 \series default
- every element 
+ each element 
 \begin_inset Formula $\ j=1,\ldots,n$
 \end_inset
 
@@ -1560,12 +1558,12 @@ For
 \begin_inset Formula $g_{i}$
 \end_inset
 
- a random number 
+ a uniformly distributed random number 
 \begin_inset Formula $r\in\left[0,1\right]$
 \end_inset
 
- is produced.
- The corresponding element is altered randomly if 
+ is drawn.
+ The element is altered randomly if 
 \begin_inset Formula $r\le p_{m}$
 \end_inset
 
@@ -1582,92 +1580,6 @@ EndFor
 \end_layout
 
 \end_deeper
-\end_deeper
-\begin_layout Enumerate
-
-\series bold
-Local method step
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
-If
-\series default
- 
-\begin_inset Formula $k\ \mbox{mod}\ N_{I}=0$
-\end_inset
-
- 
-\series bold
-then
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
-For
-\series default
- 
-\begin_inset Formula $i=1,\ldots,N_{K}$
-\end_inset
-
- do
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
-Select
-\series default
- a random chromosome 
-\begin_inset Formula $g^{r}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Apply
-\series default
- the siman algorithm: 
-\begin_inset Formula $g^{r}=\mbox{siman}\left(g^{r}\right)$
-\end_inset
-
- of subsection 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "subsec:The-new-Simulated"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
-.
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-
-\series bold
-EndFo
-\series default
-r
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-
-\series bold
-Endif
-\end_layout
-
 \end_deeper
 \begin_layout Enumerate
 
@@ -1697,11 +1609,7 @@ If
 \begin_inset Formula $k\ge N_{g}$
 \end_inset
 
- then goto 
-\series bold
-Termination
-\series default
- Step, else goto 
+ is hold, then goto Local Search Step, else goto 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "enu:Fitness-calculation-Step"
@@ -1718,52 +1626,12 @@ noprefix "false"
 \begin_layout Enumerate
 
 \series bold
-Termination step 
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
-Denote 
-\series default
-as
-\series bold
- 
-\begin_inset Formula $g^{*}$
-\end_inset
-
+Local Search Step.
  
 \series default
-the chromosome with the lowest fitness value.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Formulate 
-\series default
-the neural network
-\series bold
- 
-\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{g^{*}})$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Apply
-\series default
- a local search procedure to 
-\begin_inset Formula $g^{*}$
-\end_inset
-
-.
- The local search method used in the current work is a BFGS variant of Powell
- 
+Apply a local search procedure to chromosome of the population with the
+ lowest fitness value and report the obtained minimum.
+ In the current work the BFGS variant of Powell 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Powell"
@@ -1771,22 +1639,9 @@ literal "false"
 
 \end_inset
 
-.
+ was used as a local search procedure.
 \end_layout
 
-\begin_layout Enumerate
-Apply the neural network 
-\series bold
-
-\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{g^{*}})$
-\end_inset
-
- 
-\series default
-on the test of the objective problem and report the result.
-\end_layout
-
-\end_deeper
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -2261,6 +2116,22 @@ Regression datasets
 
 \begin_layout Standard
 The following regression datasets were used in the conducted experiments:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Abalone
+\series default
+ dataset 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "abalone"
+literal "false"
+
+\end_inset
+
+, a dataset related to the prediction of age of abalones.
 \end_layout
 
 \begin_layout Enumerate
@@ -3873,7 +3744,7 @@ name "fig:statClass"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -6153,7 +6024,7 @@ name "fig:statF"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -8554,7 +8425,7 @@ AVERAGE
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -10497,6 +10368,27 @@ M.
 \series default
 , pp.
  549–573, 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "abalone"
+literal "false"
+
+\end_inset
+
+W.
+ J Nash, T.L.
+ Sellers, S.R.
+ Talbot, A.J.
+ Cawthor, W.B.
+ Ford, The Population Biology of Abalone (_Haliotis_ species) in Tasmania.
+ I.
+ Blacklip Abalone (_H.
+ rubra_) from the North Coast and Islands of Bass Strait, Sea Fisheries
+ Division, Technical Report No.
+ 48 (ISSN 1034-3288), 1994.
 \end_layout
 
 \begin_layout Bibliography
