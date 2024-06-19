@@ -264,6 +264,7 @@ void OFAlgorithm::step() {
             newX = calculateChildren(MergePopulation[j], MergePopulation[0], K_t, D);  // Generate new solution
             feasible = CheckFeasibility(newX);
 
+	    
             if (!feasible) {
                 Bfgs* local = new Bfgs();
                 local->setProblem(myProblem);
