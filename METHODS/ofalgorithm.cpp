@@ -1,5 +1,6 @@
 #include "ofalgorithm.h"
 # include <METHODS/gradientdescent.h>
+# include <METHODS/bfgs.h>
 
 
 OFAlgorithm::OFAlgorithm() {
@@ -7,7 +8,7 @@ OFAlgorithm::OFAlgorithm() {
     addParam(Parameter("ofa_count1","250","Number of chromosomes"));
     addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
     addParam(Parameter("ofa_lrate","0.05","Localsearch rate"));
-    addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
+    addParam(Parameter("ofa_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
 
@@ -18,7 +19,7 @@ void OFAlgorithm::init()
     N=getParam("ofa_count").getValue().toInt();
     maxGenerations=getParam("ofa_maxiters").getValue().toInt();
     localsearchRate=getParam("ofa_lrate").getValue().toDouble();
-    terminationMethod=getParam("gen_termination").getValue();
+    terminationMethod=getParam("ofa_termination").getValue();
     generation=0;
     M= N/2;
     population.resize(N);
@@ -32,6 +33,7 @@ void OFAlgorithm::init()
     b = myProblem->getRightMargin();
     population = selectOptimalSolutions(population, QOP);
 
+    bestX.resize(D);
 }
 
 
@@ -42,6 +44,7 @@ double OFAlgorithm::evaluate( vector<double>& solution, double& bestFitness) {
     // έλεγχος  bestFitness
     if (fitness < bestFitness) {
         bestFitness = fitness;
+	bestX = solution;
     }
     return fitness;
 }
@@ -103,6 +106,11 @@ void OFAlgorithm::CalcFitnessArray()
                 fitness[i]=localSearch(population[i]);
             }
         }
+	if(fitness[i]<bestFitness)
+	{
+		bestFitness = fitness[i];
+		bestX = population[i];
+	}
     }
 }
 
@@ -164,24 +172,6 @@ void OFAlgorithm::ChildrenArray() {
     }
 }
 
-// ενημέρωση πληθυσμού
-void OFAlgorithm::UpdatePopulation() {
-    double bestFitness = fitness[0];
-    for (int i = 0; i < N; ++i) {
-        double fitness_children = evaluate(population[i], bestFitness);
-        if (fitness_children < fitness[i]) {
-            fitness[i] = fitness_children;
-        }
-    }
-
-    // Εκτύπωση της bestSolution
-    printf("Best Solution: ");
-    for (int i = 0; i < D; ++i) {
-        printf("%lf ", population[0][i]);
-    }
-
-}
-
 // Έλεγχος της εφικτότητας των νέων λύσεων και ανανέωση του πληθυσμού
 bool OFAlgorithm::CheckFeasibility(const vector<double>& solution) {
     for (int i = 0; i < D; ++i) {
@@ -205,14 +195,6 @@ bool OFAlgorithm::CheckFeasibility(const vector<double>& solution) {
 // }
 // }
 //}
-
-// Υπολογισμός των τιμών καταλληλότητας για τον αρχικό πληθυσμό
-void OFAlgorithm::CalculateFitness() {
-    double bestFitness = fitness[0];
-    for (int i = 0; i < N; ++i) {
-        fitness[i] = evaluate(population[i], bestFitness);
-    }
-}
 
 
 //Υπολογισμός quasi-opposite ( οιονεί αντίθετη λύση) με βάση της εξίσωση Eq. (3)
@@ -277,22 +259,44 @@ void OFAlgorithm::step() {
     for (int j = 0; j < M; ++j) {
         vector<double> newX = MergePopulation[j];
         bool feasible = false;
-        while (!feasible && !terminated()) {
+        while (!feasible && !terminated()) 
+	{
             newX = calculateChildren(MergePopulation[j], MergePopulation[0], K_t, D);  // Generate new solution
             feasible = CheckFeasibility(newX);
 
             if (!feasible) {
+                Bfgs* local = new Bfgs();
+                local->setProblem(myProblem);
+                local->setParam("opt_debug", "no");
+                ((Bfgs*)local)->setParam("bfgs_iters", "3");
+                double y = myProblem->statFunmin(MergePopulation[j]);
+                ((Bfgs*)local)->setPoint(MergePopulation[j], y);
+                local->solve();
+                ((Bfgs*)local)->getPoint(newX, y);
+                feasible = CheckFeasibility(newX);
+    	delete local;
+            }
+            /*if (!feasible) {
                 GradientDescent* local = new GradientDescent();
                 local->setProblem(myProblem);
                 local->setParam("opt_debug", "no");
                 ((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
                 ((GradientDescent*)local)->setParam("gd_maxiters","3");
                 double y = myProblem->statFunmin(MergePopulation[j]);
-                ((GradientDescent*)local)->setPoint(MergePopulation[j], y);
+		newX = MergePopulation[j];
+                ((GradientDescent*)local)->setPoint(newX, y);
                 local->solve();
                 ((GradientDescent*)local)->getPoint(newX, y);
                 feasible = CheckFeasibility(newX);
-            }
+    	delete local;
+            }*/
+	    
+	/*if(!feasible)
+	{
+            	newPopulation[j] = MergePopulation[j];  // κρατα γονιό
+		feasible = true;
+		continue;
+	}*/
         }
 
         double currentFitness = evaluate(MergePopulation[j], bestFitness);
@@ -308,9 +312,6 @@ void OFAlgorithm::step() {
 
 
 
-    if (terminated()) {
-        done();
-}
     // Ταξινόμηση του νέου πληθυσμού με βάση τo fitness
     vector<pair<double, vector<double>>> sortPopulationByFitness;
     for (int j = 0; j < M; ++j) {
@@ -333,7 +334,8 @@ bool OFAlgorithm::terminated() {
     besty = fitness[0];
     for(unsigned long i=0;i<fitness.size();i++)
         if(fitness[i]<besty) besty = fitness[i];
-    printf("iter = %d  besty = %lf maxGenerations = %d \n",generation,besty,maxGenerations);
+    besty = bestFitness;
+    //printf("OFA. iter = %d  besty = %lf maxGenerations = %d \n",generation,besty,maxGenerations);
     if(generation>=maxGenerations) return true;
     if(terminationMethod=="doublebox")
         return doubleBox.terminate(besty);
@@ -356,7 +358,13 @@ void OFAlgorithm:: done()
             bestindex = i;
         }
     }
-    besty = localSearch(population[bestindex]);
+    //besty = localSearch(population[bestindex]);
+
+    if(bestX.size()==0)
+    {
+	    bestX=population[bestindex];
+    }
+    besty  = localSearch(bestX);
     if(getParam("opt_debug").getValue()=="yes")
-        printf("OFA. terminate: %lf \n",besty);
+        printf("OFA. terminate: %lf bestFitness: %lf \n",besty,bestFitness);
 }

@@ -26,6 +26,7 @@ private:
     double similarityValue;
     int similarityCount;
     double bestFitness;
+    Data bestX;
     vector<vector<double>> QOP;
     vector<double> MergeFitness;
     int M;
@@ -52,8 +53,6 @@ public:
     virtual bool terminated();
     void Selection();
     void ChildrenArray();
-    void UpdatePopulation();
-    void CalculateFitness();
     ~OFAlgorithm();
 };
 

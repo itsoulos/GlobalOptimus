@@ -3,9 +3,9 @@ METHOD=Ofa
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=kmeans
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=similarity
 
 if [ $METHOD = "Bfgs" ]
 then
@@ -24,6 +24,9 @@ then
 #nm_maxiters: maximum number of iterations allowed
 
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
+elif [ $METHOD = "Ofa" ]
+then
+	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.05 --ofa_termination=$TERMINATION --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "Adam" ]
 then
 

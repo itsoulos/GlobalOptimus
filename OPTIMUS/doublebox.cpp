@@ -32,6 +32,7 @@ bool    DoubleBox::terminate(double value)
         stopat = variance/2.0;
         oldBesty = value;
     }
+    if(fabs(stopat)<1e-8) stopat=variance/2.0;
     iteration++;
 
     return variance <=stopat && iteration>=miniters;
@@ -48,6 +49,7 @@ bool    DoubleBox::terminate(double value,int userIter)
         stopat = variance/2.0;
         oldBesty = value;
     }
+    if(fabs(stopat)<1e-8) stopat=variance/2.0;
 
     return variance <=stopat && userIter>=miniters;
 }
