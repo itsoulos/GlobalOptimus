@@ -135,8 +135,8 @@ double OFAlgorithm::calculateK(int generation, int  maxGenerations) {
 // Υπολογισμός νέας λύσης xt+1
 vector<double> OFAlgorithm::calculateChildren(const vector<double>& xt, const vector<double>& x_best, double K_t, int D) {
     vector<double> xt_1(D); // Νέα λύση xt+1
-    double r1 = rand() / (double)RAND_MAX; // Τυχαίος αριθμός r1
-    double r2 = rand() / (double)RAND_MAX; // Τυχαίος αριθμός r2
+    double r1 = rand()*1.0 / (double)RAND_MAX; // Τυχαίος αριθμός r1
+    double r2 = rand()*1.0 / (double)RAND_MAX; // Τυχαίος αριθμός r2
 
 
     // Υπολογισμός της νέας λύσης xt+1 με βάση το Eq. (6)
