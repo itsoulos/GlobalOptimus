@@ -8,6 +8,7 @@ OFAlgorithm::OFAlgorithm() {
     addParam(Parameter("ofa_count1","250","Number of chromosomes"));
     addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
     addParam(Parameter("ofa_lrate","0.05","Localsearch rate"));
+    addParam(Parameter("ofa_bfgsiters","3","Iterations for bfgs method"));
     addParam(Parameter("ofa_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
@@ -256,6 +257,7 @@ void OFAlgorithm::step() {
     vector<vector<double>> newPopulation(M, vector<double>(D));
     vector<double> newFitness(M);
 
+    QString bfgs_iters=getParam("ofa_bfgsiters").getValue();
     for (int j = 0; j < M; ++j) {
         vector<double> newX = MergePopulation[j];
         bool feasible = false;
@@ -269,7 +271,7 @@ void OFAlgorithm::step() {
                 Bfgs* local = new Bfgs();
                 local->setProblem(myProblem);
                 local->setParam("opt_debug", "no");
-                ((Bfgs*)local)->setParam("bfgs_iters", "3");
+                ((Bfgs*)local)->setParam("bfgs_iters", bfgs_iters);
                 double y = myProblem->statFunmin(MergePopulation[j]);
                 ((Bfgs*)local)->setPoint(MergePopulation[j], y);
                 local->solve();

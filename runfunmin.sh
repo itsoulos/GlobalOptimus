@@ -3,16 +3,18 @@ METHOD=Ofa
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=kmeans
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
-
-if [ $METHOD = "Bfgs" ]
+if [ $METHOD = "bfgs" ]
 then
 
 #bfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--bfgs_iters=200"
+elif [ $METHOD = "DifferentialEvolution" ]
+then
+	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=crossover --de_termination=$TERMINATION --opt_localsearch=$LOCALSEARCH" 
 elif [ $METHOD = "NelderMead" ]
 then
 
@@ -26,7 +28,7 @@ then
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
 elif [ $METHOD = "Ofa" ]
 then
-	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.05 --ofa_termination=$TERMINATION --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.02 --ofa_bfgsiters=3 --ofa_termination=$TERMINATION --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "Adam" ]
 then
 
