@@ -14,8 +14,16 @@ MainWindow::MainWindow(QWidget *parent)
     mainWidget->setFixedSize(this->width(),this->height());
     mainLayout=new QVBoxLayout;
     mainWidget->setLayout(mainLayout);
+    mainTab=new QTabWidget;
+    mainTab->setGeometry(2*this->width()/100,
+                          2*this->height()/100,
+                          97*this->width()/100,
+                          95*this->height()/100);
+
     mainEdit=new QTextEdit;
-    mainLayout->addWidget(mainEdit);
+    mainTab->addTab(mainEdit,"Main");
+    //mainLayout->addWidget(mainEdit);
+    mainLayout->addWidget(mainTab);
     mainEdit->setGeometry(2*this->width()/100,
                           2*this->height()/100,
                           97*this->width()/100,
@@ -48,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     helpMenu    = new QMenu("HELP");
     helpMenu->addAction("MANUAL");
     helpMenu->addAction("ABOUT");
-
+    lastEdit = NULL;
     menuBar()->addMenu(problemMenu);
     menuBar()->addMenu(methodMenu);
     menuBar()->addMenu(helpMenu);
@@ -59,9 +67,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChanged(QString)));
 }
 
-void    MainWindow::addMessage(QString message)
+void    MainWindow::addMessage(QString message,bool running)
 {
-    mainEdit->append(message);
+    if(!running)
+        mainEdit->append(message);
+    else
+        if(lastEdit!=NULL)
+            lastEdit->append(message);
 }
 
 void    MainWindow::unload()
@@ -229,7 +241,7 @@ void    MainWindow::methodSlot(QAction  *action)
     {
         if(myStat==NULL) noMethodLoaded();
         else
-            addMessage(myStat->getStatistics());
+            addMessage(myStat->getStatistics(),true);
     }
     else
     if(action->text()=="RUN")
@@ -254,6 +266,23 @@ void    MainWindow::methodSlot(QAction  *action)
 
 void    MainWindow::startRunning()
 {
+    if(lastProblem==problemLoader->getSelectedProblemName()
+            && lastMethod == methodName && lastEdit!=NULL)
+    {
+        ;
+    }
+    else
+    {
+        QTextEdit *runEdit = new QTextEdit;
+        runEdit->setGeometry(mainEdit->geometry());
+        mainTab->addTab(runEdit,""+
+                    problemLoader->getSelectedProblemName()+
+                    " Running "+methodName);
+        runEdit->setReadOnly(true);
+        lastEdit = runEdit;
+        lastProblem = problemLoader->getSelectedProblemName();
+        lastMethod = methodName;
+    }
     menuBar()->setEnabled(false);
     std_fd = dup(fileno(stdout));
     freopen("xoptimus.txt","w",stdout);
@@ -287,7 +316,7 @@ void    MainWindow::fileChanged(QString path)
         f.seek(0);
         const QByteArray ba = f.readAll();
         QString t(ba);
-        addMessage(t);
+        addMessage(t,true);
     } else {
         QMessageBox::critical(this,"stdout","can't open!");
     }

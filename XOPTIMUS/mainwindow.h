@@ -14,6 +14,7 @@
 # include <QInputDialog>
 # include <QMessageBox>
 # include <QFileSystemWatcher>
+# include <QTabWidget>
 # include <XOPTIMUS/parameterdialog.h>
 # include <XOPTIMUS/problemloader.h>
 # include <XOPTIMUS/selectproblemdialog.h>
@@ -48,9 +49,13 @@ private:
     int std_fd;
     QFileSystemWatcher * watcher;
     Statistics *myStat;
+    QTabWidget *mainTab;
+    QTextEdit *lastEdit;
+    QString lastProblem="";
+    QString lastMethod ="";
 public:
     MainWindow(QWidget *parent = nullptr);
-    void    addMessage(QString message);
+    void    addMessage(QString message,bool running=false);
     ~MainWindow();
 public slots:
     void problemSlot(QAction *action);
