@@ -413,8 +413,8 @@ void    RbfProblem::init(QJsonObject &px)
     }
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=-scale_factor * 10.0;
-        right[icount] = scale_factor * 10.0;
+        left[icount]=-1000;//scale_factor * 10.0;
+        right[icount] = 1000;//scale_factor * 10.0;
         icount++;
     }
     lastGaussianValues.resize(nodes);
