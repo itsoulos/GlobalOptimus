@@ -7,10 +7,11 @@
 # include <armadillo>
 #include <adept.h>
 
-class FunctionalRbf :public Problem, Model
+class FunctionalRbf :public Problem, public Model
 {
 private:
     QString trainName="xy.data";
+    arma::vec Linear;
     QString testName="xy.data";
     int nodes=10;
     int dimension=0;

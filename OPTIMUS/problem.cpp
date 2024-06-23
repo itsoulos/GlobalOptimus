@@ -58,10 +58,13 @@ bool    Problem::isPointIn(Data &x)
 double    Problem::statFunmin(Data &x)
 {
     double y = funmin(x);
+
     if(y<besty || functionCalls ==0)
     {
+
         besty = y;
         bestx = x;
+
     }
     ++functionCalls;
     return y;

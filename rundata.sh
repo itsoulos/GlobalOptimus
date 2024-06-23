@@ -6,8 +6,8 @@ LOCALSEARCH=bfgs
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
-#Available values: mlp, rbf, gdf, nnc, rule
-MODEL=rbf
+#Available values: mlp, rbf, frbf,gdf, nnc, rule
+MODEL=frbf
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -16,6 +16,9 @@ DATAFILE=$1
 if [ $MODEL = "mlp" ]
 then
 	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+elif [ $MODEL = "frbf" ]
+then
+	MODELPARAMS="--rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "rbf" ]
 then
 	MODELPARAMS="--rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
@@ -155,4 +158,4 @@ then
 	exit
 fi
 
-./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $METHODPARAMS $MODELPARAMS --opt_iters=10
+ ./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $METHODPARAMS $MODELPARAMS --opt_iters=10

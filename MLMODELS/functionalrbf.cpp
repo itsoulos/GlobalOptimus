@@ -1,8 +1,8 @@
 #include "functionalrbf.h"
 void    FunctionalRbf::init(QJsonObject &params)
 {
-    QString trainName = params["rbf_trainfile"].toString();
-    QString testName =  params["rbf_testfile"].toString();
+    QString trainName = params["model_trainfile"].toString();
+    QString testName =  params["model_testfile"].toString();
     int nodes        = 1;
     if(params.contains("rbf_nodes"))
         nodes = params["rbf_nodes"].toString().toInt();
@@ -23,6 +23,11 @@ void    FunctionalRbf::init(QJsonObject &params)
     dimension = (d+1)*nodes;
     left.resize(dimension);
     right.resize(dimension);
+    for(int i=0;i<dimension;i++)
+    {
+	    left[i]=-1000.0;
+	    right[i]= 1000.0;
+    }
     xinput=new double[ trainx.size() * trainx[0].size()];
     yinput=new double[ trainx.size()];
 
@@ -52,36 +57,6 @@ void    FunctionalRbf::init(QJsonObject &params)
 
     Kmeans(xinput,centers,variances,trainx.size(),trainx[0].size(),nodes,
            num_of_cluster_members);
-
-    for(int i=0;i<nodes;i++)
-    {
-        for(int j=0;j<dimension;j++)
-        {
-            if(i==0 || centers[i*dimension+j]<left[j])  left[j]=centers[i*dimension+j];
-            if(i==0 || centers[i*dimension+j]>right[j]) right[j]=centers[i*dimension+j];
-        }
-    }
-
-    for(int i=0;i<nodes;i++)
-    {
-        double minDist=1e+100;
-        for(int j=0;j<i;j++)
-        {
-            double dist=0.0;
-
-            for(int k=0;k<dimension;k++)
-            {
-                double diff=centers[i*dimension+k]-centers[j*dimension+k];
-                diff=diff/(right[k]-left[k]);
-
-                dist+=fabs(diff) ;
-            }
-            dist/=dimension;
-            if(dist<minDist) minDist=dist;
-
-        }
-
-    }
 
     if(variances.size()!=0)
     {
@@ -335,7 +310,7 @@ double FunctionalRbf::nearestClass(double y)
 QJsonObject FunctionalRbf::done(Data &x)
 {
     bool ok;
-    arma::vec Linear = train(x,ok);
+    Linear = train(x,ok);
     double per;
     double classError = 0.0;
     double sum = 0.0;
@@ -356,6 +331,7 @@ QJsonObject FunctionalRbf::done(Data &x)
            classError*100.0/testy.size(),sum);
 
     QJsonObject result;
+    result["trainError"]=funmin(x);
     result["nodes"]=nodes;
     result["testError"]=sum;
     result["classError"]=classError*100.0/testy.size();
@@ -365,7 +341,13 @@ QJsonObject FunctionalRbf::done(Data &x)
 
 double  FunctionalRbf::getOutput(Data &x)
 {
-
+        Data pattern = x;
+        arma::vec neuronOuts(nodes);
+        for(unsigned j = 0; j < nodes;j++){
+            neuronOuts[j] = neuronOutput(x,pattern,pattern.size(),j);
+        }
+        double tempOut = arma::dot(neuronOuts,Linear);
+	return tempOut;
 }
 double FunctionalRbf::neuronOutput( vector<double> &x, vector<double> &patt, unsigned pattDim, unsigned offset ){
     double out = 0;
@@ -390,7 +372,7 @@ adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double>
     adept::adouble errorSum=0.0;
 
     bool ok;
-    arma::vec Linear = train(x1,ok);
+    Linear = train(x1,ok);
     if(!ok) return 1e+10;
 
     for(unsigned i = 0; i < trainx.size(); i++){
@@ -443,7 +425,7 @@ double  FunctionalRbf::funmin(Data &x)
 {
     double errorSum=0.0;
     bool ok;
-    arma::vec Linear = train(x,ok);
+     Linear = train(x,ok);
     if(!ok) return 1e+10;
     double norm = 0.0;
     for(int j=0;j<nodes;j++)
