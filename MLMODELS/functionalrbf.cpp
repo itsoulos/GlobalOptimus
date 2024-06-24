@@ -377,6 +377,7 @@ adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double>
     Linear = train(x1,ok);
     if(!ok) return 1e+10;
 
+    int icount = 0;
     for(unsigned i = 0; i < trainx.size(); i++){
         Data pattern = trainx[i];
         vector<adept::adouble> neuronOuts(nodes);
@@ -386,6 +387,7 @@ adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double>
         adept::adouble tempOut = 0;
         for(unsigned j = 0; j < nodes; j++) tempOut+= neuronOuts[j]*Linear[j];
         errorSum += ( tempOut - trainy[i] ) * ( tempOut - trainy[i] );
+	icount+= (fabs(tempOut)>=1e+4);
     }
 
     return errorSum;
@@ -416,11 +418,11 @@ arma::vec FunctionalRbf::train( vector<double> &x,bool &ok ){
     if(RetVal.has_nan() || RetVal.has_inf()) {
         RetVal = arma::zeros(arma::size(RetVal));
     }
-    for(int i=0;i<nodes;i++)
+/*    for(int i=0;i<nodes;i++)
     {
         if(RetVal[i]<initialLeft) RetVal[i]=initialLeft;
         if(RetVal[i]>initialRight) RetVal[i]=initialRight;
-    }
+    }*/
     return RetVal;
 }
 double  FunctionalRbf::funmin(Data &x)
@@ -435,6 +437,7 @@ double  FunctionalRbf::funmin(Data &x)
         norm+=(Linear(j))*(Linear(j));
     norm = sqrt(norm);
 
+    int icount = 0;
     for(unsigned i = 0; i < trainx.size(); i++){
         Data pattern = trainx[i];
         arma::vec neuronOuts(nodes);
@@ -443,8 +446,10 @@ double  FunctionalRbf::funmin(Data &x)
         }
         double tempOut = arma::dot(neuronOuts,Linear);
         errorSum += ( tempOut - trainy[i] ) * ( tempOut - trainy[i] );
+	icount+=(fabs(tempOut)>=1e+4);
     }
 
+    //return errorSum * (1.0 + 100.0 *icount);
     //if(norm>1000) return errorSum*(1.0+norm);
     return errorSum;
 }
