@@ -23,10 +23,12 @@ void    FunctionalRbf::init(QJsonObject &params)
     dimension = (d+1)*nodes;
     left.resize(dimension);
     right.resize(dimension);
+    initialLeft = -1e+8;
+    initialRight = 1e+8;
     for(int i=0;i<dimension;i++)
     {
-	    left[i]=-1000.0;
-	    right[i]= 1000.0;
+	    left[i]=initialLeft;
+	    right[i]=initialRight;
     }
     xinput=new double[ trainx.size() * trainx[0].size()];
     yinput=new double[ trainx.size()];
