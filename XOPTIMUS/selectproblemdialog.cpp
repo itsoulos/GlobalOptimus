@@ -13,9 +13,10 @@ SelectProblemDialog::SelectProblemDialog(QString sname,
     problemName = sname;
     problemList = list;
     this->setWindowTitle(tr("Problem Selection"));
-    this->setFixedSize(width,height);
+    //this->setFixedSize(width,height);
+    this->setFixedSize(500,500);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,width,height);
+    w1->setGeometry(0,0,500,500);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
     radioBox = new QGroupBox("Function list");
@@ -25,6 +26,7 @@ SelectProblemDialog::SelectProblemDialog(QString sname,
     {
         QString x = problemList[i];
         QRadioButton *bt = new QRadioButton(x);
+
         vbox->addWidget(bt,i/3,i%3);
         if(x == problemName)
             bt->setChecked(true);

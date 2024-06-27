@@ -5,34 +5,38 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 
 {
+
 	QScreen *screen = QGuiApplication::primaryScreen();
 	QRect qd = screen->geometry();
-    setFixedSize(4*qd.width()/5,7*qd.height()/8);
+    //setFixedSize(4*qd.width()/5,7*qd.height()/8);
+    //setFixedSize(1024,768);
+    this->setGeometry((qd.width()/2)-(this->width()/2),(qd.height()/2)-(this->height()/2),this->width()*2,this->height()*2);
+
     setWindowTitle("XOPTIMUS");
     mainWidget=new QWidget;
     setCentralWidget(mainWidget);
-    mainWidget->setFixedSize(this->width(),this->height());
+    //mainWidget->setFixedSize(this->width(),this->height());
     mainLayout=new QVBoxLayout;
     mainWidget->setLayout(mainLayout);
     mainTab=new QTabWidget;
-    mainTab->setGeometry(2*this->width()/100,
+    /*mainTab->setGeometry(2*this->width()/100,
                           2*this->height()/100,
                           97*this->width()/100,
-                          95*this->height()/100);
+                          95*this->height()/100);*/
 
     mainEdit=new QTextEdit;
     mainTab->addTab(mainEdit,"Main");
     //mainLayout->addWidget(mainEdit);
     mainLayout->addWidget(mainTab);
-    mainEdit->setGeometry(2*this->width()/100,
+   /* mainEdit->setGeometry(2*this->width()/100,
                           2*this->height()/100,
                           97*this->width()/100,
-                          95*this->height()/100);
+                          95*this->height()/100);*/
     mainEdit->setReadOnly(true);
     QLabel *empty = new QLabel();
     empty->setText("  ");
     mainLayout->addWidget(empty);
-    empty->setFixedHeight(3*this->height()/100);
+    //empty->setFixedHeight(3*this->height()/100);
 
     problemLoader  = new ProblemLoader();
     myMethod = NULL;
@@ -249,7 +253,7 @@ void    MainWindow::methodSlot(QAction  *action)
         if(myMethod == NULL) noMethodLoaded();
         else
         {
-             ntimes = 1;
+             ntimes = 30;
             bool ok;
             int i = QInputDialog::getInt(this, tr("Enter number of times"),
                                          tr("Number of times:"), ntimes, 0, 100, 1, &ok);

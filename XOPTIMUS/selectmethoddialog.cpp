@@ -11,9 +11,10 @@ SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
     height =3*wd.height()/4;
     methodList = list;
     this->setWindowTitle(tr("Optimizer Selection"));
-    this->setFixedSize(width,height);
+    //this->setFixedSize(width,height);
+    this->setFixedSize(500,500);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,width,height);
+    w1->setGeometry(0,0,500,500);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
     radioBox = new QGroupBox("Function list");

@@ -13,19 +13,21 @@ ParameterDialog::ParameterDialog(
     problemName=name;
     obj = params;
     this->setWindowTitle("Problem settings for function "+name);
-    this->setFixedSize(WIDTH,HEIGHT);
+    //this->setFixedSize(800,200);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,WIDTH,HEIGHT);
+    w1->setGeometry(0,0,1000,400);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
 
     table=new QTableWidget();
     l1->addWidget(table);
-    table->setFixedWidth(95 *WIDTH/100);
+    //table->setFixedWidth(95 *WIDTH/100);
     QStringList m_TableHeader;
 
     m_TableHeader<<tr("Name")<<tr("Value")<<tr("Add/Update")<<tr("Remove");
     table->setColumnCount(4);
+    //table->setFixedHeight(100);
+    table->setRowHeight(2, 50);
     table->setHorizontalHeaderLabels(m_TableHeader);
     table->verticalHeader()->setVisible(false);
     table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -75,7 +77,7 @@ void    ParameterDialog::updateTable()
         table->setCellWidget(i,1,paramValue);
         QPushButton *updateButton=new QPushButton();
         updateButton->setIcon(QIcon(QPixmap(":/images/XOPTIMUS/update.png")));
-        updateButton->setIconSize(QSize(WIDTH/8,HEIGHT/14));
+        //updateButton->setIconSize(QSize(WIDTH/8,HEIGHT/14));
         updateButton->setProperty("position",QVariant(i));
         connect(updateButton,SIGNAL(clicked(bool)),this,SLOT(updateSlot()));
         table->setCellWidget(i,2,updateButton);
@@ -92,7 +94,7 @@ void    ParameterDialog::updateTable()
     table->setCellWidget(obj.size(),1,addValue);
     QPushButton *addAddButton=new QPushButton();
     addAddButton->setIcon(QIcon(QPixmap(":/images/XOPTIMUS/add.png")));
-    addAddButton->setIconSize(QSize(WIDTH/8,HEIGHT/14));
+    //addAddButton->setIconSize(QSize(WIDTH/8,HEIGHT/14));
     table->setCellWidget(obj.size(),2,addAddButton);
     connect(addAddButton,SIGNAL(clicked(bool)),this,SLOT(insertSlot()));
 
