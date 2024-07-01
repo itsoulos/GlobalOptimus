@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
 	QScreen *screen = QGuiApplication::primaryScreen();
-	QRect qd = screen->geometry();
+     qd = screen->geometry();
     //setFixedSize(4*qd.width()/5,7*qd.height()/8);
     //setFixedSize(1024,768);
     this->setGeometry((qd.width()/2)-(this->width()/2),(qd.height()/2)-(this->height()/2),this->width()*2,this->height()*2);
@@ -45,8 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
     myStat = NULL;
     //make menu
     loadMenu = new QMenu("LOAD");
-    loadMenu->addAction("LOAD PROBLEM");
-    loadMenu->addAction("LOAD METHOD");
+    loadMenu->addAction("PROBLEM");
+    loadMenu->addAction("METHOD");
     //problemMenu->addAction("TEST");
     //problemMenu->addAction("PARAMS");
     //problemMenu->addAction("SEED");
@@ -54,8 +54,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     settingsMenu  = new QMenu("SETTINGS");
     //methodMenu->addAction("LOAD");
-    settingsMenu->addAction("PPARAMS");
-    settingsMenu->addAction("MPARAMS");
+    settingsMenu->addAction("PROBLEM");
+    settingsMenu->addAction("METHOD");
     settingsMenu->addAction("SEED");
 
     executeMenu = new QMenu("EXECUTE");
@@ -102,25 +102,17 @@ void    MainWindow::unload()
 
 void    MainWindow::noProblemLoaded()
 {
-    QMessageBox::warning(this, tr("XOPTIMUS"),
-                                   tr("No problem loaded."),
-                                   QMessageBox::Ok
-                                  ,
-                                   QMessageBox::Ok);
+    showMessageBox(appName,tr("No problem loaded."));
 }
 
 void    MainWindow::noMethodLoaded()
 {
-    QMessageBox::warning(this, tr("XOPTIMUS"),
-                                   tr("No method loaded."),
-                                   QMessageBox::Ok
-                                  ,
-                                   QMessageBox::Ok);
+    showMessageBox(appName,tr("No method loaded."));
 }
 
 void    MainWindow::loadSlot(QAction *action)
 {
-    if(action->text()=="LOAD PROBLEM")
+    if(action->text()=="PROBLEM")
     {
         SelectProblemDialog *dialog = new SelectProblemDialog(
                     problemLoader->getSelectedProblemName(),
@@ -142,9 +134,10 @@ void    MainWindow::loadSlot(QAction *action)
         }
         else
             addMessage("None selected");
+        delete dialog;
     }
     else
-    if(action->text()=="LOAD METHOD")
+    if(action->text()=="METHOD")
     {
         if(myProblem == NULL) noProblemLoaded();
         else
@@ -162,6 +155,7 @@ void    MainWindow::loadSlot(QAction *action)
                 addMessage("Method loaded "+methodName);
                 myMethod=methodLoader->getSelectedMethod(methodName);
             }
+            delete dialog;
         }
     }
     else
@@ -174,7 +168,7 @@ void    MainWindow::loadSlot(QAction *action)
 
 void    MainWindow::settingsSlot(QAction  *action)
 {
-    if(action->text()=="PPARAMS")
+    if(action->text()=="PROBLEM")
     {
         if(myProblem == NULL) noProblemLoaded();
         else
@@ -205,10 +199,11 @@ void    MainWindow::settingsSlot(QAction  *action)
                 addMessage("Problem params: "+strJson);
                 problemLoader->setParams(params);
             }
+            delete d;
         }
     }
     else
-    if(action->text()=="MPARAMS")
+    if(action->text()=="METHOD")
     {
         if(myMethod == NULL) noMethodLoaded();
         else
@@ -228,6 +223,7 @@ void    MainWindow::settingsSlot(QAction  *action)
                 addMessage("Method params "+strJson);
                 myMethod->setParams(params);
             }
+            delete d;
         }
     }
     else
@@ -344,17 +340,34 @@ void    MainWindow::helpSlot(QAction *action)
 {
     if(action->text()=="TEAM")
     {
-        QMessageBox::warning(this, tr("XOPTIMUS"),
-                             tr("Tsoulos Ioannis\n"
-                                "Charilogis Vasileios\n"
-                                "Kirou Glikeria\n"),
-                             QMessageBox::Ok
-                             ,
-                             QMessageBox::Ok);    }
+        showMessageBox(appName,                             tr("Tsoulos Ioannis\n"
+                                   "Charilogis Vasileios\n"
+                                   "Kirou Glikeria\n")); }
 }
 void    MainWindow::closeEvent(QCloseEvent *event)
 {
       unload();
+}
+
+void    MainWindow::showMessageBox(QString title,QString message)
+{
+    QMessageBox  msgBox;
+    msgBox.setText(message);
+    msgBox.setWindowTitle(title);
+
+    msgBox.setStyleSheet(
+        QString("QLabel{min-width:%1 px; min-height: %3px;font-size: 24px;font-weight: bold} QPushButton{ width:%2px;height:%4px font-size: 18px;}").
+        arg(qd.width()/4).arg(qd.width()/6).arg(qd.height()/10).arg(qd.height()/12));
+
+    // Get the palette of the QMessageBox to modify child widget colors
+    QPalette  palette = msgBox.palette();
+
+    // Set the background color of child widgets (QLabel)
+    palette.setColor(QPalette::Window, QColor(0, 100, 255));      // Yellow background color
+    msgBox.setPalette(palette);
+
+    // Show the QMessageBox
+    msgBox.exec();
 }
 
 MainWindow::~MainWindow()

@@ -41,6 +41,7 @@ private:
     QString       methodName;
     int randomSeed =1;
     int ntimes =1;
+    const QString appName = "Xoptimus";
     void unload();
     void noProblemLoaded();
     void noMethodLoaded();
@@ -53,6 +54,8 @@ private:
     QTextEdit *lastEdit;
     QString lastProblem="";
     QString lastMethod ="";
+    QRect qd;
+    void    showMessageBox(QString title,QString message);
 public:
     MainWindow(QWidget *parent = nullptr);
     void    addMessage(QString message,bool running=false);
