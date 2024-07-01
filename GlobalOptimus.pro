@@ -30,6 +30,7 @@ SOURCES += \
         GE/rule.cc \
         GE/symbol.cc \
 	GE/integeranneal.cpp \
+	OPTIMUS/mean.cpp \
     METHODS/gwooptimizer.cpp \
 	METHODS/ofalgorithm.cpp \
         METHODS/adam.cpp \
@@ -104,6 +105,8 @@ SOURCES += \
         main.cpp \
         OPTIMUS/optimizer.cpp \
         OPTIMUS/parameter.cpp \
+	PROBLEMS/discus.cpp \
+	PROBLEMS/cigar.cpp \
         OPTIMUS/problem.cpp \
         PROBLEMS/rastriginproblem.cpp \
         PROBLEMS/test2nproblem.cpp \
@@ -128,6 +131,9 @@ HEADERS += \
     GE/rule.h \
     GE/symbol.h \
     GE/integeranneal.h\
+    OPTIMUS/mean.h \
+    PROBLEMS/discus.h \
+    PROBLEMS/cigar.h \
     METHODS/adam.h \
     METHODS/gwooptimizer.h \
     METHODS/ipso.h \

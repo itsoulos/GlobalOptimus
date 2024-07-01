@@ -12,6 +12,7 @@ private:
     int SearchAgents_no, Max_iter;
     QString terminationMethod;
     int iter;
+    double sumMean;
 public:
     GWOoptimizer();
     virtual void init();

@@ -13,6 +13,8 @@ Optimizer::Optimizer()
     addParam(Parameter("opt_doubleboxminiters","5","Minimum iters to terminate the doublebox"));
     addParam(Parameter("opt_similarityminiters","5","Minimum number of iters for similarity stopping rule"));
     addParam(Parameter("opt_similaritycriterion","5","Number of iterations for same value in the similarity stopping rule"));
+    addParam(Parameter("opt_meanminiters","5","Minimum number of iters for mean stopping rule"));
+    addParam(Parameter("opt_meancriterion","5","Number of iterations for same value in the mean stopping rule"));
     addParam(Parameter("opt_sampler","uniform","Sampling method. Available values: uniform, triangular, maxwell, mlp, rbf, kmeans"));
     addParam(Parameter("opt_mlpsamples","10","Number of MLP samples"));
     addParam(Parameter("opt_mlpweights","10","Number of MLP weights"));
@@ -96,8 +98,11 @@ void    Optimizer::solve()
     doubleBox.setMinIters(getParam("opt_doubleboxminiters").getValue().toInt());
     similarity.setMinIters(getParam("opt_similarityminiters").getValue().toInt());
     similarity.setSimilarityIterations(getParam("opt_similaritycriterion").getValue().toInt());
+    mean.setMinIters(getParam("opt_meanminiters").getValue().toInt());
+    mean.setMeanIterations(getParam("opt_meancriterion").getValue().toInt());
     doubleBox.init();
     similarity.init();
+    mean.init();
     if(problemSampler!=NULL)
         delete problemSampler;
     QString sampling = getParam("opt_sampler").getValue();

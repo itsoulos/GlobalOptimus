@@ -4,6 +4,7 @@
 # include <OPTIMUS/parameter.h>
 # include <OPTIMUS/doublebox.h>
 # include <OPTIMUS/similarity.h>
+# include <OPTIMUS/mean.h>
 # include <SAMPLER/maxwellsampler.h>
 # include <SAMPLER/neuralsampler.h>
 # include <SAMPLER/triangularsampler.h>
@@ -34,6 +35,7 @@ protected:
    Problem          *myProblem;
    DoubleBox        doubleBox;
    Similarity       similarity;
+   Mean             mean;
    ProblemSampler   *problemSampler;
 public:
     /**

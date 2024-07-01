@@ -44,28 +44,38 @@ MainWindow::MainWindow(QWidget *parent)
     srand(randomSeed);
     myStat = NULL;
     //make menu
-    problemMenu = new QMenu("PROBLEM");
-    problemMenu->addAction("LOAD");
-    problemMenu->addAction("TEST");
-    problemMenu->addAction("PARAMS");
-    problemMenu->addAction("SEED");
-    problemMenu->addAction("QUIT");
+    loadMenu = new QMenu("LOAD");
+    loadMenu->addAction("LOAD PROBLEM");
+    loadMenu->addAction("LOAD METHOD");
+    //problemMenu->addAction("TEST");
+    //problemMenu->addAction("PARAMS");
+    //problemMenu->addAction("SEED");
+    loadMenu->addAction("QUIT");
 
-    methodMenu  = new QMenu("METHOD");
-    methodMenu->addAction("LOAD");
-    methodMenu->addAction("PARAMS");
-    methodMenu->addAction("STATISTICS");
-    methodMenu->addAction("RUN");
+    settingsMenu  = new QMenu("SETTINGS");
+    //methodMenu->addAction("LOAD");
+    settingsMenu->addAction("PPARAMS");
+    settingsMenu->addAction("MPARAMS");
+    settingsMenu->addAction("SEED");
+
+    executeMenu = new QMenu("EXECUTE");
+    executeMenu->addAction("RUN");
+    executeMenu->addAction("STATISTICS");
+    executeMenu->addAction("TEST");
+
 
     helpMenu    = new QMenu("HELP");
+    helpMenu->addAction("TEAM");
     helpMenu->addAction("MANUAL");
     helpMenu->addAction("ABOUT");
     lastEdit = NULL;
-    menuBar()->addMenu(problemMenu);
-    menuBar()->addMenu(methodMenu);
+    menuBar()->addMenu(loadMenu);
+    menuBar()->addMenu(settingsMenu);
+    menuBar()->addMenu(executeMenu);
     menuBar()->addMenu(helpMenu);
-    connect(problemMenu,SIGNAL(triggered(QAction*)),this,SLOT(problemSlot(QAction*)));
-    connect(methodMenu,SIGNAL(triggered(QAction*)),this,SLOT(methodSlot(QAction*)));
+    connect(loadMenu,SIGNAL(triggered(QAction*)),this,SLOT(loadSlot(QAction*)));
+    connect(settingsMenu,SIGNAL(triggered(QAction*)),this,SLOT(settingsSlot(QAction*)));
+    connect(executeMenu,SIGNAL(triggered(QAction*)),this,SLOT(executeSlot(QAction*)));
     connect(helpMenu,SIGNAL(triggered(QAction*)),this,SLOT(helpSlot(QAction*)));
     watcher = new QFileSystemWatcher(this);
     connect(watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChanged(QString)));
@@ -108,9 +118,9 @@ void    MainWindow::noMethodLoaded()
                                    QMessageBox::Ok);
 }
 
-void    MainWindow::problemSlot(QAction *action)
+void    MainWindow::loadSlot(QAction *action)
 {
-    if(action->text()=="LOAD")
+    if(action->text()=="LOAD PROBLEM")
     {
         SelectProblemDialog *dialog = new SelectProblemDialog(
                     problemLoader->getSelectedProblemName(),
@@ -134,27 +144,37 @@ void    MainWindow::problemSlot(QAction *action)
             addMessage("None selected");
     }
     else
-    if(action->text()=="TEST")
+    if(action->text()=="LOAD METHOD")
     {
         if(myProblem == NULL) noProblemLoaded();
         else
-        addMessage(""+problemLoader->getProblemReport());
-    }
-    else
-    if(action->text()=="SEED")
-    {
-        bool ok;
-            int i = QInputDialog::getInt(this, tr("Enter seed value"),
-                                         tr("Random Seed:"), randomSeed, 0, INT_MAX, 1, &ok);
-        if(ok)
         {
-            randomSeed = i;
-            addMessage("Set seed "+QString::number(randomSeed));
+            SelectMethodDialog *dialog = new
+                SelectMethodDialog(
+                    methodLoader->getMethodList(),
+                    this
+                    );
+            dialog->setModal(true);
+            int d = dialog->exec();
+            if(d==QDialog::Accepted)
+            {
+                methodName =dialog->getSelectedMethod();
+                addMessage("Method loaded "+methodName);
+                myMethod=methodLoader->getSelectedMethod(methodName);
+            }
         }
-        srand(randomSeed);
     }
     else
-    if(action->text()=="PARAMS")
+    if(action->text()=="QUIT")
+    {
+        unload();
+        qApp->exit(0);
+    }
+}
+
+void    MainWindow::settingsSlot(QAction  *action)
+{
+    if(action->text()=="PPARAMS")
     {
         if(myProblem == NULL) noProblemLoaded();
         else
@@ -165,15 +185,15 @@ void    MainWindow::problemSlot(QAction *action)
                 pt = ((MlpProblem *)myProblem)->getParams();
             }
             else
-            if(problemLoader->getSelectedProblemName()=="rbfproblem")
-            {
-                pt = ((RbfProblem *)myProblem)->getParams();
+                if(problemLoader->getSelectedProblemName()=="rbfproblem")
+                {
+                    pt = ((RbfProblem *)myProblem)->getParams();
 
-            }
-            else pt = problemLoader->getParams();
+                }
+                else pt = problemLoader->getParams();
             ParameterDialog *d = new ParameterDialog(
-                        pt,
-                        problemLoader->getSelectedProblemName(),this);
+                pt,
+                problemLoader->getSelectedProblemName(),this);
             d->setModal(true);
             int v=d->exec();
 
@@ -188,37 +208,7 @@ void    MainWindow::problemSlot(QAction *action)
         }
     }
     else
-    if(action->text()=="QUIT")
-    {
-        unload();
-        qApp->exit(0);
-    }
-}
-
-void    MainWindow::methodSlot(QAction  *action)
-{
-    if(action->text()=="LOAD")
-    {
-        if(myProblem == NULL) noProblemLoaded();
-        else
-        {
-            SelectMethodDialog *dialog = new
-                    SelectMethodDialog(
-                        methodLoader->getMethodList(),
-                        this
-                        );
-            dialog->setModal(true);
-            int d = dialog->exec();
-            if(d==QDialog::Accepted)
-            {
-                methodName =dialog->getSelectedMethod();
-                addMessage("Method loaded "+methodName);
-                myMethod=methodLoader->getSelectedMethod(methodName);
-            }
-        }
-    }
-    else
-    if(action->text()=="PARAMS")
+    if(action->text()=="MPARAMS")
     {
         if(myMethod == NULL) noMethodLoaded();
         else
@@ -241,19 +231,28 @@ void    MainWindow::methodSlot(QAction  *action)
         }
     }
     else
-    if(action->text()=="STATISTICS")
+    if(action->text()=="SEED")
     {
-        if(myStat==NULL) noMethodLoaded();
-        else
-            addMessage(myStat->getStatistics(),true);
+        bool ok;
+        int i = QInputDialog::getInt(this, tr("Enter seed value"),
+                                     tr("Random Seed:"), randomSeed, 0, INT_MAX, 1, &ok);
+        if(ok)
+        {
+            randomSeed = i;
+            addMessage("Set seed "+QString::number(randomSeed));
+        }
+        srand(randomSeed);
     }
-    else
+}
+
+void    MainWindow::executeSlot(QAction  *action)
+{
     if(action->text()=="RUN")
     {
         if(myMethod == NULL) noMethodLoaded();
         else
         {
-             ntimes = 30;
+            ntimes = 30;
             bool ok;
             int i = QInputDialog::getInt(this, tr("Enter number of times"),
                                          tr("Number of times:"), ntimes, 0, 100, 1, &ok);
@@ -266,6 +265,21 @@ void    MainWindow::methodSlot(QAction  *action)
             }
         }
     }
+    else
+    if(action->text()=="STATISTICS")
+    {
+        if(myStat==NULL) noMethodLoaded();
+        else
+            addMessage(myStat->getStatistics(),true);
+    }
+    else
+    if(action->text()=="TEST")
+    {
+        if(myProblem == NULL) noProblemLoaded();
+        else
+            addMessage(""+problemLoader->getProblemReport());
+    }
+
 }
 
 void    MainWindow::startRunning()
@@ -328,7 +342,15 @@ void    MainWindow::fileChanged(QString path)
 
 void    MainWindow::helpSlot(QAction *action)
 {
-
+    if(action->text()=="TEAM")
+    {
+        QMessageBox::warning(this, tr("XOPTIMUS"),
+                             tr("Tsoulos Ioannis\n"
+                                "Charilogis Vasileios\n"
+                                "Kirou Glikeria\n"),
+                             QMessageBox::Ok
+                             ,
+                             QMessageBox::Ok);    }
 }
 void    MainWindow::closeEvent(QCloseEvent *event)
 {

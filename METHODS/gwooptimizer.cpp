@@ -1,7 +1,7 @@
 #include "gwooptimizer.h"
 GWOoptimizer::GWOoptimizer()
 {
-    addParam(Parameter("gwo_agents", "100", "Number of gwo agents"));
+    addParam(Parameter("gwo_agents", "120", "Number of gwo agents"));
     addParam(Parameter("gwo_maxiters", "200", "Number of gwo max iters"));
     addParam(Parameter("gwo_termination", "similarity", "Termination method for gwo"));
 }
@@ -55,6 +55,7 @@ void    GWOoptimizer::init()
     Beta_score = fitnessArray[p2];
     Delta_pos = Positions[p3];
     Delta_score = fitnessArray[p3];
+    sumMean = accumulate(fitnessArray.begin(), fitnessArray.end(), 0.0);
 }
 
 void    GWOoptimizer::step()
@@ -66,6 +67,7 @@ void    GWOoptimizer::step()
         {
             Alpha_score=fitness;
             Alpha_pos=Positions[i];
+            fitnessArray.at(i)= Alpha_score;
         }
 
 
@@ -80,6 +82,7 @@ void    GWOoptimizer::step()
             Delta_pos=Positions[i];
         }
     }
+sumMean = accumulate(fitnessArray.begin(), fitnessArray.end(), 0.0);
     int dim = myProblem->getDimension();
     double a=2-1.0*((2.0)/Max_iter); //'a' decreases linearly from 2 to 0
     //Update the position of search agents including omegas
@@ -116,6 +119,7 @@ void    GWOoptimizer::step()
     }
 
     iter= iter+1;
+
 }
 
 
@@ -125,18 +129,51 @@ bool    GWOoptimizer::terminated()
     besty = Alpha_score;
     //chromosomes.getBestWorstValues(besty,worsty);
     if(iter>=Max_iter) return true;
+
+    bool t1=false,t2=false,t3=false;
+    if(terminationMethod=="similarity" || terminationMethod=="all")
+    {
+        similarity.setSimilarityIterations(12);
+	t1=similarity.terminate(besty);
+	if(t1) return true;
+    }
+    if(terminationMethod=="mean" || terminationMethod=="all")
+    {
+        mean.setMeanIterations(12);
+        t2=mean.terminate(sumMean);
+	if(t2) return true;
+    }
+    if(terminationMethod=="doublebox" || terminationMethod=="all")
+    {
+        t3=doubleBox.terminate(besty);
+	if(t3) return true;
+    }
+    if(terminationMethod=="all") return (t1 || t2|| t3);
+    return false;
+
+/*
     if(terminationMethod=="doublebox")
+    {
         return doubleBox.terminate(besty);
-    else
-        if(terminationMethod=="similarity")
-            return similarity.terminate(besty);
+    }
+    if(terminationMethod=="similarity")
+    {
+        similarity.setSimilarityIterations(12);
+        return similarity.terminate(besty);
+    }
+    if(terminationMethod=="mean")
+    {
+        mean.setMeanIterations(12);
+        return mean.terminate(sumMean);
+    }*/
+
     return false;
 }
 
 void    GWOoptimizer::showDebug()
 {
-    printf("Iter=%4d BEST VALUE=%10.4lf\n",
-           iter,Alpha_score);
+    //printf("Iter=%4d BEST VALUE=%10.4lf\n",iter,Alpha_score);
+    //printf("Iter=%4d BEST VALUE=%10.4lf\n",iter,sumMean);
 }
 
 void    GWOoptimizer::done()

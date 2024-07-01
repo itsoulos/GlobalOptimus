@@ -33,7 +33,7 @@ private:
     QVBoxLayout *mainLayout;
     QTextEdit *mainEdit;
     QMenuBar *menubar;
-    QMenu *problemMenu,*methodMenu, *helpMenu;
+    QMenu *loadMenu, *settingsMenu, *executeMenu, *helpMenu;
     ProblemLoader *problemLoader;
     MethodLoader  *methodLoader;
     Problem       *myProblem;
@@ -58,8 +58,9 @@ public:
     void    addMessage(QString message,bool running=false);
     ~MainWindow();
 public slots:
-    void problemSlot(QAction *action);
-    void methodSlot(QAction  *action);
+    void loadSlot(QAction *action);
+    void settingsSlot(QAction  *action);
+    void executeSlot(QAction  *action);
     void helpSlot(QAction *action);
     void fileChanged(QString text);
 protected:

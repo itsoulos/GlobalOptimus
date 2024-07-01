@@ -48,6 +48,7 @@ SOURCES += \
     GE/rule.cc \
     GE/ruleprogram.cpp \
     GE/symbol.cc \
+    OPTIMUS/mean.cpp \
     LINESEARCH/armijosearch.cpp \
     LINESEARCH/fibonaccisearch.cpp \
     LINESEARCH/goldensearch.cpp \
@@ -123,6 +124,8 @@ SOURCES += \
     PROBLEMS/shekel7.cpp \
     PROBLEMS/sinu.cpp \
     PROBLEMS/test2nproblem.cpp \
+    PROBLEMS/discus.cpp \
+    PROBLEMS/cigar.cpp \
     PROBLEMS/test30n.cpp \
     PROBLEMS/userproblem.cpp \
     SAMPLER/kmeanssampler.cpp \
@@ -152,6 +155,9 @@ HEADERS += \
     GE/rule.h \
     GE/ruleprogram.h \
     GE/symbol.h \
+    OPTIMUS/mean.h \
+    PROBLEMS/discus.h \
+    PROBLEMS/cigar.h \
     LINESEARCH/armijosearch.h \
     LINESEARCH/fibonaccisearch.h \
     LINESEARCH/goldensearch.h \

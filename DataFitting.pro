@@ -32,6 +32,7 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
+	OPTIMUS/mean.cpp \
     	METHODS/gwooptimizer.cpp \
 	METHODS/ofalgorithm.cpp \
         METHODS/adam.cpp \
@@ -107,6 +108,8 @@ SOURCES += \
         SAMPLER/uniformsampler.cpp \
         datafitting.cpp \
         OPTIMUS/optimizer.cpp \
+	PROBLEMS/discus.cpp \
+	PROBLEMS/cigar.cpp \
         OPTIMUS/parameter.cpp \
         OPTIMUS/problem.cpp \
 	MLMODELS/converter.cc \
@@ -133,6 +136,9 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    OPTIMUS/mean.h \
+    PROBLEMS/discus.h \
+    PROBLEMS/cigar.h \
     GE/integeranneal.h\
     GE/nncprogram.h \
     GE/ruleprogram.h \

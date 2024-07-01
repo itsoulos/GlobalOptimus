@@ -10,6 +10,8 @@
 # include <PROBLEMS/diffpower.h>
 # include <PROBLEMS/easom.h>
 # include <PROBLEMS/elp.h>
+# include <PROBLEMS/discus.h>
+# include <PROBLEMS/cigar.h>
 # include <PROBLEMS/exp.h>
 # include <PROBLEMS/gkls250.h>
 # include <PROBLEMS/gkls2100.h>
@@ -157,6 +159,15 @@ void loadProblem()
     else
         if(problemName=="camel")
         mainProblem = new Camel();
+    else
+	if(problemName=="cm")
+	 mainProblem = new Cm();
+    else
+	if(problemName == "discus")
+	 mainProblem = new Discus();
+    else
+	if(problemName == "cigar")
+	 mainProblem = new Cigar();
     else
         if(problemName=="diffpower")
         mainProblem = new DiffPower();

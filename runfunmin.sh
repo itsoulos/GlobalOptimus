@@ -1,11 +1,11 @@
-#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Ofa
+#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
+METHOD=Gwo
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=kmeans
-#Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+SAMPLER=uniform
+#Available stopping rules: maxiters, doublebox, similarity, mean, all
+TERMINATION=mean
 if [ $METHOD = "bfgs" ]
 then
 
