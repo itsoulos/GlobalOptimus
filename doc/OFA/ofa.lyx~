@@ -674,6 +674,450 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
+\begin_layout Standard
+The OFA algorithm uses nature as a source of inspiration.
+ The OFA algorithm has as its main purpose the evolution of the population
+ using some iterative steps which will be presented in more detail below.
+ The quality of the initial population can be improved, allowing the search
+ space to be explored more efficiently.
+ Essentially, a new search strategy with social behavior is implemented
+ to iteratively update the solution positions.
+ Here are the basic steps of the proposed algorithm:
+\end_layout
+
+\begin_layout Description
+
+\size footnotesize
+1.
+ 
+\series bold
+Initialization step 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+• Define Nc as the cluster in the population.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+• Define as Ng the number of allowed repetitions.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+• Randomly initialize Nc gi, i = 1, .
+ .
+ .
+ , Nc a swarm in S.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+• Set iter=0.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+•Set pl local search rate.
+ 
+\end_layout
+
+\begin_layout Description
+\paragraph_spacing single
+
+\size footnotesize
+2.
+ 
+\series bold
+Evaluation step
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing single
+
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing single
+
+\size footnotesize
+• For i = 1, .
+ .
+ .
+ , Nc do Set fi = f(gi).
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing single
+
+\size footnotesize
+• end for 
+\end_layout
+
+\begin_layout Description
+
+\size footnotesize
+3.
+ 
+\series bold
+Calculation step
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\size footnotesize
+Generate the offspring solutions x
+\begin_inset Formula $^{^{iter}{}^{+1}}$
+\end_inset
+
+ based on ranking order     
+\end_layout
+
+\begin_layout Itemize
+
+\series medium
+\size footnotesize
+  
+\series default
+  For each solution x
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset Formula $^{iter}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+in Nc do       
+\begin_inset Formula 
+\[
+x_{j}^{\mbox{iter+1}}=x_{j}^{\mbox{iter}}+K\left(\mbox{iter}\right)\left(r_{1}-r_{2}\right)\left(x_{j}^{\mbox{iter}}-x_{b}^{\mbox{iter}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+
+\series medium
+\size footnotesize
+  
+\series default
+ where 
+\begin_inset Formula $r_{1},r_{2}$
+\end_inset
+
+ are random numbers in [0, 1] and 
+\begin_inset Formula $K\left(\mbox{iter}\right)$
+\end_inset
+
+ is defined as:
+\begin_inset Formula 
+\[
+K\left(\mbox{iter}\right)=\cos\left(\frac{\pi}{2}\frac{\mbox{iter}}{N_{g}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size footnotesize
+Check the feasibility of the offspring solutions   and regenerate the solution
+ by x
+\begin_inset Formula $ij^{iter}$
+\end_inset
+
+
+\begin_inset Formula $^{+1}$
+\end_inset
+
+ = 
+\begin_inset Formula $\left(ai\right)$
+\end_inset
+
+x
+\begin_inset Formula $\left((bi-ai\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+Evaluate the fitness value of each offspring solution x
+\begin_inset Formula $^{iter+1}$
+\end_inset
+
+ and compare it with its parent solution x
+\begin_inset Formula $^{iter}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series medium
+\size footnotesize
+Calculate 
+\series default
+the values according to:     
+\end_layout
+
+\begin_layout Description
+
+\series medium
+\size footnotesize
+  
+\series default
+
+\begin_inset Formula $\begin{cases}
+\frac{\lambda j^{iter+1}xfj^{iter+1}}{1+(iter+1)x\lambda j^{iter+1}} & \prec\frac{fj^{iter}}{iter}\end{cases}$
+\end_inset
+
+ where 
+\begin_inset Formula $^{\lambda j^{iter+1}}$
+\end_inset
+
+ a uniformly random number in [0, 1], f j
+\begin_inset Formula $^{iter+1}$
+\end_inset
+
+ 
+\begin_inset Formula $and$
+\end_inset
+
+ f j
+\begin_inset Formula $^{iter}$
+\end_inset
+
+donate the fitness value of xj
+\begin_inset Formula $^{iter+1}$
+\end_inset
+
+ and  xj
+\begin_inset Formula $^{iter}$
+\end_inset
+
+, respectively
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+
+\shape italic
+\size footnotesize
+if 
+\series bold
+satisfied preserved 
+\begin_inset Formula $\left\{ x^{iter}{}^{+1}\right\} $
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Description
+
+\shape italic
+\size footnotesize
+otherwise 
+\series bold
+
+\begin_inset Formula $\left\{ x^{iter}\right\} $
+\end_inset
+
+ is preserved
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size footnotesize
+Sort all solutions in the Nc from the best to worst according to the fitness
+ value
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+4.
+ Termination check step:
+\series default
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+Set iter = iter +1
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+if 
+\begin_inset Formula $\mbox{iter}\ge N_{g}$
+\end_inset
+
+ or 
+\begin_inset Formula $\sigma^{\mbox{iter}}\le\frac{\sigma_{KT}}{2}$
+\end_inset
+
+
+\begin_inset Formula $ $
+\end_inset
+
+ where kT is the iteration where a new and better estimation for the global
+ minimum was found .
+ The proposed stopping rule of Tsoulos
+\begin_inset CommandInset citation
+LatexCommand citep
+key "stopping rule"
+literal "false"
+
+\end_inset
+
+ holds, then goto the local search step.
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+if iteration k, the absolute difference between the current located global
+ minimum f
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\size footnotesize
+k
+\end_layout
+
+\end_inset
+
+min and the previous best value f
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\size footnotesize
+k+1
+\end_layout
+
+\end_inset
+
+min is calculated: 
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset Formula $\mid$
+\end_inset
+
+f
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\size footnotesize
+k
+\end_layout
+
+\end_inset
+
+min- f
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\size footnotesize
+k-1
+\end_layout
+
+\end_inset
+
+min
+\begin_inset Formula $\mid$
+\end_inset
+
+.
+ The proposed stopping rule of Charilogis
+\begin_inset CommandInset citation
+LatexCommand citep
+key "stopping rule2"
+literal "false"
+
+\end_inset
+
+ holds, then goto the local search step.
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+if the termination criteria are not held go to Step 1.
+\end_layout
+
+\begin_layout Description
+\paragraph_spacing single
+
+\size footnotesize
+5.
+ 
+\series bold
+Local search step:
+\end_layout
+
+\begin_layout Itemize
+\paragraph_spacing single
+
+\size footnotesize
+Choose a random number r ∈ [0, 1].
+ If r ≤ Nc In this work, the BFGS method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "metric algorithm"
+literal "false"
+
+\end_inset
+
+was used as a local search procedure.
+ By using the local optimization technique, it is ensured that the result
+ of the global optimization method will be one of the local minima of the
+ objective function and that the best final result will be achieved with
+ the maximum accuracy.
+\end_layout
+
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -697,7 +1141,7 @@ Test functions
 
 \begin_layout Standard
 The functions used in the experiments are used in a variety of research
- papers  
+ papers 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Ali1,Floudas1"
@@ -706,6 +1150,8 @@ literal "false"
 \end_inset
 
 .
+ These functions cover various fields, such as problems from the field of
+ medicine, physics, engineering, etc.
 \end_layout
 
 \begin_layout Subsection
@@ -5433,6 +5879,53 @@ ons, Mathematical Programming
 \series default
 , pp.
  547-566, 1989.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "stopping rule"
+literal "false"
+
+\end_inset
+
+Tsoulos, I.G.
+ Modifications of real code genetic algorithm for global optimization.
+ Appl.
+ Math.
+ Comput.
+ 2008, 203, 598–607.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "stopping rule2"
+literal "false"
+
+\end_inset
+
+Charilogis, V.; Tsoulos, I.G.
+ Toward an Ideal Particle Swarm Optimizer for Multidimensional Functions.
+ Information 2022, 13, 217.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "metric algorithm"
+literal "false"
+
+\end_inset
+
+Fletcher, R.
+ A new approach to variable metric algorithms.
+ Comput.
+ J.
+ 1970, 13, 317–322.
  
 \end_layout
 
