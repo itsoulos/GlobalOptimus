@@ -664,7 +664,7 @@ noprefix "false"
 \end_layout
 
 \begin_layout Section
-Materials and Methods
+The proposed method
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Materials-and-Methods"
@@ -685,170 +685,239 @@ The OFA algorithm uses nature as a source of inspiration.
  Here are the basic steps of the proposed algorithm:
 \end_layout
 
-\begin_layout Description
+\begin_layout Enumerate
 
-\size footnotesize
-1.
- 
 \series bold
-Initialization step 
+Initialization step
+\series default
+.
 \end_layout
 
-\begin_layout Standard
+\begin_deeper
+\begin_layout Enumerate
 
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ the number of elements in the population.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Enumerate
 
-\size footnotesize
-• Define Nc as the cluster in the population.
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ the maximum number of allowed iterations.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ randomly the 
+\begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
+\end_inset
+
+ members of the population in set 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ This forms the initial population denoted as 
+\begin_inset Formula $P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the QOP population 
+\series bold
+...
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
  
+\begin_inset Formula $p_{l}$
+\end_inset
+
+ the local search rate.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Enumerate
 
-\size footnotesize
-• Define as Ng the number of allowed repetitions.
-\end_layout
-
-\begin_layout Standard
-
-\size footnotesize
-• Randomly initialize Nc gi, i = 1, .
- .
- .
- , Nc a swarm in S.
+\series bold
+Set
+\series default
  
+\begin_inset Formula $t=0$
+\end_inset
+
+, the iteration number.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Enumerate
+Select the 
+\begin_inset Formula $N_{c}$
+\end_inset
 
-\size footnotesize
-• Set iter=0.
- 
+ fittest solutions from the population set 
+\begin_inset Formula $\left\{ P,\text{\mbox{QOP}}\right\} $
+\end_inset
+
+ using the procedure described in subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Population-Selection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ This will produce a new population of trial solutions.
 \end_layout
 
-\begin_layout Standard
+\end_deeper
+\begin_layout Enumerate
 
-\size footnotesize
-•Set pl local search rate.
- 
-\end_layout
-
-\begin_layout Description
-\paragraph_spacing single
-
-\size footnotesize
-2.
- 
 \series bold
 Evaluation step
+\series default
+.
 \end_layout
 
-\begin_layout Standard
-\paragraph_spacing single
+\begin_layout Enumerate
 
-\end_layout
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{c}$
+\end_inset
 
-\begin_layout Standard
-\paragraph_spacing single
-
-\size footnotesize
-• For i = 1, .
- .
- .
- , Nc do Set fi = f(gi).
-\end_layout
-
-\begin_layout Standard
-\paragraph_spacing single
-
-\size footnotesize
-• end for 
-\end_layout
-
-\begin_layout Description
-
-\size footnotesize
-3.
  
 \series bold
-Calculation step
+do
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-
-\size footnotesize
-Generate the offspring solutions x
-\begin_inset Formula $^{^{iter}{}^{+1}}$
-\end_inset
-
- based on ranking order     
-\end_layout
-
-\begin_layout Itemize
-
-\series medium
-\size footnotesize
-  
-\series default
-  For each solution x
-\begin_inset script superscript
-
-\begin_layout Plain Layout
-
-\size footnotesize
-\begin_inset Formula $^{iter}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-in Nc do       
-\begin_inset Formula 
-\[
-x_{j}^{\mbox{iter+1}}=x_{j}^{\mbox{iter}}+K\left(\mbox{iter}\right)\left(r_{1}-r_{2}\right)\left(x_{j}^{\mbox{iter}}-x_{b}^{\mbox{iter}}\right)
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-
-\series medium
-\size footnotesize
-  
-\series default
- where 
-\begin_inset Formula $r_{1},r_{2}$
-\end_inset
-
- are random numbers in [0, 1] and 
-\begin_inset Formula $K\left(\mbox{iter}\right)$
-\end_inset
-
- is defined as:
-\begin_inset Formula 
-\[
-K\left(\mbox{iter}\right)=\cos\left(\frac{\pi}{2}\frac{\mbox{iter}}{N_{g}}\right)
-\]
-
+\begin_layout Enumerate
+\begin_inset Formula $f_{i}=f\left(g_{i}\right)$
 \end_inset
 
 
 \end_layout
 
 \end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Calculation step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Produce the new offspring solutions 
+\begin_inset Formula $x^{t+1}$
+\end_inset
+
+ based on the ranking order using the following equation:
+\begin_inset Formula 
+\begin{equation}
+x_{j}^{t+1}=\begin{cases}
+\begin{array}{cc}
+x_{j}^{t}+K(t)\times\left(r_{1}-r_{2}\right)\times\left(x_{j}^{t}-x_{b}^{t}\right)+\left(1-K(t)\right)\times\left(x_{1}^{t}-x_{r}^{t}\right) & ,\ j=2,\ldots,N_{c}\\
+x_{1}^{t}+K(t)\times\left(r_{1}-r_{2}\right)\times\left(x_{1}^{t}-x_{N_{c}}^{t}\right) & ,\ j=1
+\end{array}\end{cases}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $r_{1},r_{2}$
+\end_inset
+
+ are random numbers in 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ and 
+\begin_inset Formula $x_{r}^{t}$
+\end_inset
+
+ is a randomly selected solution from the population.
+\end_layout
+
 \begin_layout Itemize
 
+\size scriptsize
+     x
+\begin_inset Formula $^{t+1}$
+\end_inset
+
+=    x
+\begin_inset Formula $^{t}$
+\end_inset
+
+ + Κ
+\begin_inset Formula $\left(t\right)$
+\end_inset
+
+x 
+\begin_inset Formula $\left(r_{1}-r_{2}\right)x$
+\end_inset
+
+
+\begin_inset Formula $\left(x^{t}-xb^{iter}\right)$
+\end_inset
+
+ where r1, r2 are random numbers in [0, 1] and Κ
+\begin_inset Formula $\left(iter\right)$
+\end_inset
+
+according to : Κ
+\begin_inset Formula $\left(iter\right)$
+\end_inset
+
+= cos
+\begin_inset Formula $\left[\frac{pi}{2}x\frac{iter}{Ng}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+
 \size footnotesize
-Check the feasibility of the offspring solutions   and regenerate the solution
+c.
+ Check the feasibility of the offspring solutions   and regenerate the solution
  by x
 \begin_inset Formula $ij^{iter}$
 \end_inset
@@ -868,10 +937,11 @@ x
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Description
 
 \size footnotesize
-Evaluate the fitness value of each offspring solution x
+d.
+ Evaluate the fitness value of each offspring solution x
 \begin_inset Formula $^{iter+1}$
 \end_inset
 
@@ -884,17 +954,14 @@ Evaluate the fitness value of each offspring solution x
 
 \begin_layout Itemize
 
-\series medium
-\size footnotesize
-Calculate 
-\series default
-the values according to:     
+\size scriptsize
+Calculate the values according to:     
 \end_layout
 
 \begin_layout Description
 
 \series medium
-\size footnotesize
+\size scriptsize
   
 \series default
 
@@ -933,34 +1000,33 @@ donate the fitness value of xj
 \begin_layout Description
 
 \shape italic
-\size footnotesize
-if 
-\series bold
-satisfied preserved 
-\begin_inset Formula $\left\{ x^{iter}{}^{+1}\right\} $
+\size scriptsize
+\begin_inset Formula $\begin{cases}
+ifsatisfiedpreserved & x^{iter}{}^{+1}\end{cases}$
 \end_inset
 
  
+\begin_inset Formula $\begin{cases}
+otherwise, & x^{iter}\end{cases}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
 
-\shape italic
 \size footnotesize
-otherwise 
-\series bold
-
-\begin_inset Formula $\left\{ x^{iter}\right\} $
-\end_inset
-
- is preserved
+e.
+ All the preserved solutions are merged into the new population for the
+ next iteration according to: iter = iter + 1.
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Description
 
 \size footnotesize
-Sort all solutions in the Nc from the best to worst according to the fitness
+f.
+ Sort all solutions in the Nc from the best to worst according to the fitness
  value
 \end_layout
 
@@ -969,7 +1035,7 @@ Sort all solutions in the Nc from the best to worst according to the fitness
 
 \series bold
 \size footnotesize
-4.
+5.
  Termination check step:
 \series default
  
@@ -977,23 +1043,23 @@ Sort all solutions in the Nc from the best to worst according to the fitness
 
 \begin_layout Itemize
 
-\size footnotesize
+\size scriptsize
 Set iter = iter +1
 \end_layout
 
 \begin_layout Itemize
 
-\size footnotesize
-if 
-\begin_inset Formula $\mbox{iter}\ge N_{g}$
+\size scriptsize
+if iter 
+\begin_inset Formula $\succeq$
 \end_inset
 
- or 
-\begin_inset Formula $\sigma^{\mbox{iter}}\le\frac{\sigma_{KT}}{2}$
+Ng or σ 
+\begin_inset Formula $^{iter}\leq$
 \end_inset
 
 
-\begin_inset Formula $ $
+\begin_inset Formula $\frac{σkT}{2}$
 \end_inset
 
  where kT is the iteration where a new and better estimation for the global
@@ -1011,14 +1077,14 @@ literal "false"
 
 \begin_layout Itemize
 
-\size footnotesize
+\size scriptsize
 if iteration k, the absolute difference between the current located global
  minimum f
 \begin_inset script superscript
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 k
 \end_layout
 
@@ -1029,18 +1095,13 @@ min and the previous best value f
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 k+1
 \end_layout
 
 \end_inset
 
 min is calculated: 
-\end_layout
-
-\begin_layout Standard
-
-\size footnotesize
 \begin_inset Formula $\mid$
 \end_inset
 
@@ -1049,7 +1110,7 @@ f
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 k
 \end_layout
 
@@ -1060,7 +1121,7 @@ min- f
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 k-1
 \end_layout
 
@@ -1084,15 +1145,15 @@ literal "false"
 
 \begin_layout Itemize
 
-\size footnotesize
-if the termination criteria are not held go to Step 1.
+\size scriptsize
+if the termination criteria are not held go to Step 3a.
 \end_layout
 
 \begin_layout Description
 \paragraph_spacing single
 
 \size footnotesize
-5.
+6.
  
 \series bold
 Local search step:
@@ -1118,6 +1179,637 @@ was used as a local search procedure.
  the maximum accuracy.
 \end_layout
 
+\begin_layout Subsection
+Population Selection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Population-Selection"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As in ofa ....
+\end_layout
+
+\begin_layout Subsection
+Proposed initialization distribution
+\end_layout
+
+\begin_layout Standard
+The present work replaces the randomness of the initialization of the chromosome
+s by using the k-means technique.
+ More specifically, the method takes a series of samples from the objective
+ function and then the k-means method is used to locate the centers of these
+ points.
+ These centers can then be used as chromosomes in the genetic algorithm.
+\end_layout
+
+\begin_layout Standard
+The k-means algorithm emerged in 1957 by Stuart Lloyd in the form of Lloyd's
+ algorithm
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Lloyd"
+literal "false"
+
+\end_inset
+
+, although the concept of clustering based on distance had been introduced
+ earlier.
+ The name 'k-means' was introduced around 1967 by James MacQueen
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MacQueen"
+literal "false"
+
+\end_inset
+
+.
+ The k-means algorithm is a clustering algorithm widely used in data analysis
+ and machine learning.
+ Its primary objective is to partition a dataset into k clusters, where
+ data points within the same cluster are similar to each other and differ
+ from data points in other clusters.
+ Specifically, k-means seeks cluster centers and assigns samples to each
+ cluster, aiming to minimize the distance within clusters and maximize the
+ distance between cluster centers
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Jain"
+literal "false"
+
+\end_inset
+
+.
+ The algorithm steps are presented in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:The-K-Means-algorithm."
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The k-Means algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:The-K-Means-algorithm."
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the number of clusters 
+\begin_inset Formula $k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The input of the algorithm is the 
+\begin_inset Formula $N_{m}$
+\end_inset
+
+ initial points 
+\begin_inset Formula $x_{i},\ i=1,\ldots,N_{m}$
+\end_inset
+
+.
+ For the current algorithm the points 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ are randomly selected samples in 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For 
+\series default
+every point 
+\begin_inset Formula $x_{i},\ i=1,...,N_{m}$
+\end_inset
+
+ 
+\series bold
+do
+\series default
+ Assign randomly the point 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ in a cluster 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every center 
+\begin_inset Formula $c_{j},\ j=1..k$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $M_{j}$
+\end_inset
+
+ the number of points in 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Compute 
+\series default
+
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ as
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Repeat
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Set 
+\begin_inset Formula $S_{j}=\left\{ \right\} ,\ j=1..k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every point 
+\begin_inset Formula $x_{i},\ i=1,...,N_{m}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $j^{*}=\mbox{argmin}_{m=1}^{k}\left\{ D\left(x_{i},c_{m}\right)\right\} $
+\end_inset
+
+, where 
+\begin_inset Formula $D(x,y)$
+\end_inset
+
+ is the Euclidean distance of 
+\begin_inset Formula $(x,y)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $S_{j^{*}}=S_{j^{*}}\cup\left\{ x_{i}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every center 
+\begin_inset Formula $c_{j},\ j=1..k$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $M_{j}$
+\end_inset
+
+ the number of points in 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Compute 
+\series default
+
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ as
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Stop 
+\series default
+the algorithm, if there is no change in centers 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The algorithm terminates when there is no change in cluster centers between
+ consecutive iterations, implying that the clusters have stabilized in their
+ final form
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Bishop,Hastie"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Chromosome rejection rule
+\end_layout
+
+\begin_layout Standard
+An additional technique for discarding chromosomes where they are similar
+ or close to each other is listed and applied below.
+ Specifically, each chromosome is extensively compared to all the other
+ chromosomes, and those that have very small or negligible Euclidean distance
+ between them are sought, implying their similarity.
+ Subsequently, the algorithm incorporates these chromosomes into the final
+ initial distribution table, while chromosomes that are not similar are
+ discarded.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $C$
+\end_inset
+
+ the set of centers, 
+\begin_inset Formula $C=\left\{ c_{i},\ i=1,\ldots,k\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $\epsilon>0$
+\end_inset
+
+ a small positive number
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every center 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+ 
+\series bold
+Do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every center 
+\begin_inset Formula $c_{j},\ j=1,\ldots,i-1$
+\end_inset
+
+ 
+\series bold
+Do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+If 
+\begin_inset Formula $\left\Vert c_{i}-c_{j}\right\Vert \le\epsilon$
+\end_inset
+
+ then 
+\series default
+remove 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+ from 
+\begin_inset Formula $C$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Return
+\series default
+ the final set of centers 
+\begin_inset Formula $C$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Chromosome rejection rule
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Chromosome-rejection-rule"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The proposed sampling procedure
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-proposed-sampling"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The proposed sampling procedure has the following major steps:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Take
+\series default
+ 
+\begin_inset Formula $N_{m}$
+\end_inset
+
+ random samples from the objective function using uniform distribution
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ the 
+\begin_inset Formula $k$
+\end_inset
+
+ centers of the 
+\begin_inset Formula $N_{m}$
+\end_inset
+
+ points using the k-means algorithm provided in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:The-K-Means-algorithm."
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Remove
+\series default
+ from the set of centers 
+\begin_inset Formula $C$
+\end_inset
+
+, points that are closed to each other.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Return
+\series default
+ the set of centers 
+\begin_inset Formula $C$
+\end_inset
+
+ as the set of chromosomes.
+\end_layout
+
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -1130,8 +1822,9 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Standard
-The test functions used in the experiments as well as the experimental results
- are presented here.
+This section will begin with a detailed description of the functions that
+ will be used in the experiments, followed by an analysis of the experiments
+ performed and comparisons with other global optimization techniques.
  
 \end_layout
 
@@ -1140,8 +1833,8 @@ Test functions
 \end_layout
 
 \begin_layout Standard
-The functions used in the experiments are used in a variety of research
- papers 
+The functions used in the experiments have been proposed in a series of
+ relative works 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Ali1,Floudas1"
@@ -1149,17 +1842,19 @@ literal "false"
 
 \end_inset
 
+ and they cover various scientific fields, such medicine, physics, engineering,
+ etc.
+ Also, these objective functions have been used by many researchers in a
+ variety of publications 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "testfunctions1,testfunctions2,testfunctions3,testfunctions4"
+literal "false"
+
+\end_inset
+
 .
- These functions cover various fields, such as problems from the field of
- medicine, physics, engineering, etc.
-\end_layout
-
-\begin_layout Subsection
-Test functions
-\end_layout
-
-\begin_layout Standard
-The definition of the test functions used are given below
+ The definition of the test functions used are given below:
 \end_layout
 
 \begin_layout Itemize
@@ -1178,12 +1873,7 @@ f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\c
 
 \end_inset
 
-with 
-\begin_inset Formula $x\in[-100,100]^{2}$
-\end_inset
 
-.
- 
 \end_layout
 
 \begin_layout Itemize
@@ -1199,12 +1889,7 @@ f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi 
 
 \end_inset
 
-with 
-\begin_inset Formula $x\in[-50,50]^{2}$
-\end_inset
 
-.
- 
 \end_layout
 
 \begin_layout Itemize
@@ -1222,31 +1907,6 @@ Branin
 
 .
  
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-CM
-\series default
- function: 
-\begin_inset Formula 
-\[
-f(x)=\sum_{i=1}^{n}x_{i}^{2}-\frac{1}{10}\sum_{i=1}^{n}\cos\left(5\pi x_{i}\right)
-\]
-
-\end_inset
-
-where 
-\begin_inset Formula $x\in[-1,1]^{n}$
-\end_inset
-
-.
- In the conducted experiments the value 
-\begin_inset Formula $n=4$
-\end_inset
-
- was used.
 \end_layout
 
 \begin_layout Itemize
@@ -1298,11 +1958,11 @@ f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1
 
 \end_inset
 
- The values 
+ In the conducted experiments the values 
 \begin_inset Formula $n=4,8,16,32$
 \end_inset
 
- were used in the executed experiments.
+ were used.
 \end_layout
 
 \begin_layout Itemize
@@ -1352,11 +2012,11 @@ Gkls
 \begin_inset Formula $f(x)=\mbox{Gkls}(x,n,w)$
 \end_inset
 
-, is a function with 
+, is a constructed function with 
 \begin_inset Formula $w$
 \end_inset
 
- local minima, described in 
+ local minima presented in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gkls"
@@ -1364,16 +2024,12 @@ literal "true"
 
 \end_inset
 
- with 
+, with 
 \begin_inset Formula $x\in[-1,1]^{n}$
 \end_inset
 
- and 
-\begin_inset Formula $n$
-\end_inset
-
- a positive integer between 2 and 100.
- The values 
+.
+ For the conducted experiments the values 
 \begin_inset Formula $n=2,3$
 \end_inset
 
@@ -1381,7 +2037,7 @@ literal "true"
 \begin_inset Formula $w=50$
 \end_inset
 
- were used in the conducted experiments.
+ were utilized.
 \end_layout
 
 \begin_layout Itemize
@@ -1527,9 +2183,8 @@ p=\left(\begin{array}{cccccc}
 \series bold
 Potential
 \series default
- function.
- The molecular conformation corresponding to the global minimum of the energy
- of N atoms interacting via the Lennard-Jones potential
+ function, this function stands for the energy of a molecular conformation
+ of N atoms, that interacts using via the Lennard-Jones potential
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Jones"
@@ -1537,7 +2192,8 @@ literal "true"
 
 \end_inset
 
- is used a test function here and it is defined by:
+.
+ The function is defined as:
 \begin_inset Formula 
 \[
 V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]
@@ -1545,16 +2201,12 @@ V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{
 
 \end_inset
 
-The values 
+For the conducted experiments the values 
 \begin_inset Formula $N=3,\ 5$
 \end_inset
 
- were used in the conducted experiments.
- Also, for the conducted experiments the values 
-\begin_inset Formula $\epsilon=1,\ \sigma=$
-\end_inset
-
-1 were used.
+ were used.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -1750,7 +2402,7 @@ with
 \series bold
 Sinusoidal
 \series default
- function: 
+ function defined as:
 \begin_inset Formula 
 \[
 f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi.
@@ -1762,11 +2414,7 @@ The values of
 \begin_inset Formula $n=4,8,16$
 \end_inset
 
- and 
-\begin_inset Formula $z=\frac{\pi}{6}$
-\end_inset
-
- was used in the conducted experiments.
+ were used in the conducted experiments.
 \end_layout
 
 \begin_layout Itemize
@@ -1782,15 +2430,11 @@ f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5].
 
 \end_inset
 
-The function has 
-\begin_inset Formula $2^{n}$
-\end_inset
-
- in the specified range and in our experiments we used 
+For the conducted experiments the values 
 \begin_inset Formula $n=4,5,6,7$
 \end_inset
 
-.
+ were used.
 \end_layout
 
 \begin_layout Itemize
@@ -1806,24 +2450,318 @@ f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i
 
 \end_inset
 
-with 
-\begin_inset Formula $x\in[-10,10]$
-\end_inset
-
-, with 
-\begin_inset Formula $30^{n}$
-\end_inset
-
- local minima in the search space.
- For our experiments we used 
+The values 
 \begin_inset Formula $n=3,4$
+\end_inset
+
+ were used in the conducted experiments.
+\end_layout
+
+\begin_layout Subsection
+Experimental results
+\end_layout
+
+\begin_layout Standard
+A series of experiments were performed using the test functions presented
+ previously.
+ Every experiment was conducted 30 times using different seeds for the random
+ generator each time.
+ The averages of function calls was measured and presented in the following
+ tables.
+ The software was coded in ANSI C++ with the assistance of the OPTIMUS optimizat
+ion package, which is freely available from
+\series bold
+ 
+\series default
+
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/itsoulos/OPTIMUS
+\end_layout
+
+\end_inset
+
+ (accessed on 2 July 2024).
+ The values for the experimental parameters are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expSettings"
+plural "false"
+caps "false"
+noprefix "false"
+
 \end_inset
 
 .
 \end_layout
 
-\begin_layout Subsection
-Experimental results
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Experimental settings.
+ The numbers in cells denote the values used in the experiments for all
+ parameters.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:expSettings"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PARAMETER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+MEANING
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+VALUE
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{c}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of chromosomes/particles
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{g}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Maximum number of allowed iterations
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+200
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $p_{l}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Local search rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.01
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of iterations for BFGS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+The following applies to table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:comparison"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Enumerate
+The column FUNCTION denotes the name of the objective problem.
+\end_layout
+
+\begin_layout Enumerate
+The column GENETIC denotes the application of a genetic algorith to the
+ objective problem.
+ The genetic algorithm has 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ chromosomes and the maximum number of allowed generations was set to 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column PSO stands for the application of Particle Swarm Optimizer to
+ every objective problem.
+ The number of particles was set to 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ and the maximum number of allowed iterations was set to 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column EOFA represents the application of the proposed method using
+ the values for the parameters shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expSettings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The row SUM represents the sum of function calls for all test functions.
 \end_layout
 
 \begin_layout Standard
@@ -3285,7 +4223,18 @@ SUM
 
 \end_inset
 
+A statistical comparison for these results is also outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statCalls"
+plural "false"
+caps "false"
+noprefix "false"
 
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3330,7 +4279,53 @@ name "fig:statCalls"
 
 \end_inset
 
+As can be seen, the present method drastically reduces the required number
+ of function calls to almost all objective functions.
+ This, of course, also results in a significant reduction of the required
+ computing time for finding the global minimum.
+ Furthermore, an additional experiment was executed in order to measure
+ the importance of the K-means sampling in the proposed method.
+ In this test 3 different sampling methods was used in the proposed method:
+\end_layout
 
+\begin_layout Enumerate
+
+\series bold
+The column UNIFORM indicates the incorporation of uniform sampling in the
+ genetic algorithm.
+ In this case, 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ randomly selected chromosomes using uniform sampling are used in the genetic
+ algorithm.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The column TRIANGULAR defines the usage of triangular distribution 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "triangular"
+literal "false"
+
+\end_inset
+
+ for the initial samples of the genetic algorithm.
+ For this case, 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ randomly selected chromosomes with triangular distribution are used in
+ the genetic algorithm.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The column KMEANS denotes the application of k - means sampling as proposed
+ here in the genetic algorithm
 \end_layout
 
 \begin_layout Standard
@@ -5930,6 +6925,93 @@ Fletcher, R.
 \end_layout
 
 \begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Lloyd"
+literal "false"
+
+\end_inset
+
+S.
+ Lloyd, Least squares quantization in PCM, IEEE Transactions on Information
+ Theory 
+\series bold
+28
+\series default
+, pp.
+ 129–137, 1982.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "MacQueen"
+literal "false"
+
+\end_inset
+
+J.B.
+ MacQueen, Some Methods for classification and Analysis of Multivariate
+ Observations.
+ Proceedings of 5th Berkeley Symposium on Mathematical Statistics and Probabilit
+y.
+ Vol.
+ 1.
+ University of California Press.
+ pp.
+ 281–297.
+ MR 0214227.
+ Zbl 0214.46201, 1967.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Jain"
+literal "false"
+
+\end_inset
+
+A.K.
+ Jain, M.N.
+ Murty, P.J.
+ Flynn, Data clustering: A review, ACM Computing Surveys 
+\series bold
+31
+\series default
+, pp.
+ 264-323, 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Bishop"
+literal "false"
+
+\end_inset
+
+C.M.
+ Bishop, Pattern recognition and machine learning, Springer, 2006.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Hastie"
+literal "false"
+
+\end_inset
+
+T.
+ Hastie, R.
+ Tibshirani, J.
+ Friedman, The elements of statistical learning: Data mining, inference,
+ and prediction, Springer, 2009.
+\end_layout
+
+\begin_layout Bibliography
 \labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
@@ -5982,6 +7064,80 @@ s, S.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "testfunctions1"
+literal "false"
+
+\end_inset
+
+M.M.
+ Ali and P.
+ Kaelo, Improved particle swarm algorithms for global optimization, Applied
+ Mathematics and Computation 
+\series bold
+196
+\series default
+, pp.
+ 578-593, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunctions2"
+literal "false"
+
+\end_inset
+
+H.
+ Koyuncu, R.
+ Ceylan, A PSO based approach: Scout particle swarm algorithm for continuous
+ global optimization problems, Journal of Computational Design and Engineering
+ 
+\series bold
+6
+\series default
+, pp.
+ 129–142, 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunctions3"
+literal "false"
+
+\end_inset
+
+Patrick Siarry, Gérard Berthiau, François Durdin, Jacques Haussy, ACM Transactio
+ns on Mathematical Software 
+\series bold
+23
+\series default
+, pp 209–228, 1997.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunctions4"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, I.E.
+ Lagaris, GenMin: An enhanced genetic algorithm for global optimization,
+ Computer Physics Communications
+\series bold
+ 178, 
+\series default
+pp.
+ 843-851, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 key "gkls"
 literal "false"
 
@@ -6022,6 +7178,25 @@ J.E.
 \series default
 , pp.
  463–477, 1924.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "triangular"
+literal "false"
+
+\end_inset
+
+W.E.
+ Stein, M.F.
+ Keblis, A new method to simulate the triangular distribution, Mathematical
+ and Computer Modelling Volume 
+\series bold
+49
+\series default
+, pp.
+ 1143-1147, 2009.
 \end_layout
 
 \begin_layout Standard
