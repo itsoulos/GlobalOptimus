@@ -2,10 +2,14 @@
 GradientDescent::GradientDescent()
 {
     hasInitialized  = false;
-    addParam(Parameter("gd_maxiters","200","Maximum iterations for gradient descent"));
-    addParam(Parameter("gd_linesearch","none","Line search. Values: none, golden, fibonacci, armijo"));
-    addParam(Parameter("gd_epsilon","1e-6","Eps value for termination"));
-    addParam(Parameter("gd_rate","0.001","Step for gradient descent"));
+    addParam(Parameter("gd_maxiters",200,1,10000,"Maximum iterations for gradient descent"));
+    QStringList gd_linesearch;
+    gd_linesearch<<"none"<<"golden"<<"fibonacci"<<"armijo";
+    addParam(Parameter("gd_linesearch",gd_linesearch[0],
+                       gd_linesearch,
+                       "Line search. Values: none, golden, fibonacci, armijo"));
+    addParam(Parameter("gd_epsilon",0.000001,0.0,1.0,"Eps value for termination"));
+    addParam(Parameter("gd_rate",0.001,0.0,1.0,"Step for gradient descent"));
 }
 
  void    GradientDescent::setPoint(Data &x,double &y)

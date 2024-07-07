@@ -3,7 +3,7 @@
 Bfgs::Bfgs()
 {
     haveInitialized = false;
-    addParam(Parameter("bfgs_iters","2001","Maximum number of iterations"));
+    addParam(Parameter("bfgs_iters",2001,1,10000,"Maximum number of iterations"));
 }
 
 void    Bfgs::init()

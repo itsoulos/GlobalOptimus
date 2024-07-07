@@ -165,6 +165,7 @@ HEADERS += \
     METHODS/adam.h \
     METHODS/armadillo1.h \
     METHODS/bfgs.h \
+    METHODS/armadillo1.h \
     METHODS/differentialevolution.h \
     METHODS/genetic.h \
     METHODS/gradientdescent.h \

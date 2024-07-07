@@ -56,7 +56,7 @@ public:
     virtual void   done();
     virtual bool terminated();
      virtual void Selection();
-    ~Armadillo1();
+    virtual ~Armadillo1();
 };
 
 #endif // ARMADILLO1_H

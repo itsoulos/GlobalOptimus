@@ -2,11 +2,15 @@
 
 Adam::Adam()
 {
-    addParam(Parameter("adam_rate","0.01","Adam learning rate"));
-    addParam(Parameter("adam_linesearch","none","Line search used. Values: none,golden,fibonacci,armijo"));
-    addParam(Parameter("adam_maxiters","10000","Maximum number of iterations"));
-    addParam(Parameter("adam_b1","0.9","B1 parameter"));
-    addParam(Parameter("adam_b2","0.999","B2 parameter"));
+    QStringList options;
+    options<<"none"<<"golden"<<"fibonacci"<<"armijo";
+    addParam(Parameter("adam_rate",0.01,0.0,1.0,"Adam learning rate"));
+    addParam(Parameter("adam_linesearch",
+                       "none",options,
+                       "Line search used. Values: none,golden,fibonacci,armijo"));
+    addParam(Parameter("adam_maxiters",10000,100,100000,"Maximum number of iterations"));
+    addParam(Parameter("adam_b1",0.9,0.0,1.0,"B1 parameter"));
+    addParam(Parameter("adam_b2",0.999,0.0,1.0,"B2 parameter"));
 
     haveInitialized = false;
     lt = NULL;

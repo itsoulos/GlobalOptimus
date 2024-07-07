@@ -1,12 +1,12 @@
 #include <METHODS/neldermead.h>
 NelderMead::NelderMead()
 {
-    addParam(Parameter("nm_population","100","Number of items in population"));
-    addParam(Parameter("nm_alpha","1.0","Alpha value of the algorithm"));
-    addParam(Parameter("nm_gamma","2.0","Gamma parameter of the algorithm"));
-    addParam(Parameter("nm_rho","0.5","Rho parameter of the algorithm"));
-    addParam(Parameter("nm_sigma","0.5","Sigma parameter of the algorithm"));
-    addParam(Parameter("nm_maxiters","100","Maximum number of iterations"));
+    addParam(Parameter("nm_population",100,2,10000,"Number of items in population"));
+    addParam(Parameter("nm_alpha",1.0,0.0,2.0,"Alpha value of the algorithm"));
+    addParam(Parameter("nm_gamma",2.0,0.0,2.0,"Gamma parameter of the algorithm"));
+    addParam(Parameter("nm_rho",0.5,0.0,1.0,"Rho parameter of the algorithm"));
+    addParam(Parameter("nm_sigma",0.5,0.0,1.0,"Sigma parameter of the algorithm"));
+    addParam(Parameter("nm_maxiters",100,1,10000,"Maximum number of iterations"));
     haveInitialized = false;
 }
 

@@ -1,5 +1,7 @@
 #include "parameterdialog.h"
 # include <QScreen>
+# include <QLabel>
+# include <QHBoxLayout>
 ParameterDialog::ParameterDialog(
         QJsonObject params,
         QString name,QWidget *parent)
@@ -13,15 +15,15 @@ ParameterDialog::ParameterDialog(
     problemName=name;
     obj = params;
     this->setWindowTitle("Problem settings for function "+name);
-    //this->setFixedSize(800,200);
+    this->setFixedSize(WIDTH,HEIGHT);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,1000,400);
+    w1->setGeometry(0,0,WIDTH,HEIGHT);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
 
     table=new QTableWidget();
     l1->addWidget(table);
-    //table->setFixedWidth(95 *WIDTH/100);
+    table->setFixedWidth(98 *WIDTH/100);
     QStringList m_TableHeader;
 
     m_TableHeader<<tr("Name")<<tr("Value")<<tr("Add/Update")<<tr("Remove");

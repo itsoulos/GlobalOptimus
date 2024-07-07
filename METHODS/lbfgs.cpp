@@ -3,7 +3,7 @@
 Lbfgs::Lbfgs()
 {
     haveInitialized = false;
-    addParam(Parameter("lbfgs_iters","2001","Maximum number of iterations"));
+    addParam(Parameter("lbfgs_iters",2001,1,10000,"Maximum number of iterations"));
 }
 
 void    Lbfgs::init()

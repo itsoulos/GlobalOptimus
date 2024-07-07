@@ -53,7 +53,7 @@ public:
     virtual bool terminated();
     void Selection();
     void ChildrenArray();
-    ~OFAlgorithm();
+    virtual ~OFAlgorithm();
 };
 
 #endif // OFALGORITHM_H

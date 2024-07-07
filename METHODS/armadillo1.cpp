@@ -1,11 +1,15 @@
 #include "armadillo1.h"
 
 Armadillo1::Armadillo1()  {
-    addParam(Parameter("gao_count","100","Number of chromosomes"));
-    addParam(Parameter("gao_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("gao_lrate","0.05","Localsearch rate"));
-    addParam(Parameter("gao_iters","1","Number of iters"));
-    addParam(Parameter("gao_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
+    QStringList gao_termination;
+    gao_termination<<"similarity"<<"doublebox"<<"maxiters";
+    addParam(Parameter("gao_count",100,10,10000,"Number of chromosomes"));
+    addParam(Parameter("gao_maxiters",200,10,10000,"Maximum number of generations"));
+    addParam(Parameter("gao_lrate",0.05,0.0,1.0,"Localsearch rate"));
+    addParam(Parameter("gao_iters",1,1,100,"Number of iters"));
+    addParam(Parameter("gao_termination",gao_termination[0],
+                       gao_termination,
+                       "Termination method. Avaible values: maxiters,similarity,doublebox"));
 }
 
 
@@ -265,4 +269,9 @@ void    Armadillo1::done()
     fitness[0]=localSearch(population[0]);
     if(getParam("opt_debug").getValue()=="yes")
         printf("GENETIC. terminate: %lf \n",fitness[0]);
+}
+
+Armadillo1::~Armadillo1()
+{
+
 }

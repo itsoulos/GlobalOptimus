@@ -64,7 +64,7 @@ public:
      * @param ysample, the function values of the samples.
      */
     void        sampleFromProblem(int &N,Matrix &xsample,Data &ysample);
-    ~Optimizer();
+    virtual ~Optimizer();
 };
 
 #endif // OPTIMIZER_H

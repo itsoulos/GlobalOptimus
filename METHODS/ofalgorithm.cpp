@@ -4,12 +4,15 @@
 
 
 OFAlgorithm::OFAlgorithm() {
-    addParam(Parameter("ofa_count","500","Number of chromosomes"));
+    addParam(Parameter("ofa_count",500,10,10000,"Number of chromosomes"));
     addParam(Parameter("ofa_count1","250","Number of chromosomes"));
-    addParam(Parameter("ofa_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("ofa_lrate","0.05","Localsearch rate"));
-    addParam(Parameter("ofa_bfgsiters","3","Iterations for bfgs method"));
-    addParam(Parameter("ofa_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
+    addParam(Parameter("ofa_maxiters",200,10,20000,"Maximum number of generations"));
+    addParam(Parameter("ofa_lrate",0.05,0.0,1.0,"Localsearch rate"));
+    addParam(Parameter("ofa_bfgsiters",3,1,10,"Iterations for bfgs method"));
+    QStringList ofa_termination;
+    ofa_termination<<"doublebox"<<"similarity"<<"maxites";
+    addParam(Parameter("ofa_termination",ofa_termination[0],
+                       ofa_termination,"Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
 
@@ -370,4 +373,9 @@ void OFAlgorithm:: done()
     besty  = localSearch(bestX);
     if(getParam("opt_debug").getValue()=="yes")
         printf("OFA. terminate: %lf bestFitness: %lf \n",besty,bestFitness);
+}
+
+OFAlgorithm::~OFAlgorithm()
+{
+
 }

@@ -2,10 +2,14 @@
 
 SimanMethod::SimanMethod()
 {
-    addParam(Parameter("siman_t0","100000.0","Initial temperature"));
-    addParam(Parameter("siman_neps","100","Number of iterations"));
-    addParam(Parameter("siman_eps","0.00001","Small value for termination"));
-    addParam(Parameter("siman_coolmethod","exp","The cooling method. Available values: exp,log,linear,quad"));
+    addParam(Parameter("siman_t0",100000.0,100.0,1e+8,"Initial temperature"));
+    addParam(Parameter("siman_neps",100,10,10000,"Number of iterations"));
+    addParam(Parameter("siman_eps",0.00001,0.0,1.0,"Small value for termination"));
+    QStringList siman_coolmethod;
+    siman_coolmethod<<"exp"<<"log"<<"linear"<<"quad";
+    addParam(Parameter("siman_coolmethod",siman_coolmethod[0],
+                       siman_coolmethod,
+                       "The cooling method. Available values: exp,log,linear,quad"));
     hasInitialized = false;
 }
 void    SimanMethod::setPoint(Data &x,double &y)

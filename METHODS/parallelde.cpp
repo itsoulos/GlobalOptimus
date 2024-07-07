@@ -6,18 +6,34 @@ ParallelDe::ParallelDe()
 
 {
     before = std::chrono::system_clock::now();
-    addParam(Parameter("parde_termination", "similarity", "Termination rule. Available values: maxiters,doublebox,similarity"));
-    addParam(Parameter("parde_agents", "200", "Number of population"));
-    addParam(Parameter("parde_generations", "1000", "Maximum number of generations"));
-    addParam(Parameter("parde_cr", "0.9", "Crossover Probability"));
-    addParam(Parameter("parde_weight_method", "random", "The differential weight method. Available values are: random, ali, constant"));
-    addParam(Parameter("parde_f", "0.8", "Differential Weight"));
-    addParam(Parameter("parde_propagate_rate", "5", "The number of generations before the propagation takes place"));
-    addParam(Parameter("parde_selection_method", "tournament", "The selection method used. Available values are: tournament,random"));
-    addParam(Parameter("parde_propagate_method", "1to1", "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
-    addParam(Parameter("parde_similarityMax", "15", "Maximum allowed itearations for Similarity Stopping rule"));
-    addParam(Parameter("parde_islands", "1", "Number of thread islands"));
-    addParam(Parameter("parde_islands_enable", "1", "the number of islands that play a role in the termination rule: [1, islands. O for global check."));
+    QStringList parde_termination;
+    parde_termination<<"similarity"<<"maxiters"<<"doublebox";
+    addParam(Parameter("parde_termination", parde_termination[0],
+                       parde_termination,
+                       "Termination rule. Available values: maxiters,doublebox,similarity"));
+    addParam(Parameter("parde_agents", 200,10,10000, "Number of population"));
+    addParam(Parameter("parde_generations", 1000,10,10000, "Maximum number of generations"));
+    addParam(Parameter("parde_cr", 0.9,0.0,1.0, "Crossover Probability"));
+    QStringList parde_weight_method;
+    parde_weight_method<<"random"<<"ali"<<"constant";
+    addParam(Parameter("parde_weight_method", parde_weight_method[0],
+                       parde_weight_method,
+                       "The differential weight method. Available values are: random, ali, constant"));
+    addParam(Parameter("parde_f", 0.8,0.0,1.0, "Differential Weight"));
+    addParam(Parameter("parde_propagate_rate", 5,1,100, "The number of generations before the propagation takes place"));
+    QStringList parde_selection_method;
+    parde_selection_method<<"tournament"<<"random";
+    addParam(Parameter("parde_selection_method", parde_selection_method[0],
+                       parde_selection_method,
+                       "The selection method used. Available values are: tournament,random"));
+    QStringList parde_propagate_method;
+    parde_propagate_method<<"1to1"<<"1toN"<<"Nto1"<<"NtoN";
+    addParam(Parameter("parde_propagate_method", parde_propagate_method[0],
+                       parde_propagate_method,
+                       "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
+    addParam(Parameter("parde_similarityMax", 15,1,100, "Maximum allowed itearations for Similarity Stopping rule"));
+    addParam(Parameter("parde_islands", 1,1,10000, "Number of thread islands"));
+    addParam(Parameter("parde_islands_enable", 1,1,10000, "the number of islands that play a role in the termination rule: [1, islands. O for global check."));
 }
 
 int ParallelDe::selectAtom(int islandIndex)

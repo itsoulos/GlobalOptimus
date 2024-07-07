@@ -2,13 +2,21 @@
 
 NeuralMinimizer::NeuralMinimizer()
 {
-    addParam(Parameter("neural_model","neural","Model used. Available values: neural,rbf,nnc"));
-    addParam(Parameter("neural_weights","10","The weights used in the neural sampler"));
-    addParam(Parameter("neural_samples","100","Number of samples for Neural Minimizer"));
-    addParam(Parameter("neural_iterations","200","Number of maximum iterations for Neural Minimizer"));
-    addParam(Parameter("neural_start_samples","50","Number of start samples for Neural Minimizer"));
-    addParam(Parameter("neural_termination","doublebox","The used stopping rule. Available values: similarity, doublebox"));
-    addParam(Parameter("neural_similarityMaxValue","20","The maximum number of iterations for the similarity stopping rule"));
+    QStringList neural_model;
+    neural_model<<"neural"<<"rbf"<<"nnc";
+    addParam(Parameter("neural_model",neural_model[0],
+                       neural_model,
+                       "Model used. Available values: neural,rbf,nnc"));
+    addParam(Parameter("neural_weights",10,1,20,"The weights used in the neural sampler"));
+    addParam(Parameter("neural_samples",100,10,10000,"Number of samples for Neural Minimizer"));
+    addParam(Parameter("neural_iterations",200,10,2000,"Number of maximum iterations for Neural Minimizer"));
+    addParam(Parameter("neural_start_samples",50,10,5000,"Number of start samples for Neural Minimizer"));
+    QStringList neural_termination;
+    neural_termination<<"doublebox"<<"similarity";
+    addParam(Parameter("neural_termination",neural_termination[0],
+                       neural_termination,
+                       "The used stopping rule. Available values: similarity, doublebox"));
+    addParam(Parameter("neural_similarityMaxValue",20,1,100,"The maximum number of iterations for the similarity stopping rule"));
     addParam(Parameter("neural_trainmethod","bfgs","The method used to train the neural network model. Default: bfgs"));
     sampler= NULL;
 }

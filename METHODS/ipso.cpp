@@ -3,16 +3,24 @@
 iPso::iPso()
 {
     centerPso = false;
-    addParam(Parameter("ipso_particles", "100", "Number of pso particles"));
-    addParam(Parameter("ipso_generations", "100", "Maximum number of pso generations"));
-    addParam(Parameter("ipso_c1", "0.5", "Pso c1 parameter"));
-    addParam(Parameter("ipso_c2", "0.5", "Pso c2 parameter"));
-    addParam(Parameter("ipso_inertia_start", "0.4", "Start value for inertia"));
-    addParam(Parameter("ipso_inertia_end", "0.9", "End value for inertia"));
-    addParam(Parameter("ipso_localsearch_rate", "0.1", "Local search rate for pso"));
-    addParam(Parameter("ipso_stoppingrule","doublebox","Termination criterion (mean_fitness,best_fitness,doublebox,ali)"));
-    addParam(Parameter("ipso_gradientcheck","true","Check for gradients near to local minimum"));
-    addParam(Parameter("ipso_inertiatype","0","The used inertia equation(0-7)"));
+    addParam(Parameter("ipso_particles", 100,10,10000, "Number of pso particles"));
+    addParam(Parameter("ipso_generations", 100,10,1000, "Maximum number of pso generations"));
+    addParam(Parameter("ipso_c1", 0.5, 0.1,2.0,"Pso c1 parameter"));
+    addParam(Parameter("ipso_c2", 0.5,0.1,2.0, "Pso c2 parameter"));
+    addParam(Parameter("ipso_inertia_start", 0.4,0.0,1.0, "Start value for inertia"));
+    addParam(Parameter("ipso_inertia_end", 0.9,0.0,1.0, "End value for inertia"));
+    addParam(Parameter("ipso_localsearch_rate", 0.1,0.0,1.0, "Local search rate for pso"));
+    QStringList ipso_stoppingrule;
+    ipso_stoppingrule<<"doublebox"<<"ali"<<"mean_fitness"<<"best_fitness";
+    addParam(Parameter("ipso_stoppingrule",ipso_stoppingrule[0],
+                       ipso_stoppingrule,
+                       "Termination criterion (mean_fitness,best_fitness,doublebox,ali)"));
+    QStringList ipso_gradientcheck;
+    ipso_gradientcheck<<"true"<<"false";
+    addParam(Parameter("ipso_gradientcheck",ipso_gradientcheck[0],
+                       ipso_gradientcheck,
+                       "Check for gradients near to local minimum"));
+    addParam(Parameter("ipso_inertiatype",0,0,7,"The used inertia equation(0-7)"));
 }
 
 double  iPso::fitness(Data &x)

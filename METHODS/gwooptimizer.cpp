@@ -1,9 +1,12 @@
 #include "gwooptimizer.h"
 GWOoptimizer::GWOoptimizer()
 {
-    addParam(Parameter("gwo_agents", "120", "Number of gwo agents"));
-    addParam(Parameter("gwo_maxiters", "200", "Number of gwo max iters"));
-    addParam(Parameter("gwo_termination", "similarity", "Termination method for gwo"));
+    addParam(Parameter("gwo_agents", 120,10,1000, "Number of gwo agents"));
+    addParam(Parameter("gwo_maxiters", 200,10,1000, "Number of gwo max iters"));
+    QStringList gwo_termination;
+    gwo_termination<<"similarity"<<"doublebox";
+    addParam(Parameter("gwo_termination", gwo_termination[0],
+                       gwo_termination,"Termination method for gwo"));
 }
 
 void    GWOoptimizer::init()

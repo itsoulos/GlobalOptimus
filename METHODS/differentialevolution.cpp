@@ -3,12 +3,20 @@
 DifferentialEvolution::DifferentialEvolution()
 {
     addParam(Parameter("de_np","10n","The number of agents. Default value 10n"));
-    addParam(Parameter("de_f","0.8","De factor value"));
+    addParam(Parameter("de_f",0.8,0.0,1.0,"De factor value"));
     addParam(Parameter("de_cr","0.9","DE CR parameter"));
-    addParam(Parameter("de_tsize","8","Tournament size"));
-    addParam(Parameter("de_maxiters","1000","DE maximum iters"));
-    addParam(Parameter("de_selection","random","Selection method. Available values: random, tournament"));
-    addParam(Parameter("de_termination","maxiters","De termination. Available values: maxiters,doublebox,similarity"));
+    addParam(Parameter("de_tsize",8,2,20,"Tournament size"));
+    addParam(Parameter("de_maxiters",1000,10,10000,"DE maximum iters"));
+    QStringList de_selection;
+    de_selection<<"random"<<"tournament";
+    addParam(Parameter("de_selection",de_selection[0],
+                       de_selection,
+                       "Selection method. Available values: random, tournament"));
+    QStringList de_termination;
+    de_termination<<"maxiter"<<"doublebox"<<"similarity";
+    addParam(Parameter("de_termination",de_termination[0],
+                       de_termination,
+                       "De termination. Available values: maxiters,doublebox,similarity"));
 }
 
 void    DifferentialEvolution::init()

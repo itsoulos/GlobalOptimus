@@ -2,19 +2,39 @@
 Genetic::Genetic()
 {
     hasInitialized =false;
-    addParam(Parameter("gen_count","200","Number of chromosomes"));
-    addParam(Parameter("gen_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("gen_srate","0.10","Selection rate"));
-    addParam(Parameter("gen_mrate","0.05","Mutation rate"));
-    addParam(Parameter("gen_lrate","0.005","Localsearch rate"));
-    addParam(Parameter("gen_tsize","8","Tournament size"));
-    addParam(Parameter("gen_selection","roulette","Selection method. Available values roulette,tournament"));
-    addParam(Parameter("gen_crossover","double","Crossover method. Available values uniform, onepoint, double"));
-    addParam(Parameter("gen_mutation","double","Mutation method. Available values random, double"));
-    addParam(Parameter("gen_lsearchmethod","none","Available methods: none,crossover,mutate,siman"));
-    addParam(Parameter("gen_lsearchitems","20","Number of items for local search"));
-    addParam(Parameter("gen_lsearchgens","20","Generations for local search"));
-    addParam(Parameter("gen_termination","doublebox","Termination method. Avaible values: maxiters,similarity,doublebox"));
+    addParam(Parameter("gen_count",200,10,2000,"Number of chromosomes"));
+    addParam(Parameter("gen_maxiters",200,10,2000,"Maximum number of generations"));
+    addParam(Parameter("gen_srate",0.10,0.0,1.0,"Selection rate"));
+    addParam(Parameter("gen_mrate",0.05,0.0,1.0,"Mutation rate"));
+    addParam(Parameter("gen_lrate",0.005,0.0,1.0,"Localsearch rate"));
+    addParam(Parameter("gen_tsize",8,2,20,"Tournament size"));
+    QStringList gen_selection;
+    gen_selection<<"roulette"<<"tournament";
+    addParam(Parameter("gen_selection",gen_selection[0],
+                       gen_selection,
+                       "Selection method. Available values roulette,tournament"));
+    QStringList gen_crossover;
+    gen_crossover<<"double"<<"uniform"<<"onepoint";
+    addParam(Parameter("gen_crossover",gen_crossover[0],
+                       gen_crossover,
+                       "Crossover method. Available values uniform, onepoint, double"));
+    QStringList gen_mutation;
+    gen_mutation<<"double"<<"random";
+    addParam(Parameter("gen_mutation",gen_mutation[0],
+                       gen_mutation,
+                       "Mutation method. Available values random, double"));
+    QStringList gen_lsearchmethod;
+    gen_lsearchmethod<<"none"<<"crossover"<<"mutate"<<"siman";
+    addParam(Parameter("gen_lsearchmethod",gen_lsearchmethod[0],
+                       gen_lsearchmethod,
+                       "Available methods: none,crossover,mutate,siman"));
+    addParam(Parameter("gen_lsearchitems",20,0,100,"Number of items for local search"));
+    addParam(Parameter("gen_lsearchgens",20,0,100,"Generations for local search"));
+    QStringList gen_termination;
+    gen_termination<<"doublebox"<<"similarity"<<"maxiters";
+    addParam(Parameter("gen_termination",gen_termination[0],
+                       gen_termination,
+                       "Termination method. Avaible values: maxiters,similarity,doublebox"));
 }
 
 

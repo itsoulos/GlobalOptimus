@@ -93,11 +93,17 @@ void    MainWindow::addMessage(QString message,bool running)
 void    MainWindow::unload()
 {
     if(problemLoader!=NULL)
+    {
         delete problemLoader;
+    }
     if(methodLoader!=NULL)
+    {
         delete methodLoader;
+    }
     if(myStat!=NULL)
+    {
         delete myStat;
+    }
 }
 
 void    MainWindow::noProblemLoaded()
@@ -346,6 +352,7 @@ void    MainWindow::helpSlot(QAction *action)
 }
 void    MainWindow::closeEvent(QCloseEvent *event)
 {
+
       unload();
 }
 

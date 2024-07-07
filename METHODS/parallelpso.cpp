@@ -5,18 +5,28 @@
 ParallelPso::ParallelPso()
 {
     before = std::chrono::system_clock::now();
-    addParam(Parameter("parallelPso_termination", "similarity", "Termination rule. Available values: maxiters,doublebox,similarity"));
-    addParam(Parameter("parallelPso_particles", "100", "Number of pso particles"));
-    addParam(Parameter("parallelPso_generations", "200", "Maximum number of pso generations"));
-    addParam(Parameter("parallelPso_c1", "0.5", "Pso c1 parameter"));
-    addParam(Parameter("parallelPso_c2", "0.5", "Pso c2 parameter"));
-    addParam(Parameter("similarityMaxCount", "15", "Maximum allowed itearations for Similarity Stopping rule"));
-    addParam(Parameter("parallelPso_propagateRate", "15", "The number of generations before the propagation takes place"));
-    addParam(Parameter("parallelPso_propagateMethod", "1to1", "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
-    addParam(Parameter("parallelPso_subCluster", "5", "number of subclusters for pso"));
-    addParam(Parameter("parallelPso_subClusterEnable", "1", "the number of subclusters that play a role in the termination rule: [1, islands]"));
+    QStringList parallelPso_termination;
+    parallelPso_termination<<"similarity"<<"doublebox"<<"maxiters";
+
+    addParam(Parameter("parallelPso_termination", parallelPso_termination[0],
+                       parallelPso_termination,
+                       "Termination rule. Available values: maxiters,doublebox,similarity"));
+
+    addParam(Parameter("parallelPso_particles", 100,10,10000, "Number of pso particles"));
+    addParam(Parameter("parallelPso_generations", 200,10,20000, "Maximum number of pso generations"));
+    addParam(Parameter("parallelPso_c1", 0.5,0.0,2.0, "Pso c1 parameter"));
+    addParam(Parameter("parallelPso_c2", 0.5,0.0,2.0, "Pso c2 parameter"));
+    addParam(Parameter("similarityMaxCount", 15,1,100, "Maximum allowed itearations for Similarity Stopping rule"));
+    addParam(Parameter("parallelPso_propagateRate", 15,1,100, "The number of generations before the propagation takes place"));
+    QStringList parallelPso_propagateMethod;
+    parallelPso_propagateMethod<<"1to1"<<"1toN"<<"Nto1"<<"NtoN";
+    addParam(Parameter("parallelPso_propagateMethod", parallelPso_propagateMethod[0],
+                       parallelPso_propagateMethod,
+                       "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
+    addParam(Parameter("parallelPso_subCluster", 5,1,100, "number of subclusters for pso"));
+    addParam(Parameter("parallelPso_subClusterEnable", 1,1,100, "the number of subclusters that play a role in the termination rule: [1, islands]"));
     //addParameter("pRate", "0", "the rate of particles for propagation"));
-    addParam(Parameter("parallelPso_pNumber", "0", "the number of particles for propagation"));
+    addParam(Parameter("parallelPso_pNumber", 0,0,100, "the number of particles for propagation"));
 }
 
 void ParallelPso::getBestValue(int &index, double &value)

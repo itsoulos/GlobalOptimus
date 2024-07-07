@@ -73,7 +73,15 @@ public:
      * @return the dimension of the problem
      */
     Problem();
+    /**
+     * @brief setDimension
+     * @param n
+     */
     void    setDimension(int n);
+    /**
+     * @brief getDimension
+     * @return
+     */
     int getDimension() const;
     /**
      * @brief getSample
@@ -112,6 +120,12 @@ public:
      * @return
      */
     virtual Data gradient(Data &x) = 0;
+    /**
+     * @brief granal
+     * @param x
+     * @param g
+     */
+    virtual void    granal(Data &x,Data &g);
     /**
      * @brief statFunmin Kalei prota tin funmin(x)
      * kai diatirei to bestvalue kai kanei update
@@ -158,13 +172,45 @@ public:
      * completed
      */
     virtual QJsonObject done(Data &x);
+    /**
+     * @brief getleftmargin
+     * @param x
+     */
     void    getleftmargin(double *x);
+    /**
+     * @brief getrightmargin
+     * @param x
+     */
     void    getrightmargin(double *x);
+    /**
+     * @brief getDimension
+     * @return
+     */
     int     getDimension();
+    /**
+     * @brief getdimension
+     * @return
+     */
     int     getdimension();
+    /**
+     * @brief randomDouble
+     * @return
+     */
     double  randomDouble();
+    /**
+     * @brief getGradientCriterion
+     * @param x1
+     * @param x2
+     * @return
+     */
     bool     getGradientCriterion(Data &x1,Data &x2);
+    /**
+     * @brief resetFunctionCalls
+     */
     void    resetFunctionCalls();
+    /**
+     * @brief ~Problem
+     */
     virtual ~Problem();
 };
 

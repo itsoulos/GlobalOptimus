@@ -1,9 +1,12 @@
 #include "multistart.h"
 Multistart::Multistart()
 {
-    addParam(Parameter("ms_samples","100","Number of samples"));
-    addParam(Parameter("ms_maxiters","100","Maximum number of iterations"));
-    addParam(Parameter("ms_termination","doublebox","Termination rule. Values: maxiters,doublebox,similarity"));
+    addParam(Parameter("ms_samples",100,10,10000,"Number of samples"));
+    addParam(Parameter("ms_maxiters",100,1,10000,"Maximum number of iterations"));
+    QStringList ms_termination;
+    ms_termination<<"doublebox"<<"similarity"<<"maxiters";
+    addParam(Parameter("ms_termination",ms_termination[0],
+                       ms_termination,"Termination rule. Values: maxiters,doublebox,similarity"));
 }
 
 void    Multistart::init()

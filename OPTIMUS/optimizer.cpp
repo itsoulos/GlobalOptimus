@@ -8,19 +8,33 @@ Optimizer::Optimizer()
 {
     problemSampler=NULL;
     myProblem = NULL;
-    addParam(Parameter("opt_debug","yes","Set it to yes to show messages"));
-    addParam(Parameter("opt_localsearch","bfgs","The method used in localsearch"));
-    addParam(Parameter("opt_doubleboxminiters","5","Minimum iters to terminate the doublebox"));
-    addParam(Parameter("opt_similarityminiters","5","Minimum number of iters for similarity stopping rule"));
-    addParam(Parameter("opt_similaritycriterion","5","Number of iterations for same value in the similarity stopping rule"));
-    addParam(Parameter("opt_meanminiters","5","Minimum number of iters for mean stopping rule"));
-    addParam(Parameter("opt_meancriterion","5","Number of iterations for same value in the mean stopping rule"));
-    addParam(Parameter("opt_sampler","uniform","Sampling method. Available values: uniform, triangular, maxwell, mlp, rbf, kmeans"));
-    addParam(Parameter("opt_mlpsamples","10","Number of MLP samples"));
-    addParam(Parameter("opt_mlpweights","10","Number of MLP weights"));
-    addParam(Parameter("opt_rbfsamples","10","Number of RBF samples"));
-    addParam(Parameter("opt_rbfweights","10","Number of RBF weights"));
-    addParam(Parameter("opt_kmeansamples","1000","Number of samples for k-means sampling"));
+    QStringList opt_debug;opt_debug<<"yes"<<"no";
+    QStringList opt_localsearch;
+    opt_localsearch<<"bfgs"<<"lbfgs"<<"nelderMead"<<"gradient"<<"adam";
+    QStringList opt_sampler;
+    opt_sampler<<"uniform"<<"triangular"<<"maxwell"<<"mlp"<<"rbf"<<"kmeans";
+
+    addParam(Parameter("opt_debug",opt_debug[0],
+                       opt_debug,
+                       "Set it to yes to show messages"));
+
+    addParam(Parameter("opt_localsearch",opt_localsearch[0],
+                       opt_localsearch,
+                       "The method used in localsearch"));
+
+
+    addParam(Parameter("opt_doubleboxminiters",5,1,20,"Minimum iters to terminate the doublebox"));
+    addParam(Parameter("opt_similarityminiters",5,1,20,"Minimum number of iters for similarity stopping rule"));
+    addParam(Parameter("opt_similaritycriterion",5,1,20,"Number of iterations for same value in the similarity stopping rule"));
+    addParam(Parameter("opt_meanminiters",5,1,20,"Minimum number of iters for mean stopping rule"));
+    addParam(Parameter("opt_meancriterion",5,1,20,"Number of iterations for same value in the mean stopping rule"));
+    addParam(Parameter("opt_sampler",opt_sampler[0],opt_sampler,
+                       "Sampling method. Available values: uniform, triangular, maxwell, mlp, rbf, kmeans"));
+    addParam(Parameter("opt_mlpsamples",10,10,100,"Number of MLP samples"));
+    addParam(Parameter("opt_mlpweights",10,10,100,"Number of MLP weights"));
+    addParam(Parameter("opt_rbfsamples",10,10,100,"Number of RBF samples"));
+    addParam(Parameter("opt_rbfweights",10,1,20,"Number of RBF weights"));
+    addParam(Parameter("opt_kmeansamples",1000,100,10000,"Number of samples for k-means sampling"));
 }
 
 QJsonObject Optimizer::getParams() const

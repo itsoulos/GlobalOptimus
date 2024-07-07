@@ -155,6 +155,10 @@ bool     Problem::getGradientCriterion(Data &x1,Data &x2)
     return s>=0;
 }
 
+void    Problem::granal(Data &x,Data &g)
+{
+
+}
 QJsonObject Problem::done(Data &x)
 {
     return QJsonObject();
