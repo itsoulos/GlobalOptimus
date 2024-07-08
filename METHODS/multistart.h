@@ -20,7 +20,7 @@ public:
     virtual void showDebug();
     virtual void done();
     void getBest(Data &x,double &y);
-    ~Multistart();
+    virtual ~Multistart();
 };
 
 #endif // MULTISTART_H

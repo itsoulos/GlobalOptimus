@@ -12,7 +12,7 @@ public:
     virtual void step();
     virtual bool terminated();
     virtual void done();
-    ~UserMethod();
+    virtual ~UserMethod();
 };
 
 #endif // USERMETHOD_H

@@ -26,7 +26,7 @@ public:
     void    updateRate();
     void setPoint(Data &x,double &y);
     void getPoint(Data &x,double &y);
-    ~Adam();
+    virtual ~Adam();
 };
 
 #endif // ADAM_H

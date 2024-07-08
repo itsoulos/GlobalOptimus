@@ -145,7 +145,7 @@ public:
     virtual bool terminated();
     void setPoint(Data &x,double &y);
     void getPoint(Data &x,double &y);
-    ~Bfgs();
+    virtual ~Bfgs();
 };
 
 #endif // BFGS_H

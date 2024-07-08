@@ -55,7 +55,8 @@ public:
     void            setParams(QJsonObject &p);
     QJsonObject     getParams() const;
     QString         getSelectedProblemName() const;
-    QString getProblemReport() const;
+    static QString getProblemReport(QString selectedProblem,Problem *myProblem);
+    static Problem *getProblemFromName(QString name);
     ~ProblemLoader();
 };
 

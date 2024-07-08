@@ -28,7 +28,7 @@ public:
     virtual void showDebug();
     void    setPoint(Data &x,double &y);
     void    getPoint(Data &x,double &y);
-    ~GradientDescent();
+    virtual ~GradientDescent();
 };
 
 #endif // GRADIENTDESCENT_H

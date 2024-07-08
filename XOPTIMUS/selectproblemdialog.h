@@ -9,21 +9,25 @@
 # include <QVBoxLayout>
 # include <QGridLayout>
 # include <QHBoxLayout>
+# include <QComboBox>
+# include <QTextEdit>
 class SelectProblemDialog : public QDialog
 {
 Q_OBJECT
 private:
     QPushButton *okButton,*cancelButton;
-    QGroupBox *radioBox;
     int width,height;
     QString problemName;
     QStringList problemList;
+    QComboBox *problemCombo;
+    QTextEdit *problemEdit;
 public:
     SelectProblemDialog(QString sname,QStringList list,QWidget *parent=0);
     QString getSelectedName() const;
 public slots:
     void okSlot();
     void cancelSlot();
+    void comboSelectItem(QString text);
 };
 
 #endif // SELECTPROBLEMDIALOG_H

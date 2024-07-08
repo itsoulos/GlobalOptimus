@@ -24,10 +24,11 @@ QStringList     ProblemLoader::getProblemList() const
     return problemList;
 }
 
-QString ProblemLoader::getProblemReport() const
+QString ProblemLoader::getProblemReport(QString selectedproblem,
+                                        Problem *myProblem)
 {
     if(myProblem == NULL) return "";
-    QString ret ="\nProblem Name: "+selectedProblem+"\n";
+    QString ret ="\nProblem Name: "+selectedproblem+"\n";
     //random sample
     Data x = myProblem->getBestx();
     if(x.size()==0)
@@ -64,13 +65,9 @@ QString ProblemLoader::getProblemReport() const
     return ret;
 }
 
-Problem         *ProblemLoader::loadProblem(QString name)
+Problem *ProblemLoader::getProblemFromName(QString name)
 {
-    selectedProblem="";
-    if(myProblem!=NULL) delete myProblem;
-    if(problemList.contains(name)==false)
-        return NULL;
-    selectedProblem = name;
+    Problem *myProblem=NULL;
     if(name == "rastrigin")
         myProblem = new RastriginProblem();
     else
@@ -149,6 +146,8 @@ Problem         *ProblemLoader::loadProblem(QString name)
     if(name == "sinu")
         myProblem = new Sinu();
     else
+    if(name=="test2n")
+        myProblem = new Test2nProblem();
     if(name == "test30n")
         myProblem = new Test30n();
     else
@@ -160,6 +159,18 @@ Problem         *ProblemLoader::loadProblem(QString name)
     else
     if(name == "userproblem")
         myProblem = new UserProblem();
+    return myProblem;
+
+}
+
+Problem         *ProblemLoader::loadProblem(QString name)
+{
+    selectedProblem="";
+    if(myProblem!=NULL) delete myProblem;
+    if(problemList.contains(name)==false)
+        return NULL;
+    selectedProblem = name;
+    myProblem = ProblemLoader::getProblemFromName(name);
     return myProblem;
 }
 

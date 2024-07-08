@@ -7,14 +7,13 @@ SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
 {
 	QScreen *screen = QGuiApplication::primaryScreen();
 	QRect wd = screen->geometry();
-    width = wd.width()/2;
+    width = 3*wd.width()/4;
     height =3*wd.height()/4;
     methodList = list;
     this->setWindowTitle(tr("Optimizer Selection"));
-    //this->setFixedSize(width,height);
-    this->setFixedSize(500,500);
+    this->setFixedSize(width,height);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,500,500);
+    w1->setGeometry(0,0,width,height);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
     radioBox = new QGroupBox("Function list");

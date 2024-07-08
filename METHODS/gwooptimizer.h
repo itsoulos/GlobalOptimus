@@ -20,7 +20,7 @@ public:
     virtual bool terminated();
     virtual void showDebug();
     virtual void done();
-    ~GWOoptimizer();
+    virtual ~GWOoptimizer();
 };
 
 #endif // GWOOPTIMIZER_H

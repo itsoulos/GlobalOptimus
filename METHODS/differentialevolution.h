@@ -23,7 +23,7 @@ public:
     virtual bool terminated();
     virtual void showDebug();
     virtual void done();
-    ~DifferentialEvolution();
+    virtual ~DifferentialEvolution();
 };
 
 #endif // DIFFERENTIALEVOLUTION_H

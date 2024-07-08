@@ -40,7 +40,7 @@ public:
     virtual bool terminated();
     virtual void showDebug();
     virtual void done();
-    ~iPso();
+    virtual ~iPso();
 };
 
 #endif // IPSO_H

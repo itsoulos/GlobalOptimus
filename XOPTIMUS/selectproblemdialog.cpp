@@ -2,36 +2,37 @@
 # include <QDebug>
 # include <QScreen>
 # include <QGuiApplication>
+# include <OPTIMUS/problem.h>
+# include <XOPTIMUS/problemloader.h>
 SelectProblemDialog::SelectProblemDialog(QString sname,
                                          QStringList list,QWidget *parent)
     :QDialog(parent)
 {
 	QScreen *screen = QGuiApplication::primaryScreen();
 	QRect wd = screen->geometry();
-    width = wd.width()/2;
+    width = 3*wd.width()/4;
     height =3*wd.height()/4;
     problemName = sname;
     problemList = list;
     this->setWindowTitle(tr("Problem Selection"));
-    //this->setFixedSize(width,height);
-    this->setFixedSize(500,500);
+
+    this->setFixedSize(width,height);
     QWidget *w1=new QWidget(this);
-    w1->setGeometry(0,0,500,500);
+    w1->setGeometry(0,0,width,height);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
-    radioBox = new QGroupBox("Function list");
-    l1->addWidget(radioBox);
-    QGridLayout *vbox = new QGridLayout;
+    problemCombo = new QComboBox;
     for(int i=0;i<problemList.size();i++)
     {
-        QString x = problemList[i];
-        QRadioButton *bt = new QRadioButton(x);
-
-        vbox->addWidget(bt,i/3,i%3);
-        if(x == problemName)
-            bt->setChecked(true);
+        problemCombo->addItem(problemList[i]);
     }
-    radioBox->setLayout(vbox);
+    l1->addWidget(problemCombo);
+    problemEdit =new QTextEdit;
+    l1->addWidget(problemEdit);
+    problemEdit->setReadOnly(true);
+    connect(problemCombo,SIGNAL(currentTextChanged(QString)),this,
+            SLOT(comboSelectItem(QString)));
+
     QHBoxLayout *buttonLayout=new QHBoxLayout();
     l1->addLayout(buttonLayout);
     okButton=new QPushButton();
@@ -42,8 +43,19 @@ SelectProblemDialog::SelectProblemDialog(QString sname,
     cancelButton->setText(tr("CANCEL"));
     connect(cancelButton,SIGNAL(clicked(bool)),this,SLOT(cancelSlot()));
     buttonLayout->addWidget(cancelButton);
+    comboSelectItem(problemList[0]);
 }
 
+void    SelectProblemDialog::comboSelectItem(QString name)
+{
+    //show info about the selected problem
+    if(name=="rbfproblem" || name == "mlpproblem") return;
+    Problem *myProblem;
+    myProblem = ProblemLoader::getProblemFromName(name);
+    QString Info = ProblemLoader::getProblemReport(name,myProblem);
+    problemEdit->setText(Info);
+    delete myProblem;
+}
 QString     SelectProblemDialog::getSelectedName() const
 {
     return problemName;
@@ -51,15 +63,8 @@ QString     SelectProblemDialog::getSelectedName() const
 
 void SelectProblemDialog::okSlot()
 {
-        foreach (QRadioButton *button,
-                 radioBox->findChildren<QRadioButton*>()) {
-            if (button->isChecked()) {
-
-                problemName = button->text();
-                break;
-            }
-        }
-        accept();
+    problemName=problemCombo->currentText();
+    accept();
 }
 
 void SelectProblemDialog::cancelSlot()

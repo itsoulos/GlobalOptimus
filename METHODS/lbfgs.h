@@ -220,7 +220,7 @@ public:
     virtual bool terminated();
     void setPoint(Data &x,double &y);
     void getPoint(Data &x,double &y);
-    ~Lbfgs();
+    virtual ~Lbfgs();
 };
 
 #endif // LBFGS_H

@@ -60,7 +60,7 @@ public:
     void    LocalSearch(int pos);
     void    setBest(Data &xx,double y);
     double deltaIter(int iter,double y);
-    ~Genetic();
+    virtual ~Genetic();
 };
 
 #endif // GENETIC_H

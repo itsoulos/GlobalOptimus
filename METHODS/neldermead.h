@@ -47,7 +47,7 @@ public:
     virtual bool terminated();
     virtual void showDebug();
     virtual void done();
-     ~NelderMead();
+    virtual ~NelderMead();
 };
 
 #endif // NELDERMEAD_H

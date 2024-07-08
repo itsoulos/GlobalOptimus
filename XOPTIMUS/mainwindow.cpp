@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
      qd = screen->geometry();
     //setFixedSize(4*qd.width()/5,7*qd.height()/8);
     //setFixedSize(1024,768);
-    this->setGeometry((qd.width()/2)-(this->width()/2),(qd.height()/2)-(this->height()/2),this->width()*2,this->height()*2);
+    this->setGeometry((qd.width()/2)-(this->width()/2),
+                       (qd.height()/2)-(this->height()/2),
+                       4*qd.width()/5,7*qd.height()/8);
 
     setWindowTitle("XOPTIMUS");
     mainWidget=new QWidget;
@@ -95,14 +97,17 @@ void    MainWindow::unload()
     if(problemLoader!=NULL)
     {
         delete problemLoader;
+        problemLoader= NULL;
     }
     if(methodLoader!=NULL)
     {
         delete methodLoader;
+        methodLoader = NULL;
     }
     if(myStat!=NULL)
     {
         delete myStat;
+        myStat = NULL;
     }
 }
 
@@ -279,7 +284,8 @@ void    MainWindow::executeSlot(QAction  *action)
     {
         if(myProblem == NULL) noProblemLoaded();
         else
-            addMessage(""+problemLoader->getProblemReport());
+            addMessage(""+ProblemLoader::getProblemReport(problemLoader->getSelectedProblemName(),
+                    myProblem));
     }
 
 }
@@ -370,7 +376,7 @@ void    MainWindow::showMessageBox(QString title,QString message)
     QPalette  palette = msgBox.palette();
 
     // Set the background color of child widgets (QLabel)
-    palette.setColor(QPalette::Window, QColor(0, 100, 255));      // Yellow background color
+    palette.setColor(QPalette::Window, QColor(200, 200, 105));      // Yellow background color
     msgBox.setPalette(palette);
 
     // Show the QMessageBox

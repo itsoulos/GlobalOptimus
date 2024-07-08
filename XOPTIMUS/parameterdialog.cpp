@@ -37,7 +37,7 @@ ParameterDialog::ParameterDialog(
     table->setSelectionMode(QAbstractItemView::SingleSelection);
     table->setShowGrid(true);
     table->horizontalHeader()->setStretchLastSection(true);
-
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     updateTable();
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
