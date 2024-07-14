@@ -68,6 +68,7 @@ void    DifferentialEvolution::step()
     QString selection=params["de_selection"].toString();
     for(int i=0;i<NP;i++)
     {
+
         Data x;
         double y;
         x= agentx[i];
@@ -134,13 +135,16 @@ bool    DifferentialEvolution::terminated()
 
 void    DifferentialEvolution::showDebug()
 {
-    printf("DE. Iteration=%5d BEST VALUE=%20.10lg\n",
-           iter,besty);
+    bool debug = getParam("opt_debug").getValue()=="yes"?true:false;
+    if(debug)
+        methodLogger->printMessage(QString::asprintf("DE. Iteration=%5d BEST VALUE=%20.10lg",
+                                                     iter,besty));
 }
 
 void    DifferentialEvolution::done()
 {
     besty = localSearch(bestx);
+    showDebug();
 }
 
 DifferentialEvolution::~DifferentialEvolution()

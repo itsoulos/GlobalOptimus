@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 # include <QApplication>
 # include <QScreen>
+# include <OPTIMUS/editlogger.h>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 
@@ -79,9 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(settingsMenu,SIGNAL(triggered(QAction*)),this,SLOT(settingsSlot(QAction*)));
     connect(executeMenu,SIGNAL(triggered(QAction*)),this,SLOT(executeSlot(QAction*)));
     connect(helpMenu,SIGNAL(triggered(QAction*)),this,SLOT(helpSlot(QAction*)));
-    watcher = new QFileSystemWatcher(this);
-    connect(watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChanged(QString)));
-}
+   }
 
 void    MainWindow::addMessage(QString message,bool running)
 {
@@ -301,18 +300,24 @@ void    MainWindow::startRunning()
     {
         QTextEdit *runEdit = new QTextEdit;
         runEdit->setGeometry(mainEdit->geometry());
+
         mainTab->addTab(runEdit,""+
                     problemLoader->getSelectedProblemName()+
                     " Running "+methodName);
         runEdit->setReadOnly(true);
+
         lastEdit = runEdit;
         lastProblem = problemLoader->getSelectedProblemName();
         lastMethod = methodName;
+        this->repaint();
+        mainTab->setCurrentIndex(mainTab->count()-1);
     }
+
     menuBar()->setEnabled(false);
-    std_fd = dup(fileno(stdout));
-    freopen("xoptimus.txt","w",stdout);
-    watcher->addPath("xoptimus.txt");
+
+    EditLogger *logger = new EditLogger(lastEdit);
+    myMethod->setMethodLogger(logger);
+
     myStat = new Statistics;
     for(int t=1;t<=ntimes;t++)
     {
@@ -328,25 +333,11 @@ void    MainWindow::startRunning()
 }
 void    MainWindow::endRunning()
 {
-    myStat->printStatistics();
-    fflush(stdout);
-
-    ::close(std_fd);
+    myMethod->getMethodLogger()->printMessage(myStat->getStatistics());
     menuBar()->setEnabled(true);
 
 }
-void    MainWindow::fileChanged(QString path)
-{
-    QFile f(path);
-    if( f.open(QIODevice::ReadOnly) ){
-        f.seek(0);
-        const QByteArray ba = f.readAll();
-        QString t(ba);
-        addMessage(t,true);
-    } else {
-        QMessageBox::critical(this,"stdout","can't open!");
-    }
-}
+
 
 void    MainWindow::helpSlot(QAction *action)
 {

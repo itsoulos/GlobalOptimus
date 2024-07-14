@@ -372,7 +372,8 @@ void OFAlgorithm:: done()
     }
     besty  = localSearch(bestX);
     if(getParam("opt_debug").getValue()=="yes")
-        printf("OFA. terminate: %lf bestFitness: %lf \n",besty,bestFitness);
+        methodLogger->printMessage(
+            QString::asprintf("OFA. terminate: %lf bestFitness: %lf \n",besty,bestFitness));
 }
 
 OFAlgorithm::~OFAlgorithm()

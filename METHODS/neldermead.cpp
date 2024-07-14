@@ -237,7 +237,6 @@ bool    NelderMead::terminated()
 {
     double dd = fabs(newSum - sum);
     if(dd<1e-6 || generation>=10) return true;
-    printf("%4d] Generation  change: %10.6lf ybest:%10.6lf \n", generation, dd,ybestPoint);
     if (dd < 1e-8)
         n++;
     else
@@ -251,6 +250,8 @@ bool    NelderMead::terminated()
 
 void    NelderMead::showDebug()
 {
+    methodLogger->printMessage(
+        QString::asprintf("%4d] Generation   ybest:%10.6lf ", generation, ybestPoint));
 
 }
 

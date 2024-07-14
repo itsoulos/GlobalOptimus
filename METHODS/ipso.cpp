@@ -503,7 +503,10 @@ bool    iPso::terminated()
 
 void    iPso::showDebug()
 {
-	printf("ipso. besty = %lf \n",besty);
+        methodLogger->printMessage(
+            QString::asprintf("IPSO. Iteration=%4d besty = %10.5lg ",
+                              generation,
+                              besty));
 }
 
 void    iPso::done()

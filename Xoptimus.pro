@@ -48,6 +48,9 @@ SOURCES += \
     GE/rule.cc \
     GE/ruleprogram.cpp \
     GE/symbol.cc \
+    OPTIMUS/editlogger.cpp \
+    OPTIMUS/filelogger.cpp \
+    OPTIMUS/logger.cpp \
     OPTIMUS/mean.cpp \
     LINESEARCH/armijosearch.cpp \
     LINESEARCH/fibonaccisearch.cpp \
@@ -85,6 +88,10 @@ SOURCES += \
     OPTIMUS/parameter.cpp \
     OPTIMUS/parameterlist.cpp \
     OPTIMUS/problem.cpp \
+    PROBLEMS/Ackley.cpp \
+    PROBLEMS/Sphere.cpp \
+    PROBLEMS/schwefel.cpp \
+    PROBLEMS/schwefel221.cpp \
     XOPTIMUS/methodloader.cpp \
     XOPTIMUS/parameterdialog.cpp \
     XOPTIMUS/problemloader.cpp \
@@ -155,7 +162,12 @@ HEADERS += \
     GE/rule.h \
     GE/ruleprogram.h \
     GE/symbol.h \
+    OPTIMUS/editlogger.h \
+    OPTIMUS/filelogger.h \
+    OPTIMUS/logger.h \
     OPTIMUS/mean.h \
+    PROBLEMS/Ackley.h \
+    PROBLEMS/Sphere.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
     LINESEARCH/armijosearch.h \
@@ -196,6 +208,8 @@ HEADERS += \
     OPTIMUS/parameter.h \
     OPTIMUS/parameterlist.h \
     OPTIMUS/problem.h \
+    PROBLEMS/schwefel.h \
+    PROBLEMS/schwefel221.h \
     XOPTIMUS/methodloader.h \
     XOPTIMUS/parameterdialog.h \
     XOPTIMUS/problemloader.h \

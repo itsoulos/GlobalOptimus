@@ -12,6 +12,13 @@ SimanMethod::SimanMethod()
                        "The cooling method. Available values: exp,log,linear,quad"));
     hasInitialized = false;
 }
+
+void    SimanMethod::showDebug()
+{
+    methodLogger->printMessage(
+        QString::asprintf("Temperature: %20.10lg Value: %20.10lg ",T0,besty));
+
+}
 void    SimanMethod::setPoint(Data &x,double &y)
 {
     hasInitialized = true;

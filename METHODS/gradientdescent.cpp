@@ -42,7 +42,8 @@ void    GradientDescent::step()
 
 void    GradientDescent::showDebug()
 {
-    printf("GD. Iteration=%4d Optimum = %20.10lg\n",iteration,ypoint);
+    if(getParam("opt_debug").getValue()=="yes")
+        methodLogger->printMessage(QString::asprintf("GD. Iteration=%4d Optimum = %20.10lg",iteration,ypoint));
 }
 bool    GradientDescent::terminated()
 {

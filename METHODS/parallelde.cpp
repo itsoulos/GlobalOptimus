@@ -393,15 +393,7 @@ void ParallelDe::done()
         }
     }
     */
-    bestValue = localSearch(population[bestIndex]);
-    after = std::chrono::system_clock::now();
-    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    auto ms = milliseconds.count();
-    end = omp_get_wtime();
-    FILE *fp=fopen("debug.txt","a");
-    fprintf(fp,"%.10lf \n",end-start);
-    fclose(fp);
-    //    std::cout << "Douration: " << (double)ms / 1000.0 << " sec" << std::endl;
+    bestValue = localSearch(population[bestIndex]);    
 }
 
 ParallelDe::~ParallelDe()

@@ -35,6 +35,15 @@ Optimizer::Optimizer()
     addParam(Parameter("opt_rbfsamples",10,10,100,"Number of RBF samples"));
     addParam(Parameter("opt_rbfweights",10,1,20,"Number of RBF weights"));
     addParam(Parameter("opt_kmeansamples",1000,100,10000,"Number of samples for k-means sampling"));
+
+    methodLogger = new Logger();
+}
+
+void    Optimizer::setMethodLogger(Logger *p)
+{
+    if(methodLogger!=NULL)
+        delete methodLogger;
+    methodLogger = p;
 }
 
 QJsonObject Optimizer::getParams() const
@@ -101,6 +110,10 @@ bool    Optimizer::terminated()
     return true;
 }
 
+Logger  *Optimizer::getMethodLogger()
+{
+    return methodLogger;
+}
 
 void    Optimizer::showDebug()
 {
@@ -155,7 +168,8 @@ void    Optimizer::solve()
     do
     {
         step();
-        if(debug) showDebug();
+        if(getParam("opt_debug").getValue()=="yes")
+            showDebug();
     }while(!terminated());
     done();
 }
@@ -274,4 +288,6 @@ Optimizer::~Optimizer()
 {
     if(problemSampler!=NULL)
         delete problemSampler;
+    if(methodLogger!=NULL)
+        delete methodLogger;
 }

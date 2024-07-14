@@ -33,6 +33,7 @@ public:
     virtual void step();
     virtual void init();
     virtual void done();
+    virtual void showDebug();
     virtual         ~NeuralMinimizer();
 };
 

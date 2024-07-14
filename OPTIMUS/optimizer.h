@@ -13,7 +13,9 @@
 # include <SAMPLER/kmeanssampler.h>
 # include <QJsonArray>
 # include <QStringList>
-
+# include<OPTIMUS/logger.h>
+# include <OPTIMUS/filelogger.h>
+# include <OPTIMUS/editlogger.h>
 /**
  * @brief The Optimizer class implements a general class
  * for optimization methods.
@@ -37,11 +39,16 @@ protected:
    Similarity       similarity;
    Mean             mean;
    ProblemSampler   *problemSampler;
+
+   Logger *methodLogger;
 public:
     /**
      * @brief Optimizer  the constructor of the class
      */
     Optimizer();
+    void        setMethodLogger(Logger *p);
+    Logger      *getMethodLogger();
+    virtual     void showDebug();
     void        setProblem(Problem *p);
     void        addParam(Parameter p);
     void        setParam(QString name,QString value,QString help="");
@@ -53,7 +60,6 @@ public:
     virtual bool terminated();
     virtual void solve();
     virtual void done();
-    virtual void showDebug();
     double  localSearch(Data &x);
     Problem     *getProblem();
     QStringList getParameterNames() const;

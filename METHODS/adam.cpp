@@ -73,6 +73,7 @@ void    Adam::step()
 {
     double f=0.0;
     Data gradient=xpoint;
+    bool debug = getParam("opt_debug").getValue()=="yes"?true:false;
 
     rM = myProblem->getRightMargin();
     lM = myProblem->getLeftMargin();
@@ -90,7 +91,11 @@ void    Adam::step()
             if(xpoint[j] < lM[j]) xpoint[j] = lM[j];
         }
         f=myProblem->statFunmin(xpoint);
-        if(i % (iterations/10) == 0)std::cout << "ADAM ITER: " << i << " ERROR: " <<f << std::endl;
+        if(i % (iterations/10) == 0 && debug)
+            methodLogger->printMessage(
+                QString::asprintf("ADAM ITER: %4d ERROR %10.5lf ",
+                                  i,f));
+
     }
     ypoint = f;
 

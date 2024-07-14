@@ -29,7 +29,7 @@ MethodLoader::MethodLoader()
     method<<new SimanMethod;
     methodName<<"Simman";
     method<<new Armadillo1;
-    methodName<<"armadillo1";
+    methodName<<"Armadillo";
     method<<new OFAlgorithm;
     methodName<<"Ofa";
     method<<new GWOoptimizer;

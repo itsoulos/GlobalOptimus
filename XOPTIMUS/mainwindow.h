@@ -47,8 +47,6 @@ private:
     void noMethodLoaded();
     void    startRunning();
     void    endRunning();
-    int std_fd;
-    QFileSystemWatcher * watcher;
     Statistics *myStat;
     QTabWidget *mainTab;
     QTextEdit *lastEdit;
@@ -65,7 +63,6 @@ public slots:
     void settingsSlot(QAction  *action);
     void executeSlot(QAction  *action);
     void helpSlot(QAction *action);
-    void fileChanged(QString text);
 protected:
      void closeEvent(QCloseEvent *event);
 };

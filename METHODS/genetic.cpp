@@ -117,8 +117,9 @@ void    Genetic::showDebug()
     double besty;
     besty = fitnessArray[0];
      if(getParam("opt_debug").getValue()=="yes" && generation%20==0)
-    printf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg\n",
-           generation,besty);
+        methodLogger->printMessage(
+            QString::asprintf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg",
+                               generation,besty));
 }
 
 Collection  Genetic::makeChromosomesForRoulette()
@@ -563,7 +564,7 @@ void    Genetic::done()
 {
     fitnessArray[0]=localSearch(population[0]);
     if(getParam("opt_debug").getValue()=="yes" )
-        printf("GENETIC. terminate: %lf \n",fitnessArray[0]);
+        methodLogger->printMessage(QString::asprintf("GENETIC. terminate: %lf ",fitnessArray[0]));
 }
 
 Genetic::~Genetic()

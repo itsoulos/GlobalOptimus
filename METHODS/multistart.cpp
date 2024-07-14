@@ -31,6 +31,7 @@ void    Multistart::step()
         y = localSearch(x);
         minima.addPoint(x,y);
     }
+
 }
 
 bool    Multistart::terminated()
@@ -38,6 +39,7 @@ bool    Multistart::terminated()
     double besty,worsty;
     minima.getBestWorstValues(besty,worsty);
     QString termination = getParam("ms_termination").getValue();
+
     if(termination == "doublebox" && doubleBox.terminate(besty)) return true;
     if(termination == "similarity" && similarity.terminate(besty)) return true;
     if(iteration>=maxiters) return true;
@@ -48,8 +50,8 @@ void    Multistart::showDebug()
 {
     double besty,worsty;
     minima.getBestWorstValues(besty,worsty);
-    printf("MULTISTART. ITERATION=%4d BEST VALUE=%20.10lg\n",
-           iteration,besty);
+    methodLogger->printMessage(QString::asprintf("MULTISTART. ITERATION=%4d BEST VALUE=%20.10lg",
+                                                 iteration,besty));
 }
 
 void    Multistart::done()

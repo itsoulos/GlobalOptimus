@@ -6,6 +6,8 @@ Statistics::Statistics()
     fcallsValue.resize(0);
 }
 
+
+
 void Statistics::addProblem(Problem *p)
 {
     bestyValue.push_back(p->getBesty());
@@ -28,7 +30,8 @@ void Statistics::addProblem(Problem *p)
 void Statistics::printStatistics()
 {
     int n = (int)bestyValue.size();
-    printf("Executions: %4d\n===================\n",n);
+
+        printf("Executions: %4d\n===================\n",n);
     int totalFcalls = 0;
     double miny = 1e+100;
     int timesMinimumFound = 0;

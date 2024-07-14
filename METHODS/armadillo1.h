@@ -56,6 +56,7 @@ public:
     virtual void   done();
     virtual bool terminated();
      virtual void Selection();
+    virtual void showDebug();
     virtual ~Armadillo1();
 };
 

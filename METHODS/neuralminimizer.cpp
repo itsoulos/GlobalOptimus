@@ -24,7 +24,6 @@ NeuralMinimizer::NeuralMinimizer()
 bool    NeuralMinimizer::terminated()
 {
     ++iter;
-    printf("Neural Minimizer: ITER: %4d BESTY %20.10lg\n",iter,besty);
     int neural_iterations =params["neural_iterations"].toString().toInt();
     QString neural_termination = params["neural_termination"].toString();
 
@@ -96,10 +95,17 @@ void    NeuralMinimizer::init()
     doubleBox.setMinIters(20);
 }
 
+void    NeuralMinimizer::showDebug()
+{
+    methodLogger->printMessage(QString::asprintf(
+        "NeuralMinimizer. Iter=%4d BESTY=%10.5lg",iter,besty));
+}
+
 void    NeuralMinimizer::done()
 {
     besty = localSearch(bestx);
-    printf("Neural Minimizer: Terminating with %20.10lg\n",besty);
+    methodLogger->printMessage(
+        QString::asprintf("NeuralMinimizer: Terminating with %20.10lg",besty));
 }
 
 NeuralMinimizer::~NeuralMinimizer()

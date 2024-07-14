@@ -175,8 +175,9 @@ bool    GWOoptimizer::terminated()
 
 void    GWOoptimizer::showDebug()
 {
-    //printf("Iter=%4d BEST VALUE=%10.4lf\n",iter,Alpha_score);
-    //printf("Iter=%4d BEST VALUE=%10.4lf\n",iter,sumMean);
+    methodLogger->printMessage(
+        QString::asprintf("Iter=%4d BEST VALUE=%10.4lf\n",iter,Alpha_score));
+    methodLogger->printMessage(QString::asprintf("Iter=%4d BEST VALUE=%10.4lf\n",iter,sumMean));
 }
 
 void    GWOoptimizer::done()

@@ -25,6 +25,7 @@ public:
     void    setPoint(Data &x,double &y);
     void    getPoint(Data &x,double &y);
     virtual void done();
+    virtual void showDebug();
     virtual ~SimanMethod();
 };
 

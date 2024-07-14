@@ -216,7 +216,6 @@ again:
 
 
     finalBestValue = *min_element(bestValues.begin(), bestValues.end());
-    printf("Final Best Value: %f\n", finalBestValue);
 
 }
 
@@ -249,6 +248,7 @@ void Armadillo1::step() {
 bool Armadillo1::terminated() {
         double besty;
         besty = fitness[0];
+
         //chromosomes.getBestWorstValues(besty,worsty);
         if(generation>=maxGenerations) return true;
         if(terminationMethod=="doublebox")
@@ -259,16 +259,17 @@ bool Armadillo1::terminated() {
         return false;
     }
 
+void Armadillo1::showDebug()
+    {            methodLogger->printMessage(
+            QString::asprintf("ARMADILLO. STEP: %lf ",fitness[0]));
+
+}
 void    Armadillo1::done()
 {
-    Data xpoint;
-    double ypoint;
-    // chromosomes.sort();
-    // chromosomes.getPoint(0,xpoint,ypoint);
-    // ypoint = localSearch(xpoint);
     fitness[0]=localSearch(population[0]);
     if(getParam("opt_debug").getValue()=="yes")
-        printf("GENETIC. terminate: %lf \n",fitness[0]);
+        methodLogger->printMessage(
+            QString::asprintf("ARMADILLO. terminate: %lf \n",fitness[0]));
 }
 
 Armadillo1::~Armadillo1()

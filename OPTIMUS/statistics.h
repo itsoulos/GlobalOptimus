@@ -2,7 +2,6 @@
 #define STATISTICS_H
 
 # include "OPTIMUS/problem.h"
-
 struct Metric
 {
     QString name;
