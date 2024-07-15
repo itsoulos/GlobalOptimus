@@ -123,11 +123,10 @@ void ParallelDe::init()
     rmargin = myProblem->getRightMargin();
     population.resize(agents * islands);
     fitness_array.resize(agents * islands);
-    for (int i = 0; i < agents * islands; i++)
-    {
-        population[i] = myProblem->getSample();
-        fitness_array[i] = myProblem->statFunmin(population[i]);
-    }
+
+    int N = agents * islands;
+    sampleFromProblem(N,population,fitness_array);
+
     bestIslandIndex.resize(islands);
     bestIslandValues.resize(islands);
     similarity_max_count = params["parde_similarityMax"].toString().toInt();

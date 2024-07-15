@@ -407,10 +407,11 @@ void ParallelPso::init()
     particles.resize(parallelPsoParticles * subCluster);
     fitness_array.resize(parallelPsoParticles * subCluster);
     best_fitness_array.resize(parallelPsoParticles * subCluster);
-    for (int i = 0; i < parallelPsoParticles * subCluster; i++)
+    int N = parallelPsoParticles * subCluster;
+    sampleFromProblem(N,particles,fitness_array);
+
+    for (int i = 0; i < N; i++)
     {
-        particles[i] = myProblem->getSample();
-        fitness_array[i] = myProblem->statFunmin(particles[i]);
         best_fitness_array[i] = fitness_array[i];
     }
     similarityBestValue.resize(subCluster);
