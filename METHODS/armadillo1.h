@@ -19,7 +19,6 @@ private:
     long M;
     double bestSolutionValue;
     int bestSolutionIndex;
-    QString terminationMethod;
     vector<double> bestValues;
     int generation;
     vector<double> solutionCopy;

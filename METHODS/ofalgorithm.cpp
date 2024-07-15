@@ -9,10 +9,6 @@ OFAlgorithm::OFAlgorithm() {
     addParam(Parameter("ofa_maxiters",200,10,20000,"Maximum number of generations"));
     addParam(Parameter("ofa_lrate",0.05,0.0,1.0,"Localsearch rate"));
     addParam(Parameter("ofa_bfgsiters",3,1,10,"Iterations for bfgs method"));
-    QStringList ofa_termination;
-    ofa_termination<<"doublebox"<<"similarity"<<"maxites";
-    addParam(Parameter("ofa_termination",ofa_termination[0],
-                       ofa_termination,"Termination method. Avaible values: maxiters,similarity,doublebox"));
 
 }
 
@@ -23,7 +19,6 @@ void OFAlgorithm::init()
     N=getParam("ofa_count").getValue().toInt();
     maxGenerations=getParam("ofa_maxiters").getValue().toInt();
     localsearchRate=getParam("ofa_lrate").getValue().toDouble();
-    terminationMethod=getParam("ofa_termination").getValue();
     generation=0;
     M= N/2;
     population.resize(N);
@@ -373,7 +368,7 @@ void OFAlgorithm:: done()
     besty  = localSearch(bestX);
     if(getParam("opt_debug").getValue()=="yes")
         methodLogger->printMessage(
-            QString::asprintf("OFA. terminate: %lf bestFitness: %lf \n",besty,bestFitness));
+            QString::asprintf("OFA. terminate: %lf bestFitness: %lf ",besty,bestFitness));
 }
 
 OFAlgorithm::~OFAlgorithm()

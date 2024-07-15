@@ -36,6 +36,10 @@ Optimizer::Optimizer()
     addParam(Parameter("opt_rbfweights",10,1,20,"Number of RBF weights"));
     addParam(Parameter("opt_kmeansamples",1000,100,10000,"Number of samples for k-means sampling"));
 
+    QStringList termMethod;
+    termMethod<<"doublebox"<<"similarity"<<"maxiters";
+    addParam(Parameter("opt_termination",termMethod[0],termMethod,
+            "Termination methods: doublebox,similarity,maxiters"));
     methodLogger = new Logger();
 }
 
@@ -110,6 +114,11 @@ bool    Optimizer::terminated()
     return true;
 }
 
+QString     Optimizer::getTerminationMethod() const
+{
+    return terminationMethod;
+}
+
 Logger  *Optimizer::getMethodLogger()
 {
     return methodLogger;
@@ -121,7 +130,7 @@ void    Optimizer::showDebug()
 }
 void    Optimizer::solve()
 {
-    bool debug = getParam("opt_debug").getValue()=="yes"?true:false;
+    terminationMethod = getParam("opt_termination").getValue();
     doubleBox.setMinIters(getParam("opt_doubleboxminiters").getValue().toInt());
     similarity.setMinIters(getParam("opt_similarityminiters").getValue().toInt());
     similarity.setSimilarityIterations(getParam("opt_similaritycriterion").getValue().toInt());

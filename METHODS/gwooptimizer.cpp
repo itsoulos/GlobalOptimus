@@ -3,15 +3,11 @@ GWOoptimizer::GWOoptimizer()
 {
     addParam(Parameter("gwo_agents", 120,10,1000, "Number of gwo agents"));
     addParam(Parameter("gwo_maxiters", 200,10,1000, "Number of gwo max iters"));
-    QStringList gwo_termination;
-    gwo_termination<<"similarity"<<"doublebox";
-    addParam(Parameter("gwo_termination", gwo_termination[0],
-                       gwo_termination,"Termination method for gwo"));
+
 }
 
 void    GWOoptimizer::init()
 {
-    terminationMethod = getParam("gwo_termination").getValue();
     SearchAgents_no = getParam("gwo_agents").getValue().toInt();
     Max_iter = getParam("gwo_maxiters").getValue().toInt();
     Alpha_pos.resize(myProblem->getDimension());
@@ -176,8 +172,8 @@ bool    GWOoptimizer::terminated()
 void    GWOoptimizer::showDebug()
 {
     methodLogger->printMessage(
-        QString::asprintf("Iter=%4d BEST VALUE=%10.4lf\n",iter,Alpha_score));
-    methodLogger->printMessage(QString::asprintf("Iter=%4d BEST VALUE=%10.4lf\n",iter,sumMean));
+        QString::asprintf("Iter=%4d BEST VALUE=%10.4lf",iter,Alpha_score));
+    methodLogger->printMessage(QString::asprintf("Iter=%4d BEST VALUE=%10.4lf",iter,sumMean));
 }
 
 void    GWOoptimizer::done()

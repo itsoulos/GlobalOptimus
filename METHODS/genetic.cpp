@@ -30,12 +30,7 @@ Genetic::Genetic()
                        "Available methods: none,crossover,mutate,siman"));
     addParam(Parameter("gen_lsearchitems",20,0,100,"Number of items for local search"));
     addParam(Parameter("gen_lsearchgens",20,0,100,"Generations for local search"));
-    QStringList gen_termination;
-    gen_termination<<"doublebox"<<"similarity"<<"maxiters";
-    addParam(Parameter("gen_termination",gen_termination[0],
-                       gen_termination,
-                       "Termination method. Avaible values: maxiters,similarity,doublebox"));
-}
+    }
 
 
 void    Genetic::setBest(Data &xx,double y)
@@ -55,7 +50,6 @@ void    Genetic::init()
     selectionMethod=getParam("gen_selection").getValue();
     crossoverMethod=getParam("gen_crossover").getValue();
     mutationMethod=getParam("gen_mutation").getValue();
-    terminationMethod=getParam("gen_termination").getValue();
     localsearchRate=getParam("gen_lrate").getValue().toDouble();
     lsearchGens=getParam("gen_lsearchgens").getValue().toInt();
     lsearchItems=getParam("gen_lsearchitems").getValue().toInt();

@@ -6,12 +6,7 @@ ParallelDe::ParallelDe()
 
 {
     before = std::chrono::system_clock::now();
-    QStringList parde_termination;
-    parde_termination<<"similarity"<<"maxiters"<<"doublebox";
-    addParam(Parameter("parde_termination", parde_termination[0],
-                       parde_termination,
-                       "Termination rule. Available values: maxiters,doublebox,similarity"));
-    addParam(Parameter("parde_agents", 200,10,10000, "Number of population"));
+     addParam(Parameter("parde_agents", 200,10,10000, "Number of population"));
     addParam(Parameter("parde_generations", 1000,10,10000, "Maximum number of generations"));
     addParam(Parameter("parde_cr", 0.9,0.0,1.0, "Crossover Probability"));
     QStringList parde_weight_method;
@@ -254,7 +249,7 @@ int ParallelDe::tournament(int islandIndex, int tsize)
 }
 bool ParallelDe::checkIsland(int islandName)
 {
-
+    parde_termination = terminationMethod;
     if(parde_termination == "doublebox" && doubleBox.terminate(similarity_best_value.at(islandName))) return true;
     //if(parde_termination == "similarity" && similarity.terminate(similarity_best_value.at(islandName))) return true; //similarity
     if(parde_termination == "similarity" && similarity.terminate(fabs(newSum.at(islandName) - sum.at(islandName)))) return true;                             //sum similarity

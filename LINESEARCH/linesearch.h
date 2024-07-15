@@ -32,7 +32,7 @@ public:
      * @return
      */
     virtual double getDirection(Data &x);
-    ~LineSearch();
+    virtual ~LineSearch();
 };
 
 #endif // LINESEARCH_H

@@ -26,7 +26,6 @@ private:
     QString selectionMethod;
     QString crossoverMethod;
     QString mutationMethod;
-    QString terminationMethod;
     QString localSearchMethod;
     double selectionRate;
     double mutationRate;

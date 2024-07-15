@@ -2,6 +2,7 @@
 GradientDescent::GradientDescent()
 {
     hasInitialized  = false;
+    lt=NULL;
     addParam(Parameter("gd_maxiters",200,1,10000,"Maximum iterations for gradient descent"));
     QStringList gd_linesearch;
     gd_linesearch<<"none"<<"golden"<<"fibonacci"<<"armijo";
@@ -106,5 +107,6 @@ void    GradientDescent::getPoint(Data &x,double &y)
 
 GradientDescent::~GradientDescent()
 {
-    if(lt!=NULL) delete lt;
+   if(lt!=NULL)
+        delete lt;
 }

@@ -17,7 +17,6 @@ private:
     double y=1e+10;
     Optimizer *local=NULL;
     double besty;
-    QString terminationMethod;
     vector<double> bestValues;
     int N;
     vector<double> a;

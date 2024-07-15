@@ -11,12 +11,7 @@ NeuralMinimizer::NeuralMinimizer()
     addParam(Parameter("neural_samples",100,10,10000,"Number of samples for Neural Minimizer"));
     addParam(Parameter("neural_iterations",200,10,2000,"Number of maximum iterations for Neural Minimizer"));
     addParam(Parameter("neural_start_samples",50,10,5000,"Number of start samples for Neural Minimizer"));
-    QStringList neural_termination;
-    neural_termination<<"doublebox"<<"similarity";
-    addParam(Parameter("neural_termination",neural_termination[0],
-                       neural_termination,
-                       "The used stopping rule. Available values: similarity, doublebox"));
-    addParam(Parameter("neural_similarityMaxValue",20,1,100,"The maximum number of iterations for the similarity stopping rule"));
+       addParam(Parameter("neural_similarityMaxValue",20,1,100,"The maximum number of iterations for the similarity stopping rule"));
     addParam(Parameter("neural_trainmethod","bfgs","The method used to train the neural network model. Default: bfgs"));
     sampler= NULL;
 }
@@ -25,8 +20,7 @@ bool    NeuralMinimizer::terminated()
 {
     ++iter;
     int neural_iterations =params["neural_iterations"].toString().toInt();
-    QString neural_termination = params["neural_termination"].toString();
-
+    QString neural_termination = terminationMethod;
     if(neural_termination=="maxiters")
         return iter>=neural_iterations;
     else

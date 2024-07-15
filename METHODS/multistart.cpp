@@ -5,9 +5,7 @@ Multistart::Multistart()
     addParam(Parameter("ms_maxiters",100,1,10000,"Maximum number of iterations"));
     QStringList ms_termination;
     ms_termination<<"doublebox"<<"similarity"<<"maxiters";
-    addParam(Parameter("ms_termination",ms_termination[0],
-                       ms_termination,"Termination rule. Values: maxiters,doublebox,similarity"));
-}
+    }
 
 void    Multistart::init()
 {
@@ -38,7 +36,7 @@ bool    Multistart::terminated()
 {
     double besty,worsty;
     minima.getBestWorstValues(besty,worsty);
-    QString termination = getParam("ms_termination").getValue();
+    QString termination = terminationMethod;
 
     if(termination == "doublebox" && doubleBox.terminate(besty)) return true;
     if(termination == "similarity" && similarity.terminate(besty)) return true;

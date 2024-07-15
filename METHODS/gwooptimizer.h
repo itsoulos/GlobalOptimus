@@ -10,7 +10,6 @@ private:
     Data fitnessArray;
     double Alpha_score,Beta_score,Delta_score;
     int SearchAgents_no, Max_iter;
-    QString terminationMethod;
     int iter;
     double sumMean;
 public:

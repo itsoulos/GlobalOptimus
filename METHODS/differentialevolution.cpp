@@ -12,12 +12,7 @@ DifferentialEvolution::DifferentialEvolution()
     addParam(Parameter("de_selection",de_selection[0],
                        de_selection,
                        "Selection method. Available values: random, tournament"));
-    QStringList de_termination;
-    de_termination<<"maxiter"<<"doublebox"<<"similarity";
-    addParam(Parameter("de_termination",de_termination[0],
-                       de_termination,
-                       "De termination. Available values: maxiters,doublebox,similarity"));
-}
+   }
 
 void    DifferentialEvolution::init()
 {
@@ -121,7 +116,7 @@ void    DifferentialEvolution::step()
 
 bool    DifferentialEvolution::terminated()
 {
-    QString term = getParam("de_termination").getValue();
+    QString term = terminationMethod;
     if(term == "maxiters")
         return iter>=maxiters;
     else
