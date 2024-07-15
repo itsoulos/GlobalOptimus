@@ -90,8 +90,17 @@ SOURCES += \
     OPTIMUS/problem.cpp \
     PROBLEMS/Ackley.cpp \
     PROBLEMS/Sphere.cpp \
+    PROBLEMS/f12.cpp \
+    PROBLEMS/f13.cpp \
+    PROBLEMS/f14.cpp \
+    PROBLEMS/f15.cpp \
+    PROBLEMS/f16.cpp \
+    PROBLEMS/f17.cpp \
+    PROBLEMS/f18.cpp \
+    PROBLEMS/f19.cpp \
     PROBLEMS/schwefel.cpp \
     PROBLEMS/schwefel221.cpp \
+    PROBLEMS/schwefel222.cpp \
     XOPTIMUS/methodloader.cpp \
     XOPTIMUS/parameterdialog.cpp \
     XOPTIMUS/problemloader.cpp \
@@ -208,8 +217,17 @@ HEADERS += \
     OPTIMUS/parameter.h \
     OPTIMUS/parameterlist.h \
     OPTIMUS/problem.h \
+    PROBLEMS/f12.h \
+    PROBLEMS/f13.h \
+    PROBLEMS/f14.h \
+    PROBLEMS/f15.h \
+    PROBLEMS/f16.h \
+    PROBLEMS/f17.h \
+    PROBLEMS/f18.h \
+    PROBLEMS/f19.h \
     PROBLEMS/schwefel.h \
     PROBLEMS/schwefel221.h \
+    PROBLEMS/schwefel222.h \
     XOPTIMUS/methodloader.h \
     XOPTIMUS/parameterdialog.h \
     XOPTIMUS/problemloader.h \

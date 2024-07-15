@@ -5,10 +5,12 @@ ProblemLoader::ProblemLoader()
     problemList<<"rastrigin"<<"test2n"<<"bf1"<<"bf2"
         <<"branin"<<"camel"<<"cm"<<"diffpower"<<"easom"<<"exp"
         <<"elp"<<"gkls250"<<"gkls2100"<<"gkls350"
-       <<"goldstein"<<"griewank2"<<"griewank10"
-       <<"hansen"<<"hartman3"<<"hartman6"<<"potential"
-       <<"rosenbrock"<<"shekel5"<<"shekel7"<<"shekel10"
-       <<"sinu"<<"test30n"<<"mlpproblem"<<"rbfproblem"
+                <<"goldstein"<<"griewank2"<<"griewank10"<<"Schwefel221"
+                <<"hansen"<<"hartman3"<<"hartman6"<<"potential"<<"Schwefel"
+                <<"Sphere"<<"Schwefel222"<<"f16"<<"f17"<<"f18"<<"f19"
+                <<"f12"<<"f13"<<"f14"<<"f15"
+                <<"rosenbrock"<<"shekel5"<<"shekel7"<<"shekel10"<<"Ackley"
+                <<"sinu"<<"test30n"<<"mlpproblem"<<"rbfproblem"
        <<"userproblem";
     myParams["dummy"]=1;
     selectedProblem = "";
@@ -70,6 +72,45 @@ Problem *ProblemLoader::getProblemFromName(QString name)
     Problem *myProblem=NULL;
     if(name == "rastrigin")
         myProblem = new RastriginProblem();
+    else
+    if(name == "Ackley")
+        myProblem = new Ackley();
+    else
+    if(name == "Schwefel")
+        myProblem = new schwefel();
+    else
+    if(name == "Schwefel221")
+        myProblem = new schwefel221();
+    else
+    if(name == "Schwefel222")
+        myProblem = new schwefel222();
+    else
+    if(name == "f16")
+        myProblem = new f16();
+    else
+    if(name == "f17")
+        myProblem = new f17();
+    else
+    if(name == "f18")
+        myProblem = new f18();
+    else
+    if(name == "f19")
+        myProblem = new f19();
+    else
+    if(name == "f12")
+        myProblem = new f12();
+    else
+    if(name == "f13")
+        myProblem = new f13();
+    else
+    if(name == "f14")
+        myProblem = new f14();
+    else
+    if(name == "f15")
+        myProblem = new f15();
+    else
+    if(name =="Sphere")
+        myProblem = new Sphere();
     else
     if(name == "test2n")
         myProblem = new Test2nProblem();

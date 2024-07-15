@@ -40,6 +40,19 @@
 # include <PROBLEMS/hess.h>
 # include <PROBLEMS/fuch1.h>
 # include <OPTIMUS/optimizer.h>
+# include <PROBLEMS/Ackley.h>
+# include <PROBLEMS/schwefel.h>
+# include <PROBLEMS/schwefel221.h>
+# include <PROBLEMS/Sphere.h>
+# include <PROBLEMS/schwefel222.h>
+# include <PROBLEMS/f16.h>
+# include <PROBLEMS/f17.h>
+# include <PROBLEMS/f18.h>
+# include <PROBLEMS/f19.h>
+# include <PROBLEMS/f12.h>
+# include <PROBLEMS/f13.h>
+# include <PROBLEMS/f14.h>
+# include <PROBLEMS/f15.h>
 class ProblemLoader
 {
 private:
