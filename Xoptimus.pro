@@ -91,7 +91,9 @@ SOURCES += \
     OPTIMUS/problem.cpp \
     OPTIMUS/problemloader.cpp \
     PROBLEMS/Ackley.cpp \
+    PROBLEMS/Extended_f10.cpp \
     PROBLEMS/Sphere.cpp \
+    PROBLEMS/bf3.cpp \
     PROBLEMS/f12.cpp \
     PROBLEMS/f13.cpp \
     PROBLEMS/f14.cpp \
@@ -179,7 +181,9 @@ HEADERS += \
     OPTIMUS/methodloader.h \
     OPTIMUS/problemloader.h \
     PROBLEMS/Ackley.h \
+    PROBLEMS/Extended_f10.h \
     PROBLEMS/Sphere.h \
+    PROBLEMS/bf3.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
     LINESEARCH/armijosearch.h \

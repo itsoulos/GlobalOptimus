@@ -54,6 +54,8 @@
 # include <PROBLEMS/f14.h>
 # include <PROBLEMS/f15.h>
 # include <PROBLEMS/schaffer.h>
+# include <PROBLEMS/Extended_f10.h>
+# include <PROBLEMS/bf3.h>
 class ProblemLoader
 {
 private:

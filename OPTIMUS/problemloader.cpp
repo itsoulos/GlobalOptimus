@@ -5,6 +5,7 @@ ProblemLoader::ProblemLoader()
     problemList<<"rastrigin"<<"test2n"<<"bf1"<<"bf2"
         <<"branin"<<"camel"<<"cm"<<"diffpower"<<"easom"<<"exp"
         <<"elp"<<"gkls250"<<"gkls2100"<<"gkls350"
+                <<"bf3"<<"extendedf10"
                 <<"goldstein"<<"griewank2"<<"griewank10"<<"Schwefel221"
                 <<"hansen"<<"hartman3"<<"hartman6"<<"potential"<<"Schwefel"
                 <<"Sphere"<<"Schwefel222"<<"f16"<<"f17"<<"f18"<<"f19"
@@ -75,6 +76,12 @@ Problem *ProblemLoader::getProblemFromName(QString name)
     else
     if(name == "ackley")
         myProblem = new Ackley();
+    else
+    if(name == "bf3")
+        myProblem = new bf3();
+    else
+    if(name == "extendedf10")
+        myProblem = new Extended_f10();
     else
     if(name == "schwefel")
         myProblem = new schwefel();
