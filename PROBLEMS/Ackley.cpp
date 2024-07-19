@@ -19,7 +19,7 @@ double Ackley::funmin( Data &x)
    double a = 20;
     double b = 0.2;
    double c = 2 * M_PI;
-    int d;
+    int d=x.size();
 
     double sum1 = 0.0;
     double sum2 = 0.0;
@@ -38,7 +38,7 @@ Data Ackley::gradient(Data &x)
 {     Data g;
     double a = 20;
     double b = 0.2;
-      int d;
+      int d=x.size();
     double c = 2 * M_PI;
     double sum1 = 0.0;
     double sum2 = 0.0;

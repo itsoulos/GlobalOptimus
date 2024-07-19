@@ -16,7 +16,7 @@ schwefel221::schwefel221()
 }
 
 double schwefel221::funmin( Data &x)
-{ int n;
+{ int n=x.size();
     double y ;
     double sum = 0.0;
 
@@ -34,7 +34,7 @@ double schwefel221::funmin( Data &x)
 
 Data schwefel221::gradient(Data &x)
 
-{ int n;
+{ int n=x.size();
     Data g;
     g.resize(n);
 

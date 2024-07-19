@@ -15,8 +15,9 @@ Extended_f10::Extended_f10()
 }
 
 double  Extended_f10::funmin(Data &x)
-{double sum = 0.0;
-    int n;
+{
+    double sum = 0.0;
+    int n=x.size();
     for (int i = 0; i < n; ++i) {
         sum += x[i] * x[i] - 10 * cos(2 * M_PI * x[i]);
     }
@@ -26,9 +27,9 @@ double  Extended_f10::funmin(Data &x)
 
 Data    Extended_f10::gradient(Data &x)
 {
-    int n;
+    int n=x.size();
     Data g;
-    g.resize(2);
+    g.resize(n);
     for (int i = 0; i < n; ++i) {
         g[i] = 2 * x[i] + 20 * M_PI * sin(2 * M_PI * x[i]);
     }
