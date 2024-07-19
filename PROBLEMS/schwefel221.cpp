@@ -1,12 +1,12 @@
  #include "schwefel221.h"
 
 schwefel221::schwefel221()
-    : Problem(2)
+    : Problem(1)
 {
     Data l, r;
-    l.resize(2);
-    r.resize(2);
-    for (int i = 0; i < 2; i++)
+    l.resize(dimension);
+    r.resize(dimension);
+    for (int i = 0; i < dimension; i++)
     {
         l[i] = -500;
         r[i] = 500;
@@ -16,15 +16,15 @@ schwefel221::schwefel221()
 }
 
 double schwefel221::funmin( Data &x)
-{
+{ int n;
     double y ;
     double sum = 0.0;
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < n; ++i) {
         sum += -x[i] * sin(sqrt(abs(x[i])));
     }
 
-   y = 418.9829 * 2 + sum;
+   y = 418.9829 * n + sum;
 
     return y;
 
@@ -34,12 +34,12 @@ double schwefel221::funmin( Data &x)
 
 Data schwefel221::gradient(Data &x)
 
-{
+{ int n;
     Data g;
-    g.resize(2);
+    g.resize(n);
 
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < n; ++i) {
         double t1 = abs(x[i]);
         double t2 = (x[i] >= 0) ? 1.0 : -1.0;
    g[i] = -sin(sqrt(t1)) - t2 *  0.5 * x[i]*cos(sqrt(t1))/ sqrt(t1);    }

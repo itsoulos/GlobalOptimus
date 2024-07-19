@@ -30,6 +30,7 @@ public:
     QStringList getMethodList() const;
     Optimizer   *getSelectedMethod(QString name);
     QJsonObject getMethodParams(QString name) const;
+    QStringList  getMethodParamsNames(QString name) const;
     ~MethodLoader();
 };
 

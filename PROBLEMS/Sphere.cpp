@@ -1,15 +1,15 @@
 #include "Sphere.h"
 
 Sphere::Sphere()
-    : Problem(2)
+    : Problem(1)
 {
     Data l, r;
-    l.resize(2);
-    r.resize(2);
-    for (int i = 0; i < 2; i++)
+    l.resize(dimension);
+    r.resize(dimension);
+    for (int i = 0; i < dimension; i++)
     {
-        l[i] = -100;
-        r[i] = 100;
+        l[i] = -500;
+        r[i] = 500;
     }
     setLeftMargin(l);
     setRightMargin(r);
@@ -17,7 +17,7 @@ Sphere::Sphere()
 
 double Sphere::funmin( Data &x)
 {
-    int n=2;
+    int n;
     double sum=0.0;
     for(int i=0;i<n;i++)
     {
@@ -27,11 +27,11 @@ double Sphere::funmin( Data &x)
 }
 
 Data Sphere::gradient(Data &x)
-{   int n=2;
+{   int n;
     Data g;
     g.resize(2);
     for(int i=0;i<n;i++){
-    g[i] = 2.0 * x[i];
+    g[i] += 2.0 * x[i];
 
     }
     return g;

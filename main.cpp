@@ -1,45 +1,5 @@
 #include <QCoreApplication>
 
-# include <PROBLEMS/rastriginproblem.h>
-# include <PROBLEMS/test2nproblem.h>
-# include <PROBLEMS/bf1.h>
-# include <PROBLEMS/bf2.h>
-# include <PROBLEMS/branin.h>
-# include <PROBLEMS/camel.h>
-# include <PROBLEMS/cm.h>
-# include <PROBLEMS/diffpower.h>
-# include <PROBLEMS/easom.h>
-# include <PROBLEMS/elp.h>
-# include <PROBLEMS/discus.h>
-# include <PROBLEMS/cigar.h>
-# include <PROBLEMS/exp.h>
-# include <PROBLEMS/gkls250.h>
-# include <PROBLEMS/gkls2100.h>
-# include <PROBLEMS/gkls350.h>
-# include <PROBLEMS/goldstein.h>
-# include <PROBLEMS/griewank2.h>
-# include <PROBLEMS/griewank10.h>
-# include <PROBLEMS/hansen.h>
-# include <PROBLEMS/hartman3.h>
-# include <PROBLEMS/hartman6.h>
-# include <PROBLEMS/potential.h>
-# include <PROBLEMS/rosenbrock.h>
-# include <PROBLEMS/gross.h>
-# include <PROBLEMS/shekel5.h>
-# include <PROBLEMS/shekel7.h>
-# include <PROBLEMS/shekel10.h>
-# include <PROBLEMS/sinu.h>
-# include <PROBLEMS/test30n.h>
-# include <MLMODELS/mlpproblem.h>
-# include <MLMODELS/rbfproblem.h>
-# include <PROBLEMS/diracproblem.h>
-# include <PROBLEMS/userproblem.h>
-# include <PROBLEMS/fuchss.h>
-# include <PROBLEMS/levy.h>
-# include <PROBLEMS/salkin.h>
-# include <PROBLEMS/hess.h>
-# include <PROBLEMS/fuch1.h>
-
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
@@ -61,18 +21,19 @@
 #ifdef OPTIMUS_ARMADILLO
     # include <MLMODELS/functionalrbf.h>
 #endif
-
+# include <OPTIMUS/problemloader.h>
+# include <OPTIMUS/methodloader.h>
 # include <QVector>
 # include <QDebug>
 # include <QStringList>
 void error(QString message);
-QVector<Optimizer*> method;
+//QVector<Optimizer*> method;
 QStringList methodName;
 QVector<QStringList> methodParams;
 Problem *mainProblem = NULL;
 QVector<Parameter> mainParams;
 QJsonObject problemParams;
-
+MethodLoader *methodLoader = NULL;
 QString header="==========================================================================";
 
 void printOption(QString fullName,
@@ -93,42 +54,11 @@ void makeMainParams()
 }
 void loadMethods()
 {
-    method<<new GradientDescent;
-    methodName<<"GradientDescent";
-    method<<new Bfgs;
-    methodName<<"Bfgs";
-    method<<new Lbfgs;
-    methodName<<"Lbfgs";
-    method<<new Multistart;
-    methodName<<"Multistart";
-    method<<new Genetic;
-    methodName<<"Genetic";
-    method<<new DifferentialEvolution;
-    methodName<<"DifferentialEvolution";
-    method<<new iPso;
-    methodName<<"iPso";
-    method<<new NeuralMinimizer;
-    methodName<<"NeuralMinimizer";
-    method<<new ParallelDe;
-    methodName<<"ParallelDe";
-    method<<new ParallelPso;
-    methodName<<"ParallelPso";
-    method<<new NelderMead;
-    methodName<<"NelderMead";
-    method<<new Adam;
-    methodName<<"Adam";
-    method<<new SimanMethod;
-    methodName<<"Simman";
-    method<<new Armadillo1;
-    methodName<<"armadillo1";
-    method<<new OFAlgorithm;
-    methodName<<"Ofa";
-    method<<new GWOoptimizer;
-    methodName<<"Gwo";
-    method<<new UserMethod;
-    methodName<<"UserMethod";
-    for(int i=0;i<method.size();i++)
-    methodParams<<method[i]->getParameterNames();
+    methodLoader = new MethodLoader();
+    methodName = methodLoader->getMethodList();
+    for(int i=0;i<methodName.size();i++)
+        methodParams<<methodLoader->getMethodParamsNames(methodName[i]);
+
 }
 
 void loadProblem()
@@ -142,134 +72,14 @@ void loadProblem()
             break;
         }
     }
-    if(problemName=="rastrigin")
-        mainProblem = new RastriginProblem();
-    else
-        if(problemName=="test2n")
-        mainProblem = new Test2nProblem();
-    else
-        if(problemName=="bf1")
-        mainProblem  = new Bf1();
-    else
-        if(problemName=="bf2")
-        mainProblem = new Bf2();
-    else
-        if(problemName=="branin")
-        mainProblem = new Branin();
-    else
-        if(problemName=="camel")
-        mainProblem = new Camel();
-    else
-	if(problemName=="cm")
-	 mainProblem = new Cm();
-    else
-	if(problemName == "discus")
-	 mainProblem = new Discus();
-    else
-	if(problemName == "cigar")
-	 mainProblem = new Cigar();
-    else
-        if(problemName=="diffpower")
-        mainProblem = new DiffPower();
-    else
-        if(problemName == "easom")
-        mainProblem = new Easom();
-    else
-        if(problemName == "elp")
-        mainProblem  = new Elp();
-    else
-        if(problemName == "exp")
-        mainProblem = new Exp();
-    else
-       if(problemName == "gkls250")
-          mainProblem = new Gkls250();
-    else
-        if(problemName=="gkls2100")
-            mainProblem = new Gkls2100();
-    else
-        if(problemName == "gkls350")
-            mainProblem = new Gkls350();
-    else
-        if(problemName == "goldstein")
-            mainProblem = new Goldstein();
-    else
-        if(problemName == "griewank2")
-            mainProblem = new Griewank2();
-    else
-        if(problemName == "griewank10")
-            mainProblem = new Griewank10();
-    else
-            if(problemName == "hansen")
-            mainProblem =new Hansen();
-    else
-            if(problemName == "hartman3")
-            mainProblem = new Hartman3();
-    else
-            if(problemName == "hartman6")
-            mainProblem = new Hartman6();
-    else
-            if(problemName == "potential")
-            mainProblem =new Potential();
-    else
-            if(problemName == "rosenbrock")
-            mainProblem = new Rosenbrock();
-    else
-            if(problemName == "shekel5")
-            mainProblem = new Shekel5();
-    else
-            if(problemName == "shekel7")
-            mainProblem = new Shekel7();
-    else
-            if(problemName == "shekel10")
-            mainProblem = new Shekel10();
-    else
-            if(problemName == "sinu")
-            mainProblem = new Sinu();
-    else
-            if(problemName == "test30n")
-            mainProblem = new Test30n();
-    else
-            if(problemName == "mlp")
-            mainProblem = new MlpProblem();
-    else
-            if(problemName == "rbf")
-            mainProblem = new RbfProblem();
-    else
-            if(problemName == "DiracProblem")
-            mainProblem = new DiracProblem();
-    else
-            if(problemName == "FuchsS")
-            mainProblem =new FuchsS();
-    else
-            if(problemName == "Gross")
-            mainProblem = new Gross();
-    else
-            if(problemName == "Levy")
-            mainProblem = new Levy();
-    else
-            if(problemName == "Salkin")
-            mainProblem = new Salkin();
-    else
-            if(problemName == "Hess")
-            mainProblem = new Hess();
-    else
-            if(problemName == "UserProblem")
-            mainProblem = new UserProblem();
-#ifdef OPTIMUS_ARMADILLO
-    else
-            if(problemName == "FunctionalRbf")
-            mainProblem = new FunctionalRbf();
-#endif
-    else
-            error("Undefined function "+problemName);
-              mainProblem->init(problemParams);
+    mainProblem = ProblemLoader::getProblemFromName(problemName);
+    mainProblem->init(problemParams);
 
 }
 
 void unloadMethods()
 {
-    for(int i=0;i<method.size();i++)
-        delete method[i];
+    delete methodLoader;
 }
 
 void unloadProblem()
@@ -288,15 +98,16 @@ void    printHelp()
         Parameter pt = mainParams[i];
         printOption(pt.getName(),pt.getHelp(),pt.getValue());
     }
-    for(int i = 0;i<method.size();i++)
+    for(int i = 0;i<methodName.size();i++)
     {
         qDebug()<<"METHOD: "<<methodName[i];
         qDebug()<<header;
         for(int j=0;j<methodParams[i].size();j++)
         {
-            Parameter pt = method[i]->getParam(methodParams[i][j]);
+            Parameter pt =
+                methodLoader->getSelectedMethod(methodName[i])->getParam(methodParams[i][j]);
             if(pt.getName().startsWith("opt_")) continue;
-            printOption(pt.getName(),pt.getHelp(),pt.getValue());
+                printOption(pt.getName(),pt.getHelp(),pt.getValue());
         }
         qDebug()<<header;
 
@@ -349,14 +160,15 @@ void parseCmdLine(QStringList args)
         }
         if(!found)
         {
-            for(int j=0;j<method.size();j++)
+            for(int j=0;j<methodName.size();j++)
             {
                 for(int k=0;k<methodParams[j].size();k++)
                 {
-                    Parameter pt = method[j]->getParam(methodParams[j][k]);
+                    Parameter pt =
+                        methodLoader->getSelectedMethod(methodName[j])->getParam(methodParams[j][k]);
                     if(pt.getName()==sp[0])
                     {
-                        method[j]->setParam(sp[0],sp[1]);
+                         methodLoader->getSelectedMethod(methodName[j])->setParam(sp[0],sp[1]);
                         found = true;
                     }
                 }
@@ -389,8 +201,8 @@ void runMethod()
             break;
         }
     }
-    method[index]->setProblem(mainProblem);
-    method[index]->solve();
+    methodLoader->getSelectedMethod(methodName[index])->setProblem(mainProblem);
+    methodLoader->getSelectedMethod(methodName[index])->solve();
 }
 
 int getIters()

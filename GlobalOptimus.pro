@@ -1,9 +1,6 @@
-QT -= gui
-
-CONFIG += c++17 console
-CONFIG -= app_bundle
-
+QT       += core gui
 LIBS+=  -lm -fopenmp
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 ## ARMADILLO DEFINITIONS (ONLY FOR FUNCTIONAL RBF)
 ##DEFINES +=OPTIMUS_ARMADILLO
@@ -30,6 +27,9 @@ SOURCES += \
         GE/rule.cc \
         GE/symbol.cc \
 	GE/integeranneal.cpp \
+    OPTIMUS/editlogger.cpp \
+    OPTIMUS/filelogger.cpp \
+    OPTIMUS/logger.cpp \
 	OPTIMUS/mean.cpp \
     METHODS/gwooptimizer.cpp \
 	METHODS/ofalgorithm.cpp \
@@ -56,11 +56,15 @@ SOURCES += \
         LINESEARCH/linesearch.cpp \
         METHODS/multistart.cpp \
         MLMODELS/rbfproblem.cpp \
+    OPTIMUS/methodloader.cpp \
         OPTIMUS/parameterlist.cpp \
+    OPTIMUS/problemloader.cpp \
         OPTIMUS/statistics.cpp \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
         OPTIMUS/similarity.cpp \
+    PROBLEMS/Ackley.cpp \
+    PROBLEMS/Sphere.cpp \
         PROBLEMS/bf1.cpp \
         PROBLEMS/bf2.cpp \
         PROBLEMS/branin.cpp \
@@ -71,6 +75,14 @@ SOURCES += \
         PROBLEMS/easom.cpp \
         PROBLEMS/elp.cpp \
         PROBLEMS/exp.cpp \
+    PROBLEMS/f12.cpp \
+    PROBLEMS/f13.cpp \
+    PROBLEMS/f14.cpp \
+    PROBLEMS/f15.cpp \
+    PROBLEMS/f16.cpp \
+    PROBLEMS/f17.cpp \
+    PROBLEMS/f18.cpp \
+    PROBLEMS/f19.cpp \
         PROBLEMS/fuch1.cpp \
         PROBLEMS/fuchss.cpp \
         PROBLEMS/gkls.cpp \
@@ -88,6 +100,10 @@ SOURCES += \
         PROBLEMS/potential.cpp \
         PROBLEMS/rosenbrock.cpp \
         PROBLEMS/salkin.cpp \
+    PROBLEMS/schaffer.cpp \
+    PROBLEMS/schwefel.cpp \
+    PROBLEMS/schwefel221.cpp \
+    PROBLEMS/schwefel222.cpp \
         PROBLEMS/shekel10.cpp \
         PROBLEMS/shekel5.cpp \
 	PROBLEMS/gross.cpp\
@@ -131,7 +147,14 @@ HEADERS += \
     GE/rule.h \
     GE/symbol.h \
     GE/integeranneal.h\
+    OPTIMUS/editlogger.h \
+    OPTIMUS/filelogger.h \
+    OPTIMUS/logger.h \
     OPTIMUS/mean.h \
+    OPTIMUS/methodloader.h \
+    OPTIMUS/problemloader.h \
+    PROBLEMS/Ackley.h \
+    PROBLEMS/Sphere.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
     METHODS/adam.h \
@@ -177,6 +200,14 @@ HEADERS += \
     PROBLEMS/easom.h \
     PROBLEMS/elp.h \
     PROBLEMS/exp.h \
+    PROBLEMS/f12.h \
+    PROBLEMS/f13.h \
+    PROBLEMS/f14.h \
+    PROBLEMS/f15.h \
+    PROBLEMS/f16.h \
+    PROBLEMS/f17.h \
+    PROBLEMS/f18.h \
+    PROBLEMS/f19.h \
     PROBLEMS/fuch1.h \
     PROBLEMS/fuchss.h \
     PROBLEMS/gkls.h \
@@ -196,6 +227,10 @@ HEADERS += \
     PROBLEMS/rastriginproblem.h \
     PROBLEMS/rosenbrock.h \
     PROBLEMS/salkin.h \
+    PROBLEMS/schaffer.h \
+    PROBLEMS/schwefel.h \
+    PROBLEMS/schwefel221.h \
+    PROBLEMS/schwefel222.h \
     PROBLEMS/shekel10.h \
     PROBLEMS/shekel5.h \
     PROBLEMS/shekel7.h \

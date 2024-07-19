@@ -9,7 +9,7 @@
 # include <QVBoxLayout>
 # include <QGridLayout>
 # include <QHBoxLayout>
-# include <XOPTIMUS/methodloader.h>
+# include <OPTIMUS/methodloader.h>
 class SelectMethodDialog :public QDialog
 {
 Q_OBJECT

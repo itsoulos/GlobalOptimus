@@ -16,9 +16,9 @@
 # include <QFileSystemWatcher>
 # include <QTabWidget>
 # include <XOPTIMUS/parameterdialog.h>
-# include <XOPTIMUS/problemloader.h>
+# include <OPTIMUS/problemloader.h>
 # include <XOPTIMUS/selectproblemdialog.h>
-# include <XOPTIMUS/methodloader.h>
+# include <OPTIMUS/methodloader.h>
 # include <XOPTIMUS/selectmethoddialog.h>
 # include <OPTIMUS/statistics.h>
 QT_BEGIN_NAMESPACE

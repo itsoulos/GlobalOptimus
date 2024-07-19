@@ -1,19 +1,19 @@
 #include "f18.h"
 
-static double a[4][3] = {{1.0, 2.0, 3.0}, {0.5, 1.5, 2.5}, {2.0, 3.0, 4.0}, {1.5, 2.5, 3.5}};
-static double p[4][3] = {{0.1, 0.2, 0.3}, {0.2, 0.3, 0.4}, {0.3, 0.4, 0.5}, {0.4, 0.5, 0.6}};
-static double c1 = 1.0;
+static double a[4][3];
+static double p[4][3];
+static double c1 = 0.965;
 
 f18::f18()
-    : Problem(3) // Ορίζουμε τη διάσταση του προβλήματος σε 3 μεταβλητές
+    : Problem(3)
 {
     Data l, r;
-    l.resize(dimension);
-    r.resize(dimension);
-    for (int i = 0; i < dimension; i++)
+    l.resize(3);
+    r.resize(3);
+    for (int i = 0; i < 3; i++)
     {
-        l[i] =  1.0; // Κάτω όριο των μεταβλητών x_j
-        r[i] =  3.0; // Πάνω όριο των μεταβλητών x_j
+        l[i] =  1.0;
+        r[i] =  3.0;
     }
     setLeftMargin(l);
     setRightMargin(r);
@@ -39,9 +39,9 @@ double f18::funmin(Data &x)
 Data f18::gradient(Data &x)
 {
     Data g;
-    g.resize(dimension);
+    g.resize(3);
 
-    for (int j = 0; j < dimension; ++j) {
+    for (int j = 0; j < 3; ++j) {
         double sum = 0.0;
 
         for (int i = 0; i < 4; ++i) {

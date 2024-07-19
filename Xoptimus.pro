@@ -84,10 +84,12 @@ SOURCES += \
     MLMODELS/rulemodel.cpp \
     OPTIMUS/collection.cpp \
     OPTIMUS/doublebox.cpp \
+    OPTIMUS/methodloader.cpp \
     OPTIMUS/optimizer.cpp \
     OPTIMUS/parameter.cpp \
     OPTIMUS/parameterlist.cpp \
     OPTIMUS/problem.cpp \
+    OPTIMUS/problemloader.cpp \
     PROBLEMS/Ackley.cpp \
     PROBLEMS/Sphere.cpp \
     PROBLEMS/f12.cpp \
@@ -98,12 +100,11 @@ SOURCES += \
     PROBLEMS/f17.cpp \
     PROBLEMS/f18.cpp \
     PROBLEMS/f19.cpp \
+    PROBLEMS/schaffer.cpp \
     PROBLEMS/schwefel.cpp \
     PROBLEMS/schwefel221.cpp \
     PROBLEMS/schwefel222.cpp \
-    XOPTIMUS/methodloader.cpp \
     XOPTIMUS/parameterdialog.cpp \
-    XOPTIMUS/problemloader.cpp \
     OPTIMUS/similarity.cpp \
     OPTIMUS/statistics.cpp \
     PROBLEMS/bf1.cpp \
@@ -175,6 +176,8 @@ HEADERS += \
     OPTIMUS/filelogger.h \
     OPTIMUS/logger.h \
     OPTIMUS/mean.h \
+    OPTIMUS/methodloader.h \
+    OPTIMUS/problemloader.h \
     PROBLEMS/Ackley.h \
     PROBLEMS/Sphere.h \
     PROBLEMS/discus.h \
@@ -225,12 +228,11 @@ HEADERS += \
     PROBLEMS/f17.h \
     PROBLEMS/f18.h \
     PROBLEMS/f19.h \
+    PROBLEMS/schaffer.h \
     PROBLEMS/schwefel.h \
     PROBLEMS/schwefel221.h \
     PROBLEMS/schwefel222.h \
-    XOPTIMUS/methodloader.h \
     XOPTIMUS/parameterdialog.h \
-    XOPTIMUS/problemloader.h \
     OPTIMUS/similarity.h \
     OPTIMUS/statistics.h \
     PROBLEMS/bf1.h \

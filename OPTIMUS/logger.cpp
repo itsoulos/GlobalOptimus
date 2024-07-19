@@ -7,7 +7,7 @@ Logger::Logger()
 
 void    Logger::printMessage(QString message)
 {
-    qDebug()<<message;
+    qDebug().noquote()<<message;
 }
 
 Logger::~Logger()

@@ -53,6 +53,7 @@
 # include <PROBLEMS/f13.h>
 # include <PROBLEMS/f14.h>
 # include <PROBLEMS/f15.h>
+# include <PROBLEMS/schaffer.h>
 class ProblemLoader
 {
 private:

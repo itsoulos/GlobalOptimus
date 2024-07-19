@@ -8,7 +8,7 @@ ProblemLoader::ProblemLoader()
                 <<"goldstein"<<"griewank2"<<"griewank10"<<"Schwefel221"
                 <<"hansen"<<"hartman3"<<"hartman6"<<"potential"<<"Schwefel"
                 <<"Sphere"<<"Schwefel222"<<"f16"<<"f17"<<"f18"<<"f19"
-                <<"f12"<<"f13"<<"f14"<<"f15"
+                <<"f12"<<"f13"<<"f14"<<"f15"<<"schaffer"
                 <<"rosenbrock"<<"shekel5"<<"shekel7"<<"shekel10"<<"Ackley"
                 <<"sinu"<<"test30n"<<"mlpproblem"<<"rbfproblem"
        <<"userproblem";
@@ -73,17 +73,20 @@ Problem *ProblemLoader::getProblemFromName(QString name)
     if(name == "rastrigin")
         myProblem = new RastriginProblem();
     else
-    if(name == "Ackley")
+    if(name == "ackley")
         myProblem = new Ackley();
     else
-    if(name == "Schwefel")
+    if(name == "schwefel")
         myProblem = new schwefel();
     else
-    if(name == "Schwefel221")
+    if(name == "schwefel221")
         myProblem = new schwefel221();
     else
-    if(name == "Schwefel222")
+    if(name == "schwefel222")
         myProblem = new schwefel222();
+    else
+    if(name  == "schaffer")
+        myProblem = new schaffer();
     else
     if(name == "f16")
         myProblem = new f16();

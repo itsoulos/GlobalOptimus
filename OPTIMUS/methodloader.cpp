@@ -38,6 +38,16 @@ MethodLoader::MethodLoader()
     methodName<<"UserMethod";
 }
 
+QStringList  MethodLoader::getMethodParamsNames(QString name) const
+{
+    QStringList list;
+    if(!methodName.contains(name))
+        return list;
+    int index = methodName.indexOf(name);
+    return method[index]->getParameterNames();
+}
+
+
 QStringList MethodLoader::getMethodList() const
 {
     return methodName;

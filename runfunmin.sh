@@ -1,11 +1,13 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Gwo
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all
-TERMINATION=mean
+TERMINATION=doublebox
+### GLOBAL PARAMS
+GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
 if [ $METHOD = "bfgs" ]
 then
 
@@ -14,21 +16,19 @@ then
 	METHODPARAMS="--bfgs_iters=200"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
-	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=crossover --de_termination=$TERMINATION --opt_localsearch=$LOCALSEARCH" 
+	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=crossover" 
 elif [ $METHOD = "NelderMead" ]
 then
-
 #nm_population: number of items in simplex
 #nm_alpha: the alpha parameter
 #nm_gamma: the gamma parameter
 #nm_rho:   the rho parameter
 #nm_sigma: the sigma parameter
 #nm_maxiters: maximum number of iterations allowed
-
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
 elif [ $METHOD = "Ofa" ]
 then
-	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.02 --ofa_bfgsiters=3 --ofa_termination=$TERMINATION --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.02 --ofa_bfgsiters=3"
 elif [ $METHOD = "Adam" ]
 then
 
@@ -61,18 +61,15 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.05 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_termination=$TERMINATION --gen_count=500 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.05 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
-
 #ms_samples: number of multistart samples
 #ms_maxiters: maximum number of iterations
 #ms_termination: termination rule (maxiters|doublebox|similarity)
-
-	METHODPARAMS="--ms_samples=50 --opt_sampler=$SAMPLER --ms_maxiters=100 --opt_localsearch=$LOCALSEARCH --ms_termination=$TERMINATION"
+	METHODPARAMS="--ms_samples=50  --ms_maxiters=100"
 elif [ $METHOD = "Lbfgs" ]
 then
-
 #lbfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--lbfgs_iters=200"
@@ -85,7 +82,7 @@ then
 #de_maxiters: maximum number of iterations
 #de_tsize:  tournament size
 #de_termination: termination rule (doublebox|similarity|maxiters)
-	METHODPARAMS="--de_np=10n --de_f=0.8 --de_cr=0.9 --de_tsize=4 --de_maxiters=1000 --de_selection=random --de_termination=$TERMINATION --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--de_np=10n --de_f=0.8 --de_cr=0.9 --de_tsize=4 --de_maxiters=1000 --de_selection=random"
 elif [ $METHOD = "iPso" ]
 then
 #ipso_particles: number of pso particles
@@ -94,25 +91,22 @@ then
 #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
-METHODPARAMS="--ipso_particles=500 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+METHODPARAMS="--ipso_particles=500 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5"
 
 elif [ $METHOD = "NeuralMinimizer" ]
 then
-
 #neural_model: the model used in the method (neural|rbf)
 #neural_weights:  the weights used in the model 
 #neural_samples: the samples taken from the model
 #neural_iterations: the maximum number of allowed iterations
 #neural_start_samples: the samples used to construct initially the model
 #neural_trainmethod: the local search procedure used to train the method
-
-	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50  --neural_termination=$TERMINATION  --neural_trainmethod=bfgs --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50   --neural_trainmethod=bfgs"
 elif [ $METHOD = "armadillo1" ]
 then
-	METHODPARAMS="--opt_localsearch=$LOCALSEARCH --gao_count=100 --gao_maxiters=100 --gao_lrate=0.05 --gao_termination=$TERMINATION"
+	METHODPARAMS="--gao_count=100 --gao_maxiters=100 --gao_lrate=0.05"
 elif [ $METHOD = "ParallelDe" ]
 then
-
 #parde_termination: termination rule (maxiters|doublebox|similarity)
 #parde_agents: the number of agents per island
 #parde_generations: maximum number of allowed generations
@@ -124,11 +118,11 @@ then
 #parde_propagate_method: The used propagation method between islands (to1|1toN|Nto1|NtoN)
 #parde_islands: The number of parallel islands for the method.
 
-	METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=5 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --pade_islands_enable=1 --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=5 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --pade_islands_enable=1"
 
 elif [ $METHOD = "ParallelPso" ]
 then
-	METHODPARAMS="--parallelPso_particles=200 --parallelPso_generations=200 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=15 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=1 --parallelPso_subClusterEnable=1 --parallelPso_pnumber=1 --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--parallelPso_particles=200 --parallelPso_generations=200 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=15 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=1 --parallelPso_subClusterEnable=1 --parallelPso_pnumber=1"
 fi
 
 

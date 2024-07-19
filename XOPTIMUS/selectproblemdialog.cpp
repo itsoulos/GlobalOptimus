@@ -3,7 +3,7 @@
 # include <QScreen>
 # include <QGuiApplication>
 # include <OPTIMUS/problem.h>
-# include <XOPTIMUS/problemloader.h>
+# include <OPTIMUS/problemloader.h>
 SelectProblemDialog::SelectProblemDialog(QString sname,
                                          QStringList list,QWidget *parent)
     :QDialog(parent)
