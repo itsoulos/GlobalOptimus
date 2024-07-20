@@ -122,9 +122,9 @@ void loadProblem()
     else
     if(modelName == "rule")
         mainModel = new RuleModel();
-    else
-    if(modelName =="frbf")
-       mainModel = new FunctionalRbf();    
+   // else
+   // if(modelName =="frbf")
+     //  mainModel = new FunctionalRbf();
     QStringList modelParams = mainModel->getParameterNames();
     for(int i=0;i<problemParams.keys().size();i++)
     {
@@ -147,8 +147,8 @@ void loadProblem()
        else
       if(modelName == "frbf")
       {
-	      FunctionalRbf *p=(FunctionalRbf *)mainModel;
-	      p->init(problemParams);
+      //    FunctionalRbf *p=(FunctionalRbf *)mainModel;
+      //    p->init(problemParams);
       }
       else
        {
@@ -303,9 +303,9 @@ void runMethod()
         else
         if(modelName == "frbf")
         {
-            FunctionalRbf *mainProblem = (FunctionalRbf *)mainModel;
-            method[index]->setProblem(mainProblem);
-            method[index]->solve();
+           // FunctionalRbf *mainProblem = (FunctionalRbf *)mainModel;
+           // method[index]->setProblem(mainProblem);
+           // method[index]->solve();
         }
 
     }
@@ -366,16 +366,16 @@ int main(int argc, char *argv[])
         else
         if(modelName=="rbf")
             xx=((RbfProblem *)mainModel)->getBestx();
-        else
-        xx=((FunctionalRbf *)mainModel)->getBestx();
+      //  else
+      //  xx=((FunctionalRbf *)mainModel)->getBestx();
         QJsonObject values;
         if(modelName == "mlp")
             values=((MlpProblem *)mainModel)->done(xx);
         else
         if(modelName == "rbf")
             values = ((RbfProblem *)mainModel)->done(xx);
-        else
-        values=((FunctionalRbf *)mainModel)->done(xx);
+        //else
+        //values=((FunctionalRbf *)mainModel)->done(xx);
         average_train_error+=values["trainError"].toDouble();
         average_test_error+=values["testError"].toDouble();
         average_class_error+=values["classError"].toDouble();

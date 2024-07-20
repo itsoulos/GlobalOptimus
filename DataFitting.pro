@@ -1,4 +1,5 @@
 QT -= gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17 console
 CONFIG -= app_bundle
@@ -6,7 +7,7 @@ CONFIG -= app_bundle
 LIBS+=  -lm -fopenmp
 
 ## ARMADILLO DEFINITIONS (ONLY FOR FUNCTIONAL RBF)
-DEFINES +=OPTIMUS_ARMADILLO
+##DEFINES +=OPTIMUS_ARMADILLO
 
 contains(DEFINES,OPTIMUS_ARMADILLO){
     DEFINES += ADEPT_RECORDING_PAUSABLE ADEPTSTORAGETHREADSAFE
@@ -32,6 +33,9 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
+    OPTIMUS/editlogger.cpp \
+    OPTIMUS/filelogger.cpp \
+    OPTIMUS/logger.cpp \
 	OPTIMUS/mean.cpp \
     	METHODS/gwooptimizer.cpp \
 	METHODS/ofalgorithm.cpp \
@@ -136,6 +140,9 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    OPTIMUS/editlogger.h \
+    OPTIMUS/filelogger.h \
+    OPTIMUS/logger.h \
     OPTIMUS/mean.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
