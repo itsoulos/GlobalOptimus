@@ -221,10 +221,12 @@ void    iPso::calcFitnessArray()
     {
         if (distances[i] > 1e-6)
         {
-            if (localsearch_rate > 0.0 && myProblem->randomDouble() <= localsearch_rate && !checkGradientCriterion(particle[i]))
+            if (localsearch_rate > 0.0 && myProblem->randomDouble() <= localsearch_rate 
+			    &&  !checkGradientCriterion(particle[i]))
             {
                 Data dg = particle[i];
                 fitness_array[i] = localSearch(particle[i]);
+		printf("new minimum %lf \n",fitness_array[i]);
                 RC += getDistance(dg, particle[i]);
                 localSearchCount++;
                 {
@@ -464,14 +466,14 @@ bool    iPso::terminated()
             n = 0;
             countn++;
         }
-        if ( n > 15)
+        if ( n > 5)
             return true;
 
         return generation >= max_generations;
     }
     else
         if (charilogis2){
-            if (besty == besty_tmp)
+            if (fabs(besty-besty_tmp)<1e-6)
             {
                 n++;
                 sumn+=1;
@@ -481,7 +483,7 @@ bool    iPso::terminated()
                 n = 0;
                 countn++;
             }
-            if (n > 15)
+            if (n > 5)
                 return true;
             return generation >= max_generations;
         }else
