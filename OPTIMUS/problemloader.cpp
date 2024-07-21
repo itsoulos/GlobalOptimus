@@ -6,11 +6,11 @@ ProblemLoader::ProblemLoader()
         <<"branin"<<"camel"<<"cm"<<"diffpower"<<"easom"<<"exp"
         <<"elp"<<"gkls250"<<"gkls2100"<<"gkls350"
                 <<"bf3"<<"extendedf10"
-                <<"goldstein"<<"griewank2"<<"griewank10"<<"Schwefel221"
-                <<"hansen"<<"hartman3"<<"hartman6"<<"potential"<<"Schwefel"
-                <<"Sphere"<<"Schwefel222"<<"f16"<<"f17"<<"f18"<<"f19"
+                <<"goldstein"<<"griewank2"<<"griewank10"<<"schwefel221"
+                <<"hansen"<<"hartman3"<<"hartman6"<<"potential"<<"schwefel"
+                <<"sphere"<<"schwefel222"<<"f16"<<"f17"<<"f18"<<"f19"
                 <<"f12"<<"f13"<<"f14"<<"f15"<<"schaffer"
-                <<"rosenbrock"<<"shekel5"<<"shekel7"<<"shekel10"<<"Ackley"
+                <<"rosenbrock"<<"shekel5"<<"shekel7"<<"shekel10"<<"sckley"
                 <<"sinu"<<"test30n"<<"mlpproblem"<<"rbfproblem"
        <<"userproblem";
     myParams["dummy"]=1;
@@ -119,7 +119,7 @@ Problem *ProblemLoader::getProblemFromName(QString name)
     if(name == "f15")
         myProblem = new f15();
     else
-    if(name =="Sphere")
+    if(name =="sphere")
         myProblem = new Sphere();
     else
     if(name == "test2n")

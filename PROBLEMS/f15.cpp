@@ -5,7 +5,7 @@ static const double b[] = {0.25, 0.5, 1.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0,
 static double b1;
 
 f15::f15()
-    : Problem(2)
+    : Problem(4)
 {
     Data l, r;
     l.resize(4);
@@ -30,23 +30,25 @@ double f15::funmin( Data &x){
     }
     return sum;
 }
-
+static double dmax(double a,double b)
+{
+	return a>b?a:b;
+}
 Data f15::gradient(Data &x)
 
-{
+{ int n=x.size();
     Data g;
-    g.resize(dimension);
-      int dimension=x.size();
+    g.resize(n);
+	for(int i=0;i<dimension;i++)
+	{
+		double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
+		x[i]+=eps;
+		double v1=funmin(x);
+		x[i]-=2.0 *eps;
+		double v2=funmin(x);
+		g[i]=(v1-v2)/(2.0 * eps);
+		x[i]+=eps;
+	}
+	return g;
 
-    for (int i = 1; i <= dimension; ++i) {
-        double n = x[0] * (b1 * b1 + b[i-1] * x[1]);
-        double y = b1 * b1 + b[i-1] * x[2] + x[3];
-        double t= a[i-1] - n / y;
-        double ds = y * y;
-
-        g[0] += -2 * t * (b1 * b1 + b[i-1] * x[1]) / y;
-        g[1] += 2 * t * n / ds;
-    }
-    return g;
 }
-

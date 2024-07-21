@@ -1,7 +1,7 @@
  #include "schwefel221.h"
 
 schwefel221::schwefel221()
-    : Problem(1)
+    : Problem(2)
 {
     Data l, r;
     l.resize(dimension);
@@ -32,16 +32,26 @@ double schwefel221::funmin( Data &x)
 
 
 
+static double dmax(double a,double b)
+{
+	return a>b?a:b;
+}
 Data schwefel221::gradient(Data &x)
 
 { int n=x.size();
     Data g;
     g.resize(n);
+	for(int i=0;i<dimension;i++)
+	{
+		double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
+		x[i]+=eps;
+		double v1=funmin(x);
+		x[i]-=2.0 *eps;
+		double v2=funmin(x);
+		g[i]=(v1-v2)/(2.0 * eps);
+		x[i]+=eps;
+	}
+	return g;
 
-
-    for (int i = 0; i < n; ++i) {
-        double t1 = abs(x[i]);
-        double t2 = (x[i] >= 0) ? 1.0 : -1.0;
-   g[i] = -sin(sqrt(t1)) - t2 *  0.5 * x[i]*cos(sqrt(t1))/ sqrt(t1);    }
-    return g;
 }
+
