@@ -435,8 +435,8 @@ literal "false"
 , which divide the initial domain of the function until it discovers a promising
  subset that may contain the global minimum.
  On the other hand, stochastic methods do not guarantee finding the global
- optimization and are mainly applied to large problems, but are inefficient
- when nonlinear equality constraints are involved.
+ minimum and are mainly applied to large problems, but are inefficient when
+ nonlinear equality constraints are involved.
  Stochastic methods include a variety of techniques, such as Controlled
  Random Search methods 
 \begin_inset CommandInset citation
@@ -457,7 +457,7 @@ literal "false"
 , methods based on the Multistart technique 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "mult_repulsion,mult_minfinder,mult_cfo"
+key "mult_minfinder,mult_cfo"
 literal "false"
 
 \end_inset
@@ -485,6 +485,82 @@ literal "false"
 
 .
  
+\end_layout
+
+\begin_layout Standard
+The above techniques present various problems that had to be addressed by
+ the researchers, such as, for example, the initialization of the possible
+ solutions, the termination rules, etc.
+ A number of researchers have dealt with the topic of initialization of
+ candidate solutions and have proposed techniques such, as the repulsion
+ method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ms_repulsion"
+literal "false"
+
+\end_inset
+
+, an adaptive sampling method using the Kriging model 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "sample_kringing"
+literal "false"
+
+\end_inset
+
+, Monte Carlo based sampling methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "sample_monte"
+literal "false"
+
+\end_inset
+
+, a method which utilizes an Radial Basis Function (RBF) network 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf1"
+literal "false"
+
+\end_inset
+
+ to obtain samples 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_sample"
+literal "false"
+
+\end_inset
+
+ etc.
+ Additionally, in the direction of termination methods, a series of techniques
+ have been proposed, such as sequential stopping rules 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ms_seq"
+literal "false"
+
+\end_inset
+
+, a stopping rule based on asymptotic considerations 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "doublepop_tsoulos"
+literal "false"
+
+\end_inset
+
+, a stopping rule that utilizes the likelihood of obtaining the specific
+ set of solutions 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "stop_likehood"
+literal "false"
+
+\end_inset
+
+ etc.
 \end_layout
 
 \begin_layout Standard
@@ -640,7 +716,8 @@ noprefix "false"
 
 \end_inset
 
- the proposed method is fully described, in section 
+ the proposed method is fully described.
+ In section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Results"
@@ -650,7 +727,7 @@ noprefix "false"
 
 \end_inset
 
- the benchmark functions are presented as well as the experimental results
+ the benchmark functions are presented as well as the experimental results,
  and finally in section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1531,7 +1608,7 @@ literal "false"
 \end_inset
 
 .
- The definition of the test functions are given below:
+ The definitions of these functions are given below:
 \end_layout
 
 \begin_layout Itemize
@@ -1590,7 +1667,7 @@ f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi 
 \series bold
 Bf3
 \series default
- (Bohachevsky 2) function: 
+ (Bohachevsky 3) function: 
 \begin_inset Formula 
 \[
 f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}+4\pi x_{2}\right)+\frac{3}{10}
@@ -2780,7 +2857,7 @@ The row SUM represents the sum of function calls for all test functions.
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -4652,7 +4729,7 @@ SUM
 
 \end_inset
 
-A statistical comparison for these results is also outlined in Figure 
+A statistical comparison of these results is also outlined in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statCalls"
@@ -4712,8 +4789,63 @@ As can be seen, the present method drastically reduces the required number
  of function calls to almost all objective functions.
  This, of course, also results in a significant reduction of the required
  computing time for finding the global minimum.
- Furthermore, an additional experiment was done in order to measure the
- importance of the K-means sampling in the proposed method.
+ Also, a scatter plot for the used optimization methods is shown in Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ttest1"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, which also depicts the superiority of the current method.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ttest1.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Scatter Plot Representation of Optimization Methods with Kruskal-Wallis
+ Ranking
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:ttest1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore, an additional experiment was done in order to measure the importanc
+e of the K-means sampling in the proposed method.
  In this test, 3 different sampling methods were used in the proposed method:
 \end_layout
 
@@ -6676,6 +6808,70 @@ name "fig:statDist"
 
 \end_inset
 
+ Moreover, a scatter plot representation of the used Distributions with
+ Kruskal-Wallis Ranking is depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ttest2"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ttest2.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Scatter Plot Representation of the used Distributions with Kruskal-Wallis
+ Ranking.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:ttest2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+In this test, the p-value remains very low at any level of significance.
+ Consequently, the null hypothesis is rejected, indicating that the experimental
+ tests are statistically significant.
+\end_layout
+
+\begin_layout Standard
 Furthermore, an additional test was carried out, where the function ELP
  was used to measure the effectiveness of the proposed method, as the dimension
  increased.
@@ -7344,26 +7540,6 @@ R.W.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "mult_repulsion"
-literal "false"
-
-\end_inset
-
-A.E.
- Sepulveda, L.
- Epstein, The repulsion algorithm, a new multistart method for global optimizati
-on, Structural Optimization 
-\series bold
-11
-\series default
-, pp.
- 145–152, 1996.
- 
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
 key "mult_minfinder"
 literal "false"
 
@@ -7511,6 +7687,161 @@ Van Luong T., Melab N., Talbi EG.
  Lecture Notes in Computer Science, vol 6683.
  Springer, Berlin, Heidelberg.
  https://doi.org/10.1007/978-3-642-25566-3_24
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ms_repulsion"
+literal "false"
+
+\end_inset
+
+A.E.
+ Sepulveda, L.
+ Epstein, The repulsion algorithm, a new multistart method for global optimizati
+on, Structural Optimization 
+\series bold
+11
+\series default
+, pp.
+ 145–152, 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "sample_kringing"
+literal "false"
+
+\end_inset
+
+Z.
+ Chen, H.
+ Qiu, L.
+ Gao et al, A local adaptive sampling method for reliability-based design
+ optimization using Kriging model, Struct Multidisc Optim 
+\series bold
+49
+\series default
+, pp.
+ 401–416, 2014.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "sample_monte"
+literal "false"
+
+\end_inset
+
+T.H.-de-Mello,G.
+ Bayraksan, Monte Carlo sampling-based methods for stochastic optimization,
+ Surveys in Operations Research and Management Science 
+\series bold
+19
+\series default
+, pp.
+ 56-85, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf1"
+literal "false"
+
+\end_inset
+
+J.
+ Park, I.
+ W.
+ Sandberg, Universal Approximation Using Radial-Basis-Function Networks,
+ Neural Computation 
+\series bold
+3
+\series default
+, pp.
+ 246-257, 1991.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_sample"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, A.
+ Tzallas, D.
+ Tsalikakis, Use RBF as a Sampling Method in Multistart Global Optimization
+ Method, Signals 
+\series bold
+ 3
+\series default
+, pp.
+ 857-874, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ms_seq"
+literal "false"
+
+\end_inset
+
+W.E.
+ Hart, Sequential stopping rules for random optimization methods with applicatio
+ns to multistart local search, Siam J.
+ Optim.
+ 
+\series bold
+9
+\series default
+, pp.
+ 270–290, 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "doublepop_tsoulos"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, Modifications of real code genetic algorithm for global optimization
+ Applied Mathematics and Computation 
+\series bold
+203
+\series default
+, pp.
+ 598-607, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "stop_likehood"
+literal "false"
+
+\end_inset
+
+M.
+ Ohsaki, M.
+ Yamakawa, Stopping rule of multi-start local search for structural optimization
+, Struct Multidisc Optim 
+\series bold
+57
+\series default
+, pp.
+ 595–603, 2018.
 \end_layout
 
 \begin_layout Bibliography
