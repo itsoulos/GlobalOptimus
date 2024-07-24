@@ -11,7 +11,6 @@ EGO::EGO() {
 
 }
 
-
 void EGO::init()
 {
     SearchAgents=getParam("ego_count").getValue().toInt();
@@ -26,6 +25,7 @@ void EGO::init()
     for(int i=0;i<SearchAgents;i++)
           Theseis[i].resize(D);
     sampleFromProblem(SearchAgents,Theseis,fitness);
+
     upper = myProblem->getLeftMargin();
     lower = myProblem->getRightMargin();
     best.resize(D);
@@ -213,17 +213,21 @@ void EGO::step() {
     }
 
     for (unsigned long j = 0; j <Theseis.size(); ++j) {
-        for (unsigned long k = 0; k < Theseis[j].size(); ++k) {
+        for (unsigned long k = 0; k < lower.size(); ++k) {
             if ( Theseis[j][k] > upper[k]) {
                  Theseis[j][k] = upper[k];
             } else if ( Theseis[j][k] < lower[k]) {
                 Theseis[j][k] = lower[k];
             }
         }
+        printf("pass 1\n");
         fitness[j] = evaluate( Theseis[j],grouperBestFitness);
+        printf("pass 2\n");
         fitness_old[j][t] = fitness[j];
+printf("pass 3\n");
       position_old[j][t] = Theseis[j];
-        troxies[j][t] =  Theseis[j][0];
+
+      troxies[j][t] =  Theseis[j][0];
 
         fitness[j]=myProblem->statFunmin(Theseis[j]);
 

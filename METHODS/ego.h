@@ -57,7 +57,7 @@ public:
     void    Selection();
     void  CalcFitnessArray();
     bool Feasibility(const vector<double>& solution);
-    ~EGO();
+    virtual ~EGO(){};
 };
 
 #endif // EGO_H

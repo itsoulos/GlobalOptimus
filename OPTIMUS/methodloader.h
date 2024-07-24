@@ -17,6 +17,7 @@
 # include <METHODS/usermethod.h>
 # include <METHODS/ofalgorithm.h>
 # include <METHODS/gwooptimizer.h>
+# include <METHODS/ego.h>
 # include <QStringList>
 # include <QJsonObject>
 class MethodLoader

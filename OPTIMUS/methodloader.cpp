@@ -34,6 +34,8 @@ MethodLoader::MethodLoader()
     methodName<<"Ofa";
     method<<new GWOoptimizer;
     methodName<<"Gwo";
+    method<<new EGO;
+    methodName<<"Ego";
     method<<new UserMethod;
     methodName<<"UserMethod";
 }
