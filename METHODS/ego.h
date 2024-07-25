@@ -37,6 +37,7 @@ private:
     double b;
     int t;
     double p ;
+      Data bestX;
     double distance2eel;
     double X1;
      double distance2grouper;
@@ -57,7 +58,7 @@ public:
     void    Selection();
     void  CalcFitnessArray();
     bool Feasibility(const vector<double>& solution);
-    virtual ~EGO(){};
+    virtual ~EGO();
 };
 
 #endif // EGO_H

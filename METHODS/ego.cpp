@@ -30,8 +30,11 @@ void EGO::init()
     lower = myProblem->getRightMargin();
     best.resize(D);
 
+    fitness_old.resize(SearchAgents, vector<double>(iters, numeric_limits<double>::max()));
+    position_old.resize(SearchAgents, vector<vector<double>>(iters, vector<double>(D, 0)));
+    troxies.resize(SearchAgents, vector<double>(iters, 0));
+    kambili.resize(iters, numeric_limits<double>::max());
 }
-
 
 
 double EGO::evaluate( vector<double>& solution, double& grouperBestFitness) {
@@ -220,11 +223,8 @@ void EGO::step() {
                 Theseis[j][k] = lower[k];
             }
         }
-        printf("pass 1\n");
         fitness[j] = evaluate( Theseis[j],grouperBestFitness);
-        printf("pass 2\n");
         fitness_old[j][t] = fitness[j];
-printf("pass 3\n");
       position_old[j][t] = Theseis[j];
 
       troxies[j][t] =  Theseis[j][0];
@@ -242,13 +242,13 @@ printf("pass 3\n");
     ++t;
     }
 
-         printf("Best solution: ");
-         for (double val :  grouperBestThesi) {
-             printf("%.lf ", val);
-         }
-         printf("\n");
+        // printf("Best solution: ");
+        // for (double val :  grouperBestThesi) {
+        //     printf("%.lf ", val);
+       //  }
+       //  printf("\n");
 
-         printf("Best fitness: %.lf\n", grouperBestFitness);
+        // printf("Best fitness: %.lf\n", grouperBestFitness);
 
          if (terminated()) {
              done();
@@ -256,12 +256,15 @@ printf("pass 3\n");
 
 }
 
+EGO::~ EGO()
+{
 
+}
 
 void EGO:: done()
 {
     int bestindex=0;
-     double besty;
+    double besty;
     besty = fitness[0];
     for(unsigned long i=0;i<fitness.size();i++)
     {
@@ -271,7 +274,13 @@ void EGO:: done()
             bestindex = i;
         }
     }
-    besty = localSearch(Theseis[bestindex]);
+
+    if(bestX.size()==0)
+    {
+        bestX=Theseis[bestindex];
+    }
+    besty  = localSearch(bestX);
     if(getParam("opt_debug").getValue()=="yes")
-        printf("EGO. terminate: %lf \n",besty);
+        printf("EGO. terminate: %lf bestFitness: %lf \n",besty,grouperBestFitness);
 }
+

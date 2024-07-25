@@ -1,16 +1,16 @@
 #LyX 2.4 created this file. For more info see https://www.lyx.org/
-\lyxformat 544
+\lyxformat 620
 \begin_document
 \begin_header
 \save_transient_properties true
 \origin unavailable
 \textclass article
 \use_default_options true
-\maintain_unincluded_children false
+\maintain_unincluded_children no
 \language american
 \language_package default
 \inputencoding utf8
-\fontencoding global
+\fontencoding auto
 \font_roman "default" "default"
 \font_sans "default" "default"
 \font_typewriter "default" "default"
@@ -18,7 +18,9 @@
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
-\font_osf false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
 \font_sf_scale 100 100
 \font_tt_scale 100 100
 \use_microtype false
@@ -50,7 +52,9 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
+\use_formatted_ref 0
 \use_minted 0
+\use_lineno 0
 \index Index
 \shortcut idx
 \color #008000
@@ -66,11 +70,16 @@
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
+\tablestyle default
 \tracking_changes false
 \output_changes false
+\change_bars false
+\postpone_fragile_content false
 \html_math_output 0
 \html_css_as_file 0
 \html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
 \end_header
 
 \begin_body
@@ -197,6 +206,106 @@ S=\left[a_{1},b_{1}\right]\times\left[a_{2},b_{2}\right]\times\ldots\left[a_{n},
 \begin_layout Standard
 
 \lang english
+Global optimization is an integral part of many areas of our daily lives.
+ One of these fields is computer science
+\begin_inset CommandInset citation
+LatexCommand cite
+key "plhroforikh"
+literal "false"
+
+\end_inset
+
+.
+ In addition to the computer field,
+ global optimization finds application in sciences such as mathematics
+\begin_inset CommandInset citation
+LatexCommand cite
+key "maths"
+literal "false"
+
+\end_inset
+
+,
+ physics
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fusikh,fusikh1,fysikhh"
+literal "false"
+
+\end_inset
+
+,
+ chemistry
+\begin_inset CommandInset citation
+LatexCommand cite
+key "xhmeia,xhmeia1,xhmeia2"
+literal "false"
+
+\end_inset
+
+ and medicine
+\begin_inset CommandInset citation
+LatexCommand cite
+key "iatrikh,iatrikh1"
+literal "false"
+
+\end_inset
+
+.
+ Optimization methods are divided into two categories,
+ deterministic and stochastic.
+ The first category,
+ i.e.
+ that of deterministic methods,
+ has as its main objective the identification of the overall optimal solution and is mainly used in simple problems,
+ on the contrary,
+ stochastic methods are mainly used in complex problems.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Swarm Intelligence Algorithms as a source of inspiration and collective behavior of insects and other animals.
+ Intelligence algorithms mimic systems in which agents interact locally and cooperate worldwide to solve optimization problems.
+ Swarm intelligence algorithms are very important tools for dealing with complex optimization problems in a wide range of applications
+\begin_inset CommandInset citation
+LatexCommand cite
+key "APPS"
+literal "false"
+
+\end_inset
+
+.
+ Characteristic examples of such algorithms are WOA algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WOA"
+literal "false"
+
+\end_inset
+
+ SCA algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "SCA"
+literal "false"
+
+\end_inset
+
+and SSA algorithm
+\begin_inset CommandInset citation
+LatexCommand cite
+key "SSA"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
 The EGO algorithm is a reliable technique for real-world optimization problems.
  The EGO algorithm is inspired by the symbiotic interaction and foraging strategy of eels and groupers in marine ecosystems.
  In nature,
@@ -271,6 +380,7 @@ reference "sec:Materials-and-Methods"
 plural "false"
 caps "false"
 noprefix "false"
+nolink "false"
 
 \end_inset
 
@@ -721,6 +831,810 @@ The algorithm terminates when
 References
 \end_layout
 
+\begin_layout Section
+
+\lang english
+Results
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Results"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+This section will begin with a detailed description of the functions that will be used in the experiments,
+ followed by an analysis of the experiments performed and comparisons with other global optimization techniques.
+ 
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+Test functions 
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+The functions used in the experiments have been proposed in a series of relative works
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Ali,Floudas1"
+literal "false"
+
+\end_inset
+
+ and they cover various scientific fields,
+ such as medicine,
+ physics,
+ engineering,
+ etc.
+ Also,
+ these objective functions have been used by many researchers in a variety of publications.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "testfunc1,testfunc2,testfunc2-1,testfunc3,testfunc4"
+literal "false"
+
+\end_inset
+
+ The definitions of these functions are given below:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Bf1
+\series default
+ (Bohachevsky 1) function:
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Formula 
+\[
+f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Bf2
+\series default
+ (Bohachevsky 2) function:
+ 
+\begin_inset Formula 
+\[
+f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Bf3
+\series default
+ (Bohachevsky 3) function:
+ 
+\begin_inset Formula 
+\[
+f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}+4\pi x_{2}\right)+\frac{3}{10}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Branin
+\series default
+ function:
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Formula $f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$
+\end_inset
+
+ with 
+\begin_inset Formula $-5\le x_{1}\le10,\ 0\le x_{2}\le15$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Camel
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Easom
+\series default
+ function:
+ 
+\begin_inset Formula 
+\[
+f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $x\in[-100,100]^{2}.$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Exponential
+\series default
+ function,
+ defined as:
+ 
+\begin_inset Formula 
+\[
+f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1
+\]
+
+\end_inset
+
+ In the conducted experiments the values 
+\begin_inset Formula $n=4,8,16,32$
+\end_inset
+
+ were used.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Griewank2
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}},\quad x\in[-100,100]^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Griewank10
+\series default
+ function.
+ The function is given by the equation 
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $n=10$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Gkls
+\series default
+ function
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gkls"
+literal "false"
+
+\end_inset
+
+.
+ 
+\begin_inset Formula $f(x)=\mbox{Gkls}(x,n,w)$
+\end_inset
+
+,
+ is a constructed function with 
+\begin_inset Formula $w$
+\end_inset
+
+ local minima presented in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gkls"
+literal "true"
+
+\end_inset
+
+,
+ with 
+\begin_inset Formula $x\in[-1,1]^{n}$
+\end_inset
+
+.
+ For the conducted experiments the values 
+\begin_inset Formula $n=2,3$
+\end_inset
+
+ and 
+\begin_inset Formula $w=50$
+\end_inset
+
+ were utilized.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Goldstein and Price function 
+\begin_inset Newline newline
+\end_inset
+
+
+\series default
+
+\begin_inset Formula 
+\begin{eqnarray*}
+f(x) & = & \left[1+\left(x_{1}+x_{2}+1\right)^{2}\right.\\
+ &  & \left(19-14x_{1}+3x_{1}^{2}-14x_{2}+6x_{1}x_{2}+3x_{2}^{2}\right)]\times\\
+ &  & [30+\left(2x_{1}-3x_{2}\right)^{2}\\
+ &  & \left(18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2}\right)]
+\end{eqnarray*}
+
+\end_inset
+
+With 
+\begin_inset Formula $x\in[-2,2]^{2}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Hansen
+\series default
+ function:
+ 
+\begin_inset Formula $f(x)=\sum_{i=1}^{5}i\cos\left[(i-1)x_{1}+i\right]\sum_{j=1}^{5}j\cos\left[(j+1)x_{2}+j\right]$
+\end_inset
+
+,
+ 
+\begin_inset Formula $x\in[-10,10]^{2}$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Hartman 3
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $x\in[0,1]^{3}$
+\end_inset
+
+ and 
+\begin_inset Formula $a=\left(\begin{array}{ccc}
+3 & 10 & 30\\
+0.1 & 10 & 35\\
+3 & 10 & 30\\
+0.1 & 10 & 35
+\end{array}\right),\ c=\left(\begin{array}{c}
+1\\
+1.2\\
+3\\
+3.2
+\end{array}\right)$
+\end_inset
+
+ and
+\begin_inset Formula 
+\[
+p=\left(\begin{array}{ccc}
+0.3689 & 0.117 & 0.2673\\
+0.4699 & 0.4387 & 0.747\\
+0.1091 & 0.8732 & 0.5547\\
+0.03815 & 0.5743 & 0.8828
+\end{array}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Hartman 6
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{6}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $x\in[0,1]^{6}$
+\end_inset
+
+ and 
+\begin_inset Formula $a=\left(\begin{array}{cccccc}
+10 & 3 & 17 & 3.5 & 1.7 & 8\\
+0.05 & 10 & 17 & 0.1 & 8 & 14\\
+3 & 3.5 & 1.7 & 10 & 17 & 8\\
+17 & 8 & 0.05 & 10 & 0.1 & 14
+\end{array}\right),\ c=\left(\begin{array}{c}
+1\\
+1.2\\
+3\\
+3.2
+\end{array}\right)$
+\end_inset
+
+ and
+\begin_inset Formula 
+\[
+p=\left(\begin{array}{cccccc}
+0.1312 & 0.1696 & 0.5569 & 0.0124 & 0.8283 & 0.5886\\
+0.2329 & 0.4135 & 0.8307 & 0.3736 & 0.1004 & 0.9991\\
+0.2348 & 0.1451 & 0.3522 & 0.2883 & 0.3047 & 0.6650\\
+0.4047 & 0.8828 & 0.8732 & 0.5743 & 0.1091 & 0.0381
+\end{array}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Potential
+\series default
+ function,
+ this function stands for the energy of a molecular conformation of N atoms,
+ that interacts using via the Lennard-Jones potential
+\begin_inset CommandInset citation
+LatexCommand cite
+key "jones"
+literal "false"
+
+\end_inset
+
+.
+ The function is defined as:
+\begin_inset Formula 
+\[
+V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]
+\]
+
+\end_inset
+
+For the conducted experiments the values 
+\begin_inset Formula $N=3,\ 5$
+\end_inset
+
+ were used.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Rastrigin
+\series default
+ function.
+ 
+\begin_inset Formula 
+\[
+f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\emph on
+\lang english
+Rosenbrock
+\series default
+ function
+\emph default
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30.
+\]
+
+\end_inset
+
+The values 
+\begin_inset Formula $n=4,\ 8,\ 16$
+\end_inset
+
+ were used in the conducted experiments.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Shekel 5 
+\series default
+function.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{5}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+with 
+\begin_inset Formula $x\in[0,10]^{4}$
+\end_inset
+
+ and 
+\begin_inset Formula $a=\left(\begin{array}{cccc}
+4 & 4 & 4 & 4\\
+1 & 1 & 1 & 1\\
+8 & 8 & 8 & 8\\
+6 & 6 & 6 & 6\\
+3 & 7 & 3 & 7
+\end{array}\right),\ c=\left(\begin{array}{c}
+0.1\\
+0.2\\
+0.2\\
+0.4\\
+0.4
+\end{array}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Shekel 7
+\series default
+ function.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{7}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+with 
+\begin_inset Formula $x\in[0,10]^{4}$
+\end_inset
+
+ and 
+\begin_inset Formula $a=\left(\begin{array}{cccc}
+4 & 4 & 4 & 4\\
+1 & 1 & 1 & 1\\
+8 & 8 & 8 & 8\\
+6 & 6 & 6 & 6\\
+3 & 7 & 3 & 7\\
+2 & 9 & 2 & 9\\
+5 & 3 & 5 & 3
+\end{array}\right),\ c=\left(\begin{array}{c}
+0.1\\
+0.2\\
+0.2\\
+0.4\\
+0.4\\
+0.6\\
+0.3
+\end{array}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Shekel 10
+\series default
+ function.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{10}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+with 
+\begin_inset Formula $x\in[0,10]^{4}$
+\end_inset
+
+ and 
+\begin_inset Formula $a=\left(\begin{array}{cccc}
+4 & 4 & 4 & 4\\
+1 & 1 & 1 & 1\\
+8 & 8 & 8 & 8\\
+6 & 6 & 6 & 6\\
+3 & 7 & 3 & 7\\
+2 & 9 & 2 & 9\\
+5 & 5 & 3 & 3\\
+8 & 1 & 8 & 1\\
+6 & 2 & 6 & 2\\
+7 & 3.6 & 7 & 3.6
+\end{array}\right),\ c=\left(\begin{array}{c}
+0.1\\
+0.2\\
+0.2\\
+0.4\\
+0.4\\
+0.6\\
+0.3\\
+0.7\\
+0.5\\
+0.6
+\end{array}\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Sinusoidal
+\series default
+ function defined as:
+\begin_inset Formula 
+\[
+f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi.
+\]
+
+\end_inset
+
+The values of 
+\begin_inset Formula $n=4,8,16$
+\end_inset
+
+ were used in the conducted experiments.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Test2N
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5].
+\]
+
+\end_inset
+
+For the conducted experiments the values 
+\begin_inset Formula $n=4,5,6,7$
+\end_inset
+
+ were used.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\lang english
+Test30N
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)
+\]
+
+\end_inset
+
+The values 
+\begin_inset Formula $n=3,4$
+\end_inset
+
+ were used in the conducted experiments.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+Experimental results
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Experiments were carried out using the various test sessions previously mentioned.
+ Each experiment was run 30 times using different seeds for the random generator each time.
+ Meeting call averages were tallied and presented in the tables below.
+ The software was coded in ANSI C++ with the help of the OPTIMUS optimization package,
+ which is freely available from 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/itsoulos/OPTIMUS
+\end_layout
+
+\end_inset
+
+.
+ Generally,
+ the region of attraction 
+\begin_inset Formula $A\left(x^{*}\right)$
+\end_inset
+
+ of a local minimum 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+ is defined as:
+\begin_inset Formula 
+\begin{equation}
+A\left(x^{*}\right)=\left\{ x:\ x\in S,\ L(x)=x^{*}\right\} 
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $L(x)$
+\end_inset
+
+ is a local search procedure,
+ such as BFGS.
+ Global optimization methods,
+ usually find points which are in the region of attraction 
+\begin_inset Formula $A\left(x^{*}\right)$
+\end_inset
+
+ of a local minimum 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+ but not necessarily in the local minimum itself.
+ For this reason,
+ at the end of their execution,
+ a local minimization method is applied in order to ensure the exact finding of a local minimum.
+ Of course,
+ the fact that a function contains dozens or even hundreds of local minima does not mean that the minimum that will be identified will be the overall minimum of the meeting.
+\end_layout
+
 \begin_layout Bibliography
 \labelwidthstring 999
 
@@ -872,6 +1786,642 @@ Ali Mohammadzadeh,
  Springer Science+Business Media,
  LLC,
  part of Springer Nature 2024
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "maths"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Intriligator,
+ M.
+ D.
+ (2002).
+ Mathematical optimization and economic theory.
+ Society for Industrial and Applied Mathematics.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "plhroforikh"
+literal "false"
+
+\end_inset
+
+
+\lang english
+A.
+ Törn,
+ M.M.
+ Ali,
+ S.
+ Viitanen,
+ Stochastic global optimization:
+ Problem classes and solution techniques.
+ Journal of Global Optimization 
+\series bold
+14
+\series default
+,
+ pp.
+ 437-447,
+ 1999.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "fysikhh"
+literal "false"
+
+\end_inset
+
+L.
+ Yang,
+ D.
+ Robin,
+ F.
+ Sannibale,
+ C.
+ Steier,
+ W.
+ Wan,
+ Global optimization of an accelerator lattice using multiobjective genetic algorithms,
+ Nuclear Instruments and Methods in Physics Research Section A:
+ Accelerators,
+ Spectrometers,
+ Detectors and Associated Equipment 
+\series bold
+609
+\series default
+,
+ pp.
+ 50-57,
+ 2009.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "fusikh"
+literal "false"
+
+\end_inset
+
+
+\lang english
+E.
+ Iuliano,
+ Global optimization of benchmark aerodynamic cases using physics-based surrogate models,
+ Aerospace Science and Technology 
+\series bold
+67
+\series default
+,
+ pp.273-286,
+ 2017.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "fusikh1"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Q.
+ Duan,
+ S.
+ Sorooshian,
+ V.
+ Gupta,
+ Effective and efficient global optimization for conceptual rainfall-runoff models,
+ Water Resources Research 
+\series bold
+28
+\series default
+,
+ pp.
+ 1015-1031 ,
+ 1992.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "xhmeia"
+literal "false"
+
+\end_inset
+
+
+\lang english
+S.
+ Heiles,
+ R.
+ L.
+ Johnston,
+ Global optimization of clusters using electronic structure methods,
+ Int.
+ J.
+ Quantum Chem.
+ 
+\series bold
+113
+\series default
+,
+ pp.
+ 2091– 2109,
+ 2013.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "xhmeia1"
+literal "false"
+
+\end_inset
+
+
+\lang english
+W.H.
+ Shin,
+ J.K.
+ Kim,
+ D.S.
+ Kim,
+ C.
+ Seok,
+ GalaxyDock2:
+ Protein–ligand docking using beta-complex and global optimization,
+ J.
+ Comput.
+ Chem.
+ 
+\series bold
+34
+\series default
+,
+ pp.
+ 2647– 2656,
+ 2013.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "xhmeia2"
+literal "false"
+
+\end_inset
+
+
+\lang english
+A.
+ Liwo,
+ J.
+ Lee,
+ D.R.
+ Ripoll,
+ J.
+ Pillardy,
+ H.
+ A.
+ Scheraga,
+ Protein structure prediction by global optimization of a potential energy function,
+ Biophysics 
+\series bold
+96
+\series default
+,
+ pp.
+ 5482-5485,
+ 1999.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "iatrikh"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Eva K.
+ Lee,
+ Large-Scale Optimization-Based Classification Models in Medicine and Biology,
+ Annals of Biomedical Engineering 
+\series bold
+35
+\series default
+,
+ pp 1095-1109,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "iatrikh1"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Y.
+ Cherruault,
+ Global optimization in biology and medicine,
+ Mathematical and Computer Modelling 
+\series bold
+20
+\series default
+,
+ pp.
+ 119-132,
+ 1994.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Ali"
+literal "false"
+
+\end_inset
+
+
+\lang english
+M.
+ Montaz Ali,
+ Charoenchai Khompatraporn,
+ Zelda B.
+ Zabinsky,
+ A Numerical Evaluation of Several Stochastic Algorithms on Selected Continuous Global Optimization Test Problems,
+ Journal of Global Optimization 
+\series bold
+31
+\series default
+,
+ pp 635-672,
+ 2005.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Floudas1"
+literal "false"
+
+\end_inset
+
+
+\lang english
+C.A.
+ Floudas,
+ P.M.
+ Pardalos,
+ C.
+ Adjiman,
+ W.
+ Esposoto,
+ Z.
+ G
+\begin_inset Formula $\ddot{\mbox{u}}$
+\end_inset
+
+m
+\begin_inset Formula $\ddot{\mbox{u}}$
+\end_inset
+
+s,
+ S.
+ Harding,
+ J.
+ Klepeis,
+ C.
+ Meyer,
+ C.
+ Schweiger,
+ Handbook of Test Problems in Local and Global Optimization,
+ Kluwer Academic Publishers,
+ Dordrecht,
+ 1999.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc1"
+literal "false"
+
+\end_inset
+
+
+\lang english
+M.M.
+ Ali and P.
+ Kaelo,
+ Improved particle swarm algorithms for global optimization,
+ Applied Mathematics and Computation 
+\series bold
+196
+\series default
+,
+ pp.
+ 578-593,
+ 2008.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc2"
+literal "false"
+
+\end_inset
+
+
+\lang english
+H.
+ Koyuncu,
+ R.
+ Ceylan,
+ A PSO based approach:
+ Scout particle swarm algorithm for continuous global optimization problems,
+ Journal of Computational Design and Engineering 
+\series bold
+6
+\series default
+,
+ pp.
+ 129–142,
+ 2019.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc2-1"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Patrick Siarry,
+ Gérard Berthiau,
+ François Durdin,
+ Jacques Haussy,
+ ACM Transactions on Mathematical Software 
+\series bold
+23
+\series default
+,
+ pp 209–228,
+ 1997.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc3"
+literal "false"
+
+\end_inset
+
+
+\lang english
+I.G.
+ Tsoulos,
+ I.E.
+ Lagaris,
+ GenMin:
+ An enhanced genetic algorithm for global optimization,
+ Computer Physics Communications
+\series bold
+ 178,
+ 
+\series default
+pp.
+ 843-851,
+ 2008.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc4"
+literal "false"
+
+\end_inset
+
+
+\lang english
+A.
+ LaTorre,
+ D.
+ Molina,
+ E.
+ Osaba,
+ J.
+ Poyatos,
+ J.
+ Del Ser,
+ F.
+ Herrera,
+ A prescription of methodological guidelines for comparing bio-inspired optimization algorithms,
+ Swarm and Evolutionary Computation 
+\series bold
+67
+\series default
+,
+ 100973,
+ 2021.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gkls"
+literal "false"
+
+\end_inset
+
+
+\lang english
+M.
+ Gaviano,
+ D.E.
+ Ksasov,
+ D.
+ Lera,
+ Y.D.
+ Sergeyev,
+ Software for generation of classes of test functions with known local and global minima for global optimization,
+ ACM Trans.
+ Math.
+ Softw.
+ 
+\series bold
+29
+\series default
+,
+ pp.
+ 469-480,
+ 2003.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "jones"
+literal "false"
+
+\end_inset
+
+
+\lang english
+J.E.
+ Lennard-Jones,
+ On the Determination of Molecular Fields,
+ Proc.
+ R.
+ Soc.
+ Lond.
+ A 
+\series bold
+ 106
+\series default
+,
+ pp.
+ 463–477,
+ 1924.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "APPS"
+literal "false"
+
+\end_inset
+
+Tang,
+ J.,
+ Liu,
+ G.,
+ Pan,
+ Q.:
+ A review on representative swarm intelligence algorithms for solving optimization problems:applications and trends.
+ IEEE/CAA J.
+ Autom.
+ Sin.
+ 8(10),1627–1643 (2021)
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "WOA"
+literal "false"
+
+\end_inset
+
+Mirjalili,
+ S.,
+ Lewis,
+ A.:
+ The whale optimization algorithm.
+ Adv.
+ Eng.
+ Softw.
+ 95,
+ 51–67 (2016)
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "SCA"
+literal "false"
+
+\end_inset
+
+Mirjalili,
+ S.:
+ SCA:
+ a sine cosine algorithm for solving optimization problems.
+ Knowl.-Based Syst.
+ 96,
+ 120–133 (2016)
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "SSA"
+literal "false"
+
+\end_inset
+
+Mirjalili,
+ S.,
+ Gandomi,
+ A.H.,
+ Mirjalili,
+ S.Z.,
+ Saremi,
+ S.,
+ Faris,
+ H.,
+ Mirjalili,
+ S.M.:
+ Salp swarm algorithm:
+ a bio-inspired optimizer for engineering design problems.
+ Adv.
+ Eng.
+ Softw.
+ 114,
+ 163–191 (2017)
 \end_layout
 
 \begin_layout Standard
