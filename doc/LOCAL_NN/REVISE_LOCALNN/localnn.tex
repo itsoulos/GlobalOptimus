@@ -1,6 +1,6 @@
 %% LyX 2.3.7 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[journal,article,submit,pdftex,moreauthors]{mdpi}
+\documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 \usepackage[utf8]{inputenc}
 \usepackage{float}
 \usepackage{url}
@@ -201,8 +201,8 @@ medicine \citep{nnmed1,nnmed2} etc. Furthermore, in recent years,
 neural networks have been incorporated into a variety of practical
 problems, such as flood simulation \citep{nn_flood}, solar radiation
 prediction \citep{nn_solar}, agricultural problems \citep{nn_agro},
-solution of problems in wireless communications \citep{nn_wireless}
-etc.
+solution of problems in wireless communications \citep{nn_wireless},
+mechanical applications \citep{nn_mech1} etc.
 
 Commonly, a neural network is expressed as function $N(\overrightarrow{x},\overrightarrow{w})$,
 where the vector $\overrightarrow{x}$ expresses the input pattern
@@ -230,16 +230,33 @@ as:
 \begin{equation}
 \sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
 \end{equation}
-The number of elements in the weight vector are calculated as: $n=(d+2)H$. 
+The number of elements in the weight vector are calculated as: $n=(d+2)H$.\textbf{
+}Of course, other activation functions may be used, such as the tanh
+function defined as
+\begin{equation}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\end{equation}
+with similar approximation capabilities. Also, Guarnieri et al proposed
+the usage of an adaptive spline activation function for neural networks
+\citep{activation_spline}. Furthermore, Ertuğrul proposed the trained
+activation function in neural networks \citep{activation_trained}.
+A systematic review of activation functions for Artificial Neural
+Networks can be found in the paper of Rasamoelina et al \citep{activation_review}.
 
 In the recent bibliography, a series of methods have been proposed
 to minimize the equation \ref{eq:eq1}, such as the Back Propagation
 method \citep{bpnn,bpnn2}, the Levenberg-Marquardt method \citep{nn_leve},
 the RPROP method \citep{rpropnn,rpropnn3,rpropnn2}, Quasi Newton
 methods \citep{quasinn,quasinn2}, Particle Swarm Optimization \citep{psonn,psonn2},
-the Differential Evolution method \citep{nn_de}, etc. A survey of
-stochastic methods for training neural networks can be found in the
-work of Zhang and Suganthan \citep{nn_survey}.
+the Differential Evolution method \citep{nn_de}, etc. The first four
+methods are local optimization methods, used in a series of research
+papers but they can be easily trapped in local minima of the error
+function of Equation \ref{eq:eq1}. On the other hand, methods like
+Particle Swarm Optimization or Differential Evolution are considered
+global optimization methods aiming to discover the global minimum
+of such functions and as a consequence they can avoid local minima
+of the error function. A survey of stochastic methods for training
+neural networks can be found in the work of Zhang and Suganthan \citep{nn_survey}.
 
 Due to the wide application of artificial neural networks in various
 fields, but also due to the difficulties faced by traditional optimization
@@ -252,13 +269,13 @@ method that incorporates particle swarm optimization and Cuckoo Search
 \citep{csmethod}.
 
 Another important issue of neural networks that has been thoroughly
-studied in the recent literature is the initialization of the weights
+studied in the recent literature is the initialization of the parameters
 for the network. The methods developed for the initialization issue
 include utilization of decision trees\textbf{ }\citep{nninit1}, an
 initialization technique based on the Cauchy's inequality \citep{weight_init2},
 discriminant learning \citep{weight_init3} etc. A recent paper by
 Narkhede et al. \citep{nninitreview} presents various techniques
-for the initialization of the weights.
+for the initialization of the parameters.
 
 Due to the complexity of the training techniques but also due to the
 fact that the number of required parameters increases with the increase
@@ -283,12 +300,27 @@ natural selection, and crossover \citep{Stender,Goldberg,Michaelewicz}.
 Genetic algorithms have proven their efficiency, and they have been
 applied on a wide series of problems, such as networking \citep{ga_problem1},
 robotics \citep{ga_problem2,ga_problem3}, energy problems \citep{ga_problem4,ga_problem5}
-etc. Although Genetic Algorithms can satisfactorily train an artificial
-neural network, in many cases they get trapped in local minimum of
-the training error and this results in poor performance of the neural
-network when applied to the test set. To improve the performance of
-genetic algorithms, it is proposed to periodically apply a minimization
-technique to randomly selected chromosomes of the genetic population.
+etc. 
+
+Genetic algorithms have been extensively studied in the modern literature
+for the training of artificial neural networks or for the efficient
+creation of their structure. For example, the work of Arifovic et
+al \citep{ga_nn1} used to select the optimal architecture of an artificial
+neural network. Also, Leung et al proposed a novel genetic algorithm
+\citep{ga_nn2} to adjust the parameters and the structure of neural
+networks. Gao et al proposed an efficient genetic algorithm \citep{ga_nn3}
+with a new diffusing operator for neural network training. Recently,
+Ahmadizar et al combined genetic algorithm with grammatical evolution
+for optimal training of neural networks \citep{ga_nn4}. Additionally,
+Kobrunov and Priezzhev suggested a hybrid genetic algorithm \citep{ga_nn5}
+for efficient neural network training. Although Genetic Algorithms
+can satisfactorily train an artificial neural network, in many cases
+they get trapped in local minimum of the training error and this results
+in poor performance of the neural network when applied to the test
+set. To improve the performance of genetic algorithms, it is proposed
+to periodically apply a minimization technique to randomly selected
+chromosomes of the genetic population. 
+
 This minimization method that is applied here, is a modified version
 of the Simulated Annealing method \citep{siman_main}. Simulated annealing
 has been applied in many cases, such as police district design \citep{siman_problem1},
@@ -298,6 +330,19 @@ and regression problems, and it was compared against other optimization
 methods. From the experimental comparison of the results, it appears
 that the proposed technique significantly improves the performance
 of genetic algorithms in the training of artificial neural networks.
+
+Genetic algorithms have been used in conjuction with Simulated Annealing
+in a series of research papers in the recent literature, such as the
+work of Yu et al that combines genetic algorithm with simulated annealing
+for large scale system energy integration \citep{ga_sa1}. Also, Ganesh
+and Punniyamoorthy used hybrid genetic algorithms for optimization
+of continuous - time prediction planning \citep{ga_sa2}. Additionally,
+Hwang and He suggested the usage of simulated annealing to improve
+a genetic algorithm that was applied on engineering problems \citep{ga_sa3}.
+Furthermore, Li and Wei applied a genetic algorithm that was enhanced
+with a Simulated Annealing method on multi-reservoir systems \citep{ga_sa4}.
+A method that combines a genetic algorithm with simulated annealing
+was also used in Smart City problems recently \citep{ga_sa5}.
 
 The rest of this article is divided as follows: in section \ref{sec:Materials-and-Methods}
 the proposed method is discussed in detail. In section \ref{sec:Results}
@@ -466,7 +511,19 @@ method used in the current work is a BFGS variant of Powell \citep{Powell}.
 \item \textbf{Apply} the neural network \textbf{$N(\overrightarrow{x},\overrightarrow{g^{*}})$
 }on the test of the objective problem and report the result.
 \end{enumerate}
+%
 \end{enumerate}
+The overall algorithm is also outlined graphically as a series of
+steps in Figure \ref{fig:algorithm}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{flowchart}
+\par\end{centering}
+\caption{The overall proposed algorithm.\label{fig:algorithm}}
+
+\end{figure}
+
 
 \section{Results\label{sec:Results}}
 
@@ -582,28 +639,28 @@ values of the parameters for all used algorithms are shown in Table
 \caption{Values for the experimental parameters.\label{tab:settings}}
 
 \centering{}%
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c|c|c|}
 \hline 
-PARAMETER & VALUE\tabularnewline
+PARAMETER & MEANING & VALUE\tabularnewline
 \hline 
 \hline 
-$N_{c}$ & 500\tabularnewline
+$N_{c}$ & Number of chromosomes & 500\tabularnewline
 \hline 
-$N_{g}$ & 200\tabularnewline
+$N_{g}$ & Number of generations & 200\tabularnewline
 \hline 
-$L_{I}$ & 20\tabularnewline
+$L_{I}$ & Number of generations for local search & 20\tabularnewline
 \hline 
-$L_{K}$ & 20\tabularnewline
+$L_{K}$ & Number of chromosomes in local search & 20\tabularnewline
 \hline 
-$p_{s}$ & 0.10\tabularnewline
+$p_{s}$ & Selection rate & 0.10\tabularnewline
 \hline 
-$p_{m}$ & 0.05\tabularnewline
+$p_{m}$ & Mutation rate & 0.05\tabularnewline
 \hline 
-$H$ & 10\tabularnewline
+$H$ & Number of weights & 10\tabularnewline
 \hline 
-$F$ & 0.10\tabularnewline
+$F$ & Range of changes in Simulated Annealing & 0.10\tabularnewline
 \hline 
-$N_{R}$ & 20\tabularnewline
+$N_{R}$ & Number of changes in Simulated Annealing & 20\tabularnewline
 \hline 
 \end{tabular}
 \end{table}
@@ -614,13 +671,16 @@ to all tables with experimental results:
 \begin{enumerate}
 \item The column DATASET denotes the name of the used dataset.
 \item The column BFGS denotes the application of the BFGS optimization method
-to train a neural network with $H$ processing nodes.
+to train a neural network with $H$ processing nodes. The method used
+here is the BFGS variant of Powell \citep{Powell}.
 \item The column PSO denotes the application of a Particle Swarm Optimizer
 with $N_{c}$ particles to train a neural network with $H$ processing
-nodes.
+nodes. In the current work the improved PSO method as suggested by
+Charilogis and Tsoulos is used \citep{ipso}.
 \item The column GENETIC stands for the application of a Genetic Algorithm
 with the parameters shown in Table \ref{tab:settings} to train a
-neural network with $H$ processing nodes.
+neural network with $H$ processing nodes. The genetic algorithm used
+here is a variant proposed by Tsoulos \citep{doublepop}.
 \item The column PROPOSED denotes the application of the proposed method
 with the parameters of Table \ref{tab:settings} on a neural network
 with $H$ hidden nodes.
@@ -630,7 +690,8 @@ for all datasets.
 \begin{table}[H]
 \caption{Experimental results using a series of optimization methods for the
 classification datasets. Numbers in cells denote average classification
-error as measured on the test set.\label{tab:expClass}}
+error as measured on the test set. The bold notation is used to identify
+the method with the lowest average classification error.\label{tab:expClass}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -638,59 +699,59 @@ error as measured on the test set.\label{tab:expClass}}
 \textbf{DATASET} & \textbf{BFGS} & \textbf{PSO} & \textbf{GENETIC} & \textbf{PROPOSED}\tabularnewline
 \hline 
 \hline 
-APPENDICITIS & 18.00\% & 25.00\% & 24.40\% & 22.60\%\tabularnewline
+APPENDICITIS & \textbf{18.00\%} & 25.00\% & 24.40\% & 22.60\%\tabularnewline
 \hline 
-AUSTRALIAN & 38.13\% & 38.30\% & 36.64\% & 32.42\%\tabularnewline
+AUSTRALIAN & 38.13\% & 38.30\% & 36.64\% & \textbf{32.42\%}\tabularnewline
 \hline 
-BALANCE & 8.64\% & 7.97\% & 8.36\% & 8.10\%\tabularnewline
+BALANCE & 8.64\% & \textbf{7.97\%} & 8.36\% & 8.10\%\tabularnewline
 \hline 
-BANDS & 36.67\% & 36.61\% & 34.92\% & 34.53\%\tabularnewline
+BANDS & 36.67\% & 36.61\% & 34.92\% & \textbf{34.53\%}\tabularnewline
 \hline 
-CIRCULAR & 6.08\% & 4.24\% & 5.13\% & 4.35\%\tabularnewline
+CIRCULAR & 6.08\% & \textbf{4.24\%} & 5.13\% & 4.35\%\tabularnewline
 \hline 
-CLEVELAND & 77.55\% & 62.31\% & 57.21\% & 42.62\%\tabularnewline
+CLEVELAND & 77.55\% & 62.31\% & 57.21\% & \textbf{42.62\%}\tabularnewline
 \hline 
-DERMATOLOGY & 52.92\% & 17.69\% & 16.60\% & 12.12\%\tabularnewline
+DERMATOLOGY & 52.92\% & 17.69\% & 16.60\% & \textbf{12.12\%}\tabularnewline
 \hline 
-ECOLI & 69.52\% & 61.30\% & 54.67\% & 47.18\%\tabularnewline
+ECOLI & 69.52\% & 61.30\% & 54.67\% & \textbf{47.18\%}\tabularnewline
 \hline 
-FERT & 23.20\% & 24.00\% & 28.50\% & 25.20\%\tabularnewline
+FERT & \textbf{23.20\%} & 24.00\% & 28.50\% & 25.20\%\tabularnewline
 \hline 
-HEART & 39.44\% & 34.67\% & 26.41\% & 16.59\%\tabularnewline
+HEART & 39.44\% & 34.67\% & 26.41\% & \textbf{16.59\%}\tabularnewline
 \hline 
-HEARTATTACK & 46.67\% & 37.83\% & 29.03\% & 20.13\%\tabularnewline
+HEARTATTACK & 46.67\% & 37.83\% & 29.03\% & \textbf{20.13\%}\tabularnewline
 \hline 
-HOUSEVOTES & 7.13\% & 7.87\% & 7.00\% & 7.13\%\tabularnewline
+HOUSEVOTES & 7.13\% & 7.87\% & \textbf{7.00\%} & 7.13\%\tabularnewline
 \hline 
-LIVERDISORDER & 42.59\% & 39.82\% & 37.09\% & 32.88\%\tabularnewline
+LIVERDISORDER & 42.59\% & 39.82\% & 37.09\% & \textbf{32.88\%}\tabularnewline
 \hline 
-PARKINSONS & 27.58\% & 23.58\% & 16.58\% & 16.63\%\tabularnewline
+PARKINSONS & 27.58\% & 23.58\% & \textbf{16.58\%} & 16.63\%\tabularnewline
 \hline 
-PIMA & 35.59\% & 35.17\% & 34.21\% & 30.08\%\tabularnewline
+PIMA & 35.59\% & 35.17\% & 34.21\% & \textbf{30.08\%}\tabularnewline
 \hline 
-POPFAILURES & 5.24\% & 7.80\% & 4.17\% & 5.44\%\tabularnewline
+POPFAILURES & 5.24\% & 7.80\% & \textbf{4.17\%} & 5.44\%\tabularnewline
 \hline 
-REGIONS2 & 36.28\% & 31.43\% & 33.53\% & 27.69\%\tabularnewline
+REGIONS2 & 36.28\% & 31.43\% & 33.53\% & \textbf{27.69\%}\tabularnewline
 \hline 
-SAHEART & 37.48\% & 34.80\% & 34.85\% & 34.56\%\tabularnewline
+SAHEART & 37.48\% & 34.80\% & 34.85\% & \textbf{34.56\%}\tabularnewline
 \hline 
-SEGMENT & 68.97\% & 53.88\% & 46.30\% & 28.41\%\tabularnewline
+SEGMENT & 68.97\% & 53.88\% & 46.30\% & \textbf{28.41\%}\tabularnewline
 \hline 
-SONAR & 25.85\% & 24.70\% & 22.40\% & 19.80\%\tabularnewline
+SONAR & 25.85\% & 24.70\% & 22.40\% & \textbf{19.80\%}\tabularnewline
 \hline 
-SPIRAL & 47.99\% & 46.31\% & 47.67\% & 44.54\%\tabularnewline
+SPIRAL & 47.99\% & 46.31\% & 47.67\% & \textbf{44.54\%}\tabularnewline
 \hline 
-WDBC & 29.91\% & 9.98\% & 7.87\% & 5.66\%\tabularnewline
+WDBC & 29.91\% & 9.98\% & 7.87\% & \textbf{5.66\%}\tabularnewline
 \hline 
-WINE & 59.71\% & 32.71\% & 22.88\% & 10.59\%\tabularnewline
+WINE & 59.71\% & 32.71\% & 22.88\% & \textbf{10.59\%}\tabularnewline
 \hline 
-Z\_F\_S & 39.37\% & 38.73\% & 24.60\% & 11.10\%\tabularnewline
+Z\_F\_S & 39.37\% & 38.73\% & 24.60\% & \textbf{11.10\%}\tabularnewline
 \hline 
-ZO\_NF\_S & 43.04\% & 30.38\% & 21.54\% & 6.86\%\tabularnewline
+ZO\_NF\_S & 43.04\% & 30.38\% & 21.54\% & \textbf{6.86\%}\tabularnewline
 \hline 
-ZONF\_S & 15.62\% & 6.92\% & 4.36\% & 2.48\%\tabularnewline
+ZONF\_S & 15.62\% & 6.92\% & 4.36\% & \textbf{2.48\%}\tabularnewline
 \hline 
-ZOO & 10.70\% & 9.20\% & 9.50\% & 7.60\%\tabularnewline
+ZOO & 10.70\% & 9.20\% & 9.50\% & \textbf{7.60\%}\tabularnewline
 \hline 
 \textbf{AVERAGE} & \textbf{35.18\%} & \textbf{29.01\%} & \textbf{25.79\%} & \textbf{20.64\%}\tabularnewline
 \hline 
@@ -701,47 +762,48 @@ ZOO & 10.70\% & 9.20\% & 9.50\% & 7.60\%\tabularnewline
 \begin{centering}
 \caption{Experimental results for different optimization methods on a series
 of regression datasets. Numbers in cells denote average regression
-error as measure on the test set.\label{tab:expRegression}}
+error as measure on the test set. The bold notation is used to express
+the method with the lowest average regression error. \label{tab:expRegression}}
 \begin{tabular}{|c|c|c|c|c|}
 \hline 
 \textbf{DATASET} & \textbf{BFGS} & \textbf{PSO} & \textbf{GENETIC} & \textbf{PROPOSED}\tabularnewline
 \hline 
 \hline 
-AIRFOIL & 0.003 & 0.001 & 0.001 & 0.001\tabularnewline
+AIRFOIL & 0.003 & 0.001 & 0.001 & \textbf{0.001}\tabularnewline
 \hline 
-BK & 0.36 & 0.33 & 0.26 & 0.18\tabularnewline
+BK & 0.36 & 0.33 & 0.26 & \textbf{0.18}\tabularnewline
 \hline 
-BL & 1.09 & 2.49 & 2.23 & 0.42\tabularnewline
+BL & 1.09 & 2.49 & 2.23 & \textbf{0.42}\tabularnewline
 \hline 
-BASEBALL & 119.63 & 82.81 & 64.60 & 57.47\tabularnewline
+BASEBALL & 119.63 & 82.81 & 64.60 & \textbf{57.47}\tabularnewline
 \hline 
-DEE & 2.36 & 0.43 & 0.47 & 0.23\tabularnewline
+DEE & 2.36 & 0.43 & 0.47 & \textbf{0.23}\tabularnewline
 \hline 
-EU & 607.61 & 407.35 & 252.97 & 216.65\tabularnewline
+EU & 607.61 & 407.35 & 252.97 & \textbf{216.65}\tabularnewline
 \hline 
-FY & 0.19 & 0.05 & 0.65 & 0.23\tabularnewline
+FY & 0.19 & \textbf{0.05} & 0.65 & 0.23\tabularnewline
 \hline 
-HO & 0.62 & 0.03 & 0.37 & 0.06\tabularnewline
+HO & 0.62 & \textbf{0.03} & 0.37 & 0.06\tabularnewline
 \hline 
-HOUSING & 97.38 & 43.28 & 35.97 & 23.77\tabularnewline
+HOUSING & 97.38 & 43.28 & 35.97 & \textbf{23.77}\tabularnewline
 \hline 
-LW & 0.26 & 0.03 & 0.54 & 0.27\tabularnewline
+LW & 0.26 & \textbf{0.03} & 0.54 & 0.27\tabularnewline
 \hline 
-MORTGAGE & 8.23 & 1.47 & 0.40 & 0.05\tabularnewline
+MORTGAGE & 8.23 & 1.47 & 0.40 & \textbf{0.05}\tabularnewline
 \hline 
-MUNDIAL & 0.05 & 0.08 & 1.22 & 0.28\tabularnewline
+MUNDIAL & \textbf{0.05} & 0.08 & 1.22 & 0.28\tabularnewline
 \hline 
-PL & 0.11 & 0.06 & 0.03 & 0.02\tabularnewline
+PL & 0.11 & 0.06 & 0.03 & \textbf{0.02}\tabularnewline
 \hline 
-QUAKE & 0.09 & 0.06 & 0.12 & 0.06\tabularnewline
+QUAKE & 0.09 & 0.06 & 0.12 & \textbf{0.06}\tabularnewline
 \hline 
-REALESTATE & 128.94 & 81.41 & 81.19 & 72.95\tabularnewline
+REALESTATE & 128.94 & 81.41 & 81.19 & \textbf{72.95}\tabularnewline
 \hline 
-SN & 0.16 & 0.40 & 0.20 & 0.05\tabularnewline
+SN & 0.16 & 0.40 & 0.20 & \textbf{0.05}\tabularnewline
 \hline 
-TREASURY & 9.91 & 2.32 & 0.44 & 0.26\tabularnewline
+TREASURY & 9.91 & 2.32 & 0.44 & \textbf{0.26}\tabularnewline
 \hline 
-VE & 1.92 & 0.32 & 2.43 & 1.63\tabularnewline
+VE & 1.92 & \textbf{0.32} & 2.43 & 1.63\tabularnewline
 \hline 
 \textbf{AVERAGE} & \textbf{54.38} & \textbf{34.61} & \textbf{24.67} & \textbf{20.81}\tabularnewline
 \hline 
@@ -749,21 +811,13 @@ VE & 1.92 & 0.32 & 2.43 & 1.63\tabularnewline
 \par\end{centering}
 \end{table}
 The statistical comparison between the used methods for the classification
-datasets is shown in Figure \ref{fig:statClass}, while for the regression
-datasets in Figure \ref{fig:statRegression}. 
+datasets is shown in Figure \ref{fig:statClass}.
 
 \begin{figure}[H]
 \includegraphics{stat_class}
 
 \caption{Statistical comparison of the used optimization methods for the classification
 datasets.\label{fig:statClass}}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics{stat_regression}
-
-\caption{Statistical comparison of the used methods for the regression datasets.\label{fig:statRegression}}
-
 \end{figure}
 As the comparison of the experimental results and their statistical
 comparison shows, the genetic algorithm method significantly outperforms
@@ -773,18 +827,36 @@ their performance on almost all datasets. In several datasets, the
 reduction in error in the test set can reach up to 80\% compared to
 genetic algorithms.
 
+Nevertheless, the proposed method significantly may increase the total
+execution time and this can be observed from the graph of Figure \ref{fig:timeComparison}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{siman_time}
+\par\end{centering}
+\caption{Time comparison of the average execution time for the classification
+datasets.\label{fig:timeComparison}}
+
+\end{figure}
+The proposed technique significantly improves the performance of the
+genetic algorithm in minimizing the training error of the artificial
+neural networks but requires significantly more computing time. However,
+the required computing time could be significantly reduced either
+by using parallel computing techniques.
+
 Additionally, in order to explore the stability and the robustness
 of the proposed method, further experiments were conducted with different
 values for the critical parameters of the method. The results in Table
 \ref{tab:experF} depict the application of the proposed method on
 classification datasets, with different values for the critical parameter
 $F$, which controls the magnitude of changes in the Simulated Annealing
-variant. Also, the statistical comparison for the average classification
-error is shown in Figure \ref{fig:statF}.
+variant.
 
 \begin{table}[H]
 \caption{Experimental results using different values for the critical parameter
-$F$. The experiments were executed on the classification datasets.\label{tab:experF}}
+$F$. The experiments were executed on the classification datasets.
+The numbers in cells denote average classification error, as measured
+on the test set.\label{tab:experF}}
 
 \begin{centering}
 \begin{tabular}{|c|c|c|c|}
@@ -851,14 +923,6 @@ ZOO & 7.60\% & 7.60\% & 6.80\%\tabularnewline
 \end{tabular}
 \par\end{centering}
 \end{table}
-
-\begin{figure}[H]
-\includegraphics{stat_paramF}
-
-\caption{Statistical comparison for the results obtained by the proposed method
-for different values of the critical parameter $F$\label{fig:statF}}
-
-\end{figure}
 The proposed method is shown to improve when the critical parameter
 $F$ increases from 0.05 to 0.10 but does not improve further for
 a larger increase in the value of the parameter. Therefore, for small
@@ -874,7 +938,9 @@ this experiment and for the classification datasets are shown in Table
 \begin{table}[H]
 \caption{Experiments using the parameter $N_{R}$ of the proposed algorithm.
 The experiments were performed by applying the proposed method on
-the used classification datasets.\label{tab:experNR}}
+the used classification datasets. The numbers in cells stand for the
+average classification error, as measured on the corresponding test
+set.\label{tab:experNR}}
 
 \begin{centering}
 \begin{tabular}{|c|c|c|c|}
@@ -962,7 +1028,8 @@ is depicted in Figure \ref{fig:statNI}.
 
 \begin{table}[H]
 \caption{Experiments using the proposed method on the classification datasets
-for various values of the parameter $N_{I}$.\label{tab:experNI}}
+for various values of the parameter $N_{I}$. Numbers in cells denote
+average classification error as measured on the test set.\label{tab:experNI}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|}
@@ -1059,16 +1126,31 @@ by parameters, such as the temperature of the method. For high temperature
 values, the method accepts error values that may be higher than the
 initial one, in order to achieve the optimal exploration of the research
 space, but as the temperature decreases, the method focuses on the
-optimal values of the error function. The new training method is quite
-general and has been successfully applied to a variety of data classification
-and data fitting problems. This new technique significantly improves
-the performance of Genetic Algorithms in almost all data sets that
-were used, and in fact, in several of them the reduction in the error
-can reach up to 80\%. Furthermore, the technique's behavior and performance
-are not significantly affected by any variations in its critical parameters
-except for the $F$ parameter, which controls the magnitude of changes
-that can be made to a chromosome. However, the effect of this parameter
-seems to decrease for large values. 
+optimal values of the error function.\textbf{ }The main contributions
+of the current work are:
+\begin{enumerate}
+\item Periodic application of an intelligent stochastic technique based
+on Simulated Annealing. This technique improves the training error
+of randomly selected chromosomes.
+\item By using parameters, the changes that this stochastic method can cause
+in the chromosomes are controlled.
+\item This stochastic technique can be used without modification in both
+classification and data fitting problems.
+\end{enumerate}
+The new training method is quite general and has been successfully
+applied to a variety of data classification and data fitting problems.
+This new technique significantly improves the performance of Genetic
+Algorithms in almost all data sets that were used, and in fact, in
+several of them the reduction in the error can reach up to 80\%. The
+proposed method achieved a significant reduction in error compared
+to all the techniques with which it was compared. This reduction starts
+on average from 20\% for the case of genetic algorithms and ends in
+a reduction of 45\% for the case of the BFGS optimization method.
+Furthermore, the technique's behavior and performance are not significantly
+affected by any variations in its critical parameters except for the
+$F$ parameter, which controls the magnitude of changes that can be
+made to a chromosome. However, the effect of this parameter seems
+to decrease for large values. 
 
 However, this new technique may affect the execution time of the Genetic
 Algorithm as it adds a new computational part. This overhead in computational
@@ -1185,9 +1267,28 @@ Debbah, Artificial Neural Networks-Based Machine Learning for Wireless
 Networks: A Tutorial, IEEE Communications Surveys \& Tutorials \textbf{21},
 pp. 3039-3071, 2019.
 
+\bibitem{nn_mech1}K. Peta, J. Żurek, Prediction of air leakage in
+heat exchangers for automotive applications using artificial neural
+networks, In: 2018 9th IEEE Annual Ubiquitous Computing, Electronics
+\& Mobile Communication Conference (UEMCON), New York, NY, USA, pp.
+721-725, 2018.
+
 \bibitem{nnc}I.G. Tsoulos, D. Gavrilis, E. Glavas, Neural network
 construction and training using grammatical evolution, Neurocomputing
 \textbf{72}, pp. 269-277, 2008.
+
+\bibitem{activation_spline}S. Guarnieri, F. Piazza, A. Uncini, Multilayer
+feedforward networks with adaptive spline activation function, IEEE
+Transactions on Neural Networks \textbf{10}, pp. 672-683, 1999. 
+
+\bibitem{activation_trained}Ö.F. Ertuğrul, A novel type of activation
+function in artificial neural networks: Trained activation function,
+Neural Networks \textbf{99}, pp. 148-157, 2018.
+
+\bibitem{activation_review}A. D. Rasamoelina, F. Adjailia, P. Sinčák,
+A Review of Activation Function for Artificial Neural Network, In:
+2020 IEEE 18th World Symposium on Applied Machine Intelligence and
+Informatics (SAMI), Herlany, Slovakia, pp. 281-286, 2020.
 
 \bibitem{bpnn}D.E. Rumelhart, G.E. Hinton and R.J. Williams, Learning
 representations by back-propagating errors, Nature \textbf{323}, pp.
@@ -1324,6 +1425,30 @@ Rep. \textbf{8}, pp. 69--80, 2022.
 of electric vehicle charging stations: Based on cost model and genetic
 algorithm, Energy \textbf{247}, 123437, 2022.
 
+\bibitem{ga_nn1}J. Arifovic, R. Gençay, Using genetic algorithms
+to select architecture of a feedforward artificial neural network,
+Physica A: Statistical Mechanics and its Applications \textbf{289},
+pp. 574-594, 2001. 
+
+\bibitem{ga_nn2}F. H. F. Leung, H. K. Lam, S. H. Ling, P. K. S. Tam,
+Tuning of the structure and parameters of a neural network using an
+improved genetic algorithm, IEEE Transactions on Neural Networks \textbf{14},
+pp. 79-88, 2003.
+
+\bibitem{ga_nn3}Q. Gao, K. Qi, Y. Lei, Z. He, An Improved Genetic
+Algorithm and Its Application in Artificial Neural Network Training,
+In: 2005 5th International Conference on Information Communications
+\& Signal Processing, Bangkok, pp. 357-360, 2005.
+
+\bibitem{ga_nn4}F. Ahmadizar, K. Soltanian, F. AkhlaghianTab, I.
+Tsoulos, Artificial neural network development by means of a novel
+combination of grammatical evolution and genetic algorithm, Engineering
+Applications of Artificial Intelligence \textbf{39}, pp. 1-13, 2015. 
+
+\bibitem{ga_nn5}A. Kobrunov, I. Priezzhev, Hybrid combination genetic
+algorithm and controlled gradient method to train a neural network,
+Geophysics \textbf{81}, pp. 35-43, 2016.
+
 \bibitem{siman_main}S. Kirkpatrick, C.D. Gelatt Jr, M.P. Vecchi,
 Optimization by simulated annealing, Science \textbf{220}, pp. 671-680,
 1983.
@@ -1339,6 +1464,28 @@ of Operational Research \textbf{150}, pp. 546-571, 2003.
 \bibitem{siman_problem3}K.M. El-Naggar, M.R. AlRashidi, M.F. AlHajri,
 A.K. Al-Othman, Simulated Annealing algorithm for photovoltaic parameters
 identification, Solar Energy \textbf{86}, pp. 266-274, 2012.
+
+\bibitem{ga_sa1}H. Yu, H. Fang, P. Yao, Y. Yuan, A combined genetic
+algorithm/simulated annealing algorithm for large scale system energy
+integration, Computers \& Chemical Engineering \textbf{24}, pp. 2023-2035,
+2000. 
+
+\bibitem{ga_sa2}K. Ganesh, M. Punniyamoorthy, Optimization of continuous-time
+production planning using hybrid genetic algorithms-simulated annealing,
+Int J Adv Manuf Technol \textbf{26}, pp. 148--154, 2005.
+
+\bibitem{ga_sa3}S.-F. Hwang, R.-S. He, Improving real-parameter genetic
+algorithm with simulated annealing for engineering problems, Advances
+in Engineering Software \textbf{37}, pp. 406-418, 2006. 
+
+\bibitem{ga_sa4}X.G. Li, X. Wei, An Improved Genetic Algorithm-Simulated
+Annealing Hybrid Algorithm for the Optimization of Multiple Reservoirs,
+Water Resour Manage \textbf{22}, pp. 1031--1049, 2008.
+
+\bibitem{ga_sa5}P. Suanpang, P. Jamjuntr, K. Jermsittiparsert, P.
+Kaewyong, Tourism Service Scheduling in Smart City Based on Hybrid
+Genetic Algorithm Simulated Annealing Algorithm, Sustainability \textbf{14},
+16293, 2022.
 
 \bibitem{ga_drug}L. Terfloth, J. Gasteiger, Neural networks and genetic
 algorithms in drug design, Drug Discovery Today \textbf{6}, pp. 102-108,
@@ -1481,6 +1628,14 @@ self-noise and prediction. Technical report, NASA RP-1218, July 1989.
 \bibitem{housing}D. Harrison and D.L. Rubinfeld, Hedonic prices and
 the demand for clean ai, J. Environ. Economics \& Management \textbf{5},
 pp. 81-102, 1978.
+
+\bibitem{ipso}V. Charilogis, I.G. Tsoulos, Toward an Ideal Particle
+Swarm Optimizer for Multidimensional Functions , Information \textbf{13},
+217, 2022.
+
+\bibitem{doublepop}I.G. Tsoulos, Modifications of real code genetic
+algorithm for global optimization, Applied Mathematics and Computation
+\textbf{203}, pp. 598-607, 2008.
 
 \bibitem{psa}A. Bevilacqua, A methodological approach to parallel
 simulated annealing on an SMP system. Journal of Parallel and Distributed
