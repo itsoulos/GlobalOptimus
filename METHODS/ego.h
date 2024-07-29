@@ -37,7 +37,7 @@ private:
     double b;
     int t;
     double p ;
-      Data bestX;
+    Data bestX;
     double distance2eel;
     double X1;
      double distance2grouper;
