@@ -1,21 +1,24 @@
 #include "ego.h"
 # include <METHODS/gradientdescent.h>
+# include <METHODS/bfgs.h>
 
 
 EGO::EGO() {
-    addParam(Parameter("ego_count","50","Number of  SearchAgents"));
-    addParam(Parameter("ego_maxiters","200","Maximum number of generations"));
-    addParam(Parameter("ego_lrate","0.05","Localsearch rate"));
-    addParam(Parameter("ego_iters","30","Number of iters"));
-    addParam(Parameter("gen_termination","similarity","Termination method. Avaible values: maxiters,similarity,doublebox"));
-
+    addParam(Parameter("ego_count",50,10,10000,"Number of  SearchAgents"));
+    addParam(Parameter("ego_maxiters",200,10,10000,"Maximum number of generations"));
+    addParam(Parameter("ego_lrate",0.05,0.0,1.0,"Localsearch rate"));
+    addParam(Parameter("ego_iters",30,0,100,"Number of iters"));
+    addParam(Parameter("ego_localiters",3,0,100,"Number of local search iters"));
+    QStringList opt_localmethod;
+    opt_localmethod<<"gradient"<<"bfgs"<<"none";
+    addParam(Parameter("ego_localmethod",opt_localmethod[0],opt_localmethod,"Local method used here"));
 }
 
 void EGO::init() {
     SearchAgents = getParam("ego_count").getValue().toInt();
     maxGenerations = getParam("ego_maxiters").getValue().toInt();
     localsearchRate = getParam("ego_lrate").getValue().toDouble();
-    terminationMethod = getParam("gen_termination").getValue();
+    terminationMethod = getParam("opt_termination").getValue();
     generation = 0;
     iters = getParam("ego_iters").getValue().toInt();
 
@@ -181,18 +184,41 @@ void EGO::step() {
             }
 
             fitness[i] = myProblem->statFunmin(Theseis[i]);
-
-            GradientDescent* local = new GradientDescent();
-            local->setProblem(myProblem);
-            local->setParam("opt_debug", "no");
-            ((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
-            ((GradientDescent*)local)->setParam("gd_maxiters", "3");
-            double CurrentFitness = fitness[i];
-            ((GradientDescent*)local)->setPoint(Theseis[i], CurrentFitness);
-            local->solve();
             std::vector<double> X(D);
-            ((GradientDescent*)local)->getPoint(X, CurrentFitness);
-            delete local;
+	    double CurrentFitness;
+
+	    if(getParam("ego_localmethod").getValue()=="gradient")
+	    {
+            	GradientDescent* local = new GradientDescent();
+            	local->setProblem(myProblem);
+            	local->setParam("opt_debug", "no");
+            	((GradientDescent*)local)->setParam("gd_linesearch", "armijo");
+            	((GradientDescent*)local)->setParam("gd_maxiters", getParam("ego_localiters").getValue());
+            	CurrentFitness = fitness[i];
+            	((GradientDescent*)local)->setPoint(Theseis[i], CurrentFitness);
+            	local->solve();
+            	((GradientDescent*)local)->getPoint(X, CurrentFitness);
+            	delete local;
+	    }
+	    else
+	    if(getParam("ego_localmethod").getValue()=="bfgs")
+	    {
+		    Bfgs *local =new Bfgs();
+		    local->setProblem(myProblem);
+		    local->setParam("opt_debug","no");
+            	    ((Bfgs*)local)->setParam("bfgs_iters", getParam("ego_localiters").getValue());
+		    X = Theseis[i];
+		    CurrentFitness=fitness[i];
+            	    ((Bfgs*)local)->setPoint(Theseis[i], CurrentFitness);
+		    local->solve();
+            	    ((Bfgs*)local)->getPoint(X, CurrentFitness);
+		    delete local;
+	    }
+	    else //none case
+	    {
+		    X = Theseis[i];
+		    CurrentFitness=fitness[i];
+	    }	    
 
             bool feasible = Feasibility(X);
             if (feasible && CurrentFitness < fitness[i]) {

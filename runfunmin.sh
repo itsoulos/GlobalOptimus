@@ -26,6 +26,9 @@ then
 #nm_sigma: the sigma parameter
 #nm_maxiters: maximum number of iterations allowed
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
+elif [ $METHOD = "Ego" ]
+then
+	METHODPARAMS="--ego_count=100 --ego_maxiters=200 --ego_lrate=0.05 --ego_localiters=3 --ego_localmethod=bfgs"
 elif [ $METHOD = "Ofa" ]
 then
 	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.02 --ofa_bfgsiters=3"
