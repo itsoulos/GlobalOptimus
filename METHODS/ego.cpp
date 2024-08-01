@@ -15,6 +15,7 @@ EGO::EGO() {
 }
 
 void EGO::init() {
+	t= 0;
     SearchAgents = getParam("ego_count").getValue().toInt();
     maxGenerations = getParam("ego_maxiters").getValue().toInt();
     localsearchRate = getParam("ego_lrate").getValue().toDouble();
@@ -128,8 +129,8 @@ void EGO::step() {
     CalcFitnessArray();
     Selection();
 
-    while (!terminated()) {
-        if (t >= maxGenerations) break;
+            std::vector<double> X(D);
+	    double CurrentFitness;
 
         a = 2 - 2 * (t / (double)maxGenerations);
         starvation_rate = 100 * (t / (double)maxGenerations);
@@ -142,10 +143,12 @@ void EGO::step() {
             C1 = 2 * a * r1 - a;
             C2 = 2 * r1;
             b = a * r2;
+	    X = Theseis[i];
+	    CurrentFitness = fitness[i];
 
             for (unsigned long j = 0; j < Theseis[i].size(); ++j) {
                 double randLeader = rand() % SearchAgents;
-                double D_X_rand = abs(C2 * Theseis[i][j] - Theseis[randLeader][j]);
+                double D_X_rand = fabs(C2 * Theseis[i][j] - Theseis[randLeader][j]);
                 Theseis[i][j] = Theseis[randLeader][j] + C1 * D_X_rand;
             }
 
@@ -158,7 +161,7 @@ void EGO::step() {
             if (r4 <= starvation_rate) {
                 eelThesi.resize(D);
                 for (int j = 0; j < D; ++j) {
-                    eelThesi[j] = abs(C2 * grouperBestThesi[j]);
+                    eelThesi[j] = fabs(C2 * grouperBestThesi[j]);
                 }
             } else {
                 int randomIndex = rand() % SearchAgents;
@@ -170,10 +173,10 @@ void EGO::step() {
 
             for (int j = 0; j < D; ++j) {
                 p = (double)rand() / RAND_MAX;
-                distance2eel = abs(Theseis[i][j] - C2 * eelThesi[j]);
+                distance2eel = fabs(Theseis[i][j] - C2 * eelThesi[j]);
 
                 X1 = C1 * distance2eel * exp(b * r3) * sin(r3 * 2 * M_PI) + eelThesi[j];
-                distance2grouper = abs(C2 * grouperBestThesi[j] - Theseis[i][j]);
+                distance2grouper = fabs(C2 * grouperBestThesi[j] - Theseis[i][j]);
                 X2 = grouperBestThesi[j] + C1 * distance2grouper;
 
                 if (p < 0.5) {
@@ -182,10 +185,12 @@ void EGO::step() {
                     Theseis[i][j] = (0.2 * X1 + 0.8 * X2) / 2;
                 }
             }
-
+	if(!Feasibility(Theseis[i]))
+	{
+		Theseis[i]=X;
+	}
+	else
             fitness[i] = myProblem->statFunmin(Theseis[i]);
-            std::vector<double> X(D);
-	    double CurrentFitness;
 
 	    if(getParam("ego_localmethod").getValue()=="gradient")
 	    {
@@ -256,11 +261,6 @@ void EGO::step() {
         }
 
         ++t;
-    }
-
-    if (terminated()) {
-        done();
-    }
 }
 
 EGO::~ EGO()
@@ -282,10 +282,7 @@ void EGO:: done()
         }
     }
 
-    if(bestX.size()==0)
-    {
-        bestX=Theseis[bestindex];
-    }
+    bestX=grouperBestThesi;
     besty  = localSearch(bestX);
     if(getParam("opt_debug").getValue()=="yes")
         printf("EGO. terminate: %lf grouperBestFitness: %lf \n",besty,grouperBestFitness);

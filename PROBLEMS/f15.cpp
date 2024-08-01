@@ -23,8 +23,8 @@ double f15::funmin( Data &x){
     double sum = 0.0;
       int dimension=x.size();
     for (int i = 1; i <= 11; ++i) {
-        double n = x[0] * (b1 * b1 + b[i-1] * x[1]);
-        double y = b1 * b1 + b[i-1] * x[2] + x[3];
+        double n = x[0] * (b[i-1] * b[i-1] + b[i-1] * x[1]);
+        double y = b[i-1] * b[i-1] + b[i-1] * x[2] + x[3];
         double t = a[i-1] - n / y;
         sum += t * t;
     }

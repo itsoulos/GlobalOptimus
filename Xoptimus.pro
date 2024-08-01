@@ -48,6 +48,7 @@ SOURCES += \
     GE/rule.cc \
     GE/ruleprogram.cpp \
     GE/symbol.cc \
+    METHODS/ego.cpp \
     OPTIMUS/editlogger.cpp \
     OPTIMUS/filelogger.cpp \
     OPTIMUS/logger.cpp \
@@ -174,6 +175,7 @@ HEADERS += \
     GE/rule.h \
     GE/ruleprogram.h \
     GE/symbol.h \
+    METHODS/ego.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \
     OPTIMUS/logger.h \

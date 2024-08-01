@@ -950,7 +950,8 @@ ego.o: METHODS/ego.cpp METHODS/ego.h \
 		LINESEARCH/linesearch.h \
 		LINESEARCH/fibonaccisearch.h \
 		LINESEARCH/goldensearch.h \
-		LINESEARCH/armijosearch.h
+		LINESEARCH/armijosearch.h \
+		METHODS/bfgs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ego.o METHODS/ego.cpp
 
 editlogger.o: OPTIMUS/editlogger.cpp OPTIMUS/editlogger.h \
