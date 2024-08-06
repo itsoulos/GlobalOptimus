@@ -47,6 +47,7 @@ private:
     int iters;
     int generation;
     Data best;
+    int ego_p;
 
 public:
     EGO();

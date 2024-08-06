@@ -1,6 +1,9 @@
 #include "ego.h"
 #include <METHODS/gradientdescent.h>
 #include <METHODS/bfgs.h>
+double rand_double(double low, double high) {
+    return low + static_cast<double>(rand()) / RAND_MAX * (high - low);
+}
 
 EGO::EGO()
 {
@@ -12,11 +15,13 @@ EGO::EGO()
     QStringList opt_localmethod;
     opt_localmethod << "gradient" << "bfgs" << "none";
     addParam(Parameter("ego_localmethod", opt_localmethod[0], opt_localmethod, "Local method used here"));
+    addParam(Parameter("ego_p", 1, 2, 3,"..."));
 }
 
 void EGO::init()
 {
     t = 0;
+    ego_p = getParam("ego_p").getValue().toInt();
     SearchAgents = getParam("ego_count").getValue().toInt();
     maxGenerations = getParam("ego_maxiters").getValue().toInt();
     localsearchRate = getParam("ego_lrate").getValue().toDouble();
@@ -131,7 +136,7 @@ bool EGO::Feasibility(const vector<double> &solution)
 }
 void EGO::step()
 {
-xxx:
+
     generation++;
     CalcFitnessArray();
     Selection();
@@ -188,20 +193,27 @@ xxx:
 
         for (int j = 0; j < D; ++j)
         {
-            p = (double)rand() / RAND_MAX;
+            if (ego_p == 1)
+                p = (double)rand() / RAND_MAX;
+            else if (ego_p == 2)
+                p = (-1/2) + 2 * ((double)rand() / RAND_MAX);  //mod
             distance2eel = fabs(Theseis[i][j] - C2 * eelThesi[j]);
 
             X1 = C1 * distance2eel * exp(b * r3) * sin(r3 * 2 * M_PI) + eelThesi[j];
             distance2grouper = fabs(C2 * grouperBestThesi[j] - Theseis[i][j]);
             X2 = grouperBestThesi[j] + C1 * distance2grouper;
 
+            double f1 = rand_double(0.0, 2.0);  //////mod
+            double f2 = rand_double(-2.0,0.0);  //////mod
             if (p < 0.5)
             {
-                Theseis[i][j] = (0.8 * X1 + 0.2 * X2) / 2;
+                //Theseis[i][j] = (0.8 * X1 + 0.2 * X2) / 2;
+                Theseis[i][j] = (f1 * X1 + f2 * X2) / 2;
             }
             else
             {
-                Theseis[i][j] = (0.2 * X1 + 0.8 * X2) / 2;
+                //Theseis[i][j] = (0.2 * X1 + 0.8 * X2) / 2;
+                Theseis[i][j] = (f2 * X1 + f1 * X2) / 2;
             }
         }
         if (!Feasibility(Theseis[i]))
