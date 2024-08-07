@@ -61,7 +61,7 @@ void EGO::init()
 
 double EGO::evaluate(vector<double> &solution, double &grouperBestFitness)
 {
-    double fitness = myProblem->statFunmin(solution);
+    double fitness;// = myProblem->statFunmin(solution);
 
     if (fitness < grouperBestFitness)
     {
