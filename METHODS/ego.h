@@ -40,14 +40,14 @@ private:
     Data bestX;
     double distance2eel;
     double X1;
-     double distance2grouper;
+    double distance2grouper;
     double X2;
     double a ;
     double starvation_rate;
     int iters;
     int generation;
     Data best;
-    int ego_p;
+    int mod1, mod2, mod3;
 
 public:
     EGO();
