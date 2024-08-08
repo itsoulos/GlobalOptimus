@@ -28,7 +28,7 @@ then
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
 elif [ $METHOD = "Ego" ]
 then
-METHODPARAMS="--mod1=2 --mod2=2 --mod3=2 --ego_count=200 --ego_maxiters=200 --ego_lrate=0.05 --ego_localiters=3 --ego_localmethod=none"
+METHODPARAMS="--mod1=2 --mod2=1 --ego_count=200 --ego_maxiters=200 --ego_lrate=0.05 --ego_localiters=3 --ego_localmethod=none"
 elif [ $METHOD = "Ofa" ]
 then
 	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.02 --ofa_bfgsiters=3"
@@ -94,7 +94,8 @@ then
 #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
-METHODPARAMS="--ipso_particles=100 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.001 --ipso_stoppingrule=mean_fitness -ipso_gradientcheck=false --ipso_inertiatype=5"
+METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness --ipso_gradientcheck=false --ipso_inertiatype=10"
+
 
 elif [ $METHOD = "NeuralMinimizer" ]
 then

@@ -48,8 +48,8 @@ void EGO::init()
 
     sampleFromProblem(SearchAgents, Theseis, fitness);
 
-    upper = myProblem->getLeftMargin();
-    lower = myProblem->getRightMargin();
+    upper = myProblem->getRightMargin();
+    lower = myProblem->getLeftMargin();
     bestX.resize(D);
 
     fitness_old.resize(SearchAgents, vector<double>(maxGenerations, numeric_limits<double>::max()));
@@ -61,7 +61,7 @@ void EGO::init()
 
 double EGO::evaluate(vector<double> &solution, double &grouperBestFitness)
 {
-    double fitness;// = myProblem->statFunmin(solution);
+    double fitness= myProblem->statFunmin(solution);
 
     if (fitness < grouperBestFitness)
     {
@@ -139,7 +139,7 @@ bool EGO::Feasibility(const vector<double> &solution)
 {
     for (int i = 0; i < D; ++i)
     {
-        if (solution[i] < upper[i] || solution[i] > lower[i])
+        if (solution[i] > upper[i] || solution[i] < lower[i])
         {
             return false;
         }
@@ -150,11 +150,14 @@ void EGO::step()
 {
 
     generation++;
+    if(generation==1)
     CalcFitnessArray();
     Selection();
 
     std::vector<double> X(D);
     double CurrentFitness;
+
+
 
     a = 2 - 2 * (t / (double)maxGenerations);
     starvation_rate = 100 * (t / (double)maxGenerations);
@@ -178,12 +181,12 @@ void EGO::step()
             Theseis[i][j] = Theseis[randLeader][j] + C1 * D_X_rand;
         }
 
-        newFitness = evaluate(Theseis[i], grouperBestFitness);
-        if (newFitness < grouperBestFitness)
+        if (!Feasibility(Theseis[i]))
         {
-            grouperBestFitness = newFitness;
-            grouperBestThesi = Theseis[i];
+            Theseis[i]=X;
+            continue;
         }
+
 
         if (r4 <= starvation_rate)
         {
@@ -208,7 +211,7 @@ void EGO::step()
             if (mod1 == 1)
                 p = (double)rand() / RAND_MAX;
             else if (mod1 == 2)
-                p = (-1/2) + 2 * ((double)rand() / RAND_MAX);  //mod
+                p = (-1.0/2.0) + 2.0 * ((double)rand() / RAND_MAX);  //mod
 
 
             distance2grouper = fabs(C2 * grouperBestThesi[j] - Theseis[i][j]);
@@ -238,18 +241,20 @@ void EGO::step()
         if (!Feasibility(Theseis[i]))
         {
             Theseis[i] = X;
+            continue;
         }
         else
-            fitness[i] = myProblem->statFunmin(Theseis[i]);
-
-        bool feasible = Feasibility(X);
-        if (feasible && CurrentFitness < fitness[i])
         {
-            Theseis[i] = X;
+            CurrentFitness=evaluate(Theseis[i], grouperBestFitness);
             fitness[i] = CurrentFitness;
+            if (CurrentFitness < grouperBestFitness)
+            {
+                grouperBestFitness = CurrentFitness;
+                grouperBestThesi = Theseis[i];
+            }
         }
+
     }
-        printf("mod1=%d mod2=%d mod3=%d\n",mod1,mod2,mod3);
 
 
     for (unsigned long j = 0; j < Theseis.size(); ++j)
@@ -271,9 +276,6 @@ void EGO::step()
                     continue;
             }
         }
-
-        fitness[j] = evaluate(Theseis[j], grouperBestFitness);
-
         if (j < fitness_old.size() && t < fitness_old[j].size())
         {
             fitness_old[j][t] = fitness[j];
@@ -282,16 +284,23 @@ void EGO::step()
 
         troxies[j][t] = Theseis[j][0];
 
-        if (fitness[j] < grouperBestFitness)
-        {
-            grouperBestThesi = Theseis[j];
-            grouperBestFitness = fitness[j];
-        }
+
     }
 
     if (t < kambili.size())
     {
         kambili[t] = grouperBestFitness;
+    }
+    for(int i=0;i<Theseis.size();i++)
+    {
+          if (localsearchRate > 0.0)
+            {
+                double r = rand() * 1.0 / RAND_MAX;
+                if (r < localsearchRate)
+                {
+                    fitness[i] = localSearch(Theseis[i]);
+                }
+            }
     }
 
     ++t;
