@@ -51,11 +51,6 @@ void EGO::init()
     upper = myProblem->getRightMargin();
     lower = myProblem->getLeftMargin();
     bestX.resize(D);
-
-    fitness_old.resize(SearchAgents, vector<double>(maxGenerations, numeric_limits<double>::max()));
-    position_old.resize(SearchAgents, vector<vector<double>>(maxGenerations, vector<double>(D, 0)));
-
-    troxies.resize(SearchAgents, vector<double>(maxGenerations, 0));
     kambili.resize(maxGenerations, numeric_limits<double>::max());
 }
 
@@ -158,7 +153,6 @@ void EGO::step()
     double CurrentFitness;
 
 
-
     a = 2 - 2 * (t / (double)maxGenerations);
     starvation_rate = 100 * (t / (double)maxGenerations);
 
@@ -180,12 +174,18 @@ void EGO::step()
             double D_X_rand = fabs(C2 * Theseis[i][j] - Theseis[randLeader][j]);
             Theseis[i][j] = Theseis[randLeader][j] + C1 * D_X_rand;
         }
-
-        if (!Feasibility(Theseis[i]))
+        if(!Feasibility(Theseis[i]))
         {
             Theseis[i]=X;
             continue;
         }
+   newFitness = evaluate(Theseis[i], grouperBestFitness);
+   if (newFitness< grouperBestFitness)
+        {
+       grouperBestFitness = newFitness;
+        grouperBestThesi = Theseis[i];
+   }
+
 
 
         if (r4 <= starvation_rate)
@@ -211,7 +211,7 @@ void EGO::step()
             if (mod1 == 1)
                 p = (double)rand() / RAND_MAX;
             else if (mod1 == 2)
-                p = (-1.0/2.0) + 2.0 * ((double)rand() / RAND_MAX);  //mod
+                p =  2.0*rand()*1.0/RAND_MAX-1.0;// (-1.0/2.0) + 2.0 * ((double)rand() / RAND_MAX);  //mod
 
 
             distance2grouper = fabs(C2 * grouperBestThesi[j] - Theseis[i][j]);
@@ -238,22 +238,6 @@ void EGO::step()
                 Theseis[i][j] = (f2 * X1 + f1 * X2) / 2;
             }
         }
-        if (!Feasibility(Theseis[i]))
-        {
-            Theseis[i] = X;
-            continue;
-        }
-        else
-        {
-            CurrentFitness=evaluate(Theseis[i], grouperBestFitness);
-            fitness[i] = CurrentFitness;
-            if (CurrentFitness < grouperBestFitness)
-            {
-                grouperBestFitness = CurrentFitness;
-                grouperBestThesi = Theseis[i];
-            }
-        }
-
     }
 
 
@@ -276,21 +260,13 @@ void EGO::step()
                     continue;
             }
         }
-        if (j < fitness_old.size() && t < fitness_old[j].size())
-        {
-            fitness_old[j][t] = fitness[j];
-            position_old[j][t] = Theseis[j];
-        }
-
-        troxies[j][t] = Theseis[j][0];
 
 
     }
 
-    if (t < kambili.size())
-    {
+   ++t;
         kambili[t] = grouperBestFitness;
-    }
+
     for(int i=0;i<Theseis.size();i++)
     {
           if (localsearchRate > 0.0)
@@ -303,7 +279,7 @@ void EGO::step()
             }
     }
 
-    ++t;
+
 }
 
 EGO::~EGO()

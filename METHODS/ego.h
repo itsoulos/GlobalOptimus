@@ -14,9 +14,6 @@ private:
     double grouperBestFitness;
     vector<double> eelThesi;
     vector<double> kambili;
-    vector<vector<double>> troxies;
-    vector<vector<double>> fitness_old;
-    vector<vector<vector<double>>>position_old;
     long D;
     double newFitness;
     double y=1e+10;
