@@ -3,10 +3,16 @@
 MlpProblem::MlpProblem()
     :Problem(1)
 {
-      addParam(Parameter("mlp_nodes","1","Number of weights"));
-      addParam(Parameter("mlp_leftmargin","-10.0","Initial left margin"));
-      addParam(Parameter("mlp_rightmargin","10.0","Initial right margin"));
-      addParam(Parameter("mlp_initmethod","smallvalues","Possible values: smallvalues,xavier"));
+      addParam(Parameter("mlp_nodes",1,1,100,"Number of weights"));
+      addParam(Parameter("mlp_leftmargin",-10.0,-10000.0,10000.0,"Initial left margin"));
+      addParam(Parameter("mlp_rightmargin",10.0,-10000.0,10000.0,"Initial right margin"));
+      QStringList methods;
+      methods<<"smallvalues"<<"xavier";
+      addParam(Parameter("mlp_initmethod",methods[0],methods,"Possible values: smallvalues,xavier"));
+      QStringList boolValues;
+      boolValues<<"false"<<"true";
+      addParam(Parameter("mlp_usebound",boolValues[0],boolValues,"Use bound function for weights (true|false)"));
+      addParam(Parameter("mlp_boundlimit",10.0,1.0,100.0,"Bound limit for weights"));
 }
 
 Data    MlpProblem::getSample()
@@ -86,6 +92,8 @@ void    MlpProblem::init(QJsonObject &pt)
     {
         setParam("mlp_initmethod",pt["mlp_initmethod"].toString());
     }
+    usebound_flag = getParam("mlp_usebound").getValue()=="false"?false:true;
+    viollimit  = getParam("mlp_boundlimit").getValue().toDouble();
     loadTrainSet();
     loadTestSet();
     initWeights();
@@ -101,6 +109,14 @@ void    MlpProblem::setWeights(Data &w)
 double MlpProblem::funmin(Data &x)
 {
     weight  =x ;
+    if(usebound_flag)
+    {
+
+        resetViolationPercent(viollimit);
+        double dv = getTrainError();
+        double tt = getViolationPercent();
+        return dv*(1.0 + tt * tt);
+    }
     return getTrainError();
 
 }
@@ -112,6 +128,20 @@ Data    MlpProblem::gradient(Data &x)
     Data g;
     weight = x;
     g.resize(weight.size());
+    if(usebound_flag)
+    {
+        for(int i=0;i<getdimension();i++)
+            {
+                double eps=pow(1e-18,1.0/3.0)*qMax(1.0,fabs(x[i]));
+                x[i]+=eps;
+                double v1=funmin(x);
+                x[i]-=2.0 *eps;
+                double v2=funmin(x);
+                g[i]=(v1-v2)/(2.0 * eps);
+                x[i]+=eps;
+            }
+        return g;
+    }
     for(int i=0;i<g.size();i++)
         g[i]=0.0;
     for(int i=0;i<trainDataset->count();i++)

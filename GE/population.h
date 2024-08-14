@@ -18,6 +18,8 @@ class Population
 		int	genome_count;
 		int	genome_size;
 		int	generation;
+        double lrate=0.0;
+        int  crossover_items = 100;
 		Program	*program;
         int  localMethod;
 		void	select();
@@ -50,6 +52,10 @@ class Population
         void	localSearch(int gpos);
         void    setLocalSearchGenerations(int g);
         void    setLocalSearchItems(int i);
+        void    setLocalSearchRate(double r);
+        double  getLocalSearchRate() const;
+        void    setCrossoverItems(int n);
+        int     getCrossoverItems() const;
 		~Population();
 		
 };

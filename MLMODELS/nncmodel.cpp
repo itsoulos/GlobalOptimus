@@ -7,14 +7,18 @@ NNCModel::NNCModel()
     pop =   NULL;
     parser = NULL;
     trialProblem = NULL;
-    addParam(Parameter("nnc_popcount","200","Population count"));
-    addParam(Parameter("nnc_popsize","100","NNC chromosome size"));
-    addParam(Parameter("nnc_popgens","200","Maximum generations for NNC"));
-    addParam(Parameter("nnc_popsrate","0.10","NNC selection rate"));
-    addParam(Parameter("nnc_popmrate","0.05","NNC mutation rate"));
-    addParam(Parameter("nnc_lsearchiters","10","Number of iters before local search"));
-    addParam(Parameter("nnc_lsearchitems","1","Number of items in local search"));
-    addParam(Parameter("nnc_lsearchmethod","bfgs","Available methods: bfgs,lbfgs,adam,genetic"));
+    addParam(Parameter("nnc_popcount",200,50,10000,"Population count"));
+    addParam(Parameter("nnc_popsize",100,10,1000,"NNC chromosome size"));
+    addParam(Parameter("nnc_popgens",200,10,10000,"Maximum generations for NNC"));
+    addParam(Parameter("nnc_popsrate",0.10,0.0,1.0,"NNC selection rate"));
+    addParam(Parameter("nnc_popmrate",0.05,0.0,1.0,"NNC mutation rate"));
+    //addParam(Parameter("nnc_lsearchiters","10","Number of iters before local search"));
+    //addParam(Parameter("nnc_lsearchitems","1","Number of items in local search"));
+    addParam(Parameter("nnc_lsearchrate",0.0,0.0,1.0,"Local search rate for nnc"));
+    addParam(Parameter("nnc_crossitems",100,10,10000,"Crossover items"));
+    QStringList methods;
+    methods<<"crossover"<<"mutate"<<"bfgs"<<"none";
+    addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
 }
 
 double  NNCModel::getOutput(Data &x)
@@ -34,15 +38,14 @@ void    NNCModel::trainModel()
         program = new NncProgram(trainDataset->dimension(),this);
         program->makeGrammar();
 
-
         pop = new Population(getParam("nnc_popcount").getValue().toInt(),
                          getParam("nnc_popsize").getValue().toInt(),
                          program);
 
         pop->setSelectionRate(getParam("nnc_popsrate").getValue().toDouble());
         pop->setMutationRate(getParam("nnc_popmrate").getValue().toDouble());
-
-
+        pop->setLocalSearchRate(getParam("nnc_lsearchrate").getValue().toDouble());
+        pop->setCrossoverItems( getParam("nnc_crossitems").getValue().toInt());
 
     int gens = getParam("nnc_popgens").getValue().toInt();
     if(trialProblem==NULL)  trialProblem = new MlpProblem();

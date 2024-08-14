@@ -40,6 +40,25 @@ Population::Population(int gcount,int gsize,Program *p)
 	fitness_array=new double[genome_count];
 }
 
+void    Population::setCrossoverItems(int n)
+{
+    if(n>0 && n<genome_count)
+        crossover_items = n;
+}
+int     Population::getCrossoverItems() const
+{
+    return crossover_items;
+}
+
+void    Population::setLocalSearchRate(double r)
+{
+    if(r>=0.0 && r<=1.0)
+        lrate = r;
+}
+double  Population::getLocalSearchRate() const
+{
+    return lrate;
+}
 /* Reinitialize the population to random */
 void	Population::reset()
 {
@@ -200,6 +219,12 @@ void	Population::calcFitnessArray()
 		fitness_array[i]=fitness(g);
 		//else 
 		//localSearch(i);
+        if(lrate>0.0)
+        {
+            double  r = rand() *1.0 /RAND_MAX;
+            if(r<=lrate)
+                localSearch(i);
+        }
 		if(fabs(fitness_array[i])<dmin)
 		{
 			dmin=fabs(fitness_array[i]);
@@ -264,14 +289,14 @@ void	Population::nextGeneration()
 {
 	calcFitnessArray();
 	
-    const int mod=localsearch_generations;
+    /*const int mod=localsearch_generations;
     const int count=localsearch_items;
 	if((generation+1) % mod==0) 
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
         localSearch(0);
-	}
+    }*/
 	
 	select();
 	crossover();
@@ -408,7 +433,7 @@ void	Population::localSearch(int pos)
 
     if(localMethod == GELOCAL_CROSSOVER)
     {
-	for(int iters=1;iters<=100;iters++)
+    for(int iters=1;iters<=crossover_items;iters++)
 	{
 		int gpos=rand() % genome_count;
 		int cutpoint=rand() % genome_size;

@@ -5,17 +5,18 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=rule
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
 DATAFILE=$1
+GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
 
 if [ $MODEL = "mlp" ]
 then
-	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=true --mlpboundlimit=10.0"
 elif [ $MODEL = "frbf" ]
 then
 	MODELPARAMS="--rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
@@ -30,7 +31,7 @@ then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=200 --rule_popsize=200 --rule_popgens=500 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_lsearchiters=20 --rule_lsearchitems=20 --nnc_lsearchmethod=crossover"
 elif [ $MODEL = "nnc" ]
 then
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_lsearchmethod=siman"
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.000 --nnc_lsearchmethod=mutate --nnc_crossitems=10"
 fi
 
 if [ $METHOD = "Bfgs" ]
@@ -82,7 +83,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_termination=$TERMINATION --gen_count=500 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200 --gen_lsearchmethod=none"
+	METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --opt_termination=$TERMINATION --gen_count=500 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200 --gen_lsearchmethod=none"
 elif [ $METHOD = "Multistart" ]
 then
 
@@ -158,4 +159,4 @@ then
 	exit
 fi
 
- ./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $METHODPARAMS $MODELPARAMS --opt_iters=10
+ ./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10

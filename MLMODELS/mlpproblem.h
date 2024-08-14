@@ -10,6 +10,8 @@ class MlpProblem : public Problem, public Model
 private:
 	int violcount,sigcount;
 	double viollimit;
+    bool usebound_flag=false;
+
     /** weight=> einai oi parametroi tou neuronikou, to dianysma w **/
     Data weight;
 public:
@@ -63,7 +65,7 @@ public:
     virtual QJsonObject done(Data &x);
     void    initWeights();
     virtual Data getSample();
-    void resetViolationPercent(double limit);
+    void    resetViolationPercent(double limit);
     double  getViolationPercent();
     virtual ~MlpProblem();
 };

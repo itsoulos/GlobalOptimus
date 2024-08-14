@@ -386,7 +386,10 @@ int main(int argc, char *argv[])
             average_test_error+=mainModel->getTestError();
             average_class_error+=mainModel->getClassTestError();
         }
-
+        printf("TRAINING... TRAIN[%2d]=%10.5lf TEST[%2d]=%10.5lf CLASS[%2d]=%5.2lf%%\n",
+             t,average_train_error/t,
+             t,average_test_error/t,
+               t, average_class_error/t);
         unloadProblem();
 
     }
