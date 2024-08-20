@@ -929,11 +929,9 @@ The Grammatical Evolution
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-The chromosomes of Grammatical Evolution stand for production rules of the
- given BNF grammar.
- BNF grammars are usually defined as a tuple 
+The Grammatical Evolution considers chromosomes as set of production rules
+ in the provided BNF grammar.
+ BNF grammars are defined as a tuple 
 \begin_inset Formula $G=\left(N,T,S,P\right)$
 \end_inset
 
@@ -941,45 +939,33 @@ The chromosomes of Grammatical Evolution stand for production rules of the
 \end_layout
 
 \begin_layout Itemize
-
-\series bold
 \begin_inset Formula $N$
 \end_inset
 
- is the set of non-terminal symbols.
+ defines the set of non-terminal symbols.
 \end_layout
 
 \begin_layout Itemize
-
-\series bold
 \begin_inset Formula $T$
 \end_inset
 
- is the set of terminal symbols.
+ represents the set of terminal symbols.
  
 \end_layout
 
 \begin_layout Itemize
-
-\series bold
 \begin_inset Formula $S$
 \end_inset
 
- represents that start symbol of the grammar with 
-\begin_inset Formula $S\in N$
-\end_inset
-
-.
+ corresponds to the that start symbol of the grammar.
 \end_layout
 
 \begin_layout Itemize
-
-\series bold
 \begin_inset Formula $P$
 \end_inset
 
- is the production rules of the grammar.
- Usually these rules are in the form 
+ is the set of production rules.
+ These rules are in the form 
 \begin_inset Formula $A\rightarrow a$
 \end_inset
 
@@ -988,10 +974,34 @@ The chromosomes of Grammatical Evolution stand for production rules of the
 \end_inset
 
 .
+ For Grammatical Evolution a sequence number is assigned to every production
+ rule.
 \end_layout
 
 \begin_layout Standard
-xxxx
+The grammar used for the rule machine learning method is outlined in Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ruleGrammar"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and the grammar used for the neural network construction technique is displayed
+ in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:grammarNNC"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1137,7 +1147,7 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-           | xN (N)
+           | xD (D)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1180,19 +1190,23 @@ name "fig:ruleGrammar"
 
 
 \begin_inset Float figure
+placement H
 wide false
 sideways false
-status open
-
-\begin_layout Plain Layout
-
-\end_layout
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
 The grammar for the neural network construction method.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:grammarNNC"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1200,7 +1214,515 @@ The grammar for the neural network construction method.
 
 \end_layout
 
+\begin_layout LyX-Code
+S:=<sigexpr>                          (0)
+\end_layout
+
+\begin_layout LyX-Code
+<sigexpr>::=<Node>                    (0)
+\end_layout
+
+\begin_layout LyX-Code
+           | <Node> + <sigexpr>       (1)
+\end_layout
+
+\begin_layout LyX-Code
+<Node>::=<number>*sig(<sum>+<number>) (0)
+\end_layout
+
+\begin_layout LyX-Code
+<sum>::= <number>*<xxlist>            (0)
+\end_layout
+
+\begin_layout LyX-Code
+           |    <sum>+<sum>           (1)
+\end_layout
+
+\begin_layout LyX-Code
+<xxlist>::= x1        (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |    x2  (1)
+\end_layout
+
+\begin_layout LyX-Code
+             ..............
+\end_layout
+
+\begin_layout LyX-Code
+             |    xD  (D-1)
+\end_layout
+
+\begin_layout LyX-Code
+<number>::= (<digitlist>.<digitlist>)        (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |    (-<digitlist>.<digitlist>) (1)
+\end_layout
+
+\begin_layout LyX-Code
+<digitlist>::= <digit>            (0)
+\end_layout
+
+\begin_layout LyX-Code
+             | <digit><digitlist> (1)
+\end_layout
+
+\begin_layout LyX-Code
+<digit>::= 0      (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |  1 (1)
+\end_layout
+
+\begin_layout LyX-Code
+             ...........
+\end_layout
+
+\begin_layout LyX-Code
+             |  9 (9)
+\end_layout
+
+\end_inset
+
+Non terminal symbols are enclosed in <> in the used grammars.
+
+\series bold
+ 
+\series default
+The numbers at the end of the production rules represents the sequence number
+ of each rule.
+ The parameter 
+\begin_inset Formula $d$
+\end_inset
+
+ represnets the dimension of the used dataset ( number of features).
+ Grammatical Evolution produces valid expressions by starting from the start
+ symbol 
+\begin_inset Formula $S$
+\end_inset
+
+ and by following the production rules.
+ The method selects the following production rule according to the scheme:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Get
+\series default
+ the next element 
+\begin_inset Formula $V$
+\end_inset
+
+ from the current chromosome.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Select
+\series default
+ the next rule as:
+\series bold
+ 
+\series default
+
+\begin_inset Formula 
+\begin{equation}
+\mbox{Rule}=V\ \mbox{mod}\ \mbox{NR}
+\end{equation}
+
+\end_inset
+
+where the value NR represents the total number of production rules for the
+ under processing non – terminal symbol.
+\end_layout
+
+\begin_layout Subsection
+The genetic algorithm 
+\end_layout
+
+\begin_layout Standard
+The two machine learning techniques, in which the new genetic operator was
+ applied, follow a series of similar execution steps, which are presented
+ in detail below: 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=0$
+\end_inset
+
+ the generation counter.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ the maximum number of allowed generations.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ the total number of chromosomes in the genetic population.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $p_{s}$
+\end_inset
+
+ the selection rate, where 
+\begin_inset Formula $p_{s}\le$
+\end_inset
+
+1.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $p_{m}$
+\end_inset
+
+ the mutation rate, where 
+\begin_inset Formula $p_{m}\le$
+\end_inset
+
+1
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $p_{cr}$
+\end_inset
+
+ the rate for the application of the new crossover operator, where 
+\begin_inset Formula $p_{cr}\le$
+\end_inset
+
+1
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{cr}$
+\end_inset
+
+ the number of chromosomes the will be selected for each chromosome where
+ the new crossover operator will be applied.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Fitness Calculation step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{c}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+ the fitness of chromosome 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ For the case of rule creation model the grammar of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ruleGrammar"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ is applied while for the case of neural network construction the grammar
+ of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:grammarNNC"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ is utilized.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Genetic operations step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the selection procedure: In the first phase, the chromosomes are sorted
+ according to their fitness.
+ The 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
+\end_inset
+
+ best of these are transmitted unchanged to the next generation, while the
+ rest will be replaced by chromosomes produced in crossover and mutation.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the crossover procedure: During this procedure 
+\begin_inset Formula $p_{s}\times N_{c}$
+\end_inset
+
+ offsprings are produced from the current population.
+ For each pair 
+\begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
+\end_inset
+
+ two distinct chromosomes 
+\begin_inset Formula $(z,w)$
+\end_inset
+
+ are selected from the population.
+ These chromosomes are selected using tournament selection.
+ The new offsprings are formulated using the the one - point crossover procedure
+, graphically outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:onePoint"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Perform
+\series default
+ the mutation procedure.
+ A random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ is drawn for each element of every chromosome.
+ The corresponding element is altered randomly if 
+\begin_inset Formula $r\le p_{m}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the new crossover operator: For every chromosome 
+\begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
+\end_inset
+
+ a random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ is drawn.
+ If 
+\begin_inset Formula $r\le p_{cr}$
+\end_inset
+
+ then apply the procedure described in subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:The-new-crossover"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ on 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination check step
+\series default
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\le N_{g}$
+\end_inset
+
+ goto Fitness Calculation Step, 
+\series bold
+else
+\series default
+ terminate.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
 \begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ../GE_LOCAL/onepoint_crossover.eps
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+An example of the method of one - point crossover.
+ This method is used as the crossover procedure in the Grammatical Evolution
+ procedure.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:onePoint"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -1210,7 +1732,164 @@ The grammar for the neural network construction method.
 \end_layout
 
 \begin_layout Subsection
-The used algorithm
+The new crossover operator
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-new-crossover"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The new crossover operator performs the one - point crossover method on
+ a selected chromosome using a set of randomly selected chromosomes from
+ the current populaiton.
+ The steps of this procedure are listed below:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $g$
+\end_inset
+
+ the chromosome where the operator will be applied and as 
+\begin_inset Formula $f_{g}$
+\end_inset
+
+ the corresponding fitness value.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the set 
+\begin_inset Formula $C=\left\{ x_{1},x_{2},\ldots,x_{N_{cr}}\right\} $
+\end_inset
+
+ of 
+\begin_inset Formula $N_{cr}$
+\end_inset
+
+ randomly selected chromosomes.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{cr}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Perform
+\series default
+ one - point crossover between 
+\begin_inset Formula $g$
+\end_inset
+
+ and 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+.
+ This procedure produces the offsprings 
+\begin_inset Formula $g_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $g_{2}$
+\end_inset
+
+ with associated fitness values 
+\begin_inset Formula $f_{g_{1}}$
+\end_inset
+
+ and 
+\begin_inset Formula $f_{g_{2}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $f_{g_{1}}\le f_{g}$
+\end_inset
+
+ 
+\series bold
+then
+\series default
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $g=g_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+else if
+\series default
+ 
+\begin_inset Formula $f_{g_{2}}\le f_{g}$
+\end_inset
+
+ 
+\series bold
+then
+\series default
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $g=g_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Endif
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
 \end_layout
 
 \begin_layout Section
@@ -6304,51 +6983,37 @@ AVERAGE
 
 \end_inset
 
-
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename statistical_class.png
-	scale 40
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Statistical comparison between the improved machine learning methods and
- the original methods for the classification datasets.
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:statClass"
+The experimental results show a significant reduction in the mean error
+ using the new genetic operator in both machine learning models.
+ In a wide range of data sets, the proposed technique drastically reduces
+ the error of data classification or fitting, as it is also represented
+ in the graphs 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ruleDatasets"
+plural "false"
+caps "false"
+noprefix "false"
 
 \end_inset
 
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nncDatasets"
+plural "false"
+caps "false"
+noprefix "false"
 
 \end_inset
 
+.
+ These graphs show the number of datasets in which the application of the
+ new genetic operator resulted in a drastic reduction in the corresponding
+ error.
+\end_layout
 
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
@@ -6397,7 +7062,7 @@ name "fig:ruleDatasets"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -6415,7 +7080,8 @@ status collapsed
 
 \begin_layout Plain Layout
 Number of datasets that improved in the NNC machine learning model using
- the proposed method.
+ the proposed method.The vertical axis represents the number of data sets
+ and the horizontal axis the percentage of reduction in error.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:nncDatasets"
@@ -6431,6 +7097,49 @@ name "fig:nncDatasets"
 \end_layout
 
 \begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename statistical_class.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison between the improved machine learning methods and
+ the original methods for the classification datasets.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statClass"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
