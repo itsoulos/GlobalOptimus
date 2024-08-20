@@ -1688,6 +1688,18 @@ else
 \end_layout
 
 \begin_layout Standard
+The previous algorithm is also graphically illustrated in the flowchart
+ of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:mainGa"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \begin_inset Float figure
 placement H
 wide false
@@ -1697,7 +1709,7 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename ../GE_LOCAL/onepoint_crossover.eps
+	filename onePointCrossover.png
 	scale 50
 
 \end_inset
@@ -1723,6 +1735,49 @@ name "fig:onePoint"
 
 \end_inset
 
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ga.png
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The main steps of the used genetic algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:mainGa"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -7011,6 +7066,7 @@ noprefix "false"
  These graphs show the number of datasets in which the application of the
  new genetic operator resulted in a drastic reduction in the corresponding
  error.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -7018,7 +7074,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -7064,7 +7120,7 @@ name "fig:ruleDatasets"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -7105,7 +7161,20 @@ name "fig:nncDatasets"
 
 \end_inset
 
+Also, a statistical comparison was performed between the two machine learning
+ methods and the enhanced ones that use the new crossover operator.
+ This comparison was performed for the classification datasets and it is
+ graphically outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statClass"
+plural "false"
+caps "false"
+noprefix "false"
 
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -7148,7 +7217,33 @@ name "fig:statClass"
 
 \end_inset
 
+Furthermore, an additional test was executed in order to measure the effectivene
+ss of the new crossover rate parameter denoted as 
+\begin_inset Formula $p_{cr}$
+\end_inset
 
+.
+
+\series bold
+ 
+\series default
+In this experiment the rule construction machine learning model was applied
+ on the classification datasets using different values for the critical
+ parameter 
+\begin_inset Formula $p_{cr}$
+\end_inset
+
+ and the results are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:pcrExper"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \begin_inset Float table
 placement H
 wide false
@@ -8868,7 +8963,48 @@ AVERAGE
 
 \end_inset
 
+Looking at the table of results, one can see a significant decrease in the
+ average classification error when the application rate of the genetic operator
+ increases from 2.5% to 5%.
+ However, the rate of reduction of the average error decreases significantly
+ when the application rate increases to 7.5%.
+ This finding reinforces the idea of implementing the new genetic operator
+ at a rate of 5%.
+ 
+\end_layout
 
+\begin_layout Standard
+Another experiment was conducted in order to measure the importance of the
+ parameter 
+\begin_inset Formula $N_{cr}$
+\end_inset
+
+, which controls the number of chromosomes participating in the new crossover
+ operator.
+ In this experiment the neural network construction method was applied on
+ the classification datasets using different values for the parameter 
+\begin_inset Formula $N_{cr}$
+\end_inset
+
+ while the parameter 
+\begin_inset Formula $p_{cr}$
+\end_inset
+
+ was fixed to 2.5%.
+ The results from this experiment are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experNCR"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 wide false
@@ -10592,7 +10728,33 @@ AVERAGE
 
 \end_inset
 
+The lowest average classification error is observed for 
+\begin_inset Formula $N_{cr}=100$
+\end_inset
 
+, however, no major changes are observed in the classification errors as
+ the parameter increases.
+ Furthermore, is expected the average execution time to increase as the
+ value 
+\begin_inset Formula $N_{cr}$
+\end_inset
+
+ increases and this is demonstrated in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:timeNNC"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, where the average execution time for the neural network construction method
+ is plotted with respect to the 
+\begin_inset Formula $N_{cr}$
+\end_inset
+
+ .
 \begin_inset Float figure
 placement H
 wide false
@@ -10640,7 +10802,33 @@ name "fig:timeNNC"
 
 \end_inset
 
+The average execution time increases dramatically as the critical parameter
+ 
+\begin_inset Formula $N_{cr}$
+\end_inset
 
+ increases, something that is expected since the crossings increase significantl
+y with the increase of this parameter, as well as the evaluation of the
+ fitness function.
+ This dramatic increase in required execution time can be significantly
+ reduced by using parallel techniquesm, such as using the MPI interface
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "mpi"
+literal "false"
+
+\end_inset
+
+ or the OpenMP library 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "openmp"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -10652,6 +10840,12 @@ name "sec:Conclusions"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(.....)
 \end_layout
 
 \begin_layout Standard
@@ -11024,16 +11218,6 @@ J.
  of the Zurich ACM-GAMM Conference.
  Proceedings of the International Conference on Information Processing,
  UNESCO, 1959, pp.125-132.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-1"
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Bibliography
@@ -12572,6 +12756,33 @@ I.G.
 \series default
 , pp.
  598-607, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "mpi"
+literal "false"
+
+\end_inset
+
+Gropp, W.; Lusk, E.; Doss, N.; Skjellum, A.
+ A high-performance, portable implementation of the MPI message passing
+ interface standard.
+ Parallel Comput.
+ 1996, 22, 789–828.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "openmp"
+literal "false"
+
+\end_inset
+
+Chandra, R.
+ Parallel Programming in OpenMP; Morgan Kaufmann: Cambridge, MA, USA, 2001.
 \end_layout
 
 \begin_layout Standard
