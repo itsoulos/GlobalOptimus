@@ -9,6 +9,7 @@ void        ParameterList::addParam(Parameter p)
 {
     params[p.getName()]=p.getValue();
     paramsHelp[p.getName()]=p.getHelp();
+    paramsType[p.getName()]=p.getType();
 }
 
 QJsonObject ParameterList::getParams()

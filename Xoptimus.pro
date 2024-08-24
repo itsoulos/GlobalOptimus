@@ -155,6 +155,7 @@ SOURCES += \
     SAMPLER/rbfsampler.cpp \
     SAMPLER/triangularsampler.cpp \
     SAMPLER/uniformsampler.cpp \
+    XOPTIMUS/paramwidget.cpp \
     XOPTIMUS/selectmethoddialog.cpp \
     XOPTIMUS/selectproblemdialog.cpp \
     XOPTIMUS/xoptimusmain.cpp \
@@ -285,6 +286,7 @@ HEADERS += \
     SAMPLER/triangularsampler.h \
     SAMPLER/uniformsampler.h \
     XOPTIMUS/mainwindow.h \
+    XOPTIMUS/paramwidget.h \
     XOPTIMUS/selectmethoddialog.h \
     XOPTIMUS/selectproblemdialog.h
 

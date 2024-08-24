@@ -149,19 +149,18 @@ public:
      */
     void  setLowDoubleValue(double v);
     /**
-     * @brief setStringValues
-     * @param list
+     * @brief setStringValues changes the string array of values
+     * @param list the new list.
      */
     void setStringValues(QStringList &list);
     /**
      * @brief getStringValues
-     * @return
+     * @return the string array of values
      */
     QStringList getStringValues() const;
     /**
-     * @brief Parameter
+     * @brief Parameter, the default constructor of the class.
      */
-
     Parameter();
     /**
      */

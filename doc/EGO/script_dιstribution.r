@@ -4,7 +4,7 @@ library(ggpubr)
 library(scales)
 library(ggplot2)
 
-dat <- read_excel("C:/Users/admin/Desktop/EGO/plot_ego.xlsx")
+dat <- read_excel("C:/Users/admin/Desktop/EGO/plot_ego2.xlsx")
 
 
 
@@ -14,7 +14,7 @@ df <- dat |>
 
 
 
-cmp <- list(c("UNIFORM", "KMEANS"))
+cmp <- list(c("UNIFORM", "KMEANS"),c("TRIANGULAR", "KMEANS"),c("MAXWELL", "KMEANS"))
 scale_y_continuous(labels = label_number(prefix = "£", suffix = "k", scale = 1e-3, big.mark = ","))
 
 options(scipen = 99999999)
