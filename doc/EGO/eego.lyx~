@@ -582,7 +582,7 @@ This paper introduces some modifications to the EGO algorithm in order to
 The addition of a sampling technique based on the K-means method 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "kmeans-1,kmeans2,kmeans-ereunhtikh-koinothta"
+key "kmeans2,kmeans-ereunhtikh-koinothta"
 literal "false"
 
 \end_inset
@@ -1057,7 +1057,7 @@ If
 \begin_inset Formula $\left(p<0.5\right)$
 \end_inset
 
-
+ set
 \end_layout
 
 \begin_layout Enumerate
@@ -1131,6 +1131,32 @@ literal "false"
 
 \end_inset
 
+.
+ The termination criterion applied is called best-fitness, and in this technique
+, during iteration 
+\begin_inset Formula $t$
+\end_inset
+
+, the difference between the current best value 
+\begin_inset Formula $f_{min}^{(t)}$
+\end_inset
+
+ and the best value from the previous iteration 
+\begin_inset Formula $f_{min}^{(t-1)}$
+\end_inset
+
+ is calculated, i.e., the absolute difference
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula 
+\begin{equation}
+\left|f_{\mbox{min}}^{(t)}-f_{\mbox{min}}^{(k-1)}\right|\label{eq:best}
+\end{equation}
+
+\end_inset
+
 
 \end_layout
 
@@ -1182,7 +1208,7 @@ literal "false"
  community, both in data analysis and in machine learning 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "search algorithm,several metaheuristic algorithms "
+key "kmeans1-1"
 literal "false"
 
 \end_inset
@@ -1675,7 +1701,7 @@ with
 \series bold
 Gkls
 \series default
- function
+ function 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gkls"
@@ -1684,7 +1710,7 @@ literal "false"
 \end_inset
 
 .
- 
+ The function 
 \begin_inset Formula $f(x)=\mbox{Gkls}(x,n,w)$
 \end_inset
 
@@ -1860,7 +1886,7 @@ p=\left(\begin{array}{cccccc}
 Potential
 \series default
  function, this function stands for the energy of a molecular conformation
- of N atoms, that interacts using via the Lennard-Jones potential
+ of N atoms, that interacts using via the Lennard-Jones potential 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "jones"
@@ -2145,7 +2171,51 @@ Experimental results
 \end_layout
 
 \begin_layout Standard
+A series of global optimization methods were applied on the test functions
+ presented previously.
+ All experiments were conducted 30 times using different seed for the random
+ genearator and averages were recorded.
+ The used software was coded in ANSI C++ using the freely available OPTIMUS
+ optimization environment, that is available from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/itsoulos/OPTIMUS
+\end_layout
+
+\end_inset
+
+ (accessed on 26 August 2024).
+ The experiments were executed on a Debian Linux system that runs on an
+ AMD Ryzen 5950X processor, with 128GB of RAM.
+ An all experiments the local search method of BFGS 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+ was used at the end of each global optimization method to ensure that an
+ actual minimum will be discovered by the global optimization method.
+ The values for all experimental parameters are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:settings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
+placement H
 wide false
 sideways false
 status collapsed
@@ -2158,6 +2228,13 @@ Experimental settings.
  The numbers in cells denote the values used in the experiments for all
  parameters.
 \end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:settings"
 
 \end_inset
 
@@ -2177,6 +2254,8 @@ Experimental settings.
 
 \begin_layout Plain Layout
 
+\series bold
+PARAMETER
 \end_layout
 
 \end_inset
@@ -2186,6 +2265,8 @@ Experimental settings.
 
 \begin_layout Plain Layout
 
+\series bold
+MEANING
 \end_layout
 
 \end_inset
@@ -2195,6 +2276,8 @@ Experimental settings.
 
 \begin_layout Plain Layout
 
+\series bold
+VALUE
 \end_layout
 
 \end_inset
@@ -2205,7 +2288,7 @@ Experimental settings.
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $Nc$
+\begin_inset Formula $N_{c}$
 \end_inset
 
 
@@ -2237,7 +2320,7 @@ Number of chromosomes/particles
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $Ng$
+\begin_inset Formula $N_{g}$
 \end_inset
 
 
@@ -2265,11 +2348,11 @@ Maximum number of allowed iterations
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $Nm$
+\begin_inset Formula $N_{m}$
 \end_inset
 
 
@@ -2277,7 +2360,7 @@ Maximum number of allowed iterations
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2286,22 +2369,11 @@ Number of initial samples for K-means
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-10 × Nc
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $Nk$
+\begin_inset Formula $10\times N_{c}$
 \end_inset
 
 
@@ -2309,7 +2381,21 @@ Number of initial samples for K-means
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" usebox="none">
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2318,7 +2404,7 @@ Number of iterations for stopping rule
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2329,11 +2415,11 @@ Number of iterations for stopping rule
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $ps$
+\begin_inset Formula $p_{s}$
 \end_inset
 
 
@@ -2341,7 +2427,7 @@ Number of iterations for stopping rule
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2350,7 +2436,7 @@ Selection rate for the genetic algorithm
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2361,11 +2447,11 @@ Selection rate for the genetic algorithm
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $pm$
+\begin_inset Formula $p_{m}$
 \end_inset
 
 
@@ -2373,7 +2459,7 @@ Selection rate for the genetic algorithm
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2382,7 +2468,7 @@ Mutation rate for the genetic algorithm
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2401,11 +2487,8 @@ Mutation rate for the genetic algorithm
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-The following applies to table 
+The experimental results for the test functions and a series of optimization
+ methods are shown in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:comparison"
@@ -2415,7 +2498,7 @@ noprefix "false"
 
 \end_inset
 
-:
+, where the following applies to this table:
 \end_layout
 
 \begin_layout Itemize
@@ -2423,8 +2506,15 @@ The column FUNCTION denotes the name of the objective problem.
 \end_layout
 
 \begin_layout Itemize
-The column GENETIC denotes the application of a genetic algorith to the
- objective problem.
+The column GENETIC denotes the application of a genetic algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "genetic1,genetic2"
+literal "false"
+
+\end_inset
+
+ to the objective problem.
  The genetic algorithm has 
 \begin_inset Formula $N_{c}$
 \end_inset
@@ -2434,11 +2524,28 @@ The column GENETIC denotes the application of a genetic algorith to the
 \end_inset
 
 .
+ For the conducted experiments a modified version of the genetic algorithm
+ for global optimization problems that was suggested by Tsoulos 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "doublepop"
+literal "false"
+
+\end_inset
+
+ was used.
 \end_layout
 
 \begin_layout Itemize
-The column PSO stands for the application of Particle Swarm Optimizer to
- every objective problem.
+The column PSO stands for the application of Particle Swarm Optimizer 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pso1,pso2"
+literal "false"
+
+\end_inset
+
+ to every objective problem.
  The number of particles was set to 
 \begin_inset Formula $N_{c}$
 \end_inset
@@ -2448,11 +2555,70 @@ The column PSO stands for the application of Particle Swarm Optimizer to
 \end_inset
 
 .
+ For the conducted experiments, the improved PSO method as proposed by Charilogi
+s and Tsoulos was used 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ipso"
+literal "false"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+The column DE
+\series bold
+ 
+\series default
+refers to the Differential Evolution method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "diffe1,diffe2"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The column GAO stands for the Giant Armadillo Optimization method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gao"
+literal "false"
+
+\end_inset
+
+.
+ In the conducted experiments the improved method published recently was
+ used 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "igao"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
 The column EEGO represents the application of the proposed method using
- the values for the parameters shown in Table
+ the values for the parameters shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:settings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
@@ -2503,18 +2669,7 @@ name "tab:comparison"
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 FUNCTION
 \end_layout
 
@@ -2525,18 +2680,7 @@ FUNCTION
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 GENETIC
 \end_layout
 
@@ -2547,19 +2691,8 @@ GENETIC
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-iPSO
+\series bold
+PSO
 \end_layout
 
 \end_inset
@@ -2569,18 +2702,7 @@ iPSO
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 DE
 \end_layout
 
@@ -2591,18 +2713,7 @@ DE
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 GAO
 \end_layout
 
@@ -2613,18 +2724,7 @@ GAO
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 EEGO
 \end_layout
 
@@ -7327,18 +7427,7 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 SUM
 \end_layout
 
@@ -7349,18 +7438,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 134409
 \end_layout
 
@@ -7371,18 +7449,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 153006
 \end_layout
 
@@ -7393,18 +7460,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 247313
 \end_layout
 
@@ -7415,18 +7471,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 142389
 \end_layout
 
@@ -7437,18 +7482,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 118863
 \end_layout
 
@@ -7464,25 +7498,168 @@ SUM
 
 \end_inset
 
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:TotalFunctionCalls"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ we present the total function calls of every optimization method is presented
+ graphically.
+ The proposed method has excellent results compared to the other optimization
+ techniques according to the experiment we conducted.
+ As we can observe it has the least number of calls than all the other technique
+s.
+ 
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename image2.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Total function calls for the different optimization methods, using proposed
+ initial distribution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:TotalFunctionCalls"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Also, a statistical comparison between the optimization methods is shown
+ graphically in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:functionCalls"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename image1.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of function calls for the different optimization methods, using
+ proposed initial distribution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:functionCalls"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Standard
 One more experiment which was performed with the ultimate goal of measuring
  the importance of K-means sampling in the proposed method.
- 2 different sampling methods were used in this experiment:
+ The results for this experiment are outlined in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sampling"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and the following sampling methods were used:
 \end_layout
 
-\begin_layout Itemize
-The UNIFORM column is about incorporating uniform sampling into the genetic
- algorithm.
- Where N_{c} are randomly selected chromosomes using uniform sampling in
- the genetic algorithm.
+\begin_layout Enumerate
+The column UNIFORM represents the application of uniform sampling in the
+ current method.
 \end_layout
 
-\begin_layout Itemize
-The KMEANS column, which refers to the implementation of k-means sampling
- as proposed in the genetic algorithm.
+\begin_layout Enumerate
+The column TRIANGULAR stands for the usage of the triangular distribution
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "triangular"
+literal "false"
+
+\end_inset
+
+ for sampling.
+\end_layout
+
+\begin_layout Enumerate
+The column MAXWELL stands for the application of the Maxwell distribution
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "maxwell"
+literal "false"
+
+\end_inset
+
+ to produce initial samples for the used method.
+\end_layout
+
+\begin_layout Enumerate
+The column KMEANS represents the usage of the method described in subsection
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:The-proposed-sampling"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ to produce initial samples for the used method.
 \end_layout
 
 \begin_layout Standard
@@ -7526,6 +7703,8 @@ name "tab:sampling"
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\series bold
 FUNCTION
 \end_layout
 
@@ -7535,6 +7714,8 @@ FUNCTION
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\series bold
 UNIFORM
 \end_layout
 
@@ -7545,18 +7726,7 @@ UNIFORM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 TRIANGULAR
 \end_layout
 
@@ -7567,18 +7737,7 @@ TRIANGULAR
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 MAXWELL
 \end_layout
 
@@ -7588,6 +7747,8 @@ MAXWELL
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\series bold
 KMEANS
 \end_layout
 
@@ -10165,6 +10326,8 @@ SUM
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\series bold
 152666
 \end_layout
 
@@ -10175,18 +10338,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 151235
 \end_layout
 
@@ -10197,18 +10349,7 @@ SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\series bold
 142138
 \end_layout
 
@@ -10218,6 +10359,8 @@ SUM
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\series bold
 118863
 \end_layout
 
@@ -10237,86 +10380,6 @@ SUM
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename image1.png
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Comparison of function calls for the different optimization methods, using
- proposed initial distribution
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:functionCalls"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename image2.png
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Total function calls for the different optimization methods, using proposed
- initial distribution
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:TotalFunctionCalls"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \begin_inset Float figure
 placement H
 wide false
@@ -10352,11 +10415,7 @@ name "fig:ScatterPlot"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Initial distributions play a critical role in a wide range of applications,
+ Initial distributions play a critical role in a wide range of applications,
  including optimization, statistical analysis, and machine learning.
  Table 
 \begin_inset CommandInset ref
@@ -10425,44 +10484,6 @@ noprefix "false"
 
 , the choice of an appropriate initial distribution can significantly affect
  the performance of the algorithms that utilize them.
-\end_layout
-
-\begin_layout Standard
-In figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:functionCalls"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
- we present the statistical comparison of the proposed method with other
- optimization methods.
- The proposed method has excellent results compared to the other optimization
- techniques according to the experiment we conducted.
- As we can observe it has the least number of calls than all the other technique
-s.
-\end_layout
-
-\begin_layout Standard
-In figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:TotalFunctionCalls"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
- we present a comparison of the proposed EEGO method with other optimization
- methods.
- According to the experiment we conducted, we can observe that the proposed
- method has the least total calls compared to the rest of the optimization
- techniques.
- In conclusion, it appears that the proposed method has excellent results.
 \end_layout
 
 \begin_layout Standard
@@ -11515,22 +11536,6 @@ Ali Mohammadzadeh, Seyedali Mirjalili.
 \labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "kmeans-1"
-literal "false"
-
-\end_inset
-
-Powell, M.J.D.
- A Tolerant Algorithm for Linearly Constrained Optimization Calculations.
- Math.
- Program.
- 1989, 45, 547–566.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
 key "kmeans2"
 literal "false"
 
@@ -11562,24 +11567,6 @@ Ahmed, M., Seraj, R., & Islam, S.
  (2020).
  The k-means algorithm: A comprehensive survey and performance evaluation.
  Electronics, 9(8), 1295.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "kmeans-paterrn"
-literal "false"
-
-\end_inset
-
-Ali, H.
- H., & Kadhum, L.
- E.
- (2017).
- K-means clustering algorithm applications in data mining and pattern recognitio
-n.
- International Journal of Science and Research (IJSR), 6(8), 1577-1584.
 \end_layout
 
 \begin_layout Bibliography
@@ -11618,6 +11605,43 @@ y.
  281–297.
  MR 0214227.
  Zbl 0214.46201, 1967.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kmeans1-1"
+literal "false"
+
+\end_inset
+
+Y.
+ Li, H.
+ Wu, A clustering method based on K-means algorithm, Physics Procedia 
+\series bold
+25
+\series default
+, pp.
+ 1104-1109, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kmeans-paterrn"
+literal "false"
+
+\end_inset
+
+Ali, H.
+ H., & Kadhum, L.
+ E.
+ (2017).
+ K-means clustering algorithm applications in data mining and pattern recognitio
+n.
+ International Journal of Science and Research (IJSR), 6(8), 1577-1584.
 \end_layout
 
 \begin_layout Bibliography
@@ -11823,6 +11847,217 @@ J.E.
 \labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "powell"
+literal "false"
+
+\end_inset
+
+Powell, M.J.D.
+ A Tolerant Algorithm for Linearly Constrained Optimization Calculations.
+ Math.
+ Program.
+ 1989, 45, 547–566.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "genetic1"
+literal "true"
+
+\end_inset
+
+D.
+ Goldberg, Genetic Algorithms in Search, Optimization and Machine Learning,
+ Addison-Wesley Publishing Company, Reading, Massachussets, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "genetic2"
+literal "true"
+
+\end_inset
+
+Z.
+ Michaelewicz, Genetic Algorithms + Data Structures = Evolution Programs.
+ Springer - Verlag, Berlin, 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "doublepop"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, Modifications of real code genetic algorithm for global optimization,
+ Applied Mathematics and Computation 203, pp.
+ 598-607, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso1"
+literal "true"
+
+\end_inset
+
+Riccardo Poli, James Kennedy kennedy, Tim Blackwell, Particle swarm optimization
+ An Overview, Swarm Intelligence 
+\series bold
+1
+\series default
+, pp 33-57, 2007.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso2"
+literal "true"
+
+\end_inset
+
+Ioan Cristian Trelea, The particle swarm optimization algorithm: convergence
+ analysis and parameter selection, Information Processing Letters 
+\series bold
+85
+\series default
+, pp.
+ 317-325, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ipso"
+literal "false"
+
+\end_inset
+
+V.
+ Charilogis, I.G.
+ Tsoulos, Toward an Ideal Particle Swarm Optimizer for Multidimensional
+ Functions , Information 
+\series bold
+13
+\series default
+, 217, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "diffe1"
+literal "true"
+
+\end_inset
+
+R.
+ Storn, K.
+ Price, Differential Evolution - A Simple and Efficient Heuristic for Global
+ Optimization over Continuous Spaces, Journal of Global Optimization 
+\series bold
+11
+\series default
+, pp.
+ 341-359, 1997.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "diffe2"
+literal "false"
+
+\end_inset
+
+J.
+ Liu, J.
+ Lampinen, A Fuzzy Adaptive Differential Evolution Algorithm.
+ Soft Comput 
+\series bold
+9
+\series default
+, pp.448–462, 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gao"
+literal "false"
+
+\end_inset
+
+Alsayyed, O.; Hamadneh, T.; Al-Tarawneh, H.; Alqudah, M.; Gochhait, S.; Leonova,
+ I.; Malik, O.P.; Dehghani, M.
+ Giant Armadillo Optimization: A New Bio-Inspired Metaheuristic Algorithm
+ for Solving Optimization Problems.
+ Biomimetics 2023, 8, 619.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "igao"
+literal "false"
+
+\end_inset
+
+Kyrou G, Charilogis V, Tsoulos IG.
+ Improving the Giant-Armadillo Optimization Method.
+ Analytics.
+ 2024; 3(2):225-240.
+ https://doi.org/10.3390/analytics3020013 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "triangular"
+literal "false"
+
+\end_inset
+
+W.E.
+ Stein, M.F.
+ Keblis, A new method to simulate the triangular distribution, Mathematical
+ and Computer Modelling Volume 
+\series bold
+49
+\series default
+, pp.
+ 1143-1147, 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "maxwell"
+literal "false"
+
+\end_inset
+
+Sharma, V.
+ K., Bakouch, H.
+ S., & Suthar, K.
+ (2017).
+ An extended Maxwell distribution: Properties and applications.
+ Communications in Statistics-Simulation and Computation, 46(9), 6982-7007.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 label "(2022)"
 key "Browne"
 literal "false"
@@ -11908,25 +12143,6 @@ literal "false"
 
 Chandra, R.
  Parallel Programming in OpenMP; Morgan Kaufmann: Cambridge, MA, USA, 2001.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "kmeans1"
-literal "false"
-
-\end_inset
-
-Y.
- Li, H.
- Wu, A clustering method based on K-means algorithm, Physics Procedia 
-\series bold
-25
-\series default
-, pp.
- 1104-1109, 2012.
 \end_layout
 
 \begin_layout Bibliography
