@@ -317,7 +317,7 @@ The problems of finding a global minimum of a function are increasingly
 
 \begin_layout Keywords
 Global optimization, Meta-heuristics, Stochastic techniques, Evolutionary
- methods, Swarm based methods.s
+ methods, Swarm based methods, termination technique, sampling method
 \end_layout
 
 \begin_layout Section
@@ -352,8 +352,8 @@ S=\left[a_{1},b_{1}\right]\times\left[a_{2},b_{2}\right]\times\ldots\left[a_{n},
 \end_layout
 
 \begin_layout Standard
-During the past years many researchers have published systematic reviews
- on global optimization 
+In recent years many researchers have published important reviews on global
+ optimization
 \begin_inset CommandInset citation
 LatexCommand citep
 key "plhroforikh,computer,computer1"
@@ -362,8 +362,10 @@ literal "false"
 \end_inset
 
 .
- Furthermore, global optimization has appeared in many practical problems
- from real world, such as mathematics 
+ Global optimization is a technique of vital importance in many fields of
+ science and applications, as it allows finding the optimal solution to
+ problems with multiple local solutions.
+ In mathematics
 \begin_inset CommandInset citation
 LatexCommand citep
 key "maths,maths-1,maths2,key-maths3"
@@ -371,32 +373,37 @@ literal "false"
 
 \end_inset
 
-, physics 
+, it is used to solve complex mathematical problems, in physics
 \begin_inset CommandInset citation
-LatexCommand cite
+LatexCommand citep
 key "fusikh,fusikh1,fysikhh"
 literal "false"
 
 \end_inset
 
-, chemistry 
+, it is used to analyze and improve models that describe natural phenomena,
+ in chemistry
 \begin_inset CommandInset citation
-LatexCommand cite
+LatexCommand citep
 key "xhmeia,xhmeia1,xhmeia2"
 literal "false"
 
 \end_inset
 
- and medicine 
+, it analyzes and designs molecules and chemical diagnostic tools, and in
+ medicine
 \begin_inset CommandInset citation
 LatexCommand citep
-key "iatrikh,iatrikh1,medicine"
+key "medicine"
 literal "false"
 
 \end_inset
 
-.
- Optimization methods are divided into two categories, deterministic 
+ it analyzes and designs therapeutic strategies and diagnostic tools .
+\end_layout
+
+\begin_layout Standard
+Optimization methods are divided into two categories, deterministic 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "determistic,determistic1,determistic2"
@@ -579,28 +586,19 @@ This paper introduces some modifications to the EGO algorithm in order to
 \end_layout
 
 \begin_layout Itemize
-The addition of a sampling technique based on the K-means method 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "kmeans2,kmeans-ereunhtikh-koinothta"
-literal "false"
-
-\end_inset
-
-.
- The sampled points will help to find the global minimum of the function
+The addition of a sampling technique based on the K-means method [47, 48].
+ The sampling points will facilitate finding the global minimum of the function
  in the most efficient way.
- Additionally, by using this method, points that are in proximity can be
- rejected.
+ Additionally, by applying this method, nearby points are discarded.
 \end_layout
 
 \begin_layout Itemize
-The use of a termination technique based on stochastic observations.
- At each iteration of the algorithm, the smallest value is recorded.
- Once it remains stable for a predetermined number of iterations, the method
- terminates.
- The present termination method helps with the fastest termination without
- unnecessarily wasting computing time.
+Using a termination technique that is developed with random measurements.
+ Each time the algorithm is repeated, the minimum value is recorded.
+ When this remains constant for a predetermined number of iterations, the
+ process is terminated.
+ Therefore, the method will complete in time without unnecessarily wasting
+ time in iterations, avoiding unnecessary consumption of computing resources.
 \end_layout
 
 \begin_layout Itemize
@@ -668,7 +666,17 @@ The main steps of the algorithm
 The main steps of the used global optimization method are the following:
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
 
 \series bold
 Initialization step
@@ -676,7 +684,6 @@ Initialization step
 .
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -689,6 +696,7 @@ Define
  the number of elements in the search Agents
 \end_layout
 
+\begin_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -919,7 +927,11 @@ and
 
 \end_deeper
 \begin_layout Enumerate
-if 
+
+\series bold
+if
+\series default
+ 
 \begin_inset Formula $\left(r4\le s_{r}\right)$
 \end_inset
 
@@ -969,6 +981,8 @@ else set
 
 \end_deeper
 \begin_layout Enumerate
+
+\series bold
 Endif
 \end_layout
 
@@ -1033,30 +1047,26 @@ Calculate
 \series default
  the stopping that proposed in the work of Charilogis 
 \begin_inset CommandInset citation
-LatexCommand cite
+LatexCommand citep
 key "charilogis"
 literal "false"
 
 \end_inset
 
 .
- The termination criterion applied is called best-fitness, and in this technique
-, during iteration 
-\begin_inset Formula $t$
-\end_inset
-
-, the difference between the current best value 
+ In the Similarity stopping rule, at every iteration t, the absolute difference
+ between the current located global minimum 
 \begin_inset Formula $f_{min}^{(t)}$
 \end_inset
 
- and the best value from the previous iteration 
+ and the previous best value 
 \begin_inset Formula $f_{min}^{(t-1)}$
 \end_inset
 
- is calculated, i.e., the absolute difference
+ is calculated:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \align center
 \begin_inset Formula 
 \begin{equation}
@@ -1068,7 +1078,7 @@ literal "false"
 
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \series bold
 If
@@ -1078,9 +1088,23 @@ If
 else
 \series default
  terminate and return the best solution.
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+EGO Algorithm
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_deeper
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Formula $ $
 \end_inset
@@ -1130,17 +1154,36 @@ literal "false"
 \end_inset
 
 .
- The algorithm mainly aims to estimate the centers of possible groups from
- a set of samples.
+ The algorithm aims to divide a data set into k clusters.
+ The K-means algorithm tries to divide the data into groups in such a way
+ that the internal points of each group are as close as possible to each
+ other.
+ At the same time, he tries to place the central points of each group in
+ positions which are as representative as possible for the points of their
+ group.
  Next, the basic steps of the algorithm are presented:
 \end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
 
 \begin_layout Enumerate
 
 \series bold
-Define
+Initialization
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
 \series default
- as 
+ 
 \begin_inset Formula $k$
 \end_inset
 
@@ -1148,116 +1191,40 @@ Define
 \end_layout
 
 \begin_layout Enumerate
-Randomly select 
-\begin_inset Formula $N_{m}$
-\end_inset
 
- initial points 
+\series bold
+Set
+\series default
+ randomly initial samples to 
 \begin_inset Formula $x_{i},\ i=1,\ldots,N_{m}$
 \end_inset
 
- from the objective function.
+
 \end_layout
 
 \begin_layout Enumerate
-Randomly assign each point 
-\begin_inset Formula $x_{i},\ i=1,...,N_{m}$
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $S=_{j}\{\ \}$
 \end_inset
 
- in a cluster 
-\begin_inset Formula $S_{j},\ j=1,\ldots,k$
+, from 
+\begin_inset Formula $j=1,\ldots,k$
 \end_inset
 
 .
 \end_layout
 
-\begin_layout Enumerate
-
-\series bold
-For
-\series default
- every cluster 
-\begin_inset Formula $j=1,\ldots,k$
-\end_inset
-
- 
-\series bold
-do
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-
-\series bold
-Set
-\series default
- as 
-\begin_inset Formula $M_{j}$
-\end_inset
-
- the number of points in 
-\begin_inset Formula $S_{j}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Calculate 
-\series default
-the center of the cluster 
-\begin_inset Formula $c_{j}$
-\end_inset
-
- as
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-
-\begin_inset Formula 
-\[
-c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
-\]
-
-\end_inset
-
-
-\end_layout
-
 \end_deeper
 \begin_layout Enumerate
-
-\series bold
-End For
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Repeat the following steps:
+Repeat
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-Set 
-\begin_inset Formula $S_{j}=\left\{ \right\} ,\ j=1..k$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 For
@@ -1272,7 +1239,7 @@ do
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -1282,18 +1249,18 @@ Set
 \end_inset
 
 .
- The function 
-\begin_inset Formula $D(x,y)$
+ 
+\begin_inset Formula $j^{*}$
 \end_inset
 
- is the Euclidean distance of points 
-\begin_inset Formula $(x,y)$
+ is the nearest center from 
+\begin_inset Formula $x_{i}$
 \end_inset
 
-.
+
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -1305,14 +1272,14 @@ Set
 .
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 End For
 \end_layout
 
-\begin_layout Itemize
+\end_deeper
+\begin_layout Enumerate
 
 \series bold
 For
@@ -1327,7 +1294,23 @@ do
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $M_{j}$
+\end_inset
+
+ the number of samples in 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
 
 \series bold
 Update 
@@ -1361,31 +1344,38 @@ c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
-End For
+End
+\series default
+ For
 \end_layout
 
 \end_deeper
 \begin_layout Enumerate
-
-\series bold
-If 
-\series default
-there is no significant change in centers 
+Terminate when 
 \begin_inset Formula $c_{j}$
 \end_inset
 
+ no longer changes
+\end_layout
 
-\series bold
- terminate 
-\series default
-the algorithm and return the 
-\begin_inset Formula $k$
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+K-means Algorithm
+\end_layout
+
 \end_inset
 
- centers as the final set of samples.
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1432,627 +1422,826 @@ literal "false"
 \end_inset
 
 .
- The definitions of these functions are given below:
-\end_layout
+ The definitions of these functions are given below in Table .
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status collapsed
 
-\begin_layout Itemize
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
 
-\series bold
-Bf1
-\series default
- (Bohachevsky 1) function:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Bf2
-\series default
- (Bohachevsky 2) function: 
-\begin_inset Formula 
-\[
-f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}
-\]
+\begin_layout Plain Layout
+The test functions used in the conducted experiments.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:testFunctions"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
 
-\series bold
-Bf3
-\series default
- (Bohachevsky 3) function: 
-\begin_inset Formula 
-\[
-f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}+4\pi x_{2}\right)+\frac{3}{10}
-\]
 
+\begin_inset Tabular
+<lyxtabular version="3" rows="23" columns="3">
+<features booktabs="true" tabularvalignment="middle">
+<column alignment="left" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Test function
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Formula
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Dimension
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bohachevsky1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bohachevsky2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bohachevsky3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}+4\pi x_{2}\right)+\frac{3}{10}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Branin
-\series default
- function:
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-\begin_inset Formula 
-\[
-f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10
-\]
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$
 \end_inset
 
- with 
-\begin_inset Formula $-5\le x_{1}\le10,\ 0\le x_{2}\le15$
-\end_inset
 
-.
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Camel
-\series default
- function:
-\begin_inset Formula 
-\[
-f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}
-\]
+\end_layout
 
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Easom
-\series default
- function: 
-\begin_inset Formula 
-\[
-f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)
-\]
-
-\end_inset
-
-with 
-\begin_inset Formula $x\in[-100,100]^{2}.$
-\end_inset
-
- 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-Exponential
-\series default
- function, defined as: 
-\begin_inset Formula 
-\[
-f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1
-\]
+\begin_layout Plain Layout
 
+\size tiny
+\begin_inset Formula $f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)$
 \end_inset
 
- In the conducted experiments the values 
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exponential
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
 \begin_inset Formula $n=4,8,16,32$
 \end_inset
 
- were used.
+
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
 Griewank2
-\series default
- function:
-\begin_inset Formula 
-\[
-f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}},\quad x\in[-100,100]^{2}
-\]
+\end_layout
 
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}},\quad x\in[-100,100]^{2}$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Griewank10
-\series default
- function.
- The function is given by the equation 
-\begin_inset Formula 
-\[
-f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1
-\]
-
-\end_inset
-
-with 
-\begin_inset Formula $n=10$
-\end_inset
-
-.
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-Gkls
-\series default
- function 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "gkls"
-literal "false"
+\begin_layout Plain Layout
 
+\size tiny
+\begin_inset Formula $f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1$
 \end_inset
 
-.
- The function 
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gkls
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 \begin_inset Formula $f(x)=\mbox{Gkls}(x,n,w)$
 \end_inset
 
-, is a constructed function with 
-\begin_inset Formula $w$
-\end_inset
 
- local minima presented in 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "gkls"
-literal "true"
-
-\end_inset
-
-, with 
-\begin_inset Formula $x\in[-1,1]^{n}$
-\end_inset
-
-.
- For the conducted experiments the values 
-\begin_inset Formula $n=2,3$
-\end_inset
-
- and 
-\begin_inset Formula $w=50$
-\end_inset
-
- were utilized.
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-Goldstein and Price function 
-\begin_inset Newline newline
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $n=2,3\ w=50,100$
 \end_inset
 
 
-\series default
-
-\begin_inset Formula 
-\begin{eqnarray*}
-f(x) & = & \left[1+\left(x_{1}+x_{2}+1\right)^{2}\right.\\
- &  & \left(19-14x_{1}+3x_{1}^{2}-14x_{2}+6x_{1}x_{2}+3x_{2}^{2}\right)]\times\\
- &  & [30+\left(2x_{1}-3x_{2}\right)^{2}\\
- &  & \left(18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2}\right)]
-\end{eqnarray*}
-
-\end_inset
-
-With 
-\begin_inset Formula $x\in[-2,2]^{2}$
-\end_inset
-
-.
- 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
 Hansen
-\series default
- function: 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 \begin_inset Formula $f(x)=\sum_{i=1}^{5}i\cos\left[(i-1)x_{1}+i\right]\sum_{j=1}^{5}j\cos\left[(j+1)x_{2}+j\right]$
 \end_inset
 
-, 
-\begin_inset Formula $x\in[-10,10]^{2}$
-\end_inset
 
- .
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-Hartman 3
-\series default
- function:
-\begin_inset Formula 
-\[
-f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
-\]
+\begin_layout Plain Layout
+2
+\end_layout
 
 \end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-with 
-\begin_inset Formula $x\in[0,1]^{3}$
+\begin_layout Plain Layout
+Hartman3
+\end_layout
+
 \end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
- and 
-\begin_inset Formula $a=\left(\begin{array}{ccc}
-3 & 10 & 30\\
-0.1 & 10 & 35\\
-3 & 10 & 30\\
-0.1 & 10 & 35
-\end{array}\right),\ c=\left(\begin{array}{c}
-1\\
-1.2\\
-3\\
-3.2
-\end{array}\right)$
-\end_inset
+\begin_layout Plain Layout
 
- and
-\begin_inset Formula 
-\[
-p=\left(\begin{array}{ccc}
-0.3689 & 0.117 & 0.2673\\
-0.4699 & 0.4387 & 0.747\\
-0.1091 & 0.8732 & 0.5547\\
-0.03815 & 0.5743 & 0.8828
-\end{array}\right)
-\]
-
+\size tiny
+\begin_inset Formula $f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-Hartman 6
-\series default
- function:
-\begin_inset Formula 
-\[
-f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{6}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
-\]
+\begin_layout Plain Layout
+3
+\end_layout
 
 \end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-with 
-\begin_inset Formula $x\in[0,1]^{6}$
+\begin_layout Plain Layout
+Hartman6
+\end_layout
+
 \end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
- and 
-\begin_inset Formula $a=\left(\begin{array}{cccccc}
-10 & 3 & 17 & 3.5 & 1.7 & 8\\
-0.05 & 10 & 17 & 0.1 & 8 & 14\\
-3 & 3.5 & 1.7 & 10 & 17 & 8\\
-17 & 8 & 0.05 & 10 & 0.1 & 14
-\end{array}\right),\ c=\left(\begin{array}{c}
-1\\
-1.2\\
-3\\
-3.2
-\end{array}\right)$
-\end_inset
+\begin_layout Plain Layout
 
- and
-\begin_inset Formula 
-\[
-p=\left(\begin{array}{cccccc}
-0.1312 & 0.1696 & 0.5569 & 0.0124 & 0.8283 & 0.5886\\
-0.2329 & 0.4135 & 0.8307 & 0.3736 & 0.1004 & 0.9991\\
-0.2348 & 0.1451 & 0.3522 & 0.2883 & 0.3047 & 0.6650\\
-0.4047 & 0.8828 & 0.8732 & 0.5743 & 0.1091 & 0.0381
-\end{array}\right)
-\]
-
+\size tiny
+\begin_inset Formula $f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{6}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Potential
-\series default
- function, this function stands for the energy of a molecular conformation
- of N atoms, that interacts using via the Lennard-Jones potential 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "jones"
-literal "false"
-
-\end_inset
-
-.
- The function is defined as:
-\begin_inset Formula 
-\[
-V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]
-\]
-
-\end_inset
-
-For the conducted experiments the values 
-\begin_inset Formula $N=3,\ 5$
-\end_inset
-
- were used.
- 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-\series bold
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $n=3,5$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Rastrigin
-\series default
- function.
- 
-\begin_inset Formula 
-\[
-f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}
-\]
+\end_layout
 
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-\emph on
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 Rosenbrock
-\series default
- function
-\emph default
-.
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Formula 
-\[
-f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30.
-\]
-
-\end_inset
-
-The values 
-\begin_inset Formula $n=4,\ 8,\ 16$
-\end_inset
-
- were used in the conducted experiments.
 \end_layout
 
-\begin_layout Itemize
-
-\series bold
-Shekel 5 
-\series default
-function.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-f(x)=-\sum_{i=1}^{5}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
-\]
-
 \end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
- 
-\end_layout
+\begin_layout Plain Layout
 
-\begin_layout Standard
-with 
-\begin_inset Formula $x\in[0,10]^{4}$
-\end_inset
-
- and 
-\begin_inset Formula $a=\left(\begin{array}{cccc}
-4 & 4 & 4 & 4\\
-1 & 1 & 1 & 1\\
-8 & 8 & 8 & 8\\
-6 & 6 & 6 & 6\\
-3 & 7 & 3 & 7
-\end{array}\right),\ c=\left(\begin{array}{c}
-0.1\\
-0.2\\
-0.2\\
-0.4\\
-0.4
-\end{array}\right)$
+\size tiny
+\begin_inset Formula $f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
-
-\series bold
-Shekel 7
-\series default
- function.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-f(x)=-\sum_{i=1}^{7}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
-\]
-
 \end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
+\begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Standard
-with 
-\begin_inset Formula $x\in[0,10]^{4}$
-\end_inset
-
- and 
-\begin_inset Formula $a=\left(\begin{array}{cccc}
-4 & 4 & 4 & 4\\
-1 & 1 & 1 & 1\\
-8 & 8 & 8 & 8\\
-6 & 6 & 6 & 6\\
-3 & 7 & 3 & 7\\
-2 & 9 & 2 & 9\\
-5 & 3 & 5 & 3
-\end{array}\right),\ c=\left(\begin{array}{c}
-0.1\\
-0.2\\
-0.2\\
-0.4\\
-0.4\\
-0.6\\
-0.3
-\end{array}\right)$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Shekel 10
-\series default
- function.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-f(x)=-\sum_{i=1}^{10}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
-\]
-
-\end_inset
-
- 
-\end_layout
-
-\begin_layout Standard
-with 
-\begin_inset Formula $x\in[0,10]^{4}$
-\end_inset
-
- and 
-\begin_inset Formula $a=\left(\begin{array}{cccc}
-4 & 4 & 4 & 4\\
-1 & 1 & 1 & 1\\
-8 & 8 & 8 & 8\\
-6 & 6 & 6 & 6\\
-3 & 7 & 3 & 7\\
-2 & 9 & 2 & 9\\
-5 & 5 & 3 & 3\\
-8 & 1 & 8 & 1\\
-6 & 2 & 6 & 2\\
-7 & 3.6 & 7 & 3.6
-\end{array}\right),\ c=\left(\begin{array}{c}
-0.1\\
-0.2\\
-0.2\\
-0.4\\
-0.4\\
-0.6\\
-0.3\\
-0.7\\
-0.5\\
-0.6
-\end{array}\right)$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Sinusoidal
-\series default
- function defined as:
-\begin_inset Formula 
-\[
-f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi.
-\]
-
-\end_inset
-
-The values of 
+\size scriptsize
 \begin_inset Formula $n=4,8,16$
 \end_inset
 
- were used in the conducted experiments.
+
 \end_layout
 
-\begin_layout Itemize
-
-\series bold
-Test2N
-\series default
- function:
-\begin_inset Formula 
-\[
-f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5].
-\]
-
 \end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-For the conducted experiments the values 
-\begin_inset Formula $n=4,5,6,7$
-\end_inset
-
- were used.
+\begin_layout Plain Layout
+Shekel5
 \end_layout
 
-\begin_layout Itemize
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-\series bold
-Test30N
-\series default
- function:
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=-\sum_{i=1}^{5}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shekel7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=-\sum_{i=1}^{7}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shekel10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=-\sum_{i=1}^{10}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sinusoidal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $n=4,8$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Test2n
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5]$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $n=3,4,5,6,7$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Test30n
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 \begin_inset Formula 
 \[
 f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)
@@ -2060,11 +2249,36 @@ f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i
 
 \end_inset
 
-The values 
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
 \begin_inset Formula $n=3,4$
 \end_inset
 
- were used in the conducted experiments.
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -7576,7 +7790,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -10424,49 +10638,75 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
-In the article, specific modifications to the EEGO optimization method were
- proposed, which were mainly aimed at improving the efficiency as well as
- the speed of the global optimization algorithm.
- The first modification is the periodic application of a sampling technique
- based on the K-Means method 
+The article proposed some modifications to the EEGO optimization method,
+ aimed at improving the overall performance and increasing the speed of
+ the global optimization algorithm.
+ The first modification concerns the application of a sampling technique
+ based on the K-Means method.
+ This technique allowed us to significantly minimize the number of function
+ calls to find the global minimum and further improved the accuracy with
+ which it is located.
+ In particular, the application of the K-Means method accelerated the finding
+ of a solution, as it more efficiently located the points of interest in
+ the search space and led to the fastest convergence to the global minimum.
+ Compared to other methods based on random distributions, the proposed technique
+ proved its superiority, especially in multidimensional and complex functions.
+\end_layout
+
+\begin_layout Standard
+The second proposed amendment concerns the termination rule based on similarity
+ of solutions during iterations.
+ The main purpose of this rule is to stop the optimization process when
+ the iterated solutions are too close to each other, thus preventing pointless
+ iterations that do not provide any significant improvement.
+ It therefore avoids wasting computing time in cases where the process is
+ already very close to the desired result.
+ The use of the termination rule significantly improves the efficiency of
+ the algorithm.
+\end_layout
+
+\begin_layout Standard
+In addition, other modifications were proposed in the article, which help
+ to reduce the number of function calls and increase the success rate of
+ the algorithm.
+ These modifications enhanced the efficiency of the EEGO algorithm, making
+ it more efficient in a wide range of optimization problems.
+ 
+\end_layout
+
+\begin_layout Standard
+The experimental results presented in the article were particularly encouraging.
+ Therefore, the proposed method can be applied in various fields.
+ The increased speed and improved accuracy of the optimization process make
+ it suitable for a wide range of applications in fields such as machine
+ learning and artificial intelligence.
+\end_layout
+
+\begin_layout Standard
+A future direction suggested for further improvement of the method is the
+ utilization of parallel computing systems to speed up the optimization
+ process.
+ Examples of such systems are the use of MPI technology
 \begin_inset CommandInset citation
 LatexCommand citep
-key "kmeans-ereunhtikh-koinothta"
-literal "false"
-
-\end_inset
-
-.
- Using the sampling method we proposed helped to find the global minimum
- with the greatest accuracy and in the least possible time.
- The above procedure significantly reduced the required number of function
- calls compared to other random distributions, even in difficult multidimensiona
-l functions.
- The second proposed modification concerns the similarity termination rule,
- which helps avoid wasting unnecessary computing time on iterations.
- In addition, we proposed some modifications which significantly help to
- reduce the number of calls and increase the success rate of the algorithm.
- Because the experimental results are promising, efforts can be made to
- develop the technique in various areas.
- A future extension of the implementation may be the use of parallel computing
- techniques to speed up the optimization process, such as, for example,
- the integration of MPI 
-\begin_inset CommandInset citation
-LatexCommand cite
 key "MPI"
 literal "false"
 
 \end_inset
 
- or the OpenMP library 
+ or the integration of the OpenMP library
 \begin_inset CommandInset citation
-LatexCommand cite
+LatexCommand citep
 key "OPENMP"
 literal "false"
 
 \end_inset
 
-.
+, which allows multithreaded execution of the algorithm on modern multicore
+ systems.
+ This perspective can lead to a significant speed improvement of the EEGO
+ method, making it even more effective and efficient for applications that
+ require high computing power.
 \end_layout
 
 \begin_layout Standard
