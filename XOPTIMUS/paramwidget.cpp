@@ -5,3 +5,7 @@ ParamWidget::ParamWidget(QWidget *parent)
 {
 
 }
+ParamWidget::~ParamWidget()
+{
+
+}

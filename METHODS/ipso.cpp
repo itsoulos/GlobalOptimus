@@ -41,7 +41,7 @@ double getDistance(Data &x1,Data &x2)
 bool    iPso::checkGradientCriterion(Data &x)
 {
 
-    QString t = params["ipso_gradientcheck"].toString();
+    QString t = getParam("ipso_gradientcheck").getValue();
     if(t=="false") return false;
     double dmin = 1e+100;
     int imin = 0;
@@ -67,17 +67,17 @@ bool    iPso::checkGradientCriterion(Data &x)
 
 void    iPso::calcFitnessArray()
 {
-    double wmin = params["ipso_inertia_start"].toString().toDouble();
-    double wmax = params["ipso_inertia_end"].toString().toDouble();
-    int maxGenerations = params["ipso_generations"].toString().toInt();
-    double c1 = params["ipso_c1"].toString().toDouble();
-    double c2 = params["ipso_c2"].toString().toDouble();
+    double wmin = getParam("ipso_inertia_start").getValue().toDouble();
+    double wmax = getParam("ipso_inertia_end").getValue().toDouble();
+    int maxGenerations = getParam("ipso_generations").getValue().toInt();
+    double c1 = getParam("ipso_c1").getValue().toDouble();
+    double c2 = getParam("ipso_c2").getValue().toDouble();
     int genome_size = myProblem->getDimension();
     Data distances;
 
     double inertia;
     int inertia_type = 3;
-    QString t = params["ipso_inertiatype"].toString();
+    QString t = getParam("ipso_inertiatype").getValue();
     inertia_type=t.toInt();
 
     // inecria weight => εάν θα διατηρηθεί η ταχύτητα
@@ -175,7 +175,7 @@ void    iPso::calcFitnessArray()
     }
     }
 
-    double localsearch_rate = params["ipso_localsearch_rate"].toString().toDouble();
+    double localsearch_rate = getParam("ipso_localsearch_rate").getValue().toDouble();
     for (int i = 0; i < ipso_particles; i++)
     {
         double R = myProblem->randomDouble();
@@ -226,7 +226,6 @@ void    iPso::calcFitnessArray()
             {
                 Data dg = particle[i];
                 fitness_array[i] = localSearch(particle[i]);
-		printf("new minimum %lf \n",fitness_array[i]);
                 RC += getDistance(dg, particle[i]);
                 localSearchCount++;
                 {
@@ -369,7 +368,7 @@ void    iPso::updateBest()
 
 void    iPso::init()
 {
-    ipso_particles = params["ipso_particles"].toString().toInt();
+    ipso_particles = getParam("ipso_particles").getValue().toInt();
     center.resize(myProblem->getDimension());
     particle.resize(ipso_particles);
 
@@ -441,11 +440,11 @@ void    iPso::step()
 
 bool    iPso::terminated()
 {
-    int max_generations = params["ipso_generations"].toString().toInt();
+    int max_generations = getParam("ipso_generations").getValue().toInt();
     bool charilogis = false;
     bool charilogis2 = false;
     bool aliflag=false;
-    QString t = params["ipso_stoppingrule"].toString();
+    QString t = getParam("ipso_stoppingrule").getValue();
     if(t=="mean_fitness") charilogis=true;
     else if(t=="best_fitness") charilogis2=true;
     else if(t=="ali") aliflag=true;

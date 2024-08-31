@@ -20,18 +20,49 @@
 # include <METHODS/ego.h>
 # include <QStringList>
 # include <QJsonObject>
+/**
+ * @brief The MethodLoader class loads all the Optimizers into an array
+ */
 class MethodLoader
 {
 private:
-    //list
+    /**
+     * @brief method, the list of optimizers
+     */
     QVector<Optimizer*> method;
+    /**
+     * @brief methodName, the list of optimizer names.
+     */
     QStringList methodName;
 public:
+    /**
+     * @brief MethodLoader, the default constructor of the class.
+     */
     MethodLoader();
+    /**
+     * @brief getMethodList
+     * @return the names of the methods.
+     */
     QStringList getMethodList() const;
+    /**
+     * @brief getSelectedMethod
+     * @param name the name of the selected method.
+     * @return a pointer to the optimizer with the name of the parameter.
+     */
     Optimizer   *getSelectedMethod(QString name);
+    /**
+     * @brief getMethodParams
+     * @param name
+     * @return
+     */
     QJsonObject getMethodParams(QString name) const;
+    /**
+     * @brief getMethodParamsNames
+     * @param name
+     * @return
+     */
     QStringList  getMethodParamsNames(QString name) const;
+
     ~MethodLoader();
 };
 

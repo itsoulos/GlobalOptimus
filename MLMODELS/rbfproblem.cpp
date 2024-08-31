@@ -356,7 +356,7 @@ void    RbfProblem::init(QJsonObject &px)
     setParam("model_trainfile",trainName);
     setParam("model_testfile",testName);
     int nodes        = getParam("rbf_nodes").getValue().toInt();
-    if(params.contains("rbf_nodes"))
+    if(contains("rbf_nodes"))
     {
         nodes = px["rbf_nodes"].toString().toInt();
         setParam("rbf_nodes",px["rbf_nodes"].toString());
@@ -375,9 +375,9 @@ void    RbfProblem::init(QJsonObject &px)
     vector<Data> xpoint = trainDataset->getAllXpoint();
     runKmeans(xpoint,nodes,centers,variances);
     double scale_factor = 3.0;
-    if(params.contains("rbf_factor"))
+    if(contains("rbf_factor"))
     {
-        scale_factor = params["rbf_factor"].toString().toDouble();
+        scale_factor = getParam("rbf_factor").getValue().toDouble();
     }
     int icount = 0;
     for(int i=0;i<nodes;i++)

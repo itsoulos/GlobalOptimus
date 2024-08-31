@@ -6,18 +6,7 @@
 class ParameterList
 {
 protected:
-    /**
-    * @brief params, these are the method parameters
-    */
-    QJsonObject       params;
-    /**
-    * @brief paramsHelp, the help info for every parameter
-    */
-    QJsonObject       paramsHelp;
-    /**
-     * @brief paramsType, the type of each parametet
-     */
-    QJsonObject       paramsType;
+    QVector<Parameter> mparams;
 public:
     /**
      * @brief ParameterList, the default constructor
@@ -51,6 +40,24 @@ public:
      * @return  in json format the params
      */
     QJsonObject getParams() ;
+    /**
+     * @brief getParamVector
+     * @return  the list of parameters in vector format.
+     */
+    QVector<Parameter> getParamVector();
+
+    /**
+     * @brief contains
+     * @param name
+     * @return  true if the parameter list contains a param
+     *     with name.
+     */
+    bool contains(QString name)const;
+    /**
+     * @brief setParamValuesFromJson alters all parameter values from the json
+     * @param x, the json object contains the new values
+     */
+    void   setParamValuesFromJson(QJsonObject &x);
     ~ParameterList();
 };
 

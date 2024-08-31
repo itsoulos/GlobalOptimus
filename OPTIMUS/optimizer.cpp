@@ -50,20 +50,14 @@ void    Optimizer::setMethodLogger(Logger *p)
     methodLogger = p;
 }
 
-QJsonObject Optimizer::getParams() const
+QJsonObject Optimizer::getParams()
 {
-    return params;
+    return paramList.getParams();
 }
 
 void        Optimizer::setParams(QJsonObject &x)
 {
-    for(QString name : x.keys())
-    {
-        if(params.keys().contains(name))
-        {
-            params[name]=x[name];
-        }
-    }
+    paramList.setParamValuesFromJson(x);
 }
 
 void        Optimizer::setProblem(Problem *p)
@@ -73,29 +67,17 @@ void        Optimizer::setProblem(Problem *p)
 
 void        Optimizer::addParam(Parameter p)
 {
-   params[p.getName()]=p.getValue();
-   paramsHelp[p.getName()]=p.getHelp();
+    paramList.addParam(p);
 }
 
 void        Optimizer::setParam(QString name,QString value,QString help)
 {
-    params[name]=value;
-    if(help.size()!=0)
-    paramsHelp[name]=help;
+    paramList.setParam(name,value,help);
 }
 
 Parameter   Optimizer::getParam(QString name)
 {
-    if(!params.contains(name))
-    {
-        Parameter pt(name,"","");
-        return pt;
-    }
-    Parameter pt;
-    pt.setName(name);
-    pt.setValue(params[name].toString());
-    pt.setHelp(paramsHelp[name].toString());
-    return pt;
+    return paramList.getParam(name);
 
 }
 
@@ -280,7 +262,7 @@ double  Optimizer::localSearch(Data &x)
 
 void    Optimizer::done()
 {
-
+    //nothing here is a virtual function
 }
 
 Problem     *Optimizer::getProblem()
@@ -290,7 +272,7 @@ Problem     *Optimizer::getProblem()
 
 QStringList Optimizer::getParameterNames() const
 {
-    return params.keys();
+    return paramList.getParameterNames();
 }
 
 Optimizer::~Optimizer()

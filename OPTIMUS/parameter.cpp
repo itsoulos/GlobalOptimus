@@ -141,6 +141,11 @@ Parameter::Parameter()
     setHelp("");
 }
 
+void    Parameter::setType(int t)
+{
+    type = t;
+}
+
 Parameter::~Parameter()
 {
     //nothing here

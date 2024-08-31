@@ -33,7 +33,7 @@ ParallelDe::ParallelDe()
 
 int ParallelDe::selectAtom(int islandIndex)
 {
-    QString parde_selection_method = params["parde_selection_method"].toString();
+    QString parde_selection_method = getParam("parde_selection_method").getValue();
     if (parde_selection_method == "random")
     {
         int a = islandStartPos(islandIndex);
@@ -97,11 +97,11 @@ void ParallelDe::init()
     global_sim_value = 1e+100;
     global_sim_count = 0;
 
-    islands = params["parde_islands"].toString().toInt();
+    islands = getParam("parde_islands").getValue().toInt();
     omp_set_dynamic(0);
     omp_set_num_threads(islands);
     start = omp_get_wtime();
-    parde_generations = params["parde_generations"].toString().toInt();
+    parde_generations = getParam("parde_generations").getValue().toInt();
     doublebox_xx1.resize(islands);
     doublebox_xx2.resize(islands);
     doublebox_best_value.resize(islands);
@@ -116,9 +116,9 @@ void ParallelDe::init()
         doublebox_variance.at(i) = 1e+100;
     }
 
-    parde_F = params["parde_f"].toString().toDouble();
-    parde_CR = params["parde_cr"].toString().toDouble();
-    agents = params["parde_agents"].toString().toInt();
+    parde_F = getParam("parde_f").getValue().toDouble();
+    parde_CR = getParam("parde_cr").getValue().toDouble();
+    agents = getParam("parde_agents").getValue().toInt();
     lmargin = myProblem->getLeftMargin();
     rmargin = myProblem->getRightMargin();
     population.resize(agents * islands);
@@ -129,7 +129,7 @@ void ParallelDe::init()
 
     bestIslandIndex.resize(islands);
     bestIslandValues.resize(islands);
-    similarity_max_count = params["parde_similarityMax"].toString().toInt();
+    similarity_max_count = getParam("parde_similarityMax").getValue().toInt();
     similarity_best_value.resize(islands);
     similarity_current_count.resize(islands);
     sum.resize(islands);
@@ -147,11 +147,11 @@ void ParallelDe::init()
         MO.at(i) = 0;
     }
 
-    parde_termination = params["parde_termination"].toString();
-    parde_propagate_method = params["parde_propagate_method"].toString();
-    parde_islands_enable = params["parde_islands_enable"].toString().toInt();
-    parde_weight_method = params["parde_weight_method"].toString();
-    parde_propagate_rate = params["parde_propagate_rate"].toString().toInt();
+    parde_termination =         getParam("parde_termination").getValue();
+    parde_propagate_method =    getParam("parde_propagate_method").getValue();
+    parde_islands_enable =      getParam("parde_islands_enable").getValue().toInt();
+    parde_weight_method =       getParam("parde_weight_method").getValue();
+    parde_propagate_rate =      getParam("parde_propagate_rate").getValue().toInt();
 }
 
 void ParallelDe::replaceValueInIsland(int islandIndex, Data &x, double &y)
@@ -259,7 +259,7 @@ bool ParallelDe::checkIsland(int islandName)
 }
 bool ParallelDe::terminated()
 {
-    int parde_islands_enable = params["parde_islands_enable"].toString().toInt();
+    int parde_islands_enable = getParam("parde_islands_enable").getValue().toInt();
     if(parde_islands_enable==0)
     {
         int index;

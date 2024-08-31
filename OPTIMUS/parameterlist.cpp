@@ -7,40 +7,65 @@ ParameterList::ParameterList()
 
 void        ParameterList::addParam(Parameter p)
 {
-    params[p.getName()]=p.getValue();
-    paramsHelp[p.getName()]=p.getHelp();
-    paramsType[p.getName()]=p.getType();
+    mparams<<p;
+}
+
+void   ParameterList::setParamValuesFromJson(QJsonObject &x)
+{
+    QStringList names= x.keys();
+    for(int i=0;i<names.size();i++)
+    {
+        setParam(names[i],x[names[i]].toString());
+    }
 }
 
 QJsonObject ParameterList::getParams()
 {
+    QJsonObject params;
+    for(int i=0;i<mparams.size();i++)
+        params[mparams[i].getName()]=mparams[i].getValue();
     return params;
 }
 
 void        ParameterList::setParam(QString name,QString value,QString help)
 {
-    params[name]=value;
-    if(help.size()!=0)
-        paramsHelp[name]=help;
+    for(int i=0;i<mparams.size();i++)
+        if(mparams[i].getName()==name)
+        {
+            mparams[i].setValue(value);
+            if(help.size()!=0)
+                mparams[i].setHelp(help);
+        }
 }
 
 Parameter   ParameterList::getParam(QString name)
 {
-    if(!params.contains(name))
-    {
-        Parameter pt(name,"","");
-        return pt;
-    }
-    Parameter pt;
-    pt.setName(name);
-    pt.setValue(params[name].toString());
-    pt.setHelp(paramsHelp[name].toString());
+    for(int i=0;i<mparams.size();i++)
+        if(mparams[i].getName()==name)
+            return mparams[i];
+    Parameter pt(name,"","");
     return pt;
 }
 
 QStringList ParameterList::getParameterNames() const
 {
-    return params.keys();
+    QStringList list;
+    for(int i=0;i<mparams.size();i++)
+        list<<mparams[i].getName();
+    return list;
+}
+
+QVector<Parameter> ParameterList::getParamVector()
+{
+    return mparams;
+}
+
+bool ParameterList::contains(QString name) const
+{
+    for(int i=0;i<mparams.size();i++)
+        if(mparams[i].getName()==name)
+            return true;
+    return false;
 }
 
 ParameterList::~ParameterList()

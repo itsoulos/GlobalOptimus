@@ -109,6 +109,11 @@ public:
 
 
     /**
+     * @brief setType alters the type of a parameter.
+     * @param t
+     */
+    void    setType(int t);
+    /**
      * @brief getLowIntValue
      * @return
      */

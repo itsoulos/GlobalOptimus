@@ -41,7 +41,7 @@ void    DifferentialEvolution::init()
 
 int     DifferentialEvolution::tournament()
 {
-    int tsize=params["de_tsize"].toString().toInt();
+    int tsize=getParam("de_tsize").getValue().toInt();
     int minindex=-1;
     double minvalue=1e+100;
     for(int i=0;i<tsize;i++)
@@ -60,7 +60,7 @@ int     DifferentialEvolution::tournament()
 void    DifferentialEvolution::step()
 {
     ++iter;
-    QString selection=params["de_selection"].toString();
+    QString selection=getParam("de_selection").getValue();
     for(int i=0;i<NP;i++)
     {
 

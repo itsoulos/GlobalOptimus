@@ -19,7 +19,7 @@ NeuralMinimizer::NeuralMinimizer()
 bool    NeuralMinimizer::terminated()
 {
     ++iter;
-    int neural_iterations =params["neural_iterations"].toString().toInt();
+    int neural_iterations =getParam("neural_iterations").getValue().toInt();
     QString neural_termination = terminationMethod;
     if(neural_termination=="maxiters")
         return iter>=neural_iterations;
@@ -34,11 +34,11 @@ bool    NeuralMinimizer::terminated()
 
 void    NeuralMinimizer::step()
 {
-    int neural_samples=params["neural_samples"].toString().toInt();
-    QString neural_model = params["neural_model"].toString();
+    int neural_samples=getParam("neural_samples").getValue().toInt();
+    QString neural_model = getParam("neural_model").getValue();
     if(neural_model == "neural")
     {
-        QString method=params["neural_trainmethod"].toString();
+        QString method=getParam("neural_trainmethod").getValue();
         ((NeuralSampler *)sampler)->trainModel(method);
     }
     else
@@ -67,7 +67,7 @@ void    NeuralMinimizer::init()
 {
     similarity_best_value = 1e+100;
     similarity_current_count = 0;
-    int neural_similarityMaxValue = params["neural_similarityMaxValue"].toString().toInt();
+    int neural_similarityMaxValue = getParam("neural_similarityMaxValue").getValue().toInt();
     similarity_max_count= neural_similarityMaxValue;
     besty = 1e+100;
     doublebox_oldBesty = 1e+100;
@@ -76,15 +76,15 @@ void    NeuralMinimizer::init()
     doublebox_xx2 = 0;
     if(sampler!=NULL)
         delete sampler;
-    int neural_weights  = params["neural_weights"].toString().toInt();
-    QString neural_model = params["neural_model"].toString();
+    int neural_weights  = getParam("neural_weights").getValue().toInt();
+    QString neural_model = getParam("neural_model").getValue();
     if(neural_model=="rbf")
         sampler = new RbfSampler(myProblem,neural_weights);
     else
         sampler = new NeuralSampler(myProblem,neural_weights);
 
     minima.clear();
-    int neural_start_samples  = params["neural_start_samples"].toString().toInt();
+    int neural_start_samples  = getParam("neural_start_samples").getValue().toInt();
     sampler->sampleFromProblem(neural_start_samples,xsample,ysample);
     doubleBox.setMinIters(20);
 }

@@ -384,16 +384,16 @@ void ParallelPso::step()
 void ParallelPso::init()
 {
     parallelPso_termination =terminationMethod;
-    pNumber = params["parallelPso_pNumber"].toString().toInt();
-    subCluster = params["parallelPso_subCluster"].toString().toInt();
-    subClusterEnable = params["parallelPso_subClusterEnable"].toString().toInt();
-    parallelPsoParticles = params["parallelPso_particles"].toString().toInt();
-    parallelPsoGenerations = params["parallelPso_generations"].toString().toInt();
-    parallelPsoC1 = params["parallelPso_c1"].toString().toDouble();
-    parallelPsoC2 = params["parallelPso_c2"].toString().toDouble();
-    parallelPropagateMethod = params["parallelPso_propagateMethod"].toString();
-    similarityMaxCount = params["similarityMaxCount"].toString().toInt();
-    propagateRate = params["parallelPso_propagateRate"].toString().toInt();
+    pNumber = getParam("parallelPso_pNumber").getValue().toInt();
+    subCluster = getParam("parallelPso_subCluster").getValue().toInt();
+    subClusterEnable = getParam("parallelPso_subClusterEnable").getValue().toInt();
+    parallelPsoParticles = getParam("parallelPso_particles").getValue().toInt();
+    parallelPsoGenerations = getParam("parallelPso_generations").getValue().toInt();
+    parallelPsoC1 = getParam("parallelPso_c1").getValue().toDouble();
+    parallelPsoC2 = getParam("parallelPso_c2").getValue().toDouble();
+    parallelPropagateMethod = getParam("parallelPso_propagateMethod").getValue();
+    similarityMaxCount = getParam("similarityMaxCount").getValue().toInt();
+    propagateRate = getParam("parallelPso_propagateRate").getValue().toInt();
 
     //pNumber = round((double) pRate * parallelPsoParticles / 100);
 
