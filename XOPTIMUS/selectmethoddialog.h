@@ -9,20 +9,25 @@
 # include <QVBoxLayout>
 # include <QGridLayout>
 # include <QHBoxLayout>
+# include <QComboBox>
+# include <XOPTIMUS/paramwidget.h>
 # include <OPTIMUS/methodloader.h>
 class SelectMethodDialog :public QDialog
 {
 Q_OBJECT
 private:
     QPushButton *okButton,*cancelButton;
-    QGroupBox *radioBox;
     int width,height;
     QStringList methodList;
     QString selectedMethod;
+    QComboBox *methodCombo;
+    MethodLoader *methodLoader;
+    ParamWidget *paramWidget;
 public:
-    SelectMethodDialog(QStringList list,QWidget *parent =0);
+    SelectMethodDialog(QStringList list,MethodLoader *loader,QWidget *parent =0);
     QString getSelectedMethod() const;
 public slots:
+    void onMethodSelected(const QString &text);
     void okSlot();
     void cancelSlot();
 };

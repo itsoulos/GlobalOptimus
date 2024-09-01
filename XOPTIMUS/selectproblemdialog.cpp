@@ -10,8 +10,8 @@ SelectProblemDialog::SelectProblemDialog(QString sname,
 {
 	QScreen *screen = QGuiApplication::primaryScreen();
 	QRect wd = screen->geometry();
-    width = 3*wd.width()/4;
-    height =3*wd.height()/4;
+    width = 4*wd.width()/5;
+    height =4*wd.height()/5;
     problemName = sname;
     problemList = list;
     this->setWindowTitle(tr("Problem Selection"));

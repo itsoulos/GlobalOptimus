@@ -2,13 +2,16 @@
 # include <QScreen>
 # include <QGuiApplication>
 
-SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
+SelectMethodDialog::SelectMethodDialog(QStringList list,
+                                       MethodLoader *loader,
+                                       QWidget *parent )
     :QDialog(parent)
 {
+    methodLoader = loader;
 	QScreen *screen = QGuiApplication::primaryScreen();
 	QRect wd = screen->geometry();
-    width = 3*wd.width()/4;
-    height =3*wd.height()/4;
+    width = 4*wd.width()/5;
+    height =4*wd.height()/5;
     methodList = list;
     this->setWindowTitle(tr("Optimizer Selection"));
     this->setFixedSize(width,height);
@@ -16,17 +19,24 @@ SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
     w1->setGeometry(0,0,width,height);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
-    radioBox = new QGroupBox("Function list");
-    l1->addWidget(radioBox);
-    QGridLayout *vbox = new QGridLayout;
-    for(int i=0;i<methodList.size();i++)
-    {
-        QString x = methodList[i];
-        QRadioButton *bt = new QRadioButton(x);
-        vbox->addWidget(bt,i/3,i%3);
+    QLabel *title = new QLabel;
+    title->setText("<h3 align=center>Select a method from the list</h3>");
+    title->setFixedSize(QSize(width,height/10));
+    title->setAlignment(Qt::AlignTop);
+    l1->addWidget(title);
 
-    }
-    radioBox->setLayout(vbox);
+    methodCombo = new QComboBox;
+    methodCombo->addItems(methodList);
+    l1->addWidget(methodCombo,0,Qt::AlignCenter);
+    methodCombo->setFixedSize(QSize(95*width/100,height/15));
+    connect(methodCombo,SIGNAL(currentTextChanged(QString)),this,
+            SLOT(onMethodSelected(QString)));
+
+    ParameterList paramList=methodLoader->getSelectedMethod(methodList[0])->getParameterList();
+    paramWidget=new ParamWidget(paramList);
+    l1->addWidget(paramWidget,0,Qt::AlignCenter);
+    paramWidget->setFixedSize(QSize(95*width/100,7*height/10));
+
     QHBoxLayout *buttonLayout=new QHBoxLayout();
     l1->addLayout(buttonLayout);
     okButton=new QPushButton();
@@ -39,6 +49,11 @@ SelectMethodDialog::SelectMethodDialog(QStringList list,QWidget *parent )
     buttonLayout->addWidget(cancelButton);
 }
 
+void    SelectMethodDialog::onMethodSelected(const QString &text)
+{
+    ParameterList paramList=methodLoader->getSelectedMethod(text)->getParameterList();
+    paramWidget->setParamList(paramList);
+}
 QString SelectMethodDialog::getSelectedMethod() const
 {
     return selectedMethod;
@@ -46,14 +61,9 @@ QString SelectMethodDialog::getSelectedMethod() const
 
 void SelectMethodDialog::okSlot()
 {
-    foreach (QRadioButton *button,
-             radioBox->findChildren<QRadioButton*>()) {
-        if (button->isChecked()) {
-
-            selectedMethod = button->text();
-            break;
-        }
-    }
+    selectedMethod = methodCombo->currentText();
+    QJsonObject x = paramWidget->getJson();
+    methodLoader->getSelectedMethod(selectedMethod)->setParams(x);
     accept();
 }
 

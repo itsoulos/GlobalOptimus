@@ -39,8 +39,9 @@ private:
 public:
     explicit ParamWidget(ParameterList &list,QWidget *parent = nullptr);
     explicit ParamWidget(QJsonObject   &x,   QWidget *parent = nullptr);
-    QJsonObject getJson();
-    ParameterList getParamList();
+    QJsonObject     getJson();
+    ParameterList   getParamList();
+    void            setParamList(ParameterList &list);
     ~ParamWidget();
 public slots:
     void updateSlot();

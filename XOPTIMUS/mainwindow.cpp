@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     methodLoader   = new MethodLoader();
     srand(randomSeed);
     myStat = NULL;
+    myProblem = NULL;
     //make menu
     loadMenu = new QMenu("LOAD");
     loadMenu->addAction("PROBLEM");
@@ -140,6 +141,7 @@ void    MainWindow::loadSlot(QAction *action)
             SelectMethodDialog *dialog = new
                 SelectMethodDialog(
                     methodLoader->getMethodList(),
+                        methodLoader,
                     this
                     );
             dialog->setModal(true);
@@ -241,9 +243,21 @@ void    MainWindow::executeSlot(QAction  *action)
 {
     if(action->text()=="RUN")
     {
+        if(myProblem==NULL)
+        {
+            noProblemLoaded();
+            return;
+        }
         if(myMethod == NULL) noMethodLoaded();
         else
         {
+            if(myProblem==NULL)
+            {
+                noProblemLoaded();
+                return;
+            }
+            else
+            {
             ntimes = 30;
             bool ok;
             int i = QInputDialog::getInt(this, tr("Enter number of times"),
@@ -254,6 +268,7 @@ void    MainWindow::executeSlot(QAction  *action)
                 if(myStat!=NULL) delete myStat;
 
                 startRunning();
+            }
             }
         }
     }

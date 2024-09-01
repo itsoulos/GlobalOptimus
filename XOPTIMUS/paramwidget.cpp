@@ -290,6 +290,11 @@ ParameterList   ParamWidget::getParamList()
     return paramList;
 }
 
+void    ParamWidget::setParamList(ParameterList &list)
+{
+    paramList = list;
+    updateTable();
+}
 ParamWidget::~ParamWidget()
 {
 
