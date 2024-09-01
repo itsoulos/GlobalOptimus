@@ -99,8 +99,11 @@ QWidget *ParamWidget::addEntryWidget(int index)
         case PARAM_DOUBLE:
         {
             QDoubleSpinBox *spin = new QDoubleSpinBox;
+            spin->setLocale(QLocale::c());
+
             spin->setMinimum(param.getLowDoubleValue());
             spin->setMaximum(param.getUpperDoubleValue());
+            spin->setSingleStep(0.01*(param.getUpperDoubleValue()-param.getLowDoubleValue()));
             spin->setValue(param.getValue().toDouble());
             return spin;
         }
