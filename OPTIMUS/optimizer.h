@@ -158,6 +158,11 @@ public:
      * @return the termination method in string format
      */
     QString     getTerminationMethod() const;
+    /**
+     * @brief getParameterList
+     * @return
+     */
+    ParameterList getParameterList();
     virtual ~Optimizer();
 };
 

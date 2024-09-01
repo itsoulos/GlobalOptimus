@@ -7,20 +7,39 @@ ParameterDialog::ParameterDialog(
         QString name,QWidget *parent)
     :QDialog(parent)
 {
+    obj  =params;
+    initView(name,true);
+}
 
-	QScreen *screen = QGuiApplication::primaryScreen();
-	QRect wd = screen->geometry();
-    WIDTH = 3*wd.width()/4;
-    HEIGHT =3*wd.height()/4;
+ParameterDialog::ParameterDialog(
+        ParameterList &params,
+        QString name,QWidget *parent)
+    :QDialog(parent)
+{
+    paramList = params;
+    initView(name,false);
+}
+void     ParameterDialog::initView(QString name,bool isJson)
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect wd = screen->geometry();
+    WIDTH = 4*wd.width()/5;
+    HEIGHT =4*wd.height()/5;
     problemName=name;
-    obj = params;
     this->setWindowTitle("Problem settings for function "+name);
     this->setFixedSize(WIDTH,HEIGHT);
     QWidget *w1=new QWidget(this);
     w1->setGeometry(0,0,WIDTH,HEIGHT);
     QVBoxLayout *l1=new QVBoxLayout();
     w1->setLayout(l1);
-    paramWidget = new ParamWidget(params);
+    if(isJson)
+    {
+        paramWidget = new ParamWidget(obj);
+    }
+    else
+    {
+        paramWidget = new ParamWidget(paramList);
+    }
     l1->addWidget(paramWidget);
 
     QHBoxLayout *buttonLayout=new QHBoxLayout();
@@ -42,10 +61,15 @@ QJsonObject ParameterDialog::getParams() const
     return obj;
 }
 
-
+ParameterList ParameterDialog::getParameterList() const
+{
+    return paramList;
+}
 
 void    ParameterDialog::okSlot()
 {
+    obj = paramWidget->getJson();
+    paramList = paramWidget->getParamList();
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
     accept();

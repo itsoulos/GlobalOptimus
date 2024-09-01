@@ -5,8 +5,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-      setlocale(LC_ALL,"C");
+    setlocale(LC_ALL,"C");
     MainWindow w;
-    w.show();
+    w.showMaximized();
     return a.exec();
 }

@@ -9,37 +9,26 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QScreen *screen = QGuiApplication::primaryScreen();
      qd = screen->geometry();
-    //setFixedSize(4*qd.width()/5,7*qd.height()/8);
-    //setFixedSize(1024,768);
+
     this->setGeometry((qd.width()/2)-(this->width()/2),
                        (qd.height()/2)-(this->height()/2),
-                       4*qd.width()/5,7*qd.height()/8);
+                       7*qd.width()/8,7*qd.height()/8);
 
     setWindowTitle("XOPTIMUS");
     mainWidget=new QWidget;
     setCentralWidget(mainWidget);
-    //mainWidget->setFixedSize(this->width(),this->height());
     mainLayout=new QVBoxLayout;
     mainWidget->setLayout(mainLayout);
     mainTab=new QTabWidget;
-    /*mainTab->setGeometry(2*this->width()/100,
-                          2*this->height()/100,
-                          97*this->width()/100,
-                          95*this->height()/100);*/
 
     mainEdit=new QTextEdit;
     mainTab->addTab(mainEdit,"Main");
-    //mainLayout->addWidget(mainEdit);
     mainLayout->addWidget(mainTab);
-   /* mainEdit->setGeometry(2*this->width()/100,
-                          2*this->height()/100,
-                          97*this->width()/100,
-                          95*this->height()/100);*/
+
     mainEdit->setReadOnly(true);
     QLabel *empty = new QLabel();
     empty->setText("  ");
     mainLayout->addWidget(empty);
-    //empty->setFixedHeight(3*this->height()/100);
 
     problemLoader  = new ProblemLoader();
     myMethod = NULL;
@@ -50,13 +39,9 @@ MainWindow::MainWindow(QWidget *parent)
     loadMenu = new QMenu("LOAD");
     loadMenu->addAction("PROBLEM");
     loadMenu->addAction("METHOD");
-    //problemMenu->addAction("TEST");
-    //problemMenu->addAction("PARAMS");
-    //problemMenu->addAction("SEED");
     loadMenu->addAction("QUIT");
 
     settingsMenu  = new QMenu("SETTINGS");
-    //methodMenu->addAction("LOAD");
     settingsMenu->addAction("PROBLEM");
     settingsMenu->addAction("METHOD");
     settingsMenu->addAction("SEED");
@@ -218,16 +203,17 @@ void    MainWindow::settingsSlot(QAction  *action)
         if(myMethod == NULL) noMethodLoaded();
         else
         {
-            QJsonObject params = methodLoader->getMethodParams(
-                        methodName);
+
+            ParameterList list = myMethod->getParameterList();
             ParameterDialog *d = new ParameterDialog(
-                        params,
+                        list,
                         methodName,this);
             d->setModal(true);
             int v=d->exec();
             if(v == QDialog::Accepted)
             {
-                QJsonObject params = d->getParams();
+                list = d->getParameterList();
+                QJsonObject params = list.getParams();
                 QJsonDocument doc(params);
                 QString strJson(doc.toJson(QJsonDocument::Compact));
                 addMessage("Method params "+strJson);

@@ -82,19 +82,68 @@ QWidget *ParamWidget::addEntryWidget(int index)
         paramValue->setAlignment(Qt::AlignCenter);
         return paramValue;
     }
+    else
+    {
+        Parameter param = paramList.getParam(index);
+        int type = param.getType();
+        switch(type)
+        {
+        case PARAM_STRING:
+        {
+            QLineEdit *paramValue=new QLineEdit();
+            paramValue->setText(param.getValue());
+            paramValue->setAlignment(Qt::AlignCenter);
+            return paramValue;
+            break;
+        }
+        case PARAM_DOUBLE:
+        {
+            QDoubleSpinBox *spin = new QDoubleSpinBox;
+            spin->setMinimum(param.getLowDoubleValue());
+            spin->setMaximum(param.getUpperDoubleValue());
+            spin->setValue(param.getValue().toDouble());
+            return spin;
+        }
+            break;
+        case PARAM_FILE:
+        {
+            return NULL;
+            break;
+        }
+        case PARAM_INTEGER:
+        {
+            QSpinBox *spin = new QSpinBox;
+            spin->setMinimum(param.getLowIntValue());
+            spin->setMaximum(param.getUpperIntValue());
+            spin->setValue(param.getValue().toInt());
+            return spin;
+            break;
+        }
+        case PARAM_LIST:
+        {
+            QComboBox *combo = new QComboBox;
+            QStringList list = param.getStringValues();
+            combo->addItems(list);
+            combo->setCurrentText(param.getValue());
+            return combo;
+            break;
+        }
+        }
+    }
     return NULL;
 }
 void    ParamWidget::updateTable()
 {
     while(mainTable->rowCount()!=0)
         mainTable->removeRow(0);
-
+    int minHeight = 105*getIconSize().height()/100;;
     if(useJsonValues)
     {
         mainTable->setRowCount(jsonObject.size()+1);
 
         for(int i=0;i<jsonObject.size();i++)
         {
+            mainTable->setRowHeight(i,minHeight);
             QLineEdit *paramName=new QLineEdit();
             paramName->setAlignment(Qt::AlignCenter);
             paramName->setText(jsonObject.keys().at(i));
@@ -109,19 +158,38 @@ void    ParamWidget::updateTable()
     }
     else
     {
+        int n = paramList.countParameters();
+        QStringList names = paramList.getParameterNames();
+        mainTable->setRowCount(n+1);
+        for(int i=0;i<n;i++)
+        {
+            mainTable->setRowHeight(i,minHeight);
+            QLineEdit *paramName=new QLineEdit();
+            paramName->setAlignment(Qt::AlignCenter);
+            paramName->setText(names[i]);
+            mainTable->setCellWidget(i,0,paramName);
+            QWidget *paramValue=addEntryWidget(i);
+            mainTable->setCellWidget(i,1,paramValue);
+            QPushButton *updateButton=addAddButton(i);
+            mainTable->setCellWidget(i,2,updateButton);
+            QPushButton *deleteButton=addDelButton(i);
+            mainTable->setCellWidget(i,3,deleteButton);
 
+        }
     }
-    int lastRow = mainTable->rowCount()-1;
-    QLineEdit *addName=new QLineEdit();
-    mainTable->setCellWidget(lastRow,0,addName);
-    QLineEdit *addValue=new QLineEdit();
-    mainTable->setCellWidget(lastRow,1,addValue);
-    QPushButton *newAddButton=new QPushButton();
-    newAddButton->setIcon(QIcon(QPixmap(":/images/XOPTIMUS/add.png")));
-    newAddButton->setIconSize(getIconSize());
-    mainTable->setCellWidget(lastRow,2,newAddButton);
-    connect(newAddButton,SIGNAL(clicked(bool)),this,SLOT(insertSlot()));
-    mainTable->resizeRowsToContents();
+
+        int lastRow = mainTable->rowCount()-1;
+        mainTable->setRowHeight(lastRow,minHeight);
+        QLineEdit *addName=new QLineEdit();
+        mainTable->setCellWidget(lastRow,0,addName);
+        QLineEdit *addValue=new QLineEdit();
+        mainTable->setCellWidget(lastRow,1,addValue);
+        QPushButton *newAddButton=new QPushButton();
+        newAddButton->setIcon(QIcon(QPixmap(":/images/XOPTIMUS/add.png")));
+        newAddButton->setIconSize(getIconSize());
+        mainTable->setCellWidget(lastRow,2,newAddButton);
+        connect(newAddButton,SIGNAL(clicked(bool)),this,SLOT(insertSlot()));
+
 }
 
 void    ParamWidget::updateSlot()
@@ -137,7 +205,41 @@ void    ParamWidget::updateSlot()
     }
     else
     {
-
+        Parameter param = paramList.getParam(position);
+        int type = param.getType();
+        switch(type)
+        {
+        case PARAM_DOUBLE:
+        {
+            QDoubleSpinBox *spin = (QDoubleSpinBox *)mainTable->cellWidget(position,1);
+            param.setValue(QString::number(spin->value()));
+            break;
+        }
+        case PARAM_FILE:
+        {
+            break;
+        }
+        case PARAM_INTEGER:
+        {
+            QSpinBox *spin = (QSpinBox *)mainTable->cellWidget(position,1);
+            param.setValue(QString::number(spin->value()));
+            break;
+        }
+        case PARAM_LIST:
+        {
+            QComboBox *combo = (QComboBox *)mainTable->cellWidget(position,1);
+            QString paramText = combo->currentText();
+            param.setValue(combo->currentText());
+            break;
+        }
+        case PARAM_STRING:
+        {
+            QString value=((QLineEdit *)mainTable->cellWidget(position,1))->text();
+            param.setValue(value);
+            break;
+        }
+        }
+        paramList.setParam(param.getName(),param.getValue());
     }
     updateTable();
 }
@@ -154,7 +256,7 @@ void    ParamWidget::deleteSlot()
     }
     else
     {
-
+       paramList.deleteParam(position);
     }
     updateTable();
 }
@@ -169,10 +271,22 @@ void    ParamWidget::insertSlot()
     }
     else
     {
-
+        Parameter p(name,value,"");
+        paramList.addParam(p);
     }
     updateTable();
 }
+
+QJsonObject ParamWidget::getJson()
+{
+    return jsonObject;
+}
+
+ParameterList   ParamWidget::getParamList()
+{
+    return paramList;
+}
+
 ParamWidget::~ParamWidget()
 {
 

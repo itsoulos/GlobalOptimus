@@ -21,6 +21,7 @@
 #include <QFileDialog>
 # include <QApplication>
 # include <XOPTIMUS/paramwidget.h>
+# include <OPTIMUS/parameterlist.h>
 class ParameterDialog : public QDialog
 {
     Q_OBJECT
@@ -30,10 +31,14 @@ private:
     int WIDTH,HEIGHT;
 
      QJsonObject obj;
+     ParameterList paramList;
      QString problemName;
 public:
     ParameterDialog(QJsonObject params,QString name,QWidget *parent=0);
+    ParameterDialog(ParameterList &list,QString name,QWidget *parent=0);
+    void     initView(QString name,bool isJson=false);
     QJsonObject getParams() const;
+    ParameterList getParameterList() const;
     ~ParameterDialog();
 public slots:
     void    okSlot();

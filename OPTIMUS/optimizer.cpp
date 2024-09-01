@@ -275,6 +275,11 @@ QStringList Optimizer::getParameterNames() const
     return paramList.getParameterNames();
 }
 
+ParameterList Optimizer::getParameterList()
+{
+    return paramList;
+}
+
 Optimizer::~Optimizer()
 {
     if(problemSampler!=NULL)

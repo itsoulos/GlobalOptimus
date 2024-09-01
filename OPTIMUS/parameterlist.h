@@ -30,6 +30,8 @@ public:
      * @return  the parameter located in value name
      */
     Parameter   getParam(QString name);
+    Parameter   getParam(int index);
+    void        deleteParam(int index);
     /**
      * @brief getParameterNames
      * @return  the list of all parameter names
@@ -58,6 +60,7 @@ public:
      * @param x, the json object contains the new values
      */
     void   setParamValuesFromJson(QJsonObject &x);
+    int     countParameters() const;
     ~ParameterList();
 };
 

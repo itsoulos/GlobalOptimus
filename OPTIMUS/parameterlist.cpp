@@ -68,6 +68,21 @@ bool ParameterList::contains(QString name) const
     return false;
 }
 
+void    ParameterList::deleteParam(int index)
+{
+    mparams.remove(index);
+}
+
+Parameter ParameterList::getParam(int index)
+{
+    return mparams[index];
+}
+
+int ParameterList::countParameters() const
+{
+    return mparams.size();
+}
+
 ParameterList::~ParameterList()
 {
     //nothing here

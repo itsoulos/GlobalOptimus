@@ -1,4 +1,5 @@
 #include "parameter.h"
+# include <QDebug>
 Parameter::Parameter(QString n,QString v,QString h)
 {
     setName(n);
@@ -61,9 +62,13 @@ int Parameter::getUpperIntValue() const
 
 double  Parameter::getLowDoubleValue() const
 {
-    return upper_double;
+    return low_double;
 }
 
+double  Parameter::getUpperDoubleValue() const
+{
+    return upper_double;
+}
 QStringList Parameter::getStringValues() const
 {
     return string_values;

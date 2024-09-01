@@ -11,6 +11,10 @@
 # include <QLineEdit>
 # include <QScreen>
 # include <QGuiApplication>
+# include <QDoubleSpinBox>
+# include <QSpinBox>
+# include <QComboBox>
+# include <QFileSelector>
 # include <OPTIMUS/parameterlist.h>
 /**
  * @brief The ParamWidget class is responsible to display
