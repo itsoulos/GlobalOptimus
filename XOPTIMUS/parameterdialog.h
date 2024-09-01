@@ -20,18 +20,16 @@
 #include <QFile>
 #include <QFileDialog>
 # include <QApplication>
-
+# include <XOPTIMUS/paramwidget.h>
 class ParameterDialog : public QDialog
 {
     Q_OBJECT
 private:
-    QTableWidget *table;
+    ParamWidget  *paramWidget;
     QPushButton *ok,*cancel;
-    QPushButton *loadParameterButton;
     int WIDTH,HEIGHT;
 
      QJsonObject obj;
-     void   updateTable();
      QString problemName;
 public:
     ParameterDialog(QJsonObject params,QString name,QWidget *parent=0);
@@ -40,10 +38,6 @@ public:
 public slots:
     void    okSlot();
     void    cancelSlot();
-    void    insertSlot();
-    void    updateSlot();
-    void    deleteSlot();
-    void    loadParameterSlot();
 };
 
 #endif // PARAMETERDIALOG_H

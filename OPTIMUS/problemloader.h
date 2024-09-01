@@ -56,22 +56,72 @@
 # include <PROBLEMS/schaffer.h>
 # include <PROBLEMS/Extended_f10.h>
 # include <PROBLEMS/bf3.h>
+/**
+ * @brief The ProblemLoader class
+ */
 class ProblemLoader
 {
 private:
+    /**
+     * @brief myProblem
+     */
     Problem *myProblem;
+    /**
+     * @brief myParams
+     */
     QJsonObject myParams;
+    /**
+     * @brief problemList
+     */
     QStringList problemList;
+    /**
+     * @brief selectedProblem
+     */
     QString selectedProblem;
 
 public:
+    /**
+     * @brief ProblemLoader
+     */
     ProblemLoader();
+    /**
+     * @brief getProblemList
+     * @return the list of the supported objective functions.
+     */
     QStringList     getProblemList() const;
+    /**
+     * @brief loadProblem
+     * @param name
+     * @return loads a problem and returns a pointer to it.
+     */
     Problem         *loadProblem(QString name);
+    /**
+     * @brief setParams
+     * @param p alters the parameter values of the objective problem
+     */
     void            setParams(QJsonObject &p);
+    /**
+     * @brief getParams
+     * @return the parameters of the problem in json format
+     */
     QJsonObject     getParams() const;
+    /**
+     * @brief getSelectedProblemName
+     * @return the name of the running objective problem
+     */
     QString         getSelectedProblemName() const;
+    /**
+     * @brief getProblemReport
+     * @param selectedProblem
+     * @param myProblem
+     * @return a string report for the objective problem myProblem.
+     */
     static QString getProblemReport(QString selectedProblem,Problem *myProblem);
+    /**
+     * @brief getProblemFromName
+     * @param name
+     * @return a pointer to the problem provided by parameter name
+     */
     static Problem *getProblemFromName(QString name);
     ~ProblemLoader();
 };

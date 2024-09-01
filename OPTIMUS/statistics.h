@@ -9,6 +9,10 @@ struct Metric
     double fvalue;
 };
 
+/**
+ * @brief The Statistics class implements the statistics
+ *        for the objective problems.
+ */
 class Statistics
 {
 private:
