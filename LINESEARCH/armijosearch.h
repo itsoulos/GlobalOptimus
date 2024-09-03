@@ -12,7 +12,16 @@ private:
     double ArmijoLambda;
 public:
     ArmijoSearch(Problem *p);
+    /**
+     * @brief setLambda
+     * @param l
+     */
     void setLambda(double l);
+    /**
+     * @brief getDirection
+     * @param x
+     * @return
+     */
     virtual double getDirection(Data &x);
 };
 

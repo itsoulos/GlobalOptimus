@@ -14,11 +14,19 @@ private:
     int nsamples;
 public:
     Multistart();
+    /**
+     * @brief init
+     */
     virtual void init();
     virtual void step();
     virtual bool terminated();
     virtual void showDebug();
     virtual void done();
+    /**
+     * @brief getBest
+     * @param x
+     * @param y
+     */
     void getBest(Data &x,double &y);
     virtual ~Multistart();
 };
