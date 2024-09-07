@@ -60,7 +60,7 @@ double calculate_z(double *u) {
 
 double f12::funmin(Data &x) {
     int n = x.size();
-    double y[30];
+    double y[x.size()];
     for (int i = 0; i < n; ++i) {
         y[i] = 1 + (x[i] + 1) / 4.0;
     }

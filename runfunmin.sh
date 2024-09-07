@@ -3,7 +3,7 @@ METHOD=Ego
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=kmeans
 #Available stopping rules: maxiters, doublebox, similarity, mean, all
 TERMINATION=similarity
 ### GLOBAL PARAMS
