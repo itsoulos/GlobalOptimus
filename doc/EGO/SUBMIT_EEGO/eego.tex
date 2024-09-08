@@ -6,17 +6,18 @@
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage{url}
+\usepackage{amsmath}
 \usepackage{graphicx}
 
 \makeatletter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
 
-\Title{EEGO: an extended version of Eel and grouper optimizer for global
-optimization problems}
+\Title{Implementing a series of modifications for the Eel and grouper optimizer
+for global optimization problems}
 
-\TitleCitation{EEGO: an extended version of Eel and grouper optimizer for global
-optimization problems}
+\TitleCitation{Implementing a series of modifications for the Eel and grouper optimizer
+for global optimization problems}
 
 \Author{Glykeria Kyrou$^{1}$, Vasileios Charilogis$^{2}$ and Ioannis G.
 Tsoulos$^{3,*}$}
@@ -37,26 +38,23 @@ of Ioannina, 47150 Kostaki Artas, Greece;itsoulos@uoi.gr}
 \corres{Correspondence: itsoulos@uoi.gr}
 
 
-\abstract{The problems of finding a global minimum of a function are increasingly
-applied to real-world problems. As a result, a variety of computational
-techniques have been developed to locate the global minimum with some
-certainty. A decisive role is played by evolutionary techniques, which
-simulate natural processes and aim to find the global minimum of multidimensional
-functions. A recently introduced evolutionary technique is the optimal
-Eel and Grouper (EGO) algorithm, which is inspired by the symbiotic
-interaction and foraging strategy of eels and groupers in marine ecosystems.
-The EGO algorithm is characterized by its reliability in locating
-the global minimum. In this paper, modifications are proposed that
-aim to improve the reliability and speed of the above technique, such
-as the application of a termination technique based on stochastic
-observations and an innovative sampling method. The proposed method
-was tested on several problems from the relevant literature and a
-comparative study was made with other global optimization techniques
-with promising results.}
+\abstract{Global optimization is used in many practical and scientific problems.
+For this reason, various computational techniques have been developed.
+Particularly important are the evolutionary techniques, which simulate
+natural phenomena with the aim of detecting the global minimum in
+complex problems. A new evolutionary method is the Eel and Grouper
+Optimization (EGO) algorithm, inspired by the symbiotic relationship
+and foraging strategy of eels and groupers in marine ecosystems. In
+this work, modifications of this technique are proposed, such as the
+use of a termination technique based on stochastic observations. The
+proposed modifications have been tested on multidimensional functions
+available from the relevant literature and compared with other evolutionary
+methods.}
 
 
-\keyword{Global optimization, Meta-heuristics, Stochastic techniques, Evolutionary
-methods, Swarm based methods, termination technique, sampling method}
+\keyword{Global optimization; Metaheuristic algorithms; Stochastic methods;
+Evolutionary algorithms; Swarm algorithms; Termination strategies;
+Sampling techniques.}
 
 \newcommand*\LyXZeroWidthSpace{\hspace{0pt}}
 \DeclareTextSymbolDefault{\textquotedbl}{T1}
@@ -212,10 +210,10 @@ In recent years many researchers have published important reviews
 on global optimization\citep{plhroforikh,computer,computer1}. Global
 optimization is a technique of vital importance in many fields of
 science and applications, as it allows finding the optimal solution
-to problems with multiple local solutions. In mathematics\citep{maths,maths-1,maths2,key-maths3},
-it is used to solve complex mathematical problems, in physics\citep{fusikh,fusikh1,fysikhh},
+to problems with multiple local solutions. In mathematics \citep{maths,maths-1,maths2,key-maths3},
+it is used to solve complex mathematical problems, in physics \citep{fusikh,fusikh1,fysikhh},
 it is used to analyze and improve models that describe natural phenomena,
-in chemistry\citep{xhmeia,xhmeia1,xhmeia2}, it analyzes and designs
+in chemistry \citep{xhmeia,xhmeia1,xhmeia2}, it analyzes and designs
 molecules and chemical diagnostic tools, and in medicine\citep{medicine}
 it analyzes and designs therapeutic strategies and diagnostic tools
 .
@@ -227,18 +225,33 @@ the total minimum with some certainty, such as interval methods \citep{key-1,int
 and are usually distinguished by their complex implementation. The
 vast majority of global optimization algorithms belong to \LyXZeroWidthSpace\LyXZeroWidthSpace stochastic
 methods that have simpler implementation and can also be applied to
-large -scale problems. Among the stochastic techniques one finds a
-large group of methods that have been explored intensively in recent
-years, the so - called Swarm Intelligence algorithms.
+large -scale problems. Recently, Sergeyev et al \citep{Sergeyev}
+published a systematic comparison between deterministic and stochastic
+methods for global optimization problems.
 
-Swarm intelligence algorithms \citep{swarm1,swarm2,swarm} are inspired
-by the collective behavior of insects and other animals. These algorithms
-mimic systems in which agents interact locally and cooperate worldwide
-to solve optimization problems. Swarm intelligence algorithms are
-very important tools for dealing with complex optimization problems
-in a wide range of applications \citep{APPS}. Some examples of these
-methods are the Whale Optimization Algorithm (WOA) algorithm \citealp{WOA,WOA1,WOA2},
-the Sine Cosine algorithm (SCA) algorithm \citep{SCA,SCA1,SCA2,sca1},
+An important branch of the stochastic methods are the evolutionary
+methods, that attempt to mimic a series of natural processes. Among
+these methods one can find the Differential Evolution method \citep{diffe1,diffe2},
+Particle Swarm Optimization (PSO) methods \citep{pso_major,pso1,pso2},
+Ant Colony optimization methods \citep{aco1,aco2}, Genetic algorithms
+\citep{genetic1,genetic2} etc. Additionally, since in recent years
+there has been an extremely wide spread of parallel computing units,
+many researches have proposed evolutionary methods that exploit modern
+parallel processing units \citep{gpu1,gpu2,gpu3}. 
+
+Among the evolutionary techniques one finds a large group of methods
+that have been explored intensively in recent years, the so - called
+Swarm Intelligence algorithms. Swarm intelligence algorithms \citep{swarm1,swarm2,swarm}
+are inspired by the collective behavior of insects and other animals.
+These algorithms mimic systems in which agents interact locally and
+cooperate worldwide to solve optimization problems. Swarm intelligence
+algorithms are very important tools for dealing with complex optimization
+problems in a wide range of applications \citep{APPS}. Some examples
+of these methods are the Fast Bacterial Swarming Algorithm (FBSA)
+\citep{bacterial}, the Fish Swarm Algorithm \citep{fish}, the Dolphin
+Swarm Algorithm \citep{dolphin}, the Whale Optimization Algorithm
+(WOA) algorithm \citealp{WOA,WOA1,WOA2}, the Tunicate Swarm Algorithm
+\citep{tunicate}, the Sine Cosine algorithm (SCA) algorithm \citep{SCA,SCA1,SCA2,sca1},
 the Salp Swarm algorithm (SSA) algorithm \citep{ssaa,SSA,SSA1,SSA2}
 etc. These methods simulate a series of complex interactions between
 biological species \citep{search algorithm,several metaheuristic algorithms },
@@ -276,9 +289,9 @@ methods.
 This paper introduces some modifications to the EGO algorithm in order
 to improve its efficiency. The proposed amendments are presented below:
 \begin{itemize}
-\item The addition of a sampling technique based on the K-means method {[}47,
-48{]}. The sampling points will facilitate finding the global minimum
-of the function in the most efficient way. Additionally, by applying
+\item The addition of a sampling technique based on the K-means method \citep{MacQueen}.
+The sampling points will facilitate finding the global minimum of
+the function in the most efficient way. Additionally, by applying
 this method, nearby points are discarded.
 \item Using a termination technique that is developed with random measurements.
 Each time the algorithm is repeated, the minimum value is recorded.
@@ -302,9 +315,18 @@ are described in detail in this section.
 
 \subsection{The main steps of the algorithm}
 
-The main steps of the used global optimization method are the following:
+EGO optimization algorithm starts by initializing a population consisting
+of \textquotedbl search agents\textquotedbl{} that search to find
+the optimal solution. At each iteration, the position of the \textquotedbl prey\textquotedbl{}
+(optimal solution) is calculated. Agent positions are adjusted based
+on random variables and their distance based on the optimal position.At
+the end of each iteration, the current solutions are compared and
+it is decided whether the algorithm should continue or terminate.
+The main steps of the used global optimization method provided in
+Algorithm \ref{alg:EGO-Algorithm}. Also, the algorithm is presented
+as a series of steps in the flowchart of Figure \ref{fig:flowEgo}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \textbf{Initialization step}.
 \begin{enumerate}
 \item \textbf{Define} as $N_{c}$ the number of elements in the search Agents
@@ -369,11 +391,18 @@ calculated:
 \end{equation}
 \par\end{centering}
 \textbf{If} the termination criteria are not met then go to Calculation
-step, \textbf{else} terminate and return the best solution.\caption{EGO Algorithm}
+step, \textbf{else} terminate and return the best solution.\caption{EGO Algorithm\label{alg:EGO-Algorithm}}
 \end{enumerate}
 \end{algorithm}
 
-$ $
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{ego_flochart}
+\par\end{centering}
+\caption{Flowchart of the suggested global optimization procedure.\label{fig:flowEgo}}
+
+\end{figure}
+
 
 \subsection{The proposed sampling procedure\label{subsec:The-proposed-sampling}}
 
@@ -389,7 +418,14 @@ to divide the data into groups in such a way that the internal points
 of each group are as close as possible to each other. At the same
 time, he tries to place the central points of each group in positions
 which are as representative as possible for the points of their group.
-Next, the basic steps of the algorithm are presented:
+During the past years a series of variants of this algorithm has been
+proposed, such as the Genetic K-means algotithm \citep{gen_kmeans},
+the unsupervised K-means algorithm \citep{unsuper_kmeans}, the Fixed-centered
+K-means algorithm \citep{fixed_kmeans} etc. A review of K-Means clustering
+algorithms can be found in the work of Oti et al. \citep{kmeans_review}
+Next, the basic steps of the algorithm are presented in Algorithm
+\ref{alg:K-means-Algorithm}. A flowchart of the K-Means procedure
+is also depicted in Figure \ref{fig:flowchartKmeans}.
 
 \begin{algorithm}[H]
 \begin{enumerate}
@@ -420,8 +456,16 @@ c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
 \end{enumerate}
 \item Terminate when $c_{j}$ no longer changes
 \end{enumerate}
-\caption{K-means Algorithm}
+\caption{K-means Algorithm\label{alg:K-means-Algorithm}}
 \end{algorithm}
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{kmeans_flowchart}
+\par\end{centering}
+\caption{The flowchart of the K-Means procedure.\label{fig:flowchartKmeans}}
+
+\end{figure}
 
 
 \section{Results\label{sec:Results}}
@@ -437,62 +481,258 @@ The functions used in the experiments have been proposed in a series
 of relative works \citep{Ali,Floudas1} and they cover various scientific
 fields, such as medicine, physics, engineering, etc. Also, these objective
 functions have been used by many researchers in a variety of publications
-\citep{testfunc1,testfunc2,testfunc2-1,testfunc3,testfunc4}. The
-definitions of these functions are given below in Table .
-\begin{table}[H]
-\centering{}\caption{The test functions used in the conducted experiments.\label{tab:testFunctions}}
-\begin{tabular}{lcc}
-\toprule 
-Test function & Formula & Dimension\tabularnewline
-\midrule
-\midrule 
-Bohachevsky1 & {\tiny{}$f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}$} & 2\tabularnewline
-\midrule 
-Bohachevsky2 & {\tiny{}$f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}$} & 2\tabularnewline
-\midrule 
-Bohachevsky3 & {\tiny{}$f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}+4\pi x_{2}\right)+\frac{3}{10}$} & 2\tabularnewline
-\midrule 
-Branin & {\tiny{}$f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$} & 2\tabularnewline
-\midrule 
-Camel & {\tiny{}$f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}$} & 2\tabularnewline
-\midrule 
-Easom & {\tiny{}$f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)$} & 2\tabularnewline
-\midrule 
-Exponential & {\tiny{}$f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1$} & {\scriptsize{}$n=4,8,16,32$}\tabularnewline
-\midrule 
-Griewank2 & {\tiny{}$f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}},\quad x\in[-100,100]^{2}$} & 2\tabularnewline
-\midrule 
-Griewank10 & {\tiny{}$f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1$} & 10\tabularnewline
-\midrule 
-Gkls & {\tiny{}$f(x)=\mbox{Gkls}(x,n,w)$} & {\scriptsize{}$n=2,3\ w=50,100$}\tabularnewline
-\midrule 
-Hansen & {\tiny{}$f(x)=\sum_{i=1}^{5}i\cos\left[(i-1)x_{1}+i\right]\sum_{j=1}^{5}j\cos\left[(j+1)x_{2}+j\right]$} & 2\tabularnewline
-\midrule 
-Hartman3 & {\tiny{}$f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)$} & 3\tabularnewline
-\midrule 
-Hartman6 & {\tiny{}$f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{6}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)$} & 6\tabularnewline
-\midrule 
-Potential & {\tiny{}$V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]$} & {\scriptsize{}$n=3,5$}\tabularnewline
-\midrule 
-Rastrigin & {\tiny{}$f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}$} & 2\tabularnewline
-\midrule 
-Rosenbrock & {\tiny{}$f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$} & {\scriptsize{}$n=4,8,16$}\tabularnewline
-\midrule 
-Shekel5 & {\tiny{}$f(x)=-\sum_{i=1}^{5}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$} & 4\tabularnewline
-\midrule 
-Shekel7 & {\tiny{}$f(x)=-\sum_{i=1}^{7}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$} & 4\tabularnewline
-\midrule 
-Shekel10 & {\tiny{}$f(x)=-\sum_{i=1}^{10}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$} & 4\tabularnewline
-\midrule 
-Sinusoidal & {\tiny{}$f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi$} & {\scriptsize{}$n=4,8$}\tabularnewline
-\midrule 
-Test2n & {\tiny{}$f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5]$} & {\scriptsize{}$n=3,4,5,6,7$}\tabularnewline
-\midrule 
-Test30n & {\tiny{}$f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)$} & {\scriptsize{}$n=3,4$}\tabularnewline
-\bottomrule
-\end{tabular}
-\end{table}
+\citep{testfunc1,testfunc2,testfunc2-1,testfunc3,testfunc4}. 
 
+The definitions of these functions are given below:
+\begin{itemize}
+\item \textbf{Ackley }function:
+\item \textbf{Bf1} (Bohachevsky 1) function:
+\end{itemize}
+\[
+f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}
+\]
+
+\begin{itemize}
+\item \textbf{Bf2} (Bohachevsky 2) function: 
+\[
+f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}
+\]
+\item \textbf{Bf3} (Bohachevsky 3) function: 
+\[
+f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}+4\pi x_{2}\right)+\frac{3}{10}
+\]
+\item \textbf{Branin} function:
+
+\[
+f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10
+\]
+ with $-5\le x_{1}\le10,\ 0\le x_{2}\le15$.
+\item \textbf{Camel} function:
+\[
+f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}
+\]
+\item \textbf{Easom} function: 
+\[
+f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)
+\]
+with $x\in[-100,100]^{2}.$ 
+\item \textbf{Exponential} function, defined as: 
+\[
+f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1
+\]
+ In the conducted experiments the values $n=4,8,16,32$ were used.
+\item \textbf{Extended F10 }function:
+\[
+f(x)=\sum_{i=1}^{n}\left(x_{i}^{2}-10\cos\left(2\pi x_{i}\right)\right)
+\]
+\item \textbf{F14 }function:
+\[
+f(x)=\left(\frac{1}{500}+\sum_{j=1}^{25}\frac{1}{j+\sum_{i=1}^{2}\left(x_{i}-a_{ij}\right)^{6}}\right)^{-1}
+\]
+\item \textbf{F15 }function:
+\[
+f(x)=\sum_{i=1}^{11}\left(a_{i}-\frac{x_{1}\left(b_{i}+b_{i}x_{2}\right)}{b_{i}^{2}+b_{i}x_{3}+x_{4}}\right)^{2}
+\]
+\item \textbf{F17 }function:
+\begin{align*}
+f(x) & =\left(1+\left(x_{1}+x_{2}+1\right)^{2}\times\left(19-14x_{1}+3x_{1}^{2}-14x_{2}+6x_{1}x_{2}+3x_{2}^{2}\right)\right)\times\\
+ & \left(30+\left(2x_{1}-3x_{2}\right)^{2}\times\left(18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2}\right)\right)
+\end{align*}
+\item \textbf{Griewank2} function:
+\[
+f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}},\quad x\in[-100,100]^{2}
+\]
+\item \textbf{Griewank10} function. The function is given by the equation
+\[
+f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1
+\]
+with $n=10$.
+\item \textbf{Gkls} function \citep{gkls}. The function $f(x)=\mbox{Gkls}(x,n,w)$,
+is a constructed function with $w$ local minima presented in \citep{gkls},
+with $x\in[-1,1]^{n}$. For the conducted experiments the values $n=2,3$
+and $w=50$ were utilized.
+\item \textbf{Goldstein and Price function }\\
+\begin{eqnarray*}
+f(x) & = & \left[1+\left(x_{1}+x_{2}+1\right)^{2}\right.\\
+ &  & \left(19-14x_{1}+3x_{1}^{2}-14x_{2}+6x_{1}x_{2}+3x_{2}^{2}\right)]\times\\
+ &  & [30+\left(2x_{1}-3x_{2}\right)^{2}\\
+ &  & \left(18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2}\right)]
+\end{eqnarray*}
+With $x\in[-2,2]^{2}$. 
+\item \textbf{Hansen} function: $f(x)=\sum_{i=1}^{5}i\cos\left[(i-1)x_{1}+i\right]\sum_{j=1}^{5}j\cos\left[(j+1)x_{2}+j\right]$,
+$x\in[-10,10]^{2}$ .
+\item \textbf{Hartman 3} function:
+\[
+f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
+\]
+with $x\in[0,1]^{3}$ and $a=\left(\begin{array}{ccc}
+3 & 10 & 30\\
+0.1 & 10 & 35\\
+3 & 10 & 30\\
+0.1 & 10 & 35
+\end{array}\right),\ c=\left(\begin{array}{c}
+1\\
+1.2\\
+3\\
+3.2
+\end{array}\right)$ and
+\[
+p=\left(\begin{array}{ccc}
+0.3689 & 0.117 & 0.2673\\
+0.4699 & 0.4387 & 0.747\\
+0.1091 & 0.8732 & 0.5547\\
+0.03815 & 0.5743 & 0.8828
+\end{array}\right)
+\]
+\item \textbf{Hartman 6} function:
+\[
+f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{6}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
+\]
+with $x\in[0,1]^{6}$ and $a=\left(\begin{array}{cccccc}
+10 & 3 & 17 & 3.5 & 1.7 & 8\\
+0.05 & 10 & 17 & 0.1 & 8 & 14\\
+3 & 3.5 & 1.7 & 10 & 17 & 8\\
+17 & 8 & 0.05 & 10 & 0.1 & 14
+\end{array}\right),\ c=\left(\begin{array}{c}
+1\\
+1.2\\
+3\\
+3.2
+\end{array}\right)$ and
+\[
+p=\left(\begin{array}{cccccc}
+0.1312 & 0.1696 & 0.5569 & 0.0124 & 0.8283 & 0.5886\\
+0.2329 & 0.4135 & 0.8307 & 0.3736 & 0.1004 & 0.9991\\
+0.2348 & 0.1451 & 0.3522 & 0.2883 & 0.3047 & 0.6650\\
+0.4047 & 0.8828 & 0.8732 & 0.5743 & 0.1091 & 0.0381
+\end{array}\right)
+\]
+\item \textbf{Potential} function, this function stands for the energy of
+a molecular conformation of N atoms, that interacts using via the
+Lennard-Jones potential \citep{jones}. The function is defined as:
+\[
+V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]
+\]
+For the conducted experiments the values $N=3,\ 5$ were used. 
+\item \textbf{Rastrigin} function. 
+\[
+f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}
+\]
+\item \textbf{\emph{Rosenbrock}}\emph{ function}.\\
+\[
+f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30.
+\]
+The values $n=4,\ 8,\ 16$ were used in the conducted experiments.
+\item \textbf{Shekel 5 }function.
+\end{itemize}
+\[
+f(x)=-\sum_{i=1}^{5}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
+\]
+ 
+
+with $x\in[0,10]^{4}$ and $a=\left(\begin{array}{cccc}
+4 & 4 & 4 & 4\\
+1 & 1 & 1 & 1\\
+8 & 8 & 8 & 8\\
+6 & 6 & 6 & 6\\
+3 & 7 & 3 & 7
+\end{array}\right),\ c=\left(\begin{array}{c}
+0.1\\
+0.2\\
+0.2\\
+0.4\\
+0.4
+\end{array}\right)$
+\begin{itemize}
+\item \textbf{Shekel 7} function.
+\end{itemize}
+\[
+f(x)=-\sum_{i=1}^{7}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
+\]
+
+with $x\in[0,10]^{4}$ and $a=\left(\begin{array}{cccc}
+4 & 4 & 4 & 4\\
+1 & 1 & 1 & 1\\
+8 & 8 & 8 & 8\\
+6 & 6 & 6 & 6\\
+3 & 7 & 3 & 7\\
+2 & 9 & 2 & 9\\
+5 & 3 & 5 & 3
+\end{array}\right),\ c=\left(\begin{array}{c}
+0.1\\
+0.2\\
+0.2\\
+0.4\\
+0.4\\
+0.6\\
+0.3
+\end{array}\right)$.
+\begin{itemize}
+\item \textbf{Shekel 10} function.
+\end{itemize}
+\[
+f(x)=-\sum_{i=1}^{10}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}
+\]
+ 
+
+with $x\in[0,10]^{4}$ and $a=\left(\begin{array}{cccc}
+4 & 4 & 4 & 4\\
+1 & 1 & 1 & 1\\
+8 & 8 & 8 & 8\\
+6 & 6 & 6 & 6\\
+3 & 7 & 3 & 7\\
+2 & 9 & 2 & 9\\
+5 & 5 & 3 & 3\\
+8 & 1 & 8 & 1\\
+6 & 2 & 6 & 2\\
+7 & 3.6 & 7 & 3.6
+\end{array}\right),\ c=\left(\begin{array}{c}
+0.1\\
+0.2\\
+0.2\\
+0.4\\
+0.4\\
+0.6\\
+0.3\\
+0.7\\
+0.5\\
+0.6
+\end{array}\right)$. 
+\begin{itemize}
+\item \textbf{Sinusoidal} function defined as:
+\[
+f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi.
+\]
+The values of $n=4,8,16$ were used in the conducted experiments.
+\item \textbf{Schaffer }function:\textbf{
+\[
+f(x)=\sum_{i=1}^{n}\left(\sum_{j=1}^{i}x_{j}\right)^{2}
+\]
+}
+\item \textbf{Schwefel221 }function:
+\[
+f(x)=418.9829n+\sum_{i=1}^{n}-x_{i}\sin\left(\sqrt{\left|x_{i}\right|}\right)
+\]
+\item \textbf{Schwefel222} function:
+\[
+f(x)=\sum_{i=1}^{n}\left|x_{i}\right|+\prod_{i=1}^{n}\left|x_{i}\right|
+\]
+\item \textbf{Sphere }function:
+\[
+f(x)=\sum_{i=1}^{n}x_{i}^{2}
+\]
+\item \textbf{Test2N} function:
+\[
+f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5].
+\]
+For the conducted experiments the values $n=4,5,6,7$ were used.
+\item \textbf{Test30N} function:
+\[
+f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)
+\]
+The values $n=3,4$ were used in the conducted experiments.
+\end{itemize}
+%
 
 \subsection{Experimental results}
 
@@ -550,9 +790,6 @@ set to $N_{g}$. For the conducted experiments, the improved PSO method
 as proposed by Charilogis and Tsoulos was used \citep{ipso}. 
 \item The column DE\textbf{ }refers to the Differential Evolution method
 \citep{diffe1,diffe2}.
-\item The column GAO stands for the Giant Armadillo Optimization method
-\citep{gao}. In the conducted experiments the improved method published
-recently was used \citep{igao}.
 \item The column EEGO represents the application of the proposed method
 using the values for the parameters shown in Table \ref{tab:settings}.
 \item The row SUM represents the sum of function calls for all test functions.
@@ -562,82 +799,102 @@ using the values for the parameters shown in Table \ref{tab:settings}.
 in cells represent sum function calls.\label{tab:comparison}}
 
 \centering{}%
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline 
-\textbf{FUNCTION} & \textbf{GENETIC} & \textbf{PSO} & \textbf{DE} & \textbf{GAO} & \textbf{EEGO}\tabularnewline
+\textbf{FUNCTION} & \textbf{GENETIC} & \textbf{PSO} & \textbf{DE} & \textbf{EEGO}\tabularnewline
 \hline 
 \hline 
-BF1 & 4007 & 4142 & 8268 & 4139 & 3228\tabularnewline
+ACKLEY & 6749 & 6885 & 10220 & 4199\tabularnewline
 \hline 
-BF2 & 3794 & 3752 & 7913 & 3775 & 2815\tabularnewline
+BF1 & 4007 & 4142 & 8268 & 3228\tabularnewline
 \hline 
-BRANIN & 2376 & 2548 & 4101 & 2353 & 1684\tabularnewline
+BF2 & 3794 & 3752 & 7913 & 2815\tabularnewline
 \hline 
-CAMEL & 2869 & 2933 & 5609 & 2856 & 2262\tabularnewline
+BF3 & 3480 & 3306 & 10270 & 2501\tabularnewline
 \hline 
-EASOM & 1958 & 1982 & 2978 & 1972 & 1334\tabularnewline
+BRANIN & 2376 & 2548 & 4101 & 1684\tabularnewline
 \hline 
-EXP4 & 2946 & 3404 & 5166 & 2918 & 2166\tabularnewline
+CAMEL & 2869 & 2933 & 5609 & 2262\tabularnewline
 \hline 
-EXP8 & 3120 & 3585 & 5895 & 2989 & 2802\tabularnewline
+EASOM & 1958 & 1982 & 2978 & 1334\tabularnewline
 \hline 
-EXP16 & 3250 & 3735 & 6498 & 3110 & 3279\tabularnewline
+EXP4 & 2946 & 3404 & 5166 & 2166\tabularnewline
 \hline 
-EXP32 & 3561 & 3902 & 7606 & 3319 & 3430\tabularnewline
+EXP8 & 3120 & 3585 & 5895 & 2802\tabularnewline
 \hline 
-GKLS250 & 2280 & 2411 & 3834 & 2435 & 1603\tabularnewline
+EXP16 & 3250 & 3735 & 6498 & 3279\tabularnewline
 \hline 
-GKLS350 & 2613 & 2234 & 3919 & 2773 & 1298\tabularnewline
+EXP32 & 3561 & 3902 & 7606 & 3430\tabularnewline
 \hline 
-GOLDSTEIN & 3687 & 3865 & 6781 & 3859 & 2784\tabularnewline
+EXTENDEDF10 & 4862 & 3653 & 5728(0.87) & 2609\tabularnewline
 \hline 
-GRIEWANK2 & 4501 & 3076 (73) & 7429 & 4174 & 2589 (96)\tabularnewline
+F14 & 6686 & 5498 & 5279(0.63) & 6063\tabularnewline
 \hline 
-GRIEWANK10 & 6410 (97) & 8006 & 18490 & 7577 & 7435\tabularnewline
+F15 & 4373 & 6696 & 5874(0.80) & 4397\tabularnewline
 \hline 
-HANSEN & 3210 & 2856 & 4185 & 3506 & 2484\tabularnewline
+F17 & 3667 & 3805 & 10441 & 2766\tabularnewline
 \hline 
-HARTMAN3 & 2752 & 3140 & 5190 & 2951 & 1793\tabularnewline
+GKLS250 & 2280 & 2411 & 3834 & 1603\tabularnewline
 \hline 
-HARTMAN6 & 3219 & 3710 & 5968 & 3635 & 2478\tabularnewline
+GKLS350 & 2613 & 2234 & 3919 & 1298\tabularnewline
 \hline 
-POTENTIAL3 & 4352 & 4865 & 6118 & 3862 & 4081\tabularnewline
+GOLDSTEIN & 3687 & 3865 & 6781 & 2784\tabularnewline
 \hline 
-POTENTIAL5 & 7705 & 9183 & 9119 & 6883 & 8886\tabularnewline
+GRIEWANK2 & 4501 & 3076 (0.73) & 7429 & 2589 (0.96)\tabularnewline
 \hline 
-RASTRIGIN & 4107 & 3477 & 6216 & 3945 & 2304\tabularnewline
+GRIEWANK10 & 6410 (0.97) & 8006 & 18490 & 7435\tabularnewline
 \hline 
-ROSENBROCK4 & 3679 & 6372 & 8452 & 5115 & 4019\tabularnewline
+HANSEN & 3210 & 2856 & 4185 & 2484\tabularnewline
 \hline 
-ROSENBROCK8 & 5270 & 8284 & 11530 & 6857 & 6801\tabularnewline
+HARTMAN3 & 2752 & 3140 & 5190 & 1793\tabularnewline
 \hline 
-ROSENBROCK16 & 8509 & 11872 & 17432 & 9862 & 11996\tabularnewline
+HARTMAN6 & 3219 & 3710 & 5968 & 2478\tabularnewline
 \hline 
-SHEKEL5 & 3325 & 4259 & 6662 & 3645 & 2495\tabularnewline
+POTENTIAL3 & 4352 & 4865 & 6118 & 4081\tabularnewline
 \hline 
-SHEKEL7 & 3360 & 4241 & 6967 & 3674 & 2432\tabularnewline
+POTENTIAL5 & 7705 & 9183 & 9119 & 8886\tabularnewline
 \hline 
-SHEKEL10 & 3488 & 4237 & 6757 & 3665 & 2516\tabularnewline
+RASTRIGIN & 4107 & 3477 & 6216 & 2304\tabularnewline
 \hline 
-TEST2N4 & 3331 & 3437 & 6396 & 3423 (93) & 2277\tabularnewline
+ROSENBROCK4 & 3679 & 6372 & 8452 & 4019\tabularnewline
 \hline 
-TEST2N5 & 4000 & 3683 & 6271 & 3889 (80) & 2734 (96)\tabularnewline
+ROSENBROCK8 & 5270 & 8284 & 11530 & 6801\tabularnewline
 \hline 
-TEST2N6 & 4312 (93) & 3781 & 5410 (93) & 4267 (70) & 2905 (86)\tabularnewline
+ROSENBROCK16 & 8509 & 11872 & 17432 & 11996\tabularnewline
 \hline 
-TEST2N7 & 4775 (90) & 4060 & 7074 (97) & 4403 (43) & 3559 (73)\tabularnewline
+SHEKEL5 & 3325 & 4259 & 6662 & 2495\tabularnewline
 \hline 
-SINU4 & 2991 & 3504 & 5953 & 3265 & 2005\tabularnewline
+SHEKEL7 & 3360 & 4241 & 6967 & 2432\tabularnewline
 \hline 
-SINU8 & 3442 & 4213 & 6973 & 3844 & 3158\tabularnewline
+SHEKEL10 & 3488 & 4237 & 6757 & 2516\tabularnewline
 \hline 
-SINU16 & 4320 & 5019 & 6979 & 4813 & 5891\tabularnewline
+SCHAFFER & 18787 & 15176 & 6315 & 23531\tabularnewline
 \hline 
-TEST30N3 & 3211 & 4610 & 6168 & 3864 & 2362\tabularnewline
+SCHWEFEL221 & 2667 & 2529 & 5415 & 2203\tabularnewline
 \hline 
-TEST30N4 & 3679 & 4629 & 7006 & 4772 & 2978\tabularnewline
+SCHWEFEL222 & 33725 & 42898 & 12200 & 38876\tabularnewline
 \hline 
-\textbf{SUM} & \textbf{134409} & \textbf{153006} & \textbf{247313} & \textbf{142389} & \textbf{118863}\tabularnewline
+SPHERE & 1588 & 1521 & 3503 & 1162\tabularnewline
+\hline 
+TEST2N4 & 3331 & 3437 & 6396 & 2277\tabularnewline
+\hline 
+TEST2N5 & 4000 & 3683 & 6271 & 2734 (0.96)\tabularnewline
+\hline 
+TEST2N6 & 4312 (0.93) & 3781 & 5410 (0.93) & 2905 (0.86)\tabularnewline
+\hline 
+TEST2N7 & 4775 (0.90) & 4060 & 7074 (0.97) & 3559 (0.73)\tabularnewline
+\hline 
+SINU4 & 2991 & 3504 & 5953 & 2005\tabularnewline
+\hline 
+SINU8 & 3442 & 4213 & 6973 & 3158\tabularnewline
+\hline 
+SINU16 & 4320 & 5019 & 6979 & 5891\tabularnewline
+\hline 
+TEST30N3 & 3211 & 4610 & 6168 & 2362\tabularnewline
+\hline 
+TEST30N4 & 3679 & 4629 & 7006 & 2978\tabularnewline
+\hline 
+\textbf{SUM} & \textbf{220993} & \textbf{244974} & \textbf{322558} & \textbf{208170}\tabularnewline
 \hline 
 \end{tabular}
 \end{table}
@@ -681,9 +938,13 @@ samples for the used method.
 \textbf{FUNCTION} & \textbf{UNIFORM} & \textbf{TRIANGULAR} & \textbf{MAXWELL} & \textbf{KMEANS}\tabularnewline
 \hline 
 \hline 
+ACKLEY & 6118 & 5912 & 5986 & 4199\tabularnewline
+\hline 
 BF1 & 4513 & 4318 & 4055 & 3228\tabularnewline
 \hline 
 BF2 & 3959 & 3879 & 3587 & 2815\tabularnewline
+\hline 
+BF3 & 3506 & 3344 & 3129 & 2501\tabularnewline
 \hline 
 BRANIN & 2282 & 2131 & 2066 & 1684\tabularnewline
 \hline 
@@ -698,6 +959,14 @@ EXP8 & 3432 & 3387 & 3152 & 2802\tabularnewline
 EXP16 & 3369 & 3326 & 3291 & 3279\tabularnewline
 \hline 
 EXP32 & 3216 & 3225 & 3344 & 3430\tabularnewline
+\hline 
+EXTENDEDF10 & 4304 & 3913 & 3718 & 2609\tabularnewline
+\hline 
+F14 & 7552 & 7573 & 6148 & 6063\tabularnewline
+\hline 
+F15 & 6806 & 6466 & 6543 & 4397\tabularnewline
+\hline 
+F17 & 3805 & 3700 & 3543 & 2766\tabularnewline
 \hline 
 GKLS250 & 2268 & 2023 & 1778 & 1603\tabularnewline
 \hline 
@@ -733,6 +1002,14 @@ SHEKEL7 & 3990 & 3646 & 3944 & 2432\tabularnewline
 \hline 
 SHEKEL10 & 3836 & 3630 & 3694 & 2516\tabularnewline
 \hline 
+SCHAFFER & 55131 & 40715 & 60717 & 23531\tabularnewline
+\hline 
+SCHWEFEL221 & 2724 & 2901 & 2799 & 2203\tabularnewline
+\hline 
+SCHWEFEL222 & 53118 & 54593 & 55354 & 38876\tabularnewline
+\hline 
+SPHERE & 1346 & 1188 & 1084 & 1162\tabularnewline
+\hline 
 TEST2N4 & 3345 & 3233 & 2867 & 2277\tabularnewline
 \hline 
 TEST2N5 & 3937 & 3742 & 3094 & 2734\tabularnewline
@@ -751,7 +1028,7 @@ TEST30N3 & 3704 & 3384 & 3175 & 2362\tabularnewline
 \hline 
 TEST30N4 & 4262 & 4327 & 3491 & 2978\tabularnewline
 \hline 
-\textbf{SUM} & \textbf{152666} & \textbf{151235} & \textbf{142138} & \textbf{118863}\tabularnewline
+\textbf{SUM} & \textbf{297076} & \textbf{281540} & \textbf{291159} & \textbf{208170}\tabularnewline
 \hline 
 \end{tabular}
 \end{table}
@@ -777,7 +1054,8 @@ affect the performance of the algorithms that utilize them.
 In the scatter plot in figure \ref{fig:ScatterPlot}, the critical
 parameter \textquotedbl p\textquotedbl{} was found to be very small,
 leading to the rejection of the null hypothesis and indicating that
-the experimental results are highly significant.
+the experimental results are highly significant.Scatter plot for different
+initial distributions.
 \begin{figure}[H]
 \centering{}\includegraphics[scale=0.5]{image3}\caption{Scatter plot for different initial distributions\label{fig:ScatterPlot}}
 \end{figure}
@@ -973,6 +1251,56 @@ Applied Mathematics and Computation \textbf{75}, pp. 179-206, 1996.
 Selection in Interval Methods for Global Optimization, SIAM J. Numer.
 Anal. \textbf{34}, pp. 922--938, 1997. 
 
+\bibitem{Sergeyev}Y.D. Sergeyev, D.E. Kvasov, M.S. Mukhametzhanov,
+On the efficiency of nature-inspired metaheuristics in expensive global
+optimization with limited budget. Sci Rep \textbf{8}, 453, 2018.
+
+\bibitem{diffe1}R. Storn, K. Price, Differential Evolution - A Simple
+and Efficient Heuristic for Global Optimization over Continuous Spaces,
+Journal of Global Optimization \textbf{11}, pp. 341-359, 1997.
+
+\bibitem{diffe2}J. Liu, J. Lampinen, A Fuzzy Adaptive Differential
+Evolution Algorithm. Soft Comput \textbf{9}, pp.448--462, 2005.
+
+\bibitem{pso_major}J. Kennedy and R. Eberhart, \textquotedbl Particle
+swarm optimization,\textquotedbl{} Proceedings of ICNN'95 - International
+Conference on Neural Networks, 1995, pp. 1942-1948 vol.4, doi: 10.1109/ICNN.1995.488968.
+
+\bibitem{pso1}Riccardo Poli, James Kennedy kennedy, Tim Blackwell,
+Particle swarm optimization An Overview, Swarm Intelligence \textbf{1},
+pp 33-57, 2007. 
+
+\bibitem{pso2}Ioan Cristian Trelea, The particle swarm optimization
+algorithm: convergence analysis and parameter selection, Information
+Processing Letters \textbf{85}, pp. 317-325, 2003.
+
+\bibitem{aco1}M. Dorigo, M. Birattari and T. Stutzle, Ant colony
+optimization, IEEE Computational Intelligence Magazine \textbf{1},
+pp. 28-39, 2006.
+
+\bibitem{aco2}K. Socha, M. Dorigo, Ant colony optimization for continuous
+domains, European Journal of Operational Research 185, pp. 1155-1173,
+2008.
+
+\bibitem{genetic1}D. Goldberg, Genetic Algorithms in Search, Optimization
+and Machine Learning, Addison-Wesley Publishing Company, Reading,
+Massachussets, 1989.
+
+\bibitem{genetic2}Z. Michaelewicz, Genetic Algorithms + Data Structures
+= Evolution Programs. Springer - Verlag, Berlin, 1996.
+
+\bibitem{gpu1}Y. Zhou and Y. Tan, \textquotedbl GPU-based parallel
+particle swarm optimization,\textquotedbl{} 2009 IEEE Congress on
+Evolutionary Computation, pp. 1493-1500, 2009.
+
+\bibitem{gpu2}L. Dawson and I. Stewart, \textquotedbl Improving
+Ant Colony Optimization performance on the GPU using CUDA,\textquotedbl{}
+2013 IEEE Congress on Evolutionary Computation, 2013, pp. 1901-1908,
+doi: 10.1109/CEC.2013.6557791.
+
+\bibitem{gpu3}Barkalov, K., Gergel, V. Parallel global optimization
+on GPU. J Glob Optim 66, 3--20 (2016). 
+
 \bibitem{swarm1}Hassanien, A. E., \& Emary, E. (2018). Swarm intelligence:
 principles, advances, and applications. CRC press.
 
@@ -987,7 +1315,21 @@ Sciences, 8(9), 1521.
 
 \bibitem{APPS}Tang, J., Liu, G., Pan, Q.: A review on representative
 swarm intelligence algorithms for solving optimization problems:applications
-and trends. IEEE/CAA J. Autom. Sin. 8(10),1627--1643 (2021)
+and trends. IEEE/CAA J. Autom. Sin. 8(10),1627--1643 (2021).
+
+\bibitem{bacterial}Ying Chu, Hua Mi, Huilian Liao, Zhen Ji and Q.
+H. Wu, \textquotedbl A Fast Bacterial Swarming Algorithm for high-dimensional
+function optimization,\textquotedbl{} 2008 IEEE Congress on Evolutionary
+Computation (IEEE World Congress on Computational Intelligence), Hong
+Kong, China, 2008, pp. 3135-3140, doi: 10.1109/CEC.2008.4631222.
+
+\bibitem{fish}M. Neshat, G. Sepidnam, M. Sargolzaei, et al, Artificial
+fish swarm algorithm: a survey of the state-of-the-art, hybridization,
+combinatorial and indicative applications, Artif Intell Rev \textbf{42},
+pp. 965--997, 2014.
+
+\bibitem{dolphin}Tq. Wu, M. Yao, Jh. Yang, Dolphin swarm algorithm,
+Frontiers Inf Technol Electronic Eng \textbf{17}, pp. 717--729, 2016. 
 
 \bibitem{WOA}Mirjalili, S., Lewis, A.: The whale optimization algorithm.
 Adv. Eng. Softw. 95, 51--67 (2016)
@@ -999,6 +1341,10 @@ algorithm (WOA) approach for clustering. Cogent Mathematics \& Statistics,
 \bibitem{WOA2}Gharehchopogh, F. S., \& Gholizadeh, H. (2019). A comprehensive
 survey: Whale Optimization Algorithm and its applications. Swarm and
 Evolutionary Computation, 48, 1-24.
+
+\bibitem{tunicate}S. Kaur, L.K. Awasthi, A.L. Sangal, G. Dhiman,
+Tunicate Swarm Algorithm: A new bio-inspired based metaheuristic paradigm
+for global optimization \textbf{90}, 103541, 2020.
 
 \bibitem{SCA}Mirjalili, S.: SCA: a sine cosine algorithm for solving
 optimization problems. Knowl.-Based Syst. 96, 120--133 (2016)
@@ -1090,6 +1436,21 @@ algorithm, Physics Procedia \textbf{25}, pp. 1104-1109, 2012.
 clustering algorithm applications in data mining and pattern recognition.
 International Journal of Science and Research (IJSR), 6(8), 1577-1584.
 
+\bibitem{gen_kmeans}K. Krishna, M. Narasimha Murty, Genetic K-means
+algorithm, IEEE Transactions on Systems, Man, and Cybernetics, Part
+B (Cybernetics) \textbf{ 29}, pp. 433-439, 1999.
+
+\bibitem{unsuper_kmeans}K. P. Sinaga, M. -S. Yang, Unsupervised K-Means
+Clustering Algorithm, IEEE Access \textbf{8}, pp. 80716-80727, 2020. 
+
+\bibitem{fixed_kmeans}M. Ay, L. Özbakır, S. Kulluk, B. Gülmez , G.Öztürk,
+S. Özer, FC-Kmeans: Fixed-centered K-means algorithm, Expert Systems
+with Applications \textbf{211}, 118656, 2023.
+
+\bibitem{kmeans_review}E.U. Oti, M.O. Olusola, F.C. Eze, S.U. Enogwe,
+Comprehensive review of K-Means clustering algorithms, Criterion \textbf{12},
+pp. 22-23, 2021.
+
 \bibitem{Ali}M. Montaz Ali, Charoenchai Khompatraporn, Zelda B. Zabinsky,
 A Numerical Evaluation of Several Stochastic Algorithms on Selected
 Continuous Global Optimization Test Problems, Journal of Global Optimization
@@ -1133,43 +1494,13 @@ Fields, Proc. R. Soc. Lond. A \textbf{ 106}, pp. 463--477, 1924.
 \bibitem{powell}Powell, M.J.D. A Tolerant Algorithm for Linearly
 Constrained Optimization Calculations. Math. Program. 1989, 45, 547--566.
 
-\bibitem{genetic1}D. Goldberg, Genetic Algorithms in Search, Optimization
-and Machine Learning, Addison-Wesley Publishing Company, Reading,
-Massachussets, 1989.
-
-\bibitem{genetic2}Z. Michaelewicz, Genetic Algorithms + Data Structures
-= Evolution Programs. Springer - Verlag, Berlin, 1996.
-
 \bibitem{doublepop}I.G. Tsoulos, Modifications of real code genetic
 algorithm for global optimization, Applied Mathematics and Computation
 203, pp. 598-607, 2008.
 
-\bibitem{pso1}Riccardo Poli, James Kennedy kennedy, Tim Blackwell,
-Particle swarm optimization An Overview, Swarm Intelligence \textbf{1},
-pp 33-57, 2007. 
-
-\bibitem{pso2}Ioan Cristian Trelea, The particle swarm optimization
-algorithm: convergence analysis and parameter selection, Information
-Processing Letters \textbf{85}, pp. 317-325, 2003.
-
 \bibitem{ipso}V. Charilogis, I.G. Tsoulos, Toward an Ideal Particle
 Swarm Optimizer for Multidimensional Functions , Information \textbf{13},
 217, 2022.
-
-\bibitem{diffe1}R. Storn, K. Price, Differential Evolution - A Simple
-and Efficient Heuristic for Global Optimization over Continuous Spaces,
-Journal of Global Optimization \textbf{11}, pp. 341-359, 1997.
-
-\bibitem{diffe2}J. Liu, J. Lampinen, A Fuzzy Adaptive Differential
-Evolution Algorithm. Soft Comput \textbf{9}, pp.448--462, 2005.
-
-\bibitem{gao}Alsayyed, O.; Hamadneh, T.; Al-Tarawneh, H.; Alqudah,
-M.; Gochhait, S.; Leonova, I.; Malik, O.P.; Dehghani, M. Giant Armadillo
-Optimization: A New Bio-Inspired Metaheuristic Algorithm for Solving
-Optimization Problems. Biomimetics 2023, 8, 619.
-
-\bibitem{igao}Kyrou G, Charilogis V, Tsoulos IG. Improving the Giant-Armadillo
-Optimization Method. Analytics. 2024; 3(2):225-240. https://doi.org/10.3390/analytics3020013 
 
 \bibitem{triangular}W.E. Stein, M.F. Keblis, A new method to simulate
 the triangular distribution, Mathematical and Computer Modelling Volume
