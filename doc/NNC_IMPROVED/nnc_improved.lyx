@@ -762,13 +762,20 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 Although the neural network construction technique has been successfully
  used in a variety of applications and is able to construct the structure
  of a neural network as well as find satisfactory values for the model parameter
 s, it can often get trapped in local minima of the error function with resulting
  in reduced performance in the problems to be solved.
+ In this research paper, the periodic application of local optimization
+ techniques is proposed in randomly selected artificial neural networks
+ constructed by Grammatical Evolution.
+ Local optimization does not alter the generated neural network structure
+ but can more efficiently identify values of the network parameters with
+ lower values of the training error.
+ The proposed method was tested on a series of classification and regression
+ datasets from the relevant literature and it seems to reduce significant
+ the test error obtained by the original neural construction technique.
  
 \end_layout
 
@@ -818,8 +825,224 @@ name "sec:Method-description"
 
 \end_layout
 
+\begin_layout Standard
+This section initiates with a description of the Grammatical Evolution procedure
+ and continues with the detail description of the proposed algorithm.
+\end_layout
+
 \begin_layout Subsection
 Grammatical evolution 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Grammatical-evolution"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Grammatical evolution is a genetic algorithm, where the chromosomes stand
+ for production rules of a provided BNF (Backus–Naur form) grammar 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bnf1"
+literal "false"
+
+\end_inset
+
+.
+ The method was used on a series of real world cases, such as regression
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+function approximation
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_program1,ge_program2"
+literal "false"
+
+\end_inset
+
+, solution of trigonometric equations 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_trig"
+literal "false"
+
+\end_inset
+
+, automatic music composition 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_music"
+literal "false"
+
+\end_inset
+
+, neural network construction 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_nn,ge_nn2"
+literal "false"
+
+\end_inset
+
+, creating numeric constraints 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_constant"
+literal "false"
+
+\end_inset
+
+, video games 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_pacman,ge_supermario"
+literal "false"
+
+\end_inset
+
+, estimation of energy demand 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_energy"
+literal "false"
+
+\end_inset
+
+, combinatorial optimization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_comb"
+literal "false"
+
+\end_inset
+
+, cryptography 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_crypt"
+literal "false"
+
+\end_inset
+
+, evolution of decision trees 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ge_decision"
+literal "false"
+
+\end_inset
+
+, automatic design of analog electronic circuits 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ge_analog"
+literal "false"
+
+\end_inset
+
+ etc.
+ Any BNF grammar can be described as the set 
+\begin_inset Formula $G=\left(N,T,S,P\right)$
+\end_inset
+
+ where
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\begin_inset Formula $N$
+\end_inset
+
+ is the set of the non-terminal symbols.
+ Every symbol in 
+\begin_inset Formula $N$
+\end_inset
+
+ has a series of production rules, used to produce terminal symbols.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\begin_inset Formula $T$
+\end_inset
+
+ is the set of terminal symbols.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\begin_inset Formula $S$
+\end_inset
+
+ denotes the start symbol of the grammar, with 
+\begin_inset Formula $S\in N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\begin_inset Formula $P$
+\end_inset
+
+ is the set of production rules, to create terminal symbols non - terminal
+ symbols.
+ These rules are in the form 
+\begin_inset Formula $A\rightarrow a$
+\end_inset
+
+ or 
+\begin_inset Formula $A\rightarrow aB,\ A,B\in N,\ a\in T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+The algorithm initiates from the symbol 
+\begin_inset Formula $S$
+\end_inset
+
+ and iteratively produces terminal symbols by replacing non-terminal symbols
+ with the right hand of the selected production rule.
+ Every production rule is is selected using the following steps:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Get the next element V from the current chromosome.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Select the next production rule according to: Rule = V mod 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+, where 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+ is the total number of production rules for the current non – terminal
+ symbol.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -985,6 +1208,13 @@ with similar approximation capabilities.
 
 \begin_layout Subsection
 The proposed algorithm
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-proposed-algorithm"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1063,7 +1293,7 @@ literal "false"
 \begin_layout Enumerate
 The Statlib URL 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -13938,6 +14168,301 @@ I.G.
 10
 \series default
 , 100297, 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bnf1"
+literal "false"
+
+\end_inset
+
+J.
+ W.
+ Backus.
+ The Syntax and Semantics of the Proposed International Algebraic Language
+ of the Zurich ACM-GAMM Conference.
+ Proceedings of the International Conference on Information Processing,
+ UNESCO, 1959, pp.125-132.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_program1"
+literal "false"
+
+\end_inset
+
+C.
+ Ryan, J.
+ Collins, M.
+ O’Neill, Grammatical evolution: Evolving programs for an arbitrary language.
+ In: Banzhaf, W., Poli, R., Schoenauer, M., Fogarty, T.C.
+ (eds) Genetic Programming.
+ EuroGP 1998.
+ Lecture Notes in Computer Science, vol 1391.
+ Springer, Berlin, Heidelberg, 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_program2"
+literal "false"
+
+\end_inset
+
+M.
+ O’Neill, M., C.
+ Ryan, Evolving Multi-line Compilable C Programs.
+ In: Poli, R., Nordin, P., Langdon, W.B., Fogarty, T.C.
+ (eds) Genetic Programming.
+ EuroGP 1999.
+ Lecture Notes in Computer Science, vol 1598.
+ Springer, Berlin, Heidelberg, 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_trig"
+literal "false"
+
+\end_inset
+
+C.
+ Ryan, M.
+ O’Neill, J.J.
+ Collins, Grammatical evolution: Solving trigonometric identities, proceedings
+ of Mendel.
+ Vol.
+ 98.
+ 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_music"
+literal "false"
+
+\end_inset
+
+A.O.
+ Puente, R.
+ S.
+ Alfonso, M.
+ A.
+ Moreno, Automatic composition of music by means of grammatical evolution,
+ In: APL '02: Proceedings of the 2002 conference on APL: array processing
+ languages: lore, problems, and applications July 2002 Pages 148–155.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_nn"
+literal "false"
+
+\end_inset
+
+Lídio Mauro Limade Campo, R.
+ Célio Limã Oliveira,Mauro Roisenberg, Optimization of neural networks through
+ grammatical evolution and a genetic algorithm, Expert Systems with Applications
+ 
+\series bold
+56
+\series default
+, pp.
+ 368-384, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_nn2"
+literal "false"
+
+\end_inset
+
+K.
+ Soltanian, A.
+ Ebnenasir, M.
+ Afsharchi, Modular Grammatical Evolution for the Generation of Artificial
+ Neural Networks, Evolutionary Computation 
+\series bold
+30
+\series default
+, pp 291–327, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_constant"
+literal "false"
+
+\end_inset
+
+I.
+ Dempsey, M.O' Neill, A.
+ Brabazon, Constant creation in grammatical evolution, International Journal
+ of Innovative Computing and Applications 
+\series bold
+1
+\series default
+ , pp 23–38, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_pacman"
+literal "false"
+
+\end_inset
+
+E.
+ Galván-López, J.M.
+ Swafford, M.
+ O’Neill, A.
+ Brabazon, Evolving a Ms.
+ PacMan Controller Using Grammatical Evolution.
+ In: , et al.
+ Applications of Evolutionary Computation.
+ EvoApplications 2010.
+ Lecture Notes in Computer Science, vol 6024.
+ Springer, Berlin, Heidelberg, 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_supermario"
+literal "false"
+
+\end_inset
+
+N.
+ Shaker, M.
+ Nicolau, G.
+ N.
+ Yannakakis, J.
+ Togelius, M.
+ O'Neill, Evolving levels for Super Mario Bros using grammatical evolution,
+ 2012 IEEE Conference on Computational Intelligence and Games (CIG), 2012,
+ pp.
+ 304-31.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_energy"
+literal "false"
+
+\end_inset
+
+D.
+ Martínez-Rodríguez, J.
+ M.
+ Colmenar, J.
+ I.
+ Hidalgo, R.J.
+ Villanueva Micó, S.
+ Salcedo-Sanz, Particle swarm grammatical evolution for energy demand estimation
+, Energy Science and Engineering 
+\series bold
+8
+\series default
+, pp.
+ 1068-1079, 2020.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_comb"
+literal "false"
+
+\end_inset
+
+N.
+ R.
+ Sabar, M.
+ Ayob, G.
+ Kendall, R.
+ Qu, Grammatical Evolution Hyper-Heuristic for Combinatorial Optimization
+ Problems, IEEE Transactions on Evolutionary Computation 
+\series bold
+17
+\series default
+, pp.
+ 840-861, 2013.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_crypt"
+literal "false"
+
+\end_inset
+
+C.
+ Ryan, M.
+ Kshirsagar, G.
+ Vaidya, G.
+ et al.
+ Design of a cryptographically secure pseudo random number generator with
+ grammatical evolution.
+ Sci Rep 
+\series bold
+12
+\series default
+, 8602, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_decision"
+literal "false"
+
+\end_inset
+
+P.J.
+ Pereira, P.
+ Cortez, R.
+ Mendes, Multi-objective Grammatical Evolution of Decision Trees for Mobile
+ Marketing user conversion prediction, Expert Systems with Applications
+ 
+\series bold
+168
+\series default
+, 114287, 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_analog"
+literal "false"
+
+\end_inset
+
+F.
+ Castejón, E.J.
+ Carmona, Automatic design of analog electronic circuits using grammatical
+ evolution, Applied Soft Computing 
+\series bold
+62
+\series default
+, pp.
+ 1003-1018, 2018.
 \end_layout
 
 \begin_layout Bibliography
