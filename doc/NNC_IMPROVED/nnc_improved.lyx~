@@ -567,6 +567,93 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
+Another important aspect in artificial neural networks is the initialization
+ of parameters.
+ Various techniques have been proposed in this area, such as usage of polynomial
+ bases 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_init1"
+literal "false"
+
+\end_inset
+
+, initialization based on decision trees 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_init2"
+literal "false"
+
+\end_inset
+
+, usage of intervals 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_init3"
+literal "false"
+
+\end_inset
+
+,
+\series bold
+ 
+\series default
+discriminant learning 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_init4"
+literal "false"
+
+\end_inset
+
+ etc.
+ Also, recently Chen et al.
+ proposed a new weight initialization method that is based on the linear
+ product structure for neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_init5"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Identifying the optimal architecture of an artificial neural network plays
+ an important role in the generalization ability of a network.
+ Networks with a small number of neurons can be trained faster and may have
+ good generalization abilities, but in many cases the optimization method
+ gets trapped in local minima of the error function.
+ On the other hand, networks with a large number of neurons can have a significa
+ntly reduced training error but require a large computational time for their
+ training and many times do not perform significantly when applied to data
+ that is not present in the training set.
+ In this direction many researchers proposed various methods to discover
+ the optimal architecture, such as incorporation of genetic algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_arch1,nn_arch2"
+literal "false"
+
+\end_inset
+
+, application of the Particle Swarm Optimization method, usage of reinforcement
+ learning 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_arch4"
+literal "false"
+
+\end_inset
+
+, 
+\series bold
+(....)
+\end_layout
+
+\begin_layout Standard
 Recently, a technique was presented that utilizes the Grammatical Evolution
  method 
 \begin_inset CommandInset citation
@@ -587,13 +674,116 @@ literal "false"
 \end_inset
 
 .
- This technique 
-\series bold
-...
+ In this technique, the architecture of the neural network is found and
+ at the same time those features are selected which will reduce the training
+ error.
+ In this way the number of required features can be drastically reduced
+ leading to neural networks that are faster in response and with better
+ generalization abilities.
+ The neural construction technique has been applied on a variety of cases,
+ such as location of amide I bonds 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_amide1"
+literal "false"
+
+\end_inset
+
+, solving differential equations 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_de"
+literal "false"
+
+\end_inset
+
+, application in data collected for the Parkinson's disease 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_feas"
+literal "false"
+
+\end_inset
+
+, performance and early drop prediction for higher education students 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_student"
+literal "false"
+
+\end_inset
+
+, autism screening 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_autism"
+literal "false"
+
+\end_inset
+
+ etc.
+ Also, a software that implements this method can be downloaded freely from
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/itsoulos/NNC
+\end_layout
+
+\end_inset
+
+ (accessed on 11 September 2024) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc_code"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-The rest of this article ...
+
+\series bold
+The proposed method ....
+\end_layout
+
+\begin_layout Standard
+The rest of this article is organized as follows: in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Method-description"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the main aspects of the proposed method are discuessed in detail, in section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the conducted experiments are shown and finally in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ some conclusions and guidelines for future research are discussed.
 \end_layout
 
 \begin_layout Section
@@ -605,6 +795,175 @@ name "sec:Method-description"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Grammatical evolution 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout LyX-Code
+S:=<sigexpr>                          (0)
+\end_layout
+
+\begin_layout LyX-Code
+<sigexpr>::=<Node>                    (0)
+\end_layout
+
+\begin_layout LyX-Code
+           | <Node> + <sigexpr>       (1)
+\end_layout
+
+\begin_layout LyX-Code
+<Node>::=<number>*sig(<sum>+<number>) (0)
+\end_layout
+
+\begin_layout LyX-Code
+<sum>::= <number>*<xxlist>            (0)
+\end_layout
+
+\begin_layout LyX-Code
+           |    <sum>+<sum>           (1)
+\end_layout
+
+\begin_layout LyX-Code
+<xxlist>::= x1        (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |    x2  (1)
+\end_layout
+
+\begin_layout LyX-Code
+             ..............
+\end_layout
+
+\begin_layout LyX-Code
+             |    xn  (n-1)
+\end_layout
+
+\begin_layout LyX-Code
+<number>::= (<digitlist>.<digitlist>)        (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |    (-<digitlist>.<digitlist>) (1)
+\end_layout
+
+\begin_layout LyX-Code
+<digitlist>::= <digit>            (0)
+\end_layout
+
+\begin_layout LyX-Code
+             | <digit><digitlist> (1)
+\end_layout
+
+\begin_layout LyX-Code
+<digit>::= 0      (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |  1 (1)
+\end_layout
+
+\begin_layout LyX-Code
+             ...........
+\end_layout
+
+\begin_layout LyX-Code
+             |  9 (9)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The grammar used by the neural construction method.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:nncGrammar"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+
+\end_inset
+
+The parameter 
+\begin_inset Formula $H$
+\end_inset
+
+ defines the number of processing units and the constant 
+\begin_inset Formula $d$
+\end_inset
+
+ represents the dimension of pattern 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+.
+ The function 
+\begin_inset Formula $\sigma(x)$
+\end_inset
+
+ is called sigmoid function, and it is defined as: 
+\begin_inset Formula 
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
+\end{equation}
+
+\end_inset
+
+The number of elements in the weight vector are calculated as: 
+\begin_inset Formula $n=(d+2)H$
+\end_inset
+
+.
+
+\series bold
+ 
+\series default
+Of course, other activation functions may be used, such as the tanh function
+ defined as
+\begin_inset Formula 
+\begin{equation}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\end{equation}
+
+\end_inset
+
+with similar approximation capabilities.
+\end_layout
+
+\begin_layout Subsection
+The proposed algorithm
 \end_layout
 
 \begin_layout Section
@@ -13208,6 +13567,171 @@ M.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "nn_init1"
+literal "false"
+
+\end_inset
+
+T.M.
+ Varnava, A.J.Meade, An initialization method for feedforward artificial neural
+ networks using polynomial bases, Advances in Adaptive Data Analysis 
+\series bold
+3
+\series default
+, pp.
+ 385-400, 2011.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_init2"
+literal "false"
+
+\end_inset
+
+I.
+ Ivanova, M.
+ Kubat, Initialization of neural networks by means of decision trees, Knowledge-
+Based Systems 
+\series bold
+8
+\series default
+, pp.
+ 333-344, 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_init3"
+literal "false"
+
+\end_inset
+
+S.S.
+ Sodhi, P.
+ Chandra, Interval based Weight Initialization Method for Sigmoidal Feedforward
+ Artificial Neural Networks, AASRI Procedia 
+\series bold
+6
+\series default
+, pp.
+ 19-25, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_init4"
+literal "false"
+
+\end_inset
+
+K.
+ Chumachenko, A.
+ Iosifidis, M.
+ Gabbouj, Feedforward neural networks initialization based on discriminant
+ learning, Neural Networks 
+\series bold
+146
+\series default
+, pp.
+ 220-229, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_init5"
+literal "false"
+
+\end_inset
+
+Q.
+ Chen, W.
+ Hao, J.
+ He, A weight initialization based on the linear product structure for neural
+ networks, Applied Mathematics and Computation 
+\series bold
+415
+\series default
+, 126722, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_arch1"
+literal "false"
+
+\end_inset
+
+J.
+ Arifovic, R.
+ Gençay, Using genetic algorithms to select architecture of a feedforward
+ artificial neural network, Physica A: Statistical Mechanics and its Application
+s 
+\series bold
+289
+\series default
+, pp.
+ 574-594, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_arch2"
+literal "false"
+
+\end_inset
+
+P.G.
+ Benardos, G.C.
+ Vosniakos, Optimizing feedforward artificial neural network architecture,
+ Engineering Applications of Artificial Intelligence 
+\series bold
+20
+\series default
+, pp.
+ 365-382, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_arch3"
+literal "false"
+
+\end_inset
+
+B.A.
+ Garro, R.A.
+ Vázquez, Designing Artificial Neural Networks Using Particle Swarm Optimization
+ Algorithms, Computational Intelligence and Neuroscience, 369298,  2015.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_arch4"
+literal "false"
+
+\end_inset
+
+B.
+ Baker, O.
+ Gupta, N.
+ Naik, R.
+ Raskar, Designing neural network architectures using reinforcement learning.
+ arXiv preprint arXiv:1611.02167, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 key "ge1"
 literal "true"
 
@@ -13244,6 +13768,128 @@ I.G.
 \series default
 , pp.
  269-277, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_amide1"
+literal "false"
+
+\end_inset
+
+G.V.
+ Papamokos, I.G.
+ Tsoulos, I.N.
+ Demetropoulos, E.
+ Glavas, Location of amide I mode of vibration in computed data utilizing
+ constructed neural networks, Expert Systems with Applications 
+\series bold
+36
+\series default
+, pp.
+ 12210-12213, 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_de"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, D.
+ Gavrilis, E.
+ Glavas, Solving differential equations with constructed neural networks,
+ Neurocomputing 
+\series bold
+72
+\series default
+, pp.
+ 2385-2391, 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_feas"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, G.
+ Mitsi, A.
+ Stavrakoudis, S.
+ Papapetropoulos, Application of Machine Learning in a Parkinson's Disease
+ Digital Biomarker Dataset Using Neural Network Construction (NNC) Methodology
+ Discriminates Patient Motor Status, Frontiers in ICT 6, 10, 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_student"
+literal "false"
+
+\end_inset
+
+V.
+ Christou, I.G.
+ Tsoulos, V.
+ Loupas, A.T.
+ Tzallas, C.
+ Gogos, P.S.
+ Karvelis, N.
+ Antoniadis, E.
+ Glavas, N.
+ Giannakeas, Performance and early drop prediction for higher education
+ students using machine learning, Expert Systems with Applications 
+\series bold
+225
+\series default
+, 120079, 2023.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_autism"
+literal "false"
+
+\end_inset
+
+E.I.
+ Toki, J.
+ Pange, G.
+ Tatsis, K.
+ Plachouras, I.G.
+ Tsoulos, Utilizing Constructed Neural Networks for Autism Screening, Applied
+ Sciences 
+\series bold
+14
+\series default
+, 3053, 2024.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnc_code"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos, A.Tzallas, D.
+ Tsalikakis, NNC: A tool based on Grammatical Evolution for data classification
+ and differential equation solving, SoftwareX 
+\series bold
+10
+\series default
+, 100297, 2019.
 \end_layout
 
 \begin_layout Bibliography
