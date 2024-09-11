@@ -2726,7 +2726,7 @@ Experimental results
 The code used in the experimens was written in ANSI C++ using the optimization
  environment of Optimus, that is freely available from 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -2736,21 +2736,16 @@ https://github.com/itsoulos/GlobalOptimus/
 \end_inset
 
 ( accessed on 11 September 2024 ).
- 
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-All the experiments were executed 30 times, using different initialization
- for the random generator each time and averages were recorded.
- For the case of classification problems, the average classification error
- as measured on the test set was recorded and, for the case of regression
- datasets, the average regression error as measured on the test set was
- recorded.
- The validation of the experiments was performed using ten - fold cross
- validation.
- The values of the experimental parameters are shown in Table 
+ All the experiments were conducted and averages was recorded.
+ In every execution different seed for the random generator was used.
+ The average classification error as measured on the test is recorded for
+ the classification datasets and the average regression error for the regression
+ datasets.
+ The validation of the conducted experiments was performed using the ten
+ - fold cross validation technique.
+  The experiments was carried out on an AMD Ryzen 5950X with 128GB of RAM,
+ running the Debian Linux operating system.
+ The values for the parameters of the algorithms are shown in  Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:experSettings"
@@ -2761,6 +2756,8 @@ noprefix "false"
 \end_inset
 
 .
+ In all experimental tables the bold notation is used to mark the method
+ with the lowest classification or regression error.
 \end_layout
 
 \begin_layout Standard
@@ -2959,7 +2956,7 @@ Mutation rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $p_{cr}$
+\begin_inset Formula $N_{T}$
 \end_inset
 
 
@@ -2971,7 +2968,7 @@ Mutation rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-New crossover rate
+Number of chromosomes that selected randomly
 \end_layout
 
 \end_inset
@@ -2980,7 +2977,7 @@ New crossover rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.05
+20
 \end_layout
 
 \end_inset
@@ -2991,7 +2988,7 @@ New crossover rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $N_{cr}$
+\begin_inset Formula $N_{I}$
 \end_inset
 
 
@@ -3003,7 +3000,7 @@ New crossover rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-New crossover items
+Number of iterations before local search
 \end_layout
 
 \end_inset
@@ -3012,7 +3009,7 @@ New crossover items
 \begin_inset Text
 
 \begin_layout Plain Layout
-100
+10
 \end_layout
 
 \end_inset
@@ -3023,7 +3020,7 @@ New crossover items
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $H$
+\begin_inset Formula $F$
 \end_inset
 
 
@@ -3035,7 +3032,7 @@ New crossover items
 \begin_inset Text
 
 \begin_layout Plain Layout
-Number of weights for neural network
+Magnitude of changes from local search
 \end_layout
 
 \end_inset
@@ -3044,7 +3041,7 @@ Number of weights for neural network
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+4.0
 \end_layout
 
 \end_inset
@@ -3059,7 +3056,75 @@ Number of weights for neural network
 
 \end_inset
 
+The experimental results for the classification datasets are shown in Table
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:classResults"
+plural "false"
+caps "false"
+noprefix "false"
 
+\end_inset
+
+ and the experimental results for the regression datasets our outlined in
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:resultsRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The following applies to the tables of experimental results:
+\end_layout
+
+\begin_layout Enumerate
+The column BFGS denotes the application of the BFGS optimization method
+ to train a neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column GENETIC stands for the incorporation of a Genetic Algorithm to
+ train a neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+ The values of the parameters of the genetic algorithm are shown in Table
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experSettings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column NNC represents the application of the original neural network
+ construction model to the provided dataset.
+\end_layout
+
+\begin_layout Enumerate
+The column INNC stands for the application of the current work to the provided
+ dataset.
+\end_layout
+
+\begin_layout Enumerate
+The row AVERAGE denotes the average classification or regression row for
+ all datasets.
 \end_layout
 
 \begin_layout Standard
@@ -5981,7 +6046,13 @@ AVERAGE
 
 \end_inset
 
+The original technique of constructing artificial neural networks has significan
+tly lower classification or regression errors than the other two techniques
+ and the proposed method significantly improves the performance of this
+ technique in the majority of the datasets.
+\end_layout
 
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
