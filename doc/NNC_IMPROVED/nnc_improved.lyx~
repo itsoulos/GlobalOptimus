@@ -132,13 +132,10 @@
 \begin_local_layout
 #Adds an endnote inset, in addition to footnotes. You will need to add
 #\printendnotes in TeX-code where you want the endnotes to appear.
-
 Format 66
-
 Counter endnotes
     PrettyFormat "Endnote ##"
 End
-
 InsetLayout Flex:Endnote
    LyXType     custom
    LatexName   endnote
@@ -1706,7 +1703,8 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename ../NEW_CROSSOVER/onePointCrossover.png
+	filename onePointCrossover.png
+	lyxscale 20
 	scale 50
 
 \end_inset
@@ -1731,6 +1729,59 @@ name "fig:onePoint"
 
 \end_inset
 
+
+\end_layout
+
+\end_inset
+
+The flowchart for the proposed method is depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:flowINNC"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename flowchart_innc.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The flowchart of the proposed algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:flowINNC"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -6050,6 +6101,30 @@ The original technique of constructing artificial neural networks has significan
 tly lower classification or regression errors than the other two techniques
  and the proposed method significantly improves the performance of this
  technique in the majority of the datasets.
+ The percentage improvement in error is even greater in regression problems.
+ In some cases the improvement exceeds 50% in the test error.
+ This effect is evident in the box plots for classification and regression
+ errors outlined in Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ respectively.
 \end_layout
 
 \begin_layout Standard
@@ -6105,46 +6180,6 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename table1_stat.png
-	scale 60
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Statistical comparison between the machine learning models for the classificatio
-n datasets.
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:statisticsClass"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
 	filename table2.png
 
 \end_inset
@@ -6172,7 +6207,68 @@ name "fig:boxRegression"
 
 \end_layout
 
+\end_inset
+
+Furthermore, the same reduction in test error is validated from the statistical
+ tests performed for classification and regression problems.
+ These tests are depicted in Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statisticsClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
 \begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename table1_stat.png
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison between the machine learning models for the classificatio
+n datasets.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statisticsClass"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -6231,6 +6327,40 @@ Experiments with the parameter
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+To verify the robustness of the proposed technique as well as its sensitivity
+ to parameter changes, an additional experiment was performed in which the
+ critical 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ parameter was varied from 5 to 20.
+ This parameter determines the number of generations intervening before
+ the local optimization method is executed in randomly selected chromosomes.
+ The results from this experiment for the classification datasets are depicted
+ in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experRClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and the results for the regression datasets in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experRRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -8663,7 +8793,39 @@ AVERAGE
 
 \end_inset
 
+The method appears to have similar results for each variation of the critical
+ 
+\begin_inset Formula $N_{I}$
+\end_inset
 
+ parameter.
+ In some cases the error is smaller for low values of this parameter but
+ not to a great extent.
+ This effect is also evident in the box plot presented for the classification
+ datasets in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxNIClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ as well as in the statistical comparison of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statNIClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
@@ -8768,6 +8930,43 @@ Experiments with the parameter
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Another important parameter for the proposed method is the parameter 
+\begin_inset Formula $F$
+\end_inset
+
+.
+ This parameter controls the range of changes that the local optimization
+ method can cause on randomly selected chromosomes.
+ In this experiment the parameter 
+\begin_inset Formula $F$
+\end_inset
+
+ changed from 1.5 to 8.0 and the results for the classification datasets are
+ listed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experFClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ while the experimental results for the regression datasets are presented
+ in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experFRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -11727,7 +11926,31 @@ AVERAGE
 
 \end_inset
 
+Once again, there are no significant differences in the performance of the
+ proposed technique as the critical factor 
+\begin_inset Formula $F$
+\end_inset
 
+ varies.
+ In the case of the classification data, however, there is a small increase
+ in the classification error as this factor increases, which may be due
+ to the fact that as we move away from the solution created by the method
+ of creating neural networks, so the performance of the method decreases.
+ Also, the box plot for the classification datasets is depicted in Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxFClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
@@ -11780,6 +12003,85 @@ name "fig:boxFClass"
 
 \begin_layout Subsubsection
 Experiments with the used local search optimizer
+\end_layout
+
+\begin_layout Standard
+An important issue of the proposed method is the selection of the local
+ search optimizer, that will be applied periodically to randomly selected
+ chromosomes.
+ In the current work a BFGS variant 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+ was chosen since it can satisfactorily handle the constraints placed on
+ the network parameters for the optimization.
+ Although, an additional experiment was executed using different local optimizat
+ion techniques and the results for the classification datasets are presented
+ in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experLocalClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and the results for the regression datasets are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experLocalRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The columns in these result tables have the following meanings:
+\end_layout
+
+\begin_layout Enumerate
+The column ADAM denotes the incorporation of the ADAM local optimization
+ method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Adam"
+literal "false"
+
+\end_inset
+
+ in the current technique.
+\end_layout
+
+\begin_layout Enumerate
+The column LBFGS stands for the usage of Limited Memory BFGS (L-BFGS) method
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "LBFGS"
+literal "false"
+
+\end_inset
+
+ in the current work.
+\end_layout
+
+\begin_layout Enumerate
+The column BFGS represents the incorporation of the BFGS variant of Powell
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+as the local search procedure.
 \end_layout
 
 \begin_layout Standard
@@ -13204,10 +13506,6 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -14178,7 +14476,21 @@ AVERAGE
 
 \end_inset
 
+The BFGS method achieved lower values for the test error in the majority
+ of cases and this is also evident in the Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxMethodClass"
+plural "false"
+caps "false"
+noprefix "false"
 
+\end_inset
+
+, where a box plot is depicted for the classification datasets.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
@@ -14236,12 +14548,50 @@ name "sec:Conclusions"
 
 \end_layout
 
+\begin_layout Standard
+An extension of the artificial neural network construction technique was
+ presented in the present work, in which the periodic application of a local
+ optimization method to randomly selected chromosomes was introduced.
+ The application of the local optimization method is done in such a way
+ as not to alter the architecture of the neural network constructed by Grammatic
+al Evolution.
+ The proposed modified method was applied on a seris of benchmark datasets
+ found in the relevant literature and judging from the experimental results
+ it reduced significantly the test error of the original method in the majority
+ of datasets.
+ 
+\end_layout
+
+\begin_layout Standard
+Moreover, to establish the stability of the proposed technique, a series
+ of experiments were performed in which a number of critical parameters
+ were varied over a range of values.
+ After the completion of these experiments it became clear that there is
+ no significant difference in the effectiveness of the proposed method,
+ even if these critical parameters change significantly from execution to
+ execution.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(....)
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace 6pt
+\end_inset
+
+
+\end_layout
+
 \begin_layout Author Contributions
 V.C.
  and I.G.T.
  conducted the experiments, employing several datasets and provided the
  comparative experiments.
- D.T.
+ D.T., A.T.
  and V.C.
  performed the statistical analysis and prepared the manuscript.
  All authors have read and agreed to the published version of the manuscript.
@@ -16331,6 +16681,43 @@ D.
 \series default
 , pp.
  81-102, 1978.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Adam"
+literal "false"
+
+\end_inset
+
+D.
+ P.
+ Kingma, J.
+ L.
+ Ba, ADAM: a method for stochastic optimization, in: Proceedings of the
+ 3rd International Conference on Learning Representations (ICLR 2015), pp.
+ 1–15, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "LBFGS"
+literal "false"
+
+\end_inset
+
+D.C.
+ Liu, J.
+ Nocedal, On the Limited Memory Method for Large Scale Optimization, Mathematica
+l Programming B.
+ 
+\series bold
+45
+\series default
+, pp.
+ 503–528, 1989.
 \end_layout
 
 \begin_layout End Whole Page
