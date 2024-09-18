@@ -756,32 +756,17 @@ name "sec:overallAlgorithm"
 
 \begin_layout Standard
 The proposed method combines some aspects from different optimization algorithms
- and the main steps are outlined in Algorithm 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "alg:proposedAlgorithm"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
-.
- 
+ and the main steps are subsequently:
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
+\begin_layout Enumerate
 
-\begin_layout Plain Layout
+\series bold
 Initialization step.
 \end_layout
 
-\begin_layout Itemize
+\begin_deeper
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -793,7 +778,7 @@ Set
 4.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -805,7 +790,7 @@ Set
  the dimension of the benchmark function.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Initialize 
@@ -821,18 +806,22 @@ the samples
 using uniform distribution.
 \end_layout
 
-\begin_layout Plain Layout
-Calculation step.
-\end_layout
-
-\begin_layout Itemize
+\end_deeper
+\begin_layout Enumerate
 
 \series bold
-Repeat
+Calculation step.
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:Calculation-step."
+
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 For 
@@ -847,7 +836,7 @@ do
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Obtain 
@@ -859,7 +848,7 @@ sample
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Find nearest sample 
@@ -887,7 +876,7 @@ where
  is the Euclidean Distance.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -903,7 +892,7 @@ Set
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -915,7 +904,7 @@ Set
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Compute 
@@ -965,7 +954,7 @@ f\left(x_{i}^{new},c_{i}{}^{new}\right)\le f\left(x_{i},c_{i}\right)+c_{1}a\nabl
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Make
@@ -985,7 +974,7 @@ Make
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 For
@@ -1037,7 +1026,7 @@ then
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 EndFor
@@ -1097,14 +1086,14 @@ If
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 EndFor
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Check the termination rule stated in 
@@ -1160,10 +1149,20 @@ noprefix "false"
 
 \end_inset
 
- does not hold, then the algorithm continues from Calculation Step.
+ does not hold, then the algorithm continues from Step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:Calculation-step."
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Return
@@ -1179,27 +1178,7 @@ Return
 .
 \end_layout
 
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-The steps of the proposed algorithm
-\begin_inset CommandInset label
-LatexCommand label
-name "alg:proposedAlgorithm"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
+\begin_layout Standard
 Initially, the algorithm initializes the trial solutions as well as the
  necessary parameters.
  At every iteration the method constructs trial solutions using the genetic
@@ -1225,7 +1204,7 @@ for each sample
 
 
 \series default
- from the initial distribution.
+.
 \end_layout
 
 \begin_layout Itemize
@@ -1349,7 +1328,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -2376,7 +2355,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -7529,58 +7508,10 @@ name "fig:proposedVSOthers"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-(ADD TEXT HERE)
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename img2.png
-	lyxscale 50
-	scale 50
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Comparison of proposed method against DE
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:proposedVSDE"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-From Figure 
+The proposed method seems to significantly reduce the required number of
+ functional calls compared to other techniques, and in many functions this
+ reduction can exceed 50%.
+ This trend is also confirmed by Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:StatProposedVSOthers"
@@ -7590,9 +7521,47 @@ noprefix "false"
 
 \end_inset
 
-, it is evident that the proposed method demonstrates significantly better
- performance compared to DE, with a substantial reduction in cost (144,024
- versus 296,929).
+, where a statistical comparison is presented between universal optimization
+ methods used in the experiments.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename MethodsStat.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison of proposed method against others
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:StatProposedVSOthers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ From this figure, it is evident that the proposed method demonstrates significa
+ntly better performance compared to DE, with a substantial reduction in
+ cost (144,024 versus 296,929).
  The t-test confirmed the statistically significant difference (p-value
  < 0.05).
  Compared to IPSO, the proposed method also outperforms, with lower values
@@ -7613,7 +7582,27 @@ In conclusion, the proposed method is more efficient compared to DE, IPSO,
 \end_layout
 
 \begin_layout Standard
-The Figure 
+An additional experiment was executed for the High Elliptic function, which
+ is defined as:
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}
+\]
+
+\end_inset
+
+where the parameter 
+\begin_inset Formula $n$
+\end_inset
+
+ defines the dimension of the function.
+ In this experiment the proposed method was applied to this function as
+ the dimension 
+\begin_inset Formula $n$
+\end_inset
+
+ changes from 10 to 100.
+ The Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:ELPcalls"
@@ -7662,51 +7651,6 @@ onal problems.
  For example, moving from 10 to 20 dimensions results in more than doubling
  the time, from 0.224 to 0.577 seconds, while increasing from 90 to 100 dimensions
  causes a larger jump, from 21.897 to 32.537 seconds.
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename MethodsStat.png
-	lyxscale 50
-	scale 50
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Statistical comparison of proposed method against others
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:StatProposedVSOthers"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -7822,6 +7766,47 @@ name "fig:ELP"
 \end_layout
 
 \begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img2.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of proposed method against DE
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:proposedVSDE"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
