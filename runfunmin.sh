@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Ego
+METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=kmeans
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all
-TERMINATION=similarity
+TERMINATION=doublebox
 ### GLOBAL PARAMS
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
 if [ $METHOD = "bfgs" ]
@@ -64,7 +64,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.05 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.01 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
 #ms_samples: number of multistart samples
@@ -142,5 +142,5 @@ if [ -z "$DIMENSION" ]
 then
 	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=30 --opt_debug=yes
 else
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=30
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=30 --opt_debug=yes
 fi

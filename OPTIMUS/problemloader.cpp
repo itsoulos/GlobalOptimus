@@ -208,6 +208,9 @@ Problem *ProblemLoader::getProblemFromName(QString name)
     if(name == "rbfproblem")
         myProblem = new RbfProblem();
     else
+    if(name == "gross")
+	myProblem = new Gross();	    
+    else    
     if(name == "userproblem")
         myProblem = new UserProblem();
     return myProblem;
