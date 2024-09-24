@@ -682,8 +682,8 @@ literal "false"
 
  was suggested as an extension of the Grammatical Evolution, where a position
  - independent mapping was proposed.
- Another interesting work is the incorporation of the Particle Swarm Optimizatio
-n(PSO) 
+ Another interesting work was the incorporation of the Particle Swarm Optimizati
+on(PSO) 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "pso1"
@@ -767,9 +767,10 @@ literal "false"
 Additionally, many researchers have developed and published open source
  software for Grammatical Evolution, such as
 \series bold
- t
+ 
 \series default
-he GUI application of GEVA 
+the graphical user interface (GUI) application of Grammatical Evolution
+ in Java (GEVA)
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ge_geva"
@@ -785,7 +786,8 @@ literal "false"
 
 \end_inset
 
-, an R implementation of Grammatical Evolution called gramEvol
+, an R implementation of Grammatical Evolution called gramEvol (Grammatical
+ Evolution for R)
 \series bold
  
 \series default
@@ -801,7 +803,7 @@ literal "false"
 \series bold
 , 
 \series default
-the GRAPE software that implements Grammatical Evolution in Python 
+the GRAPE software that implemented Grammatical Evolution in Python 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ge_grape"
@@ -821,8 +823,8 @@ literal "false"
 
 \end_inset
 
- software that suggests a Matlab toolbox for Grammatical Evolution, a software
- which produces classification programs with Grammatical Evolution called
+ software that suggested a Matlab toolbox for Grammatical Evolution, a software
+ which produced classification programs with Grammatical Evolution called
  GenClass 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -839,7 +841,7 @@ literal "false"
 
 \end_inset
 
- the produces artificial features from the original ones with the assistance
+ the produced artificial features from the original ones with the assistance
  of Grammatical Evolution etc.
 \end_layout
 
@@ -876,6 +878,43 @@ literal "false"
  and regression datasets from the relevant literature and the experimental
  results indicated a reduction in classification or regression error from
  the application of the new genetic operator.
+\end_layout
+
+\begin_layout Standard
+The main components of the proposed technique are the following:
+\end_layout
+
+\begin_layout Enumerate
+The method can be applied as a genetic operator to all problems solved by
+ the Grammatical Evolution technique and the only information it exploits
+ is the fitness function of the problem.
+\end_layout
+
+\begin_layout Enumerate
+The method has no dependence on the grammar of the objective problem.
+ 
+\end_layout
+
+\begin_layout Enumerate
+By using an application rate the user can require fewer or more applications
+ of the new operator.
+\end_layout
+
+\begin_layout Enumerate
+Although this operator requires significant computing time for its execution,
+ its application between chromosomes can be done using parallel techniques,
+ since there is no dependency between its successive applications.
+\end_layout
+
+\begin_layout Enumerate
+Simple linear operations are required for its implementation, such as crossing
+ a point between chromosomes.
+\end_layout
+
+\begin_layout Enumerate
+The method could theoretically be applied to other forms of genetic algorithms
+ beyond Grammatical Evolution.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1344,6 +1383,76 @@ where the value NR represents the total number of production rules for the
  under processing non – terminal symbol.
 \end_layout
 
+\begin_layout Standard
+For a dataset with three features 
+\begin_inset Formula $\left(x_{1},x_{2},x_{3}\right)$
+\end_inset
+
+ an example of rule construction method could be the following:
+\begin_inset Formula 
+\[
+\mbox{if\left(x_{1}>2+\sin\left(x_{3}\right)\right)}\mbox{value}=10+\exp\left(x_{2}\right)\ \mbox{else}\ \mbox{value}=x_{1}
+\]
+
+\end_inset
+
+The terminal symbol value is used to denote the final outcome of the rule
+ method.
+ For the same dataset an example of neural network constructed by the Grammatica
+l Evolution could be the following:
+\begin_inset Formula 
+\[
+\mbox{NNC}(x)=2.45\mbox{sig}\left(1.9x_{1}+3.11x_{3}+2.5\right)+5.9\mbox{sig}\left(10.8x_{2}+6.25\right)
+\]
+
+\end_inset
+
+This grammar of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:grammarNNC"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ is able to construct artificial neural networks in the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(n+2)i-(n+1)}\sigma\left(\sum_{j=1}^{n}x_{j}w_{(n+2)i-(n+1)+j}+w_{(n+2)i}\right)\label{eq:nn}
+\end{equation}
+
+\end_inset
+
+where the parameter 
+\begin_inset Formula $H$
+\end_inset
+
+ defines the number of processing units.
+ These networks have one processing level, but the grammar could be easily
+ extended to produce neural networks of additional levels.
+ The function 
+\begin_inset Formula $\mbox{sig}(x)$
+\end_inset
+
+ used in the previous example denotes the sigmoid function given by:
+\begin_inset Formula 
+\begin{equation}
+\mbox{sig}(x)=\frac{1}{1+\exp(-x)}
+\end{equation}
+
+\end_inset
+
+used in the majority of cases of neural networks.
+ Of course, the Grammatical Evolution procedure can construct neural networks
+ with different activation functions or neural networks that use a mix of
+ activation functions.
+\end_layout
+
 \begin_layout Subsection
 The genetic algorithm 
 \end_layout
@@ -1753,7 +1862,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename ga.png
-	scale 55
+	scale 70
 
 \end_inset
 
@@ -3164,6 +3273,7 @@ name "tab:experClass"
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 DATASET
 \end_layout
 
@@ -3241,6 +3351,8 @@ NNC_CROSS
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 APPENDICITIS
 \end_layout
 
@@ -3306,6 +3418,8 @@ APPENDICITIS
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 AUSTRALIAN
 \end_layout
 
@@ -3371,6 +3485,8 @@ AUSTRALIAN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 BALANCE
 \end_layout
 
@@ -3436,6 +3552,8 @@ BALANCE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 CIRCULAR
 \end_layout
 
@@ -3501,6 +3619,8 @@ CIRCULAR
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 CLEVELAND
 \end_layout
 
@@ -3566,6 +3686,8 @@ CLEVELAND
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 DERMATOLOGY
 \end_layout
 
@@ -3631,6 +3753,8 @@ DERMATOLOGY
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 ECOLI
 \end_layout
 
@@ -3696,6 +3820,8 @@ ECOLI
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 FERT
 \end_layout
 
@@ -3761,6 +3887,8 @@ FERT
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 HABERMAN
 \end_layout
 
@@ -3826,6 +3954,8 @@ HABERMAN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 HAYES-ROTH
 \end_layout
 
@@ -3891,6 +4021,8 @@ HAYES-ROTH
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 HEART
 \end_layout
 
@@ -3956,6 +4088,8 @@ HEART
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 HEARTATTACK
 \end_layout
 
@@ -4021,6 +4155,8 @@ HEARTATTACK
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 HOUSEVOTES
 \end_layout
 
@@ -4086,6 +4222,8 @@ HOUSEVOTES
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 GLASS
 \end_layout
 
@@ -4151,6 +4289,8 @@ GLASS
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 IONOSPHERE
 \end_layout
 
@@ -4216,6 +4356,8 @@ IONOSPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 LIVERDISORDER
 \end_layout
 
@@ -4281,6 +4423,8 @@ LIVERDISORDER
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 MAMMOGRAPHIC
 \end_layout
 
@@ -4346,6 +4490,8 @@ MAMMOGRAPHIC
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 PARKINSONS
 \end_layout
 
@@ -4411,6 +4557,8 @@ PARKINSONS
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 PIMA
 \end_layout
 
@@ -4476,6 +4624,8 @@ PIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 POPFAILURES
 \end_layout
 
@@ -4541,6 +4691,8 @@ POPFAILURES
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 REGIONS2
 \end_layout
 
@@ -4606,6 +4758,8 @@ REGIONS2
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 SAHEART
 \end_layout
 
@@ -4671,6 +4825,8 @@ SAHEART
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 SEGMENT
 \end_layout
 
@@ -4736,6 +4892,8 @@ SEGMENT
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 SPIRAL
 \end_layout
 
@@ -4801,6 +4959,8 @@ SPIRAL
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 STUDENT
 \end_layout
 
@@ -4866,6 +5026,8 @@ STUDENT
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 TRANSFUSION
 \end_layout
 
@@ -4931,6 +5093,8 @@ TRANSFUSION
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 WDBC
 \end_layout
 
@@ -4996,6 +5160,8 @@ WDBC
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 WINE
 \end_layout
 
@@ -5061,6 +5227,8 @@ WINE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 Z_F_S
 \end_layout
 
@@ -5126,6 +5294,8 @@ Z_F_S
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 Z_O_N_F_S
 \end_layout
 
@@ -5191,6 +5361,8 @@ Z_O_N_F_S
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 ZO_NF_S
 \end_layout
 
@@ -5256,6 +5428,8 @@ ZO_NF_S
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 ZONF_S
 \end_layout
 
@@ -5321,6 +5495,8 @@ ZONF_S
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 ZOO
 \end_layout
 
@@ -5388,6 +5564,7 @@ ZOO
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 AVERAGE
 \end_layout
 
@@ -7073,6 +7250,8 @@ noprefix "false"
 \end_layout
 
 \begin_layout Standard
+
+\series bold
 \begin_inset Float figure
 placement H
 wide false
@@ -7081,6 +7260,8 @@ status collapsed
 
 \begin_layout Plain Layout
 \align center
+
+\series bold
 \begin_inset Graphics
 	filename rule_improve.png
 	scale 40
@@ -7091,6 +7272,8 @@ status collapsed
 \end_layout
 
 \begin_layout Plain Layout
+
+\series bold
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -7127,6 +7310,8 @@ status collapsed
 
 \begin_layout Plain Layout
 \align center
+
+\series bold
 \begin_inset Graphics
 	filename nnc_improve.png
 	scale 40
@@ -7137,6 +7322,8 @@ status collapsed
 \end_layout
 
 \begin_layout Plain Layout
+
+\series bold
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -7164,6 +7351,262 @@ name "fig:nncDatasets"
 
 \end_inset
 
+
+\series default
+Furthermore, the box plots for the classification cases are shown in Figures
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxRuleClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxNncClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ for the rule construction model and the network construction model respectively.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\series bold
+\begin_inset Graphics
+	filename update1.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Box plot for the comparison between the original rule construction model
+ and the improved one that utilizes the new crossover operator.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:boxRuleClass"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\series bold
+\begin_inset Graphics
+	filename update2.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Box plot for the comparison between the original rule construction model
+ and the improved one that utilizes the new crossover operator.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:boxNncClass"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\series default
+Box plots for the same comparisons as deduced from the results on the regression
+ datasets are shown in Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxRuleRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxNncRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ respectively.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\series bold
+\begin_inset Graphics
+	filename update3.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Box plot for the comparison between the original rule construction model
+ and the improved one that utilizes the new crossover operator for the regressio
+n datasets.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:boxRuleRegression"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\series bold
+\begin_inset Graphics
+	filename update4.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Box plot for the comparison between the original rule construction model
+ and the improved one that utilizes the new crossover operator for the regressio
+n datasets.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:boxNncRegression"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\series default
+These figures confirm the significant improvement brought about by the use
+ of the new operator in the effectiveness of the two techniques that utilize
+ Grammatical Evolution.
+ This improvement appears to be greater in the datasets used in data fitting.
+ 
+\end_layout
+
+\begin_layout Standard
 Also, a statistical comparison was performed between the two machine learning
  methods and the enhanced ones that use the new crossover operator.
  This comparison was performed for the classification datasets, and it is
@@ -7220,8 +7663,8 @@ name "fig:statClass"
 
 \end_inset
 
-Furthermore, an additional test was executed in order to measure the effectivene
-ss of the new crossover rate parameter denoted as 
+Moreover, an additional test was executed in order to measure the effectiveness
+ of the new crossover rate parameter denoted as 
 \begin_inset Formula $p_{cr}$
 \end_inset
 
