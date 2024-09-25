@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Genetic
+METHOD=DifferentialEvolution
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all
-TERMINATION=doublebox
+TERMINATION=similarity
 ### GLOBAL PARAMS
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
 if [ $METHOD = "bfgs" ]
@@ -16,7 +16,7 @@ then
 	METHODPARAMS="--bfgs_iters=200"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
-	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=crossover" 
+	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=random" 
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex
