@@ -95,6 +95,8 @@ SOURCES += \
     PROBLEMS/Extended_f10.cpp \
     PROBLEMS/Sphere.cpp \
     PROBLEMS/bf3.cpp \
+    PROBLEMS/equal_maxima.cpp \
+    PROBLEMS/f1.cpp \
     PROBLEMS/f12.cpp \
     PROBLEMS/f13.cpp \
     PROBLEMS/f14.cpp \
@@ -103,10 +105,16 @@ SOURCES += \
     PROBLEMS/f17.cpp \
     PROBLEMS/f18.cpp \
     PROBLEMS/f19.cpp \
+    PROBLEMS/f3.cpp \
+    PROBLEMS/f5.cpp \
+    PROBLEMS/f9.cpp \
+    PROBLEMS/himmelblau.cpp \
     PROBLEMS/schaffer.cpp \
     PROBLEMS/schwefel.cpp \
     PROBLEMS/schwefel221.cpp \
     PROBLEMS/schwefel222.cpp \
+    PROBLEMS/shubert.cpp \
+    PROBLEMS/vincent.cpp \
     XOPTIMUS/parameterdialog.cpp \
     OPTIMUS/similarity.cpp \
     OPTIMUS/statistics.cpp \
@@ -227,6 +235,8 @@ HEADERS += \
     OPTIMUS/parameter.h \
     OPTIMUS/parameterlist.h \
     OPTIMUS/problem.h \
+    PROBLEMS/equal_maxima.h \
+    PROBLEMS/f1.h \
     PROBLEMS/f12.h \
     PROBLEMS/f13.h \
     PROBLEMS/f14.h \
@@ -235,10 +245,16 @@ HEADERS += \
     PROBLEMS/f17.h \
     PROBLEMS/f18.h \
     PROBLEMS/f19.h \
+    PROBLEMS/f3.h \
+    PROBLEMS/f5.h \
+    PROBLEMS/f9.h \
+    PROBLEMS/himmelblau.h \
     PROBLEMS/schaffer.h \
     PROBLEMS/schwefel.h \
     PROBLEMS/schwefel221.h \
     PROBLEMS/schwefel222.h \
+    PROBLEMS/shubert.h \
+    PROBLEMS/vincent.h \
     XOPTIMUS/parameterdialog.h \
     OPTIMUS/similarity.h \
     OPTIMUS/statistics.h \
