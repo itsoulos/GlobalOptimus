@@ -543,27 +543,14 @@ literal "false"
 \end_inset
 
 .
- Some examples of these methods 
-\series bold
-are the Particle Swarm Optimization (PSO)
-\begin_inset CommandInset citation
-LatexCommand citep
-key "key-40,key-41"
-literal "false"
+ 
+\end_layout
 
-\end_inset
-
-, the Ant Colony optimization methods
-\begin_inset CommandInset citation
-LatexCommand citep
-key "key-42,key-43"
-literal "false"
-
-\end_inset
-
-,
-\series default
- the Fast Bacterial Swarming Algorithm (FBSA) 
+\begin_layout Standard
+In addition to the previously mentioned Particle Swarm Optimization and
+ Ant Colony methods techniques that are also included in Swarm intelligence
+ algorithms other methods that belong to this category are, the Fast Bacterial
+ Swarming Algorithm (FBSA) 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "bacterial"
@@ -917,7 +904,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -1929,6 +1916,22 @@ with
 \begin_layout Itemize
 
 \series bold
+Equal maxima 
+\series default
+function, defined as:
+\begin_inset Formula 
+\[
+f(x)=\sin^{6}\left(5\pi x\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
 Exponential
 \series default
  function, defined as: 
@@ -2009,6 +2012,51 @@ f(x) & =\left(1+\left(x_{1}+x_{2}+1\right)^{2}\times\left(19-14x_{1}+3x_{1}^{2}-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Five - uneven - peak trap 
+\series default
+function:
+\begin_inset Formula 
+\[
+f(x)=\begin{cases}
+80(2.5-x) & 0\le x<2.5\\
+64(x-2.5) & 2.5\le x<5.0\\
+64(7.5-x) & 5.0\le x<7.5\\
+28(x-7.5) & 7.5\le x<12.5\\
+28(17.5-x) & 12.5\le x<17.5\\
+32(x-17.5) & 17.5\le x<22.5\\
+32(27.5-x) & 22.5\le x<27.5\\
+80(x-27.5) & 27.5\le x\le30
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Himmelblau 
+\series default
+function:
+\begin_inset Formula 
+\[
+f(x)=200-\left(x_{1}^{2}+x_{2}-11\right)^{2}-\left(x_{1}+x_{2}^{2}-7\right)^{2}
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $x\in[-6,6]^{2}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
@@ -2524,6 +2572,26 @@ f(x)=\sum_{i=1}^{n}\left|x_{i}\right|+\prod_{i=1}^{n}\left|x_{i}\right|
 \begin_layout Itemize
 
 \series bold
+Shubert 
+\series default
+function:
+\begin_inset Formula 
+\[
+f(x)=-\prod_{i=1}^{n}\sum_{j=1}^{5}j\cos\left((j+1)x_{i}+j\right)
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $x\in[-10,10]^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
 Sphere 
 \series default
 function:
@@ -2575,6 +2643,42 @@ The values
 \end_inset
 
  were used in the conducted experiments.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Uneven decreasing maxima
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=\exp\left(-2\log(2)\left(\frac{x-0.08}{0.854}\right)^{2}\right)\sin^{6}\left(5\pi\left(x^{\frac{3}{4}}-0.05\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Vincent
+\series default
+ function:
+\begin_inset Formula 
+\[
+f(x)=\frac{1}{n}\sum_{i=1}^{n}\sin\left(10\log\left(x_{i}\right)\right)
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $x\in[0.25,10]^{n}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -11047,6 +11151,78 @@ name "fig:ScatterPlot"
  
 \end_layout
 
+\begin_layout Standard
+In addition, in order to investigate the impact that the choice of sampling
+ method has on the optimization method, an additional experiment was done,
+ in which the execution time of the proposed method was recorded and with
+ different sampling techniques for the Rosenbrock function, in which function
+ the dimension varied between 2 and 50.
+ The results from this experiment are graphically outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:timeComparison"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename eego_time_comparison.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time comparison for the Rosenbrock function and the proposed optimization
+ method using the four sampling techniques mentioned before.
+ The time depicted in figure is the sum of the execution times for 30 independen
+t runs.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:timeComparison"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+The proposed sampling method can significantly increase the required execution
+ time, since an iterative process is required before starting the algorithm.
+ The next sampling procedure in required execution time appears to be the
+ Maxwell sampling, but not significantly compared to uniform sampling.
+ 
+\end_layout
+
 \begin_layout Section
 Conclusions 
 \begin_inset CommandInset label
@@ -12024,69 +12200,6 @@ Tang, J., Liu, G., & Pan, Q.
  A review on representative swarm intelligence algorithms for solving optimizati
 on problems: Applications and trends.
  IEEE/CAA Journal of Automatica Sinica, 8(10), 1627-1643.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-40"
-
-\end_inset
-
-Intelligence, S.
- (2013).
- Particle swarm optimization. MCCAFFREY, James.[online].[cit.
- 2014-05-20].
- Dostupné z: http://msdn.
- microsoft.
- com/en-us/magazine/hh335067.
- aspx.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-41"
-
-\end_inset
-
-Marini, F., & Walczak, B.
- (2015).
- Particle swarm optimization (PSO).
- A tutorial. Chemometrics and Intelligent Laboratory Systems, 149, 153-165.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-42"
-
-\end_inset
-
-Nayyar, A., & Singh, R.
- (2016, March).
- Ant colony optimization—computational swarm intelligence technique.
- In 2016 3rd International conference on computing for sustainable global
- development (INDIACom) (pp.
- 1493-1499).
- IEEE.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-43"
-
-\end_inset
-
-Chan, F., & Tiwari, M.
- (Eds.).
- (2007). Swarm Intelligence: focus on ant and particle swarm optimization.
- BoD–Books on Demand.
 \end_layout
 
 \begin_layout Bibliography
