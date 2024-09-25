@@ -56,6 +56,14 @@
 # include <PROBLEMS/schaffer.h>
 # include <PROBLEMS/Extended_f10.h>
 # include <PROBLEMS/bf3.h>
+# include <PROBLEMS/equal_maxima.h>
+# include <PROBLEMS/f1.h>
+# include <PROBLEMS/f3.h>
+# include <PROBLEMS/f5.h>
+# include <PROBLEMS/f9.h>
+# include <PROBLEMS/himmelblau.h>
+# include <PROBLEMS/shubert.h>
+# include <PROBLEMS/vincent.h>
 /**
  * @brief The ProblemLoader class
  */

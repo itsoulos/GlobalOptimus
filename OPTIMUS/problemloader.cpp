@@ -3,6 +3,8 @@ ProblemLoader::ProblemLoader()
 {
     myProblem = NULL;
     problemList<<"rastrigin"<<"test2n"<<"bf1"<<"bf2"
+              <<"equal_maxima"<<"f1"<<"f3"<<"f5"<<"f9"
+             <<"himmelblau"<<"shubert"<<"vincent"
         <<"branin"<<"camel"<<"cm"<<"diffpower"<<"easom"<<"exp"
         <<"elp"<<"gkls250"<<"gkls2100"<<"gkls350"
                 <<"bf3"<<"extendedf10"
@@ -209,8 +211,32 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new RbfProblem();
     else
     if(name == "gross")
-	myProblem = new Gross();	    
-    else    
+    myProblem = new Gross();
+    else
+    if(name == "equal_maxima")
+        myProblem =new Equal_Maxima();
+    else
+    if(name == "f1")
+        myProblem = new F1();
+    else
+    if(name == "f3")
+        myProblem = new F3();
+    else
+    if(name == "f5")
+        myProblem = new F5();
+    else
+    if(name == "f9")
+        myProblem = new f9();
+    else
+    if(name == "himmelblau")
+        myProblem = new Himmelblau();
+    else
+    if(name == "shubert")
+        myProblem = new shubert();
+    else
+    if(name == "vincent")
+        myProblem = new Vincent();
+    else
     if(name == "userproblem")
         myProblem = new UserProblem();
     return myProblem;

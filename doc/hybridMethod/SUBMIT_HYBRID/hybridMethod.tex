@@ -193,10 +193,17 @@ Evolutionary techniques; Stochastic methods; Hybrid methods.}
 
 \section{Introduction}
 
-The basic goal of global optimization is to find the global minimum
-by searching for the appropriate range of the underlying objective
-problem. The global optimization method aims to find the global minimum
-of a continuous multidimensional function and is defined as
+The primary objective of global optimization is to locate the global
+minimum by thoroughly exploring the relevant range associated with
+the underlying objective problem. This method of global optimization
+is focused on identifying the global minimum within a continuous function
+that spans multiple dimensions. Essentially, the global optimization
+process is dedicated to seeking out the minimum value of a continuous,
+multidimensional function, ensuring that the search covers all potential
+ranges of the problem at hand. The objective is to find the lowest
+point through systematic exploration of the entire domain of the function,
+which is defined in a Euclidean space $R^{n}$. The optimal value
+of a function $f:S\rightarrow R,S\subset R^{n}$ is defined as follows:
 
 \begin{equation}
 x^{*}=\mbox{arg}\min_{x\in S}f(x)\label{eq:eq1}
@@ -216,12 +223,12 @@ agriculture \citep{go_agri1,go_agri2} and economics \citep{go_econ1,go_econ2}.
 Optimization methods can be categorized into deterministic \citep{go_determ1,go_determ2,go_determ3}
 and stochastic \citep{stohastic,stohastic1,stohastic2} based on how
 they approach solving the problem. The techniques used for deterministic
-are mainly interval methods \citep{interval1,interval2}. In interval
-methods, the set S is divided into smaller regions that may contain
-the global minimum using certain criteria. On the other hand stochastic
-methods use randomness to explore the solution space. Recently, Sergeyev
-et al. \citep{Sergeyev} proposed a comparison between deterministic
-and stochastic methods.
+are mainly interval methods \citep{interval1,interval2}. Stochastic
+methods utilize randomness to explore the solution space, while in
+interval methods, the set S is divided into smaller regions that may
+contain the global minimum based on certain criteria. Recently, a
+comparison between deterministic and stochastic methods was proposed
+by Sergeyev et al \citep{Sergeyev}.
 
 A series of stochastic optimization methods are the so - called evolutionary
 methods, which attempt to mimic a series of natural processes. Such
@@ -379,15 +386,17 @@ Differential Evolution.
 
 \subsection{Settings and benchmark functions}
 
-To ensure the reliability of the experimental results, the experiments
-were repeated 30 times using different seeds for the random number
-generator. The experiments were conducted on an AMD Ryzen 5950X processor
-with 128 GB of RAM and the used operating system was Debian Linux.
-The software as well as the objective function was written entirely
-in ANSI-C++ with the assistance of the open - source optimization
-environment OPTIMUS, that is available from \url{http://www.github.com/itsoulos/GlobalOptimus}
-(accessed on 17 September 2024). The test functions used in the experiments
-are presented in Table \ref{tab:benchmarkFunctions}. 
+In the random number generator, different seeds were used to ensure
+the reliability of the experimental results, with the experiments
+being repeated 30 times. This process of repetition aims to minimize
+the likelihood of random errors and to enhance the validity of the
+results. The experiments were conducted on a system with an AMD Ryzen
+5950X processor and 128 GB of RAM, operating in a Linux-Debian environment.
+Additionally, the open-source optimizer \textquotedbl GlobalOptimus\textquotedbl{}
+was used, which is a fully developed optimizer and is available for
+distribution via the link: \url{http://www.github.com/itsoulos/GlobalOptimus}
+(accessed on 17 September 2024). The benchmark functions used in the
+experimental measurements are presented in Table \ref{tab:benchmarkFunctions}.
 \begin{table}[H]
 \caption{The benchmark functions used in the conducted experiments.\label{tab:benchmarkFunctions}}
 
@@ -486,10 +495,8 @@ $G_{m}$ & $0.05$\ $(5\%)$ & Mutation rate for Genetic Algorithm\tabularnewline
 \subsection{Experimental results}
 
 In Table \ref{tab:mainTable}, the average function calls for each
-method and every objective function is presented. All experiments
-were executed 30 times with different initialization for the random
-generator each time and the average number of function calls was depicted.
-The following notation was used in this table:
+method and every objective function is presented. Description of table
+captions and values:
 \begin{enumerate}
 \item The column FUNCTION represents the name of the used objective problem.
 \item The column DE represents the average function calls for the Differential
@@ -499,12 +506,12 @@ as suggested by Charilogis and Tsoulos \citep{ipso} to the objective
 problems.
 \item The column GENETIC represents the application of the Genetic Algorithm
 to the objective problem.
-\item At the end of the table, the total sum of calls for each method is
-listed. 
-\item The number in parentheses indicates the percentage of executions in
-which the global optimum was successfully found. The absence of this
-number signifies that the global minimum was computed in every independent
-run with 100\% success. 
+\item The total sum of calls for each method is listed at the end of the
+table. 
+\item The success rate is indicated by the number in parentheses, which
+shows the executions in which the global optimum was successfully
+found. The absence of this number implies that the global minimum
+was computed with 100\% success in all independent runs.
 \end{enumerate}
 \begin{table}[H]
 \centering{}\caption{Comparison of average function calls of proposed method against others\label{tab:mainTable}}
@@ -600,6 +607,7 @@ of Powell \citep{powell} is utilized to improve the discovered solution
 and identify with certainty a local minimum.  Additionally, Figure
 \ref{fig:proposedVSOthers} presents a statistical comparison between
 the used optimization methods and the data provided from Table \ref{tab:mainTable}.
+
 \begin{figure}[H]
 \centering{}\includegraphics[scale=0.75]{img1}\caption{Comparison of function calls of proposed method against others\label{fig:proposedVSOthers}}
 \end{figure}
@@ -608,25 +616,38 @@ of functional calls compared to other techniques, and in many functions
 this reduction can exceed 50\%. This trend is also confirmed by Figure
 \ref{fig:StatProposedVSOthers}, where a statistical comparison is
 presented between universal optimization methods used in the experiments.
+
 \begin{figure}[H]
 \centering{}\includegraphics[scale=0.5]{MethodsStat}\caption{Statistical comparison of proposed method against others\label{fig:StatProposedVSOthers}}
 \end{figure}
- From this figure, it is evident that the proposed method demonstrates
-significantly better performance compared to DE, with a substantial
-reduction in cost (144,024 versus 296,929). The t-test confirmed the
-statistically significant difference (p-value < 0.05). Compared to
-IPSO, the proposed method also outperforms, with lower values in almost
-all functions (144,024 versus 195,297). The Kruskal-Wallis test further
-confirmed the statistical significance of this difference (p-value
-< 0.05). Regarding GENETIC, the proposed method proves to be more
-efficient, with a lower total cost (144,024 versus 171,842), and the
-t-test indicates a statistically significant superiority.
+From the analysis presented in this Figure \ref{fig:StatProposedVSOthers},
+it is abundantly clear that the proposed optimization method exhibits
+a markedly superior performance when juxtaposed with the DE technique.
+This superiority is evidenced by a significant reduction in computational
+cost, with the proposed method requiring only 144,024 function evaluations
+as opposed to the 296,929 required by DE. To substantiate this observation,
+a t-test was conducted, which confirmed the presence of a statistically
+significant difference, indicated by a p-value of less than 0.05.
+In a comparative assessment with the iPSO method, the proposed approach
+also demonstrates enhanced efficacy, achieving lower function evaluation
+costs across nearly all tested functions, yielding a cost of 144,024
+compared to IPSO’s 195,297. The Kruskal-Wallis test was employed to
+further validate the statistical significance of this observed difference,
+with results again confirming a p-value of less than 0.05. When evaluated
+against the Genetic Algorithm (GENETIC), the proposed method continues
+to display greater efficiency, as evidenced by a lower total cost
+of 144,024 in contrast to GENETIC's 171,842. The t-test results further
+reinforce this finding, highlighting a statistically significant advantage
+in favor of the proposed method.
 
-In conclusion, the proposed method is more efficient compared to DE,
-IPSO, and GENETIC. The differences in objective function costs are
-statistically significant, as confirmed by both parametric (t-test)
-and non-parametric (Kruskal-Wallis) analysis, demonstrating its superiority
-in solving the specific functions.
+In conclusion, the proposed optimization technique demonstrates enhanced
+efficiency relative to DE, IPSO, and GENETIC methodologies. The disparities
+in objective function costs are not only noteworthy but are also statistically
+significant, as corroborated by both parametric analysis through the
+t-test and non-parametric analysis via the Kruskal-Wallis test. This
+evidence collectively underscores the proposed method's superior capability
+in effectively addressing the specific optimization functions evaluated
+in this study.
 
 An additional experiment was executed for the High Elliptic function,
 which is defined as:
@@ -634,43 +655,58 @@ which is defined as:
 f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}
 \]
 where the parameter $n$ defines the dimension of the function. In
-this experiment, the proposed method was applied to this function
-as the dimension $n$ changes from 10 to 100. Figure \ref{fig:ELPcalls}
-presents the performance of the proposed method for this function
-in terms of function calls across various dimensions. It is evident
-that as the dimensionality increases, the number of function calls
-required to solve the problem also rises. Specifically, for a dimension
-of 10, the algorithm requires 2,820 function calls, whereas for a
-dimension of 100, it demands 23,062 function calls, which is approximately
-eight times higher. This increase in function calls as the problem's
-dimensionality grows suggests that the complexity of the ELP problem
-scales significantly with dimensionality. The relationship between
-dimensions and function calls appears to be nonlinear, indicating
-that higher dimensions introduce additional computational challenges.
-For instance, moving from 10 to 20 dimensions more than doubles the
-required function calls, from 2,820 to 5,337, while the increase between
-90 and 100 dimensions, although significant, shows a slightly smaller
-relative increase (19,598 to 23,062). Figure \ref{fig:ELPTimes} shows
-the response times of the ELP problem across various dimensions, from
-10 to 100, measured in seconds. As the dimensionality increases, the
-execution time also rises significantly. For instance, with 10 dimensions,
-the execution time is only 0.224 seconds, while for 100 dimensions,
-it escalates to 32.537 seconds, marking a more than 145-fold increase.
-This substantial growth in execution time as the problem's dimensionality
-increases highlights the complexity and computational demands of higher-dimensional
-problems. The relationship between dimensions and time appears to
-be nonlinear, as seen in the sharp rise in time as dimensions grow.
-For example, moving from 10 to 20 dimensions results in more than
-doubling the time, from 0.224 to 0.577 seconds, while increasing from
-90 to 100 dimensions causes a larger jump, from 21.897 to 32.537 seconds.
+this particular experiment, the proposed optimization method was systematically
+applied to a specific mathematical function as the dimension $n$
+underwent a transition from 10 to 100. Figure \ref{fig:ELPcalls}
+illustrates the performance metrics of the proposed method concerning
+this function, focusing specifically on the number of function calls
+made across various dimensional settings. It becomes increasingly
+evident that as the dimensionality of the problem expands, the corresponding
+number of function calls necessary to effectively solve the problem
+also experiences a significant increase. To be more specific, when
+examining the case for a dimension of 10, the algorithm requires a
+total of 2,820 function calls to arrive at a solution. In stark contrast,
+for a dimension of 100, the algorithm demands a staggering 23,062
+function calls, which represents an increase of approximately eight
+times the number of calls required at the lower dimensional level.
+This notable escalation in the number of function calls as the dimensionality
+of the problem grows strongly suggests that the inherent complexity
+of the ELP problem scales considerably with increasing dimensionality.
+Furthermore, the relationship between the number of dimensions and
+the number of function calls appears to exhibit a nonlinear pattern.
+This indicates that as the dimensions increase, additional computational
+challenges are introduced, complicating the problem-solving process.
+For instance, the transition from 10 to 20 dimensions results in more
+than a doubling of the required function calls, escalating from 2,820
+to 5,337. Conversely, the increase observed between 90 and 100 dimensions,
+although still significant, demonstrates a somewhat smaller relative
+increase, changing from 19,598 to 23,062. Additionally, Figure \ref{fig:ELPTimes}
+provides a visual representation of the response times associated
+with solving the ELP problem across the various dimensions, ranging
+from 10 to 100, with the time measured in seconds. As anticipated,
+with the increase in dimensionality, the execution time also rises
+dramatically. For example, when working with 10 dimensions, the execution
+time is relatively short, clocking in at only 0.224 seconds. However,
+when the dimensionality is increased to 100, the execution time escalates
+sharply to 32.537 seconds, marking an astonishing increase of more
+than 145 times the initial time. This substantial growth in execution
+time as the dimensionality of the problem increases underscores the
+inherent complexity and computational demands associated with higher-dimensional
+optimization problems. Moreover, the relationship between dimensions
+and execution time also appears to be nonlinear, as evidenced by the
+sharp increase in time observed as dimensions grow. For example, when
+moving from 10 to 20 dimensions, the time required more than doubles,
+rising from 0.224 seconds to 0.577 seconds. In contrast, the transition
+from 90 to 100 dimensions results in an even larger jump in execution
+time, from 21.897 seconds to 32.537 seconds, further illustrating
+the significant challenges posed by higher-dimensional problems.
 \begin{center}
 \begin{figure}[H]
 \begin{centering}
 \subfloat[ELP: Function calls\label{fig:ELPcalls}]{\begin{centering}
 \includegraphics[scale=0.4]{img3}
 \par\end{centering}
-}\subfloat[ELP: Times\label{fig:ELPTimes}]{
-\begin{centering}
+}\subfloat[ELP: Times\label{fig:ELPTimes}]{\begin{centering}
 \includegraphics[scale=0.4]{img4}
 \par\end{centering}
 }\caption{Different variations of the ELP problem\label{fig:ELP}}
@@ -695,48 +731,57 @@ Figure \ref{fig:proposedVSDE} have been removed.
 
 \section{Conclusions\label{sec:Conclusions}}
 
-An innovative global optimization method was proposed in this research
-paper that utilizes techniques based on established optimization techniques.
-More specifically, the new method utilizes the genetic operators from
-the Genetic Algorithms as well as the Linear Search method in order
-to create candidate solutions for the objective functions. Subsequently,
-the candidate solutions are combined to produce new solutions using
-techniques based on the Differential Evolution method. In order to
-establish the effectiveness of the new method, a series of extensive
-experiments were carried out on problems from the relevant literature
-and numerical comparisons with established global optimization techniques.
-The proposed optimization method demonstrates significantly better
-performance compared to the other methods in terms of objective function
-calls, with fewer calls indicating better efficiency. This suggests
-that the proposed method is more efficient, achieving optimal solutions
-with fewer objective function evaluations, which is crucial in problems
-where each call is computationally expensive. Statistical tests, including
-both the t-test and Kruskal-Wallis, confirm that the differences in
-the number of calls between the proposed method and the others are
-statistically significant (p-value < 0.05). This indicates that the
-proposed method not only uses fewer resources but also achieves reliable
-results with improved efficiency. In summary, the proposed method
-clearly excels in efficiency compared with other methods, significantly
-reducing the number of objective function calls and optimizing computational
-cost.
+An innovative global optimization method has been proposed in this
+research paper, which leverages techniques derived from well-established
+optimization strategies. More specifically, the new method incorporates
+genetic operators from Genetic Algorithms alongside the Linear Search
+method to generate candidate solutions for the given objective functions.
+These candidate solutions are then combined to create new solutions
+utilizing approaches inspired by the Differential Evolution method.
+To validate the effectiveness of this new optimization approach, a
+comprehensive series of experiments were conducted on various problems
+sourced from the existing literature. Additionally, numerical comparisons
+were made with recognized global optimization techniques to provide
+a clear benchmark. The results indicate that the proposed optimization
+method exhibits significantly superior performance when compared to
+alternative methods, particularly in terms of the number of calls
+made to the objective function. Fewer calls to the objective function
+suggest better overall efficiency, highlighting the proposed method's
+ability to achieve optimal solutions with fewer evaluations. This
+efficiency is particularly critical in scenarios where each function
+call is computationally expensive. Statistical analyses, including
+both the t-test and the Kruskal-Wallis test, confirm that the observed
+differences in the number of calls between the proposed method and
+other methods are statistically significant, with a p-value of less
+than 0.05. This finding not only underscores the reduced resource
+consumption of the proposed method but also affirms that it delivers
+reliable results with enhanced efficiency. 
 
-Potential improvements to the algorithm could involve identifying
-samples that contribute more effectively toward finding the optimal
-solution. Additionally, since this is a novel optimization method,
-exploring alternative termination criteria or different initial sample
-distributions may lead to enhanced performance.
+In summary, the proposed method stands out in terms of efficiency
+when compared to other optimization techniques, significantly decreasing
+the number of objective function calls and optimizing overall computational
+cost. Potential enhancements to the algorithm could involve identifying
+specific samples that contribute more effectively to the discovery
+of the optimal solution. Furthermore, since this method represents
+a novel approach to optimization, exploring alternative termination
+criteria or varying the initial sample distributions could lead to
+even greater performance improvements. By refining these aspects,
+the method could further bolster its efficiency and effectiveness
+in solving complex optimization problems.
 
 \vspace{6pt}
 
 
-\authorcontributions{V.C., I.G.T. and V.S. conceived the idea and methodology and supervised
-the technical part regarding the software. V.C. and A.M.G. conducted
-the experiments, employing several datasets, and provided the comparative
-experiments. I.G.T. performed the statistical analysis. V.S. and all
-other authors prepared the manuscript. All authors have read and agreed
-to the published version of the manuscript.}
+\authorcontributions{The conceptualization of the idea and the design of the methodology,
+as well as the supervision of the technical aspects related to the
+software, were undertaken by V.C., I.G.T., and G.K. The experiments
+were conducted using various datasets, and the comparative results
+were presented by V.C., G.K. and A.M.G. The statistical analysis was
+carried out by V.C. The manuscript was prepared by G.K. and the other
+authors. All authors have reviewed and approved the final published
+version.}
 
-\funding{This research received no external funding.}
+\funding{No external funding was received for this research.}
 
 \institutionalreview{Not applicable.}
 
@@ -744,14 +789,15 @@ to the published version of the manuscript.}
 
 \institutionalreview{Not applicable.}
 
-\acknowledgments{The experiments of this research work were performed at the high
-performance computing system established at Knowledge and Intelligent
-Computing Laboratory, Department of Informatics and Telecommunications,
-University of Ioannina, acquired with the project “Educational Laboratory
-equipment of TEI of Epirus” with MIS 5007094 funded by the Operational
-Programme “Epirus” 2014--2020, by ERDF and national funds.}
+\acknowledgments{The experiments for this research were conducted using the high-performance
+computing system installed at the Knowledge and Intelligent Computing
+Laboratory, Department of Informatics and Telecommunications, University
+of Ioannina, which was acquired through the project \textquotedbl Educational
+Laboratory Equipment of TEI of Epirus\textquotedbl{} with MIS 5007094,
+funded by the Operational Programme \textquotedbl Epirus\textquotedbl{}
+2014--2020, through ERDF and national funds}
 
-\conflictsofinterest{The authors declare no conflict of interest.}
+\conflictsofinterest{No conflicts of interest are declared by the authors.}
 
 \appendixtitles{no}
 

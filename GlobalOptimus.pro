@@ -77,7 +77,9 @@ SOURCES += \
         PROBLEMS/diracproblem.cpp \
         PROBLEMS/easom.cpp \
         PROBLEMS/elp.cpp \
+    PROBLEMS/equal_maxima.cpp \
         PROBLEMS/exp.cpp \
+    PROBLEMS/f1.cpp \
     PROBLEMS/f12.cpp \
     PROBLEMS/f13.cpp \
     PROBLEMS/f14.cpp \
@@ -86,6 +88,9 @@ SOURCES += \
     PROBLEMS/f17.cpp \
     PROBLEMS/f18.cpp \
     PROBLEMS/f19.cpp \
+    PROBLEMS/f3.cpp \
+    PROBLEMS/f5.cpp \
+    PROBLEMS/f9.cpp \
         PROBLEMS/fuch1.cpp \
         PROBLEMS/fuchss.cpp \
         PROBLEMS/gkls.cpp \
@@ -99,6 +104,7 @@ SOURCES += \
         PROBLEMS/hartman3.cpp \
         PROBLEMS/hartman6.cpp \
         PROBLEMS/hess.cpp \
+    PROBLEMS/himmelblau.cpp \
         PROBLEMS/levy.cpp \
         PROBLEMS/potential.cpp \
         PROBLEMS/rosenbrock.cpp \
@@ -111,10 +117,12 @@ SOURCES += \
         PROBLEMS/shekel5.cpp \
 	PROBLEMS/gross.cpp\
         PROBLEMS/shekel7.cpp \
+    PROBLEMS/shubert.cpp \
         PROBLEMS/sinu.cpp \
         PROBLEMS/test30n.cpp \
         MLMODELS/dataset.cpp \
         PROBLEMS/userproblem.cpp \
+    PROBLEMS/vincent.cpp \
         SAMPLER/kmeanssampler.cpp \
         SAMPLER/maxwellsampler.cpp \
         SAMPLER/neuralsampler.cpp \
@@ -205,7 +213,9 @@ HEADERS += \
     PROBLEMS/diracproblem.h \
     PROBLEMS/easom.h \
     PROBLEMS/elp.h \
+    PROBLEMS/equal_maxima.h \
     PROBLEMS/exp.h \
+    PROBLEMS/f1.h \
     PROBLEMS/f12.h \
     PROBLEMS/f13.h \
     PROBLEMS/f14.h \
@@ -214,6 +224,9 @@ HEADERS += \
     PROBLEMS/f17.h \
     PROBLEMS/f18.h \
     PROBLEMS/f19.h \
+    PROBLEMS/f3.h \
+    PROBLEMS/f5.h \
+    PROBLEMS/f9.h \
     PROBLEMS/fuch1.h \
     PROBLEMS/fuchss.h \
     PROBLEMS/gkls.h \
@@ -228,6 +241,7 @@ HEADERS += \
     PROBLEMS/hartman3.h \
     PROBLEMS/hartman6.h \
     PROBLEMS/hess.h \
+    PROBLEMS/himmelblau.h \
     PROBLEMS/levy.h \
     PROBLEMS/potential.h \
     PROBLEMS/rastriginproblem.h \
@@ -240,11 +254,13 @@ HEADERS += \
     PROBLEMS/shekel10.h \
     PROBLEMS/shekel5.h \
     PROBLEMS/shekel7.h \
+    PROBLEMS/shubert.h \
     PROBLEMS/sinu.h \
     PROBLEMS/test2nproblem.h \
     PROBLEMS/test30n.h \
     MLMODELS/dataset.h \
     PROBLEMS/userproblem.h \
+    PROBLEMS/vincent.h \
     SAMPLER/kmeanssampler.h \
     SAMPLER/maxwellsampler.h \
     SAMPLER/neuralsampler.h \
