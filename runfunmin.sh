@@ -1,5 +1,5 @@
-#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=DifferentialEvolution
+#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego
+METHOD=Ego
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -28,7 +28,7 @@ then
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
 elif [ $METHOD = "Ego" ]
 then
-METHODPARAMS="--mod1=2 --mod2=2 --mod3=2 --ego_count=200 --ego_maxiters=200 --ego_lrate=0.05 --ego_localiters=3 --ego_localmethod=none"
+METHODPARAMS="--mod1=1 --mod2=1 --mod3=2 --ego_count=200 --ego_maxiters=200 --ego_lrate=0.05 --ego_localiters=3 --ego_localmethod=none"
 elif [ $METHOD = "Ofa" ]
 then
 	METHODPARAMS="--ofa_count=500  --ofa_maxiters=200 --ofa_lrate=0.02 --ofa_bfgsiters=3"
