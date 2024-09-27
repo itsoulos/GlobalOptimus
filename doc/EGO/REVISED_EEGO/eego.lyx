@@ -798,6 +798,50 @@ Using a termination technique that is developed with random measurements.
  process is terminated.
  Therefore, the method will complete in time without unnecessarily wasting
  time in iterations, avoiding unnecessary consumption of computing resources.
+ There are several methods found in the recent bibliography to terminate
+ optimization methods.
+ An overview of methods used to terminate evolutionary algorithms can be
+ found in the work of Jain et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "jainTermination"
+literal "false"
+
+\end_inset
+
+.
+ Also, Zielinski et al outlined some stopping rules used particularly in
+ the Differential Evolution method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "zilTermination"
+literal "false"
+
+\end_inset
+
+.
+ Recently, Ghoreishi et al.
+ published a literature study concerning various termination criteria on
+ evolutionary algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ghoreishiTermination"
+literal "false"
+
+\end_inset
+
+.
+ Moreover, Ravber et al.
+ performed an extended research on the impact of maximum number of iterations
+ to the effectiveness of evolutionary algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ravberTermination"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
@@ -913,8 +957,6 @@ Initialization step.
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Define as 
 \begin_inset Formula $N_{c}$
 \end_inset
@@ -922,10 +964,7 @@ Define as
  the number of elements in the search Agents
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
-
-\series bold
 Define as 
 \begin_inset Formula $N_{g}$
 \end_inset
@@ -934,8 +973,6 @@ Define as
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Initialize randomly the search agents 
 \begin_inset Formula $x_{i},\ i=1,\ldots,N_{c}$
 \end_inset
@@ -949,8 +986,6 @@ Initialize randomly the search agents
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Set 
 \begin_inset Formula $t=0$
 \end_inset
@@ -959,8 +994,6 @@ Set
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Set 
 \begin_inset Formula $s_{r}=0$
 \end_inset
@@ -970,8 +1003,6 @@ Set
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Set 
 \begin_inset Formula $m=1$
 \end_inset
@@ -982,24 +1013,20 @@ Set
 
  are defined, which in turn affects the calculation of new positions.
  When 
-\begin_inset Formula $m=1$
+\begin_inset Formula $m=2$
 \end_inset
 
 , it introduces randomness to the range of positions before the update,
  while in the inactive state, the range remains fixed.
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \series bold
 Calculation step.
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
-
-\series bold
 Update variables 
 \begin_inset Formula $a$
 \end_inset
@@ -1032,21 +1059,15 @@ Update variables
 
 \end_deeper
 \begin_layout Enumerate
-
-\series bold
 Compute the fitness of each search agents.
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Sort all solutions in the current population from the best to worst according
  to the function value.
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Set 
 \begin_inset Formula $\mbox{XP}$
 \end_inset
@@ -1057,7 +1078,26 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Update random variables 
+For
+\series default
+ 
+\begin_inset Formula $j=1,\ldots,N_{c}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Update 
+\series default
+random variables
+\series bold
+ 
 \begin_inset Formula $r_{1},r_{2},r_{3},r_{4},C_{1},C_{2},b\:$
 \end_inset
 
@@ -1071,12 +1111,14 @@ Update random variables
 \begin_inset Formula $r_{1}$
 \end_inset
 
+
+\series default
 and 
 \begin_inset Formula $r_{2}$
 \end_inset
 
  are random numbers in 
-\begin_inset Formula $[0,1].$
+\begin_inset Formula $[0,1],\ $
 \end_inset
 
 
@@ -1088,7 +1130,7 @@ and
 \begin_inset Formula $r_{3}=(a-2)r_{1}+2$
 \end_inset
 
- 
+
 \end_layout
 
 \begin_layout Itemize
@@ -1127,7 +1169,8 @@ and
 
 \end_layout
 
-\begin_layout Itemize
+\end_deeper
+\begin_layout Enumerate
 
 \series bold
 \begin_inset Formula $X_{1}=e^{br_{3}}\sin\left(2\pi r_{3}\right)C_{1}\left|\mbox{XE}-\mbox{XP}\right|+\mbox{XE},$
@@ -1140,7 +1183,7 @@ and
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 \begin_inset Formula $X_{2}=x_{j}+C_{1}\left|x_{j}-\mbox{XP}\right|$
@@ -1149,7 +1192,6 @@ and
 
 \end_layout
 
-\end_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -1182,7 +1224,9 @@ else set
 \begin_inset Formula $f_{1}$
 \end_inset
 
- to a random number in 
+ 
+\series default
+to a random number in 
 \begin_inset Formula $[0,2]$
 \end_inset
 
@@ -1201,13 +1245,11 @@ else set
 \begin_layout Enumerate
 
 \series bold
-Endif
-\end_layout
-
-\begin_layout Enumerate
-
+Update 
+\series default
+agent:
 \series bold
-Update agent: 
+ 
 \begin_inset Formula $x_{j}=\frac{f_{1}X_{1}+f_{2}X_{2}}{2}$
 \end_inset
 
@@ -1221,13 +1263,12 @@ Update agent:
 End For
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \series bold
 Termination check step
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -1249,8 +1290,6 @@ If
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
 Calculate the stopping that proposed in the work of Charilogis 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -1272,13 +1311,12 @@ literal "false"
  is calculated:
 \end_layout
 
+\begin_deeper
 \begin_layout Plain Layout
 \align center
-
-\series bold
 \begin_inset Formula 
 \begin{equation}
-\left|f_{\mbox{min}}^{(t)}-f_{\mbox{min}}^{(t-1)}\right|\label{eq:best}
+\delta^{t}=\left|f_{\mbox{min}}^{(t)}-f_{\mbox{min}}^{(t-1)}\right|\label{eq:best}
 \end{equation}
 
 \end_inset
@@ -1287,10 +1325,23 @@ literal "false"
 \end_layout
 
 \begin_layout Plain Layout
+The algorithm terminated when 
+\begin_inset Formula $\delta^{t}\le\epsilon$
+\end_inset
 
-\series bold
-If the termination criteria are not met then go to Calculation step, else
+ for 
+\begin_inset Formula $N_{k}$
+\end_inset
+
+ consecutive iterations, where 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ is a small positive value.
+ If the termination criteria are not met then go to Calculation step, else
  terminate and return the best solution.
+\series bold
+
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -1362,8 +1413,8 @@ The main modifications introduced by the proposed algorithm are the following:
 \end_layout
 
 \begin_layout Enumerate
-The member of the population are initialized using a procedure that incorporates
- the K-means algorithm.
+The members of the population are initialized using a procedure that incorporate
+s the K-means algorithm.
  This procedure is fully described in subsection 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1379,6 +1430,32 @@ noprefix "false"
  to the local minima of the objective problem through systematic clustering.
  This will potentially significantly reduce the time required to complete
  the technique.
+ The samples used in the proposed algorithm are the calculated centers of
+ the K-means algorithm.
+\end_layout
+
+\begin_layout Enumerate
+The second modification proposed is the stopping rule invoked at every step
+ of the algorithm.
+ This rule measures the similarity between the best fitness values obtained
+ between consecutive iterations of the algorithm.
+ If this difference takes low values for a consecutive number of iterations,
+ then the algorithm may not be able to find a lower value for the global
+ minimum and should stop.
+ 
+\end_layout
+
+\begin_layout Enumerate
+The third modification is the 
+\begin_inset Formula $m$
+\end_inset
+
+ flag, which controls the randomness in the range of candidate solutions.
+ When this value is set to 2, then the critical parameters 
+\begin_inset Formula $f_{1},f_{2}$
+\end_inset
+
+ are calculated using random numbers.
  
 \end_layout
 
@@ -1686,6 +1763,14 @@ Terminate when
 \end_inset
 
  no longer changes
+\end_layout
+
+\begin_layout Enumerate
+The final samples of the algorithm are the centers 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Plain Layout
@@ -2782,7 +2867,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3177,7 +3262,7 @@ The row SUM represents the sum of function calls for all test functions.
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -8818,8 +8903,63 @@ name "fig:TotalFunctionCalls"
 
 \end_inset
 
-Also, a statistical comparison between the optimization methods is shown
- graphically in Figure 
+.
+ Furthermore, as the experimental results clearly indicate, the modified
+ version outperforms the original EGO method in terms of average and function
+ calls and this is depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:boxPlotEgo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ that outlines box plots for the mentioned methods.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename boxego.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Box plot used to compare the methods EGO and the modified version as suggested
+ in the current work.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:boxPlotEgo"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+ A box plot between all the used methods is depicted in in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:functionCalls"
@@ -8865,7 +9005,103 @@ name "fig:functionCalls"
 
 \end_inset
 
+ Moreover, a statistical comparison for all used methods is outlined in
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statAllMethods"
+plural "false"
+caps "false"
+noprefix "false"
 
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Rplot.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison of all used methods.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statAllMethods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+According to Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:comparison"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statAllMethods"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, the EEGO method proves to be more efficient, as it consistently requires
+ fewer function calls compared to the DE, PSO, GENETIC, and EGO methods,
+ and these differences are statistically significant (p < 0.05).
+ For example, in the ACKLEY function, EEGO required 4199 calls, while DE
+ required 10.220, PSO 6885, and GENETIC 6749, with a p-value < 0.05, showing
+ that EEGO is significantly more efficient.
+ Similar examples are observed in the BF1 function, where EEGO had 3228
+ calls, while DE required 8268 (p < 0.05), and in the BRANIN function, where
+ EEGO required 1684 calls, compared to 4101 for DE (p < 0.05).
+ Overall, EEGO shows the best performance in most cases, with statistically
+ significant differences in function calls, as it effectively reduces the
+ number of calls compared to the other methods.
+ While PSO and GENETIC perform better than DE in some instances, they still
+ lag significantly behind EEGO.
+ The p-values confirm that these differences are statistically significant,
+ indicating that EEGO is the most efficient method overall.
 \end_layout
 
 \begin_layout Standard
@@ -8935,7 +9171,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -14434,6 +14670,81 @@ Li, Y., & Wu, H.
  (2012).
  A clustering method based on K-means algorithm.
  Physics Procedia, 25, 1104-1109.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "jainTermination"
+literal "false"
+
+\end_inset
+
+B.J.
+ Jain, H.
+ Pohlheim, J.
+ Wegener, On termination criteria of evolutionary algorithms, in: Proceedings
+ of the 3rd Annual Conference on Genetic and Evolutionary Computation, 2001,
+ pp.
+ 768–768.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "zilTermination"
+literal "false"
+
+\end_inset
+
+K.
+ Zielinski, P.
+ Weitkemper, R.
+ Laur, K.-D.
+ Kammeyer, Examination of stopping criteria for differential evolution based
+ on a power allocation problem, J.
+ Electr.
+ Eng.
+ 7 (3) (2007) 8.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ghoreishiTermination"
+literal "false"
+
+\end_inset
+
+S.N.
+ Ghoreishi, A.
+ Clausen, B.N.
+ Joergensen, Termination criteria in evolutionary algorithms: A survey,
+ in: IJCCI, 2017, pp.
+ 373–384.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ravberTermination"
+literal "false"
+
+\end_inset
+
+M.
+ Ravber, S-H.
+ Liu, M.
+ Mernik, M.
+ Črepinšek, Maximum number of generations as a stopping criterion considered
+ harmful, Applied Soft Computing, Volume 128, 2022, 109478, ISSN 1568-4946,
+ https://doi.org/10.1016/j.asoc.2022.109478.
 \end_layout
 
 \begin_layout Bibliography
