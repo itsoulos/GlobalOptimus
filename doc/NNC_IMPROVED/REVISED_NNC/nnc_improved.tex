@@ -1,6 +1,6 @@
 %% LyX 2.3.7 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[journal,article,submit,pdftex,moreauthors]{mdpi}
+\documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 \usepackage[utf8]{inputenc}
 \usepackage{float}
 \usepackage{url}
@@ -39,20 +39,20 @@ of Ioannina, Greece; tzallas@uoi.gr}
 
 
 \abstract{Constructed neural networks with the assistance of Grammatical Evolution
-have been widely used in a series of classification and regression
-problems in the recent literature of machine learning. Application
-areas of this innovative machine learning technique include solving
-differential equations, autism screening, measuring motor function
-in Parkinson's disease. Although this technique has given excellent
-results, in many cases it is trapped in local minimum and cannot perform
-satisfactorily in many problems. For this purpose, it is considered
-necessary to find techniques to avoid local minima and one technique
-is the periodic application of local minimization techniques that
-will undertake to adjust the parameters of the constructed artificial
-neural network, but maintaining the already existing architecture
-created by Grammatical Evolution. Periodic application of local minimization
-techniques has shown a significant reduction in both classification
-and data fitting problems found in the relevant literature. }
+have been widely used in a series of classification and data fitting
+problems appeared recently. Application areas of this innovative machine
+learning technique include solving differential equations, autism
+screening, measuring motor function in Parkinson's disease. Although
+this technique has given excellent results, in many cases it is trapped
+in local minimum and cannot perform satisfactorily in many problems.
+For this purpose, it is considered necessary to find techniques to
+avoid local minima and one technique is the periodic application of
+local minimization techniques that will undertake to adjust the parameters
+of the constructed artificial neural network, but maintaining the
+already existing architecture created by Grammatical Evolution. Periodic
+application of local minimization techniques has shown a significant
+reduction in both classification and data fitting problems found in
+the relevant literature. }
 
 
 \keyword{Grammatical Evolution; Genetic Programming; Neural networks; Local
@@ -202,34 +202,33 @@ Optimization}
 
 \section{Introduction}
 
-Artificial neural networks (ANNs) are parametric machine learning
-models \citep{nn1,nn2}, in which a set of parameters, commonly called
-weights, must be estimated in order for this model to adapt to classification
-or regression data. Neural networks have been used in a variety of
-scientific and real - world problems, such as physics problems \citep{nnphysics1,nnphysics2,nnphysics3},
-solutions of differential equations \citep{nnde1,nnde2}, solar radiation
-prediction \citep{nn_solar}, agriculture problems \citep{nnagr1,nnagr2},
-problems derived from chemistry \citep{nnchem1,nnchem2,nnchem3},
-wind speed forecasting \citep{nn_wind}, problems that appear in economic
-sciences \citep{nnecon1,nnecon2,nncecon3}, problems related to medicine
-\citep{nnmed1,nnmed2} etc. A neural network can be expressed as a
-function $N(\overrightarrow{x},\overrightarrow{w})$, where the vector
-$\overrightarrow{x}$ represents the input vector to the neural network
-and the vector $\overrightarrow{w}$ stands for the vector of parameters
-that should be calculated. The set of parameters is calculated by
-minimizing the so-called training error, which is defined as:
+Among the parametric machine learning models one can find Artificial
+neural networks (ANNs) \citep{nn1,nn2}, in which a set of parameters,
+called also weights, must be estimated in order for this model to
+adapt to classification or regression data. Neural networks have been
+used in a variety of scientific problems, such as problems from physics
+\citep{nnphysics1,nnphysics2,nnphysics3}, problems involving differential
+equations \citep{nnde1}, solar radiation prediction \citep{nn_solar},
+agriculture problems \citep{nnagr2}, problems derived from chemistry
+\citep{nnchem1,nnchem3}, wind speed prediction \citep{nn_wind},
+economics problems \citep{nnecon1,nnecon2}, problems related to medicine
+\citep{nnmed1,nnmed2} etc. A common way to express a neural network
+is as a function $N(\overrightarrow{x},\overrightarrow{w})$. The
+vector $\overrightarrow{x}$ stands for the input pattern to the neural
+network and the vector $\overrightarrow{w}$ stands for the vector
+of parameters that must be computed. The set of parameters is calculated
+by minimizing the so-called training error, which is defined as:
 \begin{equation}
 E\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
 \end{equation}
 In equation \ref{eq:eq1} the set $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
-stands for the train set of the neural network. The values $y_{i}$
-denote the target outputs for patterns $\overrightarrow{x_{i}}$ .
-In the recent bibliography various methods have appeared that minimize
-this equation, such as the Back Propagation method \citep{bpnn1,bpnn2},\textbf{
-}the RPROP method \citep{rpropnn-1,rpropnn-2}, the ADAM method\textbf{
-}\citep{nn_adam} etc. Furthermore, global optimization techniques
-were also used to train neural networks, such as the Simulated Annealing
-method \citep{nn_siman1,nn_siman2},\textbf{ }genetic Algorithms \citep{geneticnn1,geneticnn2},
+stands for the train set. The values $y_{i}$ denote the target outputs
+for patterns $\overrightarrow{x_{i}}$ . Recently, various methods
+have appeared that minimize this equation, such as the Back Propagation
+method \citep{bpnn1,bpnn2},\textbf{ }the RPROP method \citep{rpropnn-1,rpropnn-2},
+the ADAM method\textbf{ }\citep{nn_adam} etc. Additionally, global
+optimization techniques were also used, such as the Simulated Annealing
+method \citep{nn_siman2},\textbf{ }genetic Algorithms \citep{geneticnn1},
 Particle Swarm Optimization (PSO) \citep{psonn}, Differential Evolution
 \citep{weight_de1}, Ant Colony Optimization \citep{weight_aco},
 Gray Wolf Optimizer \citep{gwo_nn}, Whale optimization \citep{whale_nn}
@@ -237,10 +236,9 @@ etc.
 
 In many cases, especially when the data is large in volume or has
 a high number of features, significant times are observed in the training
-of artificial neural networks by optimization methods. For this reason,
-techniques have been presented in recent years that exploit modern
-parallel computing structures for faster training of these machine
-learning models \citep{nn_gpu1,nn_gpu2,nn_gpu3}.
+of artificial neural networks. For this reason, techniques have been
+presented in recent years that exploit modern parallel computing structures
+for faster training of these machine learning models \citep{nn_gpu3}.
 
 Another important aspect in artificial neural networks is the initialization
 of parameters. Various techniques have been proposed in this area,
@@ -251,17 +249,17 @@ et al. proposed a new weight initialization method that is based on
 the linear product structure for neural networks \citep{nn_init5}.
 
 Identifying the optimal architecture of an artificial neural network
-plays an important role in the generalization ability of a network.
-Networks with a few number of neurons can be trained faster and may
-have good generalization abilities, but in many cases the optimization
-method gets trapped in local minima of the error function. On the
-other hand, networks with many neurons can have a significantly reduced
-training error but require a large computational time for their training
-and many times do not perform significantly when applied to data that
-is not present in the training set. In this direction, many researchers
-proposed various methods to discover the optimal architecture, such
-as incorporation of genetic algorithms \citep{nn_arch1,nn_arch2},
-application of the Particle Swarm Optimization method \citep{nn_arch3},
+is an extremely important factor for the generalization ability of
+a network. Networks with a few number of neurons can be trained faster
+and may have good generalization abilities, but in many cases the
+optimization method can not escape from local minima of the error
+function. On the other hand, networks with many neurons can have a
+significantly reduced training error but require a large computational
+time for their training and many times do not perform significantly
+when applied to data that is not present in the training set. In this
+direction, many researchers proposed various methods to discover the
+optimal architecture, such as usage of genetic algorithms \citep{nn_arch1,nn_arch2},
+usage of the Particle Swarm Optimization method \citep{nn_arch3},
 usage of reinforcement learning \citep{nn_arch4} etc. Also, Islam
 et al. proposed a new adaptive merging and growing algorithm for the
 design of neural networks \citep{nn_arch5}.
@@ -277,11 +275,11 @@ leading to neural networks that are faster in response and with better
 generalization abilities. The neural construction technique has been
 applied in a variety of cases, such as location of amide I bonds \citep{nnc_amide1},
 solving differential equations \citep{nnc_de}, application in data
-collected for Parkinson's disease \citep{nnc_feas}, performance and
-early drop prediction for higher education students \citep{nnc_student},
-autism screening \citep{nnc_autism} etc. Also, a software that implements
+collected for Parkinson's disease \citep{nnc_feas}, prediction of
+performance for higher education students \citep{nnc_student}, autism
+screening \citep{nnc_autism} etc. Also, a software that implements
 this method can be downloaded freely from \url{https://github.com/itsoulos/NNC}
-(accessed on 11 September 2024) \citep{nnc_code}.
+(accessed on 28 September 2024) \citep{nnc_code}.
 
 Although the neural network construction technique has been successfully
 used in a variety of applications and is able to construct the structure
@@ -293,43 +291,42 @@ optimization techniques is proposed in randomly selected artificial
 neural networks constructed by Grammatical Evolution. Local optimization
 does not alter the generated neural network structure but can more
 efficiently identify values of the network parameters with lower values
-of the training error. The proposed method was tested on a series
-of classification and regression datasets from the relevant literature,
-and it seems to reduce the test error obtained by the original neural
-construction technique. 
+of the training error. The proposed method was applied on a series
+of classification and data fitting datasets, and it seems to reduce
+the test error obtained by the original neural construction technique. 
 
-The rest of this article is organized as follows: in section \ref{sec:Method-description}
-the main aspects of the proposed method are discussed in detail, in
-section \ref{sec:Results} the conducted experiments are shown and
-finally in section \ref{sec:Conclusions} some conclusions and guidelines
-for future research are discussed.
+The current paper have the following organization: section \ref{sec:Method-description}
+discusses the main aspects of the suggested method, section \ref{sec:Results}
+outlines the conducted experiments section \ref{sec:Conclusions}
+provide some conclusions and guidelines for future research.
 
 \section{Method description\label{sec:Method-description}}
 
-This section initiates with a description of the Grammatical Evolution
-procedure and continues with the detail description of the proposed
-algorithm.
+This section initiates with a short description of the Grammatical
+Evolution method and continues with the detail description of the
+proposed algorithm.
 
 \subsection{Grammatical evolution \label{subsec:Grammatical-evolution}}
 
-Grammatical evolution is a genetic algorithm, where the chromosomes
-stand for production rules of a provided BNF (Backus--Naur form)
-grammar \citep{bnf1}. The method was used on a series of real world
-cases, such as approximation of functions from experimental data \citep{ge_program1,ge_program2},\textbf{
-}application in trigonometric problems \citep{ge_trig},\textbf{ }automatic
-composition of music \citep{ge_music},\textbf{ }production of numeric
-constants with an arbitrary number of digits \citep{ge_constant},\textbf{
-vi}deo games \citep{ge_pacman,ge_supermario}, energy problems \citep{ge_energy},\textbf{
+Grammatical evolution can be considered as genetic algorithm with
+integer chromosomes. These chromosomes stand for production rules
+of a provided BNF (Backus--Naur form) grammar \citep{bnf1}. The
+method was used on a series of real world cases, such as data fitting
+\citep{ge_program1,ge_program2},\textbf{ }application in trigonometric
+problems \citep{ge_trig},\textbf{ }automatic composition of music
+\citep{ge_music},\textbf{ }production of numeric constants with an
+arbitrary number of digits \citep{ge_constant},\textbf{ vi}deo games
+\citep{ge_pacman,ge_supermario}, energy problems \citep{ge_energy},\textbf{
 }combinatorial optimization \citep{ge_comb}, cryptography \citep{ge_crypt},
 production of decision trees \citep{ge_decision}, electronics \citep{ge_analog}\textbf{,
 }Wikipedia taxonomies \citep{ge_wikipedia}, economics \citep{ge_trading},
-bioinformatics \citep{ge_bio} etc. A\textbf{ }BNF grammar is commonly
-defined as a set $G=\left(N,T,S,P\right)$ where
+bioinformatics \citep{ge_bio}, robotics \citep{ge_robotics} etc.
+A\textbf{ }BNF grammar is commonly defined as a set $G=\left(N,T,S,P\right)$.
+The following definitions are hold for any BNF grammar:
 \begin{itemize}
-\item The set $N$ contains the non-terminal symbols of the grammar.
-\item The set $T$ contains the terminal symbols of the grammar.
-\item The non - terminal symbol $S$ represents the start symbol of the
-grammar.
+\item The set $N$ contains the non-terminal symbols.
+\item The set $T$ has the terminal symbols.
+\item The symbol $S\in N$ stands for the start symbol of the grammar.
 \item The set $P$ contains the production rules of the grammar. These rule
 are used to produce terminal symbols from non - terminal symbols,
 and they are in the form $A\rightarrow a$ or $A\rightarrow aB,\ A,B\in N,\ a\in T$.
@@ -339,15 +336,15 @@ series of steps, produces valid programs by replacing non-terminal
 symbols with the right hand of the selected production rule. The selection
 of the production rules is done in two steps:
 \begin{itemize}
-\item Obtain the next element V from the chromosome which is processed.
-\item The production rule is selected according to: Rule = V mod $N_{R}$,
-where $N_{R}$ is the total number of production rules for the current
-non -- terminal symbol. 
+\item \textbf{Read} the the next element V from the processed chromosome.
+\item \textbf{Select} the next production rule using the equation: Rule
+= V mod $N_{R}$, where $N_{R}$ represents the total number of production
+rules for the current non -- terminal symbol. 
 \end{itemize}
-The grammar used in the neural construction method is shown in Figure
-\ref{fig:nncGrammar}. The number in parentheses denote the sequence
-number of each rule for every non - terminal symbol. The constant
-$n$ defines the number of features for the used dataset.
+The incorporated grammar for the neural construction method is outlined
+in Figure \ref{fig:nncGrammar}. The number in parentheses denote
+the sequence number of each rule for every non - terminal symbol.
+The symbol $n$ represents the number of features for the used dataset.
 
 \begin{figure}[H]
 \begin{lyxcode}
@@ -395,20 +392,35 @@ This grammar can produce artificial neural networks in the form:
 \begin{equation}
 N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(n+2)i-(n+1)}\sigma\left(\sum_{j=1}^{n}x_{j}w_{(n+2)i-(n+1)+j}+w_{(n+2)i}\right)\label{eq:nn}
 \end{equation}
-where the parameter $H$ defines the number of processing units. The
-function $\sigma(x)$ is commonly called sigmoid function, and it
-has the following definition:\textbf{ 
+The parameter $H$ corresponds to the number of processing units.
+The function $\sigma(x)$ is commonly called sigmoid function, and
+it has the following definition:\textbf{ 
 \begin{equation}
 \sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
 \end{equation}
-}
+}The grammar of the present method can construct artificial neural
+networks with a hidden processing layer and with a variable number
+of computing units. This kind of architecture is sufficient to approach
+any problem, as according to Hornik's theorem \citep{Hornik} artificial
+neural networks with one level of processing can approximate any function
+if a sufficient number of computing units are available.
+
+As an example consider a problem with 3 inputs: $x_{1},x_{2},x_{3}$
+An example neural network that can be constructed by the Grammatical
+Evolution procedure could be the following:
+\begin{equation}
+N(x)=2.1\mbox{sig}\left(10.5x_{2}+9.2x_{3}+5.7\right)+3.2\mbox{sig}\left(2.2x_{1}-4.3x_{3}+6.2\right)
+\end{equation}
+This previously artificial neural network has two processing nodes,
+and not all inputs are necessarily connected to each processing node,
+since the Grammatical Evolution process may miss some connections.
 
 \subsection{The proposed algorithm\label{subsec:The-proposed-algorithm}}
 
 The main steps of the current method are derived from the steps of
 the original neural network construction method with the addition
-of the periodical application of the local optimization algorithm.
-The steps of the method are given below:
+of the periodical application of the local optimization algorithm
+and it has the following steps:
 \begin{enumerate}
 \item \textbf{Initialization step}.
 \begin{enumerate}
@@ -419,8 +431,8 @@ $N_{c}$ the number of chromosomes in the genetic population.
 the mutation rate of the genetic algorithm.
 \item \textbf{Set} as $N_{T}$ the number of chromosomes the will be selected
 to apply the local search optimization method on them.
-\item \textbf{Set} as $N_{I}$ the number of generations that must pass
-before applying the local optimization technique.
+\item \textbf{Set} as $N_{I}$ the number of generations that should pass
+before the application of the suggested local optimization technique.
 \item \textbf{Set} as $F$ the range of values within which the local optimization
 method can vary the parameters of the neural network.
 \item \textbf{Initialize} the chromosomes $g_{i},\ i=1,\ldots,N_{c}$ as
@@ -430,10 +442,11 @@ sets of random integers.
 \begin{enumerate}
 \item \textbf{For} $i=1,\ldots,N_{c}$ \textbf{do}
 \begin{enumerate}
-\item \textbf{Create} the neural network $N_{i}\left(\overrightarrow{x},\overrightarrow{w_{i}}\right)$
-for the chromosome $g_{i}$ using the procedure of subsection \ref{subsec:Grammatical-evolution}.
-The vector $\overrightarrow{w_{i}}$ denotes the set of parameters
-produced for the chromosome $g_{i}$.
+\item \textbf{Produce} the corresponding neural network $N_{i}\left(\overrightarrow{x},\overrightarrow{w_{i}}\right)$
+for the chromosome $g_{i}$, The production is performed using the
+procedure of subsection \ref{subsec:Grammatical-evolution}. The vector
+$\overrightarrow{w_{i}}$ denotes the set of parameters produced for
+the chromosome $g_{i}$.
 \item \textbf{Set} as $f_{i}=\sum_{j=1}^{M}\left(N_{i}\left(\overrightarrow{x}_{j},\overrightarrow{w_{i}}\right)-y_{j}\right)^{2}$
 the fitness of chromosome $i$. The set $\left(\overrightarrow{x_{j}},y_{j}\right),\ j=1,...,M$
 represents the train set.
@@ -442,21 +455,16 @@ represents the train set.
 \end{enumerate}
 \item \textbf{Genetic operations step}.
 \begin{enumerate}
-\item \textbf{Apply} the selection procedure: Initially the chromosomes
-are sorted according to their fitness. The $\left(1-p_{s}\right)\times N_{c}$
-best of these are copied without any change to the next generation,
-while the rest of them will be replaced by chromosomes produced in
-crossover and mutation.
+\item \textbf{Copy} the best $\left(1-p_{s}\right)\times N_{c}$ chromosomes
+according to their fitness values intact to the next generation.
 \item \textbf{Apply} the crossover procedure. This procedure creates $p_{s}\times N_{c}$
-offsprings from the current population. For each pair $\left(\tilde{z},\tilde{w}\right)$
-of ofssprings two distinct chromosomes $(z,w)$ are chosen from the
-population. The selection of these chromosomes is performed using
-tournament selection. The new offsprings $\left(\tilde{z},\tilde{w}\right)$
-are created using the one - point crossover procedure, which is demonstrated
-in Figure \ref{fig:onePoint}.
-\item \textbf{Perform} the mutation procedure. For each element of every
-chromosome select a random number $r\in[0,1]$. If $r\le p_{m}$,
-then the corresponding element is altered randomly.
+offsprings from the current population. Two chromosomes $(z,w)$ are
+selected through tournament selection for every created couple $\left(\tilde{z},\tilde{w}\right)$
+of ofssprings. These offsprings are created using the one - point
+crossover procedure, which is demonstrated in Figure \ref{fig:onePoint}.
+\item \textbf{Apply} the mutation procedure. A random number $r\in[0,1]$
+is drawn for every element of each chromosome. The corresponding element
+is altered randomly if $r\le p_{m}$.
 \end{enumerate}
 \item \textbf{Local search step.}
 \begin{enumerate}
@@ -474,12 +482,11 @@ subsection \ref{subsec:The-local-search} on chromosome $g_{r_{j}}$.
 \item \textbf{Set} $k=k+1$
 \item \textbf{If} $k\le N_{g}$ goto Fitness Calculation Step, \textbf{else} 
 \begin{enumerate}
-\item \textbf{Set} $g^{*}$ the chromosome with the lowest fitness value.
-\item \textbf{Create} the neural network $N^{*}\left(\overrightarrow{x},\overrightarrow{w^{*}}\right)$
-for the this chromosome. The vector $\overrightarrow{w^{*}}$ represents
+\item \textbf{Obtain }the chromosome $g^{*}$ with the lowest fitness value.
+\item \textbf{Produce} the corresponding neural network $N^{*}\left(\overrightarrow{x},\overrightarrow{w^{*}}\right)$
+for this chromosome. The vector $\overrightarrow{w^{*}}$ denotes
 the set of parameters for the chromosome $g^{*}$.
-\item \textbf{Apply} the network $N^{*}\left(\overrightarrow{x},\overrightarrow{w^{*}}\right)$
-to the test set and report the error.
+\item \textbf{Obtain} the corresponding test error for $N^{*}\left(\overrightarrow{x},\overrightarrow{w^{*}}\right)$.
 \end{enumerate}
 \end{enumerate}
 \end{enumerate}
@@ -512,8 +519,8 @@ created around the initial point $\overrightarrow{w}$ keeping the
 network structure intact. The main steps of this procedure are given
 below:
 \begin{enumerate}
-\item \textbf{Set} $d=\left(n+2\right)H$ the total number of parameters
-of the network $N\left(\overrightarrow{x},\overrightarrow{w}\right)$.
+\item \textbf{Set} $d=\left(n+2\right)H$. This value denotes the total
+number of parameters for $N\left(\overrightarrow{x},\overrightarrow{w}\right)$.
 \item \textbf{For} $i=1,\ldots,d$ \textbf{do}
 \begin{enumerate}
 \item \textbf{Set} $L_{i}=-F\times\left|w_{i}\right|$, the left bound of
@@ -522,10 +529,10 @@ the minimization for the parameter $i$.
 the minimization for the parameter $i$.
 \end{enumerate}
 \item \textbf{EndFor}
-\item \textbf{Minimize} the error function of equation \ref{eq:eq1} with
-respect to vector $\overrightarrow{w}$ inside the bounding box $\left[\overrightarrow{L},\overrightarrow{R}\right]$
-using a local search procedure ${\cal L}(w)$. The BFGS variant of
-Powell \citep{powell} was used a local search procedure in the conducted
+\item \textbf{Minimize} the error function of equation \ref{eq:eq1} for
+vector $\overrightarrow{w}$ inside the bounding box $\left[\overrightarrow{L},\overrightarrow{R}\right]$
+using a local optimization procedure ${\cal L}(w)$. The BFGS method
+as modified by Powell \citep{powell} was incorporated in the conducted
 experiments.
 \end{enumerate}
 As an example consider a dataset with $n=2$ and the following constructed
@@ -545,24 +552,22 @@ Hence the minimization method could not change the elements $w_{2}$
 and $w_{7}$ and as a consequence the architecture of the network
 remains intact.
 
-\section{Results\label{sec:Results}}
+\section{Experimental results\label{sec:Results}}
 
-The present research work was tested on a series of data classification
-and fitting problems, which appeared in recent years in the relevant
-literature. Also, the proposed method was compared against other well
-- known machine learning methods from the relevant literature and
-the results are reported. Also, a series of experiments were performed
-to verify the sensitivity of the proposed technique with respect to
-the critical parameters presented earlier.\textbf{ }The datasets used
-in the conducted experiments can be downloaded freely from the following
-websites:
+The present research work was applied on a series of data classification
+and fitting problems, which appeared recently. Also, the proposed
+method was compared against other established machine learning methods
+from the relevant literature and the results are reported. Furthermore,
+a series of experiments were executed to verify the sensitivity of
+the proposed technique with respect to the critical parameters presented
+earlier.\textbf{ }The following URLs provide the used datasets:
 \begin{enumerate}
 \item The UCI dataset repository, \url{https://archive.ics.uci.edu/ml/index.php}(accessed
-on 10 September 2024)\citep{UCL}
+on 28 September 2024)\citep{UCL}
 \item The Keel repository, \url{https://sci2s.ugr.es/keel/datasets.php}(accessed
-on 10 September 2024)\citep{Keel}.
+on 28 September 2024)\citep{Keel}.
 \item The Statlib URL \url{http://lib.stat.cmu.edu/datasets/ }(accessed
-on 10 September 2024). 
+on 28 September 2024). 
 \end{enumerate}
 
 \subsection{Classification datasets }
@@ -574,55 +579,132 @@ The descriptions of the used datasets are as follows:
 \item \textbf{Balance} dataset \citep{balance}, that contains data from
 psychological experiments.
 \item \textbf{Circular} dataset, which is an artificial dataset.
-\item \textbf{Cleveland} dataset, which is a medical dataset \citep{cleveland1,cleveland2}.
+\item \textbf{Cleveland} dataset \citep{cleveland1,cleveland2}.
 \item \textbf{Dermatology} dataset \citep{dermatology}, a dataset that
 contains measurements about dermatological deceases. 
 \item \textbf{Ecoli} dataset, a dataset contains measurements about proteins\citep{ecoli}.
-\item \textbf{Fert }dataset, contains data about the relation of sperm concentration
+\item \textbf{Fert }dataset, used to detect the relation between sperm concentration
 and demographic data.
 \item \textbf{Haberman} dataset, a medical dataset related to breast cancer.
 \item \textbf{Hayes roth} dataset \citep{hayesroth}, which is related to
 a human subjects study.
 \item \textbf{Heart} dataset \citep{heart}, a medical dataset used for
 the prediction of heart diseases.
-\item \textbf{HeartAttack} dataset, a medical dataset about heart diseases.
-\item \textbf{HouseVotes} dataset \citep{housevotes}, about the votes in
-the U.S. House of Representatives. 
-\item \textbf{Liverdisorder} dataset \citep{liver}, a medical dataset related
-to liver disorders.
-\item \textbf{Ionosphere} dataset, a climate dataset related to ionosphere
-experiments \citep{ion1,ion2}.
-\item \textbf{Mammographic} dataset \citep{mammographic}, a medical dataset
-for breast cancer.
-\item \textbf{Parkinsons} dataset, a medical dataset for the detection of
-Parkinson's disease (PD)\citep{parkinsons}.
+\item \textbf{HeartAttack} dataset, used for the detection of heart diseases.
+\item \textbf{HouseVotes} dataset \citep{housevotes}. 
+\item \textbf{Liverdisorder} dataset \citep{liver}, a medical dataset.
+\item \textbf{Ionosphere} dataset, a climate dataset \citep{ion1,ion2}.
+\item \textbf{Mammographic} dataset \citep{mammographic}, a dataset related
+to the breast cancer.
+\item \textbf{Parkinsons} dataset, used in the detection of Parkinson's
+disease (PD)\citep{parkinsons}.
 \item \textbf{Pima} dataset \citep{pima}, a medical dataset about the detection
 of diabetes.
-\item \textbf{Popfailures} dataset \citep{popfailures}, a dataset that
-contains climate measurements.
-\item \textbf{Regions2} dataset, a medical dataset related to hepatitis
-C \citep{regions}. 
+\item \textbf{Popfailures} dataset \citep{popfailures}, a dataset related
+to climate measurements.
+\item \textbf{Regions2} dataset, used in the detection of hepatitis C \citep{regions}. 
 \item \textbf{Saheart} dataset \citep{saheart}, a medical dataset used
 for the detection of heart diseases.
-\item \textbf{Segment} dataset \citep{segment}, an image processing dataset.
+\item \textbf{Segment} dataset \citep{segment}, a dataset related to image
+processing.
 \item \textbf{Spiral} dataset, which is an artificial dataset.
-\item \textbf{Student} dataset \citep{student}, related to data collected
-in Portuguese schools. 
-\item \textbf{Transfusion} dataset\citep{transfusion}, a medical dataset
-used in Blood Transfusion Service Center in Hsin-Chu City in Taiwan.
-\item \textbf{Wdbc} dataset \citep{wdbc}, a medical dataset.
+\item \textbf{Student} dataset \citep{student}, which contains data from
+experiments conducted in Portuguese schools. 
+\item \textbf{Transfusion} dataset\citep{transfusion}, a medical dataset.
+\item \textbf{Wdbc} dataset \citep{wdbc}, a dataset related to cancer.
 \item \textbf{Wine} dataset, used for the detection of quality of wines.
 \citep{wine1,wine2}.
-\item \textbf{Eeg} datasets, a medical dataset related to EEG measurements
-\citep{eeg}. From this dataset the following cases were used: Z\_F\_S,
-Z\_O\_N\_F\_S, ZO\_NF\_S and ZONF\_S.
+\item \textbf{Eeg} datasets, a medical dataset related to EEG experiments
+\citep{eeg}. The following distinct cases were used from this dataset:
+Z\_F\_S, Z\_O\_N\_F\_S, ZO\_NF\_S and ZONF\_S.
 \item \textbf{Zoo} dataset \citep{zoo}, used for the classification of
-animals in some categories.
+animals.
 \end{enumerate}
+The number of inputs and classes for every classification dataset
+is given in Table \ref{tab:patternsClass}.
+
+\begin{table}[H]
+\begin{centering}
+\begin{tabular}{|c|c|c|}
+\hline 
+DATASET & INPUTS & CLASSES\tabularnewline
+\hline 
+\hline 
+APPENDICITIS & 7 & 2\tabularnewline
+\hline 
+AUSTRALIAN & 14 & 2\tabularnewline
+\hline 
+BALANCE & 4 & 3\tabularnewline
+\hline 
+CIRCULAR & 5 & 2\tabularnewline
+\hline 
+CLEVELAND & 13 & 5\tabularnewline
+\hline 
+DERMATOLOGY & 34 & 6\tabularnewline
+\hline 
+ECOLI & 7 & 8\tabularnewline
+\hline 
+FERT & 9 & 2\tabularnewline
+\hline 
+HABERMAN & 3 & 2\tabularnewline
+\hline 
+HAYES ROTH & 5 & 3\tabularnewline
+\hline 
+HEART & 13 & 2\tabularnewline
+\hline 
+HEART ATTACK & 13 & 2\tabularnewline
+\hline 
+HOUSEVOTES & 16 & 2\tabularnewline
+\hline 
+LIVERDISORDER & 6 & 2\tabularnewline
+\hline 
+IONOSPHERE & 34 & 2\tabularnewline
+\hline 
+MAMMOGRAPHIC & 5 & 2\tabularnewline
+\hline 
+PARKINSONS & 22 & 2\tabularnewline
+\hline 
+PIMA & 8 & 2\tabularnewline
+\hline 
+POPFAILURES & 18 & 2\tabularnewline
+\hline 
+REGIONS2 & 18 & 5\tabularnewline
+\hline 
+SAHEART & 9 & 2\tabularnewline
+\hline 
+SEGMENT & 19 & 7\tabularnewline
+\hline 
+SPIRAL & 2 & 2\tabularnewline
+\hline 
+STUDENT & 5 & 4\tabularnewline
+\hline 
+TRANSFUSION & 4 & 2\tabularnewline
+\hline 
+WDBC & 30 & 2\tabularnewline
+\hline 
+WINE & 13 & 3\tabularnewline
+\hline 
+Z\_F\_S & 21 & 3\tabularnewline
+\hline 
+Z\_O\_N\_F\_S & 21 & 5\tabularnewline
+\hline 
+ZO\_NF\_S & 21 & 3\tabularnewline
+\hline 
+ZONF\_S & 21 & 2\tabularnewline
+\hline 
+ZOO & 16 & 7\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\caption{Number of inputs and distinct classes for every classification dataset.\label{tab:patternsClass}}
+
+\end{table}
+
 
 \subsection{Regression datasets }
 
-The used regression datasets are described below:
+The description for the incorporated regression datasets is given
+below:
 \begin{enumerate}
 \item \textbf{Abalone} dataset \citep{abalone}, used to predict the age
 of abalones.
@@ -653,23 +735,92 @@ related to trellising and pruning.
 \item \textbf{VE} dataset, downloaded from the STALIB repository.
 \item \textbf{TZ} dataset, downloaded from the STALIB repository.
 \end{enumerate}
+The number of inputs for each dataset is provided in Table \ref{tab:inputsRegression}.
+
+\begin{table}[H]
+
+\caption{Number of inputs for every regression dataset.\label{tab:inputsRegression}}
+
+\centering{}%
+\begin{tabular}{|c|c|}
+\hline 
+DATASET & INPUTS\tabularnewline
+\hline 
+\hline 
+ABALONE & 8\tabularnewline
+\hline 
+AIRFOIL & 5\tabularnewline
+\hline 
+BASEBALL & 16\tabularnewline
+\hline 
+BK & 4\tabularnewline
+\hline 
+BL & 7\tabularnewline
+\hline 
+CONCRETE & 8\tabularnewline
+\hline 
+DEE & 6\tabularnewline
+\hline 
+HO & 13\tabularnewline
+\hline 
+HOUSING & 13\tabularnewline
+\hline 
+FY & 4\tabularnewline
+\hline 
+LASER & 4\tabularnewline
+\hline 
+LW & 9\tabularnewline
+\hline 
+MORTGAGE & 15\tabularnewline
+\hline 
+MUNDIAL & 3\tabularnewline
+\hline 
+PL & 2\tabularnewline
+\hline 
+QUAKE & 3\tabularnewline
+\hline 
+REALESTATE & 5\tabularnewline
+\hline 
+SN & 11\tabularnewline
+\hline 
+TREASURY & 15\tabularnewline
+\hline 
+TZ & 60\tabularnewline
+\hline 
+VE & 7\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
 
 \subsection{Experimental results}
 
 The code used in the experiments was written in ANSI C++ using the
 optimization environment of Optimus, which is freely available from
-\url{https://github.com/itsoulos/GlobalOptimus/}( accessed on 11
+\url{https://github.com/itsoulos/GlobalOptimus/}( accessed on 28
 September 2024 ). All the experiments were conducted and averages
 were recorded. In every execution, a different seed for the random
 generator was used. The average classification error as measured on
 the test is recorded for the classification datasets and the average
-regression error for the regression datasets. The validation of the
-conducted experiments was performed using the ten - fold cross validation
-technique.  The experiments were carried out on an AMD Ryzen 5950X
-with 128GB of RAM, running the Debian Linux operating system. The
-values for the parameters of the algorithms are shown in  Table \ref{tab:experSettings}.
-In all experimental tables, the bold notation is used to mark the
-method with the lowest classification or regression error.
+regression error for the regression datasets. For the case of classification
+datasets the displayed classification error for a model $M(x)$ and
+the test dataset $T$ is calculated as:
+\begin{equation}
+E_{C}\left(M(x)\right)=100\times\frac{\sum_{i=1}^{N}\left(\mbox{class}\left(M\left(x_{i}\right)\right)-y_{i}\right)}{N}
+\end{equation}
+The test set $T$ is defined as $T=\left(x_{i},y_{i}\right),\ i=1,\ldots,N$
+For the case of regression problems the regression error $E_{R}\left(M(x)\right)$
+is defined as:
+\begin{equation}
+E_{R}\left(M(x)\right)=\frac{\sum_{i=1}^{N}\left(M\left(x_{i}\right)-y_{i}\right)^{2}}{N}
+\end{equation}
+The validation of the conducted experiments was performed using the
+ten - fold cross validation technique.  The experiments were carried
+out on an AMD Ryzen 5950X with 128GB of RAM, running the Debian Linux
+operating system. The values for the parameters of the algorithms
+are shown in  Table \ref{tab:experSettings}. In all experimental
+tables, the bold notation is used to mark the method with the lowest
+classification or regression error.
 
 \begin{table}[H]
 \caption{The values used in the experimental parameters.\label{tab:experSettings}}
@@ -696,27 +847,32 @@ $F$ & Magnitude of changes from local search & 4.0\tabularnewline
 \hline 
 \end{tabular}
 \end{table}
-The experimental results for the classification datasets are shown
-in Table \ref{tab:classResults} and the experimental results for
-the regression datasets our outlined in Table \ref{tab:resultsRegression}.
-The following applies to the tables of experimental results:
+Table \ref{tab:classResults} contains the experimental results for
+the classification datasets and Table \ref{tab:resultsRegression}
+the experimental results for the regression datasets. The neural network
+used in the experimental results has one processing unit with $H=10$
+processing nodes and the sigmoid function as activation function.
+The following notation was used in these tables:
 \begin{enumerate}
-\item The column BFGS denotes the application of the BFGS optimization method
-to train a neural network with $H=10$ processing nodes.
+\item The column BFGS represents the application of the BFGS method. This
+method was used to train an artificial neural network with $H=10$
+processing nodes.
 \item The column GENETIC stands for the incorporation of a Genetic Algorithm
-to train a neural network with $H=10$ processing nodes. The values
-of the parameters of the genetic algorithm are shown in Table \ref{tab:experSettings}.
-\item The column NNC represents the application of the original neural network
+to train a neural network with $H=10$ processing nodes. This genetic
+algorithm uses the values of Table \ref{tab:experSettings}.
+\item The column NNC stands for the usage of the original neural network
 construction model to the provided dataset.
-\item The column INNC stands for the application of the current work to
+\item The column INNC stands for the incorporation of the current work to
 the provided dataset.
-\item The row AVERAGE denotes the average classification or regression row
-for all datasets.
+\item The row AVERAGE contains the average classification or regression
+error, as measured on all datasets.
 \end{enumerate}
+The methods BFGS and GENETIC train the neural network $N\left(\overrightarrow{x},\overrightarrow{w}\right)$
+by minimizing the error function defined in Equation \ref{eq:eq1}.
 \begin{table}[H]
-\caption{Experimental results for the classification datasets of this article.
-Numbers in cells represent average classification error as measured
-on the corresponding test set.\label{tab:classResults}}
+\caption{Results from the application of machine learning models on the classification
+datasets. Numbers in cells represent average classification error
+for the corresponding test set.\label{tab:classResults}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -793,9 +949,9 @@ ZOO & 10.70\% & 9.50\% & 9.20\% & \textbf{7.20\%}\tabularnewline
 \end{tabular}
 \end{table}
 \begin{table}[H]
-\caption{Experimental results for the regression datasets presented in this
-manuscript. Numbers in cells denote average regression error as calculated
-on the corresponding test set.\label{tab:resultsRegression}}
+\caption{Results from the conducted experiments on the regression datasets.
+Numbers in cells denote average regression error as calculated on
+the corresponding test set.\label{tab:resultsRegression}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -883,15 +1039,15 @@ These tests are depicted in Figures \ref{fig:statisticsClass} and
 \begin{centering}
 \includegraphics[scale=0.6]{table1_stat}
 \par\end{centering}
-\caption{Statistical comparison between the machine learning models for the
-classification datasets.\label{fig:statisticsClass}}
+\caption{Statistical test for all machine learning models that was applied
+on the classification datasets.\label{fig:statisticsClass}}
 \end{figure}
 \begin{figure}[H]
 \begin{centering}
 \includegraphics[scale=0.6]{table2_stat}
 \par\end{centering}
-\caption{Statistical comparison between the machine learning models for the
-regression datasets.\label{fig:statRegression}}
+\caption{Statistical test for all machine learning models that was applied
+on the regression datasets.\label{fig:statRegression}}
 
 \end{figure}
 
@@ -987,8 +1143,8 @@ ZOO & \textbf{6.30\%} & 7.20\% & 7.70\%\tabularnewline
 \end{tabular}
 \end{table}
 \begin{table}[H]
-\caption{Experimental results with different values for the parameter $N_{I}$
-of the proposed method. The method was applied on the regression datasets.\label{tab:experRRegression}}
+\caption{Experimental results with a variety of values for the parameter $N_{I}$.
+The current work was applied on the regression datasets.\label{tab:experRRegression}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|}
@@ -1053,20 +1209,46 @@ of Figure \ref{fig:statNIClass}.
 \begin{centering}
 \includegraphics{table3}
 \par\end{centering}
-\caption{Box plot for the experiments with the parameter $N_{I}$ and the proposed
-method. The method was applied on the classification datasets.\label{fig:boxNIClass}}
+\caption{Box plot for the experiments with the parameter $N_{I}$ and the current
+work. The method was applied on the classification datasets.\label{fig:boxNIClass}}
 
 \end{figure}
 \begin{figure}[H]
 \begin{centering}
 \includegraphics[scale=0.6]{table3_stat}
 \par\end{centering}
-\caption{Statistical comparison for the experiment with the proposed method
-and different values of parameter $N_{I}$. The method was applied
+\caption{Statistical comparison for the experiment with the current work and
+a variety of values for parameter $N_{I}$. The method was applied
 on the classification datasets.\label{fig:statNIClass}}
 
 \end{figure}
+In addition, the average execution time of the methods was recorded
+for the various values of the parameter $N_{I}$ and the results are
+shown in graphs \ref{fig:timeNIClass} and \ref{fig:timeNIRegression}
+for classification and regression problems respectively.
 
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{innc_time_class}
+\par\end{centering}
+\caption{Average execution time for the original method and the modified one
+for various values of the parameter $N_{I}.$ The experiments were
+performed on the classification datasets.\label{fig:timeNIClass}}
+\end{figure}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{innc_time_regression}
+\par\end{centering}
+\caption{Average execution time for the original method and the modified one
+for various values of the parameter $N_{I}$. The execution times
+were recorded for the regression problems.\label{fig:timeNIRegression}}
+
+\end{figure}
+As expected, the method requires more computational time than the
+original one and in fact the smaller the value of the $N_{I}$ parameter
+the more time has to be spent since more local optimizations have
+to be performed. Of course, this additional computing time can be
+significantly reduced by using parallel computing techniques.
 
 \subsubsection{Experiments with the parameter $F$}
 
@@ -1074,14 +1256,13 @@ Another important parameter for the proposed method is the parameter
 $F$. This parameter controls the range of changes that the local
 optimization method can cause on randomly selected chromosomes. In
 this experiment, the parameter $F$ changed from 1.5 to 8.0 and the
-results for the classification datasets are listed in Table \ref{tab:experFClass}
+results for the classification datasets are outlined in Table \ref{tab:experFClass}
 while the experimental results for the regression datasets are presented
 in Table \ref{tab:experFRegression}.
 
 \begin{table}[H]
-\caption{Experimental results with different values for the parameter $F$
-of the proposed method. The method was applied on the classification
-datasets.\label{tab:experFClass}}
+\caption{Experimental results with a variety of values for the parameter $F$.
+The method was applied on the classification datasets.\label{tab:experFClass}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -1158,8 +1339,8 @@ ZOO & 8.60\% & 7.40\% & \textbf{7.20\%} & 8.90\%\tabularnewline
 \end{tabular}
 \end{table}
 \begin{table}[H]
-\caption{Experimental results with different values for the parameter $F$
-of the proposed method. The method was applied on the regression datasets.\label{tab:experFRegression}}
+\caption{Experimental results using a variety of values for the parameter $F$
+. The method was applied on the regression datasets.\label{tab:experFRegression}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -1226,7 +1407,7 @@ in Figure \ref{fig:boxFClass}.
 \begin{centering}
 \includegraphics{table5}
 \par\end{centering}
-\caption{Box plot for the experiments with the proposed method and different
+\caption{Box plot for the experiments using the current work and different
 values of the parameter $F$. The method was applied on the classification
 datasets.\label{fig:boxFClass}}
 
@@ -1236,22 +1417,23 @@ datasets.\label{fig:boxFClass}}
 \subsubsection{Experiments with the used local search optimizer}
 
 An important issue of the proposed method is the selection of the
-local search optimizer, that will be applied periodically to randomly
-selected chromosomes. In the current work, a BFGS variant \citep{powell}
+local search optimizer, that will be applied periodically to chromosomes
+selected randomly. In the current work, a BFGS variant \citep{powell}
 was chosen since it can satisfactorily handle the constraints placed
 on the network parameters for the optimization. However, an additional
 experiment was executed using different local optimization techniques
 and the results for the classification datasets are presented in Table
 \ref{tab:experLocalClass} and the results for the regression datasets
-are shown in Table \ref{tab:experLocalRegression}. The columns in
-these result tables have the following meanings:
+are shown in Table \ref{tab:experLocalRegression}. The following
+notation is used in the experimental tables:
 \begin{enumerate}
 \item The column ADAM denotes the incorporation of the ADAM local optimization
 method \citep{Adam} in the current technique.
-\item The column LBFGS stands for the usage of Limited Memory BFGS (L-BFGS)
-method \citep{LBFGS} in the current work.
-\item The column BFGS represents the incorporation of the BFGS variant of
-Powell \citep{powell}as the local search procedure.
+\item The column LBFGS stands for the application of Limited Memory BFGS
+(L-BFGS) method \citep{LBFGS} in used technique as the local search
+procedure.
+\item The column BFGS represents the incorporation of the BFGS method, modified
+by Powell \citep{powell} as the local search procedure.
 \end{enumerate}
 \begin{table}[H]
 \caption{Experimental results with different local optimization techniques
@@ -1333,8 +1515,8 @@ ZOO & 8.50\% & 8.70\% & \textbf{7.20\%}\tabularnewline
 \end{tabular}
 \end{table}
 \begin{table}[H]
-\caption{Experimental results with local optimization techniques in the proposed
-method. The method was applied on the regression datasets.\label{tab:experLocalRegression}}
+\caption{Experimental results with local optimization techniques in the current
+work. The method was applied on the regression datasets.\label{tab:experLocalRegression}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|}
@@ -1397,8 +1579,8 @@ where a box plot is depicted for the classification datasets.
 \includegraphics{table7}
 \par\end{centering}
 \caption{Box plot for the experiment with the proposed method and different
-local optimization methods. The proposed method was applied on the
-classification datasets.\label{fig:boxMethodClass}}
+local optimization methods. The current work was executed on the classification
+datasets.\label{fig:boxMethodClass}}
 
 \end{figure}
 
@@ -1406,18 +1588,18 @@ classification datasets.\label{fig:boxMethodClass}}
 \section{Conclusions\label{sec:Conclusions}}
 
 An extension of the artificial neural network construction technique
-was presented in the present work, in which the periodic application
-of a local optimization method to randomly selected chromosomes was
-introduced. The application of the local optimization method is done
-in such a way as not to alter the architecture of the neural network
-constructed by Grammatical Evolution. The proposed modified method
-was applied on a series of benchmark datasets found in the relevant
-literature and, judging from the experimental results, it reduced
-significantly the test error of the original method in the majority
-of datasets. 
+was presented in the present work, in which the continuous application
+of a local optimization method to chromosomes that selected randomly,
+was introduced. The application of the local optimization method is
+done in such a way as not to alter the architecture of the neural
+network constructed by Grammatical Evolution. The proposed modified
+method was applied on a series of benchmark datasets found in the
+relevant literature and, judging from the experimental results, it
+reduced significantly the test error of the original method in most
+datasets. 
 
 Moreover, to establish the stability of the proposed technique, a
-series of experiments were performed in which a number of critical
+series of experiments were executed in which a number of critical
 parameters were varied over a range of values. After the completion
 of these experiments, it became clear that there is no significant
 difference in the effectiveness of the proposed method, even if these
@@ -1427,21 +1609,21 @@ of the proposed technique was found was when different local optimization
 techniques were used, where the BFGS variant appeared to achieve the
 best results in the majority of cases.
 
-Nevertheless, one major drawback of the proposed method is the additional
+Nevertheless, one major drawback of the current work is the additional
 execution time required from the execution of the local search optimization
 techniques. Since the Grammatical Evolution procedure is a modified
 genetic algorithm, the generated artificial neural networks are independent
 of themselves, parallel programming techniques may be used in order
-to speed up the process, such as the usage of MPI  \citep{MPI} or
-the OpenMP library \citep{OPENMP}.
+to increase the speed of the method, such as the usage of MPI  \citep{MPI}
+or the OpenMP library \citep{OPENMP}.
 
 \vspace{6pt}
 
 
-\authorcontributions{V.C. and I.G.T. conducted the experiments, employing several datasets
-and provided the comparative experiments. D.T., A.T. and V.C. performed
-the statistical analysis and prepared the manuscript. All authors
-have read and agreed to the published version of the manuscript.}
+\authorcontributions{V.C. and I.G.T. performed the mentioned experiments. I.G.T. wrote
+the used software and D.T., A.T. and V.C. performed the statistical
+analysis and prepared the manuscript. All authors have read and agreed
+to the published version of the manuscript.}
 
 \funding{This research received no external funding.}
 
@@ -1463,43 +1645,34 @@ using Virtual Reality techniques\textquotedbl{} (project code:TAEDK-06195).}
 
 \reftitle{References}
 \begin{thebibliography}{99}
-\bibitem{nn1}C. Bishop, Neural Networks for Pattern Recognition,
-Oxford University Press, 1995.
+\bibitem{nn1}Abiodun, O. I., Jantan, A., Omolara, A. E., Dada, K.
+V., Mohamed, N. A., \& Arshad, H. (2018). State-of-the-art in artificial
+neural network applications: A survey. Heliyon, 4(11).
 
-\bibitem{nn2}G. Cybenko, Approximation by superpositions of a sigmoidal
-function, Mathematics of Control Signals and Systems \textbf{2}, pp.
-303-314, 1989.
+\bibitem{nn2}Suryadevara, S., \& Yanamala, A. K. Y. (2021). A Comprehensive
+Overview of Artificial Neural Networks: Evolution, Architectures,
+and Applications. Revista de Inteligencia Artificial en Medicina,
+12(1), 51-76.
 
 \bibitem{nnphysics1}P. Baldi, K. Cranmer, T. Faucett et al, Parameterized
 neural networks for high-energy physics, Eur. Phys. J. C \textbf{76},
 2016.
 
-\bibitem{nnphysics2}J. J. Valdas and G. Bonham-Carter, Time dependent
-neural network models for detecting changes of state in complex processes:
-Applications in earth sciences and astronomy, Neural Networks \textbf{19},
-pp. 196-207, 2006
+\bibitem{nnphysics2}Baldi, P., Cranmer, K., Faucett, T., Sadowski,
+P., \& Whiteson, D. (2016). Parameterized neural networks for high-energy
+physics. The European Physical Journal C, 76(5), 1-7.
 
 \bibitem{nnphysics3}G. Carleo,M. Troyer, Solving the quantum many-body
 problem with artificial neural networks, Science \textbf{355}, pp.
 602-606, 2017.
 
-\bibitem{nnde1}Y. Shirvany, M. Hayati, R. Moradian, Multilayer perceptron
-neural networks with novel unsupervised training method for numerical
-solution of the partial differential equations, Applied Soft Computing
-\textbf{9}, pp. 20-29, 2009.
-
-\bibitem{nnde2}A. Malek, R. Shekari Beidokhti, Numerical solution
-for high order differential equations using a hybrid neural network---Optimization
-method, Applied Mathematics and Computation \textbf{183}, pp. 260-271,
-2006.
+\bibitem{nnde1}Khoo, Y., Lu, J., \& Ying, L. (2021). Solving parametric
+PDE problems with artificial neural networks. European Journal of
+Applied Mathematics, 32(3), 421-435.
 
 \bibitem{nn_solar}A. Kumar Yadav, S.S. Chandel, Solar radiation prediction
 using Artificial Neural Network techniques: A review, Renewable and
 Sustainable Energy Reviews \textbf{33}, pp. 772-781, 2014.
-
-\bibitem{nnagr1}A. Topuz, Predicting moisture content of agricultural
-products using artificial neural networks, Advances in Engineering
-Software \textbf{41}, pp. 464-470, 2010.
 
 \bibitem{nnagr2}A. Escamilla-García, G.M. Soto-Zarazúa, M. Toledano-Ayala,
 E. Rivas-Araiza, A. Gastélum-Barrios, Abraham,Applications of Artificial
@@ -1511,18 +1684,15 @@ Quantum Mechanics/Molecular Mechanics Simulations with Neural Networks,
 Journal of Chemical Theory and Computation \textbf{12}, pp. 4934-4946,
 2016.
 
-\bibitem{nnchem2}Sergei Manzhos, Richard Dawes, Tucker Carrington,
-Neural network‐based approaches for building high dimensional and
-quantum dynamics‐friendly potential energy surfaces, Int. J. Quantum
-Chem. \textbf{115}, pp. 1012-1020, 2015.
-
 \bibitem{nnchem3}Jennifer N. Wei, David Duvenaud, and Alán Aspuru-Guzik,
 Neural Networks for the Prediction of Organic Chemistry Reactions,
 ACS Central Science \textbf{2}, pp. 725-732, 2016.
 
-\bibitem{nn_wind}G. Li, J. Shi, On comparing three artificial neural
-networks for wind speed forecasting, Applied Energy \textbf{87}, pp.
-2313-2320, 2010.
+\bibitem{nn_wind}Khosravi, A. K. R. M. L. P. J., Koury, R. N. N.,
+Machado, L., \& Pabon, J. J. G. (2018). Prediction of wind speed and
+wind direction using artificial neural network, support vector regression
+and adaptive neuro-fuzzy inference system. Sustainable Energy Technologies
+and Assessments, 25, 146-160.
 
 \bibitem{nnecon1}Lukas Falat and Lucia Pancikova, Quantitative Modelling
 in Economics with Advanced Artificial Neural Networks, Procedia Economics
@@ -1533,10 +1703,6 @@ Maharluie, Detecting and ranking cash flow risk factors via artificial
 neural networks technique, Journal of Business Research \textbf{69},
 pp. 1801-1806, 2016.
 
-\bibitem{nncecon3}G. Tkacz, Neural network forecasting of Canadian
-GDP growth, International Journal of Forecasting \textbf{17}, pp.
-57-69, 2001.
-
 \bibitem{nnmed1}Igor I. Baskin, David Winkler and Igor V. Tetko,
 A renaissance of neural networks in drug discovery, Expert Opinion
 on Drug Discovery \textbf{11}, pp. 785-795, 2016.
@@ -1545,54 +1711,45 @@ on Drug Discovery \textbf{11}, pp. 785-795, 2016.
 Compounds Utilizing Artificial Neural Network (ANN), Chemistry Faculty
 Publications \textbf{49}, pp. 16-34, 2018.
 
-\bibitem{bpnn1}D.E. Rumelhart, G.E. Hinton and R.J. Williams, Learning
-representations by back-propagating errors, Nature \textbf{323}, pp.
-533 - 536 , 1986.
+\bibitem{bpnn1}Vora, K., \& Yagnik, S. (2014). A survey on backpropagation
+algorithms for feedforward neural networks. International Journal
+of Engineering Development and Research, 1(3), 193-197.
 
 \bibitem{bpnn2}K. Vora, S. Yagnik, A survey on backpropagation algorithms
 for feedforward neural networks, International Journal of Engineering
 Development and Research \textbf{1}, pp. 193-197, 2014.
 
-\bibitem{rpropnn-1}M. Riedmiller and H. Braun, A Direct Adaptive
-Method for Faster Backpropagation Learning: The RPROP algorithm, Proc.
-of the IEEE Intl. Conf. on Neural Networks, San Francisco, CA, pp.
-586--591, 1993.
+\bibitem{rpropnn-1}Pajchrowski, T., Zawirski, K., \& Nowopolski,
+K. (2014). Neural speed controller trained online by means of modified
+RPROP algorithm. IEEE transactions on industrial informatics, 11(2),
+560-568.
 
-\bibitem{rpropnn-2}C. Igel, M. Hüsken, Empirical evaluation of the
-improved Rprop learning algorithms, Neurocomputing \textbf{50}, pp.
-105-123, 2003.
+\bibitem{rpropnn-2}Hermanto, R. P. S., \& Nugroho, A. (2018). Waiting-time
+estimation in bank customer queues using RPROP neural networks. Procedia
+Computer Science, 135, 35-42.
 
 \bibitem{nn_adam}D. P. Kingma, J. L. Ba, ADAM: a method for stochastic
 optimization, in: Proceedings of the 3rd International Conference
 on Learning Representations (ICLR 2015), pp. 1--15, 2015.
 
-\bibitem{nn_siman1}A. Yamazaki, M. C. P. de Souto,T. B. Ludermir,
-Optimization of neural network weights and architectures for odor
-recognition using simulated annealing, In: Proceedings of the 2002
-International Joint Conference on Neural Networks. IJCNN'02 \textbf{1},
-pp. 547-552 , 2002.
-
 \bibitem{nn_siman2}C.L. Kuo, E.E. Kuruoglu, W.K.V. Chan, Neural Network
 Structure Optimization by Simulated Annealing, Entropy \textbf{24},
 348, 2022.
 
-\bibitem{geneticnn1}F. H. F. Leung, H. K. Lam, S. H. Ling and P.
-K. S. Tam, Tuning of the structure and parameters of a neural network
-using an improved genetic algorithm, IEEE Transactions on Neural Networks
-\textbf{14}, pp. 79-88, 2003
+\bibitem{geneticnn1}Reynolds, J., Rezgui, Y., Kwan, A., \& Piriou,
+S. (2018). A zone-level, building energy optimisation combining an
+artificial neural network, a genetic algorithm, and model predictive
+control. Energy, 151, 729-739.
 
-\bibitem{geneticnn2}Z. Liu, A. Liu, C. Wang, Z. Niu, Evolving neural
-network using real coded genetic algorithm (GA) for multispectral
-image classification, Future Generation Computer Systems \textbf{20},
-pp. 1119-1129, 2004.
+\bibitem{psonn}Das, G., Pattnaik, P. K., \& Padhy, S. K. (2014).
+Artificial neural network trained by particle swarm optimization for
+non-linear channel equalization. Expert Systems with Applications,
+41(7), 3491-3496.
 
-\bibitem{psonn}C. Zhang, H. Shao and Y. Li, Particle swarm optimisation
-for evolving artificial neural network, IEEE International Conference
-on Systems, Man, and Cybernetics, , pp. 2487-2490, 2000.
-
-\bibitem{weight_de1}J. lonen, J.K. Kamarainen, J. Lampinen, Differential
-Evolution Training Algorithm for Feed-Forward Neural Networks, Neural
-Processing Letters \textbf{17}, pp. 93--105, 2003.
+\bibitem{weight_de1}Wang, L., Zeng, Y., \& Chen, T. (2015). Back
+propagation neural network with adaptive differential evolution algorithm
+for time series forecasting. Expert Systems with Applications, 42(2),
+855-863.
 
 \bibitem{weight_aco}K.M. Salama, A.M. Abdelbar, Learning neural network
 structures with ant colony algorithms, Swarm Intell \textbf{9}, pp.
@@ -1605,13 +1762,6 @@ in training multi-layer perceptrons, Appl Intell \textbf{43}, pp.
 \bibitem{whale_nn}I. Aljarah, H. Faris, S. Mirjalili, Optimizing
 connection weights in neural networks using the whale optimization
 algorithm, Soft Comput \textbf{22}, pp. 1--15, 2018. 
-
-\bibitem{nn_gpu1}K-S Oh, K. Jung, GPU implementation of neural networks,
-Pattern Recognition \textbf{37}, pp. 1311-1314, 2004.
-
-\bibitem{nn_gpu2}A.A. Huqqani, E.Schikuta, S. Ye, P. Chen, Multicore
-and GPU Parallelization of Neural Networks for Face Recognition, Procedia
-Computer Science \textbf{18}, pp. 349-358, 2013.
 
 \bibitem{nn_gpu3}M. Zhang, K. Hibi, J. Inoue, GPU-accelerated artificial
 neural network potential for molecular dynamics simulation, Computer
@@ -1769,6 +1919,14 @@ Evolution-based ensembles for algorithmic trading, Applied Soft Computing
 Strategies for Bioinformatics and Systems Genomics. In: Ryan, C.,
 O'Neill, M., Collins, J. (eds) Handbook of Grammatical Evolution.
 Springer, Cham. https://doi.org/10.1007/978-3-319-78717-6\_16
+
+\bibitem{ge_robotics}Peabody, C., \& Seitzer, J. (2015, March). GEF:
+a self-programming robot using grammatical evolution. In Proceedings
+of the AAAI Conference on Artificial Intelligence (Vol. 29, No. 1).
+
+\bibitem{Hornik}Hornik, K., Stinchcombe, M., \& White, H. (1989).
+Multilayer feedforward networks are universal approximators. Neural
+networks, 2(5), 359-366.
 
 \bibitem{powell}M.J.D Powell, A Tolerant Algorithm for Linearly Constrained
 Optimization Calculations, Mathematical Programming \textbf{45}, pp.

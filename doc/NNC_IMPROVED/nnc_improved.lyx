@@ -1248,6 +1248,40 @@ The parameter
 \end_inset
 
 
+\series default
+The grammar of the present method can construct artificial neural networks
+ with a hidden processing layer and with a variable number of computing
+ units.
+ This kind of architecture is sufficient to approach any problem, as according
+ to Hornik's theorem 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Hornik"
+literal "false"
+
+\end_inset
+
+ artificial neural networks with one level of processing can approximate
+ any function if a sufficient number of computing units are available.
+\end_layout
+
+\begin_layout Standard
+As an example consider a problem with 3 inputs: 
+\begin_inset Formula $x_{1},x_{2},x_{3}$
+\end_inset
+
+ An example neural network that can be constructed by the Grammatical Evolution
+ procedure could be the following:
+\begin_inset Formula 
+\begin{equation}
+N(x)=2.1\mbox{sig}\left(10.5x_{2}+9.2x_{3}+5.7\right)+3.2\mbox{sig}\left(2.2x_{1}-4.3x_{3}+6.2\right)
+\end{equation}
+
+\end_inset
+
+This previously artificial neural network has two processing nodes, and
+ not all inputs are necessarily connected to each processing node, since
+ the Grammatical Evolution process may miss some connections.
 \end_layout
 
 \begin_layout Subsection
@@ -9393,7 +9427,7 @@ AVERAGE
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -10422,7 +10456,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -10469,7 +10503,7 @@ name "fig:boxNIClass"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -10513,7 +10547,136 @@ name "fig:statNIClass"
 
 \end_inset
 
+In addition, the average execution time of the methods was recorded for
+ the various values of the parameter 
+\begin_inset Formula $N_{I}$
+\end_inset
 
+ and the results are shown in graphs 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:timeNIClass"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:timeNIRegression"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ for classification and regression problems respectively.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename innc_time_class.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average execution time for the original method and the modified one for
+ various values of the parameter 
+\begin_inset Formula $N_{I}.$
+\end_inset
+
+ The experiments were performed on the classification datasets.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:timeNIClass"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename innc_time_regression.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average execution time for the original method and the modified one for
+ various values of the parameter 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+.
+ The execution times were recorded for the regression problems.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:timeNIRegression"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+As expected, the method requires more computational time than the original
+ one and in fact the smaller the value of the 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ parameter the more time has to be spent since more local optimizations
+ have to be performed.
+ Of course, this additional computing time can be significantly reduced
+ by using parallel computing techniques.
 \end_layout
 
 \begin_layout Subsubsection
@@ -17428,6 +17591,20 @@ Peabody, C., & Seitzer, J.
  In Proceedings of the AAAI Conference on Artificial Intelligence (Vol.
  29, No.
  1).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Hornik"
+literal "false"
+
+\end_inset
+
+Hornik, K., Stinchcombe, M., & White, H.
+ (1989).
+ Multilayer feedforward networks are universal approximators.
+ Neural networks, 2(5), 359-366.
 \end_layout
 
 \begin_layout Bibliography
