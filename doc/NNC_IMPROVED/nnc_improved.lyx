@@ -863,12 +863,10 @@ name "subsec:Grammatical-evolution"
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 Grammatical evolution can be considered as genetic algorithm with integer
  chromosomes.
- These chromosomes stand for production rules of a provided BNF (Backus–Naur
- form) grammar 
+ These chromosomes stand for series of production rules of a provided in
+ a grammar expressed in the Backus–Naur (BNF) form 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "bnf1"
@@ -877,8 +875,7 @@ literal "false"
 \end_inset
 
 .
- The method was used on a series of real world cases, such as data fitting
- 
+ The method was used in data fitting 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ge_program1,ge_program2"
@@ -886,7 +883,7 @@ literal "false"
 
 \end_inset
 
-, application in trigonometric problems 
+, trigonometric problems 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ge_trig"
@@ -991,7 +988,11 @@ literal "false"
 \end_inset
 
  etc.
- A BNF grammar is commonly defined as a set 
+
+\series bold
+ 
+\series default
+A BNF grammar is commonly defined as a set 
 \begin_inset Formula $G=\left(N,T,S,P\right)$
 \end_inset
 
@@ -1004,7 +1005,7 @@ The set
 \begin_inset Formula $N$
 \end_inset
 
- contains the non-terminal symbols.
+ contains the symbols denoted as non-terminal.
 \end_layout
 
 \begin_layout Itemize
@@ -1028,8 +1029,8 @@ The set
 \begin_inset Formula $P$
 \end_inset
 
- contains the production rules of the grammar.
- These rule are used to produce terminal symbols from non - terminal symbols,
+ has all the production rules of the underlying grammar.
+ These rules are used to produce terminal symbols from non - terminal symbols,
  and they are in the form 
 \begin_inset Formula $A\rightarrow a$
 \end_inset
@@ -1064,16 +1065,17 @@ Read
 \series bold
 Select
 \series default
- the next production rule using the equation: Rule = V mod 
+ the production rule that will be applied using the equation: Rule = V mod
+ 
 \begin_inset Formula $N_{R}$
 \end_inset
 
-, where 
+, where the 
 \begin_inset Formula $N_{R}$
 \end_inset
 
- represents the total number of production rules for the current non – terminal
- symbol.
+ stands for the number of production rules that contains the current current
+ non – terminal symbol.
  
 \end_layout
 
@@ -1214,18 +1216,18 @@ N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(n+2)i-(n+1
 
 \end_inset
 
-The parameter 
+The symbol 
 \begin_inset Formula $H$
 \end_inset
 
- corresponds to the number of processing units.
+ corresponds to the number of weights or processing units.
  The function 
 \begin_inset Formula $\sigma(x)$
 \end_inset
 
- is commonly called sigmoid function, and it has the following definition:
+ denotes the sigmoid function, and it has the following definition: 
 \series bold
- 
+
 \begin_inset Formula 
 \begin{equation}
 \sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
@@ -1247,8 +1249,9 @@ literal "false"
 
 \end_inset
 
- artificial neural networks with one level of processing can approximate
- any function if a sufficient number of computing units are available.
+.
+ According to this theorem, an artificial neural network with a sufficient
+ number of computing units and a processing level can approximate any function.
 \end_layout
 
 \begin_layout Standard
@@ -1282,10 +1285,9 @@ name "subsec:The-proposed-algorithm"
 \end_layout
 
 \begin_layout Standard
-The main steps of the current method are derived from the steps of the original
+The steps of the current method are derived from the steps of the original
  neural network construction method with the addition of the periodical
- application of the local optimization algorithm and it has the following
- steps:
+ application of the local optimization algorithm and it has as follows:
 \end_layout
 
 \begin_layout Enumerate
@@ -1312,9 +1314,9 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Set
+Set 
 \series default
- as 
+as 
 \begin_inset Formula $N_{g}$
 \end_inset
 
@@ -1322,23 +1324,19 @@ Set
 \begin_inset Formula $N_{c}$
 \end_inset
 
- the number of chromosomes in the genetic population.
+ the number of chromosomes.
 \end_layout
 
 \begin_layout Enumerate
 
 \series bold
-Set
+Set 
 \series default
- as 
+as 
 \begin_inset Formula $p_{s}$
 \end_inset
 
- the selection rate 
-\series bold
-and
-\series default
- as 
+ the selection rate and as 
 \begin_inset Formula $p_{m}$
 \end_inset
 
@@ -1361,9 +1359,9 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Set
+Set 
 \series default
- as 
+as 
 \begin_inset Formula $N_{I}$
 \end_inset
 
@@ -1374,9 +1372,9 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Set
+Set 
 \series default
- as 
+as 
 \begin_inset Formula $F$
 \end_inset
 
@@ -1387,9 +1385,9 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Initialize
+Perform
 \series default
- the chromosomes 
+ a random initialization of the chromosomes 
 \begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
 \end_inset
 
@@ -1503,15 +1501,11 @@ Copy
 \begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
 \end_inset
 
- chromosomes according to their fitness values intact to the next generation.
+ chromosomes according to their fitness values to the next generation.
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
-Apply
-\series default
- the crossover procedure.
+Apply the crossover procedure.
  This procedure creates 
 \begin_inset Formula $p_{s}\times N_{c}$
 \end_inset
@@ -1543,19 +1537,19 @@ noprefix "false"
 \begin_layout Enumerate
 
 \series bold
-Apply
+Apply 
 \series default
- the mutation procedure.
- A random number 
+the mutation procedure.
+ During this procedure a random number 
 \begin_inset Formula $r\in[0,1]$
 \end_inset
 
- is drawn for every element of each chromosome.
- The corresponding element is altered randomly if 
+ is selected from uniform distribution for every element of each chromosome.
+ If 
 \begin_inset Formula $r\le p_{m}$
 \end_inset
 
-.
+, then the current element is altered randomly.
 \end_layout
 
 \end_deeper
@@ -1594,7 +1588,7 @@ Set
 \begin_inset Formula $S=\left\{ g_{r_{1}},g_{r_{2}},\ldots,g_{r_{N_{T}}}\right\} $
 \end_inset
 
- a set of randomly selected chromosomes.
+ a set of chromosomes of the current population that are selected randomly.
 \end_layout
 
 \begin_layout Enumerate
@@ -1679,7 +1673,7 @@ the chromosome
 \begin_inset Formula $g^{*}$
 \end_inset
 
- with the lowest fitness value.
+ that has the lowest fitness value among the population.
 \end_layout
 
 \begin_layout Enumerate
@@ -2061,21 +2055,19 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Standard
-The present research work was applied on a series of data classification
- and fitting problems, which appeared recently.
- Also, the proposed method was compared against other established machine
- learning methods from the relevant literature and the results are reported.
+A series of classification and regression datasets was used in order to
+ test the current work.
+ Also, the suggested technique was compared against other established machine
+ learning methods and the results are reported.
  Furthermore, a series of experiments were executed to verify the sensitivity
  of the proposed technique with respect to the critical parameters presented
  earlier.
-
-\series bold
- 
-\series default
-The following URLs provide the used datasets:
+ The following URLs provide the used datasets:
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The UCI dataset repository, 
 \begin_inset Flex URL
 status collapsed
@@ -2099,6 +2091,8 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The Keel repository, 
 \begin_inset Flex URL
 status collapsed
@@ -2122,6 +2116,8 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The Statlib URL 
 \begin_inset Flex URL
 status collapsed
@@ -2138,11 +2134,11 @@ http://lib.stat.cmu.edu/datasets/
 \end_layout
 
 \begin_layout Subsection
-Classification datasets 
+The used classification datasets 
 \end_layout
 
 \begin_layout Standard
-The descriptions of the used datasets are as follows:
+The descriptions of the used datasets are:
 \end_layout
 
 \begin_layout Enumerate
@@ -2150,7 +2146,7 @@ The descriptions of the used datasets are as follows:
 \series bold
 Appendictis
 \series default
- a medical dataset, originated in 
+ a dataset originated in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "appendicitis"
@@ -2175,7 +2171,7 @@ literal "false"
 
 \end_inset
 
-, used in bank transactions.
+, which is related to bank transactions.
 \end_layout
 
 \begin_layout Enumerate
@@ -2191,7 +2187,7 @@ literal "false"
 
 \end_inset
 
-, that contains data from psychological experiments.
+, that has been used in a series of psychological experiments.
 \end_layout
 
 \begin_layout Enumerate
@@ -2199,7 +2195,7 @@ literal "false"
 \series bold
 Circular
 \series default
- dataset, which is an artificial dataset.
+ dataset, that contains artificially generated data.
 \end_layout
 
 \begin_layout Enumerate
@@ -2231,7 +2227,7 @@ literal "false"
 
 \end_inset
 
-, a dataset that contains measurements about dermatological deceases.
+, a dataset that contains measurements for dermatological deceases.
  
 \end_layout
 
@@ -2281,7 +2277,7 @@ literal "false"
 
 \end_inset
 
-, which is related to a human subjects study.
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -2402,7 +2398,7 @@ literal "false"
 
 \end_inset
 
-, a medical dataset about the detection of diabetes.
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -2418,7 +2414,7 @@ literal "false"
 
 \end_inset
 
-, a dataset related to climate measurements.
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -2549,7 +2545,7 @@ literal "false"
 \series bold
 Eeg
 \series default
- datasets, a medical dataset related to EEG experiments 
+ datasets, a dataset related to EEG experiments 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "eeg"
@@ -2575,7 +2571,7 @@ literal "false"
 
 \end_inset
 
-, used for the classification of animals.
+, used to classify animals.
 \end_layout
 
 \begin_layout Standard
@@ -3601,17 +3597,17 @@ name "tab:patternsClass"
 \end_layout
 
 \begin_layout Subsection
-Regression datasets 
+The used regression datasets 
 \end_layout
 
 \begin_layout Standard
-The description for the incorporated regression datasets is given below:
+The descriptions for these datasets are provided below:
 \end_layout
 
 \begin_layout Enumerate
 
 \series bold
-Abalone
+(OK)Abalone
 \series default
  dataset 
 \begin_inset CommandInset citation
