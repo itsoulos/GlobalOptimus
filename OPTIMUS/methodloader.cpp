@@ -36,6 +36,8 @@ MethodLoader::MethodLoader()
     methodName<<"Gwo";
     method<<new EGO;
     methodName<<"Ego";
+    method<<new HybridMethod;
+    methodName<<"HybridMethod";
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

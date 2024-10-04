@@ -18,6 +18,7 @@
 # include <METHODS/ofalgorithm.h>
 # include <METHODS/gwooptimizer.h>
 # include <METHODS/ego.h>
+# include <METHODS/hybridmethod.h>
 # include <QStringList>
 # include <QJsonObject>
 /**

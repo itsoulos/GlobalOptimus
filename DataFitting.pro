@@ -33,6 +33,7 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
+    METHODS/hybridmethod.cpp \
     OPTIMUS/editlogger.cpp \
     OPTIMUS/filelogger.cpp \
     OPTIMUS/logger.cpp \
@@ -140,6 +141,7 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    METHODS/hybridmethod.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \
     OPTIMUS/logger.h \
