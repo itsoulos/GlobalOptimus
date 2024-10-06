@@ -172,6 +172,7 @@ void HybridMethod::step()
     trialSample.resize(dimension);
     double minValue, t_min;
     int pos=0;
+    samplesCopy = samples;
     for (int i = 0; i < samples.size(); i++)
     {
         Data x;
@@ -191,24 +192,25 @@ void HybridMethod::step()
         double r = rDouble(0.0, 1.0);
         for (int j = 0; j < dimension; j++)
         {
-            //trialSample.at(j) = - samples.at(i).at(j)  + r* (child2.at(j) - minLSample.at(j));
-            trialSample.at(j) = samples.at(i).at(j)  + r* (minLSample.at(j)-child2.at(j));
-/*
             if (calculation==1)
-                trialSample.at(j) = minSample.at(j) + r * (samples.at(i).at(j) - child.at(j));
+                trialSample.at(j) = samples.at(i).at(j)  + r* (minLSample.at(j)-child2.at(j));
             else if (calculation==2)
                 trialSample.at(j) = samples.at(i).at(j) + r * (samples.at(i).at(j) - closestSamples.at(i).first.at(j));
             else if (calculation==3)
                 trialSample.at(j) = samples.at(i).at(j) + r * (closestSamples.at(i).first.at(j) - closestSamples.at(i).second.at(j));
             else if (calculation==4)
-                trialSample.at(j) = samples.at(i).at(j) + r * (closestSamples.at(i).first.at(j) - minSample.at(j));
+                trialSample.at(j) = samples.at(i).at(j) + r * (closestSamples.at(i).first.at(j) - minLSample.at(j));
             else if (calculation==5)
-                trialSample.at(j) = samples.at(i).at(j)  + r * (samples.at(i).at(j) -  closestSamples.at(i).second.at(j) + minSample.at(j));
+                trialSample.at(j) = samples.at(i).at(j)  + r * (samples.at(i).at(j) -  closestSamples.at(i).second.at(j) + minLSample.at(j));
             else if (calculation==6)
-                trialSample.at(j) = minSample.at(j) + r * ( bestSamply.at(j) - closestSamples.at(i).first.at(j));
+                trialSample.at(j) = minLSample.at(j) + r * ( bestSamply.at(j) - closestSamples.at(i).first.at(j));
             else if (calculation==7)
                 trialSample.at(j) = samples.at(i).at(j) + r * ( child2.at(j) - closestSamples.at(i).first.at(j));
-*/
+            else if (calculation==8)
+                trialSample.at(j) = minLSample.at(j) + r * (samples.at(i).at(j) - child.at(j));
+            else if (calculation==9)
+                trialSample.at(j) = trialSample.at(j) = samples.at(i).at(j) + r*(closestSamples.at(i).first.at(j) - closestSamples.at(i).second.at(j)-child2.at(j))  +  r * (minLSample.at(j)-child2.at(j));
+
         }
         if (rejection==1)
             if (samples.at(i)==samplesCopy.at(i))
