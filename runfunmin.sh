@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod
-METHOD=HybridMethod
+METHOD=DifferentialEvolution
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -16,7 +16,7 @@ then
 	METHODPARAMS="--bfgs_iters=200"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
-	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=random" 
+	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=random"
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex
@@ -140,7 +140,7 @@ fi
 
 if [ -z "$DIMENSION" ] 
 then
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=30 --opt_debug=yes
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=300 --opt_debug=yes
 else
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=30 --opt_debug=yes
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=300 --opt_debug=yes
 fi

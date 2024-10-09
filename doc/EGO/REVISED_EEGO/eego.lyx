@@ -591,7 +591,7 @@ literal "false"
 
 , the Whale Optimization Algorithm (WOA) algorithm 
 \begin_inset CommandInset citation
-LatexCommand citealp
+LatexCommand citep
 key "WOA,WOA1,WOA2,WOA3"
 literal "false"
 
@@ -1130,6 +1130,17 @@ Calculation step.
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
+While
+\series default
+ termination criteria are not hold 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
 Update variables 
 \begin_inset Formula $a$
 \end_inset
@@ -1183,7 +1194,7 @@ Set
 For
 \series default
  
-\begin_inset Formula $j=1,\ldots,N_{c}$
+\begin_inset Formula $i=1,\ldots,N_{c}$
 \end_inset
 
  
@@ -1220,7 +1231,7 @@ and
 \end_inset
 
  are random numbers in 
-\begin_inset Formula $[0,1],\ $
+\begin_inset Formula $[0,1]$
 \end_inset
 
 
@@ -1259,7 +1270,7 @@ and
 \begin_inset Formula $C_{2}=2*r_{1}$
 \end_inset
 
- 
+
 \end_layout
 
 \begin_layout Itemize
@@ -1271,41 +1282,89 @@ and
 
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
+\begin_layout Itemize
 
 \series bold
-\begin_inset Formula $X_{1}=e^{br_{3}}\sin\left(2\pi r_{3}\right)C_{1}\left|\mbox{XE}-\mbox{XP}\right|+\mbox{XE},$
-\end_inset
-
- where 
-\begin_inset Formula $\mbox{XE}=C_{2}x_{j}$
+Select
+\series default
+ a random position 
+\begin_inset Formula $v\in\left\{ 1,\ldots,N_{c}\right\} $
 \end_inset
 
 
 \end_layout
 
-\begin_layout Enumerate
-
-\series bold
-\begin_inset Formula $X_{2}=x_{j}+C_{1}\left|x_{j}-\mbox{XP}\right|$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
+\begin_layout Itemize
 
 \series bold
 if 
 \begin_inset Formula $\left(r4\le s_{r}\right)$
 \end_inset
 
+ then set 
+\begin_inset Formula $XE=C_{2}XP$
+\end_inset
 
+ else 
+\begin_inset Formula $XE=position[random\:index\:v]$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the vector 
+\begin_inset Formula $y=\left[y_{1,}y_{2},\ldots,y_{n}\right]$
+\end_inset
+
+ with the following procedure
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $j=1,\ldots,n$
+\end_inset
+
+ 
+\series bold
+do
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Enumerate
+
+\series bold
+Set
+\begin_inset Formula $X_{1}=e^{br_{3}}\sin\left(2\pi r_{3}\right)C_{1}\left|\mbox{XE}-\mbox{XP}\right|+\mbox{XE},$
+\end_inset
+
+ where 
+\begin_inset Formula $\mbox{XE}=C_{2}x_{i,j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $X_{2}=x_{i,j}+C_{1}\left|x_{i,j}-\mbox{XP}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
 
 \series bold
 if 
@@ -1316,13 +1375,7 @@ if
 \begin_inset Formula $f_{1}=0.8,f_{2}=0.2$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-else set 
+ else set 
 \begin_inset Formula $f_{1}$
 \end_inset
 
@@ -1343,19 +1396,41 @@ to a random number in
 
 \end_layout
 
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $p\in[0,1]$
+\end_inset
+
+ a random number.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+if 
+\begin_inset Formula $\left(p\le0.5\right)$
+\end_inset
+
+ then set 
+\begin_inset Formula $x_{i,j}=\frac{f_{1}X_{1}+f_{2}X_{2}}{2}$
+\end_inset
+
+ else set 
+\begin_inset Formula $x_{i,j}=\frac{f_{2}X_{1}+f_{1}X_{2}}{2}$
+\end_inset
+
+
+\end_layout
+
 \end_deeper
 \begin_layout Enumerate
 
 \series bold
-Update 
-\series default
-agent:
-\series bold
- 
-\begin_inset Formula $x_{j}=\frac{f_{1}X_{1}+f_{2}X_{2}}{2}$
-\end_inset
-
-
+EndFor
 \end_layout
 
 \end_deeper
@@ -1397,7 +1472,6 @@ If
 Else
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
 Calculate the stopping that proposed in the work of Charilogis 
 \begin_inset CommandInset citation
@@ -1452,11 +1526,12 @@ The algorithm terminated when
 \begin_layout Enumerate
 
 \series bold
-Goto
-\series default
- Calculation step.
-\series bold
+End While
+\end_layout
 
+\begin_layout Enumerate
+
+\series bold
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -1491,6 +1566,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename eego.png
+	scale 60
 
 \end_inset
 
@@ -4517,7 +4593,8 @@ status open
 
 \begin_layout Plain Layout
 Experimental results using the incorporated optimization methods.
- Numbers in cells stand for average function calls.
+ The numbers in parentheses denote standard deviation for the number of
+ function calls.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:comparison"
@@ -4533,7 +4610,9 @@ name "tab:comparison"
 \end_layout
 
 \begin_layout Plain Layout
-\align center
+\align left
+
+\size footnotesize
 \begin_inset Tabular
 <lyxtabular version="3" rows="58" columns="6">
 <features tabularvalignment="middle">
@@ -4550,6 +4629,7 @@ name "tab:comparison"
 \begin_layout Plain Layout
 
 \series bold
+\size tiny
 FUNCTION
 \end_layout
 
@@ -4561,6 +4641,7 @@ FUNCTION
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 GENETIC
 \end_layout
 
@@ -4572,6 +4653,7 @@ GENETIC
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 PSO
 \end_layout
 
@@ -4583,6 +4665,7 @@ PSO
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 DE
 \end_layout
 
@@ -4594,6 +4677,7 @@ DE
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 EGO
 \end_layout
 
@@ -4605,6 +4689,7 @@ EGO
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 EEGO
 \end_layout
 
@@ -4616,6 +4701,8 @@ EEGO
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 ACKLEY
 \end_layout
 
@@ -4625,7 +4712,9 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-6749
+
+\size footnotesize
+6749 (869)
 \end_layout
 
 \end_inset
@@ -4634,7 +4723,9 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-6885
+
+\size footnotesize
+6885 (1108)
 \end_layout
 
 \end_inset
@@ -4643,7 +4734,9 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-10220
+
+\size footnotesize
+10220 (1342)
 \end_layout
 
 \end_inset
@@ -4652,7 +4745,9 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-8714
+
+\size footnotesize
+8714 (1009)
 \end_layout
 
 \end_inset
@@ -4663,7 +4758,8 @@ ACKLEY
 \begin_layout Plain Layout
 
 \series bold
-4199
+\size footnotesize
+4199 (768)
 \end_layout
 
 \end_inset
@@ -4675,18 +4771,7 @@ ACKLEY
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 BF1
 \end_layout
 
@@ -4697,19 +4782,8 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4007
+\size footnotesize
+4007 (308)
 \end_layout
 
 \end_inset
@@ -4719,19 +4793,8 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4142
+\size footnotesize
+4142 (397)
 \end_layout
 
 \end_inset
@@ -4741,19 +4804,8 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8268
+\size footnotesize
+8268 (299)
 \end_layout
 
 \end_inset
@@ -4762,7 +4814,9 @@ BF1
 \begin_inset Text
 
 \begin_layout Plain Layout
-4762
+
+\size footnotesize
+4762 (379)
 \end_layout
 
 \end_inset
@@ -4773,7 +4827,8 @@ BF1
 \begin_layout Plain Layout
 
 \series bold
-3228
+\size footnotesize
+3228 (356)
 \end_layout
 
 \end_inset
@@ -4785,18 +4840,7 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 BF2
 \end_layout
 
@@ -4807,19 +4851,8 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3794
+\size footnotesize
+3794 (350)
 \end_layout
 
 \end_inset
@@ -4829,19 +4862,8 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3752
+\size footnotesize
+3752 (302)
 \end_layout
 
 \end_inset
@@ -4851,19 +4873,8 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7913
+\size footnotesize
+7913 (320)
 \end_layout
 
 \end_inset
@@ -4872,7 +4883,9 @@ BF2
 \begin_inset Text
 
 \begin_layout Plain Layout
-4299
+
+\size footnotesize
+4299 (325)
 \end_layout
 
 \end_inset
@@ -4883,7 +4896,8 @@ BF2
 \begin_layout Plain Layout
 
 \series bold
-2815
+\size footnotesize
+2815 (310)
 \end_layout
 
 \end_inset
@@ -4894,6 +4908,8 @@ BF2
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 BF3
 \end_layout
 
@@ -4903,7 +4919,9 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3480
+
+\size footnotesize
+3480 (266)
 \end_layout
 
 \end_inset
@@ -4912,7 +4930,9 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3306
+
+\size footnotesize
+3306 (261)
 \end_layout
 
 \end_inset
@@ -4921,7 +4941,9 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-10270
+
+\size footnotesize
+10270 (294)
 \end_layout
 
 \end_inset
@@ -4930,7 +4952,9 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3747
+
+\size footnotesize
+3747 (303)
 \end_layout
 
 \end_inset
@@ -4941,7 +4965,8 @@ BF3
 \begin_layout Plain Layout
 
 \series bold
-2501
+\size footnotesize
+2501 (218)
 \end_layout
 
 \end_inset
@@ -4953,18 +4978,7 @@ BF3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 BRANIN
 \end_layout
 
@@ -4975,19 +4989,8 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2376
+\size footnotesize
+2376 (136)
 \end_layout
 
 \end_inset
@@ -4997,19 +5000,8 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2548
+\size footnotesize
+2548 (142)
 \end_layout
 
 \end_inset
@@ -5019,19 +5011,8 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4101
+\size footnotesize
+4101 (559)
 \end_layout
 
 \end_inset
@@ -5040,7 +5021,9 @@ BRANIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2659
+
+\size footnotesize
+2659 (150)
 \end_layout
 
 \end_inset
@@ -5051,7 +5034,8 @@ BRANIN
 \begin_layout Plain Layout
 
 \series bold
-1684
+\size footnotesize
+1684 (180)
 \end_layout
 
 \end_inset
@@ -5063,18 +5047,7 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 CAMEL
 \end_layout
 
@@ -5085,19 +5058,8 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2869
+\size footnotesize
+2869 (195)
 \end_layout
 
 \end_inset
@@ -5107,19 +5069,8 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2933
+\size footnotesize
+2933 (180)
 \end_layout
 
 \end_inset
@@ -5129,19 +5080,8 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5609
+\size footnotesize
+5609 (530)
 \end_layout
 
 \end_inset
@@ -5150,7 +5090,9 @@ CAMEL
 \begin_inset Text
 
 \begin_layout Plain Layout
-3317
+
+\size footnotesize
+3317 (229)
 \end_layout
 
 \end_inset
@@ -5161,7 +5103,8 @@ CAMEL
 \begin_layout Plain Layout
 
 \series bold
-2262
+\size footnotesize
+2262 (295)
 \end_layout
 
 \end_inset
@@ -5173,18 +5116,7 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EASOM
 \end_layout
 
@@ -5195,19 +5127,8 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1958
+\size footnotesize
+1958 (67)
 \end_layout
 
 \end_inset
@@ -5217,19 +5138,8 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1982
+\size footnotesize
+1982 (92)
 \end_layout
 
 \end_inset
@@ -5239,19 +5149,8 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2978
+\size footnotesize
+2978 (344)
 \end_layout
 
 \end_inset
@@ -5260,7 +5159,9 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
-2235
+
+\size footnotesize
+2235 (196)
 \end_layout
 
 \end_inset
@@ -5271,7 +5172,8 @@ EASOM
 \begin_layout Plain Layout
 
 \series bold
-1334
+\size footnotesize
+1334 (133)
 \end_layout
 
 \end_inset
@@ -5282,6 +5184,8 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 EQUAL_MAXIMA
 \end_layout
 
@@ -5291,7 +5195,9 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2651
+
+\size footnotesize
+2651 (131)
 \end_layout
 
 \end_inset
@@ -5300,7 +5206,9 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1499
+
+\size footnotesize
+1499 (176)
 \end_layout
 
 \end_inset
@@ -5309,7 +5217,9 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2374
+
+\size footnotesize
+2374 (117)
 \end_layout
 
 \end_inset
@@ -5318,7 +5228,9 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2013
+
+\size footnotesize
+2013 (157)
 \end_layout
 
 \end_inset
@@ -5329,7 +5241,8 @@ EQUAL_MAXIMA
 \begin_layout Plain Layout
 
 \series bold
-1286
+\size footnotesize
+1286 (121)
 \end_layout
 
 \end_inset
@@ -5341,18 +5254,7 @@ EQUAL_MAXIMA
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP4
 \end_layout
 
@@ -5363,19 +5265,8 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2946
+\size footnotesize
+2946 (196)
 \end_layout
 
 \end_inset
@@ -5385,19 +5276,8 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3404
+\size footnotesize
+3404 (201)
 \end_layout
 
 \end_inset
@@ -5407,19 +5287,8 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5166
+\size footnotesize
+5166 (430)
 \end_layout
 
 \end_inset
@@ -5428,7 +5297,9 @@ EXP4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3392
+
+\size footnotesize
+3392 (313)
 \end_layout
 
 \end_inset
@@ -5439,7 +5310,8 @@ EXP4
 \begin_layout Plain Layout
 
 \series bold
-2166
+\size footnotesize
+2166 (243)
 \end_layout
 
 \end_inset
@@ -5451,18 +5323,7 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP8
 \end_layout
 
@@ -5473,19 +5334,8 @@ EXP8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3120
+\size footnotesize
+3120 (187)
 \end_layout
 
 \end_inset
@@ -5495,19 +5345,8 @@ EXP8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3585
+\size footnotesize
+3585 (212)
 \end_layout
 
 \end_inset
@@ -5517,19 +5356,8 @@ EXP8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5895
+\size footnotesize
+5895 (615)
 \end_layout
 
 \end_inset
@@ -5538,7 +5366,9 @@ EXP8
 \begin_inset Text
 
 \begin_layout Plain Layout
-3347
+
+\size footnotesize
+3347 (288)
 \end_layout
 
 \end_inset
@@ -5549,7 +5379,8 @@ EXP8
 \begin_layout Plain Layout
 
 \series bold
-2802
+\size footnotesize
+2802 (304)
 \end_layout
 
 \end_inset
@@ -5561,18 +5392,7 @@ EXP8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP16
 \end_layout
 
@@ -5584,7 +5404,8 @@ EXP16
 \begin_layout Plain Layout
 
 \series bold
-3250
+\size footnotesize
+3250 (234)
 \end_layout
 
 \end_inset
@@ -5594,19 +5415,8 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3735
+\size footnotesize
+3735 (206)
 \end_layout
 
 \end_inset
@@ -5616,19 +5426,8 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6498
+\size footnotesize
+6498 (784)
 \end_layout
 
 \end_inset
@@ -5637,7 +5436,9 @@ EXP16
 \begin_inset Text
 
 \begin_layout Plain Layout
-3345
+
+\size footnotesize
+3345 (233)
 \end_layout
 
 \end_inset
@@ -5647,19 +5448,8 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3279
+\size footnotesize
+3279 (416)
 \end_layout
 
 \end_inset
@@ -5671,18 +5461,7 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP32
 \end_layout
 
@@ -5693,19 +5472,8 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3561
+\size footnotesize
+3561 (233)
 \end_layout
 
 \end_inset
@@ -5715,19 +5483,8 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3902
+\size footnotesize
+3902 (233)
 \end_layout
 
 \end_inset
@@ -5737,19 +5494,8 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7606
+\size footnotesize
+7606 (475)
 \end_layout
 
 \end_inset
@@ -5760,7 +5506,8 @@ EXP32
 \begin_layout Plain Layout
 
 \series bold
-3332
+\size footnotesize
+3332 (250)
 \end_layout
 
 \end_inset
@@ -5770,19 +5517,8 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3430
+\size footnotesize
+3430 (401)
 \end_layout
 
 \end_inset
@@ -5793,6 +5529,8 @@ EXP32
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 EXTENDEDF10
 \end_layout
 
@@ -5802,7 +5540,9 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-4862
+
+\size footnotesize
+4862 (959)
 \end_layout
 
 \end_inset
@@ -5811,7 +5551,9 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-3653
+
+\size footnotesize
+3653 (329)
 \end_layout
 
 \end_inset
@@ -5820,7 +5562,9 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-5728(0.87)
+
+\size footnotesize
+5728 (976) (0.87)
 \end_layout
 
 \end_inset
@@ -5829,7 +5573,9 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-4737
+
+\size footnotesize
+4737 (428)
 \end_layout
 
 \end_inset
@@ -5840,7 +5586,8 @@ EXTENDEDF10
 \begin_layout Plain Layout
 
 \series bold
-2609
+\size footnotesize
+2609 (321)
 \end_layout
 
 \end_inset
@@ -5851,6 +5598,8 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 FIVE_UNEVEN
 \end_layout
 
@@ -5862,7 +5611,8 @@ FIVE_UNEVEN
 \begin_layout Plain Layout
 
 \series bold
-3412(0.67)
+\size footnotesize
+3412 (422) (0.67)
 \end_layout
 
 \end_inset
@@ -5871,7 +5621,9 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3913(0.87)
+
+\size footnotesize
+3913 (378)(0.87)
 \end_layout
 
 \end_inset
@@ -5880,7 +5632,9 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4042(0.14)
+
+\size footnotesize
+4042 (391) (0.14)
 \end_layout
 
 \end_inset
@@ -5889,7 +5643,9 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-5006(0.97)
+
+\size footnotesize
+5006 (519) (0.97)
 \end_layout
 
 \end_inset
@@ -5898,7 +5654,9 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3849(0.90)
+
+\size footnotesize
+3849 (388)(0.90)
 \end_layout
 
 \end_inset
@@ -5909,6 +5667,8 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 F9
 \end_layout
 
@@ -5918,7 +5678,9 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-2604
+
+\size footnotesize
+2604 (197)
 \end_layout
 
 \end_inset
@@ -5927,7 +5689,9 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-1888
+
+\size footnotesize
+1888 (306)
 \end_layout
 
 \end_inset
@@ -5936,7 +5700,9 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-2271
+
+\size footnotesize
+2271 (364) 
 \end_layout
 
 \end_inset
@@ -5945,7 +5711,9 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-2748
+
+\size footnotesize
+2748 (333)
 \end_layout
 
 \end_inset
@@ -5956,7 +5724,8 @@ F9
 \begin_layout Plain Layout
 
 \series bold
-1439
+\size footnotesize
+1439 (229)
 \end_layout
 
 \end_inset
@@ -5967,6 +5736,8 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 F14
 \end_layout
 
@@ -5976,7 +5747,9 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-6686
+
+\size footnotesize
+6686 (1503)
 \end_layout
 
 \end_inset
@@ -5985,7 +5758,9 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-5498
+
+\size footnotesize
+5498 (550)
 \end_layout
 
 \end_inset
@@ -5996,7 +5771,8 @@ F14
 \begin_layout Plain Layout
 
 \series bold
-5279(0.63)
+\size footnotesize
+5279 (1988) (0.63)
 \end_layout
 
 \end_inset
@@ -6005,7 +5781,9 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-9228(0.94)
+
+\size footnotesize
+9228 (3725) (0.94)
 \end_layout
 
 \end_inset
@@ -6014,7 +5792,9 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-6063
+
+\size footnotesize
+6063 (1835)
 \end_layout
 
 \end_inset
@@ -6025,6 +5805,8 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 F15
 \end_layout
 
@@ -6036,7 +5818,8 @@ F15
 \begin_layout Plain Layout
 
 \series bold
-4373
+\size footnotesize
+4373 (624)
 \end_layout
 
 \end_inset
@@ -6045,7 +5828,9 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-6696
+
+\size footnotesize
+6696 (856)
 \end_layout
 
 \end_inset
@@ -6054,7 +5839,9 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-5874(0.80)
+
+\size footnotesize
+5874 (1880) (0.80)
 \end_layout
 
 \end_inset
@@ -6063,7 +5850,9 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-7342
+
+\size footnotesize
+7342 (1441)
 \end_layout
 
 \end_inset
@@ -6072,7 +5861,9 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-4397
+
+\size footnotesize
+4397 (1031)
 \end_layout
 
 \end_inset
@@ -6083,6 +5874,8 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 F17
 \end_layout
 
@@ -6092,7 +5885,9 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-3667
+
+\size footnotesize
+3667 (267)
 \end_layout
 
 \end_inset
@@ -6101,7 +5896,9 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-3805
+
+\size footnotesize
+3805 (333)
 \end_layout
 
 \end_inset
@@ -6110,7 +5907,9 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-10441
+
+\size footnotesize
+10441 (1435)
 \end_layout
 
 \end_inset
@@ -6119,7 +5918,9 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-4057
+
+\size footnotesize
+4057 (339)
 \end_layout
 
 \end_inset
@@ -6130,7 +5931,8 @@ F17
 \begin_layout Plain Layout
 
 \series bold
-2766
+\size footnotesize
+2766 (368)
 \end_layout
 
 \end_inset
@@ -6141,6 +5943,8 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 HIMMELBLAU
 \end_layout
 
@@ -6150,7 +5954,9 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-2481
+
+\size footnotesize
+2481 (27)
 \end_layout
 
 \end_inset
@@ -6161,7 +5967,8 @@ HIMMELBLAU
 \begin_layout Plain Layout
 
 \series bold
-1013
+\size footnotesize
+1013 (34)
 \end_layout
 
 \end_inset
@@ -6170,7 +5977,9 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-6636
+
+\size footnotesize
+6636 (282)
 \end_layout
 
 \end_inset
@@ -6179,7 +5988,9 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-1718
+
+\size footnotesize
+1718 (84)
 \end_layout
 
 \end_inset
@@ -6188,7 +5999,9 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-1119
+
+\size footnotesize
+1119 (81)
 \end_layout
 
 \end_inset
@@ -6200,18 +6013,7 @@ HIMMELBLAU
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GKLS250
 \end_layout
 
@@ -6222,19 +6024,8 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2280
+\size footnotesize
+2280 (184)
 \end_layout
 
 \end_inset
@@ -6244,19 +6035,8 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2411
+\size footnotesize
+2411 (158)
 \end_layout
 
 \end_inset
@@ -6266,19 +6046,8 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3834
+\size footnotesize
+3834 (416)
 \end_layout
 
 \end_inset
@@ -6287,7 +6056,9 @@ GKLS250
 \begin_inset Text
 
 \begin_layout Plain Layout
-3332
+
+\size footnotesize
+3332 (203)
 \end_layout
 
 \end_inset
@@ -6297,19 +6068,8 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1603
+\size footnotesize
+1603 (150)
 \end_layout
 
 \end_inset
@@ -6321,18 +6081,7 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GKLS350
 \end_layout
 
@@ -6343,19 +6092,8 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2613
+\size footnotesize
+2613 (269)
 \end_layout
 
 \end_inset
@@ -6365,19 +6103,8 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2234
+\size footnotesize
+2234 (225)
 \end_layout
 
 \end_inset
@@ -6387,19 +6114,8 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3919
+\size footnotesize
+3919 (469)
 \end_layout
 
 \end_inset
@@ -6408,7 +6124,9 @@ GKLS350
 \begin_inset Text
 
 \begin_layout Plain Layout
-2493
+
+\size footnotesize
+2493 (233)
 \end_layout
 
 \end_inset
@@ -6419,7 +6137,8 @@ GKLS350
 \begin_layout Plain Layout
 
 \series bold
-1298
+\size footnotesize
+1298 (178)
 \end_layout
 
 \end_inset
@@ -6431,18 +6150,7 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GOLDSTEIN
 \end_layout
 
@@ -6453,19 +6161,8 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3687
+\size footnotesize
+3687 (278)
 \end_layout
 
 \end_inset
@@ -6475,19 +6172,8 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3865
+\size footnotesize
+3865 (356)
 \end_layout
 
 \end_inset
@@ -6497,19 +6183,8 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6781
+\size footnotesize
+6781 (483)
 \end_layout
 
 \end_inset
@@ -6518,7 +6193,9 @@ GOLDSTEIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4015
+
+\size footnotesize
+4015 (323)
 \end_layout
 
 \end_inset
@@ -6529,7 +6206,8 @@ GOLDSTEIN
 \begin_layout Plain Layout
 
 \series bold
-2784
+\size footnotesize
+2784 (290)
 \end_layout
 
 \end_inset
@@ -6541,18 +6219,7 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GRIEWANK2
 \end_layout
 
@@ -6563,19 +6230,8 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4501
+\size footnotesize
+4501 (918)
 \end_layout
 
 \end_inset
@@ -6585,19 +6241,8 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3076 (0.73)
+\size footnotesize
+3076 (218) (0.73)
 \end_layout
 
 \end_inset
@@ -6607,19 +6252,8 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7429
+\size footnotesize
+7429 (1472)
 \end_layout
 
 \end_inset
@@ -6628,7 +6262,9 @@ GRIEWANK2
 \begin_inset Text
 
 \begin_layout Plain Layout
-4682
+
+\size footnotesize
+4682 (586)
 \end_layout
 
 \end_inset
@@ -6639,7 +6275,8 @@ GRIEWANK2
 \begin_layout Plain Layout
 
 \series bold
-2589 (0.96)
+\size footnotesize
+2589 (532) (0.96)
 \end_layout
 
 \end_inset
@@ -6651,18 +6288,7 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GRIEWANK10
 \end_layout
 
@@ -6674,7 +6300,8 @@ GRIEWANK10
 \begin_layout Plain Layout
 
 \series bold
-6410 (0.97)
+\size footnotesize
+6410 (1264) (0.97)
 \end_layout
 
 \end_inset
@@ -6684,19 +6311,8 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8006
+\size footnotesize
+8006 (732)
 \end_layout
 
 \end_inset
@@ -6706,19 +6322,8 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-18490
+\size footnotesize
+18490 (1716)
 \end_layout
 
 \end_inset
@@ -6727,7 +6332,9 @@ GRIEWANK10
 \begin_inset Text
 
 \begin_layout Plain Layout
-8772
+
+\size footnotesize
+8772 (1138)
 \end_layout
 
 \end_inset
@@ -6737,19 +6344,8 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7435
+\size footnotesize
+7435 (900)
 \end_layout
 
 \end_inset
@@ -6761,18 +6357,7 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 HANSEN
 \end_layout
 
@@ -6783,19 +6368,8 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3210
+\size footnotesize
+3210 (458)
 \end_layout
 
 \end_inset
@@ -6805,19 +6379,8 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2856
+\size footnotesize
+2856 (208)
 \end_layout
 
 \end_inset
@@ -6827,19 +6390,8 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4185
+\size footnotesize
+4185 (627)
 \end_layout
 
 \end_inset
@@ -6848,7 +6400,9 @@ HANSEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3789
+
+\size footnotesize
+3789 (864)
 \end_layout
 
 \end_inset
@@ -6859,7 +6413,8 @@ HANSEN
 \begin_layout Plain Layout
 
 \series bold
-2484
+\size footnotesize
+2484 (417)
 \end_layout
 
 \end_inset
@@ -6871,18 +6426,7 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 HARTMAN3
 \end_layout
 
@@ -6893,19 +6437,8 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2752
+\size footnotesize
+2752 (188)
 \end_layout
 
 \end_inset
@@ -6915,19 +6448,8 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3140
+\size footnotesize
+3140 (215)
 \end_layout
 
 \end_inset
@@ -6937,19 +6459,8 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5190
+\size footnotesize
+5190 (294)
 \end_layout
 
 \end_inset
@@ -6958,7 +6469,9 @@ HARTMAN3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3078
+
+\size footnotesize
+3078 (267)
 \end_layout
 
 \end_inset
@@ -6969,7 +6482,8 @@ HARTMAN3
 \begin_layout Plain Layout
 
 \series bold
-1793
+\size footnotesize
+1793 (231)
 \end_layout
 
 \end_inset
@@ -6981,18 +6495,7 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 HARTMAN6
 \end_layout
 
@@ -7003,19 +6506,8 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3219
+\size footnotesize
+3219 (217)
 \end_layout
 
 \end_inset
@@ -7025,19 +6517,8 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3710
+\size footnotesize
+3710 (235)
 \end_layout
 
 \end_inset
@@ -7047,19 +6528,8 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5968
+\size footnotesize
+5968 (548)
 \end_layout
 
 \end_inset
@@ -7068,7 +6538,9 @@ HARTMAN6
 \begin_inset Text
 
 \begin_layout Plain Layout
-3583
+
+\size footnotesize
+3583 (309)
 \end_layout
 
 \end_inset
@@ -7079,7 +6551,8 @@ HARTMAN6
 \begin_layout Plain Layout
 
 \series bold
-2478
+\size footnotesize
+2478 (282)
 \end_layout
 
 \end_inset
@@ -7091,18 +6564,7 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 POTENTIAL3
 \end_layout
 
@@ -7113,19 +6575,8 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4352
+\size footnotesize
+4352 (461)
 \end_layout
 
 \end_inset
@@ -7135,19 +6586,8 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4865
+\size footnotesize
+4865 (468)
 \end_layout
 
 \end_inset
@@ -7157,19 +6597,8 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6118
+\size footnotesize
+6118 (1047)
 \end_layout
 
 \end_inset
@@ -7178,7 +6607,9 @@ POTENTIAL3
 \begin_inset Text
 
 \begin_layout Plain Layout
-6027
+
+\size footnotesize
+6027 (793)
 \end_layout
 
 \end_inset
@@ -7189,7 +6620,8 @@ POTENTIAL3
 \begin_layout Plain Layout
 
 \series bold
-4081
+\size footnotesize
+4081 (391)
 \end_layout
 
 \end_inset
@@ -7201,18 +6633,7 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 POTENTIAL5
 \end_layout
 
@@ -7224,7 +6645,8 @@ POTENTIAL5
 \begin_layout Plain Layout
 
 \series bold
-7705
+\size footnotesize
+7705 (892)
 \end_layout
 
 \end_inset
@@ -7234,19 +6656,8 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-9183
+\size footnotesize
+9183 (1180)
 \end_layout
 
 \end_inset
@@ -7256,19 +6667,8 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-9119
+\size footnotesize
+9119 (570)
 \end_layout
 
 \end_inset
@@ -7277,7 +6677,9 @@ POTENTIAL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-9968
+
+\size footnotesize
+9968 (1171)
 \end_layout
 
 \end_inset
@@ -7287,19 +6689,8 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8886
+\size footnotesize
+8886 (1146)
 \end_layout
 
 \end_inset
@@ -7311,18 +6702,7 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 RASTRIGIN
 \end_layout
 
@@ -7333,19 +6713,8 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4107
+\size footnotesize
+4107 (729)
 \end_layout
 
 \end_inset
@@ -7355,19 +6724,8 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3477
+\size footnotesize
+3477 (348)
 \end_layout
 
 \end_inset
@@ -7377,19 +6735,8 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6216
+\size footnotesize
+6216 (428)
 \end_layout
 
 \end_inset
@@ -7398,7 +6745,9 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4201
+
+\size footnotesize
+4201 (401)
 \end_layout
 
 \end_inset
@@ -7409,7 +6758,8 @@ RASTRIGIN
 \begin_layout Plain Layout
 
 \series bold
-2304
+\size footnotesize
+2304 (302)
 \end_layout
 
 \end_inset
@@ -7421,18 +6771,7 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ROSENBROCK4
 \end_layout
 
@@ -7444,7 +6783,8 @@ ROSENBROCK4
 \begin_layout Plain Layout
 
 \series bold
-3679
+\size footnotesize
+3679 (393)
 \end_layout
 
 \end_inset
@@ -7454,19 +6794,8 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6372
+\size footnotesize
+6372 (549)
 \end_layout
 
 \end_inset
@@ -7476,19 +6805,8 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8452
+\size footnotesize
+8452 (643)
 \end_layout
 
 \end_inset
@@ -7497,7 +6815,9 @@ ROSENBROCK4
 \begin_inset Text
 
 \begin_layout Plain Layout
-6137
+
+\size footnotesize
+6137 (720)
 \end_layout
 
 \end_inset
@@ -7507,19 +6827,8 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4019
+\size footnotesize
+4019 (324)
 \end_layout
 
 \end_inset
@@ -7531,18 +6840,7 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ROSENBROCK8
 \end_layout
 
@@ -7554,7 +6852,8 @@ ROSENBROCK8
 \begin_layout Plain Layout
 
 \series bold
-5270
+\size footnotesize
+5270 (514)
 \end_layout
 
 \end_inset
@@ -7564,19 +6863,8 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8284
+\size footnotesize
+8284 (849)
 \end_layout
 
 \end_inset
@@ -7586,19 +6874,8 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11530
+\size footnotesize
+11530 (1632)
 \end_layout
 
 \end_inset
@@ -7607,7 +6884,9 @@ ROSENBROCK8
 \begin_inset Text
 
 \begin_layout Plain Layout
-8569
+
+\size footnotesize
+8569 (872)
 \end_layout
 
 \end_inset
@@ -7617,19 +6896,8 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6801
+\size footnotesize
+6801 (633)
 \end_layout
 
 \end_inset
@@ -7641,18 +6909,7 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ROSENBROCK16
 \end_layout
 
@@ -7664,7 +6921,8 @@ ROSENBROCK16
 \begin_layout Plain Layout
 
 \series bold
-8509
+\size footnotesize
+8509 (1026)
 \end_layout
 
 \end_inset
@@ -7674,19 +6932,8 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11872
+\size footnotesize
+11872 (1018)
 \end_layout
 
 \end_inset
@@ -7696,19 +6943,8 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-17432
+\size footnotesize
+17432 (1738)
 \end_layout
 
 \end_inset
@@ -7717,7 +6953,9 @@ ROSENBROCK16
 \begin_inset Text
 
 \begin_layout Plain Layout
-11777
+
+\size footnotesize
+11777 (1268)
 \end_layout
 
 \end_inset
@@ -7727,19 +6965,8 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11996
+\size footnotesize
+11996 (1331)
 \end_layout
 
 \end_inset
@@ -7751,18 +6978,7 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SHEKEL5
 \end_layout
 
@@ -7773,19 +6989,8 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3325
+\size footnotesize
+3325 (227)
 \end_layout
 
 \end_inset
@@ -7795,19 +7000,8 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4259
+\size footnotesize
+4259 (305)
 \end_layout
 
 \end_inset
@@ -7817,19 +7011,8 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6662
+\size footnotesize
+6662 (974) 
 \end_layout
 
 \end_inset
@@ -7838,7 +7021,9 @@ SHEKEL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-3948
+
+\size footnotesize
+3948 (340)
 \end_layout
 
 \end_inset
@@ -7849,7 +7034,8 @@ SHEKEL5
 \begin_layout Plain Layout
 
 \series bold
-2495
+\size footnotesize
+2495 (310)
 \end_layout
 
 \end_inset
@@ -7861,18 +7047,7 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SHEKEL7
 \end_layout
 
@@ -7883,19 +7058,8 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3360
+\size footnotesize
+3360 (283)
 \end_layout
 
 \end_inset
@@ -7905,19 +7069,8 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4241
+\size footnotesize
+4241 (300)
 \end_layout
 
 \end_inset
@@ -7927,19 +7080,8 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6967
+\size footnotesize
+6967 (1035)
 \end_layout
 
 \end_inset
@@ -7948,7 +7090,9 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-4043
+
+\size footnotesize
+4043 (379)
 \end_layout
 
 \end_inset
@@ -7959,7 +7103,8 @@ SHEKEL7
 \begin_layout Plain Layout
 
 \series bold
-2432
+\size footnotesize
+2432 (240)
 \end_layout
 
 \end_inset
@@ -7971,18 +7116,7 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SHEKEL10
 \end_layout
 
@@ -7993,19 +7127,8 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3488
+\size footnotesize
+3488 (240)
 \end_layout
 
 \end_inset
@@ -8015,19 +7138,8 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4237
+\size footnotesize
+4237 (268)
 \end_layout
 
 \end_inset
@@ -8037,19 +7149,8 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6757
+\size footnotesize
+6757 (897)
 \end_layout
 
 \end_inset
@@ -8058,7 +7159,9 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-3932
+
+\size footnotesize
+3932 (355)
 \end_layout
 
 \end_inset
@@ -8069,7 +7172,8 @@ SHEKEL10
 \begin_layout Plain Layout
 
 \series bold
-2516
+\size footnotesize
+2516 (326)
 \end_layout
 
 \end_inset
@@ -8080,6 +7184,8 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SHUBERT2
 \end_layout
 
@@ -8089,7 +7195,9 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-3567
+
+\size footnotesize
+3567 (413)
 \end_layout
 
 \end_inset
@@ -8100,7 +7208,8 @@ SHUBERT2
 \begin_layout Plain Layout
 
 \series bold
-2123
+\size footnotesize
+2123 (188)
 \end_layout
 
 \end_inset
@@ -8109,7 +7218,9 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-3526
+
+\size footnotesize
+3526 (885)
 \end_layout
 
 \end_inset
@@ -8118,7 +7229,9 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-3622
+
+\size footnotesize
+3622 (446)
 \end_layout
 
 \end_inset
@@ -8127,7 +7240,9 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-2300
+
+\size footnotesize
+2300 (527)
 \end_layout
 
 \end_inset
@@ -8138,6 +7253,8 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SHUBERT4
 \end_layout
 
@@ -8147,7 +7264,9 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3358
+
+\size footnotesize
+3358 (380)
 \end_layout
 
 \end_inset
@@ -8158,7 +7277,8 @@ SHUBERT4
 \begin_layout Plain Layout
 
 \series bold
-1823
+\size footnotesize
+1823 (166)
 \end_layout
 
 \end_inset
@@ -8167,7 +7287,9 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3067
+
+\size footnotesize
+3067 (699)
 \end_layout
 
 \end_inset
@@ -8176,7 +7298,9 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3593
+
+\size footnotesize
+3593 (674)
 \end_layout
 
 \end_inset
@@ -8185,7 +7309,9 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-1967(0.97)
+
+\size footnotesize
+1967 (323) (0.97)
 \end_layout
 
 \end_inset
@@ -8196,6 +7322,8 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SHUBERT8
 \end_layout
 
@@ -8205,7 +7333,9 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-3569
+
+\size footnotesize
+3569 (357)
 \end_layout
 
 \end_inset
@@ -8214,7 +7344,9 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-2348
+
+\size footnotesize
+2348 (203)
 \end_layout
 
 \end_inset
@@ -8223,7 +7355,9 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-3120(0.94)
+
+\size footnotesize
+3120 (452) (0.94)
 \end_layout
 
 \end_inset
@@ -8232,7 +7366,9 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-2862
+
+\size footnotesize
+2862 (383)
 \end_layout
 
 \end_inset
@@ -8243,7 +7379,8 @@ SHUBERT8
 \begin_layout Plain Layout
 
 \series bold
-2267
+\size footnotesize
+2267 (296)
 \end_layout
 
 \end_inset
@@ -8254,6 +7391,8 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SCHAFFER
 \end_layout
 
@@ -8263,7 +7402,9 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-18787
+
+\size footnotesize
+18787 (3105)
 \end_layout
 
 \end_inset
@@ -8272,7 +7413,9 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-15176
+
+\size footnotesize
+15176 (2401)
 \end_layout
 
 \end_inset
@@ -8283,7 +7426,8 @@ SCHAFFER
 \begin_layout Plain Layout
 
 \series bold
-6315
+\size footnotesize
+6315 (1548)
 \end_layout
 
 \end_inset
@@ -8292,7 +7436,9 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-28679
+
+\size footnotesize
+28679 (6267)
 \end_layout
 
 \end_inset
@@ -8301,7 +7447,9 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-23531
+
+\size footnotesize
+23531 (5904)
 \end_layout
 
 \end_inset
@@ -8312,6 +7460,8 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SCHWEFEL221
 \end_layout
 
@@ -8321,7 +7471,9 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-2667
+
+\size footnotesize
+2667 (416)
 \end_layout
 
 \end_inset
@@ -8330,7 +7482,9 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-2529
+
+\size footnotesize
+2529 (163)
 \end_layout
 
 \end_inset
@@ -8339,7 +7493,9 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-5415
+
+\size footnotesize
+5415 (1161)
 \end_layout
 
 \end_inset
@@ -8348,7 +7504,9 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-3426
+
+\size footnotesize
+3426 (787)
 \end_layout
 
 \end_inset
@@ -8359,7 +7517,8 @@ SCHWEFEL221
 \begin_layout Plain Layout
 
 \series bold
-2203
+\size footnotesize
+2203 (478)
 \end_layout
 
 \end_inset
@@ -8370,6 +7529,8 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SCHWEFEL222
 \end_layout
 
@@ -8379,7 +7540,9 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-33725
+
+\size footnotesize
+33725 (4809)
 \end_layout
 
 \end_inset
@@ -8388,7 +7551,9 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-42898
+
+\size footnotesize
+42898 (6978)
 \end_layout
 
 \end_inset
@@ -8399,7 +7564,8 @@ SCHWEFEL222
 \begin_layout Plain Layout
 
 \series bold
-12200
+\size footnotesize
+12200 (1737)
 \end_layout
 
 \end_inset
@@ -8408,7 +7574,9 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-51654
+
+\size footnotesize
+51654 (7150)
 \end_layout
 
 \end_inset
@@ -8417,7 +7585,9 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-38876
+
+\size footnotesize
+38876 (5659)
 \end_layout
 
 \end_inset
@@ -8428,6 +7598,8 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 SPHERE
 \end_layout
 
@@ -8437,7 +7609,9 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-1588
+
+\size footnotesize
+1588 (23)
 \end_layout
 
 \end_inset
@@ -8446,7 +7620,9 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-1521
+
+\size footnotesize
+1521 (12)
 \end_layout
 
 \end_inset
@@ -8455,7 +7631,9 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-3503
+
+\size footnotesize
+3503 (199)
 \end_layout
 
 \end_inset
@@ -8464,7 +7642,9 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-1642
+
+\size footnotesize
+1642 (38)
 \end_layout
 
 \end_inset
@@ -8475,7 +7655,8 @@ SPHERE
 \begin_layout Plain Layout
 
 \series bold
-1162
+\size footnotesize
+1162 (84)
 \end_layout
 
 \end_inset
@@ -8487,18 +7668,7 @@ SPHERE
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N4
 \end_layout
 
@@ -8509,19 +7679,8 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3331
+\size footnotesize
+3331 (392)
 \end_layout
 
 \end_inset
@@ -8531,19 +7690,8 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3437
+\size footnotesize
+3437 (223)
 \end_layout
 
 \end_inset
@@ -8553,19 +7701,8 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6396
+\size footnotesize
+6396 (999)
 \end_layout
 
 \end_inset
@@ -8574,7 +7711,9 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3695
+
+\size footnotesize
+3695 (411)
 \end_layout
 
 \end_inset
@@ -8585,7 +7724,8 @@ TEST2N4
 \begin_layout Plain Layout
 
 \series bold
-2277
+\size footnotesize
+2277 (464)
 \end_layout
 
 \end_inset
@@ -8597,18 +7737,7 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N5
 \end_layout
 
@@ -8619,19 +7748,8 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4000
+\size footnotesize
+4000 (815)
 \end_layout
 
 \end_inset
@@ -8641,19 +7759,8 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3683
+\size footnotesize
+3683 (287)
 \end_layout
 
 \end_inset
@@ -8663,19 +7770,8 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6271
+\size footnotesize
+6271 (1017)
 \end_layout
 
 \end_inset
@@ -8684,7 +7780,9 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-4234
+
+\size footnotesize
+4234 (636)
 \end_layout
 
 \end_inset
@@ -8695,7 +7793,8 @@ TEST2N5
 \begin_layout Plain Layout
 
 \series bold
-2734 (0.96)
+\size footnotesize
+2734 (479) (0.96)
 \end_layout
 
 \end_inset
@@ -8707,18 +7806,7 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N6
 \end_layout
 
@@ -8729,19 +7817,8 @@ TEST2N6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4312 (0.93)
+\size footnotesize
+4312 (901) (0.93)
 \end_layout
 
 \end_inset
@@ -8751,19 +7828,8 @@ TEST2N6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3781
+\size footnotesize
+3781 (241)
 \end_layout
 
 \end_inset
@@ -8773,19 +7839,8 @@ TEST2N6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5410 (0.93)
+\size footnotesize
+5410 (822) (0.93)
 \end_layout
 
 \end_inset
@@ -8794,7 +7849,9 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-4599
+
+\size footnotesize
+4599 (589)
 \end_layout
 
 \end_inset
@@ -8805,7 +7862,8 @@ TEST2N6
 \begin_layout Plain Layout
 
 \series bold
-2905 (0.86)
+\size footnotesize
+2905 (832) (0.86)
 \end_layout
 
 \end_inset
@@ -8817,18 +7875,7 @@ TEST2N6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N7
 \end_layout
 
@@ -8839,19 +7886,8 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4775 (0.90)
+\size footnotesize
+4775 (905) (0.90)
 \end_layout
 
 \end_inset
@@ -8861,19 +7897,8 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4060
+\size footnotesize
+4060 (312)
 \end_layout
 
 \end_inset
@@ -8883,19 +7908,8 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7074 (0.97)
+\size footnotesize
+7074 (1523) (0.97)
 \end_layout
 
 \end_inset
@@ -8904,7 +7918,9 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-5146
+
+\size footnotesize
+5146 (767)
 \end_layout
 
 \end_inset
@@ -8915,7 +7931,8 @@ TEST2N7
 \begin_layout Plain Layout
 
 \series bold
-3559 (0.73)
+\size footnotesize
+3559 (763) (0.73)
 \end_layout
 
 \end_inset
@@ -8927,18 +7944,7 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SINU4
 \end_layout
 
@@ -8949,19 +7955,8 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2991
+\size footnotesize
+2991 (298)
 \end_layout
 
 \end_inset
@@ -8971,19 +7966,8 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3504
+\size footnotesize
+3504 (231)
 \end_layout
 
 \end_inset
@@ -8993,19 +7977,8 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5953
+\size footnotesize
+5953 (1509)
 \end_layout
 
 \end_inset
@@ -9014,7 +7987,9 @@ SINU4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3478
+
+\size footnotesize
+3478 (463)
 \end_layout
 
 \end_inset
@@ -9025,7 +8000,8 @@ SINU4
 \begin_layout Plain Layout
 
 \series bold
-2005
+\size footnotesize
+2005 (332)
 \end_layout
 
 \end_inset
@@ -9037,18 +8013,7 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SINU8
 \end_layout
 
@@ -9059,19 +8024,8 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3442
+\size footnotesize
+3442 (293)
 \end_layout
 
 \end_inset
@@ -9081,19 +8035,8 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4213
+\size footnotesize
+4213 (309)
 \end_layout
 
 \end_inset
@@ -9103,19 +8046,8 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6973
+\size footnotesize
+6973 (1637)
 \end_layout
 
 \end_inset
@@ -9124,7 +8056,9 @@ SINU8
 \begin_inset Text
 
 \begin_layout Plain Layout
-4420
+
+\size footnotesize
+4420 (560)
 \end_layout
 
 \end_inset
@@ -9135,7 +8069,8 @@ SINU8
 \begin_layout Plain Layout
 
 \series bold
-3158
+\size footnotesize
+3158 (467)
 \end_layout
 
 \end_inset
@@ -9147,18 +8082,7 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SINU16
 \end_layout
 
@@ -9170,7 +8094,8 @@ SINU16
 \begin_layout Plain Layout
 
 \series bold
-4320
+\size footnotesize
+4320 (458)
 \end_layout
 
 \end_inset
@@ -9180,19 +8105,8 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5019
+\size footnotesize
+5019 (312)
 \end_layout
 
 \end_inset
@@ -9202,19 +8116,8 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6979
+\size footnotesize
+6979 (634)
 \end_layout
 
 \end_inset
@@ -9223,7 +8126,9 @@ SINU16
 \begin_inset Text
 
 \begin_layout Plain Layout
-7033
+
+\size footnotesize
+7033 (1017)
 \end_layout
 
 \end_inset
@@ -9233,19 +8138,8 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5891
+\size footnotesize
+5891 (553)
 \end_layout
 
 \end_inset
@@ -9257,18 +8151,7 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST30N3
 \end_layout
 
@@ -9279,19 +8162,8 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3211
+\size footnotesize
+3211 (1207)
 \end_layout
 
 \end_inset
@@ -9301,19 +8173,8 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4610
+\size footnotesize
+4610 (1615)
 \end_layout
 
 \end_inset
@@ -9323,19 +8184,8 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6168
+\size footnotesize
+6168 (1297)
 \end_layout
 
 \end_inset
@@ -9344,7 +8194,9 @@ TEST30N3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3971
+
+\size footnotesize
+3971 (1348)
 \end_layout
 
 \end_inset
@@ -9355,7 +8207,8 @@ TEST30N3
 \begin_layout Plain Layout
 
 \series bold
-2362
+\size footnotesize
+2362 (884)
 \end_layout
 
 \end_inset
@@ -9367,18 +8220,7 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST30N4
 \end_layout
 
@@ -9389,19 +8231,8 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3679
+\size footnotesize
+3679 (1435)
 \end_layout
 
 \end_inset
@@ -9411,19 +8242,8 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4629
+\size footnotesize
+4629 (1708)
 \end_layout
 
 \end_inset
@@ -9433,19 +8253,8 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7006
+\size footnotesize
+7006 (2745)
 \end_layout
 
 \end_inset
@@ -9454,7 +8263,9 @@ TEST30N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-4908
+
+\size footnotesize
+4908 (1333)
 \end_layout
 
 \end_inset
@@ -9465,7 +8276,8 @@ TEST30N4
 \begin_layout Plain Layout
 
 \series bold
-2978
+\size footnotesize
+2978 (1719)
 \end_layout
 
 \end_inset
@@ -9476,6 +8288,8 @@ TEST30N4
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 UNEVEN_MAXIMA
 \end_layout
 
@@ -9485,7 +8299,9 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2969
+
+\size footnotesize
+2969 (283)
 \end_layout
 
 \end_inset
@@ -9494,7 +8310,9 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2729
+
+\size footnotesize
+2729 (292)
 \end_layout
 
 \end_inset
@@ -9503,7 +8321,9 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2393
+
+\size footnotesize
+2393 (319)
 \end_layout
 
 \end_inset
@@ -9512,7 +8332,9 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-2972
+
+\size footnotesize
+2972 (288)
 \end_layout
 
 \end_inset
@@ -9523,7 +8345,8 @@ UNEVEN_MAXIMA
 \begin_layout Plain Layout
 
 \series bold
-1560
+\size footnotesize
+1560 (208)
 \end_layout
 
 \end_inset
@@ -9534,6 +8357,8 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 VINCENT2
 \end_layout
 
@@ -9543,7 +8368,9 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-12779
+
+\size footnotesize
+12779 (563)
 \end_layout
 
 \end_inset
@@ -9554,7 +8381,8 @@ VINCENT2
 \begin_layout Plain Layout
 
 \series bold
-1797(0.87)
+\size footnotesize
+1797 (140) (0.87)
 \end_layout
 
 \end_inset
@@ -9563,7 +8391,9 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-6216
+
+\size footnotesize
+6216 (1152)
 \end_layout
 
 \end_inset
@@ -9572,7 +8402,9 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-2094
+
+\size footnotesize
+2094 (148)
 \end_layout
 
 \end_inset
@@ -9581,7 +8413,9 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-1834(0.90)
+
+\size footnotesize
+1834 (388) (0.90)
 \end_layout
 
 \end_inset
@@ -9592,6 +8426,8 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 VINCENT4
 \end_layout
 
@@ -9601,7 +8437,9 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-19385
+
+\size footnotesize
+19385 (1179)
 \end_layout
 
 \end_inset
@@ -9612,7 +8450,8 @@ VINCENT4
 \begin_layout Plain Layout
 
 \series bold
-1830(0.67)
+\size footnotesize
+1830 (190) (0.67)
 \end_layout
 
 \end_inset
@@ -9621,7 +8460,9 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-4691(0.83)
+
+\size footnotesize
+4691 (1019) (0.83)
 \end_layout
 
 \end_inset
@@ -9630,7 +8471,9 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2674
+
+\size footnotesize
+2674 (244)
 \end_layout
 
 \end_inset
@@ -9639,7 +8482,9 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2697(0.64)
+
+\size footnotesize
+2697 (1443) (0.64)
 \end_layout
 
 \end_inset
@@ -9650,6 +8495,8 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size tiny
 VINCENT8
 \end_layout
 
@@ -9659,7 +8506,9 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-19882
+
+\size footnotesize
+19882 (2548)
 \end_layout
 
 \end_inset
@@ -9670,7 +8519,8 @@ VINCENT8
 \begin_layout Plain Layout
 
 \series bold
-2717
+\size footnotesize
+2717 (256)
 \end_layout
 
 \end_inset
@@ -9679,7 +8529,9 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-4417(0.77)
+
+\size footnotesize
+4417 (1118) (0.77)
 \end_layout
 
 \end_inset
@@ -9688,7 +8540,9 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-3423
+
+\size footnotesize
+3423 (358)
 \end_layout
 
 \end_inset
@@ -9697,7 +8551,9 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-4368(0.77)
+
+\size footnotesize
+4368 (2253) (0.77)
 \end_layout
 
 \end_inset
@@ -9710,6 +8566,7 @@ VINCENT8
 \begin_layout Plain Layout
 
 \series bold
+\size tiny
 SUM
 \end_layout
 
@@ -9721,6 +8578,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 297650
 \end_layout
 
@@ -9732,6 +8590,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 268654
 \end_layout
 
@@ -9743,6 +8602,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 288413
 \end_layout
 
@@ -9754,6 +8614,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 320469
 \end_layout
 
@@ -9765,6 +8626,7 @@ SUM
 \begin_layout Plain Layout
 
 \series bold
+\size footnotesize
 231856
 \end_layout
 
@@ -9813,7 +8675,7 @@ s.
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -9915,7 +8777,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -10119,7 +8981,9 @@ status open
 
 \begin_layout Plain Layout
 A series of sampling techniques is used in the proposed method.
- Numbers in cells denote average function calls.
+  The numbers in parentheses denote standard deviation for the number of
+ function calls.
+ 
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:sampling"
@@ -10215,7 +9079,7 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-6118
+6118 (736)
 \end_layout
 
 \end_inset
@@ -10224,7 +9088,7 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-5912
+5912 (741)
 \end_layout
 
 \end_inset
@@ -10233,7 +9097,7 @@ ACKLEY
 \begin_inset Text
 
 \begin_layout Plain Layout
-5986
+5986 (845)
 \end_layout
 
 \end_inset
@@ -10244,7 +9108,7 @@ ACKLEY
 \begin_layout Plain Layout
 
 \series bold
-4199
+4199 (768)
 \end_layout
 
 \end_inset
@@ -10264,7 +9128,7 @@ BF1
 \begin_inset Text
 
 \begin_layout Plain Layout
-4513
+4513 (423)
 \end_layout
 
 \end_inset
@@ -10286,7 +9150,7 @@ BF1
 \uwave off
 \noun off
 \color none
-4318
+4318 (368)
 \end_layout
 
 \end_inset
@@ -10308,7 +9172,7 @@ BF1
 \uwave off
 \noun off
 \color none
-4055
+4055 (346)
 \end_layout
 
 \end_inset
@@ -10319,7 +9183,7 @@ BF1
 \begin_layout Plain Layout
 
 \series bold
-3228
+3228 (356)
 \end_layout
 
 \end_inset
@@ -10339,7 +9203,7 @@ BF2
 \begin_inset Text
 
 \begin_layout Plain Layout
-3959
+3959 (333)
 \end_layout
 
 \end_inset
@@ -10361,7 +9225,7 @@ BF2
 \uwave off
 \noun off
 \color none
-3879
+3879 (363)
 \end_layout
 
 \end_inset
@@ -10383,7 +9247,7 @@ BF2
 \uwave off
 \noun off
 \color none
-3587
+3587 (339)
 \end_layout
 
 \end_inset
@@ -10394,7 +9258,7 @@ BF2
 \begin_layout Plain Layout
 
 \series bold
-2815
+2815 (310)
 \end_layout
 
 \end_inset
@@ -10414,7 +9278,7 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3506
+3506 (286)
 \end_layout
 
 \end_inset
@@ -10423,7 +9287,7 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3344
+3344 (254)
 \end_layout
 
 \end_inset
@@ -10432,7 +9296,7 @@ BF3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3129
+3129 (298)
 \end_layout
 
 \end_inset
@@ -10443,7 +9307,7 @@ BF3
 \begin_layout Plain Layout
 
 \series bold
-2501
+2501 (218)
 \end_layout
 
 \end_inset
@@ -10463,7 +9327,7 @@ BRANIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2282
+2282 (162)
 \end_layout
 
 \end_inset
@@ -10485,7 +9349,7 @@ BRANIN
 \uwave off
 \noun off
 \color none
-2131
+2131 (174)
 \end_layout
 
 \end_inset
@@ -10507,7 +9371,7 @@ BRANIN
 \uwave off
 \noun off
 \color none
-2066
+2066 (167)
 \end_layout
 
 \end_inset
@@ -10518,7 +9382,7 @@ BRANIN
 \begin_layout Plain Layout
 
 \series bold
-1684
+1684 (180)
 \end_layout
 
 \end_inset
@@ -10538,7 +9402,7 @@ CAMEL
 \begin_inset Text
 
 \begin_layout Plain Layout
-3156
+3156 (251)
 \end_layout
 
 \end_inset
@@ -10560,7 +9424,7 @@ CAMEL
 \uwave off
 \noun off
 \color none
-2919
+2919 (244)
 \end_layout
 
 \end_inset
@@ -10582,7 +9446,7 @@ CAMEL
 \uwave off
 \noun off
 \color none
-2848
+2848 (261)
 \end_layout
 
 \end_inset
@@ -10593,7 +9457,7 @@ CAMEL
 \begin_layout Plain Layout
 
 \series bold
-2262
+2262 (295)
 \end_layout
 
 \end_inset
@@ -10613,7 +9477,7 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
-1756
+1756 (138)
 \end_layout
 
 \end_inset
@@ -10635,7 +9499,7 @@ EASOM
 \uwave off
 \noun off
 \color none
-1650
+1650 (140)
 \end_layout
 
 \end_inset
@@ -10646,7 +9510,7 @@ EASOM
 \begin_layout Plain Layout
 
 \series bold
-1321
+1321 (106)
 \end_layout
 
 \end_inset
@@ -10655,7 +9519,7 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
-1334
+1334 (133)
 \end_layout
 
 \end_inset
@@ -10675,7 +9539,7 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1445
+1445 (130)
 \end_layout
 
 \end_inset
@@ -10684,7 +9548,7 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1293
+1293 (115)
 \end_layout
 
 \end_inset
@@ -10695,7 +9559,7 @@ EQUAL_MAXIMA
 \begin_layout Plain Layout
 
 \series bold
-1165
+1165 (139)
 \end_layout
 
 \end_inset
@@ -10704,7 +9568,7 @@ EQUAL_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1286
+1286 (121)
 \end_layout
 
 \end_inset
@@ -10724,7 +9588,7 @@ EXP4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3438
+3438 (335)
 \end_layout
 
 \end_inset
@@ -10746,7 +9610,7 @@ EXP4
 \uwave off
 \noun off
 \color none
-3273
+3273 (232)
 \end_layout
 
 \end_inset
@@ -10768,7 +9632,7 @@ EXP4
 \uwave off
 \noun off
 \color none
-3194
+3194 (330)
 \end_layout
 
 \end_inset
@@ -10779,7 +9643,7 @@ EXP4
 \begin_layout Plain Layout
 
 \series bold
-2166
+2166 (243)
 \end_layout
 
 \end_inset
@@ -10799,7 +9663,7 @@ EXP8
 \begin_inset Text
 
 \begin_layout Plain Layout
-3432
+3432 (284)
 \end_layout
 
 \end_inset
@@ -10821,7 +9685,7 @@ EXP8
 \uwave off
 \noun off
 \color none
-3387
+3387 (332)
 \end_layout
 
 \end_inset
@@ -10843,7 +9707,7 @@ EXP8
 \uwave off
 \noun off
 \color none
-3152
+3152 (266)
 \end_layout
 
 \end_inset
@@ -10854,7 +9718,7 @@ EXP8
 \begin_layout Plain Layout
 
 \series bold
-2802
+2802 (304)
 \end_layout
 
 \end_inset
@@ -10874,7 +9738,7 @@ EXP16
 \begin_inset Text
 
 \begin_layout Plain Layout
-3369
+3369 (349)
 \end_layout
 
 \end_inset
@@ -10896,7 +9760,7 @@ EXP16
 \uwave off
 \noun off
 \color none
-3326
+3326 (329)
 \end_layout
 
 \end_inset
@@ -10918,7 +9782,7 @@ EXP16
 \uwave off
 \noun off
 \color none
-3291
+3291 (224)
 \end_layout
 
 \end_inset
@@ -10929,7 +9793,7 @@ EXP16
 \begin_layout Plain Layout
 
 \series bold
-3279
+3279 (416)
 \end_layout
 
 \end_inset
@@ -10951,7 +9815,7 @@ EXP32
 \begin_layout Plain Layout
 
 \series bold
-3216
+3216 (274)
 \end_layout
 
 \end_inset
@@ -10973,7 +9837,7 @@ EXP32
 \uwave off
 \noun off
 \color none
-3225
+3225 (207)
 \end_layout
 
 \end_inset
@@ -10995,7 +9859,7 @@ EXP32
 \uwave off
 \noun off
 \color none
-3344
+3344 (374)
 \end_layout
 
 \end_inset
@@ -11004,7 +9868,7 @@ EXP32
 \begin_inset Text
 
 \begin_layout Plain Layout
-3430
+3430 (401)
 \end_layout
 
 \end_inset
@@ -11024,7 +9888,7 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-4304
+4304 (683)
 \end_layout
 
 \end_inset
@@ -11033,7 +9897,7 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-3913
+3913 (596)
 \end_layout
 
 \end_inset
@@ -11042,7 +9906,7 @@ EXTENDEDF10
 \begin_inset Text
 
 \begin_layout Plain Layout
-3718
+3718 (673)
 \end_layout
 
 \end_inset
@@ -11053,7 +9917,7 @@ EXTENDEDF10
 \begin_layout Plain Layout
 
 \series bold
-2609
+2609 (321)
 \end_layout
 
 \end_inset
@@ -11073,7 +9937,7 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4685
+4685 (427)
 \end_layout
 
 \end_inset
@@ -11082,7 +9946,7 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4330
+4330 (474)
 \end_layout
 
 \end_inset
@@ -11091,7 +9955,7 @@ FIVE_UNEVEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4358
+4358 (544)
 \end_layout
 
 \end_inset
@@ -11102,7 +9966,7 @@ FIVE_UNEVEN
 \begin_layout Plain Layout
 
 \series bold
-3849
+3849 (388)
 \end_layout
 
 \end_inset
@@ -11122,7 +9986,7 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-1958
+1958 (168)
 \end_layout
 
 \end_inset
@@ -11131,7 +9995,7 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-1681
+1681 (188)
 \end_layout
 
 \end_inset
@@ -11140,7 +10004,7 @@ F9
 \begin_inset Text
 
 \begin_layout Plain Layout
-1878
+1878 (186)
 \end_layout
 
 \end_inset
@@ -11151,7 +10015,7 @@ F9
 \begin_layout Plain Layout
 
 \series bold
-1439
+1439 (229)
 \end_layout
 
 \end_inset
@@ -11171,7 +10035,7 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-7552
+7552 (1377)
 \end_layout
 
 \end_inset
@@ -11180,7 +10044,7 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-7573
+7573 (2049)
 \end_layout
 
 \end_inset
@@ -11189,7 +10053,7 @@ F14
 \begin_inset Text
 
 \begin_layout Plain Layout
-6148
+6148 (724)
 \end_layout
 
 \end_inset
@@ -11200,7 +10064,7 @@ F14
 \begin_layout Plain Layout
 
 \series bold
-6063
+6063 (1835)
 \end_layout
 
 \end_inset
@@ -11220,7 +10084,7 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-6806
+6806 (1065)
 \end_layout
 
 \end_inset
@@ -11229,7 +10093,7 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-6466
+6466 (722)
 \end_layout
 
 \end_inset
@@ -11238,7 +10102,7 @@ F15
 \begin_inset Text
 
 \begin_layout Plain Layout
-6543
+6543 (974)
 \end_layout
 
 \end_inset
@@ -11249,7 +10113,7 @@ F15
 \begin_layout Plain Layout
 
 \series bold
-4397
+4397 (1031)
 \end_layout
 
 \end_inset
@@ -11269,7 +10133,7 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-3805
+3805 (326)
 \end_layout
 
 \end_inset
@@ -11278,7 +10142,7 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-3700
+3700 (404)
 \end_layout
 
 \end_inset
@@ -11287,7 +10151,7 @@ F17
 \begin_inset Text
 
 \begin_layout Plain Layout
-3543
+3543 (236)
 \end_layout
 
 \end_inset
@@ -11298,7 +10162,7 @@ F17
 \begin_layout Plain Layout
 
 \series bold
-2766
+2766 (368)
 \end_layout
 
 \end_inset
@@ -11318,7 +10182,7 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-1333
+1333 (91)
 \end_layout
 
 \end_inset
@@ -11327,7 +10191,7 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-1173
+1173 (72)
 \end_layout
 
 \end_inset
@@ -11338,7 +10202,7 @@ HIMMELBLAU
 \begin_layout Plain Layout
 
 \series bold
-1114
+1114 (102)
 \end_layout
 
 \end_inset
@@ -11347,7 +10211,7 @@ HIMMELBLAU
 \begin_inset Text
 
 \begin_layout Plain Layout
-1119
+1119 (81)
 \end_layout
 
 \end_inset
@@ -11367,7 +10231,7 @@ GKLS250
 \begin_inset Text
 
 \begin_layout Plain Layout
-2268
+2268 (177)
 \end_layout
 
 \end_inset
@@ -11389,7 +10253,7 @@ GKLS250
 \uwave off
 \noun off
 \color none
-2023
+2023 (170)
 \end_layout
 
 \end_inset
@@ -11411,7 +10275,7 @@ GKLS250
 \uwave off
 \noun off
 \color none
-1778
+1778 (208)
 \end_layout
 
 \end_inset
@@ -11422,7 +10286,7 @@ GKLS250
 \begin_layout Plain Layout
 
 \series bold
-1603
+1603 (150)
 \end_layout
 
 \end_inset
@@ -11442,7 +10306,7 @@ GKLS350
 \begin_inset Text
 
 \begin_layout Plain Layout
-2151
+2151 (291)
 \end_layout
 
 \end_inset
@@ -11464,7 +10328,7 @@ GKLS350
 \uwave off
 \noun off
 \color none
-1841
+1841 (190)
 \end_layout
 
 \end_inset
@@ -11486,7 +10350,7 @@ GKLS350
 \uwave off
 \noun off
 \color none
-2069
+2069 (893)
 \end_layout
 
 \end_inset
@@ -11497,7 +10361,7 @@ GKLS350
 \begin_layout Plain Layout
 
 \series bold
-1298
+1298 (178)
 \end_layout
 
 \end_inset
@@ -11517,7 +10381,7 @@ GOLDSTEIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3855
+3855 (291)
 \end_layout
 
 \end_inset
@@ -11539,7 +10403,7 @@ GOLDSTEIN
 \uwave off
 \noun off
 \color none
-3731
+3731 (335)
 \end_layout
 
 \end_inset
@@ -11561,7 +10425,7 @@ GOLDSTEIN
 \uwave off
 \noun off
 \color none
-3530
+3530 (309)
 \end_layout
 
 \end_inset
@@ -11572,7 +10436,7 @@ GOLDSTEIN
 \begin_layout Plain Layout
 
 \series bold
-2784
+2784 (290)
 \end_layout
 
 \end_inset
@@ -11592,7 +10456,7 @@ GRIEWANK2
 \begin_inset Text
 
 \begin_layout Plain Layout
-4310
+4310 (1205)
 \end_layout
 
 \end_inset
@@ -11614,7 +10478,7 @@ GRIEWANK2
 \uwave off
 \noun off
 \color none
-4510
+4510 (1310)
 \end_layout
 
 \end_inset
@@ -11636,7 +10500,7 @@ GRIEWANK2
 \uwave off
 \noun off
 \color none
-4035
+4035 (995)
 \end_layout
 
 \end_inset
@@ -11647,7 +10511,7 @@ GRIEWANK2
 \begin_layout Plain Layout
 
 \series bold
-2589
+2589 (532)
 \end_layout
 
 \end_inset
@@ -11667,7 +10531,7 @@ GRIEWANK10
 \begin_inset Text
 
 \begin_layout Plain Layout
-8640
+8640 (1106)
 \end_layout
 
 \end_inset
@@ -11689,7 +10553,7 @@ GRIEWANK10
 \uwave off
 \noun off
 \color none
-8773
+8773 (1265)
 \end_layout
 
 \end_inset
@@ -11711,7 +10575,7 @@ GRIEWANK10
 \uwave off
 \noun off
 \color none
-8232
+8232 (911)
 \end_layout
 
 \end_inset
@@ -11722,7 +10586,7 @@ GRIEWANK10
 \begin_layout Plain Layout
 
 \series bold
-7435
+7435 (900)
 \end_layout
 
 \end_inset
@@ -11742,7 +10606,7 @@ HANSEN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3329
+3329 (653)
 \end_layout
 
 \end_inset
@@ -11764,7 +10628,7 @@ HANSEN
 \uwave off
 \noun off
 \color none
-3071
+3071 (466)
 \end_layout
 
 \end_inset
@@ -11786,7 +10650,7 @@ HANSEN
 \uwave off
 \noun off
 \color none
-2734
+2734 (521)
 \end_layout
 
 \end_inset
@@ -11797,7 +10661,7 @@ HANSEN
 \begin_layout Plain Layout
 
 \series bold
-2484
+2484 (417)
 \end_layout
 
 \end_inset
@@ -11817,7 +10681,7 @@ HARTMAN3
 \begin_inset Text
 
 \begin_layout Plain Layout
-2849
+2849 (240)
 \end_layout
 
 \end_inset
@@ -11839,7 +10703,7 @@ HARTMAN3
 \uwave off
 \noun off
 \color none
-2673
+2673 (246)
 \end_layout
 
 \end_inset
@@ -11861,7 +10725,7 @@ HARTMAN3
 \uwave off
 \noun off
 \color none
-2678
+2678 (317)
 \end_layout
 
 \end_inset
@@ -11872,7 +10736,7 @@ HARTMAN3
 \begin_layout Plain Layout
 
 \series bold
-1793
+1793 (231)
 \end_layout
 
 \end_inset
@@ -11892,7 +10756,7 @@ HARTMAN6
 \begin_inset Text
 
 \begin_layout Plain Layout
-3456
+3456 (344)
 \end_layout
 
 \end_inset
@@ -11914,7 +10778,7 @@ HARTMAN6
 \uwave off
 \noun off
 \color none
-3249
+3249 (330)
 \end_layout
 
 \end_inset
@@ -11936,7 +10800,7 @@ HARTMAN6
 \uwave off
 \noun off
 \color none
-3119
+3119 (299)
 \end_layout
 
 \end_inset
@@ -11947,7 +10811,7 @@ HARTMAN6
 \begin_layout Plain Layout
 
 \series bold
-2478
+2478 (282)
 \end_layout
 
 \end_inset
@@ -11967,7 +10831,7 @@ POTENTIAL3
 \begin_inset Text
 
 \begin_layout Plain Layout
-4554
+4554 (511)
 \end_layout
 
 \end_inset
@@ -11989,7 +10853,7 @@ POTENTIAL3
 \uwave off
 \noun off
 \color none
-5095
+5095 (469)
 \end_layout
 
 \end_inset
@@ -12000,7 +10864,7 @@ POTENTIAL3
 \begin_layout Plain Layout
 
 \series bold
-3928
+3928 (509)
 \end_layout
 
 \end_inset
@@ -12009,7 +10873,7 @@ POTENTIAL3
 \begin_inset Text
 
 \begin_layout Plain Layout
-4081
+4081 (391)
 \end_layout
 
 \end_inset
@@ -12029,7 +10893,7 @@ POTENTIAL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-8356
+8356 (702)
 \end_layout
 
 \end_inset
@@ -12051,7 +10915,7 @@ POTENTIAL5
 \uwave off
 \noun off
 \color none
-10032
+10032 (1078)
 \end_layout
 
 \end_inset
@@ -12062,7 +10926,7 @@ POTENTIAL5
 \begin_layout Plain Layout
 
 \series bold
-7504
+7504 (996)
 \end_layout
 
 \end_inset
@@ -12071,7 +10935,7 @@ POTENTIAL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-8886
+8886 (1146)
 \end_layout
 
 \end_inset
@@ -12091,7 +10955,7 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3310
+3310 (414)
 \end_layout
 
 \end_inset
@@ -12113,7 +10977,7 @@ RASTRIGIN
 \uwave off
 \noun off
 \color none
-3187
+3187 (336)
 \end_layout
 
 \end_inset
@@ -12135,7 +10999,7 @@ RASTRIGIN
 \uwave off
 \noun off
 \color none
-2751
+2751 (600)
 \end_layout
 
 \end_inset
@@ -12146,7 +11010,7 @@ RASTRIGIN
 \begin_layout Plain Layout
 
 \series bold
-2304
+2304 (302)
 \end_layout
 
 \end_inset
@@ -12166,7 +11030,7 @@ ROSENBROCK4
 \begin_inset Text
 
 \begin_layout Plain Layout
-6566
+6566 (719)
 \end_layout
 
 \end_inset
@@ -12188,7 +11052,7 @@ ROSENBROCK4
 \uwave off
 \noun off
 \color none
-6353
+6353 (742)
 \end_layout
 
 \end_inset
@@ -12210,7 +11074,7 @@ ROSENBROCK4
 \uwave off
 \noun off
 \color none
-5588
+5588 (599)
 \end_layout
 
 \end_inset
@@ -12221,7 +11085,7 @@ ROSENBROCK4
 \begin_layout Plain Layout
 
 \series bold
-4019
+4019 (324)
 \end_layout
 
 \end_inset
@@ -12241,7 +11105,7 @@ ROSENBROCK8
 \begin_inset Text
 
 \begin_layout Plain Layout
-8379
+8379 (864)
 \end_layout
 
 \end_inset
@@ -12263,7 +11127,7 @@ ROSENBROCK8
 \uwave off
 \noun off
 \color none
-8717
+8717 (882)
 \end_layout
 
 \end_inset
@@ -12285,7 +11149,7 @@ ROSENBROCK8
 \uwave off
 \noun off
 \color none
-7783
+7783 (782)
 \end_layout
 
 \end_inset
@@ -12296,7 +11160,7 @@ ROSENBROCK8
 \begin_layout Plain Layout
 
 \series bold
-6801
+6801 (633)
 \end_layout
 
 \end_inset
@@ -12316,7 +11180,7 @@ ROSENBROCK16
 \begin_inset Text
 
 \begin_layout Plain Layout
-11921
+11921 (1389)
 \end_layout
 
 \end_inset
@@ -12338,7 +11202,7 @@ ROSENBROCK16
 \uwave off
 \noun off
 \color none
-12471
+12471 (1025)
 \end_layout
 
 \end_inset
@@ -12349,7 +11213,7 @@ ROSENBROCK16
 \begin_layout Plain Layout
 
 \series bold
-11677
+11677 (1212)
 \end_layout
 
 \end_inset
@@ -12358,7 +11222,7 @@ ROSENBROCK16
 \begin_inset Text
 
 \begin_layout Plain Layout
-11996
+11996 (1331)
 \end_layout
 
 \end_inset
@@ -12378,7 +11242,7 @@ SHEKEL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-3946
+3946 (333)
 \end_layout
 
 \end_inset
@@ -12400,7 +11264,7 @@ SHEKEL5
 \uwave off
 \noun off
 \color none
-3731
+3731 (398)
 \end_layout
 
 \end_inset
@@ -12422,7 +11286,7 @@ SHEKEL5
 \uwave off
 \noun off
 \color none
-3859
+3859 (460)
 \end_layout
 
 \end_inset
@@ -12433,7 +11297,7 @@ SHEKEL5
 \begin_layout Plain Layout
 
 \series bold
-2495
+2495 (310)
 \end_layout
 
 \end_inset
@@ -12453,7 +11317,7 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-3990
+3990 (361)
 \end_layout
 
 \end_inset
@@ -12475,7 +11339,7 @@ SHEKEL7
 \uwave off
 \noun off
 \color none
-3646
+3646 (442)
 \end_layout
 
 \end_inset
@@ -12497,7 +11361,7 @@ SHEKEL7
 \uwave off
 \noun off
 \color none
-3944
+3944 (326)
 \end_layout
 
 \end_inset
@@ -12508,7 +11372,7 @@ SHEKEL7
 \begin_layout Plain Layout
 
 \series bold
-2432
+2432 (240)
 \end_layout
 
 \end_inset
@@ -12528,7 +11392,7 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-3836
+3836 (316)
 \end_layout
 
 \end_inset
@@ -12550,7 +11414,7 @@ SHEKEL10
 \uwave off
 \noun off
 \color none
-3630
+3630 (385)
 \end_layout
 
 \end_inset
@@ -12572,7 +11436,7 @@ SHEKEL10
 \uwave off
 \noun off
 \color none
-3694
+3694 (379)
 \end_layout
 
 \end_inset
@@ -12583,7 +11447,7 @@ SHEKEL10
 \begin_layout Plain Layout
 
 \series bold
-2516
+2516 (326)
 \end_layout
 
 \end_inset
@@ -12603,7 +11467,7 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-3288
+3288 (562)
 \end_layout
 
 \end_inset
@@ -12612,7 +11476,7 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-3212
+3212 (728)
 \end_layout
 
 \end_inset
@@ -12621,7 +11485,7 @@ SHUBERT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-2631
+2631 (373)
 \end_layout
 
 \end_inset
@@ -12632,7 +11496,7 @@ SHUBERT2
 \begin_layout Plain Layout
 
 \series bold
-2300
+2300 (527)
 \end_layout
 
 \end_inset
@@ -12652,7 +11516,7 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3116
+3116 (548)
 \end_layout
 
 \end_inset
@@ -12661,7 +11525,7 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2919
+2919 (514)
 \end_layout
 
 \end_inset
@@ -12670,7 +11534,7 @@ SHUBERT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2499
+2499 (422)
 \end_layout
 
 \end_inset
@@ -12681,7 +11545,7 @@ SHUBERT4
 \begin_layout Plain Layout
 
 \series bold
-1967
+1967 (323)
 \end_layout
 
 \end_inset
@@ -12701,7 +11565,7 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-2815
+2815 (500)
 \end_layout
 
 \end_inset
@@ -12710,7 +11574,7 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-2810
+2810 (513)
 \end_layout
 
 \end_inset
@@ -12719,7 +11583,7 @@ SHUBERT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-2337
+2337 (296)
 \end_layout
 
 \end_inset
@@ -12730,7 +11594,7 @@ SHUBERT8
 \begin_layout Plain Layout
 
 \series bold
-2267
+2267 (296)
 \end_layout
 
 \end_inset
@@ -12750,7 +11614,7 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-55131
+55131 (10062)
 \end_layout
 
 \end_inset
@@ -12759,7 +11623,7 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-40715
+40715 (9866)
 \end_layout
 
 \end_inset
@@ -12768,7 +11632,7 @@ SCHAFFER
 \begin_inset Text
 
 \begin_layout Plain Layout
-60717
+60717 (9950)
 \end_layout
 
 \end_inset
@@ -12779,7 +11643,7 @@ SCHAFFER
 \begin_layout Plain Layout
 
 \series bold
-23531
+23531 (5904)
 \end_layout
 
 \end_inset
@@ -12799,7 +11663,7 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-2724
+2724 (406)
 \end_layout
 
 \end_inset
@@ -12808,7 +11672,7 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-2901
+2901 (547)
 \end_layout
 
 \end_inset
@@ -12817,7 +11681,7 @@ SCHWEFEL221
 \begin_inset Text
 
 \begin_layout Plain Layout
-2799
+2799 (505)
 \end_layout
 
 \end_inset
@@ -12828,7 +11692,7 @@ SCHWEFEL221
 \begin_layout Plain Layout
 
 \series bold
-2203
+2203 (478)
 \end_layout
 
 \end_inset
@@ -12848,7 +11712,7 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-53118
+53118 (7011)
 \end_layout
 
 \end_inset
@@ -12857,7 +11721,7 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-54593
+54593 (8763)
 \end_layout
 
 \end_inset
@@ -12866,7 +11730,7 @@ SCHWEFEL222
 \begin_inset Text
 
 \begin_layout Plain Layout
-55354
+55354 (7330)
 \end_layout
 
 \end_inset
@@ -12877,7 +11741,7 @@ SCHWEFEL222
 \begin_layout Plain Layout
 
 \series bold
-38876
+38876 (5659)
 \end_layout
 
 \end_inset
@@ -12897,7 +11761,7 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-1346
+1346 (68)
 \end_layout
 
 \end_inset
@@ -12906,7 +11770,7 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-1188
+1188 (72)
 \end_layout
 
 \end_inset
@@ -12917,7 +11781,7 @@ SPHERE
 \begin_layout Plain Layout
 
 \series bold
-1084
+1084 (82)
 \end_layout
 
 \end_inset
@@ -12926,7 +11790,7 @@ SPHERE
 \begin_inset Text
 
 \begin_layout Plain Layout
-1162
+1162 (84)
 \end_layout
 
 \end_inset
@@ -12946,7 +11810,7 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3345
+3345 (416)
 \end_layout
 
 \end_inset
@@ -12968,7 +11832,7 @@ TEST2N4
 \uwave off
 \noun off
 \color none
-3233
+3233 (401)
 \end_layout
 
 \end_inset
@@ -12990,7 +11854,7 @@ TEST2N4
 \uwave off
 \noun off
 \color none
-2867
+2867 (253)
 \end_layout
 
 \end_inset
@@ -13001,7 +11865,7 @@ TEST2N4
 \begin_layout Plain Layout
 
 \series bold
-2277
+2277 (464)
 \end_layout
 
 \end_inset
@@ -13021,7 +11885,7 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-3937
+3937 (757)
 \end_layout
 
 \end_inset
@@ -13043,7 +11907,7 @@ TEST2N5
 \uwave off
 \noun off
 \color none
-3742
+3742 (584)
 \end_layout
 
 \end_inset
@@ -13065,7 +11929,7 @@ TEST2N5
 \uwave off
 \noun off
 \color none
-3094
+3094 (278)
 \end_layout
 
 \end_inset
@@ -13076,7 +11940,7 @@ TEST2N5
 \begin_layout Plain Layout
 
 \series bold
-2734
+2734 (479)
 \end_layout
 
 \end_inset
@@ -13096,7 +11960,7 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-4008
+4008 (718)
 \end_layout
 
 \end_inset
@@ -13118,7 +11982,7 @@ TEST2N6
 \uwave off
 \noun off
 \color none
-4473
+4473 (1060)
 \end_layout
 
 \end_inset
@@ -13140,7 +12004,7 @@ TEST2N6
 \uwave off
 \noun off
 \color none
-3266
+3266 (297)
 \end_layout
 
 \end_inset
@@ -13151,7 +12015,7 @@ TEST2N6
 \begin_layout Plain Layout
 
 \series bold
-2905
+2905 (832)
 \end_layout
 
 \end_inset
@@ -13171,7 +12035,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-4545
+4545 (1169)
 \end_layout
 
 \end_inset
@@ -13193,7 +12057,7 @@ TEST2N7
 \uwave off
 \noun off
 \color none
-4612
+4612 (1046)
 \end_layout
 
 \end_inset
@@ -13204,7 +12068,7 @@ TEST2N7
 \begin_layout Plain Layout
 
 \series bold
-3549
+3549 (421)
 \end_layout
 
 \end_inset
@@ -13213,7 +12077,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-3559
+3559 (763)
 \end_layout
 
 \end_inset
@@ -13233,7 +12097,7 @@ SINU4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3128
+3128 (410)
 \end_layout
 
 \end_inset
@@ -13255,7 +12119,7 @@ SINU4
 \uwave off
 \noun off
 \color none
-2879
+2879 (240)
 \end_layout
 
 \end_inset
@@ -13277,7 +12141,7 @@ SINU4
 \uwave off
 \noun off
 \color none
-3559
+3559 (750)
 \end_layout
 
 \end_inset
@@ -13288,7 +12152,7 @@ SINU4
 \begin_layout Plain Layout
 
 \series bold
-2005
+2005 (332)
 \end_layout
 
 \end_inset
@@ -13308,7 +12172,7 @@ SINU8
 \begin_inset Text
 
 \begin_layout Plain Layout
-4126
+4126 (339)
 \end_layout
 
 \end_inset
@@ -13330,7 +12194,7 @@ SINU8
 \uwave off
 \noun off
 \color none
-3767
+3767 (410)
 \end_layout
 
 \end_inset
@@ -13352,7 +12216,7 @@ SINU8
 \uwave off
 \noun off
 \color none
-5637
+5637 (964)
 \end_layout
 
 \end_inset
@@ -13363,7 +12227,7 @@ SINU8
 \begin_layout Plain Layout
 
 \series bold
-3158
+3158 (467)
 \end_layout
 
 \end_inset
@@ -13383,7 +12247,7 @@ SINU16
 \begin_inset Text
 
 \begin_layout Plain Layout
-6774
+6774 (1166)
 \end_layout
 
 \end_inset
@@ -13405,7 +12269,7 @@ SINU16
 \uwave off
 \noun off
 \color none
-5977
+5977 (601)
 \end_layout
 
 \end_inset
@@ -13427,7 +12291,7 @@ SINU16
 \uwave off
 \noun off
 \color none
-7739
+7739 (1791)
 \end_layout
 
 \end_inset
@@ -13438,7 +12302,7 @@ SINU16
 \begin_layout Plain Layout
 
 \series bold
-5891
+5891 (553)
 \end_layout
 
 \end_inset
@@ -13458,7 +12322,7 @@ TEST30N3
 \begin_inset Text
 
 \begin_layout Plain Layout
-3704
+3704 (1289)
 \end_layout
 
 \end_inset
@@ -13480,7 +12344,7 @@ TEST30N3
 \uwave off
 \noun off
 \color none
-3384
+3384 (1083)
 \end_layout
 
 \end_inset
@@ -13502,7 +12366,7 @@ TEST30N3
 \uwave off
 \noun off
 \color none
-3175
+3175 (1012)
 \end_layout
 
 \end_inset
@@ -13513,7 +12377,7 @@ TEST30N3
 \begin_layout Plain Layout
 
 \series bold
-2362
+2362 (884)
 \end_layout
 
 \end_inset
@@ -13533,7 +12397,7 @@ TEST30N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-4262
+4262 (1805)
 \end_layout
 
 \end_inset
@@ -13555,7 +12419,7 @@ TEST30N4
 \uwave off
 \noun off
 \color none
-4327
+4327 (1838)
 \end_layout
 
 \end_inset
@@ -13577,7 +12441,7 @@ TEST30N4
 \uwave off
 \noun off
 \color none
-3491
+3491 (920)
 \end_layout
 
 \end_inset
@@ -13588,7 +12452,7 @@ TEST30N4
 \begin_layout Plain Layout
 
 \series bold
-2978
+2978 (1719)
 \end_layout
 
 \end_inset
@@ -13608,7 +12472,7 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1877
+1877 (236)
 \end_layout
 
 \end_inset
@@ -13617,7 +12481,7 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1810
+1810 (239)
 \end_layout
 
 \end_inset
@@ -13626,7 +12490,7 @@ UNEVEN_MAXIMA
 \begin_inset Text
 
 \begin_layout Plain Layout
-1666
+1666 (189)
 \end_layout
 
 \end_inset
@@ -13637,7 +12501,7 @@ UNEVEN_MAXIMA
 \begin_layout Plain Layout
 
 \series bold
-1560
+1560 (208)
 \end_layout
 
 \end_inset
@@ -13657,7 +12521,7 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-1598
+1598 (119)
 \end_layout
 
 \end_inset
@@ -13668,7 +12532,7 @@ VINCENT2
 \begin_layout Plain Layout
 
 \series bold
-1482
+1482 (133)
 \end_layout
 
 \end_inset
@@ -13677,7 +12541,7 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-1849
+1849 (121)
 \end_layout
 
 \end_inset
@@ -13686,7 +12550,7 @@ VINCENT2
 \begin_inset Text
 
 \begin_layout Plain Layout
-1834
+1834 (388)
 \end_layout
 
 \end_inset
@@ -13706,7 +12570,7 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2471
+2471 (229)
 \end_layout
 
 \end_inset
@@ -13717,7 +12581,7 @@ VINCENT4
 \begin_layout Plain Layout
 
 \series bold
-2282
+2282 (167)
 \end_layout
 
 \end_inset
@@ -13726,7 +12590,7 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2296
+2296 (206)
 \end_layout
 
 \end_inset
@@ -13735,7 +12599,7 @@ VINCENT4
 \begin_inset Text
 
 \begin_layout Plain Layout
-2697
+2697 (1443)
 \end_layout
 
 \end_inset
@@ -13755,7 +12619,7 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-3074
+3074 (524)
 \end_layout
 
 \end_inset
@@ -13766,7 +12630,7 @@ VINCENT8
 \begin_layout Plain Layout
 
 \series bold
-2797
+2797 (201)
 \end_layout
 
 \end_inset
@@ -13775,7 +12639,7 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-2883
+2883 (423)
 \end_layout
 
 \end_inset
@@ -13784,7 +12648,7 @@ VINCENT8
 \begin_inset Text
 
 \begin_layout Plain Layout
-4368
+4368 (2253)
 \end_layout
 
 \end_inset
@@ -13988,8 +12852,24 @@ name "fig:ScatterPlot"
 In addition, in order to investigate the impact that the choice of sampling
  method has on the optimization method, an additional experiment was done,
  in which the execution time of the proposed method was recorded and with
- different sampling techniques for the Rosenbrock function, in which function
- the dimension varied between 2 and 50.
+ different sampling techniques for the ELP function, in which function the
+ dimension varied between 5 and 50.
+ This function is defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}
+\]
+
+\end_inset
+
+where the parameter 
+\begin_inset Formula $n$
+\end_inset
+
+ defines the dimension of the function.
  The results from this experiment are graphically outlined in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -14013,7 +12893,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename eego_time_comparison.png
+	filename elp_time_plot.png
 	scale 50
 
 \end_inset
@@ -14025,8 +12905,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Time comparison for the Rosenbrock function and the proposed optimization
- method using the four sampling techniques mentioned before.
+Time comparison for the ELP function and the proposed optimization method
+ using the four sampling techniques mentioned before.
  The time depicted in figure is the sum of the execution times for 30 independen
 t runs.
 \begin_inset CommandInset label
@@ -14329,7 +13209,6 @@ literal "false"
 Floudas, C.
  A., & Pardalos, P.
  M.
- (Eds.).
  (2013).
  State of the art in global optimization: computational methods and applications
 \end_layout
@@ -14345,7 +13224,6 @@ literal "false"
 
 Horst, R., & Pardalos, P.
  M.
- (Eds.).
  (2013).
  Handbook of global optimization (Vol.
  2).
@@ -14762,7 +13640,7 @@ literal "false"
 \end_inset
 
 Kennedy, J., & Eberhart, R.
- (1995, November).
+ (1995).
  Particle swarm optimization.
  In Proceedings of ICNN'95-international conference on neural networks (Vol.
  4, pp.
@@ -14898,7 +13776,7 @@ literal "false"
 \end_inset
 
 Zhou, Y., & Tan, Y.
- (2009, May).
+ (2009).
  GPU-based parallel particle swarm optimization.
  In 2009 IEEE Congress on Evolutionary Computation (pp.
  1493-1500).
@@ -14914,7 +13792,7 @@ literal "false"
 \end_inset
 
 Dawson, L., & Stewart, I.
- (2013, June).
+ (2013).
  Improving Ant Colony Optimization performance on the GPU using CUDA.
  In 2013 IEEE Congress on Evolutionary Computation (pp.
  1901-1908).
@@ -15009,7 +13887,7 @@ literal "false"
 
 Chu, Y., Mi, H., Liao, H., Ji, Z., & Wu, Q.
  H.
- (2008, June).
+ (2008).
  A fast bacterial swarming algorithm for high-dimensional function optimization.
  In 2008 IEEE congress on evolutionary computation (IEEE world congress
  on computational intelligence) (pp.
@@ -15363,7 +14241,7 @@ Goudos, S.
  W., Wan, S., Sarigiannidis, P., Karagiannidis, G.
  K., & Suganthan, P.
  N.
- (2021, July).
+ (2021).
  Large Scale Global Optimization Algorithms for IoT Networks: A Comparative
  Study.
  In 2021 17th International Conference on Distributed Computing in Sensor
@@ -15552,16 +14430,11 @@ literal "false"
 
 \end_inset
 
-H.
- Maaranen, K.
- Miettinen, M.M.
- Makela, Quasi-random initial population for genetic algorithms.
- Computers & Mathematics with Applications 
-\series bold
-47
-\series default
-, pp.
- 1885-1895, 2004.
+Maaranen, H., Miettinen, K., & Mäkelä, M.
+ M.
+ (2004).
+ Quasi-random initial population for genetic algorithms.
+ Computers & Mathematics with Applications, 47(12), 1885-1895.
 \end_layout
 
 \begin_layout Bibliography
@@ -15572,13 +14445,14 @@ literal "false"
 
 \end_inset
 
-P.V.
- Paul, P.
- Dhavachelvan, R.
- Baskaran, A novel population initialization technique for Genetic Algorithm,
- In: 2013 International Conference on Circuits, Power and Computing Technologies
- (ICCPCT), Nagercoil, India, pp.
- 1235-1238, 2013.
+Paul, P.
+ V., Dhavachelvan, P., & Baskaran, R.
+ (2013).
+ A novel population initialization technique for genetic algorithm.
+ In 2013 International Conference on Circuits, Power and Computing Technologies
+ (ICCPCT) (pp.
+ 1235-1238).
+ IEEE.
 \end_layout
 
 \begin_layout Bibliography
@@ -15620,7 +14494,7 @@ literal "false"
 
 Kazimipour, B., Li, X., & Qin, A.
  K.
- (2014, July).
+ (2014).
  A review of population initialization techniques for evolutionary algorithms.
  In 2014 IEEE congress on evolutionary computation (CEC) (pp.
  2585-2592).
@@ -15651,13 +14525,13 @@ literal "false"
 
 \end_inset
 
-B.J.
- Jain, H.
- Pohlheim, J.
- Wegener, On termination criteria of evolutionary algorithms, in: Proceedings
- of the 3rd Annual Conference on Genetic and Evolutionary Computation, 2001,
- pp.
- 768–768.
+Jain, B.
+ J., Pohlheim, H., & Wegener, J.
+ (2001).
+ On termination criteria of evolutionary algorithms.
+ In Proceedings of the 3rd Annual Conference on Genetic and Evolutionary
+ Computation (pp.
+ 768-768).
 \end_layout
 
 \begin_layout Bibliography
@@ -15669,16 +14543,15 @@ literal "false"
 
 \end_inset
 
-K.
- Zielinski, P.
- Weitkemper, R.
- Laur, K.-D.
- Kammeyer, Examination of stopping criteria for differential evolution based
- on a power allocation problem, J.
- Electr.
- Eng.
- 7 (3) (2007) 8.
- 
+Zielinski, K., Weitkemper, P., Laur, R., & Kammeyer, K.
+ D.
+ (2006).
+ Examination of stopping criteria for differential evolution based on a
+ power allocation problem.
+ In Proceedings of the 10th International Conference on Optimization of
+ Electrical and Electronic Equipment (Vol.
+ 3, pp.
+ 149-156).
 \end_layout
 
 \begin_layout Bibliography
@@ -15690,13 +14563,13 @@ literal "false"
 
 \end_inset
 
-S.N.
- Ghoreishi, A.
- Clausen, B.N.
- Joergensen, Termination criteria in evolutionary algorithms: A survey,
- in: IJCCI, 2017, pp.
- 373–384.
- 
+Ghoreishi, S.
+ N., Clausen, A., & Jørgensen, B.
+ N.
+ (2017).
+ Termination Criteria in Evolutionary Algorithms: A Survey.
+ In IJCCI (pp.
+ 373-384).
 \end_layout
 
 \begin_layout Bibliography
@@ -15708,13 +14581,26 @@ literal "false"
 
 \end_inset
 
-M.
- Ravber, S-H.
- Liu, M.
- Mernik, M.
- Črepinšek, Maximum number of generations as a stopping criterion considered
- harmful, Applied Soft Computing, Volume 128, 2022, 109478, ISSN 1568-4946,
- https://doi.org/10.1016/j.asoc.2022.109478.
+Ravber, M., Liu, S.
+ H., Mernik, M., & Črepinšek, M.
+ (2022).
+ Maximum number of generations as a stopping criterion considered harmful.
+ Applied Soft Computing, 128, 109478.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+Javad Ebadi, M., Fahs, A., Fahs, H., & Dehghani, R.
+ (2023).
+ Competitive secant (BFGS) methods based on modified secant relations for
+ unconstrained optimization.
+ Optimization, 72(7), 1691-1706.
 \end_layout
 
 \begin_layout Bibliography
@@ -15726,11 +14612,12 @@ literal "false"
 
 \end_inset
 
-Kyrou G, Charilogis V, Tsoulos IG.
+Kyrou, G., Charilogis, V., & Tsoulos, I.
+ G.
+ (2024).
  EOFA: An Extended Version of the Optimal Foraging Algorithm for Global
  Optimization Problems.
- Computation.
- 2024.
+ Computation, 12(8), 158.
 \end_layout
 
 \begin_layout Bibliography
@@ -15742,10 +14629,12 @@ literal "false"
 
 \end_inset
 
-Charilogis V, Tsoulos IG, Stavrou VN.
+Charilogis, V., Tsoulos, I.
+ G., & Stavrou, V.
+ N.
+ (2023).
  An Intelligent Technique for Initial Distribution of Genetic Algorithms.
- Axioms.
- 2023; 12(10):980.
+ Axioms, 12(10), 980.
 \end_layout
 
 \begin_layout Bibliography
@@ -15757,13 +14646,11 @@ literal "false"
 
 \end_inset
 
-Charilogis, V., Tsoulos, I.G.
- & Tzallas, A.
- An Improved Parallel Particle Swarm Optimization.
- SN COMPUT.
- SCI.
- 4, 766 (2023).
- 
+Charilogis, V., Tsoulos, I.
+ G., & Tzallas, A.
+ (2023).
+ An improved parallel particle swarm optimization.
+ SN Computer Science, 4(6), 766.
 \end_layout
 
 \begin_layout Bibliography
@@ -15775,11 +14662,11 @@ literal "false"
 
 \end_inset
 
-Kyrou G, Charilogis V, Tsoulos IG.
+Kyrou, G., Charilogis, V., & Tsoulos, I.
+ G.
+ (2024).
  Improving the Giant-Armadillo Optimization Method.
- Analytics.
- 2024; 3(2):225-240.
- https://doi.org/10.3390/analytics3020013 
+ Analytics, 3(2), 225-240.
 \end_layout
 
 \begin_layout Bibliography
@@ -15918,17 +14805,11 @@ literal "false"
 
 \end_inset
 
-M.M.
- Ali and P.
- Kael.
+Ali, M.
+ M., & Kaelo, P.
  (2008).
- Improved particle swarm algorithms for global optimization, Applied Mathematics
- and Computation 
-\series bold
-196
-\series default
-, pp.
- 578-593.
+ Improved particle swarm algorithms for global optimization.
+ Applied mathematics and computation, 196(2), 578-593.
 \end_layout
 
 \begin_layout Bibliography
@@ -15940,17 +14821,11 @@ literal "false"
 
 \end_inset
 
-H.
- Koyuncu, R.
- Ceylan.(2009).
+Koyuncu, H., & Ceylan, R.
+ (2019).
  A PSO based approach: Scout particle swarm algorithm for continuous global
- optimization problems, Journal of Computational Design and Engineering
- 
-\series bold
-6
-\series default
-, pp.
- 129–142.
+ optimization problems.
+ Journal of Computational Design and Engineering, 6(2), 129-142.
 \end_layout
 
 \begin_layout Bibliography

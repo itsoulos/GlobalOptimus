@@ -260,12 +260,12 @@ intelligence algorithms, other methods that belong to this category
 are, the Fast Bacterial Swarming Algorithm (FBSA) \citep{bacterial},
 the Fish Swarm Algorithm \citep{fish}, the Dolphin Swarm Algorithm
 \citep{dolphin}, the Whale Optimization Algorithm (WOA) algorithm
-\citealp{WOA,WOA1,WOA2,WOA3}, the Tunicate Swarm Algorithm \citep{tunicate},
-the Sine Cosine algorithm (SCA) algorithm \citep{SCA,SCA1,SCA2,sca1},
-the Salp Swarm algorithm (SSA) algorithm \citep{ssaa,SSA,SSA1,SSA2}
-etc. These methods simulate a series of complex interactions between
-biological species \citep{search algorithm,several metaheuristic algorithms },
-such as:
+\citep{WOA,WOA1,WOA2,WOA3}, the Tunicate Swarm Algorithm \citep{tunicate},
+the Salp Swarm algorithm (SSA) algorithm \citep{ssaa,SSA,SSA1,SSA2},
+the Artificial Bee Colony algorithm \citep{abc} etc. These methods
+simulate a series of complex interactions between biological species
+\citep{search algorithm,several metaheuristic algorithms }, such
+as:
 \begin{enumerate}
 \item Naturalism: Where two species can live without affecting each other. 
 \item Predation, where one creature dies by feeding another. 
@@ -382,6 +382,8 @@ the update, while in the inactive state, the range remains fixed.
 \end{enumerate}
 \textbf{Calculation step.}
 \begin{enumerate}
+\item \textbf{While} termination criteria are not hold \textbf{do}
+\begin{enumerate}
 \item Update variables $a$ and $s_{r}$:
 \begin{itemize}
 \item \textbf{$a=2-2\frac{t}{N_{g}}$ }
@@ -390,28 +392,36 @@ the update, while in the inactive state, the range remains fixed.
 \item Compute the fitness of each search agents.
 \item Sort all solutions according to their fitness values.
 \item Set $\mbox{XP}$ the estimated position of the prey.
-\item \textbf{For} $j=1,\ldots,N_{c}$ \textbf{do}
+\item \textbf{For} $i=1,\ldots,N_{c}$ \textbf{do}
 \begin{enumerate}
 \item \textbf{Update }random variables\textbf{ $r_{1},r_{2},r_{3},r_{4},C_{1},C_{2},b\:$
 :}
 \begin{itemize}
-\item \textbf{$r_{1}$}and $r_{2}$ are random numbers in $[0,1],\ $
+\item \textbf{$r_{1}$}and $r_{2}$ are random numbers in $[0,1]$
 \item \textbf{$r_{3}=(a-2)r_{1}+2$}
 \item \textbf{$r_{4}=100r_{2}$ }
 \item \textbf{$C_{1}=2*a*r_{1}-a$}
-\item \textbf{$C_{2}=2*r_{1}$ }
+\item \textbf{$C_{2}=2*r_{1}$}
 \item \textbf{$b=a*r_{2}$}
+\item \textbf{Select} a random position $v\in\left\{ 1,\ldots,N_{c}\right\} $
+\item \textbf{if $\left(r4\le s_{r}\right)$ then set $XE=C_{2}XP$ else
+$XE=position[random\:index\:v]$ }
 \end{itemize}
-\item \textbf{$X_{1}=e^{br_{3}}\sin\left(2\pi r_{3}\right)C_{1}\left|\mbox{XE}-\mbox{XP}\right|+\mbox{XE},$
-where $\mbox{XE}=C_{2}x_{j}$}
-\item \textbf{$X_{2}=x_{j}+C_{1}\left|x_{j}-\mbox{XP}\right|$}
-\item \textbf{if $\left(r4\le s_{r}\right)$}
-\begin{itemize}
-\item \textbf{if $m=1$ then set $f_{1}=0.8,f_{2}=0.2$}
-\item \textbf{else set $f_{1}$ }to a random number in $[0,2]$ and $f_{2}$
-to a random number in $[-2,2]$
-\end{itemize}
-\item \textbf{Update }agent:\textbf{ $x_{j}=\frac{f_{1}X_{1}+f_{2}X_{2}}{2}$}
+\item \textbf{Create} the vector $y=\left[y_{1,}y_{2},\ldots,y_{n}\right]$
+with the following procedure
+\item \textbf{For} $j=1,\ldots,n$ \textbf{do}
+\begin{enumerate}
+\item \textbf{Set$X_{1}=e^{br_{3}}\sin\left(2\pi r_{3}\right)C_{1}\left|\mbox{XE}-\mbox{XP}\right|+\mbox{XE},$
+where $\mbox{XE}=C_{2}x_{i,j}$}
+\item \textbf{Set $X_{2}=x_{i,j}+C_{1}\left|x_{i,j}-\mbox{XP}\right|$}
+\item \textbf{if $m=1$ then set $f_{1}=0.8,f_{2}=0.2$ else set $f_{1}$
+}to a random number in $[0,2]$ and $f_{2}$ to a random number in
+$[-2,2]$
+\item \textbf{Set} $p\in[0,1]$ a random number.
+\item \textbf{if $\left(p\le0.5\right)$ then set $x_{i,j}=\frac{f_{1}X_{1}+f_{2}X_{2}}{2}$
+else set $x_{i,j}=\frac{f_{2}X_{1}+f_{1}X_{2}}{2}$}
+\end{enumerate}
+\item \textbf{EndFor}
 \end{enumerate}
 \item \textbf{End For}
 \end{enumerate}
@@ -420,7 +430,6 @@ to a random number in $[-2,2]$
 \item \textbf{Set $t=t+1$}
 \item \textbf{If $t\ge N_{g}$ terminate.}
 \item \textbf{Else}
-\begin{enumerate}
 \item Calculate the stopping that proposed in the work of Charilogis \citep{charilogis}.
 In the Similarity stopping rule, at every iteration t, the absolute
 difference between the current located global minimum $f_{min}^{(t)}$
@@ -433,15 +442,15 @@ and the previous best value $f_{min}^{(t-1)}$ is calculated:
 \par\end{centering}
 The algorithm terminated when $\delta^{t}\le\epsilon$ for $N_{k}$
 consecutive iterations, where $\epsilon$ is a small positive value.
-If the termination criteria are not satisfied then go to Calculation
-step, else terminate and return the best solution.\textbf{\caption{EGO Algorithm\label{alg:EGO-Algorithm}}
+\item \textbf{End While}
+\item \textbf{\caption{EGO Algorithm\label{alg:EGO-Algorithm}}
 }
 \end{enumerate}
 \end{algorithm}
 
 \begin{figure}[H]
 \begin{centering}
-	\includegraphics[scale=0.45]{eego.eps}
+\includegraphics[scale=0.6]{eego.jpg}
 \par\end{centering}
 \caption{Flowchart of the suggested global optimization procedure.\label{fig:flowEgo}}
 
@@ -539,8 +548,8 @@ A flowchart of the K-Means procedure is also depicted in Figure \ref{fig:flowcha
 \item \textbf{Set} $j^{*}=\mbox{argmin}_{m=1}^{k}\left\{ D\left(x_{i},c_{m}\right)\right\} $.
 $j^{*}$ is the nearest center from $x_{i}$
 \item \textbf{Set} $S_{j^{*}}=S_{j^{*}}\cup\left\{ x_{i}\right\} $.
-\item \textbf{End For}
 \end{enumerate}
+\item \textbf{End For}
 \item \textbf{For} every center $c_{j},\ j=1..k$ \textbf{do}
 \begin{enumerate}
 \item \textbf{Set} $M_{j}$ the number of samples in $S_{j}$
@@ -1032,129 +1041,130 @@ next to the average function calls.
 \end{itemize}
 \begin{table}[H]
 \caption{Experimental results using the incorporated optimization methods.
-Numbers in cells stand for average function calls.\label{tab:comparison}}
+The numbers in parentheses denote standard deviation for the number
+of function calls.\label{tab:comparison}}
 
-\centering{}%
+\raggedright{}{\footnotesize{}}%
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
-\textbf{FUNCTION} & \textbf{GENETIC} & \textbf{PSO} & \textbf{DE} & \textbf{EGO} & \textbf{EEGO}\tabularnewline
+\textbf{\tiny{}FUNCTION} & \textbf{\footnotesize{}GENETIC} & \textbf{\footnotesize{}PSO} & \textbf{\footnotesize{}DE} & \textbf{\footnotesize{}EGO} & \textbf{\footnotesize{}EEGO}\tabularnewline
 \hline 
 \hline 
-ACKLEY & 6749 & 6885 & 10220 & 8714 & \textbf{4199}\tabularnewline
+{\tiny{}ACKLEY} & {\footnotesize{}6749 (869)} & {\footnotesize{}6885 (1108)} & {\footnotesize{}10220 (1342)} & {\footnotesize{}8714 (1009)} & \textbf{\footnotesize{}4199 (768)}\tabularnewline
 \hline 
-BF1 & 4007 & 4142 & 8268 & 4762 & \textbf{3228}\tabularnewline
+{\tiny{}BF1} & {\footnotesize{}4007 (308)} & {\footnotesize{}4142 (397)} & {\footnotesize{}8268 (299)} & {\footnotesize{}4762 (379)} & \textbf{\footnotesize{}3228 (356)}\tabularnewline
 \hline 
-BF2 & 3794 & 3752 & 7913 & 4299 & \textbf{2815}\tabularnewline
+{\tiny{}BF2} & {\footnotesize{}3794 (350)} & {\footnotesize{}3752 (302)} & {\footnotesize{}7913 (320)} & {\footnotesize{}4299 (325)} & \textbf{\footnotesize{}2815 (310)}\tabularnewline
 \hline 
-BF3 & 3480 & 3306 & 10270 & 3747 & \textbf{2501}\tabularnewline
+{\tiny{}BF3} & {\footnotesize{}3480 (266)} & {\footnotesize{}3306 (261)} & {\footnotesize{}10270 (294)} & {\footnotesize{}3747 (303)} & \textbf{\footnotesize{}2501 (218)}\tabularnewline
 \hline 
-BRANIN & 2376 & 2548 & 4101 & 2659 & \textbf{1684}\tabularnewline
+{\tiny{}BRANIN} & {\footnotesize{}2376 (136)} & {\footnotesize{}2548 (142)} & {\footnotesize{}4101 (559)} & {\footnotesize{}2659 (150)} & \textbf{\footnotesize{}1684 (180)}\tabularnewline
 \hline 
-CAMEL & 2869 & 2933 & 5609 & 3317 & \textbf{2262}\tabularnewline
+{\tiny{}CAMEL} & {\footnotesize{}2869 (195)} & {\footnotesize{}2933 (180)} & {\footnotesize{}5609 (530)} & {\footnotesize{}3317 (229)} & \textbf{\footnotesize{}2262 (295)}\tabularnewline
 \hline 
-EASOM & 1958 & 1982 & 2978 & 2235 & \textbf{1334}\tabularnewline
+{\tiny{}EASOM} & {\footnotesize{}1958 (67)} & {\footnotesize{}1982 (92)} & {\footnotesize{}2978 (344)} & {\footnotesize{}2235 (196)} & \textbf{\footnotesize{}1334 (133)}\tabularnewline
 \hline 
-EQUAL\_MAXIMA & 2651 & 1499 & 2374 & 2013 & \textbf{1286}\tabularnewline
+{\tiny{}EQUAL\_MAXIMA} & {\footnotesize{}2651 (131)} & {\footnotesize{}1499 (176)} & {\footnotesize{}2374 (117)} & {\footnotesize{}2013 (157)} & \textbf{\footnotesize{}1286 (121)}\tabularnewline
 \hline 
-EXP4 & 2946 & 3404 & 5166 & 3392 & \textbf{2166}\tabularnewline
+{\tiny{}EXP4} & {\footnotesize{}2946 (196)} & {\footnotesize{}3404 (201)} & {\footnotesize{}5166 (430)} & {\footnotesize{}3392 (313)} & \textbf{\footnotesize{}2166 (243)}\tabularnewline
 \hline 
-EXP8 & 3120 & 3585 & 5895 & 3347 & \textbf{2802}\tabularnewline
+{\tiny{}EXP8} & {\footnotesize{}3120 (187)} & {\footnotesize{}3585 (212)} & {\footnotesize{}5895 (615)} & {\footnotesize{}3347 (288)} & \textbf{\footnotesize{}2802 (304)}\tabularnewline
 \hline 
-EXP16 & \textbf{3250} & 3735 & 6498 & 3345 & 3279\tabularnewline
+{\tiny{}EXP16} & \textbf{\footnotesize{}3250 (234)} & {\footnotesize{}3735 (206)} & {\footnotesize{}6498 (784)} & {\footnotesize{}3345 (233)} & {\footnotesize{}3279 (416)}\tabularnewline
 \hline 
-EXP32 & 3561 & 3902 & 7606 & \textbf{3332} & 3430\tabularnewline
+{\tiny{}EXP32} & {\footnotesize{}3561 (233)} & {\footnotesize{}3902 (233)} & {\footnotesize{}7606 (475)} & \textbf{\footnotesize{}3332 (250)} & {\footnotesize{}3430 (401)}\tabularnewline
 \hline 
-EXTENDEDF10 & 4862 & 3653 & 5728(0.87) & 4737 & \textbf{2609}\tabularnewline
+{\tiny{}EXTENDEDF10} & {\footnotesize{}4862 (959)} & {\footnotesize{}3653 (329)} & {\footnotesize{}5728 (976) (0.87)} & {\footnotesize{}4737 (428)} & \textbf{\footnotesize{}2609 (321)}\tabularnewline
 \hline 
-FIVE\_UNEVEN & \textbf{3412(0.67)} & 3913(0.87) & 4042(0.14) & 5006(0.97) & 3849(0.90)\tabularnewline
+{\tiny{}FIVE\_UNEVEN} & \textbf{\footnotesize{}3412 (422) (0.67)} & {\footnotesize{}3913 (378)(0.87)} & {\footnotesize{}4042 (391) (0.14)} & {\footnotesize{}5006 (519) (0.97)} & {\footnotesize{}3849 (388)(0.90)}\tabularnewline
 \hline 
-F9 & 2604 & 1888 & 2271 & 2748 & \textbf{1439}\tabularnewline
+{\tiny{}F9} & {\footnotesize{}2604 (197)} & {\footnotesize{}1888 (306)} & {\footnotesize{}2271 (364) } & {\footnotesize{}2748 (333)} & \textbf{\footnotesize{}1439 (229)}\tabularnewline
 \hline 
-F14 & 6686 & 5498 & \textbf{5279(0.63)} & 9228(0.94) & 6063\tabularnewline
+{\tiny{}F14} & {\footnotesize{}6686 (1503)} & {\footnotesize{}5498 (550)} & \textbf{\footnotesize{}5279 (1988) (0.63)} & {\footnotesize{}9228 (3725) (0.94)} & {\footnotesize{}6063 (1835)}\tabularnewline
 \hline 
-F15 & \textbf{4373} & 6696 & 5874(0.80) & 7342 & 4397\tabularnewline
+{\tiny{}F15} & \textbf{\footnotesize{}4373 (624)} & {\footnotesize{}6696 (856)} & {\footnotesize{}5874 (1880) (0.80)} & {\footnotesize{}7342 (1441)} & {\footnotesize{}4397 (1031)}\tabularnewline
 \hline 
-F17 & 3667 & 3805 & 10441 & 4057 & \textbf{2766}\tabularnewline
+{\tiny{}F17} & {\footnotesize{}3667 (267)} & {\footnotesize{}3805 (333)} & {\footnotesize{}10441 (1435)} & {\footnotesize{}4057 (339)} & \textbf{\footnotesize{}2766 (368)}\tabularnewline
 \hline 
-HIMMELBLAU & 2481 & \textbf{1013} & 6636 & 1718 & 1119\tabularnewline
+{\tiny{}HIMMELBLAU} & {\footnotesize{}2481 (27)} & \textbf{\footnotesize{}1013 (34)} & {\footnotesize{}6636 (282)} & {\footnotesize{}1718 (84)} & {\footnotesize{}1119 (81)}\tabularnewline
 \hline 
-GKLS250 & 2280 & 2411 & 3834 & 3332 & 1603\tabularnewline
+{\tiny{}GKLS250} & {\footnotesize{}2280 (184)} & {\footnotesize{}2411 (158)} & {\footnotesize{}3834 (416)} & {\footnotesize{}3332 (203)} & {\footnotesize{}1603 (150)}\tabularnewline
 \hline 
-GKLS350 & 2613 & 2234 & 3919 & 2493 & \textbf{1298}\tabularnewline
+{\tiny{}GKLS350} & {\footnotesize{}2613 (269)} & {\footnotesize{}2234 (225)} & {\footnotesize{}3919 (469)} & {\footnotesize{}2493 (233)} & \textbf{\footnotesize{}1298 (178)}\tabularnewline
 \hline 
-GOLDSTEIN & 3687 & 3865 & 6781 & 4015 & \textbf{2784}\tabularnewline
+{\tiny{}GOLDSTEIN} & {\footnotesize{}3687 (278)} & {\footnotesize{}3865 (356)} & {\footnotesize{}6781 (483)} & {\footnotesize{}4015 (323)} & \textbf{\footnotesize{}2784 (290)}\tabularnewline
 \hline 
-GRIEWANK2 & 4501 & 3076 (0.73) & 7429 & 4682 & \textbf{2589 (0.96)}\tabularnewline
+{\tiny{}GRIEWANK2} & {\footnotesize{}4501 (918)} & {\footnotesize{}3076 (218) (0.73)} & {\footnotesize{}7429 (1472)} & {\footnotesize{}4682 (586)} & \textbf{\footnotesize{}2589 (532) (0.96)}\tabularnewline
 \hline 
-GRIEWANK10 & \textbf{6410 (0.97)} & 8006 & 18490 & 8772 & 7435\tabularnewline
+{\tiny{}GRIEWANK10} & \textbf{\footnotesize{}6410 (1264) (0.97)} & {\footnotesize{}8006 (732)} & {\footnotesize{}18490 (1716)} & {\footnotesize{}8772 (1138)} & {\footnotesize{}7435 (900)}\tabularnewline
 \hline 
-HANSEN & 3210 & 2856 & 4185 & 3789 & \textbf{2484}\tabularnewline
+{\tiny{}HANSEN} & {\footnotesize{}3210 (458)} & {\footnotesize{}2856 (208)} & {\footnotesize{}4185 (627)} & {\footnotesize{}3789 (864)} & \textbf{\footnotesize{}2484 (417)}\tabularnewline
 \hline 
-HARTMAN3 & 2752 & 3140 & 5190 & 3078 & \textbf{1793}\tabularnewline
+{\tiny{}HARTMAN3} & {\footnotesize{}2752 (188)} & {\footnotesize{}3140 (215)} & {\footnotesize{}5190 (294)} & {\footnotesize{}3078 (267)} & \textbf{\footnotesize{}1793 (231)}\tabularnewline
 \hline 
-HARTMAN6 & 3219 & 3710 & 5968 & 3583 & \textbf{2478}\tabularnewline
+{\tiny{}HARTMAN6} & {\footnotesize{}3219 (217)} & {\footnotesize{}3710 (235)} & {\footnotesize{}5968 (548)} & {\footnotesize{}3583 (309)} & \textbf{\footnotesize{}2478 (282)}\tabularnewline
 \hline 
-POTENTIAL3 & 4352 & 4865 & 6118 & 6027 & \textbf{4081}\tabularnewline
+{\tiny{}POTENTIAL3} & {\footnotesize{}4352 (461)} & {\footnotesize{}4865 (468)} & {\footnotesize{}6118 (1047)} & {\footnotesize{}6027 (793)} & \textbf{\footnotesize{}4081 (391)}\tabularnewline
 \hline 
-POTENTIAL5 & \textbf{7705} & 9183 & 9119 & 9968 & 8886\tabularnewline
+{\tiny{}POTENTIAL5} & \textbf{\footnotesize{}7705 (892)} & {\footnotesize{}9183 (1180)} & {\footnotesize{}9119 (570)} & {\footnotesize{}9968 (1171)} & {\footnotesize{}8886 (1146)}\tabularnewline
 \hline 
-RASTRIGIN & 4107 & 3477 & 6216 & 4201 & \textbf{2304}\tabularnewline
+{\tiny{}RASTRIGIN} & {\footnotesize{}4107 (729)} & {\footnotesize{}3477 (348)} & {\footnotesize{}6216 (428)} & {\footnotesize{}4201 (401)} & \textbf{\footnotesize{}2304 (302)}\tabularnewline
 \hline 
-ROSENBROCK4 & \textbf{3679} & 6372 & 8452 & 6137 & 4019\tabularnewline
+{\tiny{}ROSENBROCK4} & \textbf{\footnotesize{}3679 (393)} & {\footnotesize{}6372 (549)} & {\footnotesize{}8452 (643)} & {\footnotesize{}6137 (720)} & {\footnotesize{}4019 (324)}\tabularnewline
 \hline 
-ROSENBROCK8 & \textbf{5270} & 8284 & 11530 & 8569 & 6801\tabularnewline
+{\tiny{}ROSENBROCK8} & \textbf{\footnotesize{}5270 (514)} & {\footnotesize{}8284 (849)} & {\footnotesize{}11530 (1632)} & {\footnotesize{}8569 (872)} & {\footnotesize{}6801 (633)}\tabularnewline
 \hline 
-ROSENBROCK16 & \textbf{8509} & 11872 & 17432 & 11777 & 11996\tabularnewline
+{\tiny{}ROSENBROCK16} & \textbf{\footnotesize{}8509 (1026)} & {\footnotesize{}11872 (1018)} & {\footnotesize{}17432 (1738)} & {\footnotesize{}11777 (1268)} & {\footnotesize{}11996 (1331)}\tabularnewline
 \hline 
-SHEKEL5 & 3325 & 4259 & 6662 & 3948 & \textbf{2495}\tabularnewline
+{\tiny{}SHEKEL5} & {\footnotesize{}3325 (227)} & {\footnotesize{}4259 (305)} & {\footnotesize{}6662 (974) } & {\footnotesize{}3948 (340)} & \textbf{\footnotesize{}2495 (310)}\tabularnewline
 \hline 
-SHEKEL7 & 3360 & 4241 & 6967 & 4043 & \textbf{2432}\tabularnewline
+{\tiny{}SHEKEL7} & {\footnotesize{}3360 (283)} & {\footnotesize{}4241 (300)} & {\footnotesize{}6967 (1035)} & {\footnotesize{}4043 (379)} & \textbf{\footnotesize{}2432 (240)}\tabularnewline
 \hline 
-SHEKEL10 & 3488 & 4237 & 6757 & 3932 & \textbf{2516}\tabularnewline
+{\tiny{}SHEKEL10} & {\footnotesize{}3488 (240)} & {\footnotesize{}4237 (268)} & {\footnotesize{}6757 (897)} & {\footnotesize{}3932 (355)} & \textbf{\footnotesize{}2516 (326)}\tabularnewline
 \hline 
-SHUBERT2 & 3567 & \textbf{2123} & 3526 & 3622 & 2300\tabularnewline
+{\tiny{}SHUBERT2} & {\footnotesize{}3567 (413)} & \textbf{\footnotesize{}2123 (188)} & {\footnotesize{}3526 (885)} & {\footnotesize{}3622 (446)} & {\footnotesize{}2300 (527)}\tabularnewline
 \hline 
-SHUBERT4 & 3358 & \textbf{1823} & 3067 & 3593 & 1967(0.97)\tabularnewline
+{\tiny{}SHUBERT4} & {\footnotesize{}3358 (380)} & \textbf{\footnotesize{}1823 (166)} & {\footnotesize{}3067 (699)} & {\footnotesize{}3593 (674)} & {\footnotesize{}1967 (323) (0.97)}\tabularnewline
 \hline 
-SHUBERT8 & 3569 & 2348 & 3120(0.94) & 2862 & \textbf{2267}\tabularnewline
+{\tiny{}SHUBERT8} & {\footnotesize{}3569 (357)} & {\footnotesize{}2348 (203)} & {\footnotesize{}3120 (452) (0.94)} & {\footnotesize{}2862 (383)} & \textbf{\footnotesize{}2267 (296)}\tabularnewline
 \hline 
-SCHAFFER & 18787 & 15176 & \textbf{6315} & 28679 & 23531\tabularnewline
+{\tiny{}SCHAFFER} & {\footnotesize{}18787 (3105)} & {\footnotesize{}15176 (2401)} & \textbf{\footnotesize{}6315 (1548)} & {\footnotesize{}28679 (6267)} & {\footnotesize{}23531 (5904)}\tabularnewline
 \hline 
-SCHWEFEL221 & 2667 & 2529 & 5415 & 3426 & \textbf{2203}\tabularnewline
+{\tiny{}SCHWEFEL221} & {\footnotesize{}2667 (416)} & {\footnotesize{}2529 (163)} & {\footnotesize{}5415 (1161)} & {\footnotesize{}3426 (787)} & \textbf{\footnotesize{}2203 (478)}\tabularnewline
 \hline 
-SCHWEFEL222 & 33725 & 42898 & \textbf{12200} & 51654 & 38876\tabularnewline
+{\tiny{}SCHWEFEL222} & {\footnotesize{}33725 (4809)} & {\footnotesize{}42898 (6978)} & \textbf{\footnotesize{}12200 (1737)} & {\footnotesize{}51654 (7150)} & {\footnotesize{}38876 (5659)}\tabularnewline
 \hline 
-SPHERE & 1588 & 1521 & 3503 & 1642 & \textbf{1162}\tabularnewline
+{\tiny{}SPHERE} & {\footnotesize{}1588 (23)} & {\footnotesize{}1521 (12)} & {\footnotesize{}3503 (199)} & {\footnotesize{}1642 (38)} & \textbf{\footnotesize{}1162 (84)}\tabularnewline
 \hline 
-TEST2N4 & 3331 & 3437 & 6396 & 3695 & \textbf{2277}\tabularnewline
+{\tiny{}TEST2N4} & {\footnotesize{}3331 (392)} & {\footnotesize{}3437 (223)} & {\footnotesize{}6396 (999)} & {\footnotesize{}3695 (411)} & \textbf{\footnotesize{}2277 (464)}\tabularnewline
 \hline 
-TEST2N5 & 4000 & 3683 & 6271 & 4234 & \textbf{2734 (0.96)}\tabularnewline
+{\tiny{}TEST2N5} & {\footnotesize{}4000 (815)} & {\footnotesize{}3683 (287)} & {\footnotesize{}6271 (1017)} & {\footnotesize{}4234 (636)} & \textbf{\footnotesize{}2734 (479) (0.96)}\tabularnewline
 \hline 
-TEST2N6 & 4312 (0.93) & 3781 & 5410 (0.93) & 4599 & \textbf{2905 (0.86)}\tabularnewline
+{\tiny{}TEST2N6} & {\footnotesize{}4312 (901) (0.93)} & {\footnotesize{}3781 (241)} & {\footnotesize{}5410 (822) (0.93)} & {\footnotesize{}4599 (589)} & \textbf{\footnotesize{}2905 (832) (0.86)}\tabularnewline
 \hline 
-TEST2N7 & 4775 (0.90) & 4060 & 7074 (0.97) & 5146 & \textbf{3559 (0.73)}\tabularnewline
+{\tiny{}TEST2N7} & {\footnotesize{}4775 (905) (0.90)} & {\footnotesize{}4060 (312)} & {\footnotesize{}7074 (1523) (0.97)} & {\footnotesize{}5146 (767)} & \textbf{\footnotesize{}3559 (763) (0.73)}\tabularnewline
 \hline 
-SINU4 & 2991 & 3504 & 5953 & 3478 & \textbf{2005}\tabularnewline
+{\tiny{}SINU4} & {\footnotesize{}2991 (298)} & {\footnotesize{}3504 (231)} & {\footnotesize{}5953 (1509)} & {\footnotesize{}3478 (463)} & \textbf{\footnotesize{}2005 (332)}\tabularnewline
 \hline 
-SINU8 & 3442 & 4213 & 6973 & 4420 & \textbf{3158}\tabularnewline
+{\tiny{}SINU8} & {\footnotesize{}3442 (293)} & {\footnotesize{}4213 (309)} & {\footnotesize{}6973 (1637)} & {\footnotesize{}4420 (560)} & \textbf{\footnotesize{}3158 (467)}\tabularnewline
 \hline 
-SINU16 & \textbf{4320} & 5019 & 6979 & 7033 & 5891\tabularnewline
+{\tiny{}SINU16} & \textbf{\footnotesize{}4320 (458)} & {\footnotesize{}5019 (312)} & {\footnotesize{}6979 (634)} & {\footnotesize{}7033 (1017)} & {\footnotesize{}5891 (553)}\tabularnewline
 \hline 
-TEST30N3 & 3211 & 4610 & 6168 & 3971 & \textbf{2362}\tabularnewline
+{\tiny{}TEST30N3} & {\footnotesize{}3211 (1207)} & {\footnotesize{}4610 (1615)} & {\footnotesize{}6168 (1297)} & {\footnotesize{}3971 (1348)} & \textbf{\footnotesize{}2362 (884)}\tabularnewline
 \hline 
-TEST30N4 & 3679 & 4629 & 7006 & 4908 & \textbf{2978}\tabularnewline
+{\tiny{}TEST30N4} & {\footnotesize{}3679 (1435)} & {\footnotesize{}4629 (1708)} & {\footnotesize{}7006 (2745)} & {\footnotesize{}4908 (1333)} & \textbf{\footnotesize{}2978 (1719)}\tabularnewline
 \hline 
-UNEVEN\_MAXIMA & 2969 & 2729 & 2393 & 2972 & \textbf{1560}\tabularnewline
+{\tiny{}UNEVEN\_MAXIMA} & {\footnotesize{}2969 (283)} & {\footnotesize{}2729 (292)} & {\footnotesize{}2393 (319)} & {\footnotesize{}2972 (288)} & \textbf{\footnotesize{}1560 (208)}\tabularnewline
 \hline 
-VINCENT2 & 12779 & \textbf{1797(0.87)} & 6216 & 2094 & 1834(0.90)\tabularnewline
+{\tiny{}VINCENT2} & {\footnotesize{}12779 (563)} & \textbf{\footnotesize{}1797 (140) (0.87)} & {\footnotesize{}6216 (1152)} & {\footnotesize{}2094 (148)} & {\footnotesize{}1834 (388) (0.90)}\tabularnewline
 \hline 
-VINCENT4 & 19385 & \textbf{1830(0.67)} & 4691(0.83) & 2674 & 2697(0.64)\tabularnewline
+{\tiny{}VINCENT4} & {\footnotesize{}19385 (1179)} & \textbf{\footnotesize{}1830 (190) (0.67)} & {\footnotesize{}4691 (1019) (0.83)} & {\footnotesize{}2674 (244)} & {\footnotesize{}2697 (1443) (0.64)}\tabularnewline
 \hline 
-VINCENT8 & 19882 & \textbf{2717} & 4417(0.77) & 3423 & 4368(0.77)\tabularnewline
+{\tiny{}VINCENT8} & {\footnotesize{}19882 (2548)} & \textbf{\footnotesize{}2717 (256)} & {\footnotesize{}4417 (1118) (0.77)} & {\footnotesize{}3423 (358)} & {\footnotesize{}4368 (2253) (0.77)}\tabularnewline
 \hline 
-\textbf{SUM} & \textbf{297650} & \textbf{268654} & \textbf{288413} & \textbf{320469} & \textbf{231856}\tabularnewline
+\textbf{\tiny{}SUM} & \textbf{\footnotesize{}297650} & \textbf{\footnotesize{}268654} & \textbf{\footnotesize{}288413} & \textbf{\footnotesize{}320469} & \textbf{\footnotesize{}231856}\tabularnewline
 \hline 
-\end{tabular}
+\end{tabular}{\footnotesize\par}
 \end{table}
 The same termination method, as detailed in subsection \ref{subsec:The-main-steps},
 was used in all global optimization techniques in order to be able
@@ -1165,7 +1175,8 @@ method has excellent results compared to the other optimization techniques
 according to the experiment we conducted. As we can observe it has
 the least number of calls than all the other techniques. 
 \begin{figure}[H]
-\centering{}\includegraphics{image2}\caption{Total function calls for the incorporated optimization methods.\label{fig:TotalFunctionCalls}}
+\centering{}\includegraphics{image2}\caption{Total function calls for the incorporated optimization methods. The
+numbers represent the sum of function calls for each mentioned method.\label{fig:TotalFunctionCalls}}
 \end{figure}
 . Furthermore, as the experimental results clearly indicate, the modified
 version outperforms the original EGO method in terms of average and
@@ -1230,8 +1241,9 @@ subsection \ref{subsec:The-proposed-sampling} to produce initial
 samples for the used method.
 \end{enumerate}
 \begin{table}[H]
-\caption{A series of sampling techniques is used in the proposed method. Numbers
-in cells denote average function calls.\label{tab:sampling}}
+\caption{A series of sampling techniques is used in the proposed method.  The
+numbers in parentheses denote standard deviation for the number of
+function calls. \label{tab:sampling}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -1239,117 +1251,117 @@ in cells denote average function calls.\label{tab:sampling}}
 \textbf{FUNCTION} & \textbf{UNIFORM} & \textbf{TRIANGULAR} & \textbf{MAXWELL} & \textbf{KMEANS}\tabularnewline
 \hline 
 \hline 
-ACKLEY & 6118 & 5912 & 5986 & \textbf{4199}\tabularnewline
+ACKLEY & 6118 (736) & 5912 (741) & 5986 (845) & \textbf{4199 (768)}\tabularnewline
 \hline 
-BF1 & 4513 & 4318 & 4055 & \textbf{3228}\tabularnewline
+BF1 & 4513 (423) & 4318 (368) & 4055 (346) & \textbf{3228 (356)}\tabularnewline
 \hline 
-BF2 & 3959 & 3879 & 3587 & \textbf{2815}\tabularnewline
+BF2 & 3959 (333) & 3879 (363) & 3587 (339) & \textbf{2815 (310)}\tabularnewline
 \hline 
-BF3 & 3506 & 3344 & 3129 & \textbf{2501}\tabularnewline
+BF3 & 3506 (286) & 3344 (254) & 3129 (298) & \textbf{2501 (218)}\tabularnewline
 \hline 
-BRANIN & 2282 & 2131 & 2066 & \textbf{1684}\tabularnewline
+BRANIN & 2282 (162) & 2131 (174) & 2066 (167) & \textbf{1684 (180)}\tabularnewline
 \hline 
-CAMEL & 3156 & 2919 & 2848 & \textbf{2262}\tabularnewline
+CAMEL & 3156 (251) & 2919 (244) & 2848 (261) & \textbf{2262 (295)}\tabularnewline
 \hline 
-EASOM & 1756 & 1650 & \textbf{1321} & 1334\tabularnewline
+EASOM & 1756 (138) & 1650 (140) & \textbf{1321 (106)} & 1334 (133)\tabularnewline
 \hline 
-EQUAL\_MAXIMA & 1445 & 1293 & \textbf{1165} & 1286\tabularnewline
+EQUAL\_MAXIMA & 1445 (130) & 1293 (115) & \textbf{1165 (139)} & 1286 (121)\tabularnewline
 \hline 
-EXP4 & 3438 & 3273 & 3194 & \textbf{2166}\tabularnewline
+EXP4 & 3438 (335) & 3273 (232) & 3194 (330) & \textbf{2166 (243)}\tabularnewline
 \hline 
-EXP8 & 3432 & 3387 & 3152 & \textbf{2802}\tabularnewline
+EXP8 & 3432 (284) & 3387 (332) & 3152 (266) & \textbf{2802 (304)}\tabularnewline
 \hline 
-EXP16 & 3369 & 3326 & 3291 & \textbf{3279}\tabularnewline
+EXP16 & 3369 (349) & 3326 (329) & 3291 (224) & \textbf{3279 (416)}\tabularnewline
 \hline 
-EXP32 & \textbf{3216} & 3225 & 3344 & 3430\tabularnewline
+EXP32 & \textbf{3216 (274)} & 3225 (207) & 3344 (374) & 3430 (401)\tabularnewline
 \hline 
-EXTENDEDF10 & 4304 & 3913 & 3718 & \textbf{2609}\tabularnewline
+EXTENDEDF10 & 4304 (683) & 3913 (596) & 3718 (673) & \textbf{2609 (321)}\tabularnewline
 \hline 
-FIVE\_UNEVEN & 4685 & 4330 & 4358 & \textbf{3849}\tabularnewline
+FIVE\_UNEVEN & 4685 (427) & 4330 (474) & 4358 (544) & \textbf{3849 (388)}\tabularnewline
 \hline 
-F9 & 1958 & 1681 & 1878 & \textbf{1439}\tabularnewline
+F9 & 1958 (168) & 1681 (188) & 1878 (186) & \textbf{1439 (229)}\tabularnewline
 \hline 
-F14 & 7552 & 7573 & 6148 & \textbf{6063}\tabularnewline
+F14 & 7552 (1377) & 7573 (2049) & 6148 (724) & \textbf{6063 (1835)}\tabularnewline
 \hline 
-F15 & 6806 & 6466 & 6543 & \textbf{4397}\tabularnewline
+F15 & 6806 (1065) & 6466 (722) & 6543 (974) & \textbf{4397 (1031)}\tabularnewline
 \hline 
-F17 & 3805 & 3700 & 3543 & \textbf{2766}\tabularnewline
+F17 & 3805 (326) & 3700 (404) & 3543 (236) & \textbf{2766 (368)}\tabularnewline
 \hline 
-HIMMELBLAU & 1333 & 1173 & \textbf{1114} & 1119\tabularnewline
+HIMMELBLAU & 1333 (91) & 1173 (72) & \textbf{1114 (102)} & 1119 (81)\tabularnewline
 \hline 
-GKLS250 & 2268 & 2023 & 1778 & \textbf{1603}\tabularnewline
+GKLS250 & 2268 (177) & 2023 (170) & 1778 (208) & \textbf{1603 (150)}\tabularnewline
 \hline 
-GKLS350 & 2151 & 1841 & 2069 & \textbf{1298}\tabularnewline
+GKLS350 & 2151 (291) & 1841 (190) & 2069 (893) & \textbf{1298 (178)}\tabularnewline
 \hline 
-GOLDSTEIN & 3855 & 3731 & 3530 & \textbf{2784}\tabularnewline
+GOLDSTEIN & 3855 (291) & 3731 (335) & 3530 (309) & \textbf{2784 (290)}\tabularnewline
 \hline 
-GRIEWANK2 & 4310 & 4510 & 4035 & \textbf{2589}\tabularnewline
+GRIEWANK2 & 4310 (1205) & 4510 (1310) & 4035 (995) & \textbf{2589 (532)}\tabularnewline
 \hline 
-GRIEWANK10 & 8640 & 8773 & 8232 & \textbf{7435}\tabularnewline
+GRIEWANK10 & 8640 (1106) & 8773 (1265) & 8232 (911) & \textbf{7435 (900)}\tabularnewline
 \hline 
-HANSEN & 3329 & 3071 & 2734 & \textbf{2484}\tabularnewline
+HANSEN & 3329 (653) & 3071 (466) & 2734 (521) & \textbf{2484 (417)}\tabularnewline
 \hline 
-HARTMAN3 & 2849 & 2673 & 2678 & \textbf{1793}\tabularnewline
+HARTMAN3 & 2849 (240) & 2673 (246) & 2678 (317) & \textbf{1793 (231)}\tabularnewline
 \hline 
-HARTMAN6 & 3456 & 3249 & 3119 & \textbf{2478}\tabularnewline
+HARTMAN6 & 3456 (344) & 3249 (330) & 3119 (299) & \textbf{2478 (282)}\tabularnewline
 \hline 
-POTENTIAL3 & 4554 & 5095 & \textbf{3928} & 4081\tabularnewline
+POTENTIAL3 & 4554 (511) & 5095 (469) & \textbf{3928 (509)} & 4081 (391)\tabularnewline
 \hline 
-POTENTIAL5 & 8356 & 10032 & \textbf{7504} & 8886\tabularnewline
+POTENTIAL5 & 8356 (702) & 10032 (1078) & \textbf{7504 (996)} & 8886 (1146)\tabularnewline
 \hline 
-RASTRIGIN & 3310 & 3187 & 2751 & \textbf{2304}\tabularnewline
+RASTRIGIN & 3310 (414) & 3187 (336) & 2751 (600) & \textbf{2304 (302)}\tabularnewline
 \hline 
-ROSENBROCK4 & 6566 & 6353 & 5588 & \textbf{4019}\tabularnewline
+ROSENBROCK4 & 6566 (719) & 6353 (742) & 5588 (599) & \textbf{4019 (324)}\tabularnewline
 \hline 
-ROSENBROCK8 & 8379 & 8717 & 7783 & \textbf{6801}\tabularnewline
+ROSENBROCK8 & 8379 (864) & 8717 (882) & 7783 (782) & \textbf{6801 (633)}\tabularnewline
 \hline 
-ROSENBROCK16 & 11921 & 12471 & \textbf{11677} & 11996\tabularnewline
+ROSENBROCK16 & 11921 (1389) & 12471 (1025) & \textbf{11677 (1212)} & 11996 (1331)\tabularnewline
 \hline 
-SHEKEL5 & 3946 & 3731 & 3859 & \textbf{2495}\tabularnewline
+SHEKEL5 & 3946 (333) & 3731 (398) & 3859 (460) & \textbf{2495 (310)}\tabularnewline
 \hline 
-SHEKEL7 & 3990 & 3646 & 3944 & \textbf{2432}\tabularnewline
+SHEKEL7 & 3990 (361) & 3646 (442) & 3944 (326) & \textbf{2432 (240)}\tabularnewline
 \hline 
-SHEKEL10 & 3836 & 3630 & 3694 & \textbf{2516}\tabularnewline
+SHEKEL10 & 3836 (316) & 3630 (385) & 3694 (379) & \textbf{2516 (326)}\tabularnewline
 \hline 
-SHUBERT2 & 3288 & 3212 & 2631 & \textbf{2300}\tabularnewline
+SHUBERT2 & 3288 (562) & 3212 (728) & 2631 (373) & \textbf{2300 (527)}\tabularnewline
 \hline 
-SHUBERT4 & 3116 & 2919 & 2499 & \textbf{1967}\tabularnewline
+SHUBERT4 & 3116 (548) & 2919 (514) & 2499 (422) & \textbf{1967 (323)}\tabularnewline
 \hline 
-SHUBERT8 & 2815 & 2810 & 2337 & \textbf{2267}\tabularnewline
+SHUBERT8 & 2815 (500) & 2810 (513) & 2337 (296) & \textbf{2267 (296)}\tabularnewline
 \hline 
-SCHAFFER & 55131 & 40715 & 60717 & \textbf{23531}\tabularnewline
+SCHAFFER & 55131 (10062) & 40715 (9866) & 60717 (9950) & \textbf{23531 (5904)}\tabularnewline
 \hline 
-SCHWEFEL221 & 2724 & 2901 & 2799 & \textbf{2203}\tabularnewline
+SCHWEFEL221 & 2724 (406) & 2901 (547) & 2799 (505) & \textbf{2203 (478)}\tabularnewline
 \hline 
-SCHWEFEL222 & 53118 & 54593 & 55354 & \textbf{38876}\tabularnewline
+SCHWEFEL222 & 53118 (7011) & 54593 (8763) & 55354 (7330) & \textbf{38876 (5659)}\tabularnewline
 \hline 
-SPHERE & 1346 & 1188 & \textbf{1084} & 1162\tabularnewline
+SPHERE & 1346 (68) & 1188 (72) & \textbf{1084 (82)} & 1162 (84)\tabularnewline
 \hline 
-TEST2N4 & 3345 & 3233 & 2867 & \textbf{2277}\tabularnewline
+TEST2N4 & 3345 (416) & 3233 (401) & 2867 (253) & \textbf{2277 (464)}\tabularnewline
 \hline 
-TEST2N5 & 3937 & 3742 & 3094 & \textbf{2734}\tabularnewline
+TEST2N5 & 3937 (757) & 3742 (584) & 3094 (278) & \textbf{2734 (479)}\tabularnewline
 \hline 
-TEST2N6 & 4008 & 4473 & 3266 & \textbf{2905}\tabularnewline
+TEST2N6 & 4008 (718) & 4473 (1060) & 3266 (297) & \textbf{2905 (832)}\tabularnewline
 \hline 
-TEST2N7 & 4545 & 4612 & \textbf{3549} & 3559\tabularnewline
+TEST2N7 & 4545 (1169) & 4612 (1046) & \textbf{3549 (421)} & 3559 (763)\tabularnewline
 \hline 
-SINU4 & 3128 & 2879 & 3559 & \textbf{2005}\tabularnewline
+SINU4 & 3128 (410) & 2879 (240) & 3559 (750) & \textbf{2005 (332)}\tabularnewline
 \hline 
-SINU8 & 4126 & 3767 & 5637 & \textbf{3158}\tabularnewline
+SINU8 & 4126 (339) & 3767 (410) & 5637 (964) & \textbf{3158 (467)}\tabularnewline
 \hline 
-SINU16 & 6774 & 5977 & 7739 & \textbf{5891}\tabularnewline
+SINU16 & 6774 (1166) & 5977 (601) & 7739 (1791) & \textbf{5891 (553)}\tabularnewline
 \hline 
-TEST30N3 & 3704 & 3384 & 3175 & \textbf{2362}\tabularnewline
+TEST30N3 & 3704 (1289) & 3384 (1083) & 3175 (1012) & \textbf{2362 (884)}\tabularnewline
 \hline 
-TEST30N4 & 4262 & 4327 & 3491 & \textbf{2978}\tabularnewline
+TEST30N4 & 4262 (1805) & 4327 (1838) & 3491 (920) & \textbf{2978 (1719)}\tabularnewline
 \hline 
-UNEVEN\_MAXIMA & 1877 & 1810 & 1666 & \textbf{1560}\tabularnewline
+UNEVEN\_MAXIMA & 1877 (236) & 1810 (239) & 1666 (189) & \textbf{1560 (208)}\tabularnewline
 \hline 
-VINCENT2 & 1598 & \textbf{1482} & 1849 & 1834\tabularnewline
+VINCENT2 & 1598 (119) & \textbf{1482 (133)} & 1849 (121) & 1834 (388)\tabularnewline
 \hline 
-VINCENT4 & 2471 & \textbf{2282} & 2296 & 2697\tabularnewline
+VINCENT4 & 2471 (229) & \textbf{2282 (167)} & 2296 (206) & 2697 (1443)\tabularnewline
 \hline 
-VINCENT8 & 3074 & \textbf{2797} & 2883 & 4368\tabularnewline
+VINCENT8 & 3074 (524) & \textbf{2797 (201)} & 2883 (423) & 4368 (2253)\tabularnewline
 \hline 
 \textbf{SUM} & \textbf{324736} & \textbf{307329} & \textbf{315835} & \textbf{231856}\tabularnewline
 \hline 
@@ -1387,15 +1399,21 @@ different initial distributions.
 In addition, in order to investigate the impact that the choice of
 sampling method has on the optimization method, an additional experiment
 was done, in which the execution time of the proposed method was recorded
-and with different sampling techniques for the Rosenbrock function,
-in which function the dimension varied between 2 and 50. The results
-from this experiment are graphically outlined in Figure \ref{fig:timeComparison}.
+and with different sampling techniques for the ELP function, in which
+function the dimension varied between 5 and 50. This function is defined
+as:
+
+\[
+f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}
+\]
+where the parameter $n$ defines the dimension of the function. The
+results from this experiment are graphically outlined in Figure \ref{fig:timeComparison}.
 
 \begin{figure}[H]
 \begin{centering}
-\includegraphics[scale=0.5]{eego_time_comparison}
+\includegraphics[scale=0.5]{elp_time_plot}
 \par\end{centering}
-\caption{Time comparison for the Rosenbrock function and the proposed optimization
+\caption{Time comparison for the ELP function and the proposed optimization
 method using the four sampling techniques mentioned before. The time
 depicted in figure is the sum of the execution times for 30 independent
 runs.\label{fig:timeComparison}}
@@ -1502,13 +1520,11 @@ Virtual Reality techniques” (project code: TAEDK-06195).}
 Stochastic global optimization: Problem classes and solution techniques.
 Journal of Global Optimization, 14, 437-447.
 
-\bibitem{computer}Floudas, C. A., \& Pardalos, P. M. (Eds.). (2013).
-State of the art in global optimization: computational methods and
-applications
+\bibitem{computer}Floudas, C. A., \& Pardalos, P. M. (2013). State
+of the art in global optimization: computational methods and applications
 
-\bibitem{computer1}Horst, R., \& Pardalos, P. M. (Eds.). (2013).
-Handbook of global optimization (Vol. 2). Springer Science \& Business
-Media.
+\bibitem{computer1}Horst, R., \& Pardalos, P. M. (2013). Handbook
+of global optimization (Vol. 2). Springer Science \& Business Media.
 
 \bibitem{maths}Intriligator, M. D. (2002). Mathematical optimization
 and economic theory. Society for Industrial and Applied Mathematics.
@@ -1596,9 +1612,8 @@ stochastic compositional optimization is nearly as easy as solving
 stochastic optimization. IEEE Transactions on Signal Processing, 69,
 4937-4948.
 
-\bibitem{key-1}\textbf{Wolfe, M. A. (1996). Interval methods for
-global optimization. Applied Mathematics and Computation, 75(2-3),
-179-206.}
+\bibitem{key-1}Wolfe, M. A. (1996). Interval methods for global optimization.
+Applied Mathematics and Computation, 75(2-3), 179-206.
 
 \bibitem{interval2}Csendes, T., \& Ratz, D. (1997). Subdivision direction
 selection in interval methods for global optimization. SIAM Journal
@@ -1616,9 +1631,9 @@ spaces. Journal of global optimization, 11, 341-359.
 \bibitem{diffe2}Liu, J., \& Lampinen, J. (2005). A fuzzy adaptive
 differential evolution algorithm. Soft Computing, 9, 448-462.
 
-\bibitem{pso_major}Kennedy, J., \& Eberhart, R. (1995, November).
-Particle swarm optimization. In Proceedings of ICNN'95-international
-conference on neural networks (Vol. 4, pp. 1942-1948). ieee.
+\bibitem{pso_major}Kennedy, J., \& Eberhart, R. (1995). Particle
+swarm optimization. In Proceedings of ICNN'95-international conference
+on neural networks (Vol. 4, pp. 1942-1948). ieee.
 
 \bibitem{pso1}Poli, R., Kennedy, J., \& Blackwell, T. (2007). Particle
 swarm optimization: An overview. Swarm intelligence, 1, 33-57.
@@ -1652,13 +1667,13 @@ efficiency of brain storm optimization via orthogonal learning design.
 IEEE Transactions on Systems, Man, and Cybernetics: Systems, 51(11),
 6723-6742.
 
-\bibitem{gpu1}Zhou, Y., \& Tan, Y. (2009, May). GPU-based parallel
-particle swarm optimization. In 2009 IEEE Congress on Evolutionary
-Computation (pp. 1493-1500). IEEE.
+\bibitem{gpu1}Zhou, Y., \& Tan, Y. (2009). GPU-based parallel particle
+swarm optimization. In 2009 IEEE Congress on Evolutionary Computation
+(pp. 1493-1500). IEEE.
 
-\bibitem{gpu2}Dawson, L., \& Stewart, I. (2013, June). Improving
-Ant Colony Optimization performance on the GPU using CUDA. In 2013
-IEEE Congress on Evolutionary Computation (pp. 1901-1908). IEEE.
+\bibitem{gpu2}Dawson, L., \& Stewart, I. (2013). Improving Ant Colony
+Optimization performance on the GPU using CUDA. In 2013 IEEE Congress
+on Evolutionary Computation (pp. 1901-1908). IEEE.
 
 \bibitem{gpu3}Barkalov, K., \& Gergel, V. (2016). Parallel global
 optimization on GPU. Journal of Global Optimization, 66, 3-20.
@@ -1680,10 +1695,9 @@ swarm intelligence algorithms for solving optimization problems: Applications
 and trends. IEEE/CAA Journal of Automatica Sinica, 8(10), 1627-1643.
 
 \bibitem{bacterial}Chu, Y., Mi, H., Liao, H., Ji, Z., \& Wu, Q. H.
-(2008, June). A fast bacterial swarming algorithm for high-dimensional
-function optimization. In 2008 IEEE congress on evolutionary computation
-(IEEE world congress on computational intelligence) (pp. 3135-3140).
-IEEE.
+(2008). A fast bacterial swarming algorithm for high-dimensional function
+optimization. In 2008 IEEE congress on evolutionary computation (IEEE
+world congress on computational intelligence) (pp. 3135-3140). IEEE.
 
 \bibitem{fish}Neshat, M., Sepidnam, G., Sargolzaei, M., \& Toosi,
 A. N. (2014). Artificial fish swarm algorithm: a survey of the state-of-the-art,
@@ -1715,22 +1729,6 @@ G. (2020). Tunicate Swarm Algorithm: A new bio-inspired based metaheuristic
 paradigm for global optimization. Engineering Applications of Artificial
 Intelligence, 90, 103541.
 
-\bibitem{SCA}Mirjalili, S. (2016). SCA: a sine cosine algorithm for
-solving optimization problems. Knowledge-based systems, 96, 120-133.
-
-\bibitem{SCA1}Hao, Y., Song, L., Cui, L., \& Wang, H. (2019). A three-dimensional
-geometric features-based SCA algorithm for compound faults diagnosis.
-Measurement, 134, 480-491.
-
-\bibitem{SCA2}Sahu, P. C., Prusty, R. C., \& Panda, S. (2022). Optimal
-design of a robust FO-Multistage controller for the frequency awareness
-of an islanded AC microgrid under i-SCA algorithm. International Journal
-of Ambient Energy, 43(1), 2681-2693.
-
-\bibitem{sca1}Zivkovic, M., Stoean, C., Chhabra, A., Budimirovic,
-N., Petrovic, A., \& Bacanin, N. (2022). Novel improved salp swarm
-algorithm: An application for feature selection. Sensors, 22(5), 1711.
-
 \bibitem{ssaa}Wan, Y., Mao, M., Zhou, L., Zhang, Q., Xi, X., \& Zheng,
 C. (2019). A novel nature-inspired maximum power point tracking (MPPT)
 controller based on SSA-GWO algorithm for partially shaded photovoltaic
@@ -1749,6 +1747,10 @@ Singapore.
 \bibitem{SSA2}Abualigah, L., Shehab, M., Alshinwan, M., \& Alabool,
 H. (2020). Salp swarm algorithm: a comprehensive survey. Neural Computing
 and Applications, 32(15), 11195-11215.
+
+\bibitem{abc}Karaboga, D., \& Akay, B. (2009). A comparative study
+of artificial bee colony algorithm. Applied mathematics and computation,
+214(1), 108-132.
 
 \bibitem{search algorithm} Abdullahi, M., Ngadi, M. A., Dishing,
 S. I., Abdulhamid, S. I. M., \& Usman, M. J. (2020). A survey of symbiotic
@@ -1788,10 +1790,9 @@ Networks---Current Status and Future Trends, 153-180.
 
 \bibitem{key-29}Goudos, S. K., Boursianis, A. D., Mohamed, A. W.,
 Wan, S., Sarigiannidis, P., Karagiannidis, G. K., \& Suganthan, P.
-N. (2021, July). Large Scale Global Optimization Algorithms for IoT
-Networks: A Comparative Study. In 2021 17th International Conference
-on Distributed Computing in Sensor Systems (DCOSS) (pp. 272-279).
-IEEE.
+N. (2021). Large Scale Global Optimization Algorithms for IoT Networks:
+A Comparative Study. In 2021 17th International Conference on Distributed
+Computing in Sensor Systems (DCOSS) (pp. 272-279). IEEE.
 
 \bibitem{key-30}Arayapan, K., \& Warunyuwong, P. (2009). Logistics
 optimization: Application of optimization modeling in inbound logistics.
@@ -1839,14 +1840,14 @@ and analysis of multivariate observations. In Proceedings of 5-th
 Berkeley Symposium on Mathematical Statistics and Probability/University
 of California Press.
 
-\bibitem{gainit1}H. Maaranen, K. Miettinen, M.M. Makela, Quasi-random
-initial population for genetic algorithms. Computers \& Mathematics
-with Applications \textbf{47}, pp. 1885-1895, 2004.
+\bibitem{gainit1}Maaranen, H., Miettinen, K., \& Mäkelä, M. M. (2004).
+Quasi-random initial population for genetic algorithms. Computers
+\& Mathematics with Applications, 47(12), 1885-1895.
 
-\bibitem{gainit2}P.V. Paul, P. Dhavachelvan, R. Baskaran, A novel
-population initialization technique for Genetic Algorithm, In: 2013
-International Conference on Circuits, Power and Computing Technologies
-(ICCPCT), Nagercoil, India, pp. 1235-1238, 2013.
+\bibitem{gainit2}Paul, P. V., Dhavachelvan, P., \& Baskaran, R. (2013).
+A novel population initialization technique for genetic algorithm.
+In 2013 International Conference on Circuits, Power and Computing
+Technologies (ICCPCT) (pp. 1235-1238). IEEE.
 
 \bibitem{aliInit}Ali, M., Pant, M., \& Abraham, A. (2013). Unconventional
 initialization methods for differential evolution. Applied Mathematics
@@ -1857,45 +1858,52 @@ A population initialization method for evolutionary algorithms based
 on clustering and Cauchy deviates. Expert Systems with Applications,
 60, 294-310.
 
-\bibitem{KazimipourInit}Kazimipour, B., Li, X., \& Qin, A. K. (2014,
-July). A review of population initialization techniques for evolutionary
+\bibitem{KazimipourInit}Kazimipour, B., Li, X., \& Qin, A. K. (2014).
+A review of population initialization techniques for evolutionary
 algorithms. In 2014 IEEE congress on evolutionary computation (CEC)
 (pp. 2585-2592). IEEE.
 
 \bibitem{kmeans1-1}Li, Y., \& Wu, H. (2012). A clustering method
 based on K-means algorithm. Physics Procedia, 25, 1104-1109.
 
-\bibitem{jainTermination}B.J. Jain, H. Pohlheim, J. Wegener, On termination
-criteria of evolutionary algorithms, in: Proceedings of the 3rd Annual
-Conference on Genetic and Evolutionary Computation, 2001, pp. 768--768.
+\bibitem{jainTermination}Jain, B. J., Pohlheim, H., \& Wegener, J.
+(2001). On termination criteria of evolutionary algorithms. In Proceedings
+of the 3rd Annual Conference on Genetic and Evolutionary Computation
+(pp. 768-768).
 
-\bibitem{zilTermination}K. Zielinski, P. Weitkemper, R. Laur, K.-D.
-Kammeyer, Examination of stopping criteria for differential evolution
-based on a power allocation problem, J. Electr. Eng. 7 (3) (2007)
-8. 
+\bibitem{zilTermination}Zielinski, K., Weitkemper, P., Laur, R.,
+\& Kammeyer, K. D. (2006). Examination of stopping criteria for differential
+evolution based on a power allocation problem. In Proceedings of the
+10th International Conference on Optimization of Electrical and Electronic
+Equipment (Vol. 3, pp. 149-156).
 
-\bibitem{ghoreishiTermination}S.N. Ghoreishi, A. Clausen, B.N. Joergensen,
-Termination criteria in evolutionary algorithms: A survey, in: IJCCI,
-2017, pp. 373--384. 
+\bibitem{ghoreishiTermination}Ghoreishi, S. N., Clausen, A., \& Jørgensen,
+B. N. (2017). Termination Criteria in Evolutionary Algorithms: A Survey.
+In IJCCI (pp. 373-384).
 
-\bibitem{ravberTermination}M. Ravber, S-H. Liu, M. Mernik, M. Črepinšek,
-Maximum number of generations as a stopping criterion considered harmful,
-Applied Soft Computing, Volume 128, 2022, 109478, ISSN 1568-4946,
-https://doi.org/10.1016/j.asoc.2022.109478.
+\bibitem{ravberTermination}Ravber, M., Liu, S. H., Mernik, M., \&
+Črepinšek, M. (2022). Maximum number of generations as a stopping
+criterion considered harmful. Applied Soft Computing, 128, 109478.
 
-\bibitem{eofa}Kyrou G, Charilogis V, Tsoulos IG. EOFA: An Extended
-Version of the Optimal Foraging Algorithm for Global Optimization
-Problems. Computation. 2024.
+\bibitem{key-1}Javad Ebadi, M., Fahs, A., Fahs, H., \& Dehghani,
+R. (2023). Competitive secant (BFGS) methods based on modified secant
+relations for unconstrained optimization. Optimization, 72(7), 1691-1706.
 
-\bibitem{newGA}Charilogis V, Tsoulos IG, Stavrou VN. An Intelligent
-Technique for Initial Distribution of Genetic Algorithms. Axioms.
-2023; 12(10):980.
+\bibitem{eofa}Kyrou, G., Charilogis, V., \& Tsoulos, I. G. (2024).
+EOFA: An Extended Version of the Optimal Foraging Algorithm for Global
+Optimization Problems. Computation, 12(8), 158.
 
-\bibitem{ppso}Charilogis, V., Tsoulos, I.G. \& Tzallas, A. An Improved
-Parallel Particle Swarm Optimization. SN COMPUT. SCI. 4, 766 (2023). 
+\bibitem{newGA}Charilogis, V., Tsoulos, I. G., \& Stavrou, V. N.
+(2023). An Intelligent Technique for Initial Distribution of Genetic
+Algorithms. Axioms, 12(10), 980.
 
-\bibitem{igao}Kyrou G, Charilogis V, Tsoulos IG. Improving the Giant-Armadillo
-Optimization Method. Analytics. 2024; 3(2):225-240. https://doi.org/10.3390/analytics3020013 
+\bibitem{ppso}Charilogis, V., Tsoulos, I. G., \& Tzallas, A. (2023).
+An improved parallel particle swarm optimization. SN Computer Science,
+4(6), 766.
+
+\bibitem{igao}Kyrou, G., Charilogis, V., \& Tsoulos, I. G. (2024).
+Improving the Giant-Armadillo Optimization Method. Analytics, 3(2),
+225-240.
 
 \bibitem{kmeans-paterrn}Ali, H. H., \& Kadhum, L. E. (2017). K-means
 clustering algorithm applications in data mining and pattern recognition.
@@ -1926,14 +1934,13 @@ W. R., Gümüs, Z. H., Harding, S. T., ... \& Schweiger, C. A. (2013).
 Handbook of test problems in local and global optimization (Vol. 33).
 Springer Science \& Business Media.
 
-\bibitem{testfunc1}M.M. Ali and P. Kael. (2008). Improved particle
-swarm algorithms for global optimization, Applied Mathematics and
-Computation \textbf{196}, pp. 578-593.
+\bibitem{testfunc1}Ali, M. M., \& Kaelo, P. (2008). Improved particle
+swarm algorithms for global optimization. Applied mathematics and
+computation, 196(2), 578-593.
 
-\bibitem{testfunc2}H. Koyuncu, R. Ceylan.(2009). A PSO based approach:
-Scout particle swarm algorithm for continuous global optimization
-problems, Journal of Computational Design and Engineering \textbf{6},
-pp. 129--142.
+\bibitem{testfunc2}Koyuncu, H., \& Ceylan, R. (2019). A PSO based
+approach: Scout particle swarm algorithm for continuous global optimization
+problems. Journal of Computational Design and Engineering, 6(2), 129-142.
 
 \bibitem{testfunc2-1}Siarry, P., Berthiau, G., Durdin, F., \& Haussy,
 J. (1997). Enhanced simulated annealing for globally minimizing functions

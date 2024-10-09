@@ -1,7 +1,7 @@
 #include "shubert.h"
 
 shubert::shubert()
-    : Problem(3)
+    : Problem(8)
 {
     Data l, r;
     l.resize(dimension);

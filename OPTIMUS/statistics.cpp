@@ -47,10 +47,19 @@ void Statistics::printStatistics()
         if(fabs(bestyValue[i]-miny)<1e-6)
             timesMinimumFound++;
     }
+   double meanFcalls=totalFcalls*1.0/n;
+    double sum_deviation_fcalls = 0.0;
+           for (int i = 0; i < n; i++)
+           {
+               sum_deviation_fcalls += pow(fcallsValue[i]-meanFcalls,2);
 
+
+       }
+           double std_deviation_fcalls= sqrt(sum_deviation_fcalls/n);
     printf("Average Function calls: %20.2lf\n",totalFcalls*1.0/n);
     printf("Minimum Function Value: %20.10lg\n",miny);
     printf("Percent Minimum  Found: %20.2lf%%\n",timesMinimumFound*100.0/n);
+    printf("Standard Deviation of Function Calls: %20.10lg\n", std_deviation_fcalls);
 
     QStringList uniqueNames;
     for(int i=0;i<functionMetric.size();i++)
