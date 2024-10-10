@@ -432,7 +432,7 @@ literal "false"
 .
  Grammatical Evolution can be utilized to produce programs in any programming
  language.
- This method was used in a variety of cases derived from real - world problems,
+ This method was used in a series of cases derived from real - world problems,
  such as
 \series bold
  
@@ -880,8 +880,8 @@ literal "false"
 \end_inset
 
 .
- These machine learning tools were applied on a wide series of classification
- and regression datasets from the relevant literature and the experimental
+ These machine learning tools were applied on a some classification and
+ regression datasets proposed in the recent literature and the experimental
  results indicated a reduction in classification or regression error from
  the application of the new genetic operator.
 \end_layout
@@ -946,8 +946,8 @@ noprefix "false"
 
 \end_inset
 
- the used datasets are provided accompanied by the experimental results
- and in section 
+ the used datasets are described followed by the experimental results and
+ in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Conclusions"
@@ -972,7 +972,7 @@ name "sec:Materials-and-Methods"
 \end_layout
 
 \begin_layout Subsection
-The Grammatical Evolution method
+Basics of the Grammatical Evolution method
 \end_layout
 
 \begin_layout Standard
@@ -1012,7 +1012,7 @@ The Grammatical Evolution considers chromosomes as set of production rules
 \begin_inset Formula $P$
 \end_inset
 
- is the set of production rules.
+ is the set of the rules used during production.
  These rules are in the form 
 \begin_inset Formula $A\rightarrow a$
 \end_inset
@@ -1022,8 +1022,8 @@ The Grammatical Evolution considers chromosomes as set of production rules
 \end_inset
 
 .
- For Grammatical Evolution a sequence number is assigned to every production
- rule.
+ In Grammatical Evolution procedure a sequence number is assigned to every
+ production rule.
 \end_layout
 
 \begin_layout Standard
@@ -1057,13 +1057,13 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The BNF grammar for the rule construction method.
+The BNF grammar used in the rule construction method.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:ruleGrammar"
@@ -1091,15 +1091,15 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-<boolexpr>::=<expr> <relop> <expr> (0)
+<boolexpr>::=<expr> <rop> <expr> (0)
 \end_layout
 
 \begin_layout LyX-Code
-            |<boolexpr> <boolop> <boolexpr> (1)
+            |<boolexpr> <bop> <boolexpr> (1)
 \end_layout
 
 \begin_layout LyX-Code
-<relop>::= > (0)
+<rop>::= > (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1123,7 +1123,7 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-<boolop>::=  & (0)
+<bop>::=  & (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1179,7 +1179,7 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-           |<digitlist>.<digitlist> (1)
+           |<dlist>.<dlist> (1)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1195,19 +1195,15 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-           | xD (D)
+           | xD (D-1)
 \end_layout
 
 \begin_layout LyX-Code
-<digitlist>::=<digit>                  (0)                 
+<dlist>::=<digit>                  (0)                 
 \end_layout
 
 \begin_layout LyX-Code
-           | <digit><digit>            (1)
-\end_layout
-
-\begin_layout LyX-Code
-           | <digit><digit><digit>     (2)
+            | <digit><dlist>       (1)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1241,7 +1237,7 @@ name "fig:ruleGrammar"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -1263,23 +1259,23 @@ name "fig:grammarNNC"
 \end_layout
 
 \begin_layout LyX-Code
-S:=<sigexpr>                          (0)
+S:=<sexpr>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-<sigexpr>::=<Node>                    (0)
+<sexpr>::=<Node>                    (0)
 \end_layout
 
 \begin_layout LyX-Code
-           | <Node> + <sigexpr>       (1)
+           | <Node> + <sexpr>       (1)
 \end_layout
 
 \begin_layout LyX-Code
-<Node>::=<number>*sig(<sum>+<number>) (0)
+<Node>::=<num>*sig(<sum>+<num>) (0)
 \end_layout
 
 \begin_layout LyX-Code
-<sum>::= <number>*<xxlist>            (0)
+<sum>::= <num>*<xlist>            (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1287,7 +1283,7 @@ S:=<sigexpr>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-<xxlist>::= x1        (0)
+<xlist>::= x1        (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1303,19 +1299,19 @@ S:=<sigexpr>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-<number>::= (<digitlist>.<digitlist>)        (0)
+<number>::= (<dlist>.<dlist>)        (0)
 \end_layout
 
 \begin_layout LyX-Code
-             |    (-<digitlist>.<digitlist>) (1)
+             |    (-<dlist>.<dlist>) (1)
 \end_layout
 
 \begin_layout LyX-Code
-<digitlist>::= <digit>            (0)
+<dlist>::= <digit>            (0)
 \end_layout
 
 \begin_layout LyX-Code
-             | <digit><digitlist> (1)
+             | <digit><dlist> (1)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1366,7 +1362,7 @@ Get
 \begin_inset Formula $V$
 \end_inset
 
- from the current chromosome.
+ for the current chromosome.
 \end_layout
 
 \begin_layout Itemize
@@ -1424,7 +1420,8 @@ noprefix "false"
 
 \end_inset
 
- is able to construct artificial neural networks in the form:
+ is able to produce artificial neural networks using the following general
+ form:
 \end_layout
 
 \begin_layout Standard
@@ -1439,7 +1436,7 @@ The vector
 \begin_inset Formula $\overrightarrow{x}$
 \end_inset
 
- represents the input pattern, while the vector 
+ represents the input vector, while the vector 
 \begin_inset Formula $\overrightarrow{p}$
 \end_inset
 
@@ -1448,7 +1445,7 @@ The vector
 \begin_inset Formula $H$
 \end_inset
 
- defines the number of weights or processing units.
+ represents the number of weights or processing units.
  These networks have one processing level, but the grammar could be easily
  extended to produce neural networks of additional levels.
  The function 
@@ -2105,7 +2102,7 @@ https://archive.ics.uci.edu/ml/index.php
 
 \end_inset
 
-(accessed on 25 September 2024)
+(accessed on 10 October 2024)
 \begin_inset CommandInset citation
 LatexCommand citep
 key "UCL"
@@ -2128,7 +2125,7 @@ https://sci2s.ugr.es/keel/datasets.php
 
 \end_inset
 
-(accessed on 25 September 2024)
+(accessed on 10 October 2024)
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Keel"
@@ -2151,7 +2148,7 @@ http://lib.stat.cmu.edu/datasets/
 
 \end_inset
 
-(accessed on 25 September 2024).
+(accessed on 10 October 2024).
  
 \end_layout
 
@@ -2168,7 +2165,7 @@ A series of classification datasets was used in the conducted experiments:
 \series bold
 Appendictis
 \series default
- a medical dataset, proposed in 
+ proposed in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "appendicitis"
@@ -2225,7 +2222,7 @@ Circular
 \series bold
 Cleveland
 \series default
- dataset, a medical dataset
+ dataset 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "cleveland1,cleveland2"
@@ -2249,7 +2246,7 @@ literal "false"
 
 \end_inset
 
-, a dataset related to dermatological deceases.
+, related to dermatological deceases.
  
 \end_layout
 
@@ -2258,7 +2255,7 @@ literal "false"
 \series bold
 Ecoli
 \series default
- dataset, a dataset related to protein problems
+ dataset, related to protein problems
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ecoli"
@@ -2341,8 +2338,8 @@ literal "false"
 
 \end_inset
 
-, related to votes in the U.S.
- House of Representatives.
+, that contains the votes in the U.S.
+ House of Representatives for various cases.
  
 \end_layout
 
@@ -2392,7 +2389,7 @@ literal "false"
 \series bold
 Parkinsons
 \series default
- dataset, a dataset related to the detection of Parkinson's disease (PD)
+ dataset, related to the detection of Parkinson's disease (PD)
 \begin_inset CommandInset citation
 LatexCommand cite
 key "parkinsons"
@@ -2416,7 +2413,7 @@ literal "false"
 
 \end_inset
 
-, a medical dataset used in the detection of diabetes.
+, used in the detection of diabetes.
 \end_layout
 
 \begin_layout Enumerate
@@ -2489,7 +2486,7 @@ literal "false"
 \series bold
 Spiral
 \series default
- dataset, which is an artificial dataset.
+ dataset, that is an artificial dataset.
 \end_layout
 
 \begin_layout Enumerate
@@ -2547,7 +2544,8 @@ literal "false"
 \series bold
 Eeg
 \series default
- datasets, a medical dataset contains EEG measurements 
+ datasets, a medical dataset contains measurements from various experiments
+ regarding EEG 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "eeg"
@@ -2556,8 +2554,8 @@ literal "true"
 \end_inset
 
 .
- From this dataset the next cases were used: Z_F_S, Z_O_N_F_S, ZO_NF_S and
- ZONF_S.
+ The following cases were used from this dataset: Z_F_S, Z_O_N_F_S, ZO_NF_S
+ and ZONF_S.
 \end_layout
 
 \begin_layout Enumerate
@@ -2638,7 +2636,7 @@ literal "false"
 \series bold
 BL
 \series default
- dataset, it contains measurements from electricity experiments.
+ dataset, that is related to calculations from electricity experiments.
 \end_layout
 
 \begin_layout Enumerate
@@ -2729,7 +2727,7 @@ LW
 \series bold
 MORTGAGE
 \series default
- dataset, that contains economic data from USA.
+ dataset, that contains economic measurements from USA.
 \end_layout
 
 \begin_layout Enumerate
@@ -2737,7 +2735,7 @@ MORTGAGE
 \series bold
 MUNDIAL, 
 \series default
-downloaded from the STALIB repository.
+used from the STALIB repository.
 \end_layout
 
 \begin_layout Enumerate
@@ -2745,7 +2743,7 @@ downloaded from the STALIB repository.
 \series bold
 PL
 \series default
- dataset, downloaded from the STALIB repository.
+ dataset, used from the STALIB repository.
 \end_layout
 
 \begin_layout Enumerate
@@ -2761,7 +2759,7 @@ QUAKE
 \series bold
 REALESTATE, 
 \series default
-downloaded from the STALIB repository.
+originated in the STALIB repository.
 \end_layout
 
 \begin_layout Enumerate
@@ -2814,9 +2812,9 @@ https://github.com/itsoulos/GlobalOptimus/
 
 \end_inset
 
-( accessed on 25 September 2024 ).
- All the experiments were executed 30 times and the random number generator
- was initialized using different seed in every execution.
+( accessed on 10 October 2024 ).
+ The experiments were executed 30 times for each case and the random number
+ generator was initialized using different seed in every execution.
  For the case of classification problems, the average classification error
  as measured on the test set was recorded and, for the case of regression
  datasets, the average regression error as measured on the test set was
@@ -2837,7 +2835,7 @@ noprefix "false"
 
 \end_inset
 
- depicts the experimental settings for the conducted experiments.
+ depicts the experimental settings for the performed experiments.
 \end_layout
 
 \begin_layout Standard
@@ -2851,7 +2849,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-All the value for the used experimental parameters.
+The values for the experimental parameters.
+ These parameters were used in the machine learning methods.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:values"
@@ -3163,7 +3162,7 @@ noprefix "false"
 \end_layout
 
 \begin_layout Enumerate
-The column BFGS denotes the application of the BFGS method 
+The column BFGS represents the incorporation of the BFGS method 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "powell"
@@ -3179,7 +3178,8 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The column GEN denotes the application of a genetic algorithm 
+The column GEN outlines the experimental results using a genetic algorithm
+ 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "doublepop"
@@ -3196,7 +3196,7 @@ literal "false"
  in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:experSettings"
+reference "tab:values"
 plural "false"
 caps "false"
 noprefix "false"
@@ -3242,8 +3242,8 @@ The column NNC_CROSS depicts the results for the neural construction method
 \end_layout
 
 \begin_layout Enumerate
-The last row under the name AVERAGE, represents the average classification
- or regression error for all datasets.
+The average classification or regression error is depicted in row under
+ the name AVERAGE.
 \end_layout
 
 \begin_layout Standard
@@ -3251,15 +3251,16 @@ The last row under the name AVERAGE, represents the average classification
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Experimental results for the classification datasets.
- The numbers in cells stand for average classification error as calculated
- on the corresponding test set.
+This table shows the average classification error as calculated on the correspon
+ding test set for the classification datasets using all machine learning
+ models.
+ 
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:experClass"
@@ -5671,15 +5672,15 @@ AVERAGE
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Experimental results for the regression datasets.
- Numbers in table represent the average regression error as measured on
- the corresponding test set.
+This table shows the experimental results when the regression datasets were
+ used and the numbers stand for the average regression error as measured
+ on the corresponding test set.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:experRegression"
@@ -7238,9 +7239,9 @@ AVERAGE
 
 \end_inset
 
-The experimental results indicate that there is a significant reduction
- in the mean error using the new genetic operator in both machine learning
- models.
+There is a clear indication from the experimental results that there is
+ a significant reduction in the mean error using the new genetic operator
+ in both machine learning models.
  In a wide range of data sets, the proposed technique drastically reduces
  the error of data classification or fitting, as it is also represented
  in the graphs 
@@ -7575,7 +7576,7 @@ name "fig:boxRuleRegression"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7630,8 +7631,8 @@ These figures confirm the significant improvement brought about by the use
 \begin_layout Standard
 Also, a statistical comparison was performed between the two machine learning
  methods and the enhanced ones that use the new crossover operator.
- This comparison was performed for the classification datasets, and it is
- graphically outlined in Figure 
+ This comparison was performed using the classification datasets, and it
+ is graphically outlined in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statClass"
@@ -7649,7 +7650,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7666,8 +7667,9 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Statistical comparison between the improved machine learning methods and
- the original methods for the classification datasets.
+Statistical test for all the improved machine learning methods and the original
+ methods.
+ The methods were tested on the classification datasets.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:statClass"
@@ -9446,8 +9448,9 @@ Another experiment was performed in order to estimate the importance of
 
 , which controls the number of chromosomes participating in the new crossover
  operator.
- In this experiment the neural network construction method was applied on
- the classification datasets using different values for the parameter 
+ In this experiment the neural network construction method was tested on
+ the series of classification datasets using different values for the parameter
+ 
 \begin_inset Formula $N_{cr}$
 \end_inset
 
@@ -9485,7 +9488,7 @@ The effects of the parameter
 \end_inset
 
  to the NNC machine learning model.
- The experiments were conducted on the classification datasets.
+ The classification datasets were used in this experiment.
  In all experiments the value 
 \begin_inset Formula $p_{cr}$
 \end_inset
@@ -11332,14 +11335,13 @@ A method that constructs artificial neural networks.
 \end_layout
 
 \begin_layout Standard
-The methods were applied on a wide series of datasets in the recent literature.
+The methods were tested on a wide series of datasets in the recent literature.
  In the vast majority of cases, the application of the new genetic operator
  resulted in a drastic reduction of the corresponding classification or
  data fitting error.
- Furthermore, to assess the effect of changing the values of the critical
- parameters of the genetic operator on the performance of the machine learning
- methods, more experiments were conducted in which these critical parameters
- were changed over a wide range of values.
+ Furthermore, to measure to asses the sensitivity of the proposed method
+ to some critical parameters, more experiments were conducted in which these
+ critical parameters were changed over a wide range of values.
  Boosting these values improves the performance of machine learning methods
  by applying the new genetic operator, but up to a point.
  In addition, an increase in the chromosomes involved in the genetic operator,

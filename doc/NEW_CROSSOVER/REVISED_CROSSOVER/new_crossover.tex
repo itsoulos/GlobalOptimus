@@ -213,7 +213,7 @@ Grammatical Evolution \citep{ge1} is an integer based genetic algorithm,
 where each chromosome represents a series of production rules derived
 from a Backus--Naur form (BNF) grammar \citep{bnf1}. Grammatical
 Evolution can be utilized to produce programs in any programming language.
-This method was used in a variety of cases derived from real - world
+This method was used in a series of cases derived from real - world
 problems, such as\textbf{ }data fitting \citep{ge_program1,ge_program2},
 credit classification \citep{ge_credit},\textbf{ }detection of network
 attacks \citep{ge_intrusion},\textbf{ }solving differential equations
@@ -281,10 +281,10 @@ function. The new genetic operator was applied in two distinct cases
 of Grammatical Evolution methods: in the rule construction technique
 introduced recently \citep{rule_tsoulos} and in the neural network
 construction technique \citep{nnc_tsoulos}. These machine learning
-tools were applied on a wide series of classification and regression
-datasets from the relevant literature and the experimental results
-indicated a reduction in classification or regression error from the
-application of the new genetic operator.
+tools were applied on a some classification and regression datasets
+proposed in the recent literature and the experimental results indicated
+a reduction in classification or regression error from the application
+of the new genetic operator.
 
 The main components of the proposed technique are the following:
 \begin{enumerate}
@@ -305,13 +305,13 @@ of genetic algorithms beyond Grammatical Evolution.
 The following sections have this structure: in section \ref{sec:Materials-and-Methods}
 the basic principles of Grammatical Evolution are discussed as well
 as the current genetic operator. In section \ref{sec:Results} the
-used datasets are provided accompanied by the experimental results
-and in section \ref{sec:Conclusions} some conclusions are discussed
-in detail.
+used datasets are described followed by the experimental results and
+in section \ref{sec:Conclusions} some conclusions are discussed in
+detail.
 
 \section{Materials and Methods\label{sec:Materials-and-Methods}}
 
-\subsection{The Grammatical Evolution method}
+\subsection{Basics of the Grammatical Evolution method}
 
 The Grammatical Evolution considers chromosomes as set of production
 rules in the provided BNF grammar. BNF grammar is usually denoted
@@ -321,16 +321,17 @@ as a set $G=\left(N,T,S,P\right)$, with the following assumptions:
 \item $T$ is a set that contains the terminal symbols. 
 \item $S$ is a non - terminal symbol that corresponds to the that start
 symbol of the grammar.
-\item $P$ is the set of production rules. These rules are in the form $A\rightarrow a$
-or $A\rightarrow aB,\ A,B\in N,\ a\in T$. For Grammatical Evolution
-a sequence number is assigned to every production rule.
+\item $P$ is the set of the rules used during production. These rules are
+in the form $A\rightarrow a$ or $A\rightarrow aB,\ A,B\in N,\ a\in T$.
+In Grammatical Evolution procedure a sequence number is assigned to
+every production rule.
 \end{itemize}
 The grammar used for the rule machine learning method is outlined
 in Figure \ref{fig:ruleGrammar} and the grammar used for the neural
 network construction technique is displayed in figure \ref{fig:grammarNNC}.
 
 \begin{figure}[H]
-\caption{The BNF grammar for the rule construction method.\label{fig:ruleGrammar}}
+\caption{The BNF grammar used in the rule construction method.\label{fig:ruleGrammar}}
 
 \begin{lyxcode}
 \textless S\textgreater ::=~\textless ifexpr\textgreater ~value=\textless expr\textgreater ~else~value=\textless expr\textgreater ~~(0)
@@ -339,11 +340,11 @@ network construction technique is displayed in figure \ref{fig:grammarNNC}.
 
 ~~~~~~~~~~~~\textbar\textless ifexpr\textgreater ~else~if(\textless boolexpr\textgreater )~value=\textless expr\textgreater ~(1)
 
-\textless boolexpr\textgreater ::=\textless expr\textgreater ~\textless relop\textgreater ~\textless expr\textgreater ~(0)
+\textless boolexpr\textgreater ::=\textless expr\textgreater ~\textless rop\textgreater ~\textless expr\textgreater ~(0)
 
-~~~~~~~~~~~~\textbar\textless boolexpr\textgreater ~\textless boolop\textgreater ~\textless boolexpr\textgreater ~(1)
+~~~~~~~~~~~~\textbar\textless boolexpr\textgreater ~\textless bop\textgreater ~\textless boolexpr\textgreater ~(1)
 
-\textless relop\textgreater ::=~\textgreater ~(0)
+\textless rop\textgreater ::=~\textgreater ~(0)
 
 ~~~~~~~~~~~\textbar\textgreater =~(1)
 
@@ -355,7 +356,7 @@ network construction technique is displayed in figure \ref{fig:grammarNNC}.
 
 ~~~~~~~~~~~\textbar !=~(5)
 
-\textless boolop\textgreater ::=~~\&~(0)
+\textless bop\textgreater ::=~~\&~(0)
 
 ~~~~~~~~~~~\textbar ~\textbar ~(1)
 
@@ -383,7 +384,7 @@ network construction technique is displayed in figure \ref{fig:grammarNNC}.
 
 \textless terminal\textgreater ::=\textless xlist\textgreater ~~~~~~~~~~~~~~~~(0)~~~~~~~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~\textbar\textless digitlist\textgreater .\textless digitlist\textgreater ~(1)
+~~~~~~~~~~~\textbar\textless dlist\textgreater .\textless dlist\textgreater ~(1)
 
 \textless xlist\textgreater ::=x1~~~~(0)~~~~~~~~~~~~~~
 
@@ -391,13 +392,11 @@ network construction technique is displayed in figure \ref{fig:grammarNNC}.
 
 ~~~~~~~~~~~………~~~~~~~~~~~~~
 
-~~~~~~~~~~~\textbar ~xD~(D)
+~~~~~~~~~~~\textbar ~xD~(D-1)
 
-\textless digitlist\textgreater ::=\textless digit\textgreater ~~~~~~~~~~~~~~~~~~(0)~~~~~~~~~~~~~~~~~
+\textless dlist\textgreater ::=\textless digit\textgreater ~~~~~~~~~~~~~~~~~~(0)~~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~\textbar ~\textless digit\textgreater\textless digit\textgreater ~~~~~~~~~~~~(1)
-
-~~~~~~~~~~~\textbar ~\textless digit\textgreater\textless digit\textgreater\textless digit\textgreater ~~~~~(2)
+~~~~~~~~~~~~\textbar ~\textless digit\textgreater\textless dlist\textgreater ~~~~~~~(1)
 
 \textless digit\textgreater ~~::=~0~(0)\textbar ~1~(1)~~~~~~~~~~~~~
 
@@ -415,19 +414,19 @@ network construction technique is displayed in figure \ref{fig:grammarNNC}.
 \caption{The grammar for the neural network construction method.\label{fig:grammarNNC}}
 
 \begin{lyxcode}
-S:=\textless sigexpr\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
+S:=\textless sexpr\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
 
-\textless sigexpr\textgreater ::=\textless Node\textgreater ~~~~~~~~~~~~~~~~~~~~(0)
+\textless sexpr\textgreater ::=\textless Node\textgreater ~~~~~~~~~~~~~~~~~~~~(0)
 
-~~~~~~~~~~~\textbar ~\textless Node\textgreater ~+~\textless sigexpr\textgreater ~~~~~~~(1)
+~~~~~~~~~~~\textbar ~\textless Node\textgreater ~+~\textless sexpr\textgreater ~~~~~~~(1)
 
-\textless Node\textgreater ::=\textless number\textgreater{*}sig(\textless sum\textgreater +\textless number\textgreater )~(0)
+\textless Node\textgreater ::=\textless num\textgreater{*}sig(\textless sum\textgreater +\textless num\textgreater )~(0)
 
-\textless sum\textgreater ::=~\textless number\textgreater{*}\textless xxlist\textgreater ~~~~~~~~~~~~(0)
+\textless sum\textgreater ::=~\textless num\textgreater{*}\textless xlist\textgreater ~~~~~~~~~~~~(0)
 
 ~~~~~~~~~~~\textbar ~~~~\textless sum\textgreater +\textless sum\textgreater ~~~~~~~~~~~(1)
 
-\textless xxlist\textgreater ::=~x1~~~~~~~~(0)
+\textless xlist\textgreater ::=~x1~~~~~~~~(0)
 
 ~~~~~~~~~~~~~\textbar ~~~~x2~~(1)
 
@@ -435,13 +434,13 @@ S:=\textless sigexpr\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
 
 ~~~~~~~~~~~~~\textbar ~~~~xD~~(D-1)
 
-\textless number\textgreater ::=~(\textless digitlist\textgreater .\textless digitlist\textgreater )~~~~~~~~(0)
+\textless number\textgreater ::=~(\textless dlist\textgreater .\textless dlist\textgreater )~~~~~~~~(0)
 
-~~~~~~~~~~~~~\textbar ~~~~(-\textless digitlist\textgreater .\textless digitlist\textgreater )~(1)
+~~~~~~~~~~~~~\textbar ~~~~(-\textless dlist\textgreater .\textless dlist\textgreater )~(1)
 
-\textless digitlist\textgreater ::=~\textless digit\textgreater ~~~~~~~~~~~~(0)
+\textless dlist\textgreater ::=~\textless digit\textgreater ~~~~~~~~~~~~(0)
 
-~~~~~~~~~~~~~\textbar ~\textless digit\textgreater\textless digitlist\textgreater ~(1)
+~~~~~~~~~~~~~\textbar ~\textless digit\textgreater\textless dlist\textgreater ~(1)
 
 \textless digit\textgreater ::=~0~~~~~~(0)
 
@@ -460,7 +459,7 @@ produces valid expressions by starting from the starting symbol $S$
 and by following the production rules. The method selects the following
 production rules according to the scheme:
 \begin{itemize}
-\item \textbf{Get} the next element $V$ from the current chromosome.
+\item \textbf{Get} the next element $V$ for the current chromosome.
 \item \textbf{Select} the next rule as:\textbf{ }
 \begin{equation}
 \mbox{Rule}=V\ \mbox{mod}\ \mbox{NR}
@@ -479,19 +478,19 @@ by the Grammatical Evolution could be the following:
 \[
 \mbox{NNC}(x)=2.45\mbox{sig}\left(1.9x_{1}+3.11x_{3}+2.5\right)+5.9\mbox{sig}\left(10.8x_{2}+6.25\right)
 \]
-This grammar of Figure \ref{fig:grammarNNC} is able to construct
-artificial neural networks in the form:
+This grammar of Figure \ref{fig:grammarNNC} is able to produce artificial
+neural networks using the following general form:
 
 \begin{equation}
 N\left(\overrightarrow{x},\overrightarrow{p}\right)=\sum_{i=1}^{H}p_{(n+2)i-(n+1)}\sigma\left(\sum_{j=1}^{n}x_{j}p_{(n+2)i-(n+1)+j}+p_{(n+2)i}\right)\label{eq:nn}
 \end{equation}
-The vector $\overrightarrow{x}$ represents the input pattern, while
+The vector $\overrightarrow{x}$ represents the input vector, while
 the vector $\overrightarrow{p}$ stands for the parameter set of the
-neural network. The parameter $H$ defines the number of weights or
-processing units. These networks have one processing level, but the
-grammar could be easily extended to produce neural networks of additional
-levels. The function $\mbox{sig}(x)$ used in the previous example
-denotes the sigmoid function given by:
+neural network. The parameter $H$ represents the number of weights
+or processing units. These networks have one processing level, but
+the grammar could be easily extended to produce neural networks of
+additional levels. The function $\mbox{sig}(x)$ used in the previous
+example denotes the sigmoid function given by:
 \begin{equation}
 \mbox{sig}(x)=\frac{1}{1+\exp(-x)}
 \end{equation}
@@ -614,27 +613,27 @@ relevant websites. The internet sources for these datasets are the
 following websites:
 \begin{enumerate}
 \item The UCI dataset repository, \url{https://archive.ics.uci.edu/ml/index.php}(accessed
-on 25 September 2024)\citep{UCL}
+on 10 October 2024)\citep{UCL}
 \item The Keel repository, \url{https://sci2s.ugr.es/keel/datasets.php}(accessed
-on 25 September 2024)\citep{Keel}.
+on 10 October 2024)\citep{Keel}.
 \item The Statlib URL \url{http://lib.stat.cmu.edu/datasets/ }(accessed
-on 25 September 2024). 
+on 10 October 2024). 
 \end{enumerate}
 
 \subsection{Classification datasets }
 
 A series of classification datasets was used in the conducted experiments:
 \begin{enumerate}
-\item \textbf{Appendictis} a medical dataset, proposed in \citep{appendicitis}. 
+\item \textbf{Appendictis} proposed in \citep{appendicitis}. 
 \item \textbf{Australian} dataset \citep{australian}, suggested for credit
 card transactions.
 \item \textbf{Balance} dataset \citep{balance}, used in a series of psychological
 experiments.
 \item \textbf{Circular} dataset, that is an artificial dataset.
-\item \textbf{Cleveland} dataset, a medical dataset\citep{cleveland1,cleveland2}.
-\item \textbf{Dermatology} dataset \citep{dermatology}, a dataset related
-to dermatological deceases. 
-\item \textbf{Ecoli} dataset, a dataset related to protein problems\citep{ecoli}.
+\item \textbf{Cleveland} dataset \citep{cleveland1,cleveland2}.
+\item \textbf{Dermatology} dataset \citep{dermatology}, related to dermatological
+deceases. 
+\item \textbf{Ecoli} dataset, related to protein problems\citep{ecoli}.
 \item \textbf{Fert }dataset, which is used to detect any relation of fertility
 and sperm concentration.
 \item \textbf{Haberman} dataset, which is related to breast cancer.
@@ -642,18 +641,17 @@ and sperm concentration.
 \item \textbf{Heart} dataset \citep{heart}, a medical dataset for the prediction
 of heart diseases.
 \item \textbf{HeartAttack} dataset, a medical dataset related to heart diseases. 
-\item \textbf{HouseVotes} dataset \citep{housevotes}, related to votes
-in the U.S. House of Representatives. 
+\item \textbf{HouseVotes} dataset \citep{housevotes}, that contains the
+votes in the U.S. House of Representatives for various cases. 
 \item \textbf{Glass} dataset, which contains glass component analysis for
 glass pieces that belong to 6 classes.
 \item \textbf{Liverdisorder} dataset \citep{liver}, a medical dataset for
 the detection of liver disorders.
 \item \textbf{Mammographic} dataset \citep{mammographic}, a medical dataset
 about breast cancer.
-\item \textbf{Parkinsons} dataset, a dataset related to the detection of
-Parkinson's disease (PD)\citep{parkinsons}.
-\item \textbf{Pima} dataset \citep{pima}, a medical dataset used in the
-detection of diabetes.
+\item \textbf{Parkinsons} dataset, related to the detection of Parkinson's
+disease (PD)\citep{parkinsons}.
+\item \textbf{Pima} dataset \citep{pima}, used in the detection of diabetes.
 \item \textbf{Popfailures} dataset \citep{popfailures}, that to do with
 climate related measurements.
 \item \textbf{Regions2} dataset, a dataset used in the detection of hepatitis
@@ -662,14 +660,15 @@ C \citep{regions}.
 of heart diseases.
 \item \textbf{Segment} dataset \citep{segment}, which contains information
 regarding image processing.
-\item \textbf{Spiral} dataset, which is an artificial dataset.
+\item \textbf{Spiral} dataset, that is an artificial dataset.
 \item \textbf{Student} dataset \citep{student}, a dataset for measurements
 in schools. 
 \item \textbf{Wdbc} dataset \citep{wdbc}, used in cancer detection.
 \item \textbf{Wine} dataset, which contains information about wines. \citep{wine1,wine2}.
-\item \textbf{Eeg} datasets, a medical dataset contains EEG measurements
-\citep{eeg}. From this dataset the next cases were used: Z\_F\_S,
-Z\_O\_N\_F\_S, ZO\_NF\_S and ZONF\_S.
+\item \textbf{Eeg} datasets, a medical dataset contains measurements from
+various experiments regarding EEG \citep{eeg}. The following cases
+were used from this dataset: Z\_F\_S, Z\_O\_N\_F\_S, ZO\_NF\_S and
+ZONF\_S.
 \item \textbf{Zoo} dataset \citep{zoo}, used to estimate the category of
 some animals.
 \end{enumerate}
@@ -683,7 +682,8 @@ the age of abalones.
 \item \textbf{Airfoil }dataset, provided by NASA \citep{airfoil}.
 \item \textbf{BK} dataset \citep{Stat}, related to the prediction of points
 in a basketball game. 
-\item \textbf{BL} dataset, it contains measurements from electricity experiments.
+\item \textbf{BL} dataset, that is related to calculations from electricity
+experiments.
 \item \textbf{Baseball} dataset, used to estimate the income of baseball
 players. 
 \item \textbf{Concrete} dataset \citep{concrete}, is a dataset related
@@ -697,11 +697,12 @@ of fruit flies.
 \item \textbf{Laser} dataset, that contains measurements from laser experiments.
 \item \textbf{LW} dataset, that contains measurements regarding the weight
 of babies.
-\item \textbf{MORTGAGE} dataset, that contains economic data from USA.
-\item \textbf{MUNDIAL, }downloaded from the STALIB repository.
-\item \textbf{PL} dataset, downloaded from the STALIB repository.
+\item \textbf{MORTGAGE} dataset, that contains economic measurements from
+USA.
+\item \textbf{MUNDIAL, }used from the STALIB repository.
+\item \textbf{PL} dataset, used from the STALIB repository.
 \item \textbf{QUAKE} dataset, that contains measurements from earthquakes.
-\item \textbf{REALESTATE, }downloaded from the STALIB repository.
+\item \textbf{REALESTATE, }originated in the STALIB repository.
 \item \textbf{SN} dataset, that is used in an experiment related to trellising
 and pruning. 
 \item \textbf{Treasury} dataset, which is a dataset regarding the economy
@@ -714,18 +715,19 @@ of USA.
 
 The code used in the experiments was coded in ANSI C++ using the Optimus
 optimization environment, available from \url{https://github.com/itsoulos/GlobalOptimus/}(
-accessed on 25 September 2024 ). All the experiments were executed
-30 times and the random number generator was initialized using different
-seed in every execution. For the case of classification problems,
-the average classification error as measured on the test set was recorded
-and, for the case of regression datasets, the average regression error
-as measured on the test set was recorded. In order to validate the
-experimental results, the well -known method of ten - fold cross validation
-was incorporated.\textbf{ }Table \ref{tab:values} depicts the experimental
-settings for the conducted experiments.
+accessed on 10 October 2024 ). The experiments were executed 30 times
+for each case and the random number generator was initialized using
+different seed in every execution. For the case of classification
+problems, the average classification error as measured on the test
+set was recorded and, for the case of regression datasets, the average
+regression error as measured on the test set was recorded. In order
+to validate the experimental results, the well -known method of ten
+- fold cross validation was incorporated.\textbf{ }Table \ref{tab:values}
+depicts the experimental settings for the performed experiments.
 
 \begin{table}[H]
-\caption{All the value for the used experimental parameters.\label{tab:values}}
+\caption{The values for the experimental parameters. These parameters were
+used in the machine learning methods.\label{tab:values}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|}
@@ -754,12 +756,12 @@ depicted in Table \ref{tab:experClass} and the experimental results
 for the case of regression datasets are displayed in Table \ref{tab:experRegression}.
 The following notations are used in the experimental tables:
 \begin{enumerate}
-\item The column BFGS denotes the application of the BFGS method \citep{powell}
+\item The column BFGS represents the incorporation of the BFGS method \citep{powell}
 to train an artificial neural network with $H$ hidden nodes.
-\item The column GEN denotes the application of a genetic algorithm \citep{doublepop}
-to train an artificial neural network with $H$ hidden nodes. The
-values for the critical parameters of the genetic algorithm are included
-in Table \ref{tab:experSettings}. 
+\item The column GEN outlines the experimental results using a genetic algorithm
+\citep{doublepop} to train an artificial neural network with $H$
+hidden nodes. The values for the critical parameters of the genetic
+algorithm are included in Table \ref{tab:values}. 
 \item The column RULE refers to the simple rule construction method \citep{rule},
 without the incorporation of the new crossover operator.
 \item The column NNC refers to the method of neural network construction
@@ -769,13 +771,13 @@ operator.
 operator the rule construction machine learning model.
 \item The column NNC\_CROSS depicts the results for the neural construction
 method with the assistance of the new genetic operator.
-\item The last row under the name AVERAGE, represents the average classification
-or regression error for all datasets.
+\item The average classification or regression error is depicted in row
+under the name AVERAGE.
 \end{enumerate}
 \begin{table}[H]
-\caption{Experimental results for the classification datasets. The numbers
-in cells stand for average classification error as calculated on the
-corresponding test set.\label{tab:experClass}}
+\caption{This table shows the average classification error as calculated on
+the corresponding test set for the classification datasets using all
+machine learning models. \label{tab:experClass}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -854,9 +856,9 @@ corresponding test set.\label{tab:experClass}}
 \end{tabular}
 \end{table}
 \begin{table}[H]
-\caption{Experimental results for the regression datasets. Numbers in table
-represent the average regression error as measured on the corresponding
-test set.\label{tab:experRegression}}
+\caption{This table shows the experimental results when the regression datasets
+were used and the numbers stand for the average regression error as
+measured on the corresponding test set.\label{tab:experRegression}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -910,14 +912,14 @@ VE & 1.92 & 2.43 & 0.028 & 6.61 & 0.043 & 0.084\tabularnewline
 \hline 
 \end{tabular}
 \end{table}
-The experimental results indicate that there is a significant reduction
-in the mean error using the new genetic operator in both machine learning
-models. In a wide range of data sets, the proposed technique drastically
-reduces the error of data classification or fitting, as it is also
-represented in the graphs \ref{fig:ruleDatasets} and \ref{fig:nncDatasets}.
-These graphs show the number of datasets in which the application
-of the new genetic operator resulted in a drastic reduction in the
-corresponding error. 
+There is a clear indication from the experimental results that there
+is a significant reduction in the mean error using the new genetic
+operator in both machine learning models. In a wide range of data
+sets, the proposed technique drastically reduces the error of data
+classification or fitting, as it is also represented in the graphs
+\ref{fig:ruleDatasets} and \ref{fig:nncDatasets}. These graphs show
+the number of datasets in which the application of the new genetic
+operator resulted in a drastic reduction in the corresponding error. 
 
 \textbf{}
 \begin{figure}[H]
@@ -1000,15 +1002,16 @@ greater in the datasets used in data fitting.
 
 Also, a statistical comparison was performed between the two machine
 learning methods and the enhanced ones that use the new crossover
-operator. This comparison was performed for the classification datasets,
+operator. This comparison was performed using the classification datasets,
 and it is graphically outlined in Figure \ref{fig:statClass}.
 
 \begin{figure}[H]
 \begin{centering}
 \includegraphics[scale=0.4]{statistical_class}
 \par\end{centering}
-\caption{Statistical comparison between the improved machine learning methods
-and the original methods for the classification datasets.\label{fig:statClass}}
+\caption{Statistical test for all the improved machine learning methods and
+the original methods. The methods were tested on the classification
+datasets.\label{fig:statClass}}
 \end{figure}
 Moreover, an additional test was executed in order to estimate the
 effectiveness of the new crossover rate parameter denoted as $p_{cr}$.\textbf{
@@ -1105,15 +1108,15 @@ the new genetic operator at a rate of 5\%.
 Another experiment was performed in order to estimate the importance
 of the parameter $N_{cr}$, which controls the number of chromosomes
 participating in the new crossover operator. In this experiment the
-neural network construction method was applied on the classification
+neural network construction method was tested on the series of classification
 datasets using different values for the parameter $N_{cr}$ while
 the parameter $p_{cr}$ was fixed to 2.5\%. The outcomes obtained
 from this experiment are depicted in Table \ref{tab:experNCR}.
 
 \begin{table}[H]
 \caption{The effects of the parameter $N_{cr}$ to the NNC machine learning
-model. The experiments were conducted on the classification datasets.
-In all experiments the value $p_{cr}$ was set to 0.025. \label{tab:experNCR}}
+model. The classification datasets were used in this experiment. In
+all experiments the value $p_{cr}$ was set to 0.025. \label{tab:experNCR}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|}
@@ -1232,20 +1235,20 @@ to the C programming language for data classification or regression
 problems.
 \item A method that constructs artificial neural networks.
 \end{itemize}
-The methods were applied on a wide series of datasets in the recent
+The methods were tested on a wide series of datasets in the recent
 literature. In the vast majority of cases, the application of the
 new genetic operator resulted in a drastic reduction of the corresponding
-classification or data fitting error. Furthermore, to assess the effect
-of changing the values of the critical parameters of the genetic operator
-on the performance of the machine learning methods, more experiments
-were conducted in which these critical parameters were changed over
-a wide range of values. Boosting these values improves the performance
-of machine learning methods by applying the new genetic operator,
-but up to a point. In addition, an increase in the chromosomes involved
-in the genetic operator, has a significant increase in the required
-execution time, as was also seen in the performed experiments. However,
-with the use of recent techniques that can utilize modern parallel
-computing structures, this additional time can be significantly reduced.
+classification or data fitting error. Furthermore, to measure to asses
+the sensitivity of the proposed method to some critical parameters,
+more experiments were conducted in which these critical parameters
+were changed over a wide range of values. Boosting these values improves
+the performance of machine learning methods by applying the new genetic
+operator, but up to a point. In addition, an increase in the chromosomes
+involved in the genetic operator, has a significant increase in the
+required execution time, as was also seen in the performed experiments.
+However, with the use of recent techniques that can utilize modern
+parallel computing structures, this additional time can be significantly
+reduced.
 
 Improvements of the proposed operator in future studies may include
 the application of the new crossover in other machine learning methods
