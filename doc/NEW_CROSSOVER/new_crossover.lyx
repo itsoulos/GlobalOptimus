@@ -661,8 +661,8 @@ literal "false"
 
 \end_inset
 
-, proposed a one-to-one mapping for chromosomes and the non - terminal symbols
- of the grammar.
+, proposed a one-to-one mapping for chromosomes and the set of non - terminal
+ symbols.
  Also, O'Neill et al.
  suggested the usage of shape grammars in the Grammatical Evolution for
  evolutionary design 
@@ -887,7 +887,7 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-The main components of the proposed technique are the following:
+The main components of the proposed technique are:
 \end_layout
 
 \begin_layout Enumerate
@@ -1063,7 +1063,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The BNF grammar used in the rule construction method.
+The BNF grammar used in the method that constructs rules using the Grammatical
+ Evolution procedure.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:ruleGrammar"
@@ -1083,19 +1084,19 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-<ifexpr>::= if(<boolexpr>) value=<expr> (0)
+<ifexpr>::= if(<bexpr>) value=<expr> (0)
 \end_layout
 
 \begin_layout LyX-Code
-            |<ifexpr> else if(<boolexpr>) value=<expr> (1)
+            |<ifexpr> else if(<bexpr>) value=<expr> (1)
 \end_layout
 
 \begin_layout LyX-Code
-<boolexpr>::=<expr> <rop> <expr> (0)
+<bexpr>::=<expr> <rop> <expr> (0)
 \end_layout
 
 \begin_layout LyX-Code
-            |<boolexpr> <bop> <boolexpr> (1)
+            |<bexpr> <bop> <bexpr> (1)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1139,7 +1140,7 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-           |<terminal>            (2) 
+           |<term>            (2) 
 \end_layout
 
 \begin_layout LyX-Code
@@ -1175,7 +1176,7 @@ name "fig:ruleGrammar"
 \end_layout
 
 \begin_layout LyX-Code
-<terminal>::=<xlist>                (0)                      
+<term>::=<xlist>                (0)                      
 \end_layout
 
 \begin_layout LyX-Code
@@ -1243,7 +1244,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The grammar for the neural network construction method.
+The BNG grammar for the procedure of creating artificial neural networks
+ with Grammatical Evolution.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:grammarNNC"
@@ -1299,7 +1301,7 @@ S:=<sexpr>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-<number>::= (<dlist>.<dlist>)        (0)
+<num>::= (<dlist>.<dlist>)        (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1343,7 +1345,7 @@ The numbers at the end of the production rules represent the sequence number
 \begin_inset Formula $d$
 \end_inset
 
- stands for the dimension of the used dataset ( number of features).
+ is the dimension of the used dataset ( number of features).
  Grammatical Evolution produces valid expressions by starting from the starting
  symbol 
 \begin_inset Formula $S$
@@ -1362,7 +1364,7 @@ Get
 \begin_inset Formula $V$
 \end_inset
 
- for the current chromosome.
+ for the processed chromosome.
 \end_layout
 
 \begin_layout Itemize
@@ -1370,7 +1372,7 @@ Get
 \series bold
 Select
 \series default
- the next rule as:
+ the rule that will be applied as:
 \series bold
  
 \series default
@@ -1402,7 +1404,7 @@ For a dataset with three features
 The terminal symbol value is used to denote the final outcome of the rule
  method.
  For the same dataset an example of neural network constructed by the Grammatica
-l Evolution could be the following:
+l Evolution may be the following:
 \begin_inset Formula 
 \[
 \mbox{NNC}(x)=2.45\mbox{sig}\left(1.9x_{1}+3.11x_{3}+2.5\right)+5.9\mbox{sig}\left(10.8x_{2}+6.25\right)
@@ -1420,8 +1422,7 @@ noprefix "false"
 
 \end_inset
 
- is able to produce artificial neural networks using the following general
- form:
+ is able to produce artificial neural networks using this form:
 \end_layout
 
 \begin_layout Standard
@@ -1586,9 +1587,16 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Fitness Calculation step
+Fitness step
 \series default
 .
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:Fitness-step."
+
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -1656,7 +1664,7 @@ EndFor
 \begin_layout Enumerate
 
 \series bold
-Application of genetic operations step.
+Genetic operations step.
 \end_layout
 
 \begin_deeper
@@ -1678,13 +1686,13 @@ Apply
 \begin_layout Enumerate
 
 \series bold
-Apply
+Perform
 \series default
  the crossover procedure: During this procedure 
 \begin_inset Formula $p_{s}\times N_{c}$
 \end_inset
 
- offsprings are produced from the current population.
+ offsprings are produced from the population under processing.
  For every set 
 \begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
 \end_inset
@@ -1693,7 +1701,7 @@ Apply
 \begin_inset Formula $(z,w)$
 \end_inset
 
- are selected from the population with tournament selection.
+ are chosen from the current population with tournament selection.
  The offsprings 
 \begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
 \end_inset
@@ -1718,7 +1726,7 @@ noprefix "false"
 Perform
 \series default
  the mutation procedure.
- A random number 
+ During this procedure a random number 
 \begin_inset Formula $r\in[0,1]$
 \end_inset
 
@@ -1769,7 +1777,7 @@ noprefix "false"
 \begin_layout Enumerate
 
 \series bold
-Check for termination step
+Termination step
 \series default
 .
  
@@ -1797,7 +1805,17 @@ If
 \begin_inset Formula $k\le N_{g}$
 \end_inset
 
- goto Fitness Calculation Step, 
+ goto Step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:Fitness-step."
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, 
 \series bold
 else
 \series default
@@ -1924,8 +1942,8 @@ name "subsec:The-new-crossover"
 
 \begin_layout Standard
 The new crossover operator executes the one - point crossover method on
- a selected chromosome using a set of randomly chosen chromosomes from the
- current population.
+ a selected chromosome using a set chromosomes that was selected randomly
+ from the current population.
  The steps of this procedure are listed below:
 \end_layout
 
@@ -2153,11 +2171,11 @@ http://lib.stat.cmu.edu/datasets/
 \end_layout
 
 \begin_layout Subsection
-Classification datasets 
+The used classification datasets 
 \end_layout
 
 \begin_layout Standard
-A series of classification datasets was used in the conducted experiments:
+A wide series of datasets presenting classification problems is used here:
 \end_layout
 
 \begin_layout Enumerate
@@ -2271,8 +2289,8 @@ literal "false"
 \series bold
 Fert 
 \series default
-dataset, which is used to detect any relation of fertility and sperm concentrati
-on.
+dataset, for the detection of possible relations between fertility and sperm
+ concentration.
 \end_layout
 
 \begin_layout Enumerate
@@ -2280,7 +2298,7 @@ on.
 \series bold
 Haberman
 \series default
- dataset, which is related to breast cancer.
+ dataset, used for breast cancer detection.
 \end_layout
 
 \begin_layout Enumerate
@@ -2288,7 +2306,7 @@ Haberman
 \series bold
 Hayes roth
 \series default
- dataset, a datatet provided by 
+ dataset 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "hayesroth"
@@ -2313,7 +2331,7 @@ literal "false"
 
 \end_inset
 
-, a medical dataset for the prediction of heart diseases.
+, proposed for the detection of heart diseases.
 \end_layout
 
 \begin_layout Enumerate
@@ -2381,7 +2399,7 @@ literal "false"
 
 \end_inset
 
-, a medical dataset about breast cancer.
+, used in breast cancer detection.
 \end_layout
 
 \begin_layout Enumerate
@@ -2389,7 +2407,7 @@ literal "false"
 \series bold
 Parkinsons
 \series default
- dataset, related to the detection of Parkinson's disease (PD)
+ dataset, proposed in
 \begin_inset CommandInset citation
 LatexCommand cite
 key "parkinsons"
@@ -2437,7 +2455,7 @@ literal "false"
 \series bold
 Regions2
 \series default
- dataset, a dataset used in the detection of hepatitis C 
+ dataset, proposed in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "regions"
@@ -2462,7 +2480,7 @@ literal "false"
 
 \end_inset
 
-, involved to the detection of heart diseases.
+, proposed to detect heart diseases.
 \end_layout
 
 \begin_layout Enumerate
@@ -2486,7 +2504,7 @@ literal "false"
 \series bold
 Spiral
 \series default
- dataset, that is an artificial dataset.
+ dataset, that is a dataset created artificially.
 \end_layout
 
 \begin_layout Enumerate
@@ -2554,8 +2572,8 @@ literal "true"
 \end_inset
 
 .
- The following cases were used from this dataset: Z_F_S, Z_O_N_F_S, ZO_NF_S
- and ZONF_S.
+ The following sub - datasets were extracted from this dataset: Z_F_S, Z_O_N_F_S
+, ZO_NF_S and ZONF_S.
 \end_layout
 
 \begin_layout Enumerate
@@ -2571,15 +2589,15 @@ literal "false"
 
 \end_inset
 
-, used to estimate the category of some animals.
+, proposed to estimate the category of some animals.
 \end_layout
 
 \begin_layout Subsection
-Regression datasets 
+The used regression datasets 
 \end_layout
 
 \begin_layout Standard
-A series of regression datasets was utilized in the conducted experiments:
+A series of datasets from this category was utilized in the experiments:
 \end_layout
 
 \begin_layout Enumerate
@@ -2670,7 +2688,7 @@ literal "false"
 \series bold
 Dee
 \series default
- dataset, that contains measurements regarding the price of electricity.
+ dataset, related to the prices of electricity.
 \end_layout
 
 \begin_layout Enumerate
@@ -2695,7 +2713,7 @@ HO
 \series bold
 Housing
 \series default
- dataset, presented in 
+ dataset 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "housing"
@@ -2727,7 +2745,7 @@ LW
 \series bold
 MORTGAGE
 \series default
- dataset, that contains economic measurements from USA.
+, that contains economic measurements from USA.
 \end_layout
 
 \begin_layout Enumerate
@@ -2751,7 +2769,7 @@ PL
 \series bold
 QUAKE
 \series default
- dataset, that contains measurements from earthquakes.
+ dataset, used in measurements from earthquakes.
 \end_layout
 
 \begin_layout Enumerate
@@ -2759,7 +2777,7 @@ QUAKE
 \series bold
 REALESTATE, 
 \series default
-originated in the STALIB repository.
+from the STALIB repository.
 \end_layout
 
 \begin_layout Enumerate
@@ -2776,7 +2794,7 @@ SN
 \series bold
 Treasury
 \series default
- dataset, which is a dataset regarding the economy of USA.
+ dataset, that is a dataset regarding the economy of USA.
 \end_layout
 
 \begin_layout Enumerate
@@ -2792,7 +2810,7 @@ TZ
 \series bold
 VE
 \series default
- dataset, originated in the STALIB repository.
+ dataset, from the STALIB repository.
 \end_layout
 
 \begin_layout Subsection
@@ -2800,8 +2818,8 @@ Experimental results
 \end_layout
 
 \begin_layout Standard
-The code used in the experiments was coded in ANSI C++ using the Optimus
- optimization environment, available from 
+ANSI C++ was used to code the software for the conducted experiments using
+ also the Optimus optimization environment, available from 
 \begin_inset Flex URL
 status collapsed
 
@@ -2819,8 +2837,8 @@ https://github.com/itsoulos/GlobalOptimus/
  as measured on the test set was recorded and, for the case of regression
  datasets, the average regression error as measured on the test set was
  recorded.
- In order to validate the experimental results, the well -known method of
- ten - fold cross validation was incorporated.
+ The validation of experiments was carried out using the method of ten -
+ fold cross validation.
 
 \series bold
  
@@ -2849,8 +2867,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The values for the experimental parameters.
- These parameters were used in the machine learning methods.
+This table presents the values used for the experimental parameters, used
+ in the conducted experiments.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:values"
@@ -3135,8 +3153,7 @@ Weights for the neural network
 
 \end_inset
 
-The experimental results obtained for the case of classification are depicted
- in Table 
+Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:experClass"
@@ -3146,8 +3163,8 @@ noprefix "false"
 
 \end_inset
 
- and the experimental results for the case of regression datasets are displayed
- in Table 
+ outlines the experimental results for the classification datasets while
+ Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:experRegression"
@@ -3157,7 +3174,7 @@ noprefix "false"
 
 \end_inset
 
-.
+ hold the results for the mentioned regression datasets.
  The following notations are used in the experimental tables:
 \end_layout
 
@@ -3228,7 +3245,8 @@ literal "false"
 
 \end_inset
 
-, without the application of the new crossover operator.
+.
+ This method was applied without the new operator.
 \end_layout
 
 \begin_layout Enumerate
@@ -3242,8 +3260,7 @@ The column NNC_CROSS depicts the results for the neural construction method
 \end_layout
 
 \begin_layout Enumerate
-The average classification or regression error is depicted in row under
- the name AVERAGE.
+The average error is depicted in row under the name AVERAGE.
 \end_layout
 
 \begin_layout Standard
@@ -7328,7 +7345,7 @@ name "fig:ruleDatasets"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7406,7 +7423,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7453,7 +7470,7 @@ name "fig:boxRuleClass"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7473,8 +7490,8 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Box plot for the comparison between the original rule construction model
- and the improved one that utilizes the new crossover operator.
+Box plot used to compare the original rule construction model and the improved
+ one that utilizes the new crossover operator.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:boxNncClass"
@@ -7497,8 +7514,8 @@ name "fig:boxNncClass"
 
 
 \series default
-Box plots for the same comparisons as deduced from the results on the regression
- datasets are depicted in Figures 
+Box plots for the same comparisons as deduced from the results using the
+ series of regression datasets are shown in Figures 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:boxRuleRegression"
@@ -7528,7 +7545,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -7548,9 +7565,8 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Box plot for the comparison between the original rule construction model
- and the improved one that utilizes the new crossover operator for the regressio
-n datasets.
+Box plot used to compare the original rule construction model and the improved
+ one that utilizes the new crossover operator for the regression datasets.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:boxRuleRegression"
@@ -7596,9 +7612,8 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Box plot for the comparison between the original rule construction model
- and the improved one that utilizes the new crossover operator for the regressio
-n datasets.
+Box plot used to compare the original rule construction model and the improved
+ one that utilizes the new crossover operator for the regression datasets.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:boxNncRegression"
@@ -7632,7 +7647,7 @@ These figures confirm the significant improvement brought about by the use
 Also, a statistical comparison was performed between the two machine learning
  methods and the enhanced ones that use the new crossover operator.
  This comparison was performed using the classification datasets, and it
- is graphically outlined in Figure 
+ is shown in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statClass"
@@ -7716,13 +7731,13 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The effect of different values of 
+The effect of a series of values of 
 \begin_inset Formula $p_{cr}$
 \end_inset
 
@@ -9449,7 +9464,7 @@ Another experiment was performed in order to estimate the importance of
 , which controls the number of chromosomes participating in the new crossover
  operator.
  In this experiment the neural network construction method was tested on
- the series of classification datasets using different values for the parameter
+ the classification datasets using a series of values for the parameter
  
 \begin_inset Formula $N_{cr}$
 \end_inset
@@ -9477,7 +9492,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -11217,7 +11232,7 @@ noprefix "false"
 
 \end_inset
 
-, where the average execution time for the neural network construction method
+, where the computation time for the neural network construction method
  is plotted with respect to the 
 \begin_inset Formula $N_{cr}$
 \end_inset
@@ -11270,16 +11285,15 @@ name "fig:timeNNC"
 
 \end_inset
 
-The average execution time increases dramatically as the critical parameter
+The average computation time increases dramatically as the critical parameter
  
 \begin_inset Formula $N_{cr}$
 \end_inset
 
  increases, something that is expected since the crossings increase significantl
-y with the increase of this parameter, as well as the evaluation of the
- fitness function.
- This dramatic increase in required execution time can be significantly
- reduced by using modern parallel libraries.
+y with the increase of this parameter.
+ This dramatic increase in required execution time can be reduced by incorporati
+ng modern parallel libraries.
  These programming techniques may include the application of the Message
  Passing Interface (MPI) library 
 \begin_inset CommandInset citation
@@ -11335,13 +11349,13 @@ A method that constructs artificial neural networks.
 \end_layout
 
 \begin_layout Standard
-The methods were tested on a wide series of datasets in the recent literature.
+Several datasets from the literature were used to test the proposed method.
  In the vast majority of cases, the application of the new genetic operator
  resulted in a drastic reduction of the corresponding classification or
  data fitting error.
  Furthermore, to measure to asses the sensitivity of the proposed method
  to some critical parameters, more experiments were conducted in which these
- critical parameters were changed over a wide range of values.
+ parameters were changed inside a wide range of values.
  Boosting these values improves the performance of machine learning methods
  by applying the new genetic operator, but up to a point.
  In addition, an increase in the chromosomes involved in the genetic operator,
