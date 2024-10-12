@@ -29,6 +29,7 @@ SOURCES += \
 	GE/integeranneal.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
+    METHODS/woa.cpp \
     OPTIMUS/editlogger.cpp \
     OPTIMUS/filelogger.cpp \
     OPTIMUS/logger.cpp \
@@ -161,6 +162,7 @@ HEADERS += \
     GE/integeranneal.h\
     METHODS/ego.h \
     METHODS/hybridmethod.h \
+    METHODS/woa.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \
     OPTIMUS/logger.h \

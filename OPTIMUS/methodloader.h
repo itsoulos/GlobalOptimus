@@ -19,6 +19,7 @@
 # include <METHODS/gwooptimizer.h>
 # include <METHODS/ego.h>
 # include <METHODS/hybridmethod.h>
+# include <METHODS/woa.h>
 # include <QStringList>
 # include <QJsonObject>
 /**
