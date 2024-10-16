@@ -14,6 +14,8 @@ double  UniformSampler::eval(Data &xpoint)
 
 void    UniformSampler::addSampleFromProblem(Data &x,double y)
 {
+
+
     //nothing
 }
 
