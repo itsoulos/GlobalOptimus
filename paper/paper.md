@@ -83,7 +83,7 @@ METHOD |  DESCRIPTION |
 The software can be extended by implementing optimization techniques by the user himself. For this purpose, there is the optimization method named UserMethod and the user can implement the provided functions according to the requirements of the method.
 </p>
 
-Method addParam()  |  DESCRIPTION |
+Method   |  DESCRIPTION |
 |----------|----------|
 |    **init()**     |This function is called every time the optimization method starts|                                    
 |    **step()**    |This function implements the actual step of the optimization method. |                                            
