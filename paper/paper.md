@@ -94,7 +94,7 @@ Method addParam()  |  DESCRIPTION |
 A flowchart of any used optimization process is outlined in Figure \autoref{FIG:optimization}.
 
 
-![The diagram of the optimization process \label{FIG:optimization}](userMethod.png)
+![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
 
 
 
