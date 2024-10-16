@@ -51,16 +51,16 @@ The suggested software is entirely coded in ANSI C++, using  programming library
 
 METHOD |  DESCRIPTION |
 |----------|----------|
-| **Differential Evolution**   |An avolutionary algorithm used  in many areas [@pant2020differential_2020]|
+| **Differential Evolution**   |An evolutionary algorithm used  in many areas [@pant2020differential_2020]|
 | **Parallel Differential Evolution**| A parallel version of the Differential Evolution method [@charilogis2023parallel_2023].|
-| **Double precision genetic algorithm**  | is included in the software and it is denoted as Genetic [@tsoulos2008modifications_2008].|
+| **Double precision genetic algorithm**  | An Improved version of the Genetic Algorithm [@tsoulos2008modifications_2008].|
 | **Improved Particle Swarm Optimization**  |Suggested as an improvement of the PSO method [@charilogis2022toward_2022].|
 | **Multistart**  |Initiates local searches from different start points.|
 | **NeuralMinimizer**| Utilizes Radial Basis Functions (RBF) networks to increase the speed of the Multistart method [@tsoulos2023neuralminimizer_2023].|
-| **Parallel Particle Swarm optimizer**  | proposed in to develop a parallel PSO variant. The method is denoted as ParallelPso in the Optimus package(V. Charilogis et al.,  2023).|  
-| **Simulated annealing optimizer**  | included in the software under the name Simman. |     
-| **The optimal foraging algorithm (OFA)**  | motivated by animal behavioral ecology included the software named Ofa (Kyrou, G. et al., 2024).|    
-| **Bio-inspired metaheuristic algorithm Giant Armadillo Optimization (GAO)** |  mimics the natural behavior of the giant armadillo  included in the software named armadillo1(Kyrou G. et al., 2024). | 
+| **Parallel Particle Swarm optimizer**  | A novell parallel PSO variant, published recently [@charilogis2023improved_2023].|
+| **Simulated annealing optimizer**  | included in the software under the name Simman [@kirkpatrick1983optimization_1983]. |
+| **The optimal foraging algorithm (OFA)**  | motivated by animal behavioral ecology included the software named Ofa [@kyrou2024eofa_2024].|
+| **Bio-inspired metaheuristic algorithm Giant Armadillo Optimization (GAO)** |  This process mimics the natural behavior of the giant armadillo [@kyrou2024improving_2024]. |
 | **The Gray Wolf Optimizer (GWO)** |  mimics hunting mechanism of gray wolves in nature  included in the software named Gwo. |
 
 ###  Implemented local optimization methods 
@@ -105,14 +105,4 @@ A flowchart of any used optimization method is outlined in Figure \autoref{userM
 In this work, an environment for executing global optimization problems was presented. In this environment, the user can code the objective problem using some predefined functions and then has the possibility to choose one among several global optimization methods to solve the mentioned problem. In addition, it is given the possibility to choose to use some local optimization method to enhance the reliability of the produced results. This programming environment is freely available and easy to extend to accommodate more global optimization techniques. 
 </p>
 
-
-
 # References
-I.G. Tsoulos, A. Tzallas, D. Tsalikakis (2016). _PDoublePop: An implementation of parallel genetic algorithm for function optimization_, Computer Physics Communications 209, pp. 183-189
-
-
-Kyrou, G., Charilogis, V., & Tsoulos, I. G. (2024). _EOFA: An Extended Version of the Optimal Foraging Algorithm for Global Optimization Problems._ Computation, 12(8), 158.
-
-Kyrou, G., Charilogis, V., & Tsoulos, I. G. (2024). _Improving the Giant-Armadillo Optimization Method._ Analytics, 3(2), 225-240.
-
-I.G. Tsoulos, I.E. Lagaris (2008).  _GenMin: An enhanced genetic algorithm for global optimization_, Computer Physics Communications 178, pp. 843-851.
