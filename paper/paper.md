@@ -1,18 +1,46 @@
-
-# OPTIMUS: a multidimensional global optimization package
-
-###### Ioannis G. Tsoulos , Vasileios Charilogis ,Glykeria Kyrou, V.N. Stavrou, Alexandros Tzallas 
+---
+title: OPTIMUS: a multidimensional global optimization package
+tags:
+  - Global optimization
+  - Evolutionary methods
+  - Stopping rules
+authors:
+  - name: Ioannis G. Tsoulos
+    equal-contrib: true
+    affiliation: "1"
+    corresponding: true
+  - name: Vasileios Charilogis
+    equal-contrib: true
+    affiliation: "1"
+  - name: Glykeria Kyrou
+    equal-contrib: true
+    affiliation: "1"
+  - name: Vasileios N. Stavrou
+    equal-contrib: true
+    affiliation: "2"
+  - name: Alexandros Tzallas
+    equal-contrib: true
+    affiliation: "1"
+affiliations:
+ - name: Department of Informatics and Telecommunications, University of Ioannina, Greece
+   index: 1
+ - name: Division of Physical Sciences, Hellenic Naval Academy, Greece
+   index: 2
+date: 16 October 2024
+---
 
 ## Summary
+The location of global minimum founds application in a variety of problems derived from physics, chemistry, medicine etc. Also, the global optimization process can be used in complex problems, such as the training of neural networks. Methods used in the global optimization process can be divided into stochastic and deterministic and this article proposes a software that incorporates a variety of stochastic methods.
 
+
+# Statement of need
 <p style="text-align: justify;">
-This paper presents a programming tool written in ANSI C++, which researchers can use to formulate the problem to be solved and then make use of the local and global optimization methods provided by this tool to efficiently solve such problems. The main features of the suggested software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to tackle the objective problem c)Parameterization of global optimization methods using user-defined parameters d) Usage of a GUI application to control the optimization strategy. 
+This paper presents the `GlobalOptimus` software tool,  written in ANSI C++, which researchers can use to formulate the problem to be solved and then apply the required global optimization method identify the global minimum of the problem. The main features of the suggested software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to tackle the objective problem c)Parameterization of global optimization methods using user-defined parameters d) Usage of a GUI application to control the optimization strategy.
 </p>
-<b>Keywords:</b> Global optimization; stochastic methods; Genetic algorithms; Software;
 
 ##  Software 
 <p style="text-align: justify;">
-The suggested software is entirely coded in ANSI C++, using the freely available QT programming library, which can be downloaded from https://qt.io. The researcher should code the objective function and a number of other mandatory functions in the C++ programming language. Also, the researcher should provide the dimension of the objective function as well as the bound of the function. Subsequently, the user can select a global optimization method to apply to the problem from a wide range of available methods.</p>
+The suggested software is entirely coded in ANSI C++, using  programming library available from https://qt.io. The researcher should code the objective function and a number of other mandatory functions in the C++ programming language. Also, the researcher should provide the dimension of the objective function as well as the bound of the function. Subsequently, the user can select a global optimization method to apply to the problem from a wide range of available methods.</p>
 
 ### Implemented global optimization methods 
 <p style="text-align: justify?">
@@ -44,7 +72,7 @@ METHOD |  DESCRIPTION |
 |  **The lbfgs method**      | The limited memory BFGS method is implemented as an approximation of the BFGS method using a limited amount of computer memory |                         
 |**The Gradient descent method** | This method is denoted as gradient in the software and  implements the Gradient Descent local optimization   procedure. T (I.G. Tsoulos et al., 2008) etc.|          
 | **The Nelder Mead method**  |The Nelder Mead simplex procedure for local optimization  is also included in the software and it is denoted as nelderMead.   |                           
-|  **The adam method**  |  The adam local optimizer  |            
+|  **The adam method**  |  The adam  optimizer  |
 
 ### Implementing a user - defined optimization method
 <p style="text-align: justify;">
@@ -59,10 +87,10 @@ Method addParam()  |  DESCRIPTION |
 |    **done()**    |   This function will be called when the optimization method terminates.|                                       
 |   **~UserMethod()**     |    This is the destructor of the optimization method.  |                                            
 
-A flowchart of any used optimization method is outlined in Figure 1
+A flowchart of any used optimization method is outlined in Figure \autoref{userMethod}.
 
 
-![usermethod](usermethod.png)
+![usermethod] \label{userMethod}(usermethod.png)
 
 
 
