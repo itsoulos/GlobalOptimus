@@ -1,4 +1,5 @@
-title: OPTIMUS: a multidimensional global optimization package
+---
+title: 'OPTIMUS: a multidimensional global optimization package'
 tags:
   - Global optimization
   - Evolutionary methods
@@ -26,6 +27,8 @@ affiliations:
  - name: Division of Physical Sciences, Hellenic Naval Academy, Greece
    index: 2
 date: 16 October 2024
+
+---
 
 ## Summary
 The location of global minimum founds application in a variety of problems derived from physics, chemistry, medicine etc. Also, the global optimization process can be used in complex problems, such as the training of neural networks. Methods used in the global optimization process can be divided into stochastic and deterministic and this article proposes a software that incorporates a variety of stochastic methods.
