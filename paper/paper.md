@@ -33,7 +33,7 @@ bibliography: paper.bib
 
 ## Summary
 <p style="text-align: justify;">
-The location of global minimum founds application in a variety of problems derived from physics [@duan1992effective_1992], chemistry, medicine etc. Also, the global optimization process can be used in complex problems, such as the training of neural networks. Methods used in the global optimization process can be divided into stochastic and deterministic and this article proposes a software that incorporates a variety of stochastic methods.
+The location of global minimum founds application in a variety of problems derived from physics [@duan1992effective_1992], chemistry [@liwo1999protein_1999], medicine [@lee2007large_2007] etc. Also, the global optimization process can be used in complex problems, such as the training of neural networks [@chiroma2017neural_2017]. Methods used in the global optimization process can be divided into stochastic and deterministic, and  a comparison between methods of these categories can be found in the work of Sergeyev et al.[@sergeyev2018efficiency_2018]. This article proposes a software that incorporates a variety of stochastic methods to handle optimization methods of multidimensional functions.
 </p>
 
 
@@ -95,10 +95,6 @@ A flowchart of any used optimization process is outlined in Figure \autoref{FIG:
 
 
 ![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
-
-
-
-**Figure 1.** The flowchart of the execution steps of the optimization methods.
 
 
 
