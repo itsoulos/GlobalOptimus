@@ -31,7 +31,7 @@ bibliography: paper.bib
 
 ---
 
-## Summary
+# Summary
 <p style="text-align: justify;">
 The location of global minimum founds application in a variety of problems derived from physics [@duan1992effective_1992], chemistry [@liwo1999protein_1999], medicine [@lee2007large_2007] etc. Also, the global optimization process can be used in complex problems, such as the training of neural networks [@chiroma2017neural_2017]. Methods used in the global optimization process can be divided into stochastic and deterministic, and  a comparison between methods of these categories can be found in the work of Sergeyev et al.[@sergeyev2018efficiency_2018]. This article proposes a software that incorporates a variety of stochastic methods to handle optimization methods of multidimensional functions.
 </p>
@@ -46,7 +46,7 @@ This paper presents the `GlobalOptimus` software tool,  written in ANSI C++, whi
 <p style="text-align: justify;">
 The software can be compiled using the QT library, available from  https://qt.io. The researcher should code the objective function and a number of other mandatory functions in the C++ programming language. Also, the researcher should provide the dimension of the objective function as well as the bound of the function. Subsequently, the user can select a global optimization method to apply to the problem from a wide range of available methods.</p>
 
-### Implemented global optimization methods 
+## Implemented global optimization methods
 <p style="text-align: justify?">
  In the proposed software, each implemented global optimization method has a set of parameters that can determine the overall optimization path and the effectiveness of the method. Some of the global optimization methods are as follows: </p>
  
@@ -65,7 +65,7 @@ METHOD |  DESCRIPTION |
 | **Bio-inspired metaheuristic algorithm Giant Armadillo Optimization (GAO)** |  This process mimics the natural behavior of the giant armadillo [@kyrou2024improving_2024]. |
 | **The Gray Wolf Optimizer (GWO)** |  This process mimics hunting mechanism of gray wolves in nature [@li2021improved_2021].|
 
-###  Implemented local optimization methods 
+##  Implemented local optimization methods
 <p style="text-align: justify;">
 The parameter used to determine the used local optimization procedure is the −−opt_localsearch parameter. The implemented local optimization methods are the following: 
 </p>
@@ -78,7 +78,7 @@ METHOD |  DESCRIPTION |
 | **The Nelder Mead method**  |The Nelder Mead simplex procedure for local optimization  is also included in the software [@olsson1975nelder_1975].   |
 |  **The adam method**  |  The adam  optimizer [@kingma2014adam_2014].  |
 
-### Implementing a user - defined optimization method
+## Implementing a user - defined optimization method
 <p style="text-align: justify;">
 The software can be extended by implementing optimization techniques by the user himself. For this purpose, there is the optimization method named UserMethod and the user can implement the provided functions according to the requirements of the method.
 </p>
@@ -101,7 +101,7 @@ $ f(x)=x_1^{2}+x_2^{2}-\cos(18x_1)-\cos(18x_2)$  and the Genetic algorithm is ou
 
 ![An example run for the function rastrigin \label{FIG:rastrigin}](rastrigin.png)
 
-###  Conclusions 
+#  Conclusions
 <p style="text-align: justify;">
 In this work, an environment for executing global optimization problems was presented. In this environment, the user can code the objective problem using some predefined functions and then has the possibility to choose one among several global optimization methods to solve the mentioned problem. In addition, it is given the possibility to choose to use some local optimization method to enhance the reliability of the produced results. This programming environment is freely available and easy to extend to accommodate more global optimization techniques. 
 </p>
