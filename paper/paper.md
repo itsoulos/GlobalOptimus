@@ -96,8 +96,7 @@ A flowchart of any used optimization process is outlined in Figure \autoref{FIG:
 
 ![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
 
-Also, an example run for the function rastrigin defined as
-$ f(x)=x_1^{2}+x_2^{2}-\cos(18x_1)-\cos(18x_2)$  and the Genetic algorithm is outlined in Figure \autoref{FIG:rastrigin}.
+Also, an example run for the function rastrigin  and the Genetic algorithm is outlined in Figure \autoref{FIG:rastrigin}.
 
 ![An example run for the function rastrigin \label{FIG:rastrigin}](rastrigin.png)
 
