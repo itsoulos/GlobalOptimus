@@ -44,7 +44,7 @@ This paper presents the `GlobalOptimus` software tool,  written in ANSI C++, whi
 
 ##  Software 
 <p style="text-align: justify;">
-The software uses the QT library, available from  https://qt.io. The researcher should code the objective function and a number of other mandatory functions in the C++ programming language. Also, the researcher should provide the dimension of the objective function as well as the bound of the function. Subsequently, the user can select a global optimization method to apply to the problem from a wide range of available methods.</p>
+The software can be compiled using the QT library, available from  https://qt.io. The researcher should code the objective function and a number of other mandatory functions in the C++ programming language. Also, the researcher should provide the dimension of the objective function as well as the bound of the function. Subsequently, the user can select a global optimization method to apply to the problem from a wide range of available methods.</p>
 
 ### Implemented global optimization methods 
 <p style="text-align: justify?">
@@ -96,7 +96,10 @@ A flowchart of any used optimization process is outlined in Figure \autoref{FIG:
 
 ![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
 
+Also, an example run for the function rastrigin defined as
+$ f(x)=x_1^{2}+x_2^{2}-\cos(18x_1)-\cos(18x_2)$  and the Genetic algorithm is outlined in Figure \autoref{FIG:rastrigin}.
 
+![An example run for the function rastrigin \label{FIG:rastrigin}](rastrigin.png)
 
 ###  Conclusions 
 <p style="text-align: justify;">
