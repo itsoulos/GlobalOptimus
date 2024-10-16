@@ -51,12 +51,12 @@ The suggested software is entirely coded in ANSI C++, using  programming library
 
 METHOD |  DESCRIPTION |
 |----------|----------|
-| **Differential Evolution**   |has been widely used in many areas [@pant2020differential_2020]|
-| **Parallel Differential Evolution**| divides the work into a number of available parallel computing units [@charilogis2023parallel_2023].|
-| **Double precision genetic algorithm**  | is included in the software and it is denoted as Genetic(I.G. Tsoulos et al., 2008).|                                    
-| **Improved Particle Swarm Optimization**  |suggested by Charilogis and Tsoulos(V. Charilogis et al., 2022).|                       
-| **Multistart**  |initiates local searches from different initial points is also implemented in the software.| 
-| **NeuralMinimizer**| incorporates Radial Basis Functions (RBF) denoted by the name NeuralMinimizer(I.G. Tsoulos et al., 2023).|             
+| **Differential Evolution**   |An avolutionary algorithm used  in many areas [@pant2020differential_2020]|
+| **Parallel Differential Evolution**| A parallel version of the Differential Evolution method [@charilogis2023parallel_2023].|
+| **Double precision genetic algorithm**  | is included in the software and it is denoted as Genetic [@tsoulos2008modifications_2008].|
+| **Improved Particle Swarm Optimization**  |Suggested as an improvement of the PSO method [@charilogis2022toward_2022].|
+| **Multistart**  |Initiates local searches from different start points.|
+| **NeuralMinimizer**| Utilizes Radial Basis Functions (RBF) networks to increase the speed of the Multistart method [@tsoulos2023neuralminimizer_2023].|
 | **Parallel Particle Swarm optimizer**  | proposed in to develop a parallel PSO variant. The method is denoted as ParallelPso in the Optimus package(V. Charilogis et al.,  2023).|  
 | **Simulated annealing optimizer**  | included in the software under the name Simman. |     
 | **The optimal foraging algorithm (OFA)**  | motivated by animal behavioral ecology included the software named Ofa (Kyrou, G. et al., 2024).|    
@@ -110,15 +110,6 @@ In this work, an environment for executing global optimization problems was pres
 # References
 I.G. Tsoulos, A. Tzallas, D. Tsalikakis (2016). _PDoublePop: An implementation of parallel genetic algorithm for function optimization_, Computer Physics Communications 209, pp. 183-189
 
-V. Charilogis, I.G. Tsoulos. (2023).  _A Parallel Implementation of the Differential Evolution Method_, Analytics 2, pp. 17-30.
-
-I.G. Tsoulos (2008).  _Modifications of real code genetic algorithm for global optimization,_ Applied Mathematics and Computation 203, pp. 598-607.
-
-V. Charilogis, I.G. Tsoulos (2022). _Toward an Ideal Particle Swarm Optimizer for Multidimensional Functions_, Information 13, 217.
-
-I.G. Tsoulos, A. Tzallas, E. Karvounis, D. Tsalikakis(2023). _NeuralMinimizer, a novel method for global optimization that incorporates machine learning_, Information 14, 2.
-
-V. Charilogis, I.G. Tsoulos, A. Tzallas (2023).  _An Improved Parallel Particle Swarm Optimization_, SN COMPUT. SCI. 4, 766.
 
 Kyrou, G., Charilogis, V., & Tsoulos, I. G. (2024). _EOFA: An Extended Version of the Optimal Foraging Algorithm for Global Optimization Problems._ Computation, 12(8), 158.
 
