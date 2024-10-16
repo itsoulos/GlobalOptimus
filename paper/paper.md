@@ -51,8 +51,8 @@ The suggested software is entirely coded in ANSI C++, using  programming library
 
 METHOD |  DESCRIPTION |
 |----------|----------|
-| **Differential Evolution**   |has been widely used in many areas [@pant2020differential:2020]|
-| **Parallel Differential Evolution**| divides the work into a number of available parallel computing units [@charilogis2023parallel:2023].|
+| **Differential Evolution**   |has been widely used in many areas [@pant2020differential_2020]|
+| **Parallel Differential Evolution**| divides the work into a number of available parallel computing units [@charilogis2023parallel_2023].|
 | **Double precision genetic algorithm**  | is included in the software and it is denoted as Genetic(I.G. Tsoulos et al., 2008).|                                    
 | **Improved Particle Swarm Optimization**  |suggested by Charilogis and Tsoulos(V. Charilogis et al., 2022).|                       
 | **Multistart**  |initiates local searches from different initial points is also implemented in the software.| 
