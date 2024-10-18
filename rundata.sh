@@ -17,12 +17,9 @@ GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termin
 if [ $MODEL = "mlp" ]
 then
 	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=true --mlpboundlimit=10.0"
-elif [ $MODEL = "frbf" ]
-then
-	MODELPARAMS="--rbf_nodes=10 --rbf_factor=1.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "rbf" ]
 then
-	MODELPARAMS="--rbf_nodes=10 --rbf_factor=1.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+	MODELPARAMS="--rbf_nodes=10 --rbf_factor=8.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "gdf" ]
 then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
@@ -83,7 +80,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none"
+	METHODPARAMS="--gen_lrate=0.005 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none"
 elif [ $METHOD = "Multistart" ]
 then
 
