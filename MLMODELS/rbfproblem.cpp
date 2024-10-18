@@ -174,7 +174,7 @@ Data    RbfProblem::gradient(Data &x)
         for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
-   // return g;
+    return g;
 
     Data g2;
     g2.resize(dimension);
@@ -408,13 +408,13 @@ void    RbfProblem::init(QJsonObject &px)
             right[icount]=left[icount];
             left[icount]=t;
         }
-        //if(right[icount]<0.001) right[icount]=0.001;
+        if(right[icount]<0.001) right[icount]=0.001;
         icount++;
     }
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=-1000;//scale_factor * 10.0;
-        right[icount] = 1000;//scale_factor * 10.0;
+        left[icount]=  -scale_factor * 10.0;
+        right[icount]= scale_factor * 10.0;
         icount++;
     }
     lastGaussianValues.resize(nodes);

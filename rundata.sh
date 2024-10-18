@@ -7,22 +7,22 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=mlp
+MODEL=rbf
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
 DATAFILE=$1
-GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
+GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]
 then
 	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=true --mlpboundlimit=10.0"
 elif [ $MODEL = "frbf" ]
 then
-	MODELPARAMS="--rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+	MODELPARAMS="--rbf_nodes=10 --rbf_factor=1.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "rbf" ]
 then
-	MODELPARAMS="--rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+	MODELPARAMS="--rbf_nodes=10 --rbf_factor=1.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "gdf" ]
 then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
@@ -83,7 +83,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --opt_termination=$TERMINATION --gen_count=500 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH --gen_maxiters=200 --gen_lsearchmethod=none"
+	METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none"
 elif [ $METHOD = "Multistart" ]
 then
 
@@ -116,7 +116,7 @@ then
 #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
 #ipso_gradientcheck: usage of gradient rejection rule (true|false)
 #ipso_inertiatype: selection of inertia calcuation mechanism
-METHODPARAMS="--ipso_particles=100 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.00 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
+METHODPARAMS="--ipso_particles=500 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.001 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 "
 
 elif [ $METHOD = "NeuralMinimizer" ]
 then
@@ -128,7 +128,7 @@ then
 #neural_start_samples: the samples used to construct initially the model
 #neural_trainmethod: the local search procedure used to train the method
 
-	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50  --neural_termination=$TERMINATION  --neural_trainmethod=lbfgs --opt_localsearch=$LOCALSEARCH"
+	METHODPARAMS="--neural_model=neural --neural_weights=10 --neural_samples=100 --neural_iterations=200 --neural_start_samples=50  --neural_termination=$TERMINATION  --neural_trainmethod=lbfgs"
 elif [ $METHOD = "ParallelDe" ]
 then
 
@@ -159,4 +159,4 @@ then
 	exit
 fi
 
- ./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10
+ ./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes
