@@ -125,6 +125,15 @@
 % \end{itemize}
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Added by lyx2lyx
+%% Variable width box for table cells
+\newenvironment{cellvarwidth}[1][t]
+    {\begin{varwidth}[#1]{\linewidth}}
+    {\@finalstrut\@arstrutbox\end{varwidth}}
+% Added by lyx2lyx
+\usepackage{varwidth}
+% Added by lyx2lyx
+\usepackage{array}
 \end_preamble
 \options journal,article,submit,pdftex,moreauthors
 \use_default_options true
@@ -777,6 +786,12 @@ name "sec:overallAlgorithm"
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+(WRITE A TEXT BEFORE THE ALGORITHM)
+\end_layout
+
+\begin_layout Standard
 The proposed method combines some aspects from different optimization algorithms
  and the main steps are subsequently:
 \end_layout
@@ -825,7 +840,15 @@ the samples
 
  
 \series default
-using uniform distribution.
+using uniform or k-means
+\begin_inset CommandInset citation
+LatexCommand citep
+key "kmeansNew"
+literal "false"
+
+\end_inset
+
+ distribution.
 \end_layout
 
 \end_deeper
@@ -873,29 +896,27 @@ sample
 \begin_layout Enumerate
 
 \series bold
-Find nearest sample 
-\begin_inset Formula $c_{ι}$
+Find 
+\series default
+nearest sample 
+\begin_inset Formula $c_{i}$
 \end_inset
 
  from 
-\begin_inset Formula $x_{ι}$
+\begin_inset Formula $x_{i}$
 \end_inset
 
+
+\series bold
 :
 \begin_inset Formula 
 \begin{equation}
-d(x,c)=\sqrt{\sum_{i=1}^{n}\left(x_{i}-c_{i}\right)^{2}}\label{eq:nearestSamply}
+d\left(x_{i},c_{i}\right)=\sqrt{\sum_{j=1}^{n}\left(x_{i,j}-c_{i,j}\right)^{2}}\label{eq:nearestSamply}
 \end{equation}
 
 \end_inset
 
 
-\series default
-where 
-\begin_inset Formula $d(x,c)$
-\end_inset
-
- is the Euclidean Distance.
 \end_layout
 
 \begin_layout Enumerate
@@ -941,7 +962,7 @@ with line search Armijo the sample:
 Find 
 \series default
 new points using line search 
-\begin_inset Formula $\mbox{minLS}(x,c)$
+\begin_inset Formula $\mbox{minLS}(x_{i},c_{i})$
 \end_inset
 
 : 
@@ -988,7 +1009,7 @@ Make
 :
 \begin_inset Formula 
 \begin{equation}
-\mbox{child}\left(x,x^{best}\right)=g_{k}x_{k}+\left(1-g_{k}\right)x_{k}^{best}\label{eq:makeChild}
+\mbox{child}\left(x_{i},x^{best}\right)=g_{k}x_{i,k}+\left(1-g_{k}\right)x_{k}^{best}\label{eq:makeChild}
 \end{equation}
 
 \end_inset
@@ -1019,7 +1040,7 @@ Set
  trial vector:
 \begin_inset Formula 
 \begin{equation}
-y_{j}=x_{j}+F\times\left(\mbox{minLS}(x_{\iota},c_{\iota})_{j}-\mbox{child}(x_{i},c_{i})_{j}\right)\label{eq:trialSample}
+y_{j}=x_{i,j}+F\times\left(\mbox{minLS}(x_{\iota},c_{\iota})_{j}-\mbox{child}(x_{i},c_{i})_{j}\right)\label{eq:trialSample}
 \end{equation}
 
 \end_inset
@@ -1141,7 +1162,7 @@ literal "false"
  The algorithm terminates when the following:
 \begin_inset Formula 
 \begin{equation}
-\left|f_{\mbox{min}}^{(k)}-f_{\mbox{min}}^{(k-1)}\right|\le\epsilon\label{eq:term}
+\left|f_{\mbox{min}}^{(t)}-f_{\mbox{min}}^{(t-1)}\right|\le\epsilon\label{eq:term}
 \end{equation}
 
 \end_inset
@@ -1201,12 +1222,81 @@ Return
 \end_layout
 
 \begin_layout Standard
-Initially, the algorithm initializes the trial solutions as well as the
- necessary parameters.
- At every iteration, the method constructs trial solutions using genetic
- algorithms operations as well as the Armijo line search method and these
- solutions are combined using a process from Differential Evolution, using
- the following steps:
+The optimization method described in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:overallAlgorithm"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ combines evolutionary techniques, such as differential evolution, Armijo
+ line search, and components of genetic algorithms, with the aim of finding
+ the optimal solution.
+ Initially, the population size and the dimensionality of the target function
+ are defined, and the population samples are generated randomly using a
+ uniform or k-means distribution.
+ For each sample, the Euclidean distance (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:nearestSamply"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+) to the other samples is calculated to identify the nearest one, followed
+ by an Armijo line search (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:findSample"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+) to determine the optimal movement direction for the initial sample.
+ Subsequently, a new offspring sample is created using a crossover process
+ (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:makeChild"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+), combining the current sample with the best discovered so far.
+ A trial vector (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:trialSample"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+) is then formed, which accounts for the adjustment of the computed samples
+ and the differential coefficient parameter derived from the differential
+ evolution algorithm.
+ Periodically, local search methods, such as BFGS
+\begin_inset CommandInset citation
+LatexCommand citep
+key "bfgs"
+literal "false"
+
+\end_inset
+
+, are applied to improve the accuracy of the solution search.
+ The method terminates when the best solution found remains nearly unchanged
+ for a specified number of iterations.
+ In summary, the basic steps for calculating a new sample are:
 \end_layout
 
 \begin_layout Itemize
@@ -1231,7 +1321,7 @@ for each sample
 
 \begin_layout Itemize
 Calculation of a sample 
-\begin_inset Formula $\mbox{minLS}(x,c)$
+\begin_inset Formula $\mbox{minLS}(x_{i},c_{i})$
 \end_inset
 
  through Armijo line search, between the sample 
@@ -1260,7 +1350,7 @@ Generation of the sample using the crossover process of the Genetic Algorithm,
  
 \series default
 and the best sample
-\begin_inset Formula $x_{i}^{best}$
+\begin_inset Formula $x^{best}$
 \end_inset
 
  .
@@ -1352,7 +1442,7 @@ name "tab:benchmarkFunctions"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="24" columns="3">
+<lyxtabular version="3" rows="32" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -1387,6 +1477,82 @@ FORMULA
 
 \size scriptsize
 DIMENSION
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ACKLEY
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $f(x)=-a\exp\left(-b\sqrt{\frac{1}{n}\sum_{i=1}^{n}x_{i}^{2}}\right)-\exp\left(\frac{1}{n}\sum_{i=1}^{n}\cos\left(cx_{i}\right)\right)+a+\exp(1)\quad a=20.0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+BF1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $f(x)=-20\exp\left(-b\sqrt{\frac{1}{n}\sum_{i=1}^{n}x_{i}^{2}}\right)-\exp\left(\frac{1}{n}\sum_{i=1}^{n}\cos\left(cx_{i}\right)\right)+20+\exp(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
 \end_layout
 
 \end_inset
@@ -1513,7 +1679,7 @@ BF3
 \begin_layout Plain Layout
 
 \size footnotesize
-BRANIN
+DIFFPOWER
 \end_layout
 
 \end_inset
@@ -1524,7 +1690,7 @@ BRANIN
 \begin_layout Plain Layout
 
 \size scriptsize
-\begin_inset Formula $f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$
+\begin_inset Formula $f(x)=\sum_{i=1}^{n}|x_{i}-y_{i}|^{p}$
 \end_inset
 
 
@@ -1538,7 +1704,10 @@ BRANIN
 \begin_layout Plain Layout
 
 \size scriptsize
-2
+\begin_inset Formula $n=2\ p=2,5,10$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1589,7 +1758,7 @@ CAMEL
 \begin_layout Plain Layout
 
 \size footnotesize
-Easom
+EASOM
 \end_layout
 
 \end_inset
@@ -1668,7 +1837,7 @@ ELP
 \begin_layout Plain Layout
 
 \size footnotesize
-Exp
+EXP
 \end_layout
 
 \end_inset
@@ -1709,7 +1878,121 @@ Exp
 \begin_layout Plain Layout
 
 \size footnotesize
-Gkls
+F3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $f(x)=\left(e^{-2.0\log(2.0)\left(\frac{(x_{1}-0.08)}{0.854}\right)^{2}}\right)\left(\sin\left(5.0\pi\left(x_{1}^{\frac{3.0}{4.0}}-0.05\right)\right)\right)^{6}\quad x\in[0,1]^{n}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+F5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $f(x)=\left(\left(4.0-2.1x_{1}^{2}+\frac{x_{1}^{4}}{3.0}\right)x_{1}^{2}\right)+\left(x_{1}x_{2}\right)+\left(\left(4.0x_{2}^{2}-4.0\right)x_{2}^{2}\right)\quad-5\le x_{i}\le5$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+F9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad x\in[0,1]^{n}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+GKLS
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Gaviano"
@@ -1758,7 +2041,7 @@ literal "false"
 \begin_layout Plain Layout
 
 \size footnotesize
-Griewank2
+GRIEWANK2
 \end_layout
 
 \end_inset
@@ -1796,7 +2079,7 @@ Griewank2
 \begin_layout Plain Layout
 
 \size footnotesize
-Griewank10
+GRIEWANK10
 \end_layout
 
 \end_inset
@@ -1835,7 +2118,7 @@ f
 \begin_layout Plain Layout
 
 \size footnotesize
-Hansen
+HANSEN
 \end_layout
 
 \end_inset
@@ -1873,7 +2156,7 @@ Hansen
 \begin_layout Plain Layout
 
 \size footnotesize
-Hartman3
+HARTMAN3
 \end_layout
 
 \end_inset
@@ -1911,7 +2194,7 @@ Hartman3
 \begin_layout Plain Layout
 
 \size footnotesize
-Hartman6
+HARTAMN6
 \end_layout
 
 \end_inset
@@ -1949,7 +2232,7 @@ Hartman6
 \begin_layout Plain Layout
 
 \size footnotesize
-Potential
+POTENTIAL
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Lennard"
@@ -1998,7 +2281,7 @@ literal "false"
 \begin_layout Plain Layout
 
 \size footnotesize
-Rastrigin
+RARSTIGIN
 \end_layout
 
 \end_inset
@@ -2036,7 +2319,7 @@ Rastrigin
 \begin_layout Plain Layout
 
 \size footnotesize
-Rosenbrcok
+ROSENBROCK
 \end_layout
 
 \end_inset
@@ -2065,6 +2348,120 @@ Rosenbrcok
 \end_inset
 
 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+SCHWEFELH
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=\sum_{i=1}^{n}\left(\sum_{j=1}^{i}x_{j}\right)^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+SCHWEFELH221
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=418.9829n+\sum_{i=1}^{n}-x_{i}\sin\left(\sqrt{\left|x_{i}\right|}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+SCHWEFELH222
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+\begin_inset Formula $f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2
 \end_layout
 
 \end_inset
@@ -2355,7 +2752,7 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -2379,7 +2776,7 @@ name "tab:settings"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="10" columns="3">
+<lyxtabular version="3" rows="11" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -2548,6 +2945,49 @@ Best fitness: Stopping rule for all methods
 
 \begin_layout Plain Layout
 Similarity max count for all methods
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $LS$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0.05$
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset Formula $(5\%)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Local search rate for all methods
 \end_layout
 
 \end_inset
@@ -2781,12 +3221,25 @@ The column FUNCTION represents the name of the used objective problem.
 \end_layout
 
 \begin_layout Enumerate
-The column DE represents the average function calls for the Differential
- Evolution optimization technique.
+The column GENETIC represents the application of the Genetic Algorithm to
+ the objective problem.
 \end_layout
 
 \begin_layout Enumerate
-the column IPSO stands for the application of the Improved PSO algorithm
+The PSO column represents the implementation of the classical PSO algorithm
+ as suggested by the literature
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pso_major"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column IPSO stands for the application of the Improved PSO algorithm
  as suggested by Charilogis and Tsoulos 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -2799,8 +3252,31 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The column GENETIC represents the application of the Genetic Algorithm to
- the objective problem.
+The column DE represents the average function calls for the Differential
+ Evolution optimization technique.
+\end_layout
+
+\begin_layout Enumerate
+The column GWO represents the average function calls for the xxx optimization
+ technique.
+\end_layout
+
+\begin_layout Enumerate
+The column WOA represents the average function calls for the Whale Optimization
+ technique.
+\end_layout
+
+\begin_layout Enumerate
+The column MEWOA stands for the application of the Improved WOA algorithm
+ as suggested by 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ipso"
+literal "false"
+
+\end_inset
+
+ to the objective problems.
 \end_layout
 
 \begin_layout Enumerate
@@ -2816,6 +3292,8 @@ The success rate is indicated by the number in parentheses, which shows
 \end_layout
 
 \begin_layout Standard
+
+\size footnotesize
 \begin_inset Float table
 placement H
 wide false
@@ -2824,6 +3302,8 @@ status open
 
 \begin_layout Plain Layout
 \align center
+
+\size footnotesize
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
@@ -2841,8 +3321,13 @@ name "tab:mainTable"
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="41" columns="5">
+<lyxtabular version="3" rows="51" columns="10">
 <features tabularvalignment="middle">
+<column alignment="center" valignment="top" special=">{\centering}V{\linewidth}">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -2854,18 +3339,7 @@ name "tab:mainTable"
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 FUNCTION
 \end_layout
 
@@ -2876,19 +3350,8 @@ FUNCTION
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-DE
+\size tiny
+GENETIC
 \end_layout
 
 \end_inset
@@ -2898,18 +3361,18 @@ DE
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
+PSO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 IPSO
 \end_layout
 
@@ -2920,19 +3383,52 @@ IPSO
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-GENETIC
+\size tiny
+DE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+GWO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+WOA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+MEWOA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+PROPOSED
 \end_layout
 
 \end_inset
@@ -2942,19 +3438,8 @@ GENETIC
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-PROPOSED
+\size tiny
+PROPOSED KMEANS
 \end_layout
 
 \end_inset
@@ -2966,18 +3451,119 @@ PROPOSED
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
+ACKLEY
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6749
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6885
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3418
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+16183
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+20182
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+24766
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+13879
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5818
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3490
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 BF1
 \end_layout
 
@@ -2988,19 +3574,8 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8268
+\size tiny
+4007
 \end_layout
 
 \end_inset
@@ -3010,18 +3585,7 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4113
 \end_layout
 
@@ -3032,19 +3596,63 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4007
+\size tiny
+1814
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8268
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9120
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9924
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7987
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5585
 \end_layout
 
 \end_inset
@@ -3054,19 +3662,8 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3951
+\size tiny
+3023
 \end_layout
 
 \end_inset
@@ -3078,18 +3675,7 @@ BF1
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 BF2
 \end_layout
 
@@ -3100,19 +3686,8 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7913
+\size tiny
+3793
 \end_layout
 
 \end_inset
@@ -3122,18 +3697,7 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3747
 \end_layout
 
@@ -3144,19 +3708,63 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3793
+\size tiny
+1759
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7913
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8731
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9597
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6262
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5008
 \end_layout
 
 \end_inset
@@ -3166,19 +3774,8 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3382
+\size tiny
+2693
 \end_layout
 
 \end_inset
@@ -3190,18 +3787,7 @@ BF2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 BF3
 \end_layout
 
@@ -3212,19 +3798,8 @@ BF3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6327
+\size tiny
+3479
 \end_layout
 
 \end_inset
@@ -3234,18 +3809,7 @@ BF3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3305
 \end_layout
 
@@ -3256,19 +3820,63 @@ BF3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3479
+\size tiny
+1689
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6327
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7791
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+20117
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5893
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4282
 \end_layout
 
 \end_inset
@@ -3278,19 +3886,8 @@ BF3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2736
+\size tiny
+2442
 \end_layout
 
 \end_inset
@@ -3302,18 +3899,7 @@ BF3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 BRANIN
 \end_layout
 
@@ -3324,19 +3910,8 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4101
+\size tiny
+2376
 \end_layout
 
 \end_inset
@@ -3346,18 +3921,7 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 2522
 \end_layout
 
@@ -3368,19 +3932,63 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2376
+\size tiny
+1730
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4101
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6055
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5939
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3367
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3026
 \end_layout
 
 \end_inset
@@ -3390,19 +3998,8 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1622
+\size tiny
+2087
 \end_layout
 
 \end_inset
@@ -3414,18 +4011,7 @@ BRANIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 CAMEL
 \end_layout
 
@@ -3436,19 +4022,8 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5609
+\size tiny
+2869
 \end_layout
 
 \end_inset
@@ -3458,18 +4033,7 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 2908
 \end_layout
 
@@ -3480,19 +4044,63 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2869
+\size tiny
+1754
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5609
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6688
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5917
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4756
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3327
 \end_layout
 
 \end_inset
@@ -3502,19 +4110,8 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2027
+\size tiny
+2607
 \end_layout
 
 \end_inset
@@ -3526,18 +4123,343 @@ CAMEL
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
+DIFFPOWER2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5443
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8657
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2462
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+14669
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+22059
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11436
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11536
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8864
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5617
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+DIFFPOWER5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+18552
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+24894
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4446
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+39018
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+49769
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+42095
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+31372
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+26065
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+17221
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+DIFFPOWER10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+18801
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+32534
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4690
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+46914
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+54442
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+56381
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+38559
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+29549
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+26615
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 EASOM
 \end_layout
 
@@ -3548,19 +4470,8 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2978
+\size tiny
+1958
 \end_layout
 
 \end_inset
@@ -3570,18 +4481,7 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 1998
 \end_layout
 
@@ -3592,19 +4492,63 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1958
+\size tiny
+1753
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2978
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4615
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3153
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2455
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2755
 \end_layout
 
 \end_inset
@@ -3614,19 +4558,8 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-969
+\size tiny
+1402
 \end_layout
 
 \end_inset
@@ -3638,18 +4571,7 @@ EASOM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ELP10
 \end_layout
 
@@ -3660,19 +4582,8 @@ ELP10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6288
+\size tiny
+3131
 \end_layout
 
 \end_inset
@@ -3682,18 +4593,7 @@ ELP10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4397
 \end_layout
 
@@ -3704,19 +4604,63 @@ ELP10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3131
+\size tiny
+1720
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6288
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9415
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10317
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5255
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4020
 \end_layout
 
 \end_inset
@@ -3726,19 +4670,8 @@ ELP10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2820
+\size tiny
+3593
 \end_layout
 
 \end_inset
@@ -3750,18 +4683,7 @@ ELP10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ELP20
 \end_layout
 
@@ -3772,19 +4694,8 @@ ELP20
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-10794
+\size tiny
+6160
 \end_layout
 
 \end_inset
@@ -3794,18 +4705,7 @@ ELP20
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 6883
 \end_layout
 
@@ -3816,19 +4716,63 @@ ELP20
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6160
+\size tiny
+1988
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10794
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+14173
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+17040
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7722
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6537
 \end_layout
 
 \end_inset
@@ -3838,19 +4782,8 @@ ELP20
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5337
+\size tiny
+6194
 \end_layout
 
 \end_inset
@@ -3862,18 +4795,7 @@ ELP20
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ELP30
 \end_layout
 
@@ -3884,19 +4806,8 @@ ELP30
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-14172
+\size tiny
+9576
 \end_layout
 
 \end_inset
@@ -3906,18 +4817,7 @@ ELP30
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 9438
 \end_layout
 
@@ -3928,19 +4828,63 @@ ELP30
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-9576
+\size tiny
+2100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+14172
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+18245
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+23532
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9776
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8270
 \end_layout
 
 \end_inset
@@ -3950,19 +4894,8 @@ ELP30
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7070
+\size tiny
+3593
 \end_layout
 
 \end_inset
@@ -3974,18 +4907,7 @@ ELP30
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP4
 \end_layout
 
@@ -3996,19 +4918,8 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5166
+\size tiny
+2946
 \end_layout
 
 \end_inset
@@ -4018,18 +4929,7 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3177
 \end_layout
 
@@ -4040,19 +4940,63 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2946
+\size tiny
+1677
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5166
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6648
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5567
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4392
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3570
 \end_layout
 
 \end_inset
@@ -4062,19 +5006,8 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2370
+\size tiny
+2238
 \end_layout
 
 \end_inset
@@ -4086,18 +5019,7 @@ EXP4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP16
 \end_layout
 
@@ -4108,19 +5030,8 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6498
+\size tiny
+3250
 \end_layout
 
 \end_inset
@@ -4130,18 +5041,7 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3477
 \end_layout
 
@@ -4152,19 +5052,63 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3250
+\size tiny
+1660
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6498
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6978
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9968
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4624
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3854
 \end_layout
 
 \end_inset
@@ -4174,19 +5118,8 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2654
+\size tiny
+3588
 \end_layout
 
 \end_inset
@@ -4198,18 +5131,7 @@ EXP16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 EXP32
 \end_layout
 
@@ -4220,19 +5142,8 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7606
+\size tiny
+3561
 \end_layout
 
 \end_inset
@@ -4242,18 +5153,7 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3728
 \end_layout
 
@@ -4264,19 +5164,63 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3561
+\size tiny
+1647
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7606
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7419
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11925
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4508
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3852
 \end_layout
 
 \end_inset
@@ -4286,19 +5230,8 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2652
+\size tiny
+3691
 \end_layout
 
 \end_inset
@@ -4310,18 +5243,343 @@ EXP32
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
+F3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4074
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3420
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1979(50)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7323
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10816
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11717
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5821
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6444
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5434
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+F5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1630
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2055
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1376
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2814
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+48377
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7393
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2117
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2697
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2199
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+F9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2494
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2707
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1879
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4535
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5502
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4479
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3534
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4406
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1968
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 GKLS250
 \end_layout
 
@@ -4332,19 +5590,8 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3834
+\size tiny
+2280
 \end_layout
 
 \end_inset
@@ -4354,18 +5601,7 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 2495
 \end_layout
 
@@ -4376,19 +5612,63 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2280
+\size tiny
+1623
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3834
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6127
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4978
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3665
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2315
 \end_layout
 
 \end_inset
@@ -4398,19 +5678,8 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1115
+\size tiny
+1657
 \end_layout
 
 \end_inset
@@ -4422,18 +5691,7 @@ GKLS250
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GKLS350
 \end_layout
 
@@ -4444,19 +5702,8 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3919
+\size tiny
+2612
 \end_layout
 
 \end_inset
@@ -4466,18 +5713,7 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 2658
 \end_layout
 
@@ -4488,19 +5724,63 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2612
+\size tiny
+1570
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3919
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6919
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7226(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3692
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2265(96)
 \end_layout
 
 \end_inset
@@ -4510,19 +5790,8 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-945(93)
+\size tiny
+1335
 \end_layout
 
 \end_inset
@@ -4534,18 +5803,7 @@ GKLS350
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GOLDSTEIN
 \end_layout
 
@@ -4556,19 +5814,8 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6781
+\size tiny
+3687
 \end_layout
 
 \end_inset
@@ -4578,18 +5825,7 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3856
 \end_layout
 
@@ -4600,19 +5836,63 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3687
+\size tiny
+1886
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6781
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9312
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9016
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5287
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3930
 \end_layout
 
 \end_inset
@@ -4622,19 +5902,8 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2676
+\size tiny
+2727
 \end_layout
 
 \end_inset
@@ -4646,18 +5915,7 @@ GOLDSTEIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GRIEWANK2
 \end_layout
 
@@ -4668,19 +5926,8 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7429(96)
+\size tiny
+4500
 \end_layout
 
 \end_inset
@@ -4690,18 +5937,7 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3168
 \end_layout
 
@@ -4712,19 +5948,63 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4500(96)
+\size tiny
+2299(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7429(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9253
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7948(86)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7285
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3850(50)
 \end_layout
 
 \end_inset
@@ -4734,19 +6014,8 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2453(50)
+\size tiny
+2223
 \end_layout
 
 \end_inset
@@ -4758,18 +6027,7 @@ GRIEWANK2
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 GRIEWANK10
 \end_layout
 
@@ -4780,19 +6038,8 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-18490
+\size tiny
+6409(96)
 \end_layout
 
 \end_inset
@@ -4802,18 +6049,7 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 7942
 \end_layout
 
@@ -4824,19 +6060,63 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6409
+\size tiny
+2142(80)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+18490
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+14708
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+51143
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+12341
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7551
 \end_layout
 
 \end_inset
@@ -4846,19 +6126,8 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6351
+\size tiny
+6593
 \end_layout
 
 \end_inset
@@ -4870,18 +6139,7 @@ GRIEWANK10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 HANSEN
 \end_layout
 
@@ -4892,19 +6150,8 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4185
+\size tiny
+3209
 \end_layout
 
 \end_inset
@@ -4914,18 +6161,7 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 2892
 \end_layout
 
@@ -4936,19 +6172,63 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3209
+\size tiny
+2204
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4185
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7253
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10498
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4116
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4565
 \end_layout
 
 \end_inset
@@ -4958,19 +6238,8 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2525
+\size tiny
+3092
 \end_layout
 
 \end_inset
@@ -4982,18 +6251,7 @@ HANSEN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 HARTMAN3
 \end_layout
 
@@ -5004,19 +6262,8 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5190
+\size tiny
+2751
 \end_layout
 
 \end_inset
@@ -5026,18 +6273,7 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3103
 \end_layout
 
@@ -5048,19 +6284,63 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2751
+\size tiny
+1801
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5190
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7293
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8440
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3982
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3145
 \end_layout
 
 \end_inset
@@ -5070,19 +6350,8 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1945
+\size tiny
+2100
 \end_layout
 
 \end_inset
@@ -5094,18 +6363,7 @@ HARTMAN3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 HARTMAN6
 \end_layout
 
@@ -5116,19 +6374,8 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5968
+\size tiny
+3219
 \end_layout
 
 \end_inset
@@ -5138,18 +6385,7 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3688
 \end_layout
 
@@ -5160,19 +6396,63 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3219
+\size tiny
+1862
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5968
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8814
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+22615
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4416
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4105
 \end_layout
 
 \end_inset
@@ -5182,19 +6462,8 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2832
+\size tiny
+2921
 \end_layout
 
 \end_inset
@@ -5206,18 +6475,7 @@ HARTMAN6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 POTENTIAL3
 \end_layout
 
@@ -5228,19 +6486,8 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6218
+\size tiny
+4351
 \end_layout
 
 \end_inset
@@ -5250,18 +6497,7 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 5154
 \end_layout
 
@@ -5272,19 +6508,63 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4351
+\size tiny
+3096
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6218
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11256
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9232
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5071
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4790
 \end_layout
 
 \end_inset
@@ -5294,19 +6574,8 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3537
+\size tiny
+4034
 \end_layout
 
 \end_inset
@@ -5318,18 +6587,7 @@ POTENTIAL3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 POTENTIAL5
 \end_layout
 
@@ -5340,19 +6598,8 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-9119
+\size tiny
+7704
 \end_layout
 
 \end_inset
@@ -5362,18 +6609,7 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 10128
 \end_layout
 
@@ -5384,19 +6620,63 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7704
+\size tiny
+6353
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9119
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+22136
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+39455
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8807
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7995
 \end_layout
 
 \end_inset
@@ -5406,19 +6686,8 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6735
+\size tiny
+7991
 \end_layout
 
 \end_inset
@@ -5430,18 +6699,7 @@ POTENTIAL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 POTENTIAL6
 \end_layout
 
@@ -5452,19 +6710,8 @@ POTENTIAL6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-10509(76)
+\size tiny
+10177(70)
 \end_layout
 
 \end_inset
@@ -5474,18 +6721,7 @@ POTENTIAL6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 11780(46)
 \end_layout
 
@@ -5496,19 +6732,63 @@ POTENTIAL6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-10177(70)
+\size tiny
+7593
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10509
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+32630(90)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+46466(46)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11341(76)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8906(76)
 \end_layout
 
 \end_inset
@@ -5518,19 +6798,8 @@ POTENTIAL6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7706(76)
+\size tiny
+9333(76)
 \end_layout
 
 \end_inset
@@ -5542,18 +6811,7 @@ POTENTIAL6
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 POTENTIAL10
 \end_layout
 
@@ -5564,19 +6822,8 @@ POTENTIAL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-12721(96)
+\size tiny
+13357
 \end_layout
 
 \end_inset
@@ -5586,18 +6833,7 @@ POTENTIAL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 16550(86)
 \end_layout
 
@@ -5608,19 +6844,63 @@ POTENTIAL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-13357
+\size tiny
+10413
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+12721
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+38337
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+59487
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+18573
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+12757
 \end_layout
 
 \end_inset
@@ -5630,19 +6910,8 @@ POTENTIAL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11517
+\size tiny
+13611
 \end_layout
 
 \end_inset
@@ -5654,18 +6923,7 @@ POTENTIAL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 RASTRIGIN
 \end_layout
 
@@ -5676,19 +6934,8 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6216
+\size tiny
+4106
 \end_layout
 
 \end_inset
@@ -5698,18 +6945,7 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3539
 \end_layout
 
@@ -5720,19 +6956,63 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4106
+\size tiny
+2211
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6216
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9043
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8116
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5523
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3672(86)
 \end_layout
 
 \end_inset
@@ -5742,19 +7022,8 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2125(86)
+\size tiny
+2364
 \end_layout
 
 \end_inset
@@ -5766,18 +7035,7 @@ RASTRIGIN
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ROSENBROCK4
 \end_layout
 
@@ -5788,19 +7046,8 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8452
+\size tiny
+3679
 \end_layout
 
 \end_inset
@@ -5810,18 +7057,7 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 5858
 \end_layout
 
@@ -5832,19 +7068,63 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3679
+\size tiny
+2025
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8452
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8078
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10759
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7750
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5642
 \end_layout
 
 \end_inset
@@ -5854,19 +7134,8 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4442
+\size tiny
+3641
 \end_layout
 
 \end_inset
@@ -5878,18 +7147,7 @@ ROSENBROCK4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ROSENBROCK8
 \end_layout
 
@@ -5900,19 +7158,8 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11530
+\size tiny
+5269
 \end_layout
 
 \end_inset
@@ -5922,18 +7169,7 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 7843
 \end_layout
 
@@ -5944,19 +7180,63 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5269
+\size tiny
+2085
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11530
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11167
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+14094
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+9469
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7926
 \end_layout
 
 \end_inset
@@ -5966,19 +7246,8 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6726
+\size tiny
+6119
 \end_layout
 
 \end_inset
@@ -5990,18 +7259,7 @@ ROSENBROCK8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 ROSENBROCK16
 \end_layout
 
@@ -6012,19 +7270,8 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-17432
+\size tiny
+8509
 \end_layout
 
 \end_inset
@@ -6034,18 +7281,7 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 11450
 \end_layout
 
@@ -6056,19 +7292,63 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-8509
+\size tiny
+2432
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+17432
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+15590
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+23544
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+13554
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11285
 \end_layout
 
 \end_inset
@@ -6078,19 +7358,8 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7310
+\size tiny
+7490
 \end_layout
 
 \end_inset
@@ -6102,18 +7371,343 @@ ROSENBROCK16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
+SCHWEFEL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1880
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2178
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1504
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3437
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4564
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4158
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3005
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2208
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1572
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+SCHWEFEL221
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2666
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2529(70)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+1875(70)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3909
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+71847
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8519(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3815
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2867
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+2256
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+SCHWEFEL222
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+33724
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+42897
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+28965
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+86861
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+101960
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+114161
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+65835
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+78734
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+18058
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
 SHEKEL5
 \end_layout
 
@@ -6124,19 +7718,8 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6662
+\size tiny
+3325
 \end_layout
 
 \end_inset
@@ -6146,18 +7729,7 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3886
 \end_layout
 
@@ -6168,19 +7740,63 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3325
+\size tiny
+2018
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6662
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10043
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+17010
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5359
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5322
 \end_layout
 
 \end_inset
@@ -6190,19 +7806,8 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3722
+\size tiny
+2657
 \end_layout
 
 \end_inset
@@ -6214,18 +7819,7 @@ SHEKEL5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SHEKEL7
 \end_layout
 
@@ -6236,19 +7830,8 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6967
+\size tiny
+3360
 \end_layout
 
 \end_inset
@@ -6258,18 +7841,7 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4009
 \end_layout
 
@@ -6280,19 +7852,63 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3360
+\size tiny
+1994
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6967(76)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10079
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+17873
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5344
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5503
 \end_layout
 
 \end_inset
@@ -6302,19 +7918,8 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3817
+\size tiny
+2648
 \end_layout
 
 \end_inset
@@ -6326,18 +7931,7 @@ SHEKEL7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SHEKEL10
 \end_layout
 
@@ -6348,19 +7942,8 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6757
+\size tiny
+2488
 \end_layout
 
 \end_inset
@@ -6370,18 +7953,7 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3985
 \end_layout
 
@@ -6392,19 +7964,63 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2488
+\size tiny
+1914(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6757(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10055
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+15524
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5321
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4784
 \end_layout
 
 \end_inset
@@ -6414,19 +8030,8 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3317
+\size tiny
+2901
 \end_layout
 
 \end_inset
@@ -6438,18 +8043,7 @@ SHEKEL10
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SINU4
 \end_layout
 
@@ -6460,19 +8054,8 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5953
+\size tiny
+2990
 \end_layout
 
 \end_inset
@@ -6482,18 +8065,7 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3409
 \end_layout
 
@@ -6504,19 +8076,63 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2990
+\size tiny
+1961
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5953
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8132
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10150
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4874
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3446
 \end_layout
 
 \end_inset
@@ -6526,19 +8142,8 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2192
+\size tiny
+2254
 \end_layout
 
 \end_inset
@@ -6550,18 +8155,7 @@ SINU4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SINU8
 \end_layout
 
@@ -6572,19 +8166,8 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6973
+\size tiny
+3441
 \end_layout
 
 \end_inset
@@ -6594,18 +8177,7 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3995
 \end_layout
 
@@ -6616,19 +8188,63 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3441
+\size tiny
+1853
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6973
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10481
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+20782
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5586
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4371
 \end_layout
 
 \end_inset
@@ -6638,19 +8254,8 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3171
+\size tiny
+3359
 \end_layout
 
 \end_inset
@@ -6662,18 +8267,7 @@ SINU8
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 SINU16
 \end_layout
 
@@ -6684,19 +8278,8 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6979
+\size tiny
+4320
 \end_layout
 
 \end_inset
@@ -6706,18 +8289,7 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4680
 \end_layout
 
@@ -6728,19 +8300,63 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4320
+\size tiny
+2251
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6979
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+15356
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+34409
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7274
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6450
 \end_layout
 
 \end_inset
@@ -6750,19 +8366,8 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-5250
+\size tiny
+5992
 \end_layout
 
 \end_inset
@@ -6774,18 +8379,7 @@ SINU16
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N4
 \end_layout
 
@@ -6796,19 +8390,8 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6396
+\size tiny
+3330
 \end_layout
 
 \end_inset
@@ -6818,18 +8401,7 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3390
 \end_layout
 
@@ -6840,19 +8412,63 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3330
+\size tiny
+1930
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6396
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8093
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+11876(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4930
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3569
 \end_layout
 
 \end_inset
@@ -6862,19 +8478,8 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2235
+\size tiny
+2204
 \end_layout
 
 \end_inset
@@ -6886,18 +8491,7 @@ TEST2N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N5
 \end_layout
 
@@ -6908,19 +8502,8 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6271
+\size tiny
+4000
 \end_layout
 
 \end_inset
@@ -6930,18 +8513,7 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 3604
 \end_layout
 
@@ -6952,19 +8524,63 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4000(96)
+\size tiny
+1982(93)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6271(96)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8812
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+16256(86)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5045
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+3877(93)
 \end_layout
 
 \end_inset
@@ -6974,19 +8590,8 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2530(93)
+\size tiny
+2575(93)
 \end_layout
 
 \end_inset
@@ -6998,18 +8603,7 @@ TEST2N5
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST2N7
 \end_layout
 
@@ -7020,19 +8614,8 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7074
+\size tiny
+4775
 \end_layout
 
 \end_inset
@@ -7042,18 +8625,7 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4020(96)
 \end_layout
 
@@ -7064,19 +8636,63 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4775(73)
+\size tiny
+2157(73)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7074(73)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10124
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+25005(63)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6363(93)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4285(50)
 \end_layout
 
 \end_inset
@@ -7086,19 +8702,8 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2939(50)
+\size tiny
+2831(36)
 \end_layout
 
 \end_inset
@@ -7110,18 +8715,7 @@ TEST2N7
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST30N3
 \end_layout
 
@@ -7132,19 +8726,8 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-6178
+\size tiny
+3210
 \end_layout
 
 \end_inset
@@ -7154,18 +8737,7 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4018
 \end_layout
 
@@ -7176,19 +8748,63 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3210
+\size tiny
+2432
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+6178
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7647
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+8163
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5311
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+4215
 \end_layout
 
 \end_inset
@@ -7198,19 +8814,8 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-2728
+\size tiny
+4389
 \end_layout
 
 \end_inset
@@ -7222,18 +8827,7 @@ TEST30N3
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 TEST30N4
 \end_layout
 
@@ -7244,19 +8838,8 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-7006
+\size tiny
+3678
 \end_layout
 
 \end_inset
@@ -7266,18 +8849,7 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\size tiny
 4504
 \end_layout
 
@@ -7288,19 +8860,63 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3678
+\size tiny
+3354
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7006
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+10656
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+13596
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+7069
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+5013
 \end_layout
 
 \end_inset
@@ -7310,19 +8926,8 @@ TEST30N4
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-3593
+\size tiny
+2901
 \end_layout
 
 \end_inset
@@ -7333,7 +8938,9 @@ TEST30N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-TOTAL SUM
+
+\size tiny
+TOTAL
 \end_layout
 
 \end_inset
@@ -7343,19 +8950,8 @@ TOTAL SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-296929
+\size tiny
+261106
 \end_layout
 
 \end_inset
@@ -7365,19 +8961,8 @@ TOTAL SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-195297
+\size tiny
+317168
 \end_layout
 
 \end_inset
@@ -7387,19 +8972,63 @@ TOTAL SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-171842
+\size tiny
+145908
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+506409
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+802608
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+916996
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+419939
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size tiny
+361454
 \end_layout
 
 \end_inset
@@ -7409,19 +9038,8 @@ TOTAL SUM
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-144024
+\size tiny
+230033
 \end_layout
 
 \end_inset
@@ -7436,6 +9054,8 @@ TOTAL SUM
 
 \end_inset
 
+
+\size default
  At the end of every global optimization procedure, a BFGS variant of Powell
  
 \begin_inset CommandInset citation
@@ -7480,10 +9100,86 @@ status open
 
 \begin_layout Plain Layout
 \align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
-	filename img1.png
-	lyxscale 50
-	scale 75
+	filename new10.png
+	lyxscale 40
+	scale 40
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+With outliers appearing
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:CompWith"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename new11.png
+	lyxscale 40
+	scale 40
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Without outliers appearing
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:CompWithout"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
 
 \end_inset
 
@@ -7508,21 +9204,7 @@ name "fig:proposedVSOthers"
 
 \end_inset
 
- The proposed method seems to significantly reduce the required number of
- functional calls compared to other techniques, and in many functions this
- reduction can exceed 50%.
- This trend is also confirmed by Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:StatProposedVSOthers"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
-, where a statistical comparison is presented between universal optimization
- methods used in the experiments.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -7535,7 +9217,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename MethodsStat.png
+	filename new12.png
 	lyxscale 50
 	scale 50
 
@@ -7562,7 +9244,120 @@ name "fig:StatProposedVSOthers"
 
 \end_inset
 
-From the analysis presented in this Figure 
+
+\end_layout
+
+\begin_layout Standard
+The table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:mainTable"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ contains values representing objective function evaluations, with lower
+ values indicating better performance.
+ The goal is to minimize the number of function calls required to achieve
+ a result.
+ The algorithms analyzed are GENETIC, PSO, IPSO, DE, GWO, WOA, MEWOA, PROPOSED,
+ and PROPOSED(KMEANS).
+ The GENETIC algorithm, with a total of 261,106 evaluations, shows mixed
+ results.
+ In some functions, such as SHEKEL10 with 2488 evaluations, it performs
+ well.
+ However, in more demanding functions, like DIFFPOWER5 and DIFFPOWER10 with
+ 18,552 and 18,801 evaluations respectively, it requires many calls, indicating
+ reduced efficiency.
+ The PSO algorithm, with 317,168 total evaluations, needs more calls than
+ GENETIC and is generally considered less efficient.
+ In difficult functions, such as DIFFPOWER10, it requires many evaluations,
+ indicating reduced effectiveness.
+ The IPSO algorithm is the most efficient, with only 145,908 evaluations.
+ Its low values in several functions, such as ROSENBROCK16 with 2432 calls
+ and TEST2N5 with 1982 calls, indicate that it requires fewer evaluations
+ to achieve a result, making it the most efficient algorithm.
+ The DE algorithm, with 506,409 evaluations, performs worse compared to
+ IPSO and other algorithms.
+ In difficult functions, such as DIFFPOWER10 with 46,914 calls and SCHWEFEL222
+ with 86,861 calls, it requires significantly more evaluations, indicating
+ difficulties in optimizing efficiently.
+ GWO has the most total evaluations (802,608), showing reduced efficiency.
+ It encounters particular difficulties in hard problems, such as DIFFPOWER10
+ with 54,442 calls and SCHWEFEL222 with 101,960 calls.
+ WOA, with 916,996 evaluations, is even less efficient than GWO.
+ It faces serious issues in demanding functions such as DIFFPOWER10 (56,381
+ calls) and SCHWEFEL222 (114,161 calls), indicating poor performance.
+ MEWOA (Modified WOA) has 419,939 total evaluations, showing some improvement
+ over WOA but still less efficient than IPSO and PROPOSED+KMEANS.
+ Despite the improvement, it continues to require many calls in difficult
+ problems, such as DIFFPOWER10 (38,559 calls) and SCHWEFEL222 (65,835 calls).
+ The PROPOSED algorithm, with 361,454 evaluations, performs better than
+ DE but does not reach the efficiency of IPSO.
+ It shows moderate results in some problems, such as DIFFPOWER10 with 29,549
+ calls, limiting its overall performance.
+ The improved PROPOSED(KMEANS) algorithm achieves better results, with 257,033
+ total evaluations.
+ In many functions, such as SCHWEFEL222 with 22,058 evaluations and DIFFPOWER10
+ with 26,615 evaluations, the addition of KMEANS significantly improves
+ performance, making it competitive with IPSO.
+ In conclusion, IPSO is the most efficient algorithm, with the lowest total
+ number of evaluations, achieving better results with fewer calls.
+ PROPOSED(KMEANS) also performs well, approaching the performance of IPSO.
+ On the other hand, GWO and WOA have the worst performance, requiring the
+ highest number of evaluations.
+ MEWOA shows some improvements over WOA but remains less efficient than
+ the top-performing algorithms.
+\end_layout
+
+\begin_layout Standard
+In Figure [fig:StatProposedVSOthers], pairwise comparisons between the proposed
+ methods and the other methods are presented.
+ In all these comparisons, the critical parameter p<0.05 confirms the statistical
+ significance of the results.
+\end_layout
+
+\begin_layout Standard
+Overall, the proposed methods achieve a significant reduction in the required
+ number of objective function calls and, in many cases, outperform other
+ optimization techniques.
+ Compared to the Differential Evolution (DE) algorithm, the proposed approaches
+ perform better across all mathematical models, with the reduction in the
+ number of calls exceeding 50%.
+ This trend is confirmed by Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:mainTable"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ Additionally, Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:CompWith"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:CompWithout"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, and 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:StatProposedVSOthers"
@@ -7572,38 +9367,9 @@ noprefix "false"
 
 \end_inset
 
-, it is abundantly clear that the proposed optimization method exhibits
- a markedly superior performance when juxtaposed with the DE technique.
- This superiority is evidenced by a significant reduction in computational
- cost, with the proposed method requiring only 144,024 function evaluations
- as opposed to the 296,929 required by DE.
- To substantiate this observation, a t-test was conducted, which confirmed
- the presence of a statistically significant difference, indicated by a
- p-value of less than 0.05.
- In a comparative assessment with the iPSO method, the proposed approach
- also demonstrates enhanced efficacy, achieving lower function evaluation
- costs across nearly all tested functions, yielding a cost of 144,024 compared
- to IPSO’s 195,297.
- The Kruskal-Wallis test was employed to further validate the statistical
- significance of this observed difference, with results again confirming
- a p-value of less than 0.05.
- When evaluated against the Genetic Algorithm (GENETIC), the proposed method
- continues to display greater efficiency, as evidenced by a lower total
- cost of 144,024 in contrast to GENETIC's 171,842.
- The t-test results further reinforce this finding, highlighting a statistically
- significant advantage in favor of the proposed method.
-\end_layout
-
-\begin_layout Standard
-In conclusion, the proposed optimization technique demonstrates enhanced
- efficiency relative to DE, IPSO, and GENETIC methodologies.
- The disparities in objective function costs are not only noteworthy but
- are also statistically significant, as corroborated by both parametric
- analysis through the t-test and non-parametric analysis via the Kruskal-Wallis
- test.
- This evidence collectively underscores the proposed method's superior capabilit
-y in effectively addressing the specific optimization functions evaluated
- in this study.
+ present statistical comparisons between the global optimization methods
+ used in the experiments, highlighting the superiority of the proposed approache
+s.
 \end_layout
 
 \begin_layout Standard
@@ -7637,29 +9403,29 @@ noprefix "false"
 
 \end_inset
 
- illustrates the performance metrics of the proposed method concerning this
- function, focusing specifically on the number of function calls made across
- various dimensional settings.
- It becomes increasingly evident that as the dimensionality of the problem
- expands, the corresponding number of function calls necessary to effectively
- solve the problem also experiences a significant increase.
- To be more specific, when examining the case for a dimension of 10, the
- algorithm requires a total of 2,820 function calls to arrive at a solution.
- In stark contrast, for a dimension of 100, the algorithm demands a staggering
- 23,062 function calls, which represents an increase of approximately eight
- times the number of calls required at the lower dimensional level.
- This notable escalation in the number of function calls as the dimensionality
- of the problem grows strongly suggests that the inherent complexity of
- the ELP problem scales considerably with increasing dimensionality.
- Furthermore, the relationship between the number of dimensions and the
- number of function calls appears to exhibit a nonlinear pattern.
- This indicates that as the dimensions increase, additional computational
- challenges are introduced, complicating the problem-solving process.
- For instance, the transition from 10 to 20 dimensions results in more than
- a doubling of the required function calls, escalating from 2,820 to 5,337.
- Conversely, the increase observed between 90 and 100 dimensions, although
- still significant, demonstrates a somewhat smaller relative increase, changing
- from 19,598 to 23,062.
+ presents the number of objective function calls required for each algorithm
+ across different dimensions.
+ As the problem dimension increases, the number of function calls needed
+ to find a solution grows significantly for all algorithms, indicating the
+ increasing complexity of the ELP function.
+ For example, the PROPOSED(KMEANS) algorithm requires 3593 calls for 10
+ dimensions and 20,900 calls for 100 dimensions, showing a gradual increase.
+ Similarly, the PROPOSED algorithm starts with 4020 calls for 10 dimensions
+ and reaches 24,322 calls for 100 dimensions.
+ IPSO stands out as the most efficient algorithm, with only 1720 calls at
+ 10 dimensions and 3165 at 100, consistently maintaining low evaluations.
+ In contrast, WOA exhibits the worst performance, with 10,317 calls at 10
+ dimensions and 62,878 at 100 dimensions.
+ The rate of increase in calls varies among algorithms.
+ For example, the PROPOSED algorithm increases from 4020 to 6537 calls between
+ 10 and 20 dimensions (a 1.6 times increase), while the rise from 90 to 100
+ dimensions is more moderate, from 20,798 to 24,322 calls.
+ MEWOA, although improved compared to WOA, requires more calls than the
+ proposed methods, with 5255 calls at 10 dimensions and 26,684 at 100.
+ GENETIC displays a variable pattern, with 3131 calls at 10 dimensions and
+ 29,004 at 100.
+ GWO and PSO follow a similar trend, with a gradual increase in calls as
+ the dimension increases.
  Additionally, Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -7670,27 +9436,47 @@ noprefix "false"
 
 \end_inset
 
- provides a visual representation of the response times associated with
- solving the ELP problem across the various dimensions, ranging from 10
- to 100, with the time measured in seconds.
- As anticipated, with the increase in dimensionality, the execution time
- also rises dramatically.
- For example, when working with 10 dimensions, the execution time is relatively
- short, clocking in at only 0.224 seconds.
- However, when the dimensionality is increased to 100, the execution time
- escalates sharply to 32.537 seconds, marking an astonishing increase of
- more than 145 times the initial time.
- This substantial growth in execution time as the dimensionality of the
- problem increases underscores the inherent complexity and computational
- demands associated with higher-dimensional optimization problems.
- Moreover, the relationship between dimensions and execution time also appears
- to be nonlinear, as evidenced by the sharp increase in time observed as
- dimensions grow.
- For example, when moving from 10 to 20 dimensions, the time required more
- than doubles, rising from 0.224 seconds to 0.577 seconds.
- In contrast, the transition from 90 to 100 dimensions results in an even
- larger jump in execution time, from 21.897 seconds to 32.537 seconds, further
- illustrating the significant challenges posed by higher-dimensional problems.
+ illustrates the execution time for each algorithm across different dimensions,
+ measured in seconds.
+ As expected, increasing the dimension leads to a significant rise in execution
+ time for all algorithms, highlighting the increased computational load.
+ For example, PROPOSED(KMEANS) starts with 0.652 seconds at 10 dimensions
+ and reaches 23.54 seconds at 100.
+ PROPOSED begins with 0.236 seconds at 10 dimensions and climbs to 32.784
+ seconds at 100, marking an impressive 139-fold increase.
+ The fastest algorithm, IPSO, takes only 0.034 seconds at 10 dimensions and
+ 2.106 seconds at 100, demonstrating excellent performance and scalability.
+ On the other hand, WOA records the worst performance, with 75.319 seconds
+ at 100 dimensions compared to 0.257 seconds at 10 dimensions.
+ DE also struggles in execution time, increasing from 0.16 seconds at 10
+ dimensions to 47.68 seconds at 100.
+ The increase in execution time across dimensions follows a nonlinear trend
+ for most algorithms.
+ For example, PROPOSED takes 0.587 seconds at 20 dimensions (more than double
+ the 0.236 seconds at 10 dimensions) but reaches 14.847 seconds at 80 dimensions.
+ Similarly, PSO starts at 0.128 seconds at 10 dimensions and reaches 20.361
+ seconds at 100 dimensions.
+ 
+\end_layout
+
+\begin_layout Standard
+The data reveals significant differences in the scalability and efficiency
+ of the algorithms.
+ IPSO stands out as the most efficient algorithm, with the lowest number
+ of calls and the shortest execution time.
+ PROPOSED(KMEANS) also achieves satisfactory results, maintaining a balance
+ between calls and execution time.
+ On the other hand, WOA and GWO exhibit the worst performance, with significantl
+y more calls and substantial increases in execution time as the dimension
+ grows.
+\end_layout
+
+\begin_layout Standard
+The results confirm that the complexity of optimization problems increases
+ sharply with the dimension.
+ Most algorithms struggle to maintain their efficiency in higher dimensions,
+ highlighting the importance of selecting the appropriate algorithm according
+ to the problem's requirements and the available computational resources.
 \end_layout
 
 \begin_layout Standard
@@ -7699,19 +9485,19 @@ noprefix "false"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename img3.png
+	filename new13.png
 	lyxscale 40
 	scale 40
 
@@ -7721,7 +9507,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-ELP: Function calls
+Function calls
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:ELPcalls"
@@ -7736,10 +9522,6 @@ name "fig:ELPcalls"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -7751,7 +9533,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename img4.png
+	filename new14.png
 	lyxscale 40
 	scale 40
 
@@ -7761,7 +9543,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-ELP: Times
+Times
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:ELPTimes"
@@ -7822,7 +9604,7 @@ In each iteration of the algorithm, a trial point is calculated through
  find optimal solutions, as shown in Figure
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:proposedVSDE"
+reference "fig:proposedsVSDE"
 plural "false"
 caps "false"
 noprefix "false"
@@ -7830,10 +9612,39 @@ noprefix "false"
 \end_inset
 
 .
+ In the case where the initial distribution is created by the k-means algorithm,
+ the performance increases by 36.3%.
+ The statistical analysis of the results in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:StatProposedVSOthers"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:proposedsVSDE"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ indicates that the proposed methods (PROPOSED and PROPOSED+KMEANS) demonstrate
+ statistically significantly better performance than the DE method in most
+ cases.
+ The use of the t-test confirms that these differences are not random but
+ are due to substantial improvements in the efficiency of the proposed methods.
+ The lower function call values show that the proposed methods lead to faster
+ convergence, and thus, better optimization performance.
  The extraneous samples of Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:proposedVSDE"
+reference "fig:compStatWithoutOutliers"
 plural "false"
 caps "false"
 noprefix "false"
@@ -7849,14 +9660,21 @@ noprefix "false"
 placement H
 wide false
 sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename img2.png
-	lyxscale 50
-	scale 50
+	filename new7.png
+	lyxscale 40
+	scale 40
 
 \end_inset
 
@@ -7864,10 +9682,75 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Comparison of proposed method against DE
+Comparison of total function calls 
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:proposedVSDE"
+name "fig:compTotal"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename new4.png
+	lyxscale 40
+	scale 40
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison of total function calls
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:compStatWithoutOutliers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Proposeds methods against DE
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:proposedsVSDE"
 
 \end_inset
 
@@ -7924,13 +9807,10 @@ ly superior performance when compared to alternative methods, particularly
  This finding not only underscores the reduced resource consumption of the
  proposed method but also affirms that it delivers reliable results with
  enhanced efficiency.
- 
-\end_layout
-
-\begin_layout Standard
-In summary, the proposed method stands out in terms of efficiency when compared
- to other optimization techniques, significantly decreasing the number of
- objective function calls and optimizing overall computational cost.
+ In summary, the proposed method stands out in terms of efficiency when
+ compared to other optimization techniques, significantly decreasing the
+ number of objective function calls and optimizing overall computational
+ cost.
  Potential enhancements to the algorithm could involve identifying specific
  samples that contribute more effectively to the discovery of the optimal
  solution.
@@ -7979,12 +9859,15 @@ Not applicable.
 \end_layout
 
 \begin_layout Acknowledgments
-The experiments for this research were conducted using the high-performance
- computing system installed at the Knowledge and Intelligent Computing Laborator
-y, Department of Informatics and Telecommunications, University of Ioannina,
- which was acquired through the project "Educational Laboratory Equipment
- of TEI of Epirus" with MIS 5007094, funded by the Operational Programme
- "Epirus" 2014–2020, through ERDF and national funds
+This research has been financed by the European Union: Next Generation EU
+ through the Program Greece 2.0 National Recovery and Resilience Plan, under
+ the call RESEARCH–CREATE–INNOVATE, project name “iCREW: Intelligent small
+ craft simulator for advanced crew training using Virtual Reality techniques”
+ (project code: TAEDK-06195).
+\end_layout
+
+\begin_layout Conflicts of Interest
+The authors declare no conflicts of interest.
 \end_layout
 
 \begin_layout Conflicts of Interest
@@ -8721,11 +10604,9 @@ literal "false"
 
 \end_inset
 
-Mirjalili, S., Lewis, A.: The whale optimization algorithm.
- Adv.
- Eng.
- Softw.
- 95, 51–67 (2016)
+Mirjalili, S., Lewis, A.
+ (2016).: The whale optimization algorithm.
+ Elsevier: Advances in Engineering Software 95 (2016) 51–67.
 \end_layout
 
 \begin_layout Bibliography
@@ -9218,6 +11099,25 @@ Armijo, L.
  (1966).
  Minimization of functions having Lipschitz continuous first partial derivatives.
  Pacific Journal of mathematics, 16(1), 1-3.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kmeansNew"
+literal "false"
+
+\end_inset
+
+M.
+ Ahmed, R.
+ Seraj, S.M.S.
+ Islam, The k-means algorithm: A comprehensive survey and performance evaluation
+, Electronics 
+\series bold
+9
+\series default
+, 1295.
 \end_layout
 
 \begin_layout Bibliography
