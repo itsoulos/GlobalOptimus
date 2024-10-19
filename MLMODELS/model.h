@@ -23,6 +23,7 @@ public:
     void        loadTestSet();
     double      getTestError();
     double      getClassTestError();
+    Dataset     *getTrainDataset();
     virtual ~Model();
 };
 

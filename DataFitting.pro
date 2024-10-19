@@ -24,8 +24,10 @@ QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
         GE/doublestack.cc \
+    GE/fcprogram.cpp \
         GE/fparser.cc \
         GE/fpoptimizer.cc \
+    GE/mapper.cc \
         GE/population.cc \
         GE/program.cc \
         GE/rule.cc \
@@ -33,8 +35,10 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
+    METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
     METHODS/woa.cpp \
+    MLMODELS/fcmodel.cpp \
     OPTIMUS/editlogger.cpp \
     OPTIMUS/filelogger.cpp \
     OPTIMUS/logger.cpp \
@@ -66,6 +70,7 @@ SOURCES += \
         LINESEARCH/linesearch.cpp \
         METHODS/multistart.cpp \
         MLMODELS/rbfproblem.cpp \
+    OPTIMUS/methodloader.cpp \
         OPTIMUS/parameterlist.cpp \
         OPTIMUS/statistics.cpp \
         OPTIMUS/collection.cpp \
@@ -135,19 +140,24 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     GE/cprogram.h \
     GE/doublestack.h \
+    GE/fcprogram.h \
     GE/fparser.hh \
     GE/fpconfig.hh \
     GE/fptypes.hh \
+    GE/mapper.h \
     GE/population.h \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    METHODS/ego.h \
     METHODS/hybridmethod.h \
     METHODS/woa.h \
+    MLMODELS/fcmodel.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \
     OPTIMUS/logger.h \
     OPTIMUS/mean.h \
+    OPTIMUS/methodloader.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
     GE/integeranneal.h\

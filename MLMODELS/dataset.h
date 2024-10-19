@@ -152,6 +152,7 @@ public:
     double  getClass(double value)const;
     vector<Data> getAllXpoint();
     Data         getAllYpoint();
+    void        clearPoints();
 };
 
 #endif // DATASET_H

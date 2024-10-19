@@ -100,6 +100,11 @@ void        Model::disableRemoveData()
     noRemoveData=true;
 }
 
+Dataset     *Model::getTrainDataset()
+{
+    return trainDataset;
+}
+
 Model::~Model()
 {
 if(noRemoveData) return;

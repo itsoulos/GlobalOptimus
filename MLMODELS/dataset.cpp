@@ -252,6 +252,13 @@ Data Dataset::getAllYpoint()
     return ypoint;
 }
 
+
+void    Dataset::clearPoints()
+{
+    xpoint.clear();
+    ypoint.clear();
+}
+
 double  Dataset::getClass(int pos) const
 {
     double y=ypoint[pos];
