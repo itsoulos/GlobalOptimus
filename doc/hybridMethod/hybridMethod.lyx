@@ -126,13 +126,6 @@
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Added by lyx2lyx
-%% Variable width box for table cells
-\newenvironment{cellvarwidth}[1][t]
-    {\begin{varwidth}[#1]{\linewidth}}
-    {\@finalstrut\@arstrutbox\end{varwidth}}
-% Added by lyx2lyx
-\usepackage{varwidth}
-% Added by lyx2lyx
 \usepackage{array}
 \end_preamble
 \options journal,article,submit,pdftex,moreauthors
@@ -230,7 +223,7 @@ End
 \begin_body
 
 \begin_layout Title
-An Innovative Hybrid Approach to Global Optimization
+An innovative hybrid approach producing trial solutions for Global Optimization
 \end_layout
 
 \begin_layout Title Citation
@@ -333,9 +326,10 @@ ion, with each algorithm offering specific advantages and disadvantages.
  An effective approach to solving complex problems is the hybrid method,
  which combines established global optimization algorithms.
  This paper presents a hybrid global optimization method, which produces
- trial solutions of the objective problem through vector operations derived
- from methods, such as Genetic Algorithms, Line Search and Differential
- Evolution.
+ trial solutions for an objective problem, utilizing Genetic Algorithm genetic
+ operators, as well as solutions obtained through a linear search process.
+ Then, the generated solutions are used to form new test solutions, by applying
+ Differential Evolution techniques.
  These operations are based on samples derived either from internal line
  searches or genetically modified samples in specific subsets of Euclidean
  space.
@@ -366,17 +360,11 @@ The primary objective of global optimization is to locate the global minimum
  the minimum value of a continuous, multidimensional function, ensuring
  that the search covers all potential ranges of the problem at hand.
  The objective is to find the lowest point through systematic exploration
- of the entire domain of the function, which is defined in a Euclidean space
- 
-\begin_inset Formula $R^{n}$
-\end_inset
-
-.
- The optimal value of a function 
+ of the entire domain of the function
 \begin_inset Formula $f:S\rightarrow R,S\subset R^{n}$
 \end_inset
 
- is defined as follows:
+ and it is defined as follows:
 \end_layout
 
 \begin_layout Standard
@@ -403,11 +391,10 @@ S=\left[a_{1},b_{1}\right]\times\left[a_{2},b_{2}\right]\times\ldots\left[a_{n},
 \end_layout
 
 \begin_layout Standard
-Global Optimization refers to algorithms whose main objective is to find
- the global optimum of a problem.
- According to literature research there are a variety of real - world problems
- that can be formulated as global optimization problems, such as problems
- in mathematics 
+Global optimization refers to algorithms that aim to find the overall optimum
+ of a problem.
+ According to the literature survey, there are a variety of real-world problems
+ that can be applied in mathematics 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "go_math1,go_math2,go_math3"
@@ -481,7 +468,8 @@ literal "false"
 \end_inset
 
  based on how they approach solving the problem.
- The techniques used for deterministic are mainly interval methods 
+ The techniques belong to the category of deterministic nethods are mainly
+ the so - called interval methods 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "interval1,interval2"
@@ -491,8 +479,12 @@ literal "false"
 
 .
  Stochastic methods utilize randomness to explore the solution space, while
- in interval methods, the set S is divided into smaller regions that may
- contain the global minimum based on certain criteria.
+ in interval methods, the set 
+\begin_inset Formula $S$
+\end_inset
+
+ is divided into smaller regions that may contain the global minimum based
+ on certain criteria.
  Recently, a comparison between deterministic and stochastic methods was
  proposed by Sergeyev et al 
 \begin_inset CommandInset citation
@@ -565,9 +557,28 @@ literal "false"
 \end_inset
 
  etc.
- Also, due to the wide spread of parallel computing units, a variety of
- research papers related to evolutionary techniques appeared that use such
- processing units 
+ Also, due to the wide spread of parallel computing units
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-7"
+literal "false"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-8"
+literal "false"
+
+\end_inset
+
+
+\series bold
+, 
+\series default
+a variety of research papers related to evolutionary techniques appeared
+ that use such processing units 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gpu1,gpu2,gpu3"
@@ -576,9 +587,7 @@ literal "false"
 \end_inset
 
 .
- In the current work, two evolutionary methods were incorporated in the
- final algorithm: Genetic Algorithms and the Differential Evolution method
- was combined into a hybrid optimization method.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -590,10 +599,10 @@ literal "false"
 
 \end_inset
 
- and his team and they initially generated randomly candidate solutions
- to an optimization problem.
- These solutions were modified through a series of operators that mimic
- natural processes, such as mutation, selection and crossover.
+ and his team, and they form randomly candidate solutions for the optimization
+ problem.
+ These solutions are modified through a series of operators that mimic natural
+ processes, such as mutation, selection and crossover.
  Genetic algorithms have been used widely in areas such as networking 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -719,10 +728,13 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-The current work produces through a series of steps trial solutions using
- the genetic operators of the Genetic Algorithm as well as solutions identified
- by a line search procedure.
- In current work, the Armijo line search is a method is used.
+In the current work, two evolutionary methods were incorporated into the
+ final algorithm: Genetic Algorithms and the Differential Evolution method
+ were combined into a hybrid optimization method.
+ More specifically through a series of steps trial solutions are generated
+ using the genetic operators of the Genetic Algorithm as well as solutions
+ determined by a line search procedure.
+ Additionally, an Armijo line search method is used.
  This method is incorporated to estimate an appropriate step when updating
  the trial points, and it was introduced in the work of Armijo
 \begin_inset CommandInset citation
@@ -786,14 +798,45 @@ name "sec:overallAlgorithm"
 \end_layout
 
 \begin_layout Standard
+Modern optimization methods have been developed to solve complex problems.
+ The GA, inspired by natural selection, uses operators like crossover and
+ mutation but often suffers from slow convergence and high computational
+ cost in high-dimensional problems.
+ PSO leverages particle collaboration to search for optimal solutions, although
+ it can get trapped in local optima.
+ The Improved PSO (IPSO) addresses this issue with dynamic adjustments,
+ enhancing both speed and accuracy.
+ DE stands out for its simplicity and efficiency through mutation and recombinat
+ion, but its performance relies heavily on proper parameter tuning.
+ The Grey Wolf Optimizer (GWO) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gwo"
+literal "false"
 
-\series bold
-(WRITE A TEXT BEFORE THE ALGORITHM)
+\end_inset
+
+ mimics the hunting behavior of wolves, balancing exploration and exploitation,
+ but struggles with high-dimensional problems.
+ The WOA, inspired by whales' hunting strategies, has proven effective,
+ though its performance decreases in large-scale problems.
+ The Multi-Enhanced WOA (MEWOA) introduces additional strategies to avoid
+ local optima and accelerate convergence.
+ Each method offers advantages and limitations, with the choice depending
+ on the problem’s requirements and available resources.
 \end_layout
 
 \begin_layout Standard
-The proposed method combines some aspects from different optimization algorithms
- and the main steps are subsequently:
+The proposed algorithm combines elements from various optimization techniques.
+ It begins with initialization, where the population is generated using
+ either uniform distribution or k-means clustering.
+ Samples are then calculated, drawing inspiration from the Armijo line search
+ and genetic algorithm operators, and are applied using the DE formula.
+ The algorithm assesses the termination criterion through an adaptive process,
+ deciding whether to continue or stop based on solution improvement.
+ In experimental tests, the algorithm demonstrates high performance, reducing
+ objective function calls and overall computational cost.
+ The algorithm is as follows:
 \end_layout
 
 \begin_layout Enumerate
@@ -3250,7 +3293,7 @@ In the random number generator, different seeds were used to ensure the
  is a fully developed optimizer and is available for distribution via the
  link: 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -3280,11 +3323,23 @@ The column FUNCTION represents the name of the used objective problem.
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The column GENETIC represents the application of the Genetic Algorithm to
- the objective problem.
+ the objective problem
+\begin_inset CommandInset citation
+LatexCommand citep
+key "genetic3"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The PSO column represents the implementation of the classical PSO algorithm
  as suggested by the literature
 \begin_inset CommandInset citation
@@ -3298,11 +3353,13 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The column IPSO stands for the application of the Improved PSO algorithm
  as suggested by Charilogis and Tsoulos 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "ipso"
+key "charilogis"
 literal "false"
 
 \end_inset
@@ -3311,31 +3368,64 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
+
+\series bold
 The column DE represents the average function calls for the Differential
- Evolution optimization technique.
-\end_layout
-
-\begin_layout Enumerate
-The column GWO represents the average function calls for the xxx optimization
- technique.
-\end_layout
-
-\begin_layout Enumerate
-The column WOA represents the average function calls for the Whale Optimization
- technique.
-\end_layout
-
-\begin_layout Enumerate
-The column MEWOA stands for the application of the Improved WOA algorithm
- as suggested by 
+ Evolution optimization technique
 \begin_inset CommandInset citation
 LatexCommand citep
-key "ipso"
+key "key-6"
 literal "false"
 
 \end_inset
 
- to the objective problems.
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The column GWO represents the average function calls for the Gray Wolf optimizat
+ion technique
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gwo"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The column WOA represents the average function calls for the Whale Optimization
+ technique
+\begin_inset CommandInset citation
+LatexCommand citep
+key "WOA"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The column MEWOA stands for the application of the Improved WOA algorithm
+ as suggested by Shen Y.
+ et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-1"
+literal "false"
+
+\end_inset
+
+to the objective problems.
 \end_layout
 
 \begin_layout Enumerate
@@ -3379,10 +3469,16 @@ name "tab:mainTable"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+
+\size footnotesize
 \begin_inset Tabular
 <lyxtabular version="3" rows="51" columns="10">
 <features tabularvalignment="middle">
-<column alignment="center" valignment="top" special=">{\centering}V{\linewidth}">
+<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -9950,11 +10046,10 @@ literal "false"
 
 \end_inset
 
-Intriligator, M.
- D.
- (2002).
- Mathematical optimization and economic theory.
- Society for Industrial and Applied Mathematics.
+Carrizosa, E., Molero-Río, C., & Romero Morales, D.
+ (2021).
+ Mathematical optimization in classification and regression trees.
+ Top, 29(1), 5-33.
 \end_layout
 
 \begin_layout Bibliography
@@ -9984,13 +10079,11 @@ literal "false"
 
 \end_inset
 
-Mahmoodabadi, M.
- J., & Nemati, A.
- R.
- (2016).
- A novel adaptive genetic algorithm for global optimization of mathematical
- test functions and real-world problems.
- Engineering Science and Technology, an International Journal, 19(4), 2002-2021.
+Legat, B., Dowson, O., Garcia, J.
+ D., & Lubin, M.
+ (2022).
+ MathOptInterface: a data structure for mathematical optimization problems.
+ INFORMS Journal on Computing, 34(2), 672-689.
 \end_layout
 
 \begin_layout Bibliography
@@ -10002,13 +10095,11 @@ literal "false"
 
 \end_inset
 
-E.
- Iuliano, Global optimization of benchmark aerodynamic cases using physics-based
- surrogate models, Aerospace Science and Technology 
-\series bold
-67
-\series default
-, pp.273-286, 2017.
+Iuliano, E.
+ (2017).
+ Global optimization of benchmark aerodynamic cases using physics-based
+ surrogate models.
+ Aerospace Science and Technology, 67, 273-286.
 \end_layout
 
 \begin_layout Bibliography
@@ -10020,16 +10111,11 @@ literal "false"
 
 \end_inset
 
-Q.
- Duan, S.
- Sorooshian, V.
- Gupta, Effective and efficient global optimization for conceptual rainfall-runo
-ff models, Water Resources Research 
-\series bold
-28
-\series default
-, pp.
- 1015-1031 , 1992.
+Su, H., Zhao, D., Heidari, A.
+ A., Liu, L., Zhang, X., Mafarja, M., & Chen, H.
+ (2023).
+ RIME: A physics-based optimization.
+ Neurocomputing, 532, 183-214.
 \end_layout
 
 \begin_layout Bibliography
@@ -10041,20 +10127,10 @@ literal "false"
 
 \end_inset
 
-L.
- Yang, D.
- Robin, F.
- Sannibale, C.
- Steier, W.
- Wan, Global optimization of an accelerator lattice using multiobjective
- genetic algorithms, Nuclear Instruments and Methods in Physics Research
- Section A: Accelerators, Spectrometers, Detectors and Associated Equipment
- 
-\series bold
-609
-\series default
-, pp.
- 50-57, 2009.
+Stilck França, D., & Garcia-Patron, R.
+ (2021).
+ Limitations of optimization algorithms on noisy quantum devices.
+ Nature Physics, 17(11), 1221-1227.
 \end_layout
 
 \begin_layout Bibliography
@@ -10066,19 +10142,12 @@ literal "false"
 
 \end_inset
 
-S.
- Heiles, R.
- L.
- Johnston, Global optimization of clusters using electronic structure methods,
- Int.
- J.
- Quantum Chem.
- 
-\series bold
-113
-\series default
-, pp.
- 2091– 2109, 2013.
+Zhang, J., & Glezakou, V.
+ A.
+ (2021).
+ Global optimization of chemical cluster structures: Methods, applications,
+ and challenges.
+ International Journal of Quantum Chemistry, 121(7), e26553.
 \end_layout
 
 \begin_layout Bibliography
@@ -10090,20 +10159,11 @@ literal "false"
 
 \end_inset
 
-W.H.
- Shin, J.K.
- Kim, D.S.
- Kim, C.
- Seok, GalaxyDock2: Protein–ligand docking using beta-complex and global
- optimization, J.
- Comput.
- Chem.
- 
-\series bold
-34
-\series default
-, pp.
- 2647– 2656, 2013.
+Hu, Y., Zang, Z., Chen, D., Ma, X., Liang, Y., You, W., & Zhang, Z.
+ (2022).
+ Optimization and evaluation of SO2 emissions based on WRF-Chem and 3DVAR
+ data assimilation.
+ Remote Sensing, 14(1), 220.
 \end_layout
 
 \begin_layout Bibliography
@@ -10115,19 +10175,13 @@ literal "false"
 
 \end_inset
 
-A.
- Liwo, J.
- Lee, D.R.
- Ripoll, J.
- Pillardy, H.
+Jeraal, M.
+ I., Sung, S., & Lapkin, A.
  A.
- Scheraga, Protein structure prediction by global optimization of a potential
- energy function, Biophysics 
-\series bold
-96
-\series default
-, pp.
- 5482-5485, 1999.
+ (2021).
+ A Machine Learning‐Enabled Autonomous Flow Chemistry Platform for Process
+ Optimization of Multiple Reaction Metrics.
+ Chemistry‐Methods, 1(1), 71-77.
 \end_layout
 
 \begin_layout Bibliography
@@ -10139,13 +10193,11 @@ literal "false"
 
 \end_inset
 
-Eva K.
- Lee, Large-Scale Optimization-Based Classification Models in Medicine and
- Biology, Annals of Biomedical Engineering 
-\series bold
-35
-\series default
-, pp 1095-1109, 2007.
+Nour, M., Cömert, Z., & Polat, K.
+ (2020).
+ A novel medical diagnosis model for COVID-19 infection detection based
+ on deep features and Bayesian optimization.
+ Applied Soft Computing, 97, 106580.
 \end_layout
 
 \begin_layout Bibliography
@@ -10157,14 +10209,11 @@ literal "false"
 
 \end_inset
 
-Y.
- Cherruault, Global optimization in biology and medicine, Mathematical and
- Computer Modelling 
-\series bold
-20
-\series default
-, pp.
- 119-132, 1994.
+Kaur, P., & Singh, R.
+ K.
+ (2023).
+ A review on optimization techniques for medical image analysis.
+ Concurrency and Computation: Practice and Experience, 35(1), e7443.
 \end_layout
 
 \begin_layout Bibliography
@@ -10197,12 +10246,11 @@ literal "false"
 
 \end_inset
 
-Banga, J.R.
- Optimization in computational systems biology.
- BMC Syst.
- Biol.
- 2008, 2, 47.
- 
+Wang, L., Cao, Q., Zhang, Z., Mirjalili, S., & Zhao, W.
+ (2022).
+ Artificial rabbits optimization: A new bio-inspired meta-heuristic algorithm
+ for solving engineering optimization problems.
+ Engineering Applications of Artificial Intelligence, 114, 105082.
 \end_layout
 
 \begin_layout Bibliography
@@ -10214,13 +10262,13 @@ literal "false"
 
 \end_inset
 
-Beites, T.; Mendes, M.V.
- Chassis optimization as a cornerstone for the application of synthetic
- biology based strategies in microbial secondary metabolism.
- Front.
- Microbiol.
- 2015, 6, 159095.
- 
+Hesami, M., & Jones, A.
+ M.
+ P.
+ (2020).
+ Application of artificial intelligence models and optimization algorithms
+ in plant cell and tissue culture.
+ Applied Microbiology and Biotechnology, 104(22), 9449-9485.
 \end_layout
 
 \begin_layout Bibliography
@@ -10232,11 +10280,13 @@ literal "false"
 
 \end_inset
 
-Filip, M.; Zoubek, T.; Bumbalek, R.; Cerny, P.; Batista, C.E.; Olsan, P.; Bartos,
- P.; Kriz, P.; Xiao, M.; Dolan, A.; et al.
+Filip, M., Zoubek, T., Bumbalek, R., Cerny, P., Batista, C.
+ E., Olsan, P., ...
+ & Findura, P.
+ (2020).
  Advanced computational methods for agriculture machinery movement optimization
  with applications in sugarcane production.
- Agriculture 2020, 10, 434
+ Agriculture, 10(10), 434.
 \end_layout
 
 \begin_layout Bibliography
@@ -10248,12 +10298,13 @@ literal "false"
 
 \end_inset
 
-Zhang, D.; Guo, P.
- Integrated agriculture water management optimization model for water saving
- potential analysis.
- Agric.
- Water Manag.
- 2016, 170, 5–19.
+Akintuyi, O.
+ B.
+ (2024).
+ Adaptive AI in precision agriculture: a review: investigating the use of
+ self-learning algorithms in optimizing farm operations based on real-time
+ data.
+ Research Journal of Multidisciplinary Studies, 7(02), 016-030.
 \end_layout
 
 \begin_layout Bibliography
@@ -10265,9 +10316,12 @@ literal "false"
 
 \end_inset
 
-Intriligator, M.D.
- Mathematical Optimization and Economic Theory; SIAM: Philadelphia, PA,
- USA, 2002
+Wang, Y., Ma, Y., Song, F., Ma, Y., Qi, C., Huang, F., ...
+ & Zhang, F.
+ (2020).
+ Economic and efficient multi-objective operation optimization of integrated
+ energy system considering electro-thermal demand response.
+ Energy, 205, 118022.
 \end_layout
 
 \begin_layout Bibliography
@@ -10279,9 +10333,15 @@ literal "false"
 
 \end_inset
 
-Dixit, A.K.
- Optimization in Economic Theory; Oxford University Press: Oxford, MA, USA,
- 1990.
+Alirahmi, S.
+ M., Mousavi, S.
+ B., Razmi, A.
+ R., & Ahmadi, P.
+ (2021).
+ A comprehensive techno-economic analysis and multi-criteria optimization
+ of a compressed air energy storage (CAES) hybridized with solar and desalinatio
+n units.
+ Energy Conversion and Management, 236, 114053.
 \end_layout
 
 \begin_layout Bibliography
@@ -10293,14 +10353,18 @@ literal "false"
 
 \end_inset
 
-Ion, I.
- G., Bontinck, Z., Loukrezis, D., Römer, U., Lass, O., Ulbrich, S., ...
- & De Gersem, H.
- (2018).
- Robust shape optimization of electric devices based on deterministic optimizati
-on methods and finite-element analysis with affine parametrization and design
- elements.
- Electrical Engineering, 100(4), 2635-2647.
+Shezan, S.
+ A., Ishraque, M.
+ F., Shafiullah, G.
+ M., Kamwa, I., Paul, L.
+ C., Muyeen, S.
+ M., ...
+ & Kumar, P.
+ P.
+ (2023).
+ Optimization and control of solar-wind islanded hybrid microgrid by using
+ heuristic and deterministic optimization algorithms and fuzzy logic controller.
+ Energy reports, 10, 3272-3288.
 \end_layout
 
 \begin_layout Bibliography
@@ -10329,13 +10393,10 @@ literal "false"
 
 \end_inset
 
-Pereyra, M., Schniter, P., Chouzenoux, E., Pesquet, J.
- C., Tourneret, J.
- Y., Hero, A.
- O., & McLaughlin, S.
- (2015).
- A survey of stochastic simulation and optimization methods in signal processing.
- IEEE Journal of Selected Topics in Signal Processing, 10(2), 224-241.
+Xu, Z., Zhao, Z., & Liu, J.
+ (2024).
+ Deterministic Multi-Objective Optimization of Analog Circuits.
+ Electronics, 13(13), 2510.
 \end_layout
 
 \begin_layout Bibliography
@@ -10347,11 +10408,12 @@ literal "false"
 
 \end_inset
 
-Hannah, L.
- A.
- (2015).
- Stochastic optimization.
- International Encyclopedia of the Social & Behavioral Sciences, 2, 473-481.
+Hsieh, Y.
+ P., Karimi Jaghargh, M.
+ R., Krause, A., & Mertikopoulos, P.
+ (2024).
+ Riemannian stochastic optimization methods avoid strict saddle points.
+ Advances in Neural Information Processing Systems, 36.
 \end_layout
 
 \begin_layout Bibliography
@@ -10363,11 +10425,11 @@ literal "false"
 
 \end_inset
 
-Kizielewicz, B., & Sałabun, W.
- (2020).
- A new approach to identifying a multi-criteria decision model based on
- stochastic optimization techniques.
- Symmetry, 12(9), 1551.
+Tyurin, A., & Richtárik, P.
+ (2024).
+ Optimal time complexities of parallel stochastic optimization methods under
+ a fixed computation model.
+ Advances in Neural Information Processing Systems, 36.
 \end_layout
 
 \begin_layout Bibliography
@@ -10395,14 +10457,13 @@ literal "false"
 
 \end_inset
 
-M.A.
- Wolfe, Interval methods for global optimization, Applied Mathematics and
- Computation 
-\series bold
-75
-\series default
-, pp.
- 179-206, 1996.
+Villanueva, F.
+ R., & de Oliveira, V.
+ A.
+ (2022).
+ Necessary optimality conditions for interval optimization problems with
+ functional and abstract constraints.
+ Journal of Optimization Theory and Applications, 194(3), 896-923.
 \end_layout
 
 \begin_layout Bibliography
@@ -10413,19 +10474,11 @@ literal "true"
 
 \end_inset
 
-T.
- Csendes and D.
- Ratz, Subdivision Direction Selection in Interval Methods for Global Optimizati
-on, SIAM J.
- Numer.
- Anal.
- 
-\series bold
-34
-\series default
-, pp.
- 922–938, 1997.
- 
+Wang, L., Chen, Z., Yang, G., Sun, Q., & Ge, J.
+ (2020).
+ An interval uncertain optimization method using back-propagation neural
+ network differentiation.
+ Computer Methods in Applied Mechanics and Engineering, 366, 113065.
 \end_layout
 
 \begin_layout Bibliography
@@ -10436,16 +10489,14 @@ literal "false"
 
 \end_inset
 
-Y.D.
- Sergeyev, D.E.
- Kvasov, M.S.
- Mukhametzhanov, On the efficiency of nature-inspired metaheuristics in
- expensive global optimization with limited budget.
- Sci Rep 
-\series bold
-8
-\series default
-, 453, 2018.
+Sergeyev, Y.
+ D., Kvasov, D.
+ E., & Mukhametzhanov, M.
+ S.
+ (2018).
+ On the efficiency of nature-inspired metaheuristics in expensive global
+ optimization with limited budget.
+ Scientific reports, 8(1), 453.
 \end_layout
 
 \begin_layout Bibliography
@@ -10457,9 +10508,12 @@ literal "false"
 
 \end_inset
 
-D.
- Goldberg, Genetic Algorithms in Search, Optimization and Machine Learning,
- Addison-Wesley Publishing Company, Reading, Massachussets, 1989.
+Chen, M., Yu, L., Zhi, C., Sun, R., Zhu, S., Gao, Z., ...
+ & Zhang, Y.
+ (2022).
+ Improved faster R-CNN for fabric defect detection based on Gabor filter
+ with Genetic Algorithm optimization.
+ Computers in Industry, 134, 103551.
 \end_layout
 
 \begin_layout Bibliography
@@ -10470,9 +10524,10 @@ literal "true"
 
 \end_inset
 
-Z.
- Michaelewicz, Genetic Algorithms + Data Structures = Evolution Programs.
- Springer - Verlag, Berlin, 1996.
+Sohail, A.
+ (2023).
+ Genetic algorithms in the fields of artificial intelligence and data sciences.
+ Annals of Data Science, 10(4), 1007-1018.
 \end_layout
 
 \begin_layout Bibliography
@@ -10499,15 +10554,11 @@ literal "true"
 
 \end_inset
 
-R.
- Storn, K.
- Price, Differential Evolution - A Simple and Efficient Heuristic for Global
- Optimization over Continuous Spaces, Journal of Global Optimization 
-\series bold
-11
-\series default
-, pp.
- 341-359, 1997.
+Deng, W., Shang, S., Cai, X., Zhao, H., Song, Y., & Xu, J.
+ (2021).
+ An improved differential evolution algorithm and its application in optimizatio
+n problem.
+ Soft Computing, 25, 5277-5298.
 \end_layout
 
 \begin_layout Bibliography
@@ -10518,14 +10569,10 @@ literal "false"
 
 \end_inset
 
-J.
- Liu, J.
- Lampinen, A Fuzzy Adaptive Differential Evolution Algorithm.
- Soft Comput 
-\series bold
-9
-\series default
-, pp.448–462, 2005.
+Pant, M., Zaheer, H., Garcia-Hernandez, L., & Abraham, A.
+ (2020).
+ Differential Evolution: A review of more than two decades of research.
+ Engineering Applications of Artificial Intelligence, 90, 103479.
 \end_layout
 
 \begin_layout Bibliography
@@ -10536,11 +10583,13 @@ literal "false"
 
 \end_inset
 
-J.
- Kennedy and R.
- Eberhart, "Particle swarm optimization," Proceedings of ICNN'95 - International
- Conference on Neural Networks, 1995, pp.
- 1942-1948 vol.4, doi: 10.1109/ICNN.1995.488968.
+Shami, T.
+ M., El-Saleh, A.
+ A., Alswaitti, M., Al-Tashi, Q., Summakieh, M.
+ A., & Mirjalili, S.
+ (2022).
+ Particle swarm optimization: A comprehensive survey.
+ Ieee Access, 10, 10031-10061.
 \end_layout
 
 \begin_layout Bibliography
@@ -10551,12 +10600,12 @@ literal "true"
 
 \end_inset
 
-Riccardo Poli, James Kennedy kennedy, Tim Blackwell, Particle swarm optimization
- An Overview, Swarm Intelligence 
-\series bold
-1
-\series default
-, pp 33-57, 2007.
+Gad, A.
+ G.
+ (2022).
+ Particle swarm optimization algorithm and its applications: a systematic
+ review.
+ Archives of computational methods in engineering, 29(5), 2531-2561.
  
 \end_layout
 
@@ -10568,13 +10617,11 @@ literal "true"
 
 \end_inset
 
-Ioan Cristian Trelea, The particle swarm optimization algorithm: convergence
- analysis and parameter selection, Information Processing Letters 
-\series bold
-85
-\series default
-, pp.
- 317-325, 2003.
+Shafiei Chafi, Z., & Afrakhte, H.
+ (2021).
+ Short‐Term Load Forecasting Using Neural Network and Particle Swarm Optimizatio
+n (PSO) Algorithm.
+ Mathematical Problems in Engineering, 2021(1), 5598267.
 \end_layout
 
 \begin_layout Bibliography
@@ -10585,16 +10632,14 @@ literal "false"
 
 \end_inset
 
-M.
- Dorigo, M.
- Birattari and T.
- Stutzle, Ant colony optimization, IEEE Computational Intelligence Magazine
- 
-\series bold
-1
-\series default
-, pp.
- 28-39, 2006.
+Rokbani, N., Kumar, R., Abraham, A., Alimi, A.
+ M., Long, H.
+ V., Priyadarshini, I., & Son, L.
+ H.
+ (2021).
+ Bi-heuristic ant colony optimization-based approaches for traveling salesman
+ problem.
+ Soft Computing, 25, 3775-3794.
 \end_layout
 
 \begin_layout Bibliography
@@ -10605,11 +10650,11 @@ literal "false"
 
 \end_inset
 
-K.
- Socha, M.
- Dorigo, Ant colony optimization for continuous domains, European Journal
- of Operational Research 185, pp.
- 1155-1173, 2008.
+Wu, L., Huang, X., Cui, J., Liu, C., & Xiao, W.
+ (2023).
+ Modified adaptive ant colony optimization algorithm and its application
+ for solving path planning of mobile robot.
+ Expert Systems with Applications, 215, 119410.
 \end_layout
 
 \begin_layout Bibliography
@@ -10620,17 +10665,12 @@ literal "false"
 
 \end_inset
 
-M.
- Neshat, G.
- Sepidnam, M.
- Sargolzaei, et al, Artificial fish swarm algorithm: a survey of the state-of-th
-e-art, hybridization, combinatorial and indicative applications, Artif Intell
- Rev 
-\series bold
-42
-\series default
-, pp.
- 965–997, 2014.
+Pourpanah, F., Wang, R., Lim, C.
+ P., Wang, X.
+ Z., & Yazdani, D.
+ (2023).
+ A review of artificial fish swarm algorithms: Recent advances and applications.
+ Artificial Intelligence Review, 56(3), 1867-1903.
 \end_layout
 
 \begin_layout Bibliography
@@ -10642,15 +10682,14 @@ literal "false"
 
 \end_inset
 
-Tq.
- Wu, M.
- Yao, Jh.
- Yang, Dolphin swarm algorithm, Frontiers Inf Technol Electronic Eng 
-\series bold
-17
-\series default
-, pp.
- 717–729, 2016.
+Kareem, S.
+ W., Mohammed, A.
+ S., & Khoshabaa, F.
+ S.
+ (2023).
+ Novel nature-inspired meta-heuristic optimization algorithm based on hybrid
+ dolphin and sparrow optimization.
+ International Journal of Nonlinear Analysis and Applications, 14(1), 355-373.
  
 \end_layout
 
@@ -10663,9 +10702,12 @@ literal "false"
 
 \end_inset
 
-Mirjalili, S., Lewis, A.
- (2016).: The whale optimization algorithm.
- Elsevier: Advances in Engineering Software 95 (2016) 51–67.
+Nadimi-Shahraki, M.
+ H., Zamani, H., Asghari Varzaneh, Z., & Mirjalili, S.
+ (2023).
+ A systematic review of the whale optimization algorithm: theoretical foundation
+, improvements, and hybridizations.
+ Archives of Computational Methods in Engineering, 30(7), 4113-4159.
 \end_layout
 
 \begin_layout Bibliography
@@ -10677,11 +10719,10 @@ literal "false"
 
 \end_inset
 
-Nasiri, J., & Khiyabani, F.
- M.
- (2018).
- A whale optimization algorithm (WOA) approach for clustering.
- Cogent Mathematics & Statistics, 5(1), 1483565.
+Brodzicki, A., Piekarski, M., & Jaworek-Korjakowska, J.
+ (2021).
+ The whale optimization algorithm approach for deep neural networks.
+ Sensors, 21(23), 8003.
 \end_layout
 
 \begin_layout Bibliography
@@ -10693,11 +10734,41 @@ literal "false"
 
 \end_inset
 
-Gharehchopogh, F.
- S., & Gholizadeh, H.
+Zan, J.
+ (2022).
+ Research on robot path perception and optimization technology based on
+ whale optimization algorithm.
+ Journal of Computational and Cognitive Engineering, 1(4), 201-208.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-7"
+
+\end_inset
+
+Lalwani, S., Sharma, H., Satapathy, S.
+ C., Deep, K., & Bansal, J.
+ C.
  (2019).
- A comprehensive survey: Whale Optimization Algorithm and its applications.
- Swarm and Evolutionary Computation, 48, 1-24.
+ A survey on parallel particle swarm optimization algorithms.
+ Arabian Journal for Science and Engineering, 44, 2899-2923.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-8"
+
+\end_inset
+
+Harada, T., & Alba, E.
+ (2020).
+ Parallel genetic algorithms: a useful survey.
+ ACM Computing Surveys (CSUR), 53(4), 1-39.
 \end_layout
 
 \begin_layout Bibliography
@@ -10709,11 +10780,12 @@ literal "false"
 
 \end_inset
 
-Y.
- Zhou and Y.
- Tan, "GPU-based parallel particle swarm optimization," 2009 IEEE Congress
- on Evolutionary Computation, pp.
- 1493-1500, 2009.
+Hussain, M.
+ M., & Fujimoto, N.
+ (2020).
+ GPU-based parallel multi-objective particle swarm optimization for large
+ swarms and high dimensional problems.
+ Parallel Computing, 92, 102589.
 \end_layout
 
 \begin_layout Bibliography
@@ -10724,11 +10796,10 @@ literal "false"
 
 \end_inset
 
-L.
- Dawson and I.
- Stewart, "Improving Ant Colony Optimization performance on the GPU using
- CUDA," 2013 IEEE Congress on Evolutionary Computation, 2013, pp.
- 1901-1908, doi: 10.1109/CEC.2013.6557791.
+Skinderowicz, R.
+ (2020).
+ Implementing a GPU-based parallel MAX–MIN Ant System.
+ Future Generation Computer Systems, 106, 277-295.
 \end_layout
 
 \begin_layout Bibliography
@@ -10739,10 +10810,11 @@ literal "false"
 
 \end_inset
 
-Barkalov, K., Gergel, V.
- Parallel global optimization on GPU.
- J Glob Optim 66, 3–20 (2016).
- 
+Schmitz, A., Burak, S., Miller, J., & Müller, M.
+ S.
+ (2024).
+ Parallel pattern compiler for automatic global optimizations.
+ Parallel Computing, 103112.
 \end_layout
 
 \begin_layout Bibliography
@@ -10753,11 +10825,11 @@ literal "false"
 
 \end_inset
 
-Holland, J.H.
+Holland, J.
+ H.
+ (1992).
  Genetic algorithms.
- Sci.
- Am.
- 1992, 267, 66–73.
+ Scientific american, 267(1), 66-73.
 \end_layout
 
 \begin_layout Bibliography
@@ -10768,21 +10840,12 @@ literal "false"
 
 \end_inset
 
-Y.H.
- Santana, R.M.
- Alonso, G.G.
- Nieto, L.
- Martens, W.
- Joseph, D.
- Plets, Indoor genetic algorithm-based 5G network planning using a machine
- learning model for path loss estimation, Appl.
- Sci.
- 
-\series bold
-12
-\series default
-, 3923.
- 2022.
+Hervis Santana, Y., Martinez Alonso, R., Guillen Nieto, G., Martens, L., Joseph,
+ W., & Plets, D.
+ (2022).
+ Indoor genetic algorithm-based 5G network planning using a machine learning
+ model for path loss estimation.
+ Applied Sciences, 12(8), 3923.
 \end_layout
 
 \begin_layout Bibliography
@@ -10794,21 +10857,11 @@ literal "false"
 
 \end_inset
 
-X.
- Liu, D.
- Jiang, B.
- Tao, G.
- Jiang, Y.
- Sun, J.
- Kong, B.
- Chen, Genetic algorithm-based trajectory optimization for digital twin
- robots, Front.
- Bioeng.
- Biotechnol 
-\series bold
-9
-\series default
-, 793782, 2022.
+Liu, X., Jiang, D., Tao, B., Jiang, G., Sun, Y., Kong, J., ...
+ & Chen, B.
+ (2022).
+ Genetic algorithm-based trajectory optimization for digital twin robots.
+ Frontiers in Bioengineering and Biotechnology, 9, 793782.
 \end_layout
 
 \begin_layout Bibliography
@@ -10820,16 +10873,12 @@ literal "false"
 
 \end_inset
 
-K.
- Nonoyama, Z.Liu, T.
- Fujiwara, M.M.
- Alam, T.
- Nishi, Energy-efficient robot configuration and motion planning using genetic
- algorithm and particle swarm optimization, Energies 
-\series bold
-15
-\series default
-, 2074, 2022.
+Nonoyama, K., Liu, Z., Fujiwara, T., Alam, M.
+ M., & Nishi, T.
+ (2022).
+ Energy-efficient robot configuration and motion planning using genetic
+ algorithm and particle swarm optimization.
+ Energies, 15(6), 2074.
 \end_layout
 
 \begin_layout Bibliography
@@ -10841,19 +10890,12 @@ literal "false"
 
 \end_inset
 
-K.
- Liu, B.
- Deng, Q.
- Shen, J.
- Yang, Y.
- Li, Optimization based on genetic algorithms on energy conservation potential
- of a high speed SI engine fueled with butanol–gasoline blends, Energy Rep.
- 
-\series bold
-8
-\series default
-, pp.
- 69–80, 2022.
+Liu, K., Deng, B., Shen, Q., Yang, J., & Li, Y.
+ (2022).
+ Optimization based on genetic algorithms on energy conservation potential
+ of a high speed SI engine fueled with butanol–gasoline\SpecialChar allowbreak
+ blends.
+ Energy Reports, 8, 69-80.
 \end_layout
 
 \begin_layout Bibliography
@@ -10865,15 +10907,11 @@ literal "false"
 
 \end_inset
 
-G.
- Zhou, S.
- Zhu, S.
- Luo, Location optimization of electric vehicle charging stations: Based
- on cost model and genetic algorithm, Energy 
-\series bold
-247
-\series default
-, 123437, 2022.
+Zhou, G., Zhu, Z., & Luo, S.
+ (2022).
+ Location optimization of electric vehicle charging stations: Based on cost
+ model and genetic algorithm.
+ Energy, 247, 123437.
 \end_layout
 
 \begin_layout Bibliography
@@ -10885,17 +10923,11 @@ literal "false"
 
 \end_inset
 
-J.
- Arifovic, R.
- Gençay, Using genetic algorithms to select architecture of a feedforward
- artificial neural network, Physica A: Statistical Mechanics and its Application
-s 
-\series bold
-289
-\series default
-, pp.
- 574-594, 2001.
- 
+Arifovic, J., & Gencay, R.
+ (2001).
+ Using genetic algorithms to select architecture of a feedforward artificial
+ neural network.
+ Physica A: Statistical mechanics and its applications, 289(3-4), 574-594.
 \end_layout
 
 \begin_layout Bibliography
@@ -10907,23 +10939,17 @@ literal "false"
 
 \end_inset
 
-F.
+Leung, F.
  H.
- F.
- Leung, H.
- K.
- Lam, S.
- H.
- Ling, P.
+ F., Lam, H.
+ K., Ling, S.
+ H., & Tam, P.
  K.
  S.
- Tam, Tuning of the structure and parameters of a neural network using an
- improved genetic algorithm, IEEE Transactions on Neural Networks 
-\series bold
-14
-\series default
-, pp.
- 79-88, 2003.
+ (2003).
+ Tuning of the structure and parameters of a neural network using an improved
+ genetic algorithm.
+ IEEE Transactions on Neural networks, 14(1), 79-88.
 \end_layout
 
 \begin_layout Bibliography
@@ -10935,18 +10961,17 @@ literal "false"
 
 \end_inset
 
-Y.H.
- Li, J.Q.
- Wang, X.J.
- Wang, Y.L.
- Zhao, X.H.
- Lu, D.L.
- Liu, Community Detection Based on Differential Evolution Using Social Spider
- Optimization, Symmetry 
-\series bold
-9
-\series default
-, 2017.
+Li, Y.
+ H., Wang, J.
+ Q., Wang, X.
+ J., Zhao, Y.
+ L., Lu, X.
+ H., & Liu, D.
+ L.
+ (2017).
+ Community detection based on differential evolution using social spider
+ optimization.
+ Symmetry, 9(9), 183.
 \end_layout
 
 \begin_layout Bibliography
@@ -10957,19 +10982,13 @@ literal "false"
 
 \end_inset
 
-W.
- Yang, E.M.
- Dilanga Siriwardane, R.
- Dong, Y.
- Li, J.
- Hu, Crystal structure prediction of materials with high symmetry using
- differential evolution, J.
- Phys.: Condens.
- Matter 
-\series bold
-33
-\series default
- 455902, 2021.
+Yang, W., Siriwardane, E.
+ M.
+ D., Dong, R., Li, Y., & Hu, J.
+ (2021).
+ Crystal structure prediction of materials with high symmetry using differential
+ evolution.
+ Journal of Physics: Condensed Matter, 33(45), 455902.
 \end_layout
 
 \begin_layout Bibliography
@@ -10980,13 +10999,11 @@ literal "false"
 
 \end_inset
 
-Maulik, U.; Saha, I.
- Automatic Fuzzy Clustering Using Modified Differential Evolution for Image
- Classification.
- IEEE Trans.
- Geosci.
- Remote Sens.
- 2010, 48, 3503–3510.
+Maulik, U., & Saha, I.
+ (2010).
+ Automatic fuzzy clustering using modified differential evolution for image
+ classification.
+ IEEE transactions on Geoscience and Remote sensing, 48(9), 3503-3510.
 \end_layout
 
 \begin_layout Bibliography
@@ -10997,12 +11014,14 @@ literal "false"
 
 \end_inset
 
-Zhang, Y.; Zhang, H.; Cai, J.; Yang, B.
- A Weighted Voting Classifier Based on Differential Evolution.
- Abstr.
- Appl.
- Anal.
- 2014, 2014, 376950.
+Zhang, Y., Zhang, H., Cai, J., & Yang, B.
+ (2014).
+ A weighted voting classifier based on differential evolution.
+ In Abstract and applied analysis (Vol.
+ 2014, No.
+ 1, p.
+ 376950).
+ Hindawi Publishing Corporation.
 \end_layout
 
 \begin_layout Bibliography
@@ -11014,9 +11033,9 @@ literal "false"
 \end_inset
 
 Hancer, E.
- Differential evolution for feature selection: A fuzzy wrapper–filter approach.
- Soft Comput.
- 2019, 23, 5233–5248.
+ (2019).
+ Differential evolution for feature selection: a fuzzy wrapper–filter approach.
+ Soft Computing, 23, 5233-5248.
 \end_layout
 
 \begin_layout Bibliography
@@ -11027,13 +11046,14 @@ literal "false"
 
 \end_inset
 
-Vivekanandan, T.; Iyengar, N.C.S.N.
+Vivekanandan, T., & Iyengar, N.
+ C.
+ S.
+ N.
+ (2017).
  Optimal feature selection using a modified differential evolution algorithm
  and its effectiveness for prediction of heart disease.
- Comput.
- Biol.
- Med.
- 2017, 90, 125–136.
+ Computers in biology and medicine, 90, 125-136.
 \end_layout
 
 \begin_layout Bibliography
@@ -11044,13 +11064,11 @@ literal "false"
 
 \end_inset
 
-Deng, W.; Liu, H.; Xu, J.; Zhao, H.; Song, Y.
- An Improved Quantum-Inspired Differential Evolution Algorithm for Deep
- Belief Network.
- IEEE Trans.
- Instrum.
- Meas.
- 2020, 69, 7319–7327.
+Deng, W., Liu, H., Xu, J., Zhao, H., & Song, Y.
+ (2020).
+ An improved quantum-inspired differential evolution algorithm for deep
+ belief network.
+ IEEE Transactions on Instrumentation and Measurement, 69(10), 7319-7327.
 \end_layout
 
 \begin_layout Bibliography
@@ -11061,10 +11079,11 @@ literal "false"
 
 \end_inset
 
-Wu, T.; Li, X.; Zhou, D.; Li, N.; Shi, J.
- Differential Evolution Based Layer-Wise Weight Pruning for Compressing
- Deep Neural Networks.
- Sensors 2021, 21, 880.
+Wu, T., Li, X., Zhou, D., Li, N., & Shi, J.
+ (2021).
+ Differential evolution based layer-wise weight pruning for compressing
+ deep neural networks.
+ Sensors, 21(3), 880.
 \end_layout
 
 \begin_layout Bibliography
@@ -11075,18 +11094,12 @@ literal "false"
 
 \end_inset
 
-H.
- Badem, A.
- Basturk, A.
- Caliskan, M.E.
- Yuksel, A new hybrid optimization method combining artificial bee colony
- and limited-memory BFGS algorithms for efficient numerical optimization,
- Applied Soft Computing 
-\series bold
-70
-\series default
-, pp.
- 826-844, 2018.
+Badem, H., Basturk, A., Caliskan, A., & Yuksel, M.
+ E.
+ (2018).
+ A new hybrid optimization method combining artificial bee colony and limited-me
+mory BFGS algorithms for efficient numerical optimization.
+ Applied Soft Computing, 70, 826-844.
 \end_layout
 
 \begin_layout Bibliography
@@ -11097,16 +11110,13 @@ literal "false"
 
 \end_inset
 
-A.A.
- Nagra, F.
- Han, Q.H.
- Ling, An improved hybrid self-inertia weight adaptive particle swarm optimizati
-on algorithm with local search, Engineering Optimization 
-\series bold
-51
-\series default
-, pp.
- 1115-1132, 2018.
+Nagra, A.
+ A., Han, F., & Ling, Q.
+ H.
+ (2019).
+ An improved hybrid self-inertia weight adaptive particle swarm optimization
+ algorithm with local search.
+ Engineering Optimization, 51(7), 1115-1132.
 \end_layout
 
 \begin_layout Bibliography
@@ -11163,20 +11173,32 @@ Armijo, L.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "gwo"
+literal "false"
+
+\end_inset
+
+Mirjalili, S., Mirjalili, S.
+ M., & Lewis, A.
+ (2014).
+ Grey wolf optimizer.
+ Advances in engineering software, 69, 46-61.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 key "kmeansNew"
 literal "false"
 
 \end_inset
 
-M.
- Ahmed, R.
- Seraj, S.M.S.
- Islam, The k-means algorithm: A comprehensive survey and performance evaluation
-, Electronics 
-\series bold
-9
-\series default
-, 1295.
+Ahmed, M., Seraj, R., & Islam, S.
+ M.
+ S.
+ (2020).
+ The k-means algorithm: A comprehensive survey and performance evaluation.
+ Electronics, 9(8), 1295.
 \end_layout
 
 \begin_layout Bibliography
@@ -11188,13 +11210,11 @@ literal "false"
 
 \end_inset
 
-, Convergence properties of the BFGS algoritm.
- SIAM Journal on Optimization 
-\series bold
-13
-\series default
-, pp.
- 693-701, 2002.
+ Dai, Y.
+ H.
+ (2002).
+ Convergence properties of the BFGS algoritm.
+ SIAM Journal on Optimization, 13(3), 693-701.
 \end_layout
 
 \begin_layout Bibliography
@@ -11205,10 +11225,11 @@ literal "false"
 
 \end_inset
 
-Charilogis, V.; Tsoulos, I.G.
- Toward an Ideal Particle Swarm Optimizer for Multidimensional Functions.
- Information 2022, 13, 217.
- 
+Charilogis, V., & Tsoulos, I.
+ G.
+ (2022).
+ Toward an ideal particle swarm optimizer for multidimensional functions.
+ Information, 13(5), 217.
 \end_layout
 
 \begin_layout Bibliography
@@ -11220,20 +11241,13 @@ literal "false"
 
 \end_inset
 
- M.
- Gaviano, D.E.
- Ksasov, D.
- Lera, Y.D.
- Sergeyev, Software for generation of classes of test functions with known
- local and global minima for global optimization, ACM Trans.
- Math.
- Softw.
- 
-\series bold
-29
-\series default
-, pp.
- 469-480, 2003.
+ Gaviano, M., Kvasov, D.
+ E., Lera, D., & Sergeyev, Y.
+ D.
+ (2003).
+ Algorithm 829: Software for generation of classes of test functions with
+ known local and global minima for global optimization.
+ ACM Transactions on Mathematical Software (TOMS), 29(4), 469-480.
 \end_layout
 
 \begin_layout Bibliography
@@ -11245,17 +11259,14 @@ literal "false"
 
 \end_inset
 
- J.E.
- Lennard-Jones, On the Determination of Molecular Fields, Proc.
- R.
- Soc.
- Lond.
- A 
-\series bold
- 106
-\series default
-, pp.
- 463–477, 1924.
+ Jones, J.
+ E.
+ (1924).
+ On the determination of molecular fields.—II.
+ From the equation of state of a gas.
+ Proceedings of the Royal Society of London.
+ Series A, Containing Papers of a Mathematical and Physical Character, 106(738),
+ 463-477.
 \end_layout
 
 \begin_layout Bibliography
@@ -11267,13 +11278,15 @@ literal "false"
 
 \end_inset
 
- Z.B.
- Zabinsky, D.L.
- Graesser, M.E.
- Tuttle, G.I.
- Kim, Global optimization of composite laminates using improving hit and
- run, In: Recent advances in global optimization, pp.
- 343-368, 1992.
+Zabinsky, Z.
+ B., Graesser, D.
+ L., Tuttle, M.
+ E., & Kim, G.
+ I.
+ (1992).
+ Global optimization of composite laminates using improving hit and run.
+ In Recent advances in global optimization (pp.
+ 343-368).
 \end_layout
 
 \begin_layout Bibliography
@@ -11285,16 +11298,13 @@ literal "false"
 
 \end_inset
 
-M.
- Montaz Ali, Charoenchai Khompatraporn, Zelda B.
- Zabinsky, A Numerical Evaluation of Several Stochastic Algorithms on Selected
- Continuous Global Optimization Test Problems, Journal of Global Optimization
- 
-\series bold
-31
-\series default
-, pp 635-672, 2005.
- 
+Ali, M.
+ M., Khompatraporn, C., & Zabinsky, Z.
+ B.
+ (2005).
+ A numerical evaluation of several stochastic algorithms on selected continuous
+ global optimization test problems.
+ Journal of global optimization, 31, 635-672.
 \end_layout
 
 \begin_layout Bibliography
@@ -11305,43 +11315,50 @@ literal "true"
 
 \end_inset
 
-C.A.
- Floudas, P.M.
- Pardalos, C.
- Adjiman, W.
- Esposoto, Z.
- G
-\begin_inset Formula $\ddot{\mbox{u}}$
-\end_inset
-
-m
-\begin_inset Formula $\ddot{\mbox{u}}$
-\end_inset
-
-s, S.
- Harding, J.
- Klepeis, C.
- Meyer, C.
- Schweiger, Handbook of Test Problems in Local and Global Optimization,
- Kluwer Academic Publishers, Dordrecht, 1999.
+Floudas, C.
+ A., Pardalos, P.
+ M., Adjiman, C., Esposito, W.
+ R., Gümüs, Z.
+ H., Harding, S.
+ T., ...
+ & Schweiger, C.
+ A.
+ (2013).
+ Handbook of test problems in local and global optimization (Vol.
+ 33).
+ Springer Science & Business Media.
 \end_layout
 
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "ipso"
-literal "false"
+key "key-6"
 
 \end_inset
 
-V.
- Charilogis, I.G.
- Tsoulos, Toward an Ideal Particle Swarm Optimizer for Multidimensional
- Functions , Information 
+Storn, R.
+ (1996, June).
+ On the usage of differential evolution for function optimization.
+ In Proceedings of North American fuzzy information processing (pp.
+ 519-523).
+ Ieee.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+Shen, Y., Zhang, C., Gharehchopogh, F.
+ S., & Mirjalili, S.
+ (2023).
+ An improved whale optimization algorithm based on multi-population evolution
+ for global optimization and engineering design problems.
+ Expert Systems with Applications, 215, 119269
 \series bold
-13
-\series default
-, 217, 2022.
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -11352,11 +11369,12 @@ literal "false"
 
 \end_inset
 
-Powell, M.J.D.
- A Tolerant Algorithm for Linearly Constrained Optimization Calculations.
- Math.
- Program.
- 1989, 45, 547–566.
+Powell, M.
+ J.
+ D.
+ (1989).
+ A tolerant algorithm for linearly constrained optimization calculations.
+ Mathematical Programming, 45, 547-566.
 \end_layout
 
 \end_body
