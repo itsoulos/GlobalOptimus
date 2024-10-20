@@ -1,4 +1,7 @@
 #include "rbfproblem.h"
+#include <iostream>
+#include <random>
+using namespace std;
 
 RbfProblem::RbfProblem()
     :Problem(1)
@@ -19,9 +22,6 @@ double  RbfProblem::getDerivative(Data &x,int pos)
 }
 double      RbfProblem::gaussianDerivative(Data &x,Data &m,double v,int pos)
 {
-
-
-
     double hx = gaussian(x,m,v);
     return hx * (-2.0/v)*(x[pos]-m[pos]);
 }
@@ -189,7 +189,7 @@ Data    RbfProblem::gradient(Data &x)
         if(fabs(g[i]-g2[i])>1e-3)
         {
             g[i]=g2[i];/*
-            printf("DIFFERENCE[%4d]=%.8lf\n",i,fabs(g[i]-g2[i]));
+            printf("DIFFERENCE[%4d]=%.8lf\n",i,fab(g[i]-g2[i]));
             if(i<nodes*d)
                 printf("Center difference \n");
             else
@@ -231,7 +231,8 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
     vector<int> teamElements;
     teamElements.resize(K);
     variances.resize(K);
-
+    std::mt19937 gen(1); // mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distrib(0, K-1);
  for(int i=0;i<K;i++)
  {
 
@@ -240,9 +241,10 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 
     for(int i=0;i<pop;i++)
     {
-        belong[i]=rand() % K;
+        belong[i]=distrib(gen);
         teamElements[belong[i]]++;
     }
+
     int d = trainDataset->dimension();
     for(int i=0;i<K;i++)
     {
@@ -251,6 +253,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
         for(int j=0;j<d;j++)
             centers[i][j]=0.0;
     }
+
     for(int j=0;j<point.size();j++)
         {
          for(int k=0;k<d;k++)
@@ -258,6 +261,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
              centers[belong[j]][k]+=point[j][k];
          }
      }
+
     for(int i=0;i<K;i++)
     {
         for(int j=0;j<d;j++)
@@ -273,8 +277,8 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 
         for(int i=0;i<point.size();i++)
         {
-            int minCenterIndex = -1;
-            double minCenterDist = 1e+100;
+            int minCenterIndex = 0;
+            double minCenterDist = getDistance(point[i],centers[0]);
             for(int j=0;j<K;j++)
             {
                 double dist = getDistance(point[i],centers[j]);
@@ -298,7 +302,9 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
            {
             for(int k=0;k<d;k++)
             {
+
                 centers[belong[j]][k]+=point[j][k];
+
             }
            }
 
@@ -315,6 +321,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
         if(iteration>1 && fabs(totalDistance-oldDist)<1e-8) break;
         iteration++;
         oldDist = totalDistance;
+
     }
     for(int i=0;i<variances.size();i++)
     {
@@ -338,6 +345,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
         for(int j=0;j<d;j++)
             variances[i]+=dvar[j]/teamElements[i];
     }
+
     for(int i=0;i<variances.size();i++)
         {
             if(teamElements[i]==0)
@@ -346,35 +354,26 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 
         variances[i]=sqrt(variances[i]/teamElements[i]);
     }
+
 }
 
-
-void    RbfProblem::init(QJsonObject &px)
+void    RbfProblem::initModel()
 {
-    QString trainName = px["model_trainfile"].toString();
-    QString testName =  px["model_testfile"].toString();
-    setParam("model_trainfile",trainName);
-    setParam("model_testfile",testName);
     int nodes        = getParam("rbf_nodes").getValue().toInt();
-    if(contains("rbf_nodes"))
-    {
-        nodes = px["rbf_nodes"].toString().toInt();
-        setParam("rbf_nodes",px["rbf_nodes"].toString());
-    }
+
     weight.resize(nodes);
-    loadTrainSet();
-    loadTestSet();
     int d = trainDataset->dimension();
     int k = (d*nodes)+
             nodes+nodes;
     setDimension(k);
     left.resize(k);
     right.resize(k);
-
     //kmeans to estimate the range of margins
+
     vector<Data> xpoint = trainDataset->getAllXpoint();
     runKmeans(xpoint,nodes,centers,variances);
     double scale_factor = 3.0;
+
     if(contains("rbf_factor"))
     {
         scale_factor = getParam("rbf_factor").getValue().toDouble();
@@ -418,6 +417,18 @@ void    RbfProblem::init(QJsonObject &px)
         icount++;
     }
     lastGaussianValues.resize(nodes);
+
+}
+void    RbfProblem::init(QJsonObject &px)
+{
+    QString trainName = px["model_trainfile"].toString();
+    QString testName =  px["model_testfile"].toString();
+    setParam("model_trainfile",trainName);
+    setParam("model_testfile",testName);
+
+    loadTrainSet();
+    loadTestSet();
+    initModel();
  }
 
 QJsonObject RbfProblem::done(Data &x)

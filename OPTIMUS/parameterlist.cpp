@@ -1,5 +1,5 @@
 #include "parameterlist.h"
-
+# include <QStringList>
 ParameterList::ParameterList()
 {
     //nothing here
@@ -81,6 +81,41 @@ Parameter ParameterList::getParam(int index)
 int ParameterList::countParameters() const
 {
     return mparams.size();
+}
+
+QVector<QStringList>     ParameterList::parseString(QString st)
+{
+    QStringList params;
+    QStringList values;
+    for(int i=0;i<st.size();i++)
+    {
+        if(st[i]=='=')
+        {
+            QString left="",right="";
+            for(int j=i-1;j>=0;j--)
+            {
+                if(st[j]==' ') break;
+                left=st[j]+left;
+            }
+            for(int j=i+1;j<st.size();j++)
+            {
+                if(st[j]==' ') break;
+                right = right+st[j];
+            }
+            if(left.startsWith("--"))
+                left.remove(0,2);
+            params.append(left);
+            values.append(right);
+        }
+    }
+    for(int i=0;i<params.size();i++)
+    {
+        setParam(params[i],values[i],"");
+    }
+    QVector<QStringList> sx;
+    sx.append(params);
+    sx.append(values);
+    return sx;
 }
 
 ParameterList::~ParameterList()

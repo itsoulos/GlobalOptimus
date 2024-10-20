@@ -17,7 +17,7 @@ class Mapper
 		Mapper(int d);
         void	setExpr(vector<string> &s);
         int     map(Data &x,Data &x1);
-        void    mapDataset(Dataset *original,Dataset *mappedDataset);
+        bool    mapDataset(Dataset *original,Dataset *mappedDataset);
 		~Mapper();
 };
 # endif

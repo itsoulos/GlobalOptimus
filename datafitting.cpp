@@ -5,6 +5,7 @@
 # include <MLMODELS/gdfmodel.h>
 # include <MLMODELS/nncmodel.h>
 # include <MLMODELS/rulemodel.h>
+# include <MLMODELS/fcmodel.h>
 
 
 # include <METHODS/gradientdescent.h>
@@ -105,6 +106,7 @@ void loadProblem()
         if(mainParams[i].getName()=="opt_model")
         {
             modelName = mainParams[i].getValue();
+
             break;
         }
     }
@@ -122,6 +124,9 @@ void loadProblem()
     else
     if(modelName == "rule")
         mainModel = new RuleModel();
+    else
+    if(modelName == "fc")
+        mainModel = new FcModel();
    // else
    // if(modelName =="frbf")
      //  mainModel = new FunctionalRbf();
@@ -143,6 +148,8 @@ void loadProblem()
        {
         MlpProblem *p = (MlpProblem *)mainModel;
         p->init(problemParams);
+        qDebug()<<"Problem Params are "<<problemParams;
+        printf("initialize problem \n");
        }
        else
       if(modelName == "frbf")
@@ -222,10 +229,11 @@ void parseCmdLine(QStringList args)
     {
 
         if(args[i]=="--help") printHelp();
-        QStringList sp=args[i].split("=");
-        QString name = sp[0];
-        sp[0]=sp[0].replace("--","");
-        QString value = sp[1];
+        int i1=args[i].indexOf("=");
+        QString name = args[i].mid(0,i1);
+        QString value = args[i].mid(i1+1);
+        if(name.startsWith("--"))
+            name = name.mid(2);
         if(value=="")
         {
             error(QString("Param %1 is empty.").arg(value));
@@ -234,9 +242,9 @@ void parseCmdLine(QStringList args)
         for(int j=0;j<mainParams.size();j++)
         {
             Parameter pt = mainParams[j];
-            if(pt.getName()==sp[0])
+            if(pt.getName()==name)
             {
-                mainParams[j].setValue(sp[1]);
+                mainParams[j].setValue(value);
                 found = true;
                 break;
             }
@@ -248,9 +256,9 @@ void parseCmdLine(QStringList args)
                 for(int k=0;k<methodParams[j].size();k++)
                 {
                     Parameter pt = method[j]->getParam(methodParams[j][k]);
-                    if(pt.getName()==sp[0])
+                    if(pt.getName()==name)
                     {
-                        method[j]->setParam(sp[0],sp[1]);
+                        method[j]->setParam(name,value);
                         found = true;
                     }
                 }
@@ -258,7 +266,7 @@ void parseCmdLine(QStringList args)
         }
         if(!found)
         {
-            problemParams[sp[0]]=sp[1];
+            problemParams[name]=value;
         }
     }
 }
@@ -283,50 +291,11 @@ void runMethod()
             break;
         }
     }
-    //trainModel
     if(modelName=="mlp" || modelName=="rbf" || modelName =="frbf")
     {
-        if(modelName=="mlp")
-        {
-        MlpProblem *mainProblem = (MlpProblem*)mainModel;
-        method[index]->setProblem(mainProblem);
-        method[index]->solve();
-        }
-        else
-        if(modelName=="rbf")
-        {
-        RbfProblem *mainProblem = (RbfProblem*)mainModel;
-        method[index]->setProblem(mainProblem);
-        method[index]->solve();
-
-        }
-        else
-        if(modelName == "frbf")
-        {
-           // FunctionalRbf *mainProblem = (FunctionalRbf *)mainModel;
-           // method[index]->setProblem(mainProblem);
-           // method[index]->solve();
-        }
-
+        mainModel->setOptimizer(method[index]);
     }
-    else
-    if(modelName=="gdf")
-    {
-        GdfModel *p = (GdfModel *)mainModel;
-        p->trainModel();
-    }
-    else
-    if(modelName == "nnc")
-    {
-        NNCModel *p=(NNCModel *)mainModel;
-        p->trainModel();
-    }
-    else
-    if(modelName == "rule")
-    {
-        RuleModel *p=(RuleModel *)mainModel;
-        p->trainModel();
-    }
+    mainModel->trainModel();
 }
 
 int getIters()
@@ -345,7 +314,14 @@ int main(int argc, char *argv[])
     setlocale(LC_ALL,"C");
     makeMainParams();
     loadMethods();
-    parseCmdLine(app.arguments());
+
+    QStringList args;
+    for(int i=0;i<argc;i++)
+    {
+        QString xx = argv[i];
+        args.append(xx);
+    }
+    parseCmdLine(args);//app.arguments());
     int times = getIters();
     double average_train_error  = 0.0;
     double average_test_error   = 0.0;
@@ -356,36 +332,11 @@ int main(int argc, char *argv[])
         srand(t);
         loadProblem();
         runMethod();
-        if(modelName == "mlp" ||
-                modelName=="rbf"||
-                modelName == "frbf")
-        {
-        Data xx ;
-        if(modelName == "mlp")
-            xx=((MlpProblem *)mainModel)->getBestx();
-        else
-        if(modelName=="rbf")
-            xx=((RbfProblem *)mainModel)->getBestx();
-      //  else
-      //  xx=((FunctionalRbf *)mainModel)->getBestx();
-        QJsonObject values;
-        if(modelName == "mlp")
-            values=((MlpProblem *)mainModel)->done(xx);
-        else
-        if(modelName == "rbf")
-            values = ((RbfProblem *)mainModel)->done(xx);
-        //else
-        //values=((FunctionalRbf *)mainModel)->done(xx);
-        average_train_error+=values["trainError"].toDouble();
-        average_test_error+=values["testError"].toDouble();
-        average_class_error+=values["classError"].toDouble();
-        }
-        else
-        {
-            average_train_error+=mainModel->getTrainError();
-            average_test_error+=mainModel->getTestError();
-            average_class_error+=mainModel->getClassTestError();
-        }
+        double d1,d2,d3;
+        mainModel->testModel(d1,d2,d3);
+        average_train_error+=d1;
+        average_test_error+=d2;
+        average_class_error+=d3;
         printf("TRAINING... TRAIN[%2d]=%10.5lf TEST[%2d]=%10.5lf CLASS[%2d]=%5.2lf%%\n",
              t,average_train_error/t,
              t,average_test_error/t,

@@ -42,14 +42,14 @@ int	Mapper::map(Data &x,Data &x1)
     for(int i=0;i<parser.size();i++)
 	{
 		x1[i]=parser[i]->Eval(xx);
-		if(isnan(x1[i]) || isinf(x1[i])) {delete[] xx;return 0;}
-		if(parser[i]->EvalError()) {delete[] xx;return 0;}
+        if(isnan(x1[i]) || isinf(x1[i])) {return 0;}
+        if(parser[i]->EvalError()) {return 0;}
 		//if(fabs(x1[i])>1e+2) {delete[] xx;return 0;}
 	}
 	return 1;
 }
 
-void    Mapper::mapDataset(Dataset *original,Dataset *mappedDataset)
+bool    Mapper::mapDataset(Dataset *original,Dataset *mappedDataset)
 {
     int count= original->count();
     Data newPoint;newPoint.resize(parser.size());
@@ -57,9 +57,10 @@ void    Mapper::mapDataset(Dataset *original,Dataset *mappedDataset)
     {
         Data xpoint = original->getXPoint(i);
         double ypoint = original->getYPoint(i);
-        map(xpoint,newPoint);
+        if(!map(xpoint,newPoint)) return false;
         mappedDataset->addPoint(newPoint,ypoint);
     }
+    return true;
 }
 
 Mapper::~Mapper()

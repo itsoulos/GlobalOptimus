@@ -4,8 +4,46 @@ Model::Model()
 {
     trainDataset = NULL;
     testDataset = NULL;
+    method=NULL;
     addParam(Parameter("model_trainfile","","The trainfile used"));
     addParam(Parameter("model_testfile","","The test file used"));
+}
+
+void    Model::trainModel()
+{
+    method->setProblem(dynamic_cast<Problem*>(this));
+
+    if(method!=NULL)
+        method->solve();
+}
+
+
+void    Model::testModel(double &trainError,double &testError,double &classError)
+{
+    if(method!=NULL)
+    {
+       Problem *p=dynamic_cast<Problem*>(this);
+       Data xx = p->getBestx();
+       QJsonObject values = p->done(xx);
+       trainError=values["trainError"].toDouble();
+       testError=values["testError"].toDouble();
+       classError=values["classError"].toDouble();
+    }
+    else
+    {
+        trainError = getTrainError();
+        testError  = getTestError();
+        classError = getClassTestError();
+    }
+}
+
+void    Model::initModel()
+{
+
+}
+void   Model::setOptimizer(Optimizer *p)
+{
+    method = p;
 }
 
 void        Model::loadTrainSet()

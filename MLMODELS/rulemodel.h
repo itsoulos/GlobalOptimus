@@ -22,7 +22,7 @@ public:
     RuleModel();
     virtual     double  getOutput(Data &x);
     void        localSearchItem(int pos);
-    void        trainModel();
+    virtual void        trainModel();
     virtual     ~RuleModel();
 };
 

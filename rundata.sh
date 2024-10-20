@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=rbf
+MODEL=fc
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -16,7 +16,12 @@ GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termin
 
 if [ $MODEL = "mlp" ]
 then
-	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=true --mlpboundlimit=10.0"
+	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=false --mlpboundlimit=10.0"
+elif [ $MODEL = "fc" ]
+then
+	CREATEPARAMS='\"--opt_method=Genetic\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"'
+	EVALPARAMS='\"--opt_method=Bfgs\"'
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=rbf --fc_evaluatemodel=mlp --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=2 --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS"
 elif [ $MODEL = "rbf" ]
 then
 	MODELPARAMS="--rbf_nodes=10 --rbf_factor=8.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
@@ -156,4 +161,4 @@ then
 	exit
 fi
 
- ./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes
+./DataFitting --opt_model=$MODEL  --opt_method=$METHOD $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=1 --opt_debug=no

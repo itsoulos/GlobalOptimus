@@ -13,7 +13,7 @@ private:
 public:
     GdfModel();
     virtual     double  getOutput(Data &x);
-    void        trainModel();
+    virtual void        trainModel();
     virtual ~GdfModel();
 };
 

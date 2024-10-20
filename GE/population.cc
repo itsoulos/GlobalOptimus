@@ -231,11 +231,11 @@ void	Population::calcFitnessArray()
 		}
         if(fabs(fitness_array[i])>=1e+100) icount++;
 
-        /*if((i+1)%10==0)
+        if((i+1)%10==0)
 		{
 			printf(" %d:%.5lg ",i+1,dmin);
 			fflush(stdout);
-        }*/
+        }
 		
 	}
 	return;

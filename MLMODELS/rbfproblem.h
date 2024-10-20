@@ -26,6 +26,7 @@ public:
     double  getSecondDerivative(Data &x,int pos);
     void    setParameters(Data &x);
     void    getParameters(Data &x);
+    virtual void initModel();
     virtual double  funmin(Data &x);
     virtual Data    gradient(Data &x);
     double  getOutput(Data &x);

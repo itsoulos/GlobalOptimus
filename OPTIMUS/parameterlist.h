@@ -60,7 +60,17 @@ public:
      * @param x, the json object contains the new values
      */
     void   setParamValuesFromJson(QJsonObject &x);
+    /**
+     * @brief countParameters
+     * @return  the number of parameters
+     */
     int     countParameters() const;
+    /**
+     * @brief parseString converts a string in format --param1=value --param2=value
+     * to the vector of parameters
+     * @param st
+     */
+    QVector<QStringList>    parseString(QString st);
     ~ParameterList();
 };
 

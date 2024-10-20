@@ -83,7 +83,6 @@ Parameter   Optimizer::getParam(QString name)
 
 void    Optimizer::init()
 {
-
 }
 
 void    Optimizer::step()
@@ -112,6 +111,7 @@ void    Optimizer::showDebug()
 }
 void    Optimizer::solve()
 {
+
     terminationMethod = getParam("opt_termination").getValue();
     doubleBox.setMinIters(getParam("opt_doubleboxminiters").getValue().toInt());
     similarity.setMinIters(getParam("opt_similarityminiters").getValue().toInt());
@@ -154,7 +154,6 @@ void    Optimizer::solve()
         problemSampler=new UniformSampler(myProblem);
 
     }
-
     init();
     do
     {

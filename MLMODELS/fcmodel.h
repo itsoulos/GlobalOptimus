@@ -11,6 +11,7 @@ class FcModel :public Model
 private:
     Model           *createModel,*evaluateModel;
     MethodLoader    *createLoader,*evaluateLoader;
+    Optimizer       *createMethod,*evaluateMethod;
     Population      *pop;
     FcProgram       *program;
 public:

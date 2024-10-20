@@ -1,12 +1,14 @@
 #include "fcprogram.h"
 
-FcProgram::FcProgram(int dim,Model *m,int nf)
+FcProgram::FcProgram(int dim,Model *m,Dataset *orig,int nf)
     :Cprogram(dim,m)
 {
     pattern_dimension = dim;
     nfeatures = nf;
     mapper = new Mapper(dim);
     mappedDataset = new Dataset();
+
+    originalDataset = orig;
 }
 
 double  FcProgram::fitness(vector<int> &genome)
@@ -25,9 +27,14 @@ double  FcProgram::fitness(vector<int> &genome)
     }
     mapper->setExpr(slist);
     mappedDataset->clearPoints();
-    Dataset *tr=currrentModel->getTrainDataset();
-    mapper->mapDataset(tr,mappedDataset);
-    double value = currrentModel->getTestError(mappedDataset);
+    if(!mapper->mapDataset(originalDataset,mappedDataset)) return 1e+100;
+    currrentModel->setTrainSet(mappedDataset);
+
+    currrentModel->initModel();
+    srand(1);
+    srand48(1);
+    currrentModel->trainModel();
+    double value = currrentModel->getTrainError();
     return value;
 }
 
