@@ -37,6 +37,7 @@ SOURCES += \
 	GE/ruleprogram.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
+    METHODS/mewoa.cpp \
     METHODS/woa.cpp \
     MLMODELS/fcmodel.cpp \
     OPTIMUS/editlogger.cpp \
@@ -151,6 +152,7 @@ HEADERS += \
     GE/symbol.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \
+    METHODS/mewoa.h \
     METHODS/woa.h \
     MLMODELS/fcmodel.h \
     OPTIMUS/editlogger.h \

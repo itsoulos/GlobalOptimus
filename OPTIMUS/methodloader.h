@@ -20,6 +20,7 @@
 # include <METHODS/ego.h>
 # include <METHODS/hybridmethod.h>
 # include <METHODS/woa.h>
+# include <METHODS/mewoa.h>
 # include <QStringList>
 # include <QJsonObject>
 /**

@@ -40,6 +40,8 @@ MethodLoader::MethodLoader()
     methodName<<"HybridMethod";
     method<<new WOA;
     methodName<<"Woa";
+    method<<new MEWOA;
+    methodName<<"MeWoa";
     method<<new UserMethod;
     methodName<<"UserMethod";
 }
