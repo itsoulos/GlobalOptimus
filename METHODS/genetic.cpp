@@ -247,6 +247,7 @@ void    Genetic::CalcFitnessArray()
     {
 
         fitnessArray[i]=myProblem->statFunmin(population[i]);
+
         if(localsearchRate>0.0)
         {
             double r = rand()*1.0/RAND_MAX;

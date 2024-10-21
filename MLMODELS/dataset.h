@@ -16,11 +16,7 @@ private:
     //
     // ypoint = > exodos gia kathe protypo
     Data   ypoint;
-    /**
-     * @brief makePatternClass, dimiourgei tis monadikes katigories pou yparxoun
-     * mesa sto dataset.
-     */
-    void makePatternClass();
+
 public:
     Dataset(Problem *p,int N);
     /**
@@ -153,6 +149,11 @@ public:
     vector<Data> getAllXpoint();
     Data         getAllYpoint();
     void        clearPoints();
+    /**
+     * @brief makePatternClass, dimiourgei tis monadikes katigories pou yparxoun
+     * mesa sto dataset.
+     */
+    void makePatternClass();
 };
 
 #endif // DATASET_H

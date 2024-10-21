@@ -15,6 +15,7 @@ public:
     Model();
     void        disableRemoveData();
     void        setTrainSet(Dataset *tr);
+    void        setTestSet(Dataset *tt);
     virtual     double  getOutput(Data &x)=0;
     double      getTrainError();
     double      getTestError(Dataset *test) ;

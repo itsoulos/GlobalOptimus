@@ -80,9 +80,16 @@ double      Model::getDistance(Data &x1,Data &x2)
     return sqrt(sum);
 }
 
+void    Model::setTestSet(Dataset *tt)
+{
+    testDataset = tt;
+    testDataset->makePatternClass();
+}
+
 void        Model::setTrainSet(Dataset *tr)
 {
     trainDataset = tr;
+    trainDataset->makePatternClass();
     xall = trainDataset->getAllXpoint();
 }
 

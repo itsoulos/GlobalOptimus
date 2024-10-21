@@ -70,6 +70,10 @@ void    MlpProblem::initWeights()
 
 }
 
+void    MlpProblem::initModel()
+{
+    initWeights();
+}
 void    MlpProblem::init(QJsonObject &pt)
 {
     QString trainName = pt["model_trainfile"].toString();

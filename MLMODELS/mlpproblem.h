@@ -67,6 +67,7 @@ public:
     virtual Data getSample();
     void    resetViolationPercent(double limit);
     double  getViolationPercent();
+    virtual void initModel();
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H

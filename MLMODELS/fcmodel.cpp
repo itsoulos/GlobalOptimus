@@ -12,7 +12,7 @@ FcModel::FcModel()
     addParam(Parameter("fc_evaluatemode",cmodel[0],cmodel,"Feature evaluate model"));
     addParam(Parameter("fc_popcount",200,50,10000,"Population count"));
     addParam(Parameter("fc_popsize",100,10,1000,"FC chromosome size"));
-    addParam(Parameter("fc_popgens",200,10,10000,"Maximum generations for FC"));
+    addParam(Parameter("fc_popgens",200,1,10000,"Maximum generations for FC"));
     addParam(Parameter("fc_popsrate",0.10,0.0,1.0,"FC selection rate"));
     addParam(Parameter("fc_popmrate",0.05,0.0,1.0,"FC mutation rate"));
     addParam(Parameter("fc_features",1,1,100,"Number of constructed features"));
@@ -155,11 +155,30 @@ void        FcModel::trainModel()
     int gens = getParam("fc_popgens").getValue().toInt();
     for(int g=1;g<=gens;g++)
     {
-        printf("Start Generation %d \n",g);
         pop->nextGeneration();
-        printf("Pop [%4d]=%lf \n",g,pop->getBestFitness());
+        printf("Fc Generation[%4d]=%lf \n",g,pop->getBestFitness());
     }
     pop->evaluateBestFitness();
+}
+
+void  FcModel::testModel(double &trainError,
+                         double &testError,
+                         double &classError)
+{
+    Mapper *mapper = program->getMapper();
+    Dataset *mappedDataset =new Dataset();
+    mapper->mapDataset(trainDataset,mappedDataset);
+    evaluateModel->setTrainSet(mappedDataset);
+    evaluateModel->initModel();
+    evaluateModel->trainModel();
+
+    Dataset *mappedTestSet = new Dataset();
+    mapper->mapDataset(testDataset,mappedTestSet);
+    evaluateModel->setTestSet(mappedTestSet);
+    evaluateModel->testModel(trainError,testError,classError);
+
+    delete mappedDataset;
+    delete mappedTestSet;
 }
 
 FcModel::~FcModel()

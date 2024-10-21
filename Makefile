@@ -301,6 +301,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
@@ -609,6 +610,7 @@ Makefile: DataFitting.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
@@ -697,6 +699,7 @@ Makefile: DataFitting.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri:
@@ -2077,6 +2080,8 @@ datafitting.o: datafitting.cpp MLMODELS/mlpproblem.h \
 		OPTIMUS/collection.h \
 		MLMODELS/rulemodel.h \
 		GE/ruleprogram.h \
+		MLMODELS/fcmodel.h \
+		OPTIMUS/methodloader.h \
 		METHODS/gradientdescent.h \
 		METHODS/multistart.h \
 		METHODS/differentialevolution.h \
@@ -2085,10 +2090,16 @@ datafitting.o: datafitting.cpp MLMODELS/mlpproblem.h \
 		METHODS/parallelde.h \
 		METHODS/parallelpso.h \
 		METHODS/neldermead.h \
+		METHODS/armadillo1.h \
 		METHODS/simanmethod.h \
 		METHODS/usermethod.h \
-		METHODS/armadillo1.h \
+		METHODS/ofalgorithm.h \
 		METHODS/gwooptimizer.h \
+		METHODS/ego.h \
+		METHODS/hybridmethod.h \
+		METHODS/woa.h \
+		GE/fcprogram.h \
+		GE/mapper.h \
 		OPTIMUS/statistics.h \
 		MLMODELS/functionalrbf.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datafitting.o datafitting.cpp

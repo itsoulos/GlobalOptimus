@@ -16,8 +16,9 @@ private:
     FcProgram       *program;
 public:
     FcModel();
-    void        trainModel();
+    virtual     void        trainModel();
     virtual     double  getOutput(Data &x);
+    virtual     void  testModel(double &trainError,double &testError,double &classError);
     virtual ~FcModel();
 };
 
