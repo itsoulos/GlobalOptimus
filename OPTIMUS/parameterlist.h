@@ -3,6 +3,7 @@
 # include <OPTIMUS/parameter.h>
 # include <QJsonObject>
 # include <QStringList>
+# include <QVector>
 class ParameterList
 {
 protected:
