@@ -53,7 +53,7 @@ void printOption(QString fullName,
 void makeMainParams()
 {
     mainParams<<Parameter("help","","Show help screen");
-    mainParams<<Parameter("opt_method","Genetic","Used Optimization method");
+    mainParams<<Parameter("opt_method","","Used Optimization method");
     mainParams<<Parameter("opt_model","mlp","Model name. Values: mlp,rbf,gdf,nnc");
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
@@ -291,13 +291,13 @@ void runMethod()
             break;
         }
     }
-    if(modelName=="mlp" || modelName=="rbf" || modelName =="frbf")
+    if((modelName=="mlp" || modelName=="rbf" || modelName =="frbf") && index!=-1)
     {
         mainModel->setOptimizer(method[index]);
     }
-    printf("f1\n");
+    else mainModel->setOptimizer(NULL);
+    mainModel->initModel();
     mainModel->trainModel();
-    printf("f2\n");
 }
 
 int getIters()
