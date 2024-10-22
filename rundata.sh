@@ -19,9 +19,12 @@ then
 	MODELPARAMS="--mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=false --mlpboundlimit=10.0"
 elif [ $MODEL = "fc" ]
 then
-	CREATEPARAMS='\"--opt_method=Genetic\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"'
-	EVALPARAMS='\"--opt_method=iPso\"\"--mlp_nodes=10\"\"--opt_debug=yes\"\"--mlp_initmethod=smallvalues\"\"--opt_termination=maxiters\"'
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=rbf --fc_evaluatemodel=mlp --fc_popcount=200 --fc_popsize=200 --fc_popgens=10 --fc_features=2 --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS"
+	CREATEMODEL=rbf
+	EVALUATEMODEL=mlp
+	FEATURES=2
+	CREATEPARAMS='"--opt_method=Bfgs\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"'
+	EVALPARAMS='\"--opt_method=Bfgs\"\"--mlp_nodes=10\"\"--rbf_nodes=10\"\"--opt_debug=yes\"\"--rbf_factor=5\"\"--opt_termination=maxiters\"'
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=200 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS"
 elif [ $MODEL = "rbf" ]
 then
 	MODELPARAMS="--rbf_nodes=10 --rbf_factor=8.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"

@@ -25,14 +25,15 @@ double  FcProgram::fitness(vector<int> &genome)
         string st = printRandomProgram(pgenome,redo);
         slist.push_back(st);
     }
+
     mapper->setExpr(slist);
     mappedDataset->clearPoints();
     if(!mapper->mapDataset(originalDataset,mappedDataset)) return 1e+100;
-    currrentModel->setTrainSet(mappedDataset);
 
+    currrentModel->setTrainSet(mappedDataset);
+    currrentModel->setModelSeed(1);
     currrentModel->initModel();
     srand(1);
-    srand48(1);
     currrentModel->trainModel();
     double value = currrentModel->getTrainError();
     return value;

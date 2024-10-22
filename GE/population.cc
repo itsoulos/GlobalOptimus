@@ -230,7 +230,8 @@ void	Population::calcFitnessArray()
 			dmin=fabs(fitness_array[i]);
 		}
         if(fabs(fitness_array[i])>=1e+100) icount++;
-
+        if(isinf(fitness_array[i]) || isnan(fitness_array[i]))
+            fitness_array[i]=1e+100;
         if((i+1)%10==0)
 		{
 			printf(" %d:%.5lg ",i+1,dmin);

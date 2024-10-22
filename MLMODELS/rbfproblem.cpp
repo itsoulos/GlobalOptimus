@@ -139,6 +139,7 @@ Data    RbfProblem::gradient(Data &x)
     setParameters(x);
     g.resize(x.size());
     
+
    for(int i=0;i<g.size();i++)
         g[i]=0.0;
     Data gtemp ;
@@ -174,6 +175,7 @@ Data    RbfProblem::gradient(Data &x)
         for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
+
     return g;
 
     Data g2;
@@ -207,7 +209,7 @@ double  RbfProblem::getOutput(Data &x)
 {
     int nodes = weight.size();
     double sum = 0.0;
-
+    if(error_flag) return 1e+100;
     for(int i=0;i<nodes;i++)
     {
         double val = gaussian(x,centers[i],variances[i]);
@@ -231,17 +233,20 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
     vector<int> teamElements;
     teamElements.resize(K);
     variances.resize(K);
-    std::mt19937 gen(1); // mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> distrib(0, K-1);
+
+    using param_t = std::uniform_int_distribution<>::param_type;
+    intDistrib.param(param_t(0, K-1));
+
  for(int i=0;i<K;i++)
  {
 
      teamElements[i]=0;
  }
 
+
     for(int i=0;i<pop;i++)
     {
-        belong[i]=distrib(gen);
+        belong[i]=intDistrib(generator);
         teamElements[belong[i]]++;
     }
 
@@ -253,7 +258,6 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
         for(int j=0;j<d;j++)
             centers[i][j]=0.0;
     }
-
     for(int j=0;j<point.size();j++)
         {
          for(int k=0;k<d;k++)
@@ -261,16 +265,15 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
              centers[belong[j]][k]+=point[j][k];
          }
      }
-
     for(int i=0;i<K;i++)
     {
         for(int j=0;j<d;j++)
             centers[i][j]/=teamElements[i]>1?teamElements[i]:1;
     }
-
     int iteration = 1;
+    const int maxiters=100;
     double oldDist = 1e+100;
-    while(true)
+    while(iteration<=maxiters)
     {
         copyCenter = centers;
         for(int i=0;i<K;i++) teamElements[i]=0;
@@ -345,7 +348,6 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
         for(int j=0;j<d;j++)
             variances[i]+=dvar[j]/teamElements[i];
     }
-
     for(int i=0;i<variances.size();i++)
         {
             if(teamElements[i]==0)
@@ -353,6 +355,8 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
             else
 
         variances[i]=sqrt(variances[i]/teamElements[i]);
+            if(variances[i]<1e-6 || isnan(variances[i]) || isinf(variances[i]))
+                variances[i]=0.0001;
     }
 
 }
@@ -368,12 +372,12 @@ void    RbfProblem::initModel()
     setDimension(k);
     left.resize(k);
     right.resize(k);
-    //kmeans to estimate the range of margins
+    lastGaussianValues.resize(nodes);
 
+    //kmeans to estimate the range of margins
     vector<Data> xpoint = trainDataset->getAllXpoint();
     runKmeans(xpoint,nodes,centers,variances);
     double scale_factor = 3.0;
-
     if(contains("rbf_factor"))
     {
         scale_factor = getParam("rbf_factor").getValue().toDouble();
@@ -396,7 +400,6 @@ void    RbfProblem::initModel()
 
             dmax += variances[i];
     }
-
     for(int i=0;i<nodes;i++)
     {
         left[icount]= 0.01;//-scale_factor *dmax;
@@ -416,7 +419,6 @@ void    RbfProblem::initModel()
         right[icount]= scale_factor * 10.0;
         icount++;
     }
-    lastGaussianValues.resize(nodes);
 
 }
 void    RbfProblem::init(QJsonObject &px)
@@ -442,6 +444,187 @@ QJsonObject RbfProblem::done(Data &x)
     xx["testError"]=tt;
     xx["classError"]=tc;
     return xx;
+}
+
+
+void    RbfProblem::trainModel()
+{
+    if(method!=NULL)
+    {
+
+        Model::trainModel();
+
+    }
+    else
+    {
+        originalTrain();
+    }
+}
+
+
+
+Matrix  RbfProblem::matrix_mult(Matrix &x,Matrix &y)
+{
+    int m=x.size();
+    int p=x[0].size();
+    int n=y[0].size();
+    if(p!=y.size())
+    {
+        printf("Impossible to multiple \n");
+
+    }
+    else
+    {
+        Matrix z;
+        z.resize(m);
+        int i,j,k;
+        for(i=0;i<m;i++) z[i].resize(n);
+        for(i=0;i<m;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                z[i][j]=0.0;
+                for(k=0;k<p;k++)
+                {
+                    z[i][j]=z[i][j]+x[i][k]*y[k][j];
+                }
+            }
+        }
+        return z;
+    }
+}
+
+Matrix  RbfProblem::matrix_inverse(Matrix x,bool &error_flag)
+{
+    Matrix c=x;
+    error_flag =false;
+    int npivot;
+    double det;
+    int pass, row, col, maxrow, i, j;
+    double temp, pivot, mult;
+    int n=x.size();
+     for(i=0; i<n; ++i) {
+        for(j=0; j<n; ++j) {
+            if(i==j) {
+            c[i][j] = 1.0;
+            } else {
+            c[i][j] = 0.0;
+              }
+        }
+       }
+
+       det=1.0;
+       npivot=0;
+
+
+       for(pass=0; pass<n; ++pass) {
+        maxrow=pass;
+        for(row=pass; row<n; ++row)
+            if(fabs(x[row][pass]) > fabs(x[maxrow][pass]))
+            maxrow=row;
+
+        if(maxrow != pass)
+            ++npivot;
+
+        for(col=0; col<n; ++col) {
+            temp=x[pass][col];
+            x[pass][col] = x[maxrow][col];
+            x[maxrow][col] = temp;
+            temp = c[pass][col];
+            c[pass][col] = c[maxrow][col];
+            c[maxrow][col] = temp;
+        }
+
+
+        pivot = x[pass][pass];
+        det *= pivot;
+
+        if(fabs(det) < 1.0e-40) {
+            error_flag =true;
+            return c;
+        }
+
+
+        for(col=0; col<n; ++col) {
+            x[pass][col] = x[pass][col]/pivot;
+            c[pass][col] = c[pass][col]/pivot;
+        }
+
+        for(row=0; row<n; ++row) {
+            if(row != pass) {
+                mult = x[row][pass];
+                for(col=0; col<n; ++col) {
+                    x[row][col] = x[row][col] - x[pass][col] * mult;
+                    c[row][col] = c[row][col] - c[pass][col] * mult;
+                }
+            }
+        }
+
+       }
+
+       if(npivot % 2 != 0)
+        det = det * (-1.0);
+      return c;
+}
+
+Matrix  RbfProblem::matrix_pseudoinverse(Matrix &a,bool &error_flag)
+{
+    error_flag=false;
+    Matrix b=matrix_transpose(a);
+    Matrix e=matrix_mult(b,a);
+    Matrix d=matrix_inverse(e,error_flag);
+    Matrix c=matrix_mult(d,b);
+    return c;
+}
+
+Matrix  RbfProblem::matrix_transpose(Matrix &x)
+{
+    Matrix xx;
+    xx.resize(x[0].size());
+    int i,j;
+    for(i=0;i<xx.size();i++)
+    {
+        xx[i].resize(x.size());
+        for(j=0;j<x.size();j++)
+        {
+            xx[i][j]=x[j][i];
+        }
+    }
+    return xx;
+}
+
+void    RbfProblem::originalTrain()
+{
+    //phase1
+    int nodes        = getParam("rbf_nodes").getValue().toInt();
+    vector<Data> xpoint = trainDataset->getAllXpoint();
+    runKmeans(xpoint,nodes,centers,variances);
+
+
+    //phase2
+    Matrix A,RealOutput;
+    A.resize(trainDataset->count());
+    RealOutput.resize(trainDataset->count());
+    int i,j;
+    for(i=0;i<A.size();i++)
+    {
+        /**/
+        RealOutput[i].push_back(trainDataset->getYPoint(i));
+        Data x=trainDataset->getXPoint(i);
+        A[i].resize(centers.size());
+
+        for(j=0;j<centers.size();j++)
+        {
+          A[i][j]=gaussian(x,centers[j],variances[j]);
+
+        }
+
+    }
+    Matrix pA=matrix_pseudoinverse(A,error_flag);
+    if(error_flag) return;
+    Matrix pW=matrix_mult(pA,RealOutput);
+    for(i=0;i<pW.size();i++)
+        weight[i]=pW[i][0];
 }
 
 RbfProblem::~RbfProblem()

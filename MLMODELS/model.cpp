@@ -102,11 +102,13 @@ double  Model::getTrainError()
         Data xx = xall[i];
 
         double yy = trainDataset->getYPoint(i);
-        double per = getOutput(xx);
 
+        double per = getOutput(xx);
+        if(fabs(per)>=1e+10) return 1e+100;
+        if(isnan(per)) return 1e+100;
+        if(isinf(per)) return 1e+100;
         error+= (per-yy)*(per-yy);
     }
-
     return error;
 }
 /** kanei oti kai i getTrainError() alla gia to test set **/
@@ -148,6 +150,18 @@ void        Model::disableRemoveData()
 Dataset     *Model::getTrainDataset()
 {
     return trainDataset;
+}
+
+void    Model::setModelSeed(int seed)
+{
+    modelSeed = seed;
+    generator.seed(modelSeed);
+
+}
+
+int     Model::getModelSeed() const
+{
+    return modelSeed;
 }
 
 Model::~Model()

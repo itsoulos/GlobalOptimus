@@ -20,6 +20,8 @@ private:
     /** test
      */
     Data lastGaussianValues;
+
+    bool error_flag=false;
 public:
     RbfProblem();
     double  getDerivative(Data &x,int pos);
@@ -33,8 +35,16 @@ public:
     void    runKmeans(vector<Data> &point, int K,vector<Data> &centers,
                                 Data &variances);
     double  gaussian(Data &x,Data &center,double variance);
+    virtual void trainModel();
     virtual void init(QJsonObject &params);
     virtual QJsonObject done(Data &x);
+
+    /** Matrix operations **/
+    Matrix  matrix_transpose(Matrix &x);
+    Matrix  matrix_mult(Matrix &x,Matrix &y);
+    Matrix  matrix_inverse(Matrix x,bool &error_flag);
+    Matrix  matrix_pseudoinverse(Matrix &x,bool &error_flag);
+    void    originalTrain();
     virtual ~RbfProblem();
 };
 

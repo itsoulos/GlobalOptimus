@@ -95,9 +95,11 @@ void        FcModel::trainModel()
         int i1=paramNames.indexOf("opt_method");
         if(i1!=-1)
         {
+            qDebug()<<"Set method to "<<paramValues[i1];
             createMethod=createLoader->getSelectedMethod(paramValues[i1]);
         }
-        else createMethod=createLoader->getSelectedMethod("Bfgs");
+        else createMethod = NULL;
+        //else createMethod=createLoader->getSelectedMethod("Bfgs");
         if(model1=="mlp" || model1=="rbf")
         {
             createModel->setOptimizer(createMethod);
@@ -105,7 +107,7 @@ void        FcModel::trainModel()
         //set method params
         for(int i=0;i<paramNames.size();i++)
         {
-            createMethod->setParam(paramNames[i],paramValues[i]);
+            if(createMethod!=NULL)  createMethod->setParam(paramNames[i],paramValues[i]);
         }
     }
     if(model2=="mlp" || model2=="rbf")
@@ -126,6 +128,7 @@ void        FcModel::trainModel()
         //set method params
         for(int i=0;i<paramNames.size();i++)
         {
+            if(evaluateMethod!=NULL)
             evaluateMethod->setParam(paramNames[i],paramValues[i]);
         }
     }
