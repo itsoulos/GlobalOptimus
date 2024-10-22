@@ -4,6 +4,7 @@
 # include <MLMODELS/nncmodel.h>
 # include <MLMODELS/gdfmodel.h>
 # include <MLMODELS/rulemodel.h>
+# include <QDebug>
 FcModel::FcModel()
 {
     QStringList cmodel;
