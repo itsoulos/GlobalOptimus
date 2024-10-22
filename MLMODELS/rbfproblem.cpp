@@ -359,6 +359,16 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
                 variances[i]=0.0001;
     }
 
+    double var_diag = 0.0;
+    for(int i=0;i<variances.size();i++)
+    {
+        var_diag+=variances[i];
+    }
+    if(var_diag<0.00000001) var_diag=0.001;
+    for(int i=0;i<variances.size();i++)
+        variances[i]=var_diag;
+
+
 }
 
 void    RbfProblem::initModel()

@@ -102,6 +102,7 @@ void        FcModel::trainModel()
         {
 		if(createLoader==NULL)
        	    		createLoader=new MethodLoader();
+        if(createMethod==NULL)
             createMethod=createLoader->getSelectedMethod(paramValues[i1]);
         }
         else createMethod = NULL;
@@ -125,11 +126,9 @@ void        FcModel::trainModel()
         int i1=paramNames.indexOf("opt_method");
         if(i1!=-1)
         {
-            evaluateMethod=evaluateLoader->getSelectedMethod(paramValues[i1]);
+            if(evaluateMethod==NULL)
+                evaluateMethod=evaluateLoader->getSelectedMethod(paramValues[i1]);
         }
-        else 
-		if(evaluateLoader!=NULL)
-			evaluateMethod=evaluateLoader->getSelectedMethod("Bfgs");
         if(model2=="mlp" || model2=="rbf")
         {
                evaluateModel->setOptimizer(evaluateMethod);
