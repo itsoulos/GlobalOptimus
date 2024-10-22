@@ -1848,12 +1848,12 @@ int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
     for(int i=0;i<*n;i++)
         tempx[i]=x[i];
     *f=myProblem->statFunmin(tempx);
-     if(getParam("opt_debug").getValue()=="yes")
+   /*  if(getParam("opt_debug").getValue()=="yes")
         methodLogger->printMessage(
             QString::asprintf(
                 "BFGS ITER=%4ld  Value = %20.10lg\n",
            totcal_1.itnocs,
-           *f));
+           *f));*/
     tempg = myProblem->gradient(tempx);
     for(int i=0;i<*n;i++)
     {

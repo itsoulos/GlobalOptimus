@@ -295,7 +295,9 @@ void runMethod()
     {
         mainModel->setOptimizer(method[index]);
     }
+    printf("f1\n");
     mainModel->trainModel();
+    printf("f2\n");
 }
 
 int getIters()
@@ -327,10 +329,10 @@ int main(int argc, char *argv[])
     double average_test_error   = 0.0;
     double average_class_error  = 0.0;
 
+        loadProblem();
     for(int t=1;t<=times;t++)
     {
         srand(t);
-        loadProblem();
         runMethod();
         double d1,d2,d3;
         mainModel->testModel(d1,d2,d3);
@@ -341,9 +343,9 @@ int main(int argc, char *argv[])
              t,average_train_error/t,
              t,average_test_error/t,
                t, average_class_error/t);
-        unloadProblem();
 
     }
+        unloadProblem();
     printf("Average Train Error: %20.10lg\n",average_train_error/times);
     printf("Average Test  Error: %20.10lg\n",average_test_error/times);
     printf("Average Class Error: %20.10lg%%\n",average_class_error/times);

@@ -10,7 +10,7 @@ FcModel::FcModel()
     QStringList cmodel;
     cmodel<<"mlp"<<"rbf"<<"nnc"<<"rule"<<"gdf";
     addParam(Parameter("fc_createmodel",cmodel[0],cmodel,"Feature construction model"));
-    addParam(Parameter("fc_evaluatemode",cmodel[0],cmodel,"Feature evaluate model"));
+    addParam(Parameter("fc_evaluatemodel",cmodel[0],cmodel,"Feature evaluate model"));
     addParam(Parameter("fc_popcount",200,50,10000,"Population count"));
     addParam(Parameter("fc_popsize",100,10,1000,"FC chromosome size"));
     addParam(Parameter("fc_popgens",200,1,10000,"Maximum generations for FC"));
@@ -76,9 +76,12 @@ void        FcModel::trainModel()
 {
     //construct models
     QString model1 = getParam("fc_createmodel").getValue();
-    createModel = getModelByName(model1);
-    QString model2 = getParam("fc_evaluatemode").getValue();
-    evaluateModel = getModelByName(model2);
+    if(createModel==NULL)
+    	createModel = getModelByName(model1);
+    createModel->disableRemoveData();
+    QString model2 = getParam("fc_evaluatemodel").getValue();
+    if(evaluateModel==NULL)
+    	evaluateModel = getModelByName(model2);
     //initiate methods from loaders
     QString params1=getParam("fc_createparams").getValue();
     params1.replace("\"","");
@@ -90,18 +93,18 @@ void        FcModel::trainModel()
     QVector<QStringList> listArray2=evaluateModel->parseString(params2);
     if(model1=="mlp" || model1=="rbf")
     {
-        createLoader=new MethodLoader();
         QStringList paramNames=listArray1[0];
         QStringList paramValues=listArray1[1];
         int i1=paramNames.indexOf("opt_method");
         if(i1!=-1)
         {
-            qDebug()<<"Set method to "<<paramValues[i1];
+		if(createLoader==NULL)
+       	    		createLoader=new MethodLoader();
             createMethod=createLoader->getSelectedMethod(paramValues[i1]);
         }
         else createMethod = NULL;
         //else createMethod=createLoader->getSelectedMethod("Bfgs");
-        if(model1=="mlp" || model1=="rbf")
+        if((model1=="mlp" || model1=="rbf") && createLoader!=NULL)
         {
             createModel->setOptimizer(createMethod);
         }
@@ -113,7 +116,8 @@ void        FcModel::trainModel()
     }
     if(model2=="mlp" || model2=="rbf")
     {
-        evaluateLoader =new MethodLoader();
+	    if(evaluateLoader==NULL)
+        	evaluateLoader =new MethodLoader();
         QStringList paramNames=listArray2[0];
         QStringList paramValues=listArray2[1];
         int i1=paramNames.indexOf("opt_method");
@@ -121,7 +125,9 @@ void        FcModel::trainModel()
         {
             evaluateMethod=evaluateLoader->getSelectedMethod(paramValues[i1]);
         }
-        else evaluateMethod=evaluateLoader->getSelectedMethod("Bfgs");
+        else 
+		if(evaluateLoader!=NULL)
+			evaluateMethod=evaluateLoader->getSelectedMethod("Bfgs");
         if(model2=="mlp" || model2=="rbf")
         {
                evaluateModel->setOptimizer(evaluateMethod);
@@ -160,7 +166,8 @@ void        FcModel::trainModel()
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
-        printf("Fc Generation[%4d]=%lf \n",g,pop->getBestFitness());
+//	if(g%50==0)
+	printf("\nFC Gen=%4d ERROR=%20.10lg\n",g,pop->getBestFitness());
     }
     pop->evaluateBestFitness();
 }
@@ -181,6 +188,7 @@ void  FcModel::testModel(double &trainError,
     evaluateModel->setTestSet(mappedTestSet);
     evaluateModel->testModel(trainError,testError,classError);
 
+    evaluateModel->disableRemoveData();
     delete mappedDataset;
     delete mappedTestSet;
 }
@@ -190,10 +198,17 @@ FcModel::~FcModel()
     if(pop!=NULL)
     {
         delete pop;
-        delete createLoader;
+	if(createLoader!=NULL)
+	{
+        	delete createLoader;
+	}
+	if(createModel!=NULL)
         delete createModel;
+	if(evaluateLoader!=NULL)
         delete evaluateLoader;
-        delete evaluateModel;
+	if(evaluateModel!=NULL)
+       delete evaluateModel;
+	if(program!=NULL)
         delete program;
     }
 }

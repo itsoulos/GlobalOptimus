@@ -255,12 +255,26 @@ Data Dataset::getAllYpoint()
 
 void    Dataset::clearPoints()
 {
-    xpoint.clear();
-    ypoint.clear();
+	auto pos1 = xpoint.begin();
+	auto last1 = xpoint.end();
+	xpoint.erase(pos1,last1);
+	auto pos2=ypoint.begin();
+	auto end2=ypoint.end();
+	ypoint.erase(pos2,end2);
 }
 
 double  Dataset::getClass(int pos) const
 {
     double y=ypoint[pos];
     return getClass(y);
+}
+
+Dataset::~Dataset()
+{
+	auto pos1 = xpoint.begin();
+	auto last1 = xpoint.end();
+	xpoint.erase(pos1,last1);
+	auto pos2=ypoint.begin();
+	auto end2=ypoint.end();
+	ypoint.erase(pos2,end2);
 }

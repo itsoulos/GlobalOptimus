@@ -154,6 +154,7 @@ public:
      * mesa sto dataset.
      */
     void makePatternClass();
+    ~Dataset();
 };
 
 #endif // DATASET_H

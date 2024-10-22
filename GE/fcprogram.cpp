@@ -26,9 +26,14 @@ double  FcProgram::fitness(vector<int> &genome)
         slist.push_back(st);
     }
 
+    Dataset *mappedDataset = new Dataset();
     mapper->setExpr(slist);
-    mappedDataset->clearPoints();
-    if(!mapper->mapDataset(originalDataset,mappedDataset)) return 1e+100;
+    //mappedDataset->clearPoints();
+    if(!mapper->mapDataset(originalDataset,mappedDataset)) 
+    {
+	    delete mappedDataset;
+	    return 1e+100;
+    }
 
     currrentModel->setTrainSet(mappedDataset);
     currrentModel->setModelSeed(1);
@@ -36,6 +41,7 @@ double  FcProgram::fitness(vector<int> &genome)
     srand(1);
     currrentModel->trainModel();
     double value = currrentModel->getTrainError();
+    delete mappedDataset;
     return value;
 }
 
@@ -52,5 +58,4 @@ Mapper  *FcProgram::getMapper()
 FcProgram::~FcProgram()
 {
     delete mapper;
-    delete mappedDataset;
 }
