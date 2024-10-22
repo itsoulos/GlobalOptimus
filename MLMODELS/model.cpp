@@ -7,6 +7,8 @@ Model::Model()
     method=NULL;
     addParam(Parameter("model_trainfile","","The trainfile used"));
     addParam(Parameter("model_testfile","","The test file used"));
+    modelSeed=1;
+    generator.seed(modelSeed);
 }
 
 void    Model::trainModel()

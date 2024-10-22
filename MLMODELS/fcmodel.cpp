@@ -79,9 +79,11 @@ void        FcModel::trainModel()
     if(createModel==NULL)
     	createModel = getModelByName(model1);
     createModel->disableRemoveData();
+    createModel->setModelSeed(getModelSeed());
     QString model2 = getParam("fc_evaluatemodel").getValue();
     if(evaluateModel==NULL)
     	evaluateModel = getModelByName(model2);
+    evaluateModel->setModelSeed(getModelSeed());
     //initiate methods from loaders
     QString params1=getParam("fc_createparams").getValue();
     params1.replace("\"","");
@@ -150,15 +152,14 @@ void        FcModel::trainModel()
     //construct population
     int nfeatures = getParam("fc_features").getValue().toInt();
 
-
     program = new FcProgram(trainDataset->dimension(),createModel,
                             trainDataset,
                             nfeatures);
     program->makeGrammar();
-
     pop = new Population(getParam("fc_popcount").getValue().toInt(),
                      getParam("fc_popsize").getValue().toInt(),
-                     program);
+                     program,getModelSeed());
+
 
     pop->setSelectionRate(getParam("fc_popsrate").getValue().toDouble());
     pop->setMutationRate(getParam("fc_popmrate").getValue().toDouble());

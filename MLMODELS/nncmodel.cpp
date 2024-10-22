@@ -40,7 +40,7 @@ void    NNCModel::trainModel()
 
         pop = new Population(getParam("nnc_popcount").getValue().toInt(),
                          getParam("nnc_popsize").getValue().toInt(),
-                         program);
+                         program,getModelSeed());
 
         pop->setSelectionRate(getParam("nnc_popsrate").getValue().toDouble());
         pop->setMutationRate(getParam("nnc_popmrate").getValue().toDouble());

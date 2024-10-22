@@ -6,8 +6,6 @@ FcProgram::FcProgram(int dim,Model *m,Dataset *orig,int nf)
     pattern_dimension = dim;
     nfeatures = nf;
     mapper = new Mapper(dim);
-    mappedDataset = new Dataset();
-
     originalDataset = orig;
 }
 
@@ -23,22 +21,20 @@ double  FcProgram::fitness(vector<int> &genome)
             pgenome[j]=genome[i*psize+j];
         int redo = 0;
         string st = printRandomProgram(pgenome,redo);
+        if(redo>=REDO_MAX) return 1e+100;
         slist.push_back(st);
     }
-
     Dataset *mappedDataset = new Dataset();
-    mapper->setExpr(slist);
-    //mappedDataset->clearPoints();
+    if(!mapper->setExpr(slist)) return 1e+100;
     if(!mapper->mapDataset(originalDataset,mappedDataset)) 
     {
 	    delete mappedDataset;
 	    return 1e+100;
     }
-
     currrentModel->setTrainSet(mappedDataset);
+    srand(currrentModel->getModelSeed());
     currrentModel->setModelSeed(1);
     currrentModel->initModel();
-    srand(1);
     currrentModel->trainModel();
     double value = currrentModel->getTrainError();
     delete mappedDataset;

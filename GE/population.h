@@ -1,5 +1,7 @@
 # ifndef __POPULATION__H
 # include <GE/program.h>
+#include <random>
+using namespace std;
 
 # define GELOCAL_NONE       0x0
 # define GELOCAL_CROSSOVER  0x1
@@ -30,8 +32,14 @@ class Population
 		int	elitism;
         int localsearch_generations;
         int localsearch_items;
+        int randomSeed=1;
+        mt19937 generator;
+        uniform_int_distribution<> intDistrib;
+        uniform_int_distribution<> intDistribGcount;
+        uniform_int_distribution<> intDistribGsize;
+        uniform_real_distribution<> doubleDistrib;
 	public:
-		Population(int gcount,int gsize,Program *p);
+        Population(int gcount,int gsize,Program *p,int seed=1);
         void setLocalMethod(int m);
 		double 	fitness(vector<int> &g);
 		void	setElitism(int s);
@@ -56,6 +64,7 @@ class Population
         double  getLocalSearchRate() const;
         void    setCrossoverItems(int n);
         int     getCrossoverItems() const;
+        void    setRandomSeed(int s);
 		~Population();
 		
 };

@@ -11,7 +11,7 @@
 
 /* Population constructor */
 /* Input: genome count , genome size, pointer to Program instance */
-Population::Population(int gcount,int gsize,Program *p)
+Population::Population(int gcount,int gsize,Program *p,int seed)
 {
 	elitism=1;
 	selection_rate = 0.1;
@@ -28,14 +28,21 @@ Population::Population(int gcount,int gsize,Program *p)
 	double f;
 	genome=new int*[genome_count];
 	children=new int*[genome_count];
+    generator.seed(1);
 	vector<int> g;
 	g.resize(genome_size);
+    randomSeed=seed;
+    generator.seed(randomSeed);
+    using param_t = std::uniform_int_distribution<>::param_type;
+    intDistrib.param(param_t(0, MAX_RULE-1));
+    intDistribGcount.param(param_t(0,genome_count-1));
+    intDistribGsize.param(param_t(0,genome_size-1));
 	for(int i=0;i<genome_count;i++)
 	{
 		genome[i]=new int[genome_size];
 		children[i]=new int[genome_size];
 			for(int j=0;j<genome_size;j++)
-				g[j]=genome[i][j]=rand()%MAX_RULE;
+                g[j]=genome[i][j]=intDistrib(generator);//rand()%MAX_RULE;
 	}
 	fitness_array=new double[genome_count];
 }
@@ -65,7 +72,7 @@ void	Population::reset()
 	generation = 0;
 	for(int i=0;i<genome_count;i++)
 		for(int j=0;j<genome_size;j++)
-				genome[i][j]=rand()%MAX_RULE;
+                genome[i][j]=intDistrib(generator);//rand()%MAX_RULE;
 	for(int i=0;i<genome_count;i++)
             fitness_array[i]=1e+100;
 }
@@ -142,7 +149,7 @@ void	Population::crossover()
 			// Select the best parents of  the candidates 
                         for(int j=0;j<tournament_size;j++)
                         {
-				r=rand() % (genome_count);
+                r=intDistribGcount(generator);// rand() % (genome_count);
                                 if(j==0 || fitness_array[r]<max_fitness)
                                 {
                                         max_index=r;
@@ -154,7 +161,7 @@ void	Population::crossover()
                 }
 		int pt1,pt2;
 		// The one-point crossover is performed here (the point is pt1)
-		pt1=rand() % genome_size;
+        pt1=intDistribGsize(generator);//rand() % genome_size;
 		memcpy(children[count_children],
 				genome[parent[0]],pt1 * sizeof(int));
 		memcpy(&children[count_children][pt1],
@@ -196,10 +203,10 @@ void	Population::mutate()
 	{
 		for(int j=0;j<genome_size;j++)
 		{
-			double r=rand()*1.0/RAND_MAX;
+            double r=doubleDistrib(generator);//rand()*1.0/RAND_MAX;
 			if(r<mutation_rate)
 			{
-				genome[i][j]=rand() % MAX_RULE;
+                genome[i][j]=intDistrib(generator);//rand() % MAX_RULE;
 			}
 		}
 	}
@@ -221,7 +228,7 @@ void	Population::calcFitnessArray()
 		//localSearch(i);
         if(lrate>0.0)
         {
-            double  r = rand() *1.0 /RAND_MAX;
+            double  r = doubleDistrib(generator);// rand() *1.0 /RAND_MAX;
             if(r<=lrate)
                 localSearch(i);
         }
@@ -436,8 +443,8 @@ void	Population::localSearch(int pos)
     {
     for(int iters=1;iters<=crossover_items;iters++)
 	{
-		int gpos=rand() % genome_count;
-		int cutpoint=rand() % genome_size;
+        int gpos=intDistribGcount(generator);//rand() % genome_count;
+        int cutpoint=intDistribGsize(generator);//rand() % genome_size;
 		for(int j=0;j<cutpoint;j++) g[j]=genome[pos][j];
 		for(int j=cutpoint;j<genome_size;j++) g[j]=genome[gpos][j];
 		double f=fitness(g);
@@ -466,7 +473,7 @@ void	Population::localSearch(int pos)
 		
 	for(int i=0;i<genome_size;i++)
 	{
-        int ipos = rand() % genome_size;
+        int ipos =intDistribGsize(generator);// rand() % genome_size;
                 int new_value;
                 for(int k=0;k<20;k++)
                 {
@@ -567,6 +574,12 @@ double	Population::evaluateBestFitness()
 	vector<int> g;g.resize(genome_size);
 	for(int i=0;i<genome_size;i++) g[i]=genome[0][i];	
 	return fitness(g);
+}
+
+void    Population::setRandomSeed(int s)
+{
+    randomSeed=s;
+    generator.seed(randomSeed);
 }
 
 /* Destructor */

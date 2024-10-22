@@ -30,7 +30,7 @@ void    GdfModel::trainModel()
     program->makeGrammar();
     pop = new Population(getParam("gdf_popcount").getValue().toInt(),
                          getParam("gdf_popsize").getValue().toInt(),
-                         program);
+                         program,getModelSeed());
     pop->setSelectionRate(getParam("gdf_popsrate").getValue().toDouble());
     pop->setMutationRate(getParam("gdf_popmrate").getValue().toDouble());
     int gens = getParam("gdf_popgens").getValue().toInt();

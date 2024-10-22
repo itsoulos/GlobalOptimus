@@ -18,7 +18,7 @@ Mapper::Mapper(int d)
     xx=new double[dimension];
 }
 
-void	Mapper::setExpr(vector<string> &s)
+bool	Mapper::setExpr(vector<string> &s)
 {
 	if(parser.size()!=s.size()) 
 	{
@@ -32,12 +32,14 @@ void	Mapper::setExpr(vector<string> &s)
 	}
 	for(int i=0;i<s.size();i++) 
 	{
-        parser[i]->Parse(s[i],vars);
+        if(parser[i]->Parse(s[i],vars)!=-1) return false;
 	}
+    return true;
 }
 
 int	Mapper::map(Data &x,Data &x1)
 {
+
 	for(int i=0;i<x.size();i++) xx[i]=x[i];
     for(int i=0;i<parser.size();i++)
 	{

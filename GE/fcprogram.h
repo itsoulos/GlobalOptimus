@@ -11,7 +11,6 @@ private:
     int     pattern_dimension;
     int     nfeatures;
     Mapper  *mapper;
-    Dataset *mappedDataset;
     Dataset *originalDataset;
 public:
     FcProgram(int dim,Model *m,Dataset *orig,int nf);

@@ -38,7 +38,7 @@ void        RuleModel::trainModel()
 
  pop = new Population(getParam("rule_popcount").getValue().toInt(),
                       getParam("rule_popsize").getValue().toInt(),
-                      program);
+                      program,getModelSeed());
 
  pop->setSelectionRate(getParam("rule_popsrate").getValue().toDouble());
  pop->setMutationRate(getParam("rule_popmrate").getValue().toDouble());

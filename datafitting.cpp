@@ -333,6 +333,7 @@ int main(int argc, char *argv[])
     for(int t=1;t<=times;t++)
     {
         srand(t);
+	mainModel->setModelSeed(t);
         runMethod();
         double d1,d2,d3;
         mainModel->testModel(d1,d2,d3);
