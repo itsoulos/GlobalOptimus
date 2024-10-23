@@ -163,6 +163,8 @@ void        FcModel::trainModel()
     pop->setSelectionRate(getParam("fc_popsrate").getValue().toDouble());
     pop->setMutationRate(getParam("fc_popmrate").getValue().toDouble());
     int gens = getParam("fc_popgens").getValue().toInt();
+ //   pop->setLocalSearchRate(0.001);
+ //   pop->setLocalMethod(GELOCAL_MUTATE);
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
@@ -172,25 +174,39 @@ void        FcModel::trainModel()
     pop->evaluateBestFitness();
 }
 
-void  FcModel::testModel(double &trainError,
-                         double &testError,
-                         double &classError)
+void  FcModel::testModel(double &avg_trainError,
+                         double &avg_testError,
+                         double &avg_classError)
 {
     Mapper *mapper = program->getMapper();
-    Dataset *mappedDataset =new Dataset();
-    mapper->mapDataset(trainDataset,mappedDataset);
-    evaluateModel->setTrainSet(mappedDataset);
-    evaluateModel->initModel();
-    evaluateModel->trainModel();
+	avg_trainError = 0.0;
+	avg_testError = 0.0;
+	avg_classError = 0.0;
+    const int iters=30;
+	for(int i=1;i<=iters;i++)
+	{
+    	Dataset *mappedDataset =new Dataset();
+    	mapper->mapDataset(trainDataset,mappedDataset);
+    	evaluateModel->setTrainSet(mappedDataset);
+    	evaluateModel->initModel();
+    	evaluateModel->trainModel();
 
-    Dataset *mappedTestSet = new Dataset();
-    mapper->mapDataset(testDataset,mappedTestSet);
-    evaluateModel->setTestSet(mappedTestSet);
-    evaluateModel->testModel(trainError,testError,classError);
+    	Dataset *mappedTestSet = new Dataset();
+    	mapper->mapDataset(testDataset,mappedTestSet);
+    	evaluateModel->setTestSet(mappedTestSet);
+	double trainError  =0.0,testError=0.0,classError=0.0;
+    	evaluateModel->testModel(trainError,testError,classError);
 
-    evaluateModel->disableRemoveData();
-    delete mappedDataset;
-    delete mappedTestSet;
+    	evaluateModel->disableRemoveData();
+	avg_trainError+=trainError; 
+	avg_testError+=testError;
+	avg_classError+=classError;
+    	delete mappedDataset;
+    	delete mappedTestSet;
+	}
+	avg_trainError/=iters;
+	avg_testError/=iters;
+	avg_classError/=iters;
 }
 
 FcModel::~FcModel()

@@ -22,7 +22,7 @@ then
 	CREATEMODEL=rbf
 	EVALUATEMODEL=mlp
 	FEATURES=2
-	CREATEPARAMS='\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"'
+	CREATEPARAMS='\"--bfgs_iters=5\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"'
 	EVALPARAMS='\"--opt_method=Bfgs\"\"--mlp_nodes=10\"\"--rbf_nodes=10\"\"--opt_debug=no\"\"--rbf_factor=5\"\"--opt_termination=maxiters\"'
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS"
 elif [ $MODEL = "rbf" ]
