@@ -166,7 +166,7 @@ void        FcModel::trainModel()
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
-//	if(g%50==0)
+    if(g%50==0)
 	printf("\nFC Gen=%4d ERROR=%20.10lg\n",g,pop->getBestFitness());
     }
     pop->evaluateBestFitness();

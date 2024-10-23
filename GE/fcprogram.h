@@ -12,6 +12,7 @@ private:
     int     nfeatures;
     Mapper  *mapper;
     Dataset *originalDataset;
+    Dataset *mappedDataset;
 public:
     FcProgram(int dim,Model *m,Dataset *orig,int nf);
     virtual double	fitness(vector<int> &genome);

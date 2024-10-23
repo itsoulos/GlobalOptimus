@@ -17,6 +17,12 @@ private:
     void    getWeightDerivative(int index,Data &x,double &g);
     void    getVarianceDerivative(int index,Data &x,double &g);
     void    getCenterDerivative(int index,Data &x,Data &g);
+    Matrix trainA;
+    Matrix RealOutput;
+    Matrix trA;
+    Matrix matrixE;
+    Matrix matrixC;
+    Matrix matrixD;
     /** test
      */
     Data lastGaussianValues;
@@ -40,10 +46,10 @@ public:
     virtual QJsonObject done(Data &x);
 
     /** Matrix operations **/
-    Matrix  matrix_transpose(Matrix &x);
-    Matrix  matrix_mult(Matrix &x,Matrix &y);
-    Matrix  matrix_inverse(Matrix x,bool &error_flag);
-    Matrix  matrix_pseudoinverse(Matrix &x,bool &error_flag);
+    void  matrix_transpose(Matrix &x,Matrix &xx);
+    void  matrix_mult(Matrix &x,Matrix &y,Matrix &z);
+    void  matrix_inverse(Matrix &x,bool &error_flag,Matrix &c);
+    void  matrix_pseudoinverse(Matrix &x,bool &error_flag);
     void    originalTrain();
     virtual ~RbfProblem();
 };

@@ -55,13 +55,31 @@ bool    Mapper::mapDataset(Dataset *original,Dataset *mappedDataset)
 {
     int count= original->count();
     Data newPoint;newPoint.resize(parser.size());
+    Matrix xall  = original->getAllXpoint();
     for(int i=0;i<count;i++)
     {
-        Data xpoint = original->getXPoint(i);
+        Data xpoint = xall[i];
         double ypoint = original->getYPoint(i);
         if(!map(xpoint,newPoint)) return false;
         mappedDataset->addPoint(newPoint,ypoint);
     }
+    return true;
+}
+
+bool    Mapper::mapAndReplaceDataset(Dataset *original,Dataset *mappedDataset)
+{
+    int count= original->count();
+    Data newPoint;newPoint.resize(parser.size());
+    Matrix xall  = original->getAllXpoint();
+    for(int i=0;i<count;i++)
+    {
+        Data xpoint = xall[i];
+        double ypoint = original->getYPoint(i);
+        if(!map(xpoint,newPoint)) return false;
+        mappedDataset->setPoint(i,newPoint,ypoint);
+       // mappedDataset->addPoint(newPoint,ypoint);
+    }
+
     return true;
 }
 

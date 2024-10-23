@@ -154,6 +154,8 @@ public:
      * mesa sto dataset.
      */
     void makePatternClass();
+
+    void    setPoint(int pos,Data &x,double y);
     ~Dataset();
 };
 

@@ -7,6 +7,7 @@ FcProgram::FcProgram(int dim,Model *m,Dataset *orig,int nf)
     nfeatures = nf;
     mapper = new Mapper(dim);
     originalDataset = orig;
+    mappedDataset=NULL;
 }
 
 double  FcProgram::fitness(vector<int> &genome)
@@ -24,20 +25,42 @@ double  FcProgram::fitness(vector<int> &genome)
         if(redo>=REDO_MAX) return 1e+100;
         slist.push_back(st);
     }
-    Dataset *mappedDataset = new Dataset();
+
     if(!mapper->setExpr(slist)) return 1e+100;
-    if(!mapper->mapDataset(originalDataset,mappedDataset)) 
+    bool createFlag = false;
+    if(mappedDataset==NULL)
     {
-	    delete mappedDataset;
-	    return 1e+100;
+        mappedDataset = new Dataset;
+        createFlag = true;
     }
+    else
+    if(mappedDataset->dimension()!=slist.size())
+    {
+        delete mappedDataset;
+        mappedDataset = new Dataset;
+        createFlag=true;
+    }
+    if(createFlag)
+    {
+        if(!mapper->mapDataset(originalDataset,mappedDataset))
+        {
+            return 1e+100;
+        }
+    }
+    else
+    {
+        if(!mapper->mapAndReplaceDataset(originalDataset,mappedDataset))
+        {
+            return 1e+100;
+        }
+    }
+
     currrentModel->setTrainSet(mappedDataset);
     srand(currrentModel->getModelSeed());
     currrentModel->setModelSeed(1);
     currrentModel->initModel();
     currrentModel->trainModel();
     double value = currrentModel->getTrainError();
-    delete mappedDataset;
     return value;
 }
 
@@ -53,5 +76,7 @@ Mapper  *FcProgram::getMapper()
 
 FcProgram::~FcProgram()
 {
+    if(mappedDataset!=NULL)
+        delete mappedDataset;
     delete mapper;
 }

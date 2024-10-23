@@ -194,6 +194,8 @@ int     Dataset::count() const
 //epistrefei stiles
 int     Dataset::dimension() const
 {
+    if(xpoint.size()==0)
+        return 0;
     return xpoint[0].size();
 }
 
@@ -267,6 +269,13 @@ double  Dataset::getClass(int pos) const
 {
     double y=ypoint[pos];
     return getClass(y);
+}
+
+void    Dataset::setPoint(int pos,Data &x,double y)
+{
+
+    xpoint[pos]=x;
+    ypoint[pos]=y;
 }
 
 Dataset::~Dataset()

@@ -8,6 +8,7 @@ RbfProblem::RbfProblem()
 {
     addParam(Parameter("rbf_nodes","1","Number of rbf nodes"));
     addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
+    trainA.resize(0);
 }
 double  RbfProblem::getDerivative(Data &x,int pos)
 {
@@ -473,7 +474,7 @@ void    RbfProblem::trainModel()
 
 
 
-Matrix  RbfProblem::matrix_mult(Matrix &x,Matrix &y)
+void  RbfProblem::matrix_mult(Matrix &x,Matrix &y,Matrix &z)
 {
     int m=x.size();
     int p=x[0].size();
@@ -485,10 +486,8 @@ Matrix  RbfProblem::matrix_mult(Matrix &x,Matrix &y)
     }
     else
     {
-        Matrix z;
-        z.resize(m);
         int i,j,k;
-        for(i=0;i<m;i++) z[i].resize(n);
+
         for(i=0;i<m;i++)
         {
             for(j=0;j<n;j++)
@@ -500,13 +499,12 @@ Matrix  RbfProblem::matrix_mult(Matrix &x,Matrix &y)
                 }
             }
         }
-        return z;
     }
 }
 
-Matrix  RbfProblem::matrix_inverse(Matrix x,bool &error_flag)
+void RbfProblem::matrix_inverse(Matrix &x,bool &error_flag,Matrix &c)
 {
-    Matrix c=x;
+
     error_flag =false;
     int npivot;
     double det;
@@ -551,7 +549,7 @@ Matrix  RbfProblem::matrix_inverse(Matrix x,bool &error_flag)
 
         if(fabs(det) < 1.0e-40) {
             error_flag =true;
-            return c;
+
         }
 
 
@@ -574,33 +572,33 @@ Matrix  RbfProblem::matrix_inverse(Matrix x,bool &error_flag)
 
        if(npivot % 2 != 0)
         det = det * (-1.0);
-      return c;
 }
 
-Matrix  RbfProblem::matrix_pseudoinverse(Matrix &a,bool &error_flag)
+void  RbfProblem::matrix_pseudoinverse(Matrix &a,bool &error_flag)
 {
+
     error_flag=false;
-    Matrix b=matrix_transpose(a);
-    Matrix e=matrix_mult(b,a);
-    Matrix d=matrix_inverse(e,error_flag);
-    Matrix c=matrix_mult(d,b);
-    return c;
+    matrix_transpose(a,trA);
+    matrix_mult(trA,a,matrixE);
+
+    matrix_inverse(matrixE,error_flag,matrixD);
+    matrix_mult(matrixD,trA,matrixC);
+
 }
 
-Matrix  RbfProblem::matrix_transpose(Matrix &x)
+void  RbfProblem::matrix_transpose(Matrix &x,Matrix &xx)
 {
-    Matrix xx;
-    xx.resize(x[0].size());
+
+
     int i,j;
     for(i=0;i<xx.size();i++)
     {
-        xx[i].resize(x.size());
+
         for(j=0;j<x.size();j++)
         {
             xx[i][j]=x[j][i];
         }
     }
-    return xx;
 }
 
 void    RbfProblem::originalTrain()
@@ -612,29 +610,50 @@ void    RbfProblem::originalTrain()
 
 
     //phase2
-    Matrix A,RealOutput;
-    A.resize(trainDataset->count());
-    RealOutput.resize(trainDataset->count());
-    int i,j;
-    for(i=0;i<A.size();i++)
+
+    if(trainA.size()==0)
     {
-        /**/
-        RealOutput[i].push_back(trainDataset->getYPoint(i));
-        Data x=trainDataset->getXPoint(i);
-        A[i].resize(centers.size());
-
-        for(j=0;j<centers.size();j++)
+        RealOutput.resize(trainDataset->count());
+        trainA.resize(trainDataset->count());
+        trA.resize(centers.size());
+        for(int i=0;i<trainA.size();i++)
         {
-          A[i][j]=gaussian(x,centers[j],variances[j]);
-
+            trainA[i].resize(centers.size());
+            RealOutput[i].resize(1);
+           }
+        for(int i=0;i<trA.size();i++)
+            trA[i].resize(trainDataset->count());
+        matrixE.resize(centers.size());
+        matrixC.resize(centers.size());
+        matrixD.resize(centers.size());
+        for(int i=0;i<matrixE.size();i++)
+        {
+            matrixE[i].resize(centers.size());
+            matrixD[i].resize(centers.size());
+            matrixC[i].resize(trainDataset->count());
         }
 
     }
-    Matrix pA=matrix_pseudoinverse(A,error_flag);
+    int i,j;
+    for(i=0;i<trainA.size();i++)
+    {
+
+        RealOutput[i][0]=trainDataset->getYPoint(i);
+        for(j=0;j<centers.size();j++)
+        {
+          trainA[i][j]=gaussian(xpoint[i],centers[j],variances[j]);
+        }
+    }
+    matrix_pseudoinverse(trainA,error_flag);
     if(error_flag) return;
-    Matrix pW=matrix_mult(pA,RealOutput);
-    for(i=0;i<pW.size();i++)
-        weight[i]=pW[i][0];
+
+    Matrix pw;
+    pw.resize(centers.size());
+    for(int i=0;i<pw.size();i++)
+        pw[i].resize(1);
+    matrix_mult(matrixC,RealOutput,pw);
+    for(i=0;i<pw.size();i++)
+        weight[i]=pw[i][0];
 }
 
 RbfProblem::~RbfProblem()

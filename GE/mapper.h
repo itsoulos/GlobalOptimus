@@ -18,6 +18,7 @@ class Mapper
         bool	setExpr(vector<string> &s);
         int     map(Data &x,Data &x1);
         bool    mapDataset(Dataset *original,Dataset *mappedDataset);
+        bool    mapAndReplaceDataset(Dataset *original,Dataset *mappedDataset);
 		~Mapper();
 };
 # endif
