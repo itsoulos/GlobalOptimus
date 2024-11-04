@@ -178,6 +178,8 @@ void  FcModel::testModel(double &avg_trainError,
                          double &avg_testError,
                          double &avg_classError)
 {
+	vector<int> g = pop->getBestGenome();
+	pop->fitness(g);
     Mapper *mapper = program->getMapper();
 	avg_trainError = 0.0;
 	avg_testError = 0.0;
