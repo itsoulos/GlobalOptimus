@@ -42,6 +42,8 @@ MethodLoader::MethodLoader()
     methodName<<"Woa";
     method<<new MEWOA;
     methodName<<"MeWoa";
+    methodName<<"JDE";
+    method<<new jDElsgo;
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

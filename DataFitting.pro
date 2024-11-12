@@ -37,6 +37,7 @@ SOURCES += \
 	GE/ruleprogram.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
+    METHODS/jDElsgo.cpp \
     METHODS/mewoa.cpp \
     METHODS/woa.cpp \
     MLMODELS/fcmodel.cpp \
@@ -152,6 +153,7 @@ HEADERS += \
     GE/symbol.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \
+    METHODS/jDElsgo.h \
     METHODS/mewoa.h \
     METHODS/woa.h \
     MLMODELS/fcmodel.h \

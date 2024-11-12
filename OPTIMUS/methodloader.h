@@ -21,6 +21,7 @@
 # include <METHODS/hybridmethod.h>
 # include <METHODS/woa.h>
 # include <METHODS/mewoa.h>
+# include <METHODS/jDElsgo.h>
 # include <QStringList>
 # include <QJsonObject>
 /**
