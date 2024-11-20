@@ -134,8 +134,6 @@ Data jDElsgo::jDEoneIter(int index, QVector<Data>& pop)
 
 bool jDElsgo::terminated()
 {
-    return iter >= maxiters;
-    {
         QString term = terminationMethod;
         if(term == "maxiters")
             return iter>=maxiters;
@@ -146,7 +144,6 @@ bool jDElsgo::terminated()
             if(term == "similarity")
             return similarity.terminate(worsty);
         return false;
-    }
 }
 int    jDElsgo::tournament()
 {
