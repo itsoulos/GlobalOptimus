@@ -7,6 +7,15 @@ DifferentialEvolution::DifferentialEvolution()
     addParam(Parameter("de_cr","0.9","DE CR parameter"));
     addParam(Parameter("de_tsize",8,2,20,"Tournament size"));
     addParam(Parameter("de_maxiters",1000,10,10000,"DE maximum iters"));
+
+    QStringList de_fselection;
+    de_fselection<<"number"<<"ali"<<"random";
+    addParam(Parameter("de_fselection",de_fselection[0],de_fselection,"The differential weight method. Values: number, ali, random"));
+
+    QStringList yes_no;
+    yes_no<<"no"<<"yes";
+    addParam(Parameter("de_localsearch",yes_no[0],yes_no,"Perform local search at every iteration. Values: no,yes"));
+
     QStringList de_selection;
     de_selection<<"random"<<"tournament";
     addParam(Parameter("de_selection",de_selection[0],
@@ -61,6 +70,23 @@ void    DifferentialEvolution::step()
 {
     ++iter;
     QString selection=getParam("de_selection").getValue();
+    QString  de_fselection = getParam("de_fselection").getValue();
+    double bestMax = 0;
+    double bestMin = 0;
+    bool is_local = false;
+    if(de_fselection == "ali")
+    {
+
+        bestMax = *max_element(agenty.begin(), agenty.end());
+        bestMin = *min_element(agenty.begin(),agenty.end());
+        if (bestMax/bestMin <1)
+            F = 1.0 - (bestMax/bestMin);
+        else
+            F = 1.0 - (bestMin/bestMax);
+    }
+    if(getParam("de_localsearch").getValue()=="yes")
+        is_local = true;
+    bool is_random = de_fselection=="random";
     for(int i=0;i<NP;i++)
     {
 
@@ -95,12 +121,14 @@ void    DifferentialEvolution::step()
             double rj = myProblem->randomDouble();
             if(rj<CR || j==R)
             {
+                if(is_random)
+                    F= -0.5 +2.0 * myProblem->randomDouble();
                 trialx[j]=xa[j]+F*(xb[j]-xc[j]);
             }
             else trialx[j]=x[j];
         }
         if(!myProblem->isPointIn(trialx)) trialx = x;
-        double ft = myProblem->statFunmin(trialx);
+        double ft = is_local?localSearch(trialx):myProblem->statFunmin(trialx);
         if(ft<y)
         {
             agentx[i]=trialx;
@@ -121,10 +149,10 @@ bool    DifferentialEvolution::terminated()
         return iter>=maxiters;
     else
         if(term == "doublebox")
-        return doubleBox.terminate(besty);
+        return iter>=maxiters || doubleBox.terminate(besty);
     else
         if(term == "similarity")
-        return similarity.terminate(besty);
+        return iter>=maxiters || similarity.terminate(besty);
     return false;
 }
 

@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE
-METHOD=JDE
+METHOD=DifferentialEvolution
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=kmeans
 #Available stopping rules: maxiters, doublebox, similarity, mean, all
-TERMINATION=similarity
+TERMINATION=doublebox
 ### GLOBAL PARAMS
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
 if [ $METHOD = "bfgs" ]
@@ -16,7 +16,15 @@ then
 	METHODPARAMS="--bfgs_iters=200"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
-	METHODPARAMS="--de_np=500 --de_maxiters=200 --de_selection=random"
+##de_np:          The population size. 
+##de_f:           The differential weight
+##de_cr:          The mutation parameter
+##de_tsize:       The tournament size for the tournament selection
+##de_maxiters:    The maximum number of parameters
+##de_fselection:  The selection of differential weight. Values: number, ali, random
+##de_localsearch: Enable or disable the incorporation of local search at every iteration. Values: yes,no
+##de_selection:   The selection method used in every iteration. Values: random, tournament
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=number --de_localsearch=yes"
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex
