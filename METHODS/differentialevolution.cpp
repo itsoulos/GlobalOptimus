@@ -9,8 +9,8 @@ DifferentialEvolution::DifferentialEvolution()
     addParam(Parameter("de_maxiters",1000,10,10000,"DE maximum iters"));
 
     QStringList de_fselection;
-    de_fselection<<"number"<<"ali"<<"random";
-    addParam(Parameter("de_fselection",de_fselection[0],de_fselection,"The differential weight method. Values: number, ali, random"));
+    de_fselection<<"number"<<"ali"<<"random"<<"adaptive";
+    addParam(Parameter("de_fselection",de_fselection[0],de_fselection,"The differential weight method. Values: number, ali, random, adaptive"));
 
     QStringList yes_no;
     yes_no<<"no"<<"yes";
@@ -25,6 +25,8 @@ DifferentialEvolution::DifferentialEvolution()
 
 void    DifferentialEvolution::init()
 {
+	sumFitness = 0.0;
+	sumItersCount = 0;
     if(getParam("de_np").getValue()=="10n")
         NP = 10 * myProblem->getDimension();
     else
@@ -87,6 +89,7 @@ void    DifferentialEvolution::step()
     if(getParam("de_localsearch").getValue()=="yes")
         is_local = true;
     bool is_random = de_fselection=="random";
+    bool is_adaptive = de_fselection=="adaptive";
     for(int i=0;i<NP;i++)
     {
 
@@ -123,6 +126,8 @@ void    DifferentialEvolution::step()
             {
                 if(is_random)
                     F= -0.5 +2.0 * myProblem->randomDouble();
+		if(is_adaptive)
+	            F = 0.8 +0.2 *myProblem->randomDouble();		
                 trialx[j]=xa[j]+F*(xb[j]-xc[j]);
             }
             else trialx[j]=x[j];
@@ -144,7 +149,18 @@ void    DifferentialEvolution::step()
 
 bool    DifferentialEvolution::terminated()
 {
-    QString term = terminationMethod;
+    QString term =getParam("opt_termination").getValue();
+	if(term == "sumfitness")
+	{
+        	double newSum = accumulate(agenty.begin(), agenty.end(), 0);
+        	newSum = newSum / agenty.size();
+		if(fabs(newSum - sumFitness)<1e-6) sumItersCount++; else sumItersCount = 0;
+		sumFitness = newSum;
+		if(sumItersCount>=10 || iter>=maxiters) return true;
+		sumFitness = newSum;
+		return false;
+	}
+	else
     if(term == "maxiters")
         return iter>=maxiters;
     else

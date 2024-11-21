@@ -37,7 +37,7 @@ Optimizer::Optimizer()
     addParam(Parameter("opt_kmeansamples",1000,100,10000,"Number of samples for k-means sampling"));
 
     QStringList termMethod;
-    termMethod<<"doublebox"<<"similarity"<<"maxiters";
+    termMethod<<"doublebox"<<"similarity"<<"maxiters"<<"sumfitness";
     addParam(Parameter("opt_termination",termMethod[0],termMethod,
             "Termination methods: doublebox,similarity,maxiters"));
     methodLogger = new Logger();

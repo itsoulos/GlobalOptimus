@@ -16,6 +16,8 @@ private:
     Data bestx;
     double besty;
     int tournament();
+    double sumFitness=0.0;
+    int    sumItersCount = 0;
 public:
     DifferentialEvolution();
     virtual void init();
