@@ -21,10 +21,10 @@ then
 ##de_cr:          The mutation parameter
 ##de_tsize:       The tournament size for the tournament selection
 ##de_maxiters:    The maximum number of parameters
-##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive
+##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
 ##de_localsearch: Enable or disable the incorporation of local search at every iteration. Values: yes,no
 ##de_selection:   The selection method used in every iteration. Values: random, tournament
-	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=number --de_localsearch=yes --opt_termination=sumfitness"
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=migrant --de_localsearch=yes --opt_termination=sumfitness"
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex

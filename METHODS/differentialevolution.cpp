@@ -9,8 +9,8 @@ DifferentialEvolution::DifferentialEvolution()
     addParam(Parameter("de_maxiters",1000,10,10000,"DE maximum iters"));
 
     QStringList de_fselection;
-    de_fselection<<"number"<<"ali"<<"random"<<"adaptive";
-    addParam(Parameter("de_fselection",de_fselection[0],de_fselection,"The differential weight method. Values: number, ali, random, adaptive"));
+    de_fselection<<"number"<<"ali"<<"random"<<"adaptive"<<"migrant";
+    addParam(Parameter("de_fselection",de_fselection[0],de_fselection,"The differential weight method. Values: number, ali, random, adaptive, migrant"));
 
     QStringList yes_no;
     yes_no<<"no"<<"yes";
@@ -68,39 +68,51 @@ int     DifferentialEvolution::tournament()
     }
     return minindex;
 }
-void    DifferentialEvolution::step()
+void DifferentialEvolution::step()
 {
     ++iter;
-    QString selection=getParam("de_selection").getValue();
-    QString  de_fselection = getParam("de_fselection").getValue();
+    QString selection = getParam("de_selection").getValue();
+    QString de_fselection = getParam("de_fselection").getValue();
     double bestMax = 0;
     double bestMin = 0;
     bool is_local = false;
-    if(de_fselection == "ali")
-    {
+    bool is_migrant = false;
 
+
+    if (de_fselection == "migrant")
+    {
+        calculateMigrantWeights();
+	is_migrant = true;
+
+        }
+
+    if (de_fselection == "ali")
+    {
         bestMax = *max_element(agenty.begin(), agenty.end());
-        bestMin = *min_element(agenty.begin(),agenty.end());
-        if (bestMax/bestMin <1)
-            F = 1.0 - (bestMax/bestMin);
+        bestMin = *min_element(agenty.begin(), agenty.end());
+        if (bestMax / bestMin < 1)
+            F = 1.0 - (bestMax / bestMin);
         else
-            F = 1.0 - (bestMin/bestMax);
+            F = 1.0 - (bestMin / bestMax);
     }
-    if(getParam("de_localsearch").getValue()=="yes")
-        is_local = true;
-    bool is_random = de_fselection=="random";
-    bool is_adaptive = de_fselection=="adaptive";
-    for(int i=0;i<NP;i++)
-    {
 
+    if (getParam("de_localsearch").getValue() == "yes")
+        is_local = true;
+
+    bool is_random = de_fselection == "random";
+    bool is_adaptive = de_fselection == "adaptive";
+
+    for (int i = 0; i < NP; i++)
+    {
         Data x;
         double y;
-        x= agentx[i];
-        y=agenty[i];
-        int randomA,randomB,randomC;
+        x = agentx[i];
+        y = agenty[i];
+
+        int randomA, randomB, randomC;
         do
         {
-            if(selection == "random")
+            if (selection == "random")
             {
                 randomA = rand() % NP;
                 randomB = rand() % NP;
@@ -108,37 +120,48 @@ void    DifferentialEvolution::step()
             }
             else
             {
-                randomA=tournament();
-                randomB=tournament();
-                randomC=tournament();
+                randomA = tournament();
+                randomB = tournament();
+                randomC = tournament();
             }
-        }while(randomA == randomB || randomB == randomC || randomA == randomC);
-        Data xa,xb,xc;
+        } while (randomA == randomB || randomB == randomC || randomA == randomC);
+
+        Data xa, xb, xc;
         xa = agentx[randomA];
         xb = agentx[randomB];
         xc = agentx[randomC];
+
         int R = rand() % myProblem->getDimension();
         Data trialx = x;
-        for(int j=0;j<myProblem->getDimension();j++)
+
+        for (int j = 0; j < myProblem->getDimension(); j++)
         {
             double rj = myProblem->randomDouble();
-            if(rj<CR || j==R)
+            if (rj < CR || j == R)
             {
-                if(is_random)
-                    F= -0.5 +2.0 * myProblem->randomDouble();
-		if(is_adaptive)
-	            F = 0.8 +0.2 *myProblem->randomDouble();		
-                trialx[j]=xa[j]+F*(xb[j]-xc[j]);
+                if (is_random)
+                    F = -0.5 + 2.0 * myProblem->randomDouble();
+                if (is_adaptive)
+                    F = 0.8 + 0.2 * myProblem->randomDouble();
+		if(is_migrant)
+		    F = migrantWeights[i];	
+
+                trialx[j] = xa[j] + F * (xb[j] - xc[j]);
             }
-            else trialx[j]=x[j];
+            else
+                trialx[j] = x[j];
         }
-        if(!myProblem->isPointIn(trialx)) trialx = x;
-        double ft = is_local?localSearch(trialx):myProblem->statFunmin(trialx);
-        if(ft<y)
+
+        if (!myProblem->isPointIn(trialx))
+            trialx = x;
+
+        double ft = is_local ? localSearch(trialx) : myProblem->statFunmin(trialx);
+
+        if (ft < y)
         {
-            agentx[i]=trialx;
-            agenty[i]=ft;
-            if(ft<besty)
+            agentx[i] = trialx;
+            agenty[i] = ft;
+            if (ft < besty)
             {
                 besty = ft;
                 bestx = trialx;
@@ -146,7 +169,30 @@ void    DifferentialEvolution::step()
         }
     }
 }
+void DifferentialEvolution::calculateMigrantWeights()
+{
+    double maxFitness = *max_element(agenty.begin(), agenty.end());
+    double sumW = 0.0;
 
+    vector<double> weights;
+    weights.resize(NP);
+    migrantWeights.resize(NP);
+
+    for (int i = 0; i < NP; ++i)
+    {
+        double d = maxFitness - agenty[i];
+        weights[i] = d;
+        sumW += d;
+    }
+
+
+    for (int i = 0; i < NP; ++i)
+    {
+        migrantWeights[i] = weights[i] / sumW;
+    }
+
+
+}
 bool    DifferentialEvolution::terminated()
 {
     QString term =getParam("opt_termination").getValue();

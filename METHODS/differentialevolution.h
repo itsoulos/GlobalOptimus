@@ -18,6 +18,7 @@ private:
     int tournament();
     double sumFitness=0.0;
     int    sumItersCount = 0;
+     vector<double> migrantWeights;
 public:
     DifferentialEvolution();
     virtual void init();
@@ -25,7 +26,9 @@ public:
     virtual bool terminated();
     virtual void showDebug();
     virtual void done();
+    void calculateMigrantWeights();
     virtual ~DifferentialEvolution();
+
 };
 
 #endif // DIFFERENTIALEVOLUTION_H
