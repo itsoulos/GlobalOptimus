@@ -69,6 +69,7 @@ SOURCES += \
         OPTIMUS/doublebox.cpp \
         OPTIMUS/similarity.cpp \
     PROBLEMS/Ackley.cpp \
+    PROBLEMS/E_ev.cpp \
     PROBLEMS/Extended_f10.cpp \
     PROBLEMS/Sphere.cpp \
         PROBLEMS/bf1.cpp \
@@ -174,6 +175,7 @@ HEADERS += \
     OPTIMUS/methodloader.h \
     OPTIMUS/problemloader.h \
     PROBLEMS/Ackley.h \
+    PROBLEMS/E_ev.h \
     PROBLEMS/Extended_f10.h \
     PROBLEMS/Sphere.h \
     PROBLEMS/bf3.h \

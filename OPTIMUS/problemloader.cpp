@@ -14,7 +14,7 @@ ProblemLoader::ProblemLoader()
                 <<"f12"<<"f13"<<"f14"<<"f15"<<"schaffer"
                 <<"rosenbrock"<<"shekel5"<<"shekel7"<<"shekel10"<<"sckley"
                 <<"sinu"<<"test30n"<<"mlpproblem"<<"rbfproblem"
-       <<"userproblem";
+		<<"brenner"<<"userproblem";
     myParams["dummy"]=1;
     selectedProblem = "";
 }
@@ -236,7 +236,10 @@ Problem *ProblemLoader::getProblemFromName(QString name)
     else
     if(name == "vincent")
         myProblem = new Vincent();
-    else
+    else 
+    if(name == "brenner")
+	myProblem = new E_ev();
+    else    
     if(name == "userproblem")
         myProblem = new UserProblem();
     return myProblem;

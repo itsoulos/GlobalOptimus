@@ -64,6 +64,7 @@
 # include <PROBLEMS/himmelblau.h>
 # include <PROBLEMS/shubert.h>
 # include <PROBLEMS/vincent.h>
+# include <PROBLEMS/E_ev.h>
 /**
  * @brief The ProblemLoader class
  */
