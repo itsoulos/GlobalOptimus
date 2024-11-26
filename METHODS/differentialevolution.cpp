@@ -68,6 +68,14 @@ int     DifferentialEvolution::tournament()
     }
     return minindex;
 }
+static double getDistance(Data &x,Data &y)
+{
+	double d= 0.0;
+	for(int i=0;i<x.size();i++)
+		d+=(x[i]-y[i])*(x[i]-y[i]);
+	return sqrt(d);
+}
+
 void DifferentialEvolution::step()
 {
     ++iter;
@@ -102,6 +110,7 @@ void DifferentialEvolution::step()
     bool is_random = de_fselection == "random";
     bool is_adaptive = de_fselection == "adaptive";
 
+    int countAvoid = 0;
     for (int i = 0; i < NP; i++)
     {
         Data x;
@@ -153,9 +162,21 @@ void DifferentialEvolution::step()
         }
 
         if (!myProblem->isPointIn(trialx))
+	{
             trialx = x;
+	    countAvoid++;
+	    continue;
+	}
+	double minDist = 1e+100;
+	for(int j=0;j<agenty.size();j++)
+	{
+		Data xx = agentx[j];
+		double d = getDistance(xx,trialx);	
+		if(d<minDist) minDist = d;
+	}
 
-        double ft = is_local ? localSearch(trialx) : myProblem->statFunmin(trialx);
+	if(minDist<=1e-4) countAvoid++;
+        double ft = (is_local && minDist>1e-4) ? localSearch(trialx) : myProblem->statFunmin(trialx);
 
         if (ft < y)
         {
