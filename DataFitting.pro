@@ -93,6 +93,7 @@ SOURCES += \
         PROBLEMS/gkls.cpp \
         PROBLEMS/gkls2100.cpp \
         PROBLEMS/gkls250.cpp \
+    PROBLEMS/E_ev.cpp \
         PROBLEMS/gkls350.cpp \
         PROBLEMS/goldstein.cpp \
         PROBLEMS/griewank10.cpp \
@@ -164,6 +165,7 @@ HEADERS += \
     OPTIMUS/methodloader.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
+    PROBLEMS/E_ev.h \
     GE/integeranneal.h\
     GE/nncprogram.h \
     GE/ruleprogram.h \

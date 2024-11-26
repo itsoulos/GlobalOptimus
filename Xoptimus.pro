@@ -137,6 +137,7 @@ SOURCES += \
     PROBLEMS/gkls.cpp \
     PROBLEMS/gkls2100.cpp \
     PROBLEMS/gkls250.cpp \
+    PROBLEMS/E_ev.cpp \
     PROBLEMS/gkls350.cpp \
     PROBLEMS/goldstein.cpp \
     PROBLEMS/griewank10.cpp \
@@ -217,6 +218,7 @@ HEADERS += \
     METHODS/genetic.h \
     METHODS/gradientdescent.h \
     METHODS/gwooptimizer.h \
+    PROBLEMS/E_ev.h \
     METHODS/ipso.h \
     METHODS/lbfgs.h \
     METHODS/multistart.h \

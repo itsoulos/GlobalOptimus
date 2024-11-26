@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=GradientDescent
+METHOD=DifferentialEvolution
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=maxiters
+TERMINATION=sumfitness
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -56,6 +56,17 @@ then
 #nm_maxiters: maximum number of iterations allowed
 
 	METHODPARAMS="--nm_population=100 --nm_alpha=1.0 --nm_gamma=2.0 --nm_rho=0.5 --nm_sigma=0.5 --nm_maxiters=100"
+elif [ $METHOD = "DifferentialEvolution" ]
+then
+##de_np:          The population size. 
+##de_f:           The differential weight
+##de_cr:          The mutation parameter
+##de_tsize:       The tournament size for the tournament selection
+##de_maxiters:    The maximum number of parameters
+##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
+##de_localsearch: Enable or disable the incorporation of local search at every iteration. Values: yes,no
+##de_selection:   The selection method used in every iteration. Values: random, tournament
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=number --de_localsearch=yes --opt_termination=sumfitness"
 elif [ $METHOD = "Adam" ]
 then
 
@@ -103,16 +114,6 @@ then
 #lbfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--lbfgs_iters=200"
-elif [ $METHOD = "DifferentialEvolution" ]
-then
-#de_np: number of de agents
-#de_f: factor value
-#de_cr: crosover parameter
-#de_selection: the method to select agents values (random|tournament)
-#de_maxiters: maximum number of iterations
-#de_tsize:  tournament size
-#de_termination: termination rule (doublebox|similarity|maxiters)
-	METHODPARAMS="--de_np=10n --de_f=0.8 --de_cr=0.9 --de_tsize=4 --de_maxiters=1000 --de_selection=random --de_termination=$TERMINATION --opt_sampler=$SAMPLER --opt_localsearch=$LOCALSEARCH"
 elif [ $METHOD = "iPso" ]
 then
 #ipso_particles: number of pso particles
@@ -164,4 +165,4 @@ then
 	exit
 fi
 
-./DataFitting --opt_model=$MODEL  $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=30 --opt_debug=no
+./DataFitting --opt_model=$MODEL  $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=30 --opt_debug=yes
