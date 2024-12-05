@@ -24,7 +24,7 @@ then
 ##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
 ##de_localsearch: Enable or disable the incorporation of local search at every iteration. Values: yes,no
 ##de_selection:   The selection method used in every iteration. Values: random, tournament
-	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=migrant --de_localsearch=yes --opt_termination=sumfitness"
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=migrant --de_lrate=0.01 --opt_termination=sumfitness"
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex
@@ -84,18 +84,6 @@ then
 #lbfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--lbfgs_iters=200"
-elif [ $METHOD = "DifferentialEvolution" ]
-then
-#de_np: number of de agents
-#de_f: factor value
-#de_cr: crosover parameter
-#de_selection: the method to select agents values (random|tournament)
-#de_maxiters: maximum number of iterations
-#de_tsize:  tournament size
-#de_termination: termination rule (doublebox|similarity|maxiters|sumfitness)
-#de_fselection: differential weight method (number, random, adaptive, migrant)
-#de_lrate: The local search rate used in the method
-	METHODPARAMS="--de_np=10n --de_f=0.8 --de_cr=0.9 --de_tsize=4 --de_maxiters=1000 --de_selection=random --de_localsearch=yes --de_lrate=0.01 --de_fselection=migrant"
 elif [ $METHOD = "iPso" ]
 then
 #ipso_particles: number of pso particles
