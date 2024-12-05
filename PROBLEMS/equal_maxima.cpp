@@ -3,36 +3,45 @@
 Equal_Maxima::Equal_Maxima()
  :Problem(1)
 {
-    Data l, r;
-    l.resize(dimension);
-    r.resize(dimension);
-    for (int i = 0; i < dimension; i++)
-    {
-        l[i] = 0.0;
-        r[i] =  1.0;
+
+}
+
+
+double Equal_Maxima::funmin(Data &x) {
+    double result = 0.0;
+    for (int i = 0; i < dimension; i++) {
+        double sin_value = sin(5.0 * M_PI * x[i]);
+        result += pow(sin_value, 6.0);
     }
+
+    return result;
+}
+
+Data Equal_Maxima::gradient(Data &x) {
+    Data g(dimension);
+    for (int i = 0; i < dimension; i++) {
+        double sin_value = sin(5.0 * M_PI * x[i]);
+        double cos_value = cos(5.0 * M_PI * x[i]);
+        g[i] = 30.0 * M_PI * pow(sin_value, 5.0) * cos_value;
+    }
+
+    return g;
+}
+
+void Equal_Maxima::init(QJsonObject &params) {
+    int n = params["opt_dimension"].toString().toInt();
+    setDimension(n);
+    Data l, r;
+    l.resize(n);
+    r.resize(n);
+
+    for (int i = 0; i < n; i++) {
+        l[i] = -dimension;
+        r[i] = dimension;
+    }
+
     setLeftMargin(l);
     setRightMargin(r);
 }
 
 
-
-double  Equal_Maxima::funmin(Data &x)
-{
-
-    double sin_value = sin(5.0 * M_PI * x[0]);
-    return pow(sin_value, 6.0);
-
-}
-
-Data   Equal_Maxima::gradient(Data &x)
-{
-    Data g(dimension);
-    double sin_value = sin(5 * M_PI * x[0]);
-    double cos_value = cos(5 * M_PI * x[0]);
-    g[0] = 30.0 * M_PI * pow(sin_value, 5.0) * cos_value;
-    return g;
-
-
-
-}

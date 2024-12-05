@@ -1,15 +1,13 @@
-#ifndef F14_H
-#define F14_H
+#ifndef SCHWEFEL222_H
+#define SCHWEFEL222_H
 # include <OPTIMUS/problem.h>
 
-class f14 : public Problem
+class schwefel222 : public Problem
 {
 public:
-    f14 ();
+    schwefel222 ();
     double funmin(Data &x);
     Data gradient(Data &x);
     void init(QJsonObject &params);
 };
-
-
-#endif // F14_H
+#endif // SCHWEFEL222_H

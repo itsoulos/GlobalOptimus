@@ -3,16 +3,7 @@
 f13::f13()
     : Problem(2)
 {
-    Data l, r;
-    l.resize(dimension);
-    r.resize(dimension);
-    for (int i = 0; i < dimension; i++)
-    {
-        l[i] = -100;
-        r[i] =  100;
-    }
-    setLeftMargin(l);
-    setRightMargin(r);
+
 }
 
 double f13::funmin( Data &x){
@@ -48,4 +39,19 @@ Data f13::gradient(Data &x)
     }
 
     return g;
+}
+void f13::init(QJsonObject &params) {
+    int n = params["opt_dimension"].toString().toInt();
+    setDimension(n);
+    Data l, r;
+    l.resize(n);
+    r.resize(n);
+
+    for (int i = 0; i < n; i++) {
+        l[i] = -dimension;
+        r[i] = dimension;
+    }
+
+    setLeftMargin(l);
+    setRightMargin(r);
 }

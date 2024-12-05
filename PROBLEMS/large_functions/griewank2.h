@@ -1,15 +1,14 @@
-#ifndef F14_H
-#define F14_H
+#ifndef GRIEWANK2_H
+#define GRIEWANK2_H
 # include <OPTIMUS/problem.h>
 
-class f14 : public Problem
+class Griewank2 : public Problem
 {
 public:
-    f14 ();
+    Griewank2();
     double funmin(Data &x);
     Data gradient(Data &x);
     void init(QJsonObject &params);
 };
 
-
-#endif // F14_H
+#endif // GRIEWANK2_H

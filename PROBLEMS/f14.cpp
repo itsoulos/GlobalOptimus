@@ -2,32 +2,22 @@
 #include <cmath>
 
 
-static double a[2][25] = {
--32,-16,0,16,32,-32,-16,0,16,32,-32,-16,0,16,32,-32,-16,0,16,32,-32,-16,0,16,32
-, -32,-32,-32,-32,-32,-16,-16,-16,-16,-16,0,0,0,0,0,16,16,16,16,16,32,32,32,32,32
+static double a[2][25] = {{-32,-16,0,16,32,-32,-16,0,16,32,-32,-16,0,16,32,-32,-16,0,16,32,-32,-16,0,16,32}, {-32,-32,-32,-32,-32,-16,-16,-16,-16,-16,0,0,0,0,0,16,16,16,16,16,32,32,32,32,32}
 };
 
 f14::f14()
     : Problem(2)
 {
-    Data l, r;
-    l.resize(2);
-    r.resize(2);
-    for (int i = 0; i < 2; i++)
-    {
-        l[i] = -65;
-        r[i] =  65;
-    }
-    setLeftMargin(l);
-    setRightMargin(r);
+
 }
 
 double f14::funmin(Data &x) {
+    int dimension=x.size();
 	double sumj=0;
 	for(int j=0;j<25;j++)
 	{
 		double sum2=0.0;
-		for(int i=0;i<2;i++)
+        for(int i=0;i<dimension;i++)
 			sum2+=pow(x[i]-a[i][j],6.0);
 		sumj+=1.0/(j+1.0 +sum2);
 	}
@@ -40,9 +30,9 @@ static double dmax(double a,double b)
 }
 Data f14::gradient(Data &x)
 
-{ int n=x.size();
+{
     Data g;
-    g.resize(n);
+    g.resize(dimension);
 	for(int i=0;i<dimension;i++)
 	{
 		double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -55,4 +45,20 @@ Data f14::gradient(Data &x)
 	}
 	return g;
 
+}
+
+void f14::init(QJsonObject &params) {
+    int n = params["opt_dimension"].toString().toInt();
+    setDimension(n);
+    Data l, r;
+    l.resize(n);
+    r.resize(n);
+
+    for (int i = 0; i < n; i++) {
+        l[i] = -dimension;
+        r[i] = dimension;
+    }
+
+    setLeftMargin(l);
+    setRightMargin(r);
 }

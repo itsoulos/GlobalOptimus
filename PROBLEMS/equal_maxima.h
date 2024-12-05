@@ -8,6 +8,7 @@ public:
     Equal_Maxima();
     double funmin(Data &x);
     Data gradient(Data &x);
+    void init(QJsonObject &params);
 };
 
 #endif // EQUAL_MAXIMA_H

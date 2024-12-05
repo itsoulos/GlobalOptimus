@@ -9,6 +9,7 @@ public:
     double funmin(Data &x);
     Data gradient(Data &x);
     double u(double xi, double a, double k, double m);
+    void init(QJsonObject &params);
 
 };
 

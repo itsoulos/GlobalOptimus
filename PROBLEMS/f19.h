@@ -8,6 +8,7 @@ public:
     f19 ();
     double funmin(Data &x);
     Data gradient(Data &x);
+    void init(QJsonObject &params);
 };
 
 #endif // F19_H

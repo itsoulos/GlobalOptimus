@@ -1,15 +1,17 @@
-#ifndef F14_H
-#define F14_H
+#ifndef SPHERE_H
+#define SPHERE_H
 # include <OPTIMUS/problem.h>
-
-class f14 : public Problem
+class Sphere : public Problem
 {
 public:
-    f14 ();
+   Sphere ();
     double funmin(Data &x);
     Data gradient(Data &x);
     void init(QJsonObject &params);
 };
 
+#endif // SPHERE_H
 
-#endif // F14_H
+
+
+

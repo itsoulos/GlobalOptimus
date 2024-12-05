@@ -1,15 +1,14 @@
-#ifndef F14_H
-#define F14_H
+#ifndef HARTMAN6_H
+#define HARTMAN6_H
 # include <OPTIMUS/problem.h>
 
-class f14 : public Problem
+class Hartman6 : public Problem
 {
 public:
-    f14 ();
+    Hartman6();
     double funmin(Data &x);
     Data gradient(Data &x);
     void init(QJsonObject &params);
 };
 
-
-#endif // F14_H
+#endif // HARTMAN6_H

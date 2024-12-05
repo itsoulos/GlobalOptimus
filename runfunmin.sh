@@ -92,8 +92,10 @@ then
 #de_selection: the method to select agents values (random|tournament)
 #de_maxiters: maximum number of iterations
 #de_tsize:  tournament size
-#de_termination: termination rule (doublebox|similarity|maxiters)
-	METHODPARAMS="--de_np=10n --de_f=0.8 --de_cr=0.9 --de_tsize=4 --de_maxiters=1000 --de_selection=random"
+#de_termination: termination rule (doublebox|similarity|maxiters|sumfitness)
+#de_fselection: differential weight method (number, random, adaptive, migrant)
+#de_lrate: The local search rate used in the method
+	METHODPARAMS="--de_np=10n --de_f=0.8 --de_cr=0.9 --de_tsize=4 --de_maxiters=1000 --de_selection=random --de_localsearch=yes --de_lrate=0.01 --de_fselection=migrant"
 elif [ $METHOD = "iPso" ]
 then
 #ipso_particles: number of pso particles

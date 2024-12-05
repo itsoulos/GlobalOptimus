@@ -5,15 +5,7 @@
 f12::f12()
     : Problem(30)
 {
-    Data l, r;
-    l.resize(dimension);
-    r.resize(dimension);
-    for (int i = 0; i < dimension; i++) {
-        l[i] = -100;
-        r[i] = 100;
-    }
-    setLeftMargin(l);
-    setRightMargin(r);
+
 }
 
 double f12::u(double xi, double a, double k, double m) {
@@ -59,9 +51,9 @@ double calculate_z(double *u) {
 }
 
 double f12::funmin(Data &x) {
-    int n = x.size();
-    double y[x.size()];
-    for (int i = 0; i < n; ++i) {
+   int dimension=x.size();
+    double y[dimension];
+    for (int i = 0; i < dimension; ++i) {
         y[i] = 1 + (x[i] + 1) / 4.0;
     }
     return calculate_z(y);
@@ -72,10 +64,9 @@ static double dmax(double a,double b)
 	return a>b?a:b;
 }
 Data f12::gradient(Data &x)
-
-{ int n=x.size();
-    Data g;
-    g.resize(n);
+{
+ Data g;
+    g.resize(dimension);
 	for(int i=0;i<dimension;i++)
 	{
 		double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -89,4 +80,19 @@ Data f12::gradient(Data &x)
 	return g;
 
 }
+    void f12::init(QJsonObject &params) {
+        int n = params["opt_dimension"].toString().toInt();
+        setDimension(n);
+        Data l, r;
+        l.resize(n);
+        r.resize(n);
+
+        for (int i = 0; i < n; i++) {
+            l[i] = -dimension;
+            r[i] = dimension;
+        }
+
+        setLeftMargin(l);
+        setRightMargin(r);
+    }
 

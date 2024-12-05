@@ -16,6 +16,8 @@ DifferentialEvolution::DifferentialEvolution()
     yes_no<<"no"<<"yes";
     addParam(Parameter("de_localsearch",yes_no[0],yes_no,"Perform local search at every iteration. Values: no,yes"));
 
+    addParam(Parameter("de_lrate",0.0,0.0,1.0,"The local search rate"));
+
     QStringList de_selection;
     de_selection<<"random"<<"tournament";
     addParam(Parameter("de_selection",de_selection[0],
@@ -85,6 +87,7 @@ void DifferentialEvolution::step()
     double bestMin = 0;
     bool is_local = false;
     bool is_migrant = false;
+    double lrate = getParam("de_lrate").getValue().toDouble();
 
 
     if (de_fselection == "migrant")
@@ -176,7 +179,7 @@ void DifferentialEvolution::step()
 	}
 
 	if(minDist<=1e-4) countAvoid++;
-        double ft = (is_local && minDist>1e-4) ? localSearch(trialx) : myProblem->statFunmin(trialx);
+        double ft = (lrate>0.0 && minDist>1e-4 && myProblem->randomDouble()<=lrate) ? localSearch(trialx) : myProblem->statFunmin(trialx);
 
         if (ft < y)
         {
