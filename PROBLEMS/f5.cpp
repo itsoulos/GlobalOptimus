@@ -1,12 +1,12 @@
 #include "f5.h"
 
-F5::F5()
+f5::f5()
     : Problem(2)
 {
 
 }
 
-double F5::funmin(Data &x) {
+double f5::funmin(Data &x) {
 
     double result = 0.0;
 
@@ -21,7 +21,7 @@ double F5::funmin(Data &x) {
     return -4.0 * result;
 }
 
-Data F5::gradient(Data &x) {
+Data f5::gradient(Data &x) {
     Data g;
     g.resize(dimension);
 
@@ -42,16 +42,17 @@ Data F5::gradient(Data &x) {
     return g;
 }
 
-void F5::init(QJsonObject &params) {
-    int n = params["opt_dimension"].toInt();
+void f5::init(QJsonObject &params) {
+    int n = params["opt_dimension"].toString().toInt();
     setDimension(n);
     Data l, r;
     l.resize(n);
     r.resize(n);
 
+
     for (int i = 0; i < n; i++) {
-        l[i] = -dimension;
-        r[i] = dimension;
+        l[i] = -n;
+        r[i] = n;
     }
 
     setLeftMargin(l);

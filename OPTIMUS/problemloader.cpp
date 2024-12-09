@@ -220,10 +220,10 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new F1();
     else
     if(name == "f3")
-        myProblem = new F3();
+        myProblem = new f3();
     else
     if(name == "f5")
-        myProblem = new F5();
+        myProblem = new f5();
     else
     if(name == "f9")
         myProblem = new f9();

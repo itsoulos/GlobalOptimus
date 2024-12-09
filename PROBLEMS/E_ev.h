@@ -19,6 +19,7 @@ double Bij(const Data &x, size_t i, size_t j);
 double distance(const Data &x, size_t i, size_t j);
 double fij(double rij);
 double VR(double rij) ;
+double Fij(const Data &x, size_t i, size_t j);
 void init(QJsonObject &params);
 double VA(double rij);
 };
