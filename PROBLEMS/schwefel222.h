@@ -8,5 +8,6 @@ public:
     schwefel222 ();
     double funmin(Data &x);
     Data gradient(Data &x);
+    void init(QJsonObject &params);
 };
 #endif // SCHWEFEL222_H

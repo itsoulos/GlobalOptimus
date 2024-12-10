@@ -3,28 +3,19 @@
 schwefel221::schwefel221()
     : Problem(2)
 {
-    Data l, r;
-    l.resize(dimension);
-    r.resize(dimension);
-    for (int i = 0; i < dimension; i++)
-    {
-        l[i] = -500;
-        r[i] = 500;
-    }
-    setLeftMargin(l);
-    setRightMargin(r);
+
 }
 
 double schwefel221::funmin( Data &x)
-{ int n=x.size();
+{  int dimension=x.size();
     double y ;
     double sum = 0.0;
 
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < dimension; ++i) {
         sum += -x[i] * sin(sqrt(abs(x[i])));
     }
 
-   y = 418.9829 * n + sum;
+   y = 418.9829 * dimension + sum;
 
     return y;
 
@@ -38,9 +29,8 @@ static double dmax(double a,double b)
 }
 Data schwefel221::gradient(Data &x)
 
-{ int n=x.size();
-    Data g;
-    g.resize(n);
+{     Data g;
+      g.resize(dimension);
 	for(int i=0;i<dimension;i++)
 	{
 		double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -55,3 +45,18 @@ Data schwefel221::gradient(Data &x)
 
 }
 
+void  schwefel221::init(QJsonObject &params) {
+    int n = params["opt_dimension"].toString().toInt();
+    setDimension(n);
+    Data l, r;
+    l.resize(n);
+    r.resize(n);
+
+    for (int i = 0; i < n; i++) {
+        l[i] = -dimension;
+        r[i] = dimension;
+    }
+
+    setLeftMargin(l);
+    setRightMargin(r);
+}

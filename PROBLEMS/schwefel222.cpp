@@ -3,23 +3,31 @@
 schwefel222::schwefel222()
     : Problem(2)
 {
+
+}
+void  schwefel222::init(QJsonObject &params) {
+    int n = params["opt_dimension"].toString().toInt();
+    setDimension(n);
     Data l, r;
-    l.resize(2);
-    r.resize(2);
-    for (int i = 0; i < 2; i++)
-    {
-        l[i] = -10;
-        r[i] = 10;
+    l.resize(n);
+    r.resize(n);
+
+    for (int i = 0; i < n; i++) {
+        l[i] = -dimension;
+        r[i] = dimension;
     }
+
     setLeftMargin(l);
     setRightMargin(r);
 }
-
 double schwefel222::funmin( Data &x)
-{    double y ;
+
+{
+    int dimension=x.size();
+    double y ;
     double p =1.0;
     double sum = 0.0;
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < dimension; ++i) {
         sum = sum + abs(x[i]);
          p= p*abs(x[i]);
     }
@@ -36,10 +44,10 @@ Data schwefel222::gradient(Data &x)
 
 {
     Data g;
-    g.resize(2);
+          g.resize(dimension);
     double p =1.0;
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < dimension; ++i) {
         double s_xi = (x[i] > 0) ? 1.0 : -1.0;
         double p_without_xi = (x[i] == 0) ? 0 : p/ abs(x[i]);
         g[i] = s_xi + p_without_xi * s_xi;  }

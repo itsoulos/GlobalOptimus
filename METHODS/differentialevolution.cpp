@@ -143,9 +143,10 @@ void DifferentialEvolution::step()
         xb = agentx[randomB];
         xc = agentx[randomC];
 
-        int R = rand() % myProblem->getDimension();
+        int R ;
         Data trialx = x;
 
+		R= rand() % myProblem->getDimension();
         for (int j = 0; j < myProblem->getDimension(); j++)
         {
             double rj = myProblem->randomDouble();
@@ -159,6 +160,7 @@ void DifferentialEvolution::step()
 		    F = migrantWeights[i];	
 
                 trialx[j] = xa[j] + F * (xb[j] - xc[j]);
+		if(!myProblem->isPointIn(trialx)) trialx[j]=x[j];
             }
             else
                 trialx[j] = x[j];
