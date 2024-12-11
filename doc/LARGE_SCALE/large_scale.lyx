@@ -317,7 +317,7 @@ Global optimization is fundamental to engineering and computer science as
 
 \begin_layout Keywords
 Optimization; Differential evolution; Evolutionary techniques; Stochastic
- methods; Large-Scale problems;
+ methods; Large-Scale problems
 \end_layout
 
 \begin_layout Section
@@ -335,6 +335,528 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
+\begin_layout Standard
+The proposed algorithm incorporates a series of modifications to the original
+ differential evolution method, which makes finding the global minimum in
+ high - dimensional problems more efficient.
+ The main steps of the proposed method are listed subsequently.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as NP the population size of the method (number of agents).
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ randomly from a distribution NP agents 
+\begin_inset Formula $x_{i},\ i=1,\ldots,\mbox{NP}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Compute
+\series default
+ the fitness value 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+ of each agent 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ using the objective function as 
+\begin_inset Formula $f_{i}=f\left(x_{i}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $p_{l}$
+\end_inset
+
+ the local search rate.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the integer parameter 
+\begin_inset Formula $N_{t}$
+\end_inset
+
+ as the tournament size.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ the maximum number of iterations allowed.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ the number of iterations used in the stopping rule.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=0$
+\end_inset
+
+, the iteration counter.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the parameter CR, which represents the crossover probability with 
+\begin_inset Formula $\mbox{CR\ensuremath{\le1}}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ the differential weight method, which is represented by the parameter 
+\begin_inset Formula $F$
+\end_inset
+
+.
+ In the proposed method three distinct methods were incorporated:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Number
+\series default
+.
+ In this case the parameter 
+\begin_inset Formula $F$
+\end_inset
+
+ is chosen as a constant value.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Random
+\series default
+.
+ The random method represents the differential weight mechanism proposed
+ by Charilogis et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_char"
+literal "false"
+
+\end_inset
+
+, where it is defined as:
+\begin_inset Formula 
+\begin{equation}
+F=-0.5+2r
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $r$
+\end_inset
+
+ is a random number with 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Migrant
+\series default
+.
+ In this case the differential weight mechanism proposed in 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_migrant"
+literal "false"
+
+\end_inset
+
+ was used.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,\mbox{NP}$
+\end_inset
+
+ 
+\series bold
+do
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:For--do"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ the agent 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ randomly three distinct agents 
+\begin_inset Formula $x_{a},x_{b},x_{c}$
+\end_inset
+
+.
+ The selection of these agents could be performed randomly or with the applicati
+on of the tournament selection procedure.
+ During tournament selection, a subset of 
+\begin_inset Formula $N_{t}$
+\end_inset
+
+ agents are selected from the current population and the one with the lowest
+ fitness value is selected.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Choose
+\series default
+ a random integer 
+\begin_inset Formula $R\in[1,n],$
+\end_inset
+
+where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the dimension of the objective problem.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ a trial point 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $j=1,\ldots.n$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ a random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $r\le\mbox{CR}$
+\end_inset
+
+ 
+\series bold
+or
+\series default
+ 
+\begin_inset Formula $i=R$
+\end_inset
+
+ 
+\series bold
+then
+\series default
+ 
+\begin_inset Formula $x_{t,j}=x_{a,j}+F\times\left(x_{b,j}-x_{c,j}\right)$
+\end_inset
+
+ 
+\series bold
+else
+\series default
+ 
+\begin_inset Formula $x_{t,j}=x_{i,j}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $y_{t}=f\left(x_{t}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $y_{t}\le f_{i}$
+\end_inset
+
+ 
+\series bold
+then
+\series default
+ 
+\begin_inset Formula $x_{i}=x_{t},\ f_{i}=y_{t}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ a random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $r\le p_{l}$
+\end_inset
+
+ then 
+\begin_inset Formula $x_{i}=\mbox{LS\left(x_{i}\right)},$
+\end_inset
+
+where LS defines a local search procedure.
+ In the proposed method the BFGS variant of Powell 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+ was used.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Check for termination
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\ge N_{g}$
+\end_inset
+
+ then terminate.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Check
+\series default
+ the termination rule specified in the work of Charilogis et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_char"
+literal "false"
+
+\end_inset
+
+.
+ In this work the quantity 
+\begin_inset Formula 
+\begin{equation}
+\delta^{(k)}=\left|\sum_{i=1}^{\mbox{NP}}\left|f_{i}^{(k)}\right|-\sum_{i=1}^{\mbox{NP}}\left|f_{i}^{(k-1)}\right|\right|
+\end{equation}
+
+\end_inset
+
+is calculated.
+ The term 
+\begin_inset Formula $f_{i}^{(k)}$
+\end_inset
+
+ stands for the fitness value of agent 
+\begin_inset Formula $i$
+\end_inset
+
+ at iteration 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\delta^{(k)}\le\epsilon$
+\end_inset
+
+ for a number of 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ iterations, then terminate the algorithm else goto step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:For--do"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -346,32 +868,221 @@ name "sec:Results"
 
 \end_layout
 
+\begin_layout Standard
+This section begins with a description of the functions that will be used
+ in the experiments and then presents in detail the experiments that were
+ performed, in which the parameters available in the proposed algorithm
+ were studied in order to study its reliability and adequacy.
+ 
+\end_layout
+
 \begin_layout Subsection
 Test Functions
+\end_layout
+
+\begin_layout Standard
+A variety of test functions was used in the conducted experiments.
+ These functions are used in a series of research papers 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "testfunc1,testfunc2,testfunc2-1,testfunc4"
+literal "false"
+
+\end_inset
+
+.
+ In the present research work, these functions were used with a varying
+ number of dimensions from 5 to 20.
+ The description of each used test function is provided below.
+ In all cases the constant 
+\begin_inset Formula $n$
+\end_inset
+
+ defines the dimension of the objective function\SpecialChar endofsentence
+
+\end_layout
+
+\begin_layout Itemize
+F9 function, which is defined as:
+\begin_inset Formula 
+\[
+f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad x\in[0,1]^{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+F12 function, having the following definition:
+\begin_inset Formula 
+\begin{align*}
+f(x) & =\frac{\pi}{n}\left(10\sin\left(\pi y_{1}\right)+\sum_{i=1}^{n-1}\left(\left(y_{i}-1\right)^{2}\left(1+10\sin^{2}\left(\pi y_{i+1}\right)\right)\right)+\left(y_{n}-1\right)^{2}\right)\\
+ & +\sum_{i=1}^{n}u\left(x_{i},10,100,4\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+F13 function, defined as:
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+F14 function, which is defined as follows:
+\begin_inset Formula 
+\[
+f(x)=\left(\frac{1}{500}+\sum_{j=1}^{25}\frac{1}{j+\sum_{i=1}^{n}\left(x_{i}-a_{ij}\right)^{6}}\right)^{-1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+F15 function, with the following definition
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{11}\left(a_{i}-\frac{x_{1}\left(b_{i}+b_{i}x_{2}\right)}{b_{i}^{2}+b_{i}x_{3}+x_{4}}\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+F18 function, which has the following definition
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{4}c_{1}\exp\left(-\sum_{j=1}^{n}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $c_{1}=0.965$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+F19 function, defined as
+\begin_inset Formula 
+\[
+f(x)=-\sum_{i=1}^{4}c_{1}\exp\left(-\sum_{j=1}^{n}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $c_{1}=0.83$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+TEST2N function, with the following definition:
+\begin_inset Formula 
+\[
+f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5].
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+ELP function, with the following definition:
+\begin_inset Formula 
+\[
+f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+SCHWEFEL221 function, defined as
+\begin_inset Formula 
+\[
+f(x)=418.9829n+\sum_{i=1}^{n}-x_{i}\sin\left(\sqrt{\left|x_{i}\right|}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+SINU function defined as:
+\begin_inset Formula 
+\[
+f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi.
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 Experimental results 
 \end_layout
 
-\begin_layout Enumerate
-RANDOM(R)=random weight me random selection
+\begin_layout Standard
+A series of experiments was carried out for the previously mentioned functions
+ and these experiments were executed on an AMD RYZEN 5950X with 128GB RAM.
+ The operating system of the running machine was Debian Linux.
+ Each experiment was conducted 30 times, with different random numbers each
+ time and the averages were recorded.
+ The software used in the experiments was coded in ANSI C++ using the freely
+ available optimization environment of OPTIMUS, that can be downloaded from
+\series bold
+ 
+\series default
+
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/itsoulos/OPTIMUS
 \end_layout
 
-\begin_layout Enumerate
-RANDOM(T)=random weight me tournament selection
-\end_layout
+\end_inset
 
-\begin_layout Enumerate
-MIGRANT(R)=migrant weight me random selection
-\end_layout
+ (accessed on 11 December 2024).
+ The values for the experimental parameters used in the proposed method
+ are outlined in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expSettings"
+plural "false"
+caps "false"
+noprefix "false"
 
-\begin_layout Enumerate
-MIGRANT(T)=migrant weight me tournament selection
-\end_layout
+\end_inset
 
-\begin_layout Subsection
-The effect of differential weight mechanism
+.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -379,7 +1090,364 @@ The effect of differential weight mechanism
 placement H
 wide false
 sideways false
-status open
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The values of the parameters of the proposed method.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:expSettings"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PARAMETER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+MEANING
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+VALUE
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NP
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of agents
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+200
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $p_{l}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Local search rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.01
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Differential weight
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CR
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Crossover probability
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{g}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Maximum number of allowed iterations
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+200
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{I}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of iterations used in the termination rule
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{t}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tournament size
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+In the following tables that depict the experimental results the numbers
+ in cells stand for the average function calls, as measured on 30 independent
+ runs.
+ The numbers in parentheses denote the fraction of the executions where
+ the method discovered successfully the global minimum.
+ If this number is not present, then the method managed to locate the global
+ minimum in every run (success 100%).
+\end_layout
+
+\begin_layout Subsection
+The effect of differential weight mechanism
+\end_layout
+
+\begin_layout Standard
+The table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expWeight"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ presents the objective function evaluations required by the differential
+ evolution method for different test functions and dimensions.
+ It is noted that the sample selection in the basic differential evolution
+ framework is random.
+ Three approaches for calculating the differential weight are compared:
+ constant value, random selection, and the MIGRANT approach.
+ The values in parentheses indicate the success rate of each approach (e.g.,
+ 0.97 corresponds to 97%).
+ In all cases, the initial sample distribution was uniform.
+ The analysis of the results shows that the number of objective function
+ evaluations generally increases with the dimension for all test functions.
+ For example, in the F9 function, the evaluations increase from 69034 in
+ dimension 5 to 75942 in dimension 20 when the differential weight is constant.
+ Similar trends are observed in the other two approaches, with the MIGRANT
+ approach generally requiring fewer evaluations, especially in higher dimensions.
+ The performance of the MIGRANT approach varies depending on the function
+ and the dimension.
+ For instance, in the F15 function with dimension 20, MIGRANT records 6145
+ evaluations with a success rate of 0.97, a significantly lower number of
+ evaluations compared to the other two approaches.
+ Conversely, in the F13 function for dimension 20, relatively low success
+ rates are observed (0.37 for the MIGRANT approach versus 0.63 when the differenti
+al weight is constant).
+ The average number of evaluations for the three approaches is 931043 for
+ a constant differential weight, 825891 for random selection, and 445122
+ for the MIGRANT approach.
+ The success rates are similar across the approaches, with values of 0.82,
+ 0.83, and 0.81, respectively.
+ However, the MIGRANT approach demonstrates greater efficiency in several
+ cases, achieving comparable or even higher success rates with significantly
+ fewer evaluations.
+ Specific functions such as TEST2N and F15 clearly show the superiority
+ of MIGRANT, as this approach achieves high success rates (up to 0.97) with
+ a reduced number of evaluations.
+ Similarly, in the SCHWEFEL221 function, MIGRANT shows better efficiency
+ for higher dimensions, with an example of 14832 evaluations in dimension
+ 20 compared to 58552 when the differential weight is constant.
+ In conclusion, MIGRANT emerges as an approach that offers competitive advantage
+s over the other two, especially in higher-dimensional problems.
+ The choice of the appropriate approach depends on the problem requirements
+ and the complexity of the test function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3048,8 +4116,111 @@ AVERAGE
 
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+(TEXT FOR FIGURE HERE)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename stat1.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison between the different variations of the proposed
+ method for the series of objective problems.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statWeight"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 The effect of selection mechanism
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:selection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ compares four approaches for computing the differential weight: random
+ differential weight with random selection (RANDOM(R)), random differential
+ weight with tournament selection (RANDOM(T)), MIGRANT differential weight
+ with random selection (MIGRANT(R)), and MIGRANT differential weight with
+ tournament selection (MIGRANT(T)).
+ Values in parentheses indicate the success rate for each approach (e.g.,
+ 0.97 corresponds to 97%).
+ In all cases, the initial sample distribution was uniform.
+ The results analysis shows a systematic reduction in the number of objective
+ function evaluations when transitioning from RANDOM(R) to MIGRANT(T).
+ For instance, in function F9 with a dimension of 5, the evaluations decrease
+ from 68262 in RANDOM(R) to 4337 in MIGRANT(T), but the success rate drops
+ significantly from 0.57 to 0.23.
+ Similar trends are observed in other cases, where MIGRANT(T) drastically
+ reduces the evaluations, but the success rate is alarmingly low in many
+ instances.
+ MIGRANT(T) records the lowest average number of evaluations (186307) compared
+ to RANDOM(R) (825891), RANDOM(T) (503875), and MIGRANT(R) (445122).
+ However, MIGRANT(T)’s success rate is only 0.66, a significant disadvantage
+ as it often fails to find the correct solution.
+ This success rate is much lower than the other approaches, which maintain
+ rates close to 0.80-0.83.
+ Examples such as the TEST2N function highlight the challenges of MIGRANT(T).
+ In dimension 20, MIGRANT(T) reduces the evaluations to 4595 compared to
+ 65758 for RANDOM(R), but the success rate falls to 0.10 from RANDOM(R)’s
+ 0.93.
+ A similar scenario occurs in the SINU function with a dimension of 5, where
+ MIGRANT(T) requires 3326 evaluations with a success rate of 0.77, compared
+ to RANDOM(R)’s 9938 evaluations but with higher reliability (success rate
+ of 1.0).
+ It is essential to note that despite the reduction in evaluations, MIGRANT(T)
+ is particularly ineffective when solution accuracy is a priority.
+ Applications requiring high accuracy (i.e., high success rates) will face
+ significant challenges with this approach, limiting its usability to specific
+ problem domains.
+ In conclusion, MIGRANT(T) offers remarkable reductions in the number of
+ evaluations, but its very low success rate (66% on average) is a major
+ drawback.
+ This makes it less suitable for scenarios where solution reliability is
+ critical, even though the reduction in evaluations is impressive.
+ Its selection should be made cautiously, depending on the problem’s requirement
+s.
 \end_layout
 
 \begin_layout Standard
@@ -3057,7 +4228,7 @@ The effect of selection mechanism
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3066,7 +4237,7 @@ status open
 Experimental results comparing random and tournament selection.
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:fselection"
+name "tab:selection"
 
 \end_inset
 
@@ -6234,24 +7405,111 @@ AVERAGE
 
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+(TEXT FOR FIGURE HERE)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename stat2.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the used selection methods.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statSelection"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 The effect of sampling method
 \end_layout
 
-\begin_layout Enumerate
-Random(U)=>Random Weight me Uniform sampling
-\end_layout
+\begin_layout Standard
+In Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sampling"
+plural "false"
+caps "false"
+noprefix "false"
 
-\begin_layout Enumerate
-Random(K)=>Random weight me kmeans sampling
-\end_layout
+\end_inset
 
-\begin_layout Enumerate
-Migrant(U)=>Migrant Weight me Uniform sampling
-\end_layout
-
-\begin_layout Enumerate
-Migrant(K)=>Migrant Weight me kmeans sampling
+, the selection of samples used in the core formula of differential evolution
+ is conducted through tournament selection.
+ Four approaches for computing the differential weight are compared: random
+ weight with uniform sampling (Random(U)), random weight with k-means sampling
+ (Random(K)), MIGRANT weight with uniform sampling (Migrant(U)), and MIGRANT
+ weight with k-means sampling (Migrant(K)).
+ The use of k-means sampling has a decisive impact on reducing the number
+ of objective function evaluations and improving success rates.
+ For example, in the Random method, k-means sampling (Random(K)) dramatically
+ reduces the number of evaluations while significantly increasing success
+ rates.
+ In function F9 with a dimension of 10, Random(U) requires 71680 evaluations
+ with a success rate of only 3%, whereas Random(K) reduces the evaluations
+ to 62309 and boosts the success rate to 97%.
+ Similar outcomes are observed in higher dimensions, such as in dimension
+ 20 for the same function, where Random(K) achieves a success rate of 97%
+ with fewer evaluations (74754) compared to Random(U), which has a 3% success
+ rate with 75827 evaluations.
+ A similar impact of k-means is evident in the MIGRANT method.
+ For instance, in function F12 with a dimension of 5, MIGRANT(K) reduces
+ the number of evaluations to 2310 while maintaining a notable success rate
+ of 63%, compared to MIGRANT(U), which requires 3366 evaluations with a
+ success rate of 90%.
+ In more demanding functions, such as SCHWEFEL221 with a dimension of 15,
+ MIGRANT(K) reduces the evaluations to 4134 while maintaining a success
+ rate of 10%, whereas MIGRANT(U) requires 5112 evaluations for the same
+ success rate.
+ The overall effect of k-means sampling is also reflected in the average
+ results.
+ In the Random method, the success rate increases from 80% (Random(U)) to
+ 94% (Random(K)), with a significant reduction in evaluations from 503875
+ to 432601.
+ Similarly, in the MIGRANT method, MIGRANT(K) achieves an average success
+ rate of 83% with only 144826 evaluations, compared to MIGRANT(U), which
+ has a success rate of 66% and requires 186307 evaluations.
+ These findings highlight the critical role of k-means sampling in reducing
+ computational complexity and enhancing the method’s performance.
+ The use of k-means provides an effective strategy for boosting success
+ rates while simultaneously conserving computational resources.
 \end_layout
 
 \begin_layout Standard
@@ -6259,7 +7517,7 @@ Migrant(K)=>Migrant Weight me kmeans sampling
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -9436,8 +10694,122 @@ AVERAGE
 
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+(TEXT FOR FIGURE HERE)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename stat3.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the different sampling techniques.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statSampling"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 The effect of local search rate 
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lrate"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, similarly to the previous tables, presents the number of objective function
+ evaluations for various test functions and dimensions using the differential
+ evolution method.
+ In this case, the initial distribution is based on the k-means technique,
+ sample selection is performed using tournament selection, and the differential
+ weight is calculated stochastically.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(TEXT ABOUT KMEANS HERE)
+\end_layout
+
+\begin_layout Standard
+The difference between the columns lies in the frequency of applying periodic
+ local search, which is used for selecting the differential weight.
+ The evaluated frequencies are 0.005 (0.5%), 0.01 (1%), 0.02 (2%), and 0.04 (4%).
+ The results indicate that higher periodic local search frequencies lead
+ to an increased number of objective function evaluations without a commensurate
+ improvement in success rates.
+ For instance, in function F9 with a dimension of 10, a frequency of 0.005
+ requires 48872 evaluations, while a frequency of 0.04 increases the evaluations
+ to 151795, more than threefold.
+ However, the success rate remains at 97% for both 0.01 and 0.04 frequencies,
+ suggesting that higher frequencies do not significantly enhance performance.
+ Similar trends are observed in other functions.
+ In function TEST2N with a dimension of 20, a frequency of 0.005 requires
+ 11297 evaluations for a success rate of 73%, whereas a frequency of 0.01
+ increases evaluations to 12059, improving the success rate to 97%.
+ However, a frequency of 0.04 raises the evaluations to 14491 without further
+ increasing the success rate.
+ In less demanding functions, such as F12, the impact of periodic local
+ search frequency is smaller.
+ For instance, in dimension 5, evaluations range from 2665 to 2488 without
+ noticeable changes in results.
+ This overall trend is reflected in the averages.
+ With a frequency of 0.005, the average number of evaluations is 335607 with
+ a success rate of 90%.
+ A frequency of 0.01 increases evaluations to 432601, with the success rate
+ reaching 94%.
+ Higher frequencies, 0.02 and 0.04, lead to 496873 and 714296 evaluations,
+ respectively, with success rates marginally rising to 95% and 96%.
+ These findings emphasize the importance of selecting an optimal frequency
+ for applying periodic local search.
+ While higher frequencies may provide slight improvements in success rates,
+ the computational cost increases disproportionately.
+ Lower frequencies, such as 0.005 or 0.01, appear to offer the best balance
+ between efficiency and accuracy.
 \end_layout
 
 \begin_layout Standard
@@ -9445,7 +10817,7 @@ The effect of local search rate
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -12622,20 +13994,918 @@ AVERAGE
 
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+(TEXT FOR FIGURE HERE)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename stat4.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the proposed method and different values of parameter
+ 
+\begin_inset Formula $p_{l}$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statLrate"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Practical problems
+\end_layout
+
+\begin_layout Standard
+The proposed method was tested on some problems inspired by real world,
+ such as the molecular conformation of some atoms or the training of neural
+ networks.
 \end_layout
 
 \begin_layout Subsubsection
 Lennard Jones Potential
 \end_layout
 
-\begin_layout Subsubsection
-Brenner Potential
+\begin_layout Standard
+The first case of practical function is the energy obtained by the molecular
+ conformation of N atoms, that interacts using the Lennard-Jones potential
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Jones"
+literal "true"
+
+\end_inset
+
+.
+ The potential function is expressed as:
+\begin_inset Formula 
+\[
+V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]
+\]
+
+\end_inset
+
+In table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experPotential"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the function calls using the proposed method for this potential are shown.
+ In column NUMBER the results using the number variant of differential weight
+ are shown, while in column RANDOM the average function calls obtained by
+ the Random variance of the differential weight are shown.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Experiments for the Lennard - Jones potential using two different differential
+ weight mechanisms.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:experPotential"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="16" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ATOMS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NUMBER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RANDOM
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2982
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2844
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3856
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3673
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5385
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5183
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8012
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6920
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12866
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10995
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21288
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17577
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35714
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31866
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+57342
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+53424
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+89383
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+77893
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+113164
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+108395
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+144190
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+125621
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+146164
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+134219
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+171496
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+166035
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+195007
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+193038
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+SUM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+1006849
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+937683
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Also in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:potential"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the plot of the function calls against the number of atoms for the previously
+ used differential weight mechanisms is shown.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename potential_plot.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Plot of the function calls for the Lennard - Jones potential using two different
+ial weight mechanisms.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:potential"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+As can be seen from the table of results and the relevant graph, the method
+ that uses the random technique for the differential weight has slightly
+ better results than the technique that uses a fixed differential weight.
+ 
 \end_layout
 
 \begin_layout Subsubsection
-Neural network
+Neural network training
+\end_layout
+
+\begin_layout Standard
+Another interesting problem where the proposed method can be applied is
+ the training of artificial neural networks for classification or regression
+ problems.
+
+\series bold
+ 
+\series default
+Artificial Neural networks (ANNs) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nn1,nn2"
+literal "true"
+
+\end_inset
+
+ are parametric tools machine learning tools that have been used widely
+ in a series of real - world problems, such as problems from physics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnphysics1,nnphysics2,nnphysics3"
+literal "false"
+
+\end_inset
+
+, chemistry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnchem1,nnchem2,nnchem3"
+literal "false"
+
+\end_inset
+
+, economics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnecon1,nnecon2,nncecon3"
+literal "false"
+
+\end_inset
+
+, medicine 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nnmed1,nnmed2"
+literal "false"
+
+\end_inset
+
+ etc.
+ Artificial neural networks are usually expressed as a function 
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{w})$
+\end_inset
+
+, where the vector 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+ defines the input pattern and the vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ stands for the weight vector of the neural network (set of parameters).
+ The training of the neural network is performed with the adjustment of
+ vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+in order to minimize the so - called training error which is expressed as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+E\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\end{equation}
+
+\end_inset
+
+The set 
+\begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
+\end_inset
+
+ represents the train set of the neural network.
+ The value 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ stand for the actual output for pattern 
+\begin_inset Formula $\overrightarrow{x_{i}}$
+\end_inset
+
+ .
+ 
+\end_layout
+
+\begin_layout Standard
+The proposed method was applied to train a neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes for the following series of classification datasets, found
+ in the relevant literature 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "UCL,Keel"
+literal "false"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Pima
+\series default
+ dataset 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pima"
+literal "false"
+
+\end_inset
+
+, which is used to detect the presence of the diabetes disease.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Regions2
+\series default
+ dataset, related to the detection hepatitis C 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "regions"
+literal "true"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Wdbc
+\series default
+ dataset 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wdbc"
+literal "false"
+
+\end_inset
+
+, a medical related to breast cancer detection.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Wine
+\series default
+ dataset, used for the detection of quality of wines 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wine1,wine2"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Eeg
+\series default
+ datasets, a dataset related to EEG measurements 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "eeg"
+literal "true"
+
+\end_inset
+
+.
+ In the conducted experiments the case of Z_F_S was used.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Zoo
+\series default
+ dataset 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zoo"
+literal "false"
+
+\end_inset
+
+, used to classify animals.
+\end_layout
+
+\begin_layout Standard
+The experimental results using the proposed method and a series of differential
+ weight methods are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expNeural"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -12646,15 +14916,13 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Application of the proposed method with a series of differential weights
  on a neural network used for data classification problems.
+ Numbers in cells represent average classification error as measured on
+ the test set of the objective problem.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:expNeural"
@@ -12672,7 +14940,7 @@ name "tab:expNeural"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="4">
+<lyxtabular version="3" rows="8" columns="4">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -12721,6 +14989,120 @@ MIGRANT
 \begin_inset Text
 
 \begin_layout Plain Layout
+PIMA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.91%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.71%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.99%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+REGIONS2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.98%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.04%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.54%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WDBC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.22%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.32%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.51%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 WINE
 \end_layout
 
@@ -12759,44 +15141,6 @@ WINE
 \begin_inset Text
 
 \begin_layout Plain Layout
-WDBC
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4.51%
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 Z_F_S
 \end_layout
 
@@ -12806,7 +15150,7 @@ Z_F_S
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+21.39%
 \end_layout
 
 \end_inset
@@ -12815,7 +15159,7 @@ Z_F_S
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+19.17%
 \end_layout
 
 \end_inset
@@ -12824,7 +15168,45 @@ Z_F_S
 \begin_inset Text
 
 \begin_layout Plain Layout
+8.16%
+\end_layout
 
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ZOO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.77%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.70%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.13%
 \end_layout
 
 \end_inset
@@ -12835,7 +15217,9 @@ Z_F_S
 \begin_inset Text
 
 \begin_layout Plain Layout
-PIMA
+
+\series bold
+AVERAGE
 \end_layout
 
 \end_inset
@@ -12845,6 +15229,8 @@ PIMA
 
 \begin_layout Plain Layout
 
+\series bold
+20.42%
 \end_layout
 
 \end_inset
@@ -12854,6 +15240,8 @@ PIMA
 
 \begin_layout Plain Layout
 
+\series bold
+19.76%
 \end_layout
 
 \end_inset
@@ -12863,6 +15251,8 @@ PIMA
 
 \begin_layout Plain Layout
 
+\series bold
+13.43%
 \end_layout
 
 \end_inset
@@ -12877,7 +15267,8 @@ PIMA
 
 \end_inset
 
-
+As it can be deduced from this table, the method MIGRANT proved to be more
+ effective in terms of classification error from the other methods.
 \end_layout
 
 \begin_layout Section
@@ -12886,6 +15277,16 @@ Conclusions
 LatexCommand label
 name "sec:Conclusions"
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+WRITE SOME TEXT HERE
+\begin_inset Newline newline
 \end_inset
 
 
@@ -13057,16 +15458,594 @@ References
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
 label "Author1(year)"
-key "ref-journal"
+key "de_char"
 literal "false"
 
 \end_inset
 
- Author
-\begin_inset space ~
+ V.
+ Charilogis, I.G.
+ Tsoulos, A.
+ Tzallas, E.
+ Karvounis, Modifications for the Differential Evolution Algorithm, Symmetry
+ 
+\series bold
+14
+\series default
+, 447, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_migrant"
+literal "false"
+
 \end_inset
 
-1 
+J.
+ Cheng, G.
+ Zhang, F.
+ Neri, Enhancing distributed differential evolution with multicultural migration
+ for global numerical optimization.
+ Information Sciences 
+\series bold
+247
+\series default
+, pp.
+ 72-93, 2013.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "powell"
+literal "false"
+
+\end_inset
+
+Powell, M.J.D.
+ A Tolerant Algorithm for Linearly Constrained Optimization Calculations.
+ Math.
+ Program.
+ 1989, 45, 547–566.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc1"
+literal "false"
+
+\end_inset
+
+M.M.
+ Ali and P.
+ Kaelo, Improved particle swarm algorithms for global optimization, Applied
+ Mathematics and Computation 
+\series bold
+196
+\series default
+, pp.
+ 578-593, 2008.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc2"
+literal "false"
+
+\end_inset
+
+H.
+ Koyuncu, R.
+ Ceylan, A PSO based approach: Scout particle swarm algorithm for continuous
+ global optimization problems, Journal of Computational Design and Engineering
+ 
+\series bold
+6
+\series default
+, pp.
+ 129–142, 2019.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc2-1"
+literal "false"
+
+\end_inset
+
+Patrick Siarry, Gérard Berthiau, François Durdin, Jacques Haussy, ACM Transactio
+ns on Mathematical Software 
+\series bold
+23
+\series default
+, pp 209–228, 1997.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "testfunc4"
+literal "false"
+
+\end_inset
+
+A.
+ LaTorre, D.
+ Molina, E.
+ Osaba, J.
+ Poyatos, J.
+ Del Ser, F.
+ Herrera, A prescription of methodological guidelines for comparing bio-inspired
+ optimization algorithms, Swarm and Evolutionary Computation 
+\series bold
+67
+\series default
+, 100973, 2021.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Jones"
+literal "false"
+
+\end_inset
+
+J.E.
+ Lennard-Jones, On the Determination of Molecular Fields, Proc.
+ R.
+ Soc.
+ Lond.
+ A 
+\series bold
+ 106
+\series default
+, pp.
+ 463–477, 1924.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn1"
+literal "true"
+
+\end_inset
+
+C.
+ Bishop, Neural Networks for Pattern Recognition, Oxford University Press,
+ 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn2"
+literal "true"
+
+\end_inset
+
+G.
+ Cybenko, Approximation by superpositions of a sigmoidal function, Mathematics
+ of Control Signals and Systems 
+\series bold
+2
+\series default
+, pp.
+ 303-314, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics1"
+literal "false"
+
+\end_inset
+
+P.
+ Baldi, K.
+ Cranmer, T.
+ Faucett et al, Parameterized neural networks for high-energy physics, Eur.
+ Phys.
+ J.
+ C 
+\series bold
+76
+\series default
+, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics2"
+literal "true"
+
+\end_inset
+
+J.
+ J.
+ Valdas and G.
+ Bonham-Carter, Time dependent neural network models for detecting changes
+ of state in complex processes: Applications in earth sciences and astronomy,
+ Neural Networks 
+\series bold
+19
+\series default
+, pp.
+ 196-207, 2006
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics3"
+literal "false"
+
+\end_inset
+
+G.
+ Carleo,M.
+ Troyer, Solving the quantum many-body problem with artificial neural networks,
+ Science 
+\series bold
+355
+\series default
+, pp.
+ 602-606, 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem1"
+literal "false"
+
+\end_inset
+
+Lin Shen, Jingheng Wu, and Weitao Yang, Multiscale Quantum Mechanics/Molecular
+ Mechanics Simulations with Neural Networks, Journal of Chemical Theory
+ and Computation 
+\series bold
+12
+\series default
+, pp.
+ 4934-4946, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem2"
+literal "false"
+
+\end_inset
+
+Sergei Manzhos, Richard Dawes, Tucker Carrington, Neural network‐based approache
+s for building high dimensional and quantum dynamics‐friendly potential
+ energy surfaces, Int.
+ J.
+ Quantum Chem.
+ 
+\series bold
+115
+\series default
+, pp.
+ 1012-1020, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem3"
+literal "false"
+
+\end_inset
+
+Jennifer N.
+ Wei, David Duvenaud, and Alán Aspuru-Guzik, Neural Networks for the Prediction
+ of Organic Chemistry Reactions, ACS Central Science 
+\series bold
+2
+\series default
+, pp.
+ 725-732, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon1"
+literal "false"
+
+\end_inset
+
+Lukas Falat and Lucia Pancikova, Quantitative Modelling in Economics with
+ Advanced Artificial Neural Networks, Procedia Economics and Finance 
+\series bold
+34
+\series default
+, pp.
+ 194-201, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon2"
+literal "false"
+
+\end_inset
+
+Mohammad Namazi, Ahmad Shokrolahi, Mohammad Sadeghzadeh Maharluie, Detecting
+ and ranking cash flow risk factors via artificial neural networks technique,
+ Journal of Business Research 
+\series bold
+69
+\series default
+, pp.
+ 1801-1806, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nncecon3"
+literal "false"
+
+\end_inset
+
+G.
+ Tkacz, Neural network forecasting of Canadian GDP growth, International
+ Journal of Forecasting 
+\series bold
+17
+\series default
+, pp.
+ 57-69, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnmed1"
+literal "false"
+
+\end_inset
+
+Igor I.
+ Baskin, David Winkler and Igor V.
+ Tetko, A renaissance of neural networks in drug discovery, Expert Opinion
+ on Drug Discovery 
+\series bold
+11
+\series default
+, pp.
+ 785-795, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnmed2"
+literal "false"
+
+\end_inset
+
+Ronadl Bartzatt, Prediction of Novel Anti-Ebola Virus Compounds Utilizing
+ Artificial Neural Network (ANN), Chemistry Faculty Publications 
+\series bold
+49
+\series default
+, pp.
+ 16-34, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "UCL"
+literal "false"
+
+\end_inset
+
+M.
+ Kelly, R.
+ Longjohn, K.
+ Nottingham, The UCI Machine Learning Repository.
+ 2023.
+ Available online: https://archive.ics.uci.edu (accessed on 18 February 2024).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Keel"
+literal "false"
+
+\end_inset
+
+J.
+ Alcalá-Fdez, A.
+ Fernandez, J.
+ Luengo, J.
+ Derrac, S.
+ García, L.
+ Sánchez, F.
+ Herrera.
+ KEEL Data-Mining Software Tool: Data Set Repository, Integration of Algorithms
+ and Experimental Analysis Framework.
+ Journal of Multiple-Valued Logic and Soft Computing 17, pp.
+ 255-287, 2011.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pima"
+literal "false"
+
+\end_inset
+
+J.W.
+ Smith, J.E.
+ Everhart, W.C.
+ Dickson, W.C.
+ Knowler, R.S.
+ Johannes, Using the ADAP learning algorithm to forecast the onset of diabetes
+ mellitus, In: Proceedings of the Symposium on Computer Applications and
+ Medical Care IEEE Computer Society Press, pp.261-265, 1988.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "regions"
+literal "false"
+
+\end_inset
+
+N.
+ Giannakeas, M.G.
+ Tsipouras, A.T.
+ Tzallas, K.
+ Kyriakidi, Z.E.
+ Tsianou, P.
+ Manousou, A.
+ Hall, E.C.
+ Karvounis, V.
+ Tsianos, E.
+ Tsianos, A clustering based method for collagen proportional area extraction
+ in liver biopsy images (2015) Proceedings of the Annual International Conferenc
+e of the IEEE Engineering in Medicine and Biology Society, EMBS, 2015-November,
+ art.
+ no.
+ 7319047, pp.
+ 3097-3100.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "wdbc"
+literal "false"
+
+\end_inset
+
+W.H.
+ Wolberg, O.L.
+ Mangasarian, Multisurface method of pattern separation for medical diagnosis
+ applied to breast cytology, Proc Natl Acad Sci U S A.
+ 
+\series bold
+87
+\series default
+, pp.
+ 9193–9196, 1990.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "wine1"
+literal "false"
+
+\end_inset
+
+M.
+ Raymer, T.E.
+ Doom, L.A.
+ Kuhn, W.F.
+ Punch, Knowledge discovery in medical and biological datasets using a hybrid
+ Bayes classifier/evolutionary algorithm.
+ IEEE transactions on systems, man, and cybernetics.
+ Part B, Cybernetics : a publication of the IEEE Systems, Man, and Cybernetics
+ Society, 
+\series bold
+33
+\series default
+ , pp.
+ 802-813, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "wine2"
+literal "false"
+
+\end_inset
+
+P.
+ Zhong, M.
+ Fukushima, Regularized nonsmooth Newton method for multi-class support
+ vector machines, Optimization Methods and Software 
+\series bold
+22
+\series default
+, pp.
+ 225-236, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "eeg"
+literal "true"
+
+\end_inset
+
+R.G.
+ Andrzejak, K.
+ Lehnertz, F.
+ Mormann, C.
+ Rieke, P.
+ David, and C.
+ E.
+ Elger, Indications of nonlinear deterministic and finite-dimensional structures
+ in time series of brain electrical activity: Dependence on recording region
+ and brain state, Phys.
+ Rev.
+ E 
+\series bold
+64
+\series default
+, pp.
+ 1-8, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "zoo"
+literal "false"
+
+\end_inset
+
+M.
+ Koivisto, K.
+ Sood, Exact Bayesian Structure Discovery in Bayesian Networks, The Journal
+ of Machine Learning Research
+\series bold
+ 5
+\series default
+, pp.
+ 549–573, 2004.
 \end_layout
 
 \begin_layout End Whole Page
