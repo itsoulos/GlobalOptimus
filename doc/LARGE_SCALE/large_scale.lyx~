@@ -324,6 +324,447 @@ Optimization; Differential evolution; Evolutionary techniques; Stochastic
 Introduction
 \end_layout
 
+\begin_layout Standard
+The primary objective of global optimization is to locate the global minimum
+ of a continuous and multidimensional function, in such a way as to ensure
+ complete exploration of the search space.
+ Global optimization aims to examine the entire problem domain in order
+ to find the lowest possible value that is feasible.
+ This procedure is applied to complex functions which usually include multiple
+ local minima, making it difficult to identify the global minimum.
+ Global optimization includes techniques that ensure that local optima are
+ avoided while focusing on maximizing the accuracy and efficiency of the
+ search process.
+ The objective is to find the lowest point through systematic exploration
+ of the entire domain of the function
+\begin_inset Formula $f:S\rightarrow R,S\subset R^{n}$
+\end_inset
+
+ and it is defined as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+x^{*}=\mbox{arg}\min_{x\in S}f(x)\label{eq:eq1-1}
+\end{equation}
+
+\end_inset
+
+where the set 
+\begin_inset Formula $S$
+\end_inset
+
+ is defined as follows: 
+\begin_inset Formula 
+\[
+S=\left[a_{1},b_{1}\right]\times\left[a_{2},b_{2}\right]\times\ldots\left[a_{n},b_{n}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Global optimization refers to algorithms that aim to find the global minimum
+ optimum of a problem regardless of its complexity.
+ Such methods find application in a wide range of scientific fields, such
+ as mathematics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_math1,go_math3"
+literal "false"
+
+\end_inset
+
+, physics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_physics2,go_physics3"
+literal "false"
+
+\end_inset
+
+, chemistry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_chem1,go_chem2"
+literal "false"
+
+\end_inset
+
+, biology 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_bio1,go_bio2"
+literal "false"
+
+\end_inset
+
+, medicine 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_med2,medicine"
+literal "false"
+
+\end_inset
+
+, agriculture 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_agri1,go_agri2"
+literal "false"
+
+\end_inset
+
+ and economics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_econ1,go_econ2"
+literal "false"
+
+\end_inset
+
+.
+
+\series bold
+ 
+\end_layout
+
+\begin_layout Standard
+Recently, it has been proposed 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "go_comparison"
+literal "false"
+
+\end_inset
+
+ to separate global optimization techniques into deterministic 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_determ1,go_determ3"
+literal "false"
+
+\end_inset
+
+ and stochastic ones 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "stohastic,stohastic1"
+literal "false"
+
+\end_inset
+
+.
+ Deterministic methods, such as interval techniques 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "interval1,interval2"
+literal "false"
+
+\end_inset
+
+, are based on the analysis of the search space, dividing it into smaller
+ regions in order to locate the region containing the global minimum.
+
+\series bold
+ 
+\series default
+Recently, a Sergeyev et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Sergeyev"
+literal "false"
+
+\end_inset
+
+ published a comparison between stochastic and deterministic global optimization
+ methods.
+ A set of stochastic methods may include Controlled Random Search techniques
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs1,crs2,crs3"
+literal "true"
+
+\end_inset
+
+, Simulated Annealing methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "simann1,simann2"
+literal "true"
+
+\end_inset
+
+, Genetic algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "genetic2,genetic3"
+literal "false"
+
+\end_inset
+
+, Differential Evolution 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "diffe1,diffe2"
+literal "false"
+
+\end_inset
+
+, Particle Swarm Optimization methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pso_major,pso1"
+literal "true"
+
+\end_inset
+
+, Ant Colony Optimization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "aco1,aco2"
+literal "false"
+
+\end_inset
+
+, etc
+\end_layout
+
+\begin_layout Standard
+Differential Evolution (DE) belonging to the evolutionary methods as mentioned
+ above, is an extremely efficient evolutionary algorithm, which gained great
+ recognition from the late 1990s.
+ More specifically, it was initially proposed in 1995 by Storn and Price
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-1,key-2-1"
+literal "false"
+
+\end_inset
+
+.
+ It finds applications in many fields of science and engineering, in symmetric
+ optimization problems and in problems that are discontinuous and noisy
+ and change over time.
+
+\series bold
+ 
+\series default
+The DE method creates randomly an initial population of solutions and, gradually
+ it produces new solutions as a combination of the previous ones.
+
+\series bold
+ 
+\series default
+Also, DE has been used in a variety of symmetry problems from the recent
+ literature, such as community detection 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_symmetry1"
+literal "false"
+
+\end_inset
+
+, structure prediction 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_symmetry3"
+literal "false"
+
+\end_inset
+
+, motor fault diagnosis 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_symmetry6"
+literal "false"
+
+\end_inset
+
+, clustering techniques 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_symmetry7"
+literal "false"
+
+\end_inset
+
+ etc.
+ It can be successfully combined with other techniques for machine learning
+ applications such as classification methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-16,de_problem2"
+literal "false"
+
+\end_inset
+
+, feature selection techniques 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_problem3,de_problem4"
+literal "false"
+
+\end_inset
+
+, deep learning 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_deep1,de_deep2"
+literal "false"
+
+\end_inset
+
+, etc.
+ 
+\end_layout
+
+\begin_layout Standard
+The behavior of the method is controlled by a small set of parameters, such
+ as the differential weight denoted as 
+\begin_inset Formula $F$
+\end_inset
+
+, the crossover probability denoted as CR and the number of candidate solutions,
+ called also agents, denoted as NP.
+ In literature a variety of methods has been proposed to adapt some of these
+ parameters, such as the Fuzzy Adaptive DE method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_fuzzy"
+literal "false"
+
+\end_inset
+
+, a self adapting technique for the control parameters of DE 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_self"
+literal "false"
+
+\end_inset
+
+, the opposition - based DE method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_opo"
+literal "false"
+
+\end_inset
+
+ etc.
+ Also, Das et al.
+ proposed 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_mutate"
+literal "false"
+
+\end_inset
+
+ a Neighborhood - Based Mutation Operator for the Differential Evolution
+ method.
+ A survey of recent trends in Differential Evolution techniques is provided
+ in the recent published work of Das et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "de_survey"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A Differential Evolution variant and its efficiency was evaluated on a series
+ of large - scale optimization problems from the relevant literature.
+ More specifically, the current work introduces a number of modifications
+ to the Differential Evolution algorithm in order to speed up the process
+ and increase the efficiency of the algorithm, especially for large - scale
+ problems.
+ These modifications include: the integration of an efficient sampling method,
+ the incorporation of a termination technique designed for the Differential
+ Evolution method, application of different mechanisms for the differential
+ weight parameter, as well as periodic refinement of the produced solutions
+ using a local optimization method.
+\end_layout
+
+\begin_layout Standard
+The handling of large - scale optimization problems was studied in a series
+ of research papers from the recent literature, such as cooperative coevolution
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "large_co"
+literal "false"
+
+\end_inset
+
+, Particle Swarm Optimization 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "large_pso"
+literal "false"
+
+\end_inset
+
+, a memetic Differential Evolution approach 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "large_memetic"
+literal "false"
+
+\end_inset
+
+
+\series bold
+ 
+\series default
+etc.
+\end_layout
+
+\begin_layout Standard
+The remain of this paper is divided as follows: in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Materials-and-Methods"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the proposed method is fully described, in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the test functions used in the experiments as well as the related experiments
+ are presented and finally in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ some conclusions and guidelines for future improvements are discussed.
+\end_layout
+
 \begin_layout Section
 Materials and Methods
 \begin_inset CommandInset label
@@ -872,7 +1313,7 @@ name "sec:Results"
 This section begins with a description of the functions that will be used
  in the experiments and then presents in detail the experiments that were
  performed, in which the parameters available in the proposed algorithm
- were studied in order to study its reliability and adequacy.
+ were studied, in order to study its reliability and adequacy.
  
 \end_layout
 
@@ -1052,9 +1493,10 @@ A series of experiments was carried out for the previously mentioned functions
  and these experiments were executed on an AMD RYZEN 5950X with 128GB RAM.
  The operating system of the running machine was Debian Linux.
  Each experiment was conducted 30 times, with different random numbers each
- time and the averages were recorded.
+ time, and the averages were recorded.
  The software used in the experiments was coded in ANSI C++ using the freely
- available optimization environment of OPTIMUS, that can be downloaded from
+ available optimization environment of OPTIMUS, which can be downloaded
+ from
 \series bold
  
 \series default
@@ -1375,7 +1817,7 @@ Tournament size
 
 \end_inset
 
-In the following tables that depict the experimental results the numbers
+In the following tables that depict the experimental results, the numbers
  in cells stand for the average function calls, as measured on 30 independent
  runs.
  The numbers in parentheses denote the fraction of the executions where
@@ -4117,9 +4559,47 @@ AVERAGE
 \end_layout
 
 \begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statWeight"
+plural "false"
+caps "false"
+noprefix "false"
 
-\series bold
-(TEXT FOR FIGURE HERE)
+\end_inset
+
+, the overall analysis, which includes all pairwise comparisons, yielded
+ a p-value of 1.1e-05.
+ This value is significantly smaller than the conventional significance
+ level (p=0.05), indicating that there are clear statistically significant
+ differences among the groups.
+ This result suggests that the compared techniques do not exhibit homogeneity
+ and that the observed differences in outcomes are unlikely to be due to
+ chance.
+ The comparison between the NUMBER(R) and RANDOM(R) methods produced a p-value
+ of 1.5e-05.
+ This value is similarly very small, signifying that these two methods display
+ statistically significant differences.
+ For the comparison of NUMBER(R) with MIGRANT(R), the p-value was also 1.5e-05.
+ This finding confirms that these two methods also exhibit significantly
+ different performance characteristics.
+ The statistical significance observed here underscores that the differences
+ in results between NUMBER(R) and MIGRANT(R) cannot be ignored.
+ The final pairwise comparison, between RANDOM(R) and MIGRANT(R), yielded
+ a p-value of 1e-04.
+ Although this value is larger than the previous ones, it is still well
+ below the significance threshold of p=0.05.
+ Therefore, in this case as well, statistically significant differences
+ between the two approaches are evident, indicating variations in their
+ effectiveness or the stability of their results.
+ Overall, the very low p-values obtained from all comparisons point to clear
+ and systematic differences among the methods.
+ This indicates that each approach has distinct characteristics that set
+ it apart from the others, whether in terms of reducing the number of objective
+ function evaluations or achieving high success rates.
+ The results of the analysis highlight the importance of selecting the appropria
+te method based on the specific requirements of the problem.
 \end_layout
 
 \begin_layout Standard
@@ -7406,9 +7886,50 @@ AVERAGE
 \end_layout
 
 \begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statSelection"
+plural "false"
+caps "false"
+noprefix "false"
 
-\series bold
-(TEXT FOR FIGURE HERE)
+\end_inset
+
+, the general Kruskal-Wallis test produced a p-value of 1.1e-08.
+ This exceptionally low p-value indicates the presence of statistically
+ significant differences among the groups.
+ This result suggests that the approaches under evaluation exhibit substantial
+ variability in their performance or behavior, which cannot be attributed
+ to random chance.
+ The comparison between RANDOM(R) and RANDOM(T) yielded a p-value of 1.9e-05.
+ This very low value confirms the existence of statistically significant
+ differences between the two approaches, emphasizing their distinct performance
+ characteristics.
+ The analysis of RANDOM(R) compared to MIGRANT(R) produced a p-value of
+ 1e-04.
+ Although higher than the previous value, it is still low enough to indicate
+ statistically significant differences, highlighting variations that cannot
+ be overlooked.
+ The comparison of RANDOM(R) with MIGRANT(T) yielded a p-value of 1.8e-05,
+ once again indicating the presence of statistically significant differences
+ between the two approaches.
+ Conversely, the p-value for the comparison between RANDOM(T) and MIGRANT(R)
+ was 0.51.
+ This value exceeds the conventional significance threshold, suggesting
+ insufficient statistical evidence to conclude meaningful differences between
+ these two approaches.
+ Similar results were observed for the comparison between RANDOM(T) and
+ MIGRANT(T), where the p-value was 0.38, further reinforcing the lack of
+ statistically significant differences.
+ Finally, the analysis between MIGRANT(R) and MIGRANT(T) produced a p-value
+ of 0.0034, which is significantly below the significance level (p=0.05).
+ This highlights the existence of statistically significant differences
+ between these two variations of the MIGRANT approach.
+ In summary, most comparisons revealed clear differences among the evaluated
+ approaches, as reflected in the exceptionally low p-values, while some
+ exceptions indicated no statistically significant differences.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -7477,7 +7998,30 @@ noprefix "false"
  weight with uniform sampling (Random(U)), random weight with k-means sampling
  (Random(K)), MIGRANT weight with uniform sampling (Migrant(U)), and MIGRANT
  weight with k-means sampling (Migrant(K)).
- The use of k-means sampling has a decisive impact on reducing the number
+ The k-means technique used to locate centers is considered also as a sampling
+ method here.
+ The method was introduced by James MacQueen
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MacQueen"
+literal "false"
+
+\end_inset
+
+ and it has been considered in a series of research papers 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "kmeans1,kmeans2"
+literal "false"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The use of k-means sampling has a decisive impact on reducing the number
  of objective function evaluations and improving success rates.
  For example, in the Random method, k-means sampling (Random(K)) dramatically
  reduces the number of evaluations while significantly increasing success
@@ -10695,9 +11239,53 @@ AVERAGE
 \end_layout
 
 \begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statSampling"
+plural "false"
+caps "false"
+noprefix "false"
 
-\series bold
-(TEXT FOR FIGURE HERE)
+\end_inset
+
+, the general analysis yielded a p-value of 1e-08.
+ This value is extremely small and significantly lower than the commonly
+ used significance level (p=0.05).
+ The comparison between RANDOM(U) and RANDOM(K) produced a p-value of 3e-09.
+ This exceptionally low value indicates that the two approaches differ significa
+ntly in their results.
+ These differences reflect substantial variations in performance or behavior.
+ The analysis of RANDOM(U) compared to MIGRANT(U) resulted in a p-value
+ of 1e-04.
+ Although larger than the previous values, this p-value remains sufficiently
+ low to indicate statistically significant differences.
+ This suggests that the two approaches exhibit distinct performance characterist
+ics that cannot be ignored.
+ The comparison between RANDOM(U) and MIGRANT(K) yielded a p-value of 1.6e-06,
+ further supporting the presence of notable differences between these two
+ approaches.
+ Conversely, the p-value for the comparison between RANDOM(K) and MIGRANT(U)
+ was 0.056, which exceeds the conventional significance threshold.
+ This indicates that, in this case, there is insufficient evidence to conclude
+ statistically significant differences between these two approaches.
+ The comparison between RANDOM(K) and MIGRANT(K) produced a p-value of 0.016,
+ which is lower than the significance threshold (p=0.05).
+ This demonstrates that the two approaches exhibit some statistically significan
+t differences in their outcomes, albeit less pronounced than in earlier
+ comparisons.
+ Finally, the analysis between MIGRANT(U) and MIGRANT(K) yielded two p-values,
+ 3e-09 and 0.00041, both of which are far below the significance level.
+ This highlights clear and strong differences between these two variations
+ of the MIGRANT approach, suggesting that the choice of the appropriate
+ approach can significantly impact performance.
+ In summary, the exceptionally low p-values observed in most comparisons
+ indicate the presence of clear differences among the approaches examined.
+ An exception is the comparison between RANDOM(K) and MIGRANT(U), where
+ no significant difference was recorded.
+ These findings underscore the importance of selecting the appropriate method,
+ taking into account the specific characteristics of each problem and the
+ potential to optimize performance through careful parameterization.
 \end_layout
 
 \begin_layout Standard
@@ -10766,17 +11354,7 @@ noprefix "false"
  In this case, the initial distribution is based on the k-means technique,
  sample selection is performed using tournament selection, and the differential
  weight is calculated stochastically.
- 
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-(TEXT ABOUT KMEANS HERE)
-\end_layout
-
-\begin_layout Standard
-The difference between the columns lies in the frequency of applying periodic
+ The difference between the columns lies in the frequency of applying periodic
  local search, which is used for selecting the differential weight.
  The evaluated frequencies are 0.005 (0.5%), 0.01 (1%), 0.02 (2%), and 0.04 (4%).
  The results indicate that higher periodic local search frequencies lead
@@ -10817,7 +11395,7 @@ The difference between the columns lies in the frequency of applying periodic
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -13995,9 +14573,55 @@ AVERAGE
 \end_layout
 
 \begin_layout Standard
+The general analysis for all pairwise comparisons shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statLrate"
+plural "false"
+caps "false"
+noprefix "false"
 
-\series bold
-(TEXT FOR FIGURE HERE)
+\end_inset
+
+ produced a p-value of 0.49.
+ This value is much higher than the conventional significance threshold
+ (p=0.05), indicating that the comparisons overall do not exhibit statistically
+ significant differences.
+ This observation suggests that, when considered collectively, the differences
+ among the comparisons might result from random factors.
+ The comparison between the RANDOM(0.005) and RANDOM(0.01) approaches yielded
+ a p-value of 0.019.
+ This value is below the significance threshold, indicating statistically
+ significant differences between these two approaches.
+ These differences are likely attributable to changes in the frequency of
+ applying periodic local search.
+ The analysis of RANDOM(0.005) versus RANDOM(0.02) produced a p-value of 0.00046.
+ This very low value demonstrates clear statistically significant differences
+ between the two approaches, reflecting substantial performance changes
+ due to the increased application frequency.
+ The comparison between RANDOM(0.005) and RANDOM(0.04) yielded a p-value of
+ 8.3e-06, which is extremely low.
+ This indicates that the two approaches exhibit significantly different
+ performance, likely due to the very high local search frequency in RANDOM(0.04).
+ The analysis of RANDOM(0.01) versus RANDOM(0.02) yielded a p-value of 0.0001.
+ Statistically significant differences are again evident, suggesting that
+ the increase in frequency markedly affects the results.
+ The comparison between RANDOM(0.01) and RANDOM(0.04) produced a p-value of
+ 1.7e-06.
+ This extremely low value confirms the presence of clear differences in
+ the performance of the two approaches, due to the further frequency increase.
+ Lastly, the comparison between RANDOM(0.02) and RANDOM(0.04) yielded a p-value
+ of 3.1e-09.
+ This exceptionally small value demonstrates that the increasing frequency
+ of local search continues to significantly influence performance.
+ Overall, the low p-values in most comparisons suggest that the frequency
+ of periodic local search application significantly affects the performance
+ of the approaches.
+ However, the general analysis with p=0.49 indicates that, in combination,
+ the approaches may not show significant differentiation.
+ These findings underscore the importance of carefully tuning the frequency
+ of local search application to achieve an optimal balance between performance
+ and computational cost.
 \end_layout
 
 \begin_layout Standard
@@ -14921,8 +15545,8 @@ status open
 \begin_layout Plain Layout
 Application of the proposed method with a series of differential weights
  on a neural network used for data classification problems.
- Numbers in cells represent average classifcation error as measured on the
- test set of the objective problem.
+ Numbers in cells represent average classification error as measured on
+ the test set of the objective problem.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:expNeural"
@@ -15283,13 +15907,49 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
+This study focuses on large-scale optimization through a modified version
+ of the Differential Evolution algorithm.
+ The introduced modifications aim to enhance efficiency and reliability
+ in high-dimensional problems.
+ Key elements of the new approach include the Migrant differential weight
+ mechanism and the use of k-means sampling to optimize sample selection.
+ Experimental results demonstrated that the proposed method significantly
+ reduces the number of objective function evaluations, particularly for
+ high-dimensional problems.
+ Variants of the differential weight mechanism, such as Migrant, offer competiti
+ve advantages with higher success rates and reduced computational cost compared
+ to traditional approaches.
+ Additionally, the use of k-means sampling contributes to reduced complexity
+ and improves the algorithm’s performance.
+ In experimental tests, such as neural network training and molecular conformati
+on optimization using the Lennard-Jones potential, the algorithm showcased
+ exceptional capability in finding optimal solutions.
+ However, the algorithm’s performance is sensitive to parameter tuning,
+ such as the local search rate.
+ It was observed that higher local search frequencies can substantially
+ increase computational costs without a corresponding improvement in success
+ rates, highlighting the need for a careful balance between accuracy and
+ efficiency.
+ 
+\end_layout
 
-\series bold
-WRITE SOME TEXT HERE
-\begin_inset Newline newline
-\end_inset
-
-
+\begin_layout Standard
+Future research could focus on several directions to further enhance the
+ method.
+ An important aspect is the development of adaptive parameter tuning strategies
+ that dynamically adjust to the nature of the problem.
+ Moreover, applying the algorithm in distributed computing environments
+ could increase its scalability and speed, making it suitable for real-time
+ problems.
+ Additionally, integrating the algorithm into more complex dynamic systems,
+ such as economic forecasting problems or simulations of physical phenomena,
+ represents a promising avenue.
+ Finally, evaluating the algorithm's performance in large-scale machine
+ learning applications, such as training deep neural networks, may reveal
+ new capabilities and applications.
+ Overall, the study highlights the potential of the proposed approach and
+ emphasizes the importance of continued research to develop even more efficient
+ and versatile optimization algorithms.
 \end_layout
 
 \begin_layout Author Contributions
@@ -15457,6 +16117,974 @@ References
 \labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "go_math1"
+literal "false"
+
+\end_inset
+
+Carrizosa, E., Molero-Río, C., & Romero Morales, D.
+ (2021).
+ Mathematical optimization in classification and regression trees.
+ Top, 29(1), 5-33.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_math3"
+literal "false"
+
+\end_inset
+
+Legat, B., Dowson, O., Garcia, J.
+ D., & Lubin, M.
+ (2022).
+ MathOptInterface: a data structure for mathematical optimization problems.
+ INFORMS Journal on Computing, 34(2), 672-689.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_physics2"
+literal "false"
+
+\end_inset
+
+Su, H., Zhao, D., Heidari, A.
+ A., Liu, L., Zhang, X., Mafarja, M., & Chen, H.
+ (2023).
+ RIME: A physics-based optimization.
+ Neurocomputing, 532, 183-214.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_physics3"
+literal "false"
+
+\end_inset
+
+Stilck França, D., & Garcia-Patron, R.
+ (2021).
+ Limitations of optimization algorithms on noisy quantum devices.
+ Nature Physics, 17(11), 1221-1227.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_chem1"
+literal "false"
+
+\end_inset
+
+Zhang, J., & Glezakou, V.
+ A.
+ (2021).
+ Global optimization of chemical cluster structures: Methods, applications,
+ and challenges.
+ International Journal of Quantum Chemistry, 121(7), e26553.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_chem2"
+literal "false"
+
+\end_inset
+
+Hu, Y., Zang, Z., Chen, D., Ma, X., Liang, Y., You, W., & Zhang, Z.
+ (2022).
+ Optimization and evaluation of SO2 emissions based on WRF-Chem and 3DVAR
+ data assimilation.
+ Remote Sensing, 14(1), 220.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_med2"
+literal "false"
+
+\end_inset
+
+Kaur, P., & Singh, R.
+ K.
+ (2023).
+ A review on optimization techniques for medical image analysis.
+ Concurrency and Computation: Practice and Experience, 35(1), e7443.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "medicine"
+literal "false"
+
+\end_inset
+
+Houssein, E.
+ H., Hosney, M.
+ E., Mohamed, W.
+ M., Ali, A.
+ A., & Younis, E.
+ M.
+ (2023).
+ Fuzzy-based hunger games search algorithm for global optimization and feature
+ selection using medical data.
+ Neural Computing and Applications, 35(7), 5251-5275.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_bio1"
+literal "false"
+
+\end_inset
+
+Wang, L., Cao, Q., Zhang, Z., Mirjalili, S., & Zhao, W.
+ (2022).
+ Artificial rabbits optimization: A new bio-inspired meta-heuristic algorithm
+ for solving engineering optimization problems.
+ Engineering Applications of Artificial Intelligence, 114, 105082.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_bio2"
+literal "false"
+
+\end_inset
+
+Hesami, M., & Jones, A.
+ M.
+ P.
+ (2020).
+ Application of artificial intelligence models and optimization algorithms
+ in plant cell and tissue culture.
+ Applied Microbiology and Biotechnology, 104(22), 9449-9485.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_agri1"
+literal "false"
+
+\end_inset
+
+Filip, M., Zoubek, T., Bumbalek, R., Cerny, P., Batista, C.
+ E., Olsan, P., ...
+ & Findura, P.
+ (2020).
+ Advanced computational methods for agriculture machinery movement optimization
+ with applications in sugarcane production.
+ Agriculture, 10(10), 434.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_agri2"
+literal "false"
+
+\end_inset
+
+Akintuyi, O.
+ B.
+ (2024).
+ Adaptive AI in precision agriculture: a review: investigating the use of
+ self-learning algorithms in optimizing farm operations based on real-time
+ data.
+ Research Journal of Multidisciplinary Studies, 7(02), 016-030.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_econ1"
+literal "false"
+
+\end_inset
+
+Wang, Y., Ma, Y., Song, F., Ma, Y., Qi, C., Huang, F., ...
+ & Zhang, F.
+ (2020).
+ Economic and efficient multi-objective operation optimization of integrated
+ energy system considering electro-thermal demand response.
+ Energy, 205, 118022.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_econ2"
+literal "false"
+
+\end_inset
+
+Alirahmi, S.
+ M., Mousavi, S.
+ B., Razmi, A.
+ R., & Ahmadi, P.
+ (2021).
+ A comprehensive techno-economic analysis and multi-criteria optimization
+ of a compressed air energy storage (CAES) hybridized with solar and desalinatio
+n units.
+ Energy Conversion and Management, 236, 114053.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_comparison"
+literal "false"
+
+\end_inset
+
+L.
+ Liberti, S.
+ Kucherenko, Comparison of deterministic and stochastic approaches to global
+ optimization.
+ International Transactions in Operational Research 
+\series bold
+12
+\series default
+, pp.
+ 263-285, 2005.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_determ1"
+literal "false"
+
+\end_inset
+
+Shezan, S.
+ A., Ishraque, M.
+ F., Shafiullah, G.
+ M., Kamwa, I., Paul, L.
+ C., Muyeen, S.
+ M., ...
+ & Kumar, P.
+ P.
+ (2023).
+ Optimization and control of solar-wind islanded hybrid microgrid by using
+ heuristic and deterministic optimization algorithms and fuzzy logic controller.
+ Energy reports, 10, 3272-3288.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_determ3"
+literal "false"
+
+\end_inset
+
+Xu, Z., Zhao, Z., & Liu, J.
+ (2024).
+ Deterministic Multi-Objective Optimization of Analog Circuits.
+ Electronics, 13(13), 2510.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "stohastic"
+literal "false"
+
+\end_inset
+
+Hsieh, Y.
+ P., Karimi Jaghargh, M.
+ R., Krause, A., & Mertikopoulos, P.
+ (2024).
+ Riemannian stochastic optimization methods avoid strict saddle points.
+ Advances in Neural Information Processing Systems, 36.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "stohastic1"
+literal "false"
+
+\end_inset
+
+Tyurin, A., & Richtárik, P.
+ (2024).
+ Optimal time complexities of parallel stochastic optimization methods under
+ a fixed computation model.
+ Advances in Neural Information Processing Systems, 36.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "interval1"
+literal "true"
+
+\end_inset
+
+M.A.
+ Wolfe, Interval methods for global optimization, Applied Mathematics and
+ Computation 
+\series bold
+75
+\series default
+, pp.
+ 179-206, 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "interval2"
+literal "true"
+
+\end_inset
+
+T.
+ Csendes and D.
+ Ratz, Subdivision Direction Selection in Interval Methods for Global Optimizati
+on, SIAM J.
+ Numer.
+ Anal.
+ 
+\series bold
+34
+\series default
+, pp.
+ 922–938, 1997.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Sergeyev"
+literal "false"
+
+\end_inset
+
+Sergeyev, Y.
+ D., Kvasov, D.
+ E., & Mukhametzhanov, M.
+ S.
+ (2018).
+ On the efficiency of nature-inspired metaheuristics in expensive global
+ optimization with limited budget.
+ Scientific reports, 8(1), 453.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs1"
+literal "true"
+
+\end_inset
+
+W.
+ L.
+ Price, Global optimization by controlled random search, Journal of Optimization
+ Theory and Applications 
+\series bold
+40
+\series default
+, pp.
+ 333-348, 1983.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs2"
+literal "true"
+
+\end_inset
+
+Ivan Křivý, Josef Tvrdík, The controlled random search algorithm in optimizing
+ regression models, Computational Statistics & Data Analysis 
+\series bold
+20
+\series default
+, pp.
+ 229-234, 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs3"
+literal "false"
+
+\end_inset
+
+M.M.
+ Ali, A.
+ Törn, and S.
+ Viitanen, A Numerical Comparison of Some Modified Controlled Random Search
+ Algorithms, Journal of Global Optimization 
+\series bold
+11
+\series default
+,pp.
+ 377–385,1997.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "simann1"
+literal "true"
+
+\end_inset
+
+L.
+ Ingber, Very fast simulated re-annealing, Mathematical and Computer Modelling
+ 
+\series bold
+12
+\series default
+, pp.
+ 967-973, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "simann2"
+literal "true"
+
+\end_inset
+
+R.W.
+ Eglese, Simulated annealing: A tool for operational research, Simulated
+ annealing: A tool for operational research 
+\series bold
+46
+\series default
+, pp.
+ 271-281, 1990.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "genetic2"
+literal "true"
+
+\end_inset
+
+Sohail, A.
+ (2023).
+ Genetic algorithms in the fields of artificial intelligence and data sciences.
+ Annals of Data Science, 10(4), 1007-1018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "genetic3"
+literal "false"
+
+\end_inset
+
+Charilogis, V., Tsoulos, I.
+ G., & Stavrou, V.
+ N.
+ (2023).
+ An Intelligent Technique for Initial Distribution of Genetic Algorithms.
+ Axioms, 12(10), 980.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "diffe1"
+literal "true"
+
+\end_inset
+
+Deng, W., Shang, S., Cai, X., Zhao, H., Song, Y., & Xu, J.
+ (2021).
+ An improved differential evolution algorithm and its application in optimizatio
+n problem.
+ Soft Computing, 25, 5277-5298.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "diffe2"
+literal "false"
+
+\end_inset
+
+Pant, M., Zaheer, H., Garcia-Hernandez, L., & Abraham, A.
+ (2020).
+ Differential Evolution: A review of more than two decades of research.
+ Engineering Applications of Artificial Intelligence, 90, 103479.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso_major"
+literal "false"
+
+\end_inset
+
+Shami, T.
+ M., El-Saleh, A.
+ A., Alswaitti, M., Al-Tashi, Q., Summakieh, M.
+ A., & Mirjalili, S.
+ (2022).
+ Particle swarm optimization: A comprehensive survey.
+ Ieee Access, 10, 10031-10061.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso1"
+literal "true"
+
+\end_inset
+
+Gad, A.
+ G.
+ (2022).
+ Particle swarm optimization algorithm and its applications: a systematic
+ review.
+ Archives of computational methods in engineering, 29(5), 2531-2561.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "aco1"
+literal "false"
+
+\end_inset
+
+Rokbani, N., Kumar, R., Abraham, A., Alimi, A.
+ M., Long, H.
+ V., Priyadarshini, I., & Son, L.
+ H.
+ (2021).
+ Bi-heuristic ant colony optimization-based approaches for traveling salesman
+ problem.
+ Soft Computing, 25, 3775-3794.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "aco2"
+literal "false"
+
+\end_inset
+
+Wu, L., Huang, X., Cui, J., Liu, C., & Xiao, W.
+ (2023).
+ Modified adaptive ant colony optimization algorithm and its application
+ for solving path planning of mobile robot.
+ Expert Systems with Applications, 215, 119410.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+Storn, R., & Price, K.
+ (1995).
+ Differential evolution-a simple and efficient adaptive scheme for global
+ optimization over continuous spaces.
+ International computer science institute.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-2-1"
+
+\end_inset
+
+Storn, R., & Price, K.
+ (1997).
+ Differential evolution–a simple and efficient heuristic for global optimization
+ over continuous spaces.
+ Journal of global optimization, 11, 341-359.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_symmetry1"
+literal "false"
+
+\end_inset
+
+Y.H.
+ Li, J.Q.
+ Wang, X.J.
+ Wang, Y.L.
+ Zhao, X.H.
+ Lu, D.L.
+ Liu, Community Detection Based on Differential Evolution Using Social Spider
+ Optimization, Symmetry 
+\series bold
+9
+\series default
+, 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_symmetry3"
+literal "false"
+
+\end_inset
+
+W.
+ Yang, E.M.
+ Dilanga Siriwardane, R.
+ Dong, Y.
+ Li, J.
+ Hu, Crystal structure prediction of materials with high symmetry using
+ differential evolution, J.
+ Phys.: Condens.
+ Matter 
+\series bold
+33
+\series default
+ 455902, 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_symmetry6"
+literal "false"
+
+\end_inset
+
+C.Y.
+ Lee, C.H.
+ Hung, Feature Ranking and Differential Evolution for Feature Selection
+ in Brushless DC Motor Fault Diagnosis , Symmetry 
+\series bold
+13
+\series default
+, 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_symmetry7"
+literal "false"
+
+\end_inset
+
+S.
+ Saha, R.
+ Das, Exploring differential evolution and particle swarm optimization to
+ develop some symmetry-based automatic clustering techniques: application
+ to gene clustering, Neural Comput & Applic 
+\series bold
+30
+\series default
+, pp.
+ 735–757, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-16"
+
+\end_inset
+
+Maulik, U., & Saha, I.
+ (2010).
+ Automatic fuzzy clustering using modified differential evolution for image
+ classification.
+ IEEE transactions on Geoscience and Remote sensing, 48(9), 3503-3510.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_problem2"
+literal "false"
+
+\end_inset
+
+Zhang, Y., Zhang, H., Cai, J., & Yang, B.
+ (2014).
+ A weighted voting classifier based on differential evolution.
+ In Abstract and applied analysis (Vol.
+ 2014, No.
+ 1, p.
+ 376950).
+ Hindawi Publishing Corporation.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_problem3"
+literal "false"
+
+\end_inset
+
+Hancer, E.
+ (2019).
+ Differential evolution for feature selection: a fuzzy wrapper–filter approach.
+ Soft Computing, 23, 5233-5248.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_problem4"
+literal "false"
+
+\end_inset
+
+Vivekanandan, T., & Iyengar, N.
+ C.
+ S.
+ N.
+ (2017).
+ Optimal feature selection using a modified differential evolution algorithm
+ and its effectiveness for prediction of heart disease.
+ Computers in biology and medicine, 90, 125-136.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_deep1"
+literal "false"
+
+\end_inset
+
+Deng, W., Liu, H., Xu, J., Zhao, H., & Song, Y.
+ (2020).
+ An improved quantum-inspired differential evolution algorithm for deep
+ belief network.
+ IEEE Transactions on Instrumentation and Measurement, 69(10), 7319-7327.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_deep2"
+literal "false"
+
+\end_inset
+
+Wu, T., Li, X., Zhou, D., Li, N., & Shi, J.
+ (2021).
+ Differential evolution based layer-wise weight pruning for compressing
+ deep neural networks.
+ Sensors, 21(3), 880.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_fuzzy"
+literal "false"
+
+\end_inset
+
+Liu, J., Lampinen, J.
+ A Fuzzy Adaptive Differential Evolution Algorithm.
+ Soft Comput 9, 448–462 (2005).
+ https://doi.org/10.1007/s00500-004-0363-x
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_self"
+literal "false"
+
+\end_inset
+
+J.
+ Brest, S.
+ Greiner, B.
+ Boskovic, M.
+ Mernik and V.
+ Zumer, "Self-Adapting Control Parameters in Differential Evolution: A Comparati
+ve Study on Numerical Benchmark Problems," in IEEE Transactions on Evolutionary
+ Computation, vol.
+ 10, no.
+ 6, pp.
+ 646-657, Dec.
+ 2006, doi: 10.1109/TEVC.2006.872133.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_opo"
+literal "false"
+
+\end_inset
+
+S.
+ Rahnamayan, H.
+ R.
+ Tizhoosh and M.
+ M.
+ A.
+ Salama, "Opposition-Based Differential Evolution," in IEEE Transactions
+ on Evolutionary Computation, vol.
+ 12, no.
+ 1, pp.
+ 64-79, Feb.
+ 2008, doi: 10.1109/TEVC.2007.894200.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_mutate"
+literal "false"
+
+\end_inset
+
+S.
+ Das, A.
+ Abraham, U.
+ K.
+ Chakraborty and A.
+ Konar, "Differential Evolution Using a Neighborhood-Based Mutation Operator,"
+ in IEEE Transactions on Evolutionary Computation, vol.
+ 13, no.
+ 3, pp.
+ 526-553, June 2009, doi: 10.1109/TEVC.2008.2009457.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_survey"
+literal "false"
+
+\end_inset
+
+S.
+ Das, S.
+ Subhra Mullick, P.N.
+ Suganthan, Recent advances in differential evolution – An updated survey,
+ Swarm and Evolutionary Computation 
+\series bold
+27
+\series default
+, pp.
+ 1-30, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "large_co"
+literal "false"
+
+\end_inset
+
+D.
+ Sofge, K.
+ De Jong, and A.
+ Schultz.
+ A Blended Population Approach to Cooperative Coevolution for Decomposition
+ of Complex Problems.
+ In Proceedings of the 2002 Congress on Evolutionary Computation (CEC 2002),
+ pages 413–418.
+ IEEE, 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "large_pso"
+literal "false"
+
+\end_inset
+
+F.
+ van den Bergh and A.
+ P.
+ Engelbrecht.
+ A Cooperative Approach to Particle Swarm Optimisation.
+ IEEE Transactions on Evolutionary Computing, 3:225–239, 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "large_memetic"
+literal "false"
+
+\end_inset
+
+Yu Gao and Yong-Jun Wang.
+ A Memetic Differential Evolutionary Al- gorithm for High Dimensional Functions’
+ Optimization.
+ International Conference on Natural Computation, 4:188–192, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 label "Author1(year)"
 key "de_char"
 literal "false"
@@ -15511,6 +17139,66 @@ Powell, M.J.D.
  Math.
  Program.
  1989, 45, 547–566.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "MacQueen"
+literal "false"
+
+\end_inset
+
+J.B.
+ MacQueen, Some Methods for classification and Analysis of Multivariate
+ Observations.
+ Proceedings of 5th Berkeley Symposium on Mathematical Statistics and Probabilit
+y.
+ Vol.
+ 1.
+ University of California Press.
+ pp.
+ 281–297.
+ MR 0214227.
+ Zbl 0214.46201, 1967.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kmeans1"
+literal "false"
+
+\end_inset
+
+Y.
+ Li, H.
+ Wu, A clustering method based on K-means algorithm, Physics Procedia 
+\series bold
+25
+\series default
+, pp.
+ 1104-1109, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kmeans2"
+literal "false"
+
+\end_inset
+
+P.
+ Arora, S.
+ Varshney, Analysis of k-means and k-medoids algorithm for big data, Procedia
+ Computer Science 
+\series bold
+78
+\series default
+, pp.
+ 507-512, 2016.
 \end_layout
 
 \begin_layout Bibliography
