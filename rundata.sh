@@ -3,9 +3,9 @@ METHOD=DifferentialEvolution
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=kmeans
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=sumfitness
+TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -64,9 +64,8 @@ then
 ##de_tsize:       The tournament size for the tournament selection
 ##de_maxiters:    The maximum number of parameters
 ##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
-##de_localsearch: Enable or disable the incorporation of local search at every iteration. Values: yes,no
 ##de_selection:   The selection method used in every iteration. Values: random, tournament
-	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=random --de_fselection=number --de_localsearch=yes --opt_termination=sumfitness"
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_isneural=yes --de_neuralw=5 --de_lrate=0.005 --opt_termination=$TERMINATION"
 elif [ $METHOD = "Adam" ]
 then
 

@@ -12,9 +12,6 @@ DifferentialEvolution::DifferentialEvolution()
     de_fselection<<"number"<<"ali"<<"random"<<"adaptive"<<"migrant";
     addParam(Parameter("de_fselection",de_fselection[0],de_fselection,"The differential weight method. Values: number, ali, random, adaptive, migrant"));
 
-    QStringList yes_no;
-    yes_no<<"no"<<"yes";
-    addParam(Parameter("de_localsearch",yes_no[0],yes_no,"Perform local search at every iteration. Values: no,yes"));
 
     addParam(Parameter("de_lrate",0.0,0.0,1.0,"The local search rate"));
 
@@ -23,7 +20,12 @@ DifferentialEvolution::DifferentialEvolution()
     addParam(Parameter("de_selection",de_selection[0],
                        de_selection,
                        "Selection method. Available values: random, tournament"));
-   }
+
+    QStringList isNeural;
+    isNeural<<"no"<<"yes";
+    addParam(Parameter("de_isneural",isNeural[0],isNeural,"Select yes for mlp training"));
+    addParam(Parameter("de_neuralw",2.0,1.0,10.0,"Bound limit for mlp training"));
+}
 
 void    DifferentialEvolution::init()
 {
@@ -85,10 +87,10 @@ void DifferentialEvolution::step()
     QString de_fselection = getParam("de_fselection").getValue();
     double bestMax = 0;
     double bestMin = 0;
-    bool is_local = false;
     bool is_migrant = false;
     double lrate = getParam("de_lrate").getValue().toDouble();
-
+    bool de_isneural = getParam("de_isneural").getValue()=="yes";
+    double de_neuralw = getParam("de_neuralw").getValue().toDouble();
 
     if (de_fselection == "migrant")
     {
@@ -107,8 +109,7 @@ void DifferentialEvolution::step()
             F = 1.0 - (bestMin / bestMax);
     }
 
-    if (getParam("de_localsearch").getValue() == "yes")
-        is_local = true;
+
 
     bool is_random = de_fselection == "random";
     bool is_adaptive = de_fselection == "adaptive";
@@ -158,22 +159,21 @@ void DifferentialEvolution::step()
                     F = 0.8 + 0.2 * myProblem->randomDouble();
 		if(is_migrant)
 		    F = migrantWeights[i];	
-
-                trialx[j] = xa[j] + F * (xb[j] - xc[j]);
-		if(!myProblem->isPointIn(trialx)) trialx[j]=x[j];
-            }
+        trialx[j] = xa[j] + F * (xb[j] - xc[j]);
+        if(!de_isneural && !myProblem->isPointIn(trialx)) trialx[j]=x[j];
+        }
             else
                 trialx[j] = x[j];
         }
 
-        if (!myProblem->isPointIn(trialx))
+    if (!de_isneural &&  !myProblem->isPointIn(trialx))
 	{
-            trialx = x;
+        trialx = x;
 	    countAvoid++;
 	    continue;
-	}
+    }
 	double minDist = 1e+100;
-	for(int j=0;j<agenty.size();j++)
+    for(int j=0;j<(int)agenty.size();j++)
 	{
 		Data xx = agentx[j];
 		double d = getDistance(xx,trialx);	
@@ -181,7 +181,29 @@ void DifferentialEvolution::step()
 	}
 
 	if(minDist<=1e-4) countAvoid++;
-        double ft = (lrate>0.0 && minDist>1e-4 && myProblem->randomDouble()<=lrate) ? localSearch(trialx) : myProblem->statFunmin(trialx);
+        double ft=0.0;
+        if(lrate>0.0 && minDist>1e-4 && myProblem->randomDouble()<=lrate)
+        {
+            if(!de_isneural)
+                ft = localSearch(trialx);
+            else
+            {
+                Data xl,xr;
+                xl.resize(myProblem->getDimension());
+                xr.resize(myProblem->getDimension());
+                for(int k=0;k<myProblem->getDimension();k++)
+                {
+                    xl[k]=-de_neuralw * fabs(trialx[k]);
+                    xr[k]= de_neuralw * fabs(trialx[k]);
+
+                }
+                myProblem->setLeftMargin(xl);
+                myProblem->setRightMargin(xr);
+                ft = localSearch(trialx);
+            }
+        }
+        else
+        ft= myProblem->statFunmin(trialx);
 
         if (ft < y)
         {
@@ -222,6 +244,9 @@ void DifferentialEvolution::calculateMigrantWeights()
 bool    DifferentialEvolution::terminated()
 {
     QString term =getParam("opt_termination").getValue();
+    bool de_isneural = getParam("de_isneural").getValue()=="yes";
+
+    if(de_isneural && fabs(besty)<1e-6) return true;
 	if(term == "sumfitness")
 	{
         	double newSum = accumulate(agenty.begin(), agenty.end(), 0);
