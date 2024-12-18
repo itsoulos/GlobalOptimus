@@ -1,5 +1,5 @@
 #include "differentialevolution.h"
-
+# include <MLMODELS/mlpproblem.h>
 DifferentialEvolution::DifferentialEvolution()
 {
     addParam(Parameter("de_np","10n","The number of agents. Default value 10n"));
@@ -19,12 +19,18 @@ DifferentialEvolution::DifferentialEvolution()
     de_selection<<"random"<<"tournament";
     addParam(Parameter("de_selection",de_selection[0],
                        de_selection,
-                       "Selection method. Available values: random, tournament"));
+        "Selection method. Available values: random, tournament"));
 
     QStringList isNeural;
     isNeural<<"no"<<"yes";
-    addParam(Parameter("de_isneural",isNeural[0],isNeural,"Select yes for mlp training"));
-    addParam(Parameter("de_neuralw",2.0,1.0,10.0,"Bound limit for mlp training"));
+    addParam(Parameter("de_isneural",isNeural[0],
+             isNeural,"Select yes for mlp training"));
+    addParam(Parameter("de_neuralw",2.0,-1.0,10.0,
+            "Bound limit for mlp training. Set -1 for adaptive."));
+
+
+    addParam(Parameter("de_neuralsampling",isNeural[0],isNeural,
+                "Set to yes to use neural sampling method"));
 }
 
 void    DifferentialEvolution::init()
@@ -39,9 +45,25 @@ void    DifferentialEvolution::init()
     CR = getParam("de_cr").getValue().toDouble();
     maxiters = getParam("de_maxiters").getValue().toInt();
     iter = 0;
-
+    bool de_isneural = getParam("de_isneural").getValue()=="yes";
+    bool de_neuralsampling=getParam("de_neuralsampling").getValue()=="yes";
     //sampling
+    if(!de_isneural || (de_isneural && !de_neuralsampling))
     sampleFromProblem(NP,agentx,agenty);
+    else
+    {
+
+        for(int i=0;i<NP;i++)
+        {
+            MlpProblem *neural = dynamic_cast<MlpProblem*>(myProblem);
+            Data x = neural->getSampleNoViolate();
+            double y = neural->funmin(x);
+            agentx.push_back(x);
+            agenty.push_back(y);
+        }
+    }
+    //neural sampling as  a test here
+
     for(int i=0;i<NP;i++)
     {
         Data x= agentx[i];
@@ -188,18 +210,40 @@ void DifferentialEvolution::step()
                 ft = localSearch(trialx);
             else
             {
+                double fv = de_neuralw;
                 Data xl,xr;
                 xl.resize(myProblem->getDimension());
                 xr.resize(myProblem->getDimension());
                 for(int k=0;k<myProblem->getDimension();k++)
                 {
-                    xl[k]=-de_neuralw * fabs(trialx[k]);
-                    xr[k]= de_neuralw * fabs(trialx[k]);
+                    xl[k]=-fv * fabs(trialx[k]);
+                    xr[k]= fv * fabs(trialx[k]);
+                }
+                if(de_neuralw <0 ) //adaptive
+                {
+                    for(int k=0;k<myProblem->getDimension();k++)
+                    {
+                        xl[k]=-2.0 * fabs(trialx[k]);
+                        xr[k]= 2.0 * fabs(trialx[k]);
+                    }
 
+                    MlpProblem *neural = dynamic_cast<MlpProblem*>(myProblem);
+                    neural->findBoundsWithSiman(trialx,xl,xr);
+                    for(int k=0;k<myProblem->getDimension();k++)
+                    {
+                        if(trialx[k]<xl[k])
+                            xl[k]=trialx[k];
+                        if(trialx[k]>xr[k])
+                            xr[k]=trialx[k];
+                    }
                 }
                 myProblem->setLeftMargin(xl);
                 myProblem->setRightMargin(xr);
+                double oldf = myProblem->funmin(trialx);
+                printf("In bounds %d \n",
+                       myProblem->isPointIn(trialx));
                 ft = localSearch(trialx);
+                printf("Local search found %lf=>%lf \n",oldf,ft);
             }
         }
         else

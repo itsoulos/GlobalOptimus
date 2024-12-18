@@ -65,7 +65,7 @@ then
 ##de_maxiters:    The maximum number of parameters
 ##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
 ##de_selection:   The selection method used in every iteration. Values: random, tournament
-	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_isneural=yes --de_neuralw=5 --de_lrate=0.005 --opt_termination=$TERMINATION"
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_isneural=yes --de_neuralw=2 --de_lrate=0.005 --opt_termination=$TERMINATION --de_neuralsampling=yes"
 elif [ $METHOD = "Adam" ]
 then
 

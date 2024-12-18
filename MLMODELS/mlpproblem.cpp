@@ -1,5 +1,6 @@
 #include "mlpproblem.h"
 # include <QDebug>
+# include <QRandomGenerator>
 MlpProblem::MlpProblem()
     :Problem(1)
 {
@@ -202,6 +203,7 @@ double  MlpProblem::getOutput(Data  &x)
         arg+=weight[(d+2)*i-1];
 	    if(fabs(arg)>=viollimit)
 	    {
+
 		    violcount++;
 	    }
         per+=weight[(d+2)*i-(d+1)-1]*sig(arg);
@@ -283,6 +285,168 @@ double	MlpProblem::getDerivative2(vector<double> xpoint,int pos)
         return per;
 }
 
+class SimanBounds
+{
+private:
+    MlpProblem *problem;
+    Data left,right;
+    double T0;
+    int neps;
+    int k;
+    Data X0;
+    void    reduceTemp();
+    double  fitness(Data &xl,Data &xr);
+    void    randomBounds(Data &xl,Data &xr);
+    double  besty;
+    QRandomGenerator gen;
+public:
+    SimanBounds(Data &x0,MlpProblem *p,Data &xl,Data &xr);
+    void    Solve();
+    void    getBounds(Data &xl,Data &xr);
+    ~SimanBounds();
+};
+
+
+SimanBounds::SimanBounds(Data &x0,MlpProblem *p,Data &xl,Data &xr)
+{
+    X0 = x0;
+    problem = p;
+    left = xl;
+    right = xr;
+    k=0;
+    T0=1e+8;
+    besty = fitness(xl,xr);
+    neps = 50;
+    gen.seed(1);
+}
+
+double  SimanBounds::fitness(Data &xl,Data &xr)
+{
+    return problem->getViolationPercentInBounds(10.0,xl,xr);
+}
+
+void    SimanBounds::reduceTemp()
+{
+    k=k+1;
+    const double alpha = 0.8;
+    T0 =T0 * pow(alpha,k);
+
+}
+
+
+void    SimanBounds::randomBounds(Data &xl,Data &xr)
+{
+    for(int i=0;i<(int)xl.size();i++)
+    {
+        double mid = left[i]+(right[i]-left[i])/2.0;
+        double l = left[i]+gen.generateDouble()*(mid-left[i]);
+        double r = mid+gen.generateDouble()*(right[i]-mid);
+        if(l<X0[i])
+            l=X0[i]-0.05 * fabs(X0[i]);
+        if(r>X0[i])
+            r = X0[i]+0.05 *fabs(X0[i]);
+        xl[i]=l;
+        xr[i]=r;
+        //printf("In %lf ->[%lf,%lf]\n",X0[i],l,r);
+    }
+}
+void    SimanBounds::Solve()
+{
+    Data xl=left,xr=right;
+    Data globalLeft = left;
+    Data globalRight = right;
+    double ypoint = besty;
+    while(true)
+    {
+        Data testLeft = xl;
+        Data testRight = xr;
+        for(int i=1;i<=neps;i++)
+        {
+            randomBounds(testLeft,testRight);
+            double y = fitness(testLeft,testRight);
+            if(y<ypoint)
+            {
+                ypoint = y;
+                xl = testLeft;
+                xr = testRight;
+                if(ypoint<besty)
+                {
+                    besty=ypoint;
+                    globalLeft = xl;
+                    globalRight = xr;
+                }
+            }
+            else
+            {
+                double r = (rand()*1.0/RAND_MAX);
+                double ratio = exp(-(y-ypoint)/T0);
+                double xmin = ratio<1?ratio:1;
+                if(r<xmin)
+                {
+                    ypoint = y;
+                    xl = testLeft;
+                    xr = testRight;
+                    if(ypoint<besty)
+                    {
+                        besty=ypoint;
+                        globalLeft = xl;
+                        globalRight = xr;
+                    }
+                }
+            }
+        }
+        reduceTemp();
+        if(T0<1e-6) break;
+      //  printf("Siman Bounds Generation: %4d Besty: %10.5lf\n",
+      //         k,besty);
+    }
+    left = globalLeft;
+    right = globalRight;
+}
+
+void    SimanBounds::getBounds(Data &xl,Data &xr)
+{
+    xl = left;
+    xr = right;
+}
+
+SimanBounds::~SimanBounds()
+{
+
+}
+
+void    MlpProblem::findBoundsWithSiman(Data &x0,Data &xl,Data &xr)
+{
+    SimanBounds b(x0,this,xl,xr);
+    b.Solve();
+    b.getBounds(xl,xr);
+}
+
+double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)
+{
+    const int nsamples =100;
+    randomize(1);
+    Data sample;
+    int n = getDimension();
+    sample.resize(n);
+
+    double sum=0.0;
+    for(int i=0;i<nsamples;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            sample[j]=lb[j]+randomDouble()*(rb[j]-lb[j]);
+        }
+        setWeights(sample);
+        resetViolationPercent(limit);
+        double v=getTrainError();
+        sum = sum+v*(1.0+getViolationPercent()/100.0);
+    }
+    sum/=nsamples;
+  //  printf("Fitness sum = %.10lg\n",sum);
+    return sum;
+}
+
 QJsonObject MlpProblem::done(Data &x)
 {
     double tr=funmin(x);
@@ -295,6 +459,30 @@ QJsonObject MlpProblem::done(Data &x)
     return xx;
 
 }
+
+Data    MlpProblem::getSampleNoViolate()
+{
+    Data x = getSample();
+    const int iters = 100;
+    double minViolate = 1e+100;
+    Data bestx = x;
+    for(int i=1;i<=iters;i++)
+    {
+        for(int j=0;j<getDimension();j++)
+            x[j]=(2.0*randomDouble()-1.0);
+        resetViolationPercent(10.0);
+        double y = getTrainError();
+        double p = getViolationPercent();
+        p  = y *(1.0+p/100.0);
+        if(p<minViolate)
+        {
+            minViolate=p;
+            bestx  = x;
+        }
+    }
+    return bestx;
+}
+
 MlpProblem::~MlpProblem()
 {
 }

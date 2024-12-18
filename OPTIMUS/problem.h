@@ -193,6 +193,11 @@ public:
      */
     int     getdimension();
     /**
+     * @brief randomize initializes the random generator.
+     * @param seed
+     */
+    void    randomize(int seed=1);
+    /**
      * @brief randomDouble
      * @return
      */

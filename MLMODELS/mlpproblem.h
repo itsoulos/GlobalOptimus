@@ -67,7 +67,10 @@ public:
     virtual Data getSample();
     void    resetViolationPercent(double limit);
     double  getViolationPercent();
+    double  getViolationPercentInBounds(double limit,Data &lb,Data &rb);
     virtual void initModel();
+    void    findBoundsWithSiman(Data &x0,Data &xl,Data &xr);
+    Data    getSampleNoViolate();
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H

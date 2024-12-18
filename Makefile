@@ -1698,7 +1698,9 @@ differentialevolution.o: METHODS/differentialevolution.cpp METHODS/differentiale
 		OPTIMUS/logger.h \
 		OPTIMUS/filelogger.h \
 		OPTIMUS/editlogger.h \
-		OPTIMUS/parameterlist.h
+		OPTIMUS/parameterlist.h \
+		MLMODELS/mlpproblem.h \
+		MLMODELS/model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o differentialevolution.o METHODS/differentialevolution.cpp
 
 genetic.o: METHODS/genetic.cpp METHODS/genetic.h \

@@ -142,6 +142,11 @@ double  Problem::randomDouble()
     return rand()*1.0/RAND_MAX;
 }
 
+void    Problem::randomize(int seed)
+{
+    srand(seed);
+}
+
 bool     Problem::getGradientCriterion(Data &x1,Data &x2)
 {
     Data g1,g2;
