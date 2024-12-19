@@ -1,9 +1,9 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=DifferentialEvolution
+METHOD=Bfgs
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=kmeans
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
@@ -65,7 +65,7 @@ then
 ##de_maxiters:    The maximum number of parameters
 ##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
 ##de_selection:   The selection method used in every iteration. Values: random, tournament
-	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_isneural=yes --de_neuralw=2 --de_lrate=0.005 --opt_termination=$TERMINATION --de_neuralsampling=yes"
+	METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_isneural=yes --de_neuralw=2 --de_lrate=0.005 --opt_termination=$TERMINATION --de_neuralsampling=no"
 elif [ $METHOD = "Adam" ]
 then
 
@@ -98,7 +98,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.005 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none"
+	METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none"
 elif [ $METHOD = "Multistart" ]
 then
 

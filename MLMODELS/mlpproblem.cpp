@@ -19,17 +19,20 @@ MlpProblem::MlpProblem()
 Data    MlpProblem::getSample()
 {
 
+
       //init weights
       Data xx;
       xx.resize(dimension);
+
+
       double leftMargin = getParam("mlp_leftmargin").getValue().toDouble();
       double rightMargin = getParam("mlp_rightmargin").getValue().toDouble();
       QString initmethod = getParam("mlp_initmethod").getValue();
 
       if(initmethod == "smallvalues")
       {
-          double a = -10;
-          double b = 10;
+          double a = -1;
+          double b = 1;
           for(int i=0;i<dimension;i++)
           {
               xx[i]=a+(b-a)*randomDouble();
@@ -462,18 +465,19 @@ QJsonObject MlpProblem::done(Data &x)
 
 Data    MlpProblem::getSampleNoViolate()
 {
-    Data x = getSample();
+    Data x;
     const int iters = 100;
     double minViolate = 1e+100;
     Data bestx = x;
+    x.resize(getDimension());
     for(int i=1;i<=iters;i++)
     {
         for(int j=0;j<getDimension();j++)
-            x[j]=(2.0*randomDouble()-1.0);
+            x[j]=0.01 * (2.0*randomDouble()-1.0);
         resetViolationPercent(10.0);
         double y = getTrainError();
         double p = getViolationPercent();
-        p  = y *(1.0+p/100.0);
+        p  = y *(1.0+p);
         if(p<minViolate)
         {
             minViolate=p;
