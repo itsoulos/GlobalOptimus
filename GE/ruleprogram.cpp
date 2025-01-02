@@ -54,7 +54,7 @@ double	RuleProgram::fitness(vector<int> &genome)
         int d = mparser[i].Parse(st,vars);
         if(d!=-1)
         {
-            //  printf("Wrong expression %s value = %d \n",st.c_str(),d);
+       //     printf("Wrong expression %s value = %d \n",st.c_str(),d);
             return NANVALUE;
         }
 
@@ -143,13 +143,13 @@ void RuleProgram::makeRules()
 
 
     r=newRule();
-    rule[r]->addSymbol(&Expr);
+    rule[r]->addSymbol(&XXlist);
     rule[r]->addSymbol(&relop);
     rule[r]->addSymbol(&Expr);
     boolexpr.addRule(rule[r]);
 
     r=newRule();
-    rule[r]->addSymbol(&Expr);
+    rule[r]->addSymbol(&XXlist);
     rule[r]->addSymbol(&relop);
     rule[r]->addSymbol(&Expr);
     rule[r]->addSymbol(&boolop);
@@ -224,7 +224,16 @@ void RuleProgram::makeRules()
 
     r=newRule();
     rule[r]->addSymbol(&Digit0);
-    rule[r]->addSymbol(&DigitList);
+    rule[r]->addSymbol(&Digit0);
+//    rule[r]->addSymbol(&DigitList);
+    DigitList.addRule(rule[r]);
+
+
+    r=newRule();
+    rule[r]->addSymbol(&Digit0);
+    rule[r]->addSymbol(&Digit0);
+    rule[r]->addSymbol(&Digit0);
+//    rule[r]->addSymbol(&DigitList);
     DigitList.addRule(rule[r]);
 
     r=newRule();
@@ -236,9 +245,13 @@ void RuleProgram::makeRules()
     r=newRule();
     rule[r]->addSymbol(&XXlist);
     terminal.addRule(rule[r]);
-    Expr.addRule(rule[r]);
+    //Expr.addRule(rule[r]);
 
     r=newRule();
+    rule[r]->addSymbol(&terminal);
+    Expr.addRule(rule[r]);
+
+    /*r=newRule();
     rule[r]->addSymbol(&Lpar);
     rule[r]->addSymbol(&XXlist);
     rule[r]->addSymbol(&binaryop);
@@ -246,7 +259,7 @@ void RuleProgram::makeRules()
     rule[r]->addSymbol(&Dot);
     rule[r]->addSymbol(&DigitList);
     rule[r]->addSymbol(&Rpar);
-    // Expr.addRule(rule[r]);
+    // Expr.addRule(rule[r]);*/
 
 
     r=newRule();
@@ -281,7 +294,7 @@ void RuleProgram::makeRules()
     rule[r]->addSymbol(&Log);
     function.addRule(rule[r]);
 
-    r=newRule();
+   /* r=newRule();
     rule[r]->addSymbol(&Lpar);
     rule[r]->addSymbol(&DigitList);
     rule[r]->addSymbol(&Dot);
@@ -290,7 +303,7 @@ void RuleProgram::makeRules()
     rule[r]->addSymbol(&binaryop);
     rule[r]->addSymbol(&XXlist);
     rule[r]->addSymbol(&Rpar);
-    // Expr.addRule(rule[r]);
+    // Expr.addRule(rule[r]);*/
 
 
 }

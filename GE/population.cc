@@ -297,14 +297,14 @@ void	Population::nextGeneration()
 {
 	calcFitnessArray();
 	
-    /*const int mod=localsearch_generations;
+    const int mod=localsearch_generations;
     const int count=localsearch_items;
 	if((generation+1) % mod==0) 
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
         localSearch(0);
-    }*/
+    }
 	
 	select();
 	crossover();
@@ -487,7 +487,7 @@ void	Population::localSearch(int pos)
                 double trial_fitness=fitness(g);
                 if(fabs(trial_fitness)<fabs(fitness_array[pos]))
                 {
-                    //printf("MUTATE[%d] %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
+                //    printf("MUTATE[%d] %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
 
                     fitness_array[pos]=trial_fitness;
                 }
