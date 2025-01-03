@@ -245,13 +245,13 @@ void RuleProgram::makeRules()
     r=newRule();
     rule[r]->addSymbol(&XXlist);
     terminal.addRule(rule[r]);
-    //Expr.addRule(rule[r]);
+    Expr.addRule(rule[r]);
 
     r=newRule();
     rule[r]->addSymbol(&terminal);
     Expr.addRule(rule[r]);
 
-    /*r=newRule();
+    r=newRule();
     rule[r]->addSymbol(&Lpar);
     rule[r]->addSymbol(&XXlist);
     rule[r]->addSymbol(&binaryop);
@@ -259,7 +259,7 @@ void RuleProgram::makeRules()
     rule[r]->addSymbol(&Dot);
     rule[r]->addSymbol(&DigitList);
     rule[r]->addSymbol(&Rpar);
-    // Expr.addRule(rule[r]);*/
+    // Expr.addRule(rule[r]);
 
 
     r=newRule();
@@ -294,7 +294,7 @@ void RuleProgram::makeRules()
     rule[r]->addSymbol(&Log);
     function.addRule(rule[r]);
 
-   /* r=newRule();
+    r=newRule();
     rule[r]->addSymbol(&Lpar);
     rule[r]->addSymbol(&DigitList);
     rule[r]->addSymbol(&Dot);
@@ -303,7 +303,7 @@ void RuleProgram::makeRules()
     rule[r]->addSymbol(&binaryop);
     rule[r]->addSymbol(&XXlist);
     rule[r]->addSymbol(&Rpar);
-    // Expr.addRule(rule[r]);*/
+   //Expr.addRule(rule[r]);
 
 
 }

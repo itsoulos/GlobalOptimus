@@ -43,7 +43,7 @@ void        RuleModel::trainModel()
  pop->setSelectionRate(getParam("rule_popsrate").getValue().toDouble());
  pop->setMutationRate(getParam("rule_popmrate").getValue().toDouble());
  pop->setLocalSearchRate(0.000);
- pop->setLocalMethod(GELOCAL_MUTATE);
+ pop->setLocalMethod(GELOCAL_NONE);
 
 
  int gens = getParam("rule_popgens").getValue().toInt();

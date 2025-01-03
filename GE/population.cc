@@ -479,17 +479,20 @@ void	Population::localSearch(int pos)
                 int new_value;
                 for(int k=0;k<20;k++)
                 {
-                int old_value = genome[pos][ipos];
-                int range = 20;
-                int direction = rand() % 2==1?1:-1;
+			int old_value,range,direction;
+again:
+		
+                old_value = genome[pos][ipos];
+                range = 20;
+                direction = rand() % 2==1?1:-1;
                 new_value =  old_value + direction * (rand() % range);
-                if(new_value<0) new_value=0;
+                if(new_value<0) goto again; 
                 genome[pos][ipos]=new_value;
                 for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
                 double trial_fitness=fitness(g);
                 if(fabs(trial_fitness)<fabs(fitness_array[pos]))
                 {
-                //    printf("MUTATE[%d] %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
+//                    printf("MUTATE[%d] %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
 
                     fitness_array[pos]=trial_fitness;
                 }
