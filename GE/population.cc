@@ -42,7 +42,7 @@ Population::Population(int gcount,int gsize,Program *p,int seed)
 		genome[i]=new int[genome_size];
 		children[i]=new int[genome_size];
 			for(int j=0;j<genome_size;j++)
-                g[j]=genome[i][j]=intDistrib(generator);//rand()%MAX_RULE;
+                g[j]=genome[i][j]=rand()%MAX_RULE;
 	}
 	fitness_array=new double[genome_count];
 }
@@ -149,7 +149,7 @@ void	Population::crossover()
 			// Select the best parents of  the candidates 
                         for(int j=0;j<tournament_size;j++)
                         {
-                r=intDistribGcount(generator);// rand() % (genome_count);
+                r= rand() % (genome_count);
                                 if(j==0 || fitness_array[r]<max_fitness)
                                 {
                                         max_index=r;
@@ -161,7 +161,7 @@ void	Population::crossover()
                 }
 		int pt1,pt2;
 		// The one-point crossover is performed here (the point is pt1)
-        pt1=intDistribGsize(generator);//rand() % genome_size;
+        pt1=rand() % genome_size;
 		memcpy(children[count_children],
 				genome[parent[0]],pt1 * sizeof(int));
 		memcpy(&children[count_children][pt1],
@@ -203,10 +203,10 @@ void	Population::mutate()
 	{
 		for(int j=0;j<genome_size;j++)
 		{
-            double r=doubleDistrib(generator);//rand()*1.0/RAND_MAX;
+            double r=rand()*1.0/RAND_MAX;
 			if(r<mutation_rate)
 			{
-                genome[i][j]=intDistrib(generator);//rand() % MAX_RULE;
+                genome[i][j]=rand() % MAX_RULE;
 			}
 		}
 	}
@@ -228,9 +228,11 @@ void	Population::calcFitnessArray()
 		//localSearch(i);
         if(lrate>0.0)
         {
-            double  r = doubleDistrib(generator);// rand() *1.0 /RAND_MAX;
+            double  r =  rand() *1.0 /RAND_MAX;
             if(r<=lrate)
+	    {
                 localSearch(i);
+	    }
         }
 		if(fabs(fitness_array[i])<dmin)
 		{
@@ -297,13 +299,13 @@ void	Population::nextGeneration()
 {
 	calcFitnessArray();
 	
+	
     const int mod=localsearch_generations;
     const int count=localsearch_items;
 	if((generation+1) % mod==0) 
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
-        localSearch(0);
     }
 	
 	select();
@@ -443,8 +445,8 @@ void	Population::localSearch(int pos)
     {
     for(int iters=1;iters<=crossover_items;iters++)
 	{
-        int gpos=intDistribGcount(generator);//rand() % genome_count;
-        int cutpoint=intDistribGsize(generator);//rand() % genome_size;
+        int gpos=rand() % genome_count;
+        int cutpoint=rand() % genome_size;
 		for(int j=0;j<cutpoint;j++) g[j]=genome[pos][j];
 		for(int j=cutpoint;j<genome_size;j++) g[j]=genome[gpos][j];
 		double f=fitness(g);
@@ -473,12 +475,12 @@ void	Population::localSearch(int pos)
 		
 	for(int i=0;i<genome_size;i++)
 	{
-        int ipos =intDistribGsize(generator);// rand() % genome_size;
+        int ipos =rand() % genome_size;
                 int new_value;
                 for(int k=0;k<20;k++)
                 {
                 int old_value = genome[pos][ipos];
-                int range = 10;
+                int range = 20;
                 int direction = rand() % 2==1?1:-1;
                 new_value =  old_value + direction * (rand() % range);
                 if(new_value<0) new_value=0;

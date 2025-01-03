@@ -143,13 +143,13 @@ void RuleProgram::makeRules()
 
 
     r=newRule();
-    rule[r]->addSymbol(&XXlist);
+    rule[r]->addSymbol(&Expr);
     rule[r]->addSymbol(&relop);
     rule[r]->addSymbol(&Expr);
     boolexpr.addRule(rule[r]);
 
     r=newRule();
-    rule[r]->addSymbol(&XXlist);
+    rule[r]->addSymbol(&Expr);
     rule[r]->addSymbol(&relop);
     rule[r]->addSymbol(&Expr);
     rule[r]->addSymbol(&boolop);

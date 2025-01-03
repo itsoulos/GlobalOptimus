@@ -42,7 +42,8 @@ void        RuleModel::trainModel()
 
  pop->setSelectionRate(getParam("rule_popsrate").getValue().toDouble());
  pop->setMutationRate(getParam("rule_popmrate").getValue().toDouble());
- pop->setLocalMethod(GELOCAL_NONE);
+ pop->setLocalSearchRate(0.000);
+ pop->setLocalMethod(GELOCAL_MUTATE);
 
 
  int gens = getParam("rule_popgens").getValue().toInt();
@@ -59,10 +60,16 @@ void        RuleModel::trainModel()
      int redo =0;
      vector<int> genome = pop->getBestGenome();
 
+    
      if(g%50==0)
+     {
      printf(" generation = %d best expression = %s best value= %20.10lg\n",g,
             program->printRandomProgram(genome,redo).c_str(),
             pop->getBestFitness());
+ pop->evaluateBestFitness();
+ printf("Errors %lf %lf \n",getTestError(),getClassTestError());
+
+     }
      if(g%LI==0)
      {
          for(int i=1;i<=LC;i++)

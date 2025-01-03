@@ -117,11 +117,17 @@ double  Model::getTrainError()
 double  Model::getTestError(Dataset *test)
 {
     double error = 0.0;
+    int icount = test->count();
     for(int i=0;i<test->count();i++)
     {
         Data xx = test->getXPoint(i);
         double yy = test->getYPoint(i);
         double per = getOutput(xx);
+	if(fabs(per)>1e+10) 
+	{
+		icount--;
+		continue;
+	}
         error+= (per-yy)*(per-yy);
     }
     return error;
