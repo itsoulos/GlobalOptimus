@@ -9,8 +9,7 @@ RuleModel::RuleModel()
     addParam(Parameter("rule_popgens","200","Maximum generations for RULER"));
     addParam(Parameter("rule_popsrate","0.10","RULER selection rate"));
     addParam(Parameter("rule_popmrate","0.05","RULER mutation rate"));
-    addParam(Parameter("rule_lsearchiters","10","Number of iters before local search"));
-    addParam(Parameter("rule_lsearchitems","1","Number of items in local search"));
+    addParam(Parameter("rule_poplrate","0.00","RULER local search rate"));
     addParam(Parameter("rule_lsearchmethod","bfgs","Available methods: bfgs,lbfgs,adam,genetic"));
 }
 
@@ -42,17 +41,29 @@ void        RuleModel::trainModel()
 
  pop->setSelectionRate(getParam("rule_popsrate").getValue().toDouble());
  pop->setMutationRate(getParam("rule_popmrate").getValue().toDouble());
- pop->setLocalSearchRate(0.000);
- pop->setLocalMethod(GELOCAL_NONE);
+ pop->setLocalSearchRate(getParam("rule_poplrate").getValue().toDouble());
+ QString method=getParam("rule_lsearchmethod").getValue();
+ if(method == "none")
+    pop->setLocalMethod(GELOCAL_NONE);
+ else
+ if(method == "crossover")
+    pop->setLocalMethod(GELOCAL_CROSSOVER);
+ else
+ if(method=="mutate")
+     pop->setLocalMethod(GELOCAL_MUTATE);
+ else
+ if(method=="bfgs")
+     pop->setLocalMethod(GELOCAL_BFGS);
+ else
+ if(method=="siman")
+     pop->setLocalMethod(GELOCAL_SIMAN);
 
 
  int gens = getParam("rule_popgens").getValue().toInt();
  //if(trialProblem==NULL)  trialProblem = new MlpProblem();
  //trialProblem->disableRemoveData();
  //trialProblem->setTrainSet(trainDataset);
- int LI,LC;
- LI= getParam("rule_lsearchiters").getValue().toInt();
- LC= getParam("rule_lsearchitems").getValue().toInt();
+
 
  for(int g=1;g<=gens;g++)
  {
@@ -63,21 +74,11 @@ void        RuleModel::trainModel()
     
      if(g%50==0)
      {
-     printf(" generation = %d best expression = %s best value= %20.10lg\n",g,
+        printf(" generation = %d best expression = %s best value= %20.10lg\n",g,
             program->printRandomProgram(genome,redo).c_str(),
             pop->getBestFitness());
- pop->evaluateBestFitness();
- printf("Errors %lf %lf \n",getTestError(),getClassTestError());
-
-     }
-     if(g%LI==0)
-     {
-         for(int i=1;i<=LC;i++)
-         {
-             int pos = rand() % pop->getCount();
-
-             localSearchItem(pos);
-         }
+            pop->evaluateBestFitness();
+        printf("Errors %lf %lf \n",getTestError(),getClassTestError());
      }
  }
  pop->evaluateBestFitness();

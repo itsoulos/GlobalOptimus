@@ -300,13 +300,13 @@ void	Population::nextGeneration()
 	calcFitnessArray();
 	
 	
-    const int mod=localsearch_generations;
+    /*const int mod=localsearch_generations;
     const int count=localsearch_items;
 	if((generation+1) % mod==0) 
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
-    }
+    }*/
 	
 	select();
 	crossover();
@@ -473,7 +473,7 @@ void	Population::localSearch(int pos)
     if(localMethod==GELOCAL_MUTATE)
     {
 		
-	for(int i=0;i<genome_size;i++)
+    for(int i=0;i<genome_size;i++)
 	{
         int ipos =rand() % genome_size;
                 int new_value;
@@ -483,7 +483,7 @@ void	Population::localSearch(int pos)
 again:
 		
                 old_value = genome[pos][ipos];
-                range = 20;
+                range = 10;
                 direction = rand() % 2==1?1:-1;
                 new_value =  old_value + direction * (rand() % range);
                 if(new_value<0) goto again; 
@@ -498,22 +498,6 @@ again:
                 }
                 else	genome[pos][ipos]=old_value;
                 }
-        /*int ipos = rand() % genome_size;
-		int new_value;
-		for(int k=0;k<20;k++)
-		{
-		int old_value = genome[pos][ipos];
-		new_value = rand() % 256;
-		genome[pos][ipos]=new_value;
-		for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
-		double trial_fitness=fitness(g);
-		if(fabs(trial_fitness)<fabs(fitness_array[pos]))
-		{
-			fitness_array[pos]=trial_fitness;
-			return;
-		}
-		else	genome[pos][ipos]=old_value;
-        }*/
 	}
     }
     else
@@ -544,13 +528,8 @@ again:
      method = new SimanMethod();
     method->setParam("opt_localsearch","none");
     method->setProblem(pr);
-    if(localMethod == GELOCAL_BFGS)
-
     ((Bfgs *)method)->setPoint(x,y);
-    else
-    ((SimanMethod *)method)->setPoint(x,y);
-
-    method->solve();
+     method->solve();
     x = pr->getBestx();
     y = pr->funmin(x);
     delete method;
