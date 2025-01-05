@@ -33,7 +33,7 @@ then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
 elif [ $MODEL = "rule" ]
 then
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=500 --rule_popsize=200 --rule_popgens=1000 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_poplrate=0.005  --rule_lsearchmethod=siman"
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=500 --rule_popsize=200 --rule_popgens=1000 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_poplrate=0.000  --rule_lsearchmethod=crossover"
 elif [ $MODEL = "nnc" ]
 then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.000 --nnc_lsearchmethod=mutate --nnc_crossitems=10"

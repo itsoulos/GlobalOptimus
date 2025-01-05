@@ -310,6 +310,15 @@ int getIters()
     }
     return 0;
 }
+
+void red () {
+  printf("\033[1;31m");
+}
+
+
+void reset () {
+  printf("\033[0m");
+}
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc,argv);
@@ -340,10 +349,12 @@ int main(int argc, char *argv[])
         average_train_error+=d1;
         average_test_error+=d2;
         average_class_error+=d3;
+	red();
         printf("TRAINING... TRAIN[%2d]=%10.5lf TEST[%2d]=%10.5lf CLASS[%2d]=%5.2lf%%\n",
              t,average_train_error/t,
              t,average_test_error/t,
                t, average_class_error/t);
+	reset();
 
     }
         unloadProblem();

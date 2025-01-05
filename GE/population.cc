@@ -300,13 +300,13 @@ void	Population::nextGeneration()
 	calcFitnessArray();
 	
 	
-    /*const int mod=localsearch_generations;
-    const int count=localsearch_items;
+    const int mod=5;//localsearch_generations;
+    const int count=5;//localsearch_items;
 	if((generation+1) % mod==0) 
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
-    }*/
+    }
 	
 	select();
 	crossover();
