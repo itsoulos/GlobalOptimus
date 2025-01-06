@@ -12,8 +12,8 @@ NNCModel::NNCModel()
     addParam(Parameter("nnc_popgens",200,10,10000,"Maximum generations for NNC"));
     addParam(Parameter("nnc_popsrate",0.10,0.0,1.0,"NNC selection rate"));
     addParam(Parameter("nnc_popmrate",0.05,0.0,1.0,"NNC mutation rate"));
-    //addParam(Parameter("nnc_lsearchiters","10","Number of iters before local search"));
-    //addParam(Parameter("nnc_lsearchitems","1","Number of items in local search"));
+    addParam(Parameter("nnc_lsearchiters","5","Number of iters before local search"));
+    addParam(Parameter("nnc_lsearchitems","5","Number of items in local search"));
     addParam(Parameter("nnc_lsearchrate",0.0,0.0,1.0,"Local search rate for nnc"));
     addParam(Parameter("nnc_crossitems",100,10,10000,"Crossover items"));
     QStringList methods;
