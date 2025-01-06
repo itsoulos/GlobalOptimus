@@ -4,14 +4,14 @@ This projects proposes a programming tool written in ANSI C+ for global optimiza
 1. A C++ compiler (GNU GCC is recommended).
 2. The GNU make utility
 3. The OpenMP programming library
-4. The QT programming library.
+4. The QT programming library (tested with version 5.15 and 6.8)
+
 ## Linux/Openbsd installation
 The steps to install the software in most Unix systems are
-1. Download the Qt library (usually using the package manager of the distribution)
-2. Unzip the software: guznip GlobalOptimus-master.zip
-3. Issue the command: cd GlobalOptimus-master
-4. Issue the command: qmake (or qmake-qt5 in some systems)
-5. Issue the command: make
+1. Download or clone the repository
+3. Issue the command: `cd GlobalOptimus`
+4. Issue the command: `qmake GlobalOptimus.pro` (or qmake-qt5 in some systems)
+5. Issue the command: `make`
 
 ## Windows installation
 On Windows a simple solution for the installation could be the following steps:
@@ -37,18 +37,25 @@ The steps of the installation are shown in Figure 1. The user needs to select on
 </p>
 
 (a) First screen of the windows installation wizard.
+
 ![win_1.png](paper/win_1.png)
 
 (b) The user selects the desired installation directory
+
 ![win_2.png](paper/win_2.png)
 
-
 (c) Prompt to install.
+
 ![win_3](paper/win_3.png)
+
 (d) Copying files.
+
 ![win_4](paper/win_4.png)
+
 (e) Finalizing installation.
+
 ![win_5](paper/win_5.png)
+
 **Figure 1.** The steps of windows installation
 
 
