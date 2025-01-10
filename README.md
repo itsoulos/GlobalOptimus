@@ -195,6 +195,13 @@ The class has two additional methods that may be used by the user:
 1. void init(QJsonObject &params). The function init() is called before the objective function is executed and its purpose is to pass parameters from the execution environment to the objective function. 
 2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The point x is the global minimum for the function f(x). 
 
+Having completed the coding of userproblem.cpp, the user should re - compile the software.  A simple execution of the user problem could be the following one:
+```
+./GlobalOptimus --opt_problem=userproblem --opt_method=Genetic --opt_iters=1  --opt_debug=yes
+```
+
+This line optimizes the userproblem with the Genetic Algorithm optimizer.
+
 ## The script runfunmin.sh
 It is a script to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
 
