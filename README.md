@@ -122,7 +122,47 @@ All global optimization methods can be enhanced by applying a local minimization
 
 ## Problem example
 Consider the Rastrigin problem, defined as: 
- $f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_1)-\cos(18_x2)$
+ $f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_1)-\cos(18x_2)$. This function is implemented as rastriginproblem.cpp in the PROBLEMS subdirectory of the distribution.  The RastriginProblem class contains the following main methods:
+ 1. The constructor method RastriginProblem. In this function dimension of the objective function should be 
+ defined as well as the bounds of this function.  For the case of this function the bounds are defined in $[-1,1]^2$. The code for this method has as follows
+ ```
+ RastriginProblem::RastriginProblem()
+    : Problem(2)
+{
+    Data l, r;
+    l.resize(2);
+    r.resize(2);
+    for (int i = 0; i < 2; i++)
+    {
+        l[i] = -1.0;
+        r[i] = 1.0;
+    }
+    setLeftMargin(l);
+    setRightMargin(r);
+}
+ ```
+ The method setLeftMargin() is used to change the left bound of the objective function and the method setRightMargin() is used for the corresponding right bound of the objective function. The dimension of the objective function is set to 2 and this is defined using the call to the Problem constructor with the line Problem(2).
+ 2. The method funmin. This method defines the objective function that should be minimized by any optimization method. For the case of the Rastrigin Problem the following definition is used:
+ ```
+ double RastriginProblem::funmin(Data &x)
+{
+    return x[0] * x[0] + x[1] * x[1] - cos(18.0 * x[0]) - cos(18.0 * x[1]);
+}
+ ```
+ The vector x defined the point where the objective function should be evaluated.
+ 3. The method gradient. This method stands for the gradient of the objective function, evaluated at a specific point. If the gradient vector can be calculated analytically, then the user should enter the code in this function. Otherwise, he can use some numerical calculation method such as finite differences. The code for the gradient of the Rastrigin problem has as follows:
+ ```
+Data RastriginProblem::gradient(Data &x)
+{
+    Data g;
+    g.resize(2);
+    g[0] = 2.0 * x[0] + 18.0 * sin(18.0 * x[0]);
+    g[1] = 2.0 * x[1] + 18.0 * sin(18.0 * x[1]);
+    return g;
+}
+ ```
+The vector g created at this method contains the gradient estimated at point x. 
+ 
 ## Implementing a user defined function
 
 ## The script runfunmin.sh
@@ -134,6 +174,6 @@ The program GlobalOptimus will print at the end of the execution the following i
 2. The average functions calls.
 3. The lowest function value.
 4. The percentage of the runs, where the global minimum was obtained.
-5. The standard deviation of the function calls.
+5. The standard deviation of the function calls. 
 
 
