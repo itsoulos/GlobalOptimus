@@ -120,6 +120,10 @@ All global optimization methods can be enhanced by applying a local minimization
 4. The Nelder Mead method (denoted as nelderMead).
 5. The Adam optimizer (denoted as adam).
 
+## Problem example
+This sentence uses `$` delimiters to show math inline: $\sqrt{3x-1}+(1+x)^2$
+## Implementing a user defined function
+
 ## The script runfunmin.sh
 It is a scrip to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
 
