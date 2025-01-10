@@ -217,12 +217,14 @@ The main executable GlobalOptimus has a series of command line options that will
 Also, the program can be used for testing puproses in order to validate the efficiency of the implemeted global optimization methods as well as 
 it can also be used to verify the correctness of writing any test function.  The command line options of the GlobalOptimus are divided into 3 categories:
 1. Global options. These parameters configure the overall behavior of the software and begin with the prefix opt in their name. Among these, one can identify the following:
-    a. --opt_problem
-    b. --opt_method
-    c. --opt_iters
-    d. --opt_debug
+
+    a. --opt_problem. This option is used to define the objective function to be used.
+    b. --opt_method. This option determines the global optimization method to be used during optimization. 
+    c. --opt_iters. This parameter defines the number of different executions for the global optimization method chosen by the user. With this option, the  stability of the selected  global optimization can be measured in the location of the global minimum.
+    d. --opt_debug. This option has two values: yes and no. If the used pass the value yes, then the program will print debug messages for every used global optimization method.
     e. --opt_localsearch
     f. --opt_sampler
+
 2. Optimizer options.
 3. Problem options.
 
