@@ -222,10 +222,15 @@ it can also be used to verify the correctness of writing any test function.  The
     b. --opt_method. This option determines the global optimization method to be used during optimization. 
     c. --opt_iters. This parameter defines the number of different executions for the global optimization method chosen by the user. With this option, the  stability of the selected  global optimization can be measured in the location of the global minimum.
     d. --opt_debug. This option has two values: yes and no. If the used pass the value yes, then the program will print debug messages for every used global optimization method.
-    e. --opt_localsearch
-    f. --opt_sampler
+    e. --opt_localsearch. This option is used to select the local optimization method that will be used by the global optimizer.
+    f. --opt_sampler. This option sets the sampling technique used in a series of global optimization methods, such as genetic algorithm, pso, multistart etc. The available values are: uniform, maxwell, triangular, mlp, rbf, kmeans
 
-2. Optimizer options.
+
+2. Optimizer options. All global optimization techniques included in this software use a series of parameters to improve their performance. For example, the user can set the number of chromosomes to 200 in the genetic algorithm with the parameter --gen_count=200. The list with all parameters used by the global optimization methods can be printed using the following command:
+```
+./GlobalOptimus --help
+```
+
 3. Problem options.
 
 
