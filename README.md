@@ -213,12 +213,18 @@ This line optimizes the userproblem with the Genetic Algorithm optimizer.
 
 
 ## Testing
-The program GlobalOptimus will print at the end of the execution the following information
-1. The global minimum located in every run.
-2. The average functions calls.
-3. The lowest function value.
-4. The percentage of the runs, where the global minimum was obtained.
-5. The standard deviation of the function calls. 
+The main executable GlobalOptimus has a series of command line options that will be used to optimize the objective functions located under PROBLEMS subdirectory.
+Also, the program can be used for testing puproses in order to validate the efficiency of the implemeted global optimization methods as well as 
+it can also be used to verify the correctness of writing any test function.  The command line options of the GlobalOptimus are divided into 3 categories:
+1. Global options. These parameters configure the overall behavior of the software and begin with the prefix opt in their name. Among these, one can identify the following:
+    a. --opt_problem
+    b. --opt_method
+    c. --opt_iters
+    d. --opt_debug
+    e. --opt_localsearch
+    f. --opt_sampler
+2. Optimizer options.
+3. Problem options.
 
 
 ## The script runfunmin.sh
