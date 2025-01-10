@@ -231,11 +231,73 @@ it can also be used to verify the correctness of writing any test function.  The
 ./GlobalOptimus --help
 ```
 
-3. Problem options.
+3. Problem options. The remaining command line options are considered as options that should be passed to the optimization problem.
 
-
-## The script runfunmin.sh
-It is a script to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
-
-
-
+As a full working example, that may be used to test the effectiveness of the Genetic Algorithm to estimate the global minimum of the function $ f(x)= \frac{1}{2}\sum_{i=1}^{n}(x_{i}^4-16x_i^{2}+5x_i)$. This function has $2^{n}$ local minima in the range $[-5,5]^{n}$ and it is represented by the name test2n in the optimization package.  During the first test, the test2n function where $n=4$ is minimized with the following command:
+```
+./GlobalOptimus  --opt_problem=test2n --opt_method=Genetic --opt_debug=no --opt_iters=10 --opt_dimension=4
+```
+The last parameter opt_dimension is passed to the optimization function. The output from this command will be:
+```
+Executions:   10
+===================
+RUN:    1 BEST VALUE:         -156.6646628 FUNCTION CALLS: 1442
+RUN:    2 BEST VALUE:         -156.6646628 FUNCTION CALLS: 5284
+RUN:    3 BEST VALUE:         -156.6646628 FUNCTION CALLS: 1610
+RUN:    4 BEST VALUE:         -156.6646628 FUNCTION CALLS: 3795
+RUN:    5 BEST VALUE:         -156.6646628 FUNCTION CALLS: 1390
+RUN:    6 BEST VALUE:         -156.6646628 FUNCTION CALLS: 46462
+RUN:    7 BEST VALUE:         -156.6646628 FUNCTION CALLS: 2066
+RUN:    8 BEST VALUE:         -142.5279438 FUNCTION CALLS: 1343
+RUN:    9 BEST VALUE:         -156.6646628 FUNCTION CALLS: 22712
+RUN:   10 BEST VALUE:         -156.6646628 FUNCTION CALLS: 19590
+Average Function calls:             10569.40
+Minimum Function Value:         -156.6646628
+Percent Minimum  Found:                90.00%
+```
+The program prints in standard output the global minimum located in every run and the required number of function calls. At the end, the average number of function calls and the percentage of the runs where the same global minimum was found are printed.
+If the dimension of the objective function is increased to $n=5$, then the following command is used for the corresponding optimization:
+```
+./GlobalOptimus  --opt_problem=test2n --opt_method=Genetic --opt_debug=no --opt_iters=10 --opt_dimension=5
+```
+The output for this command (in Debian Linux ) could be the following:
+```
+Executions:   10
+===================
+RUN:    1 BEST VALUE:         -181.6941095 FUNCTION CALLS: 1971
+RUN:    2 BEST VALUE:         -181.6941095 FUNCTION CALLS: 2038
+RUN:    3 BEST VALUE:         -195.8308285 FUNCTION CALLS: 1238
+RUN:    4 BEST VALUE:         -195.8308285 FUNCTION CALLS: 41601
+RUN:    5 BEST VALUE:         -195.8308285 FUNCTION CALLS: 1387
+RUN:    6 BEST VALUE:         -181.6941095 FUNCTION CALLS: 1360
+RUN:    7 BEST VALUE:         -181.6941095 FUNCTION CALLS: 4092
+RUN:    8 BEST VALUE:         -195.8308285 FUNCTION CALLS: 35729
+RUN:    9 BEST VALUE:         -195.8308285 FUNCTION CALLS: 2760
+RUN:   10 BEST VALUE:         -195.8308285 FUNCTION CALLS: 19691
+Average Function calls:             11186.70
+Minimum Function Value:         -195.8308285
+Percent Minimum  Found:                60.00%
+```
+As it was expected, the required number of function calls increased but the success rate of the genetic algorithm dropped from 90% to 60%, because of the increase in the dimension of the objective function. The following command
+``
+./GlobalOptimus  --opt_problem=test2n --opt_method=Genetic --opt_debug=no --opt_iters=10 --opt_dimension=5 --gen_lrate=0.05
+``
+utilizes again the Genetic Algorithm for the test2n function with $n=5$, but the local search rate is set to 0.05 (5%). This parameter determines the number of chromosomes to which a local minimization method will be applied in each generation. The output from the previous command is:
+```
+Executions:   10
+===================
+RUN:    1 BEST VALUE:         -195.8308285 FUNCTION CALLS: 8700
+RUN:    2 BEST VALUE:         -181.6941095 FUNCTION CALLS: 3159
+RUN:    3 BEST VALUE:         -195.8308285 FUNCTION CALLS: 3060
+RUN:    4 BEST VALUE:         -195.8308285 FUNCTION CALLS: 3806
+RUN:    5 BEST VALUE:         -195.8308285 FUNCTION CALLS: 2860
+RUN:    6 BEST VALUE:         -195.8308285 FUNCTION CALLS: 8504
+RUN:    7 BEST VALUE:         -195.8308285 FUNCTION CALLS: 3597
+RUN:    8 BEST VALUE:         -195.8308285 FUNCTION CALLS: 16090
+RUN:    9 BEST VALUE:         -195.8308285 FUNCTION CALLS: 3736
+RUN:   10 BEST VALUE:         -195.8308285 FUNCTION CALLS: 9152
+Average Function calls:              6266.40
+Minimum Function Value:         -195.8308285
+Percent Minimum  Found:                90.00%
+```
+As we can see, the incorporation of the local search method increased the success rate of the genetic algorithm from 60% to 90%. 
