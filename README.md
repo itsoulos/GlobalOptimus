@@ -161,7 +161,16 @@ Data RastriginProblem::gradient(Data &x)
     return g;
 }
  ```
-The vector g created at this method contains the gradient estimated at point x. 
+The vector g created at this method contains the gradient estimated at point x. The user can optimize the Rastrigin function using the main executable GlobalOptimus. An example of execution could be the following:
+```
+./GlobalOptimus --opt_problem=rastrigin --opt_method=Genetic --opt_localsearch=lbfgs --opt_iters=1  --opt_debug=yes
+```
+This command will optimize the rastrigin test function using the Genetic Algorithm optimizer. The parameters used here have the following meaning:
+
+1. The parameter --opt_localsearch  defines the used local optimization procedure, that should invoked after the termination of the Genetic Algorithm. In  this case the Lbfgs optimization method will be used.
+2. The parameter --opt_iters stands for the number of  executions of the Genetic Algorithm. In thise case the number of executions are 1.
+3. The parameter --opt_debug indicates if the genetic algorithm will print debug messages in the standard output.
+
  
 ## Implementing a user defined function
 For convenience, all objective problems have been stored in the PROBLEMS folder of the existing distribution, although the programmer can easily create his own objective function simply by overriding the class Problem. The user can also implement the methods of class UserProblem found in the PROBLEMS subdirectory in order to create a new test function. The contents of the file userproblem.cpp are shown below
@@ -202,8 +211,6 @@ Having completed the coding of userproblem.cpp, the user should re - compile the
 
 This line optimizes the userproblem with the Genetic Algorithm optimizer.
 
-## The script runfunmin.sh
-It is a script to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
 
 ## Testing
 The program GlobalOptimus will print at the end of the execution the following information
@@ -212,5 +219,10 @@ The program GlobalOptimus will print at the end of the execution the following i
 3. The lowest function value.
 4. The percentage of the runs, where the global minimum was obtained.
 5. The standard deviation of the function calls. 
+
+
+## The script runfunmin.sh
+It is a script to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
+
 
 
