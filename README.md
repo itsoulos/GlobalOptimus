@@ -164,9 +164,39 @@ Data RastriginProblem::gradient(Data &x)
 The vector g created at this method contains the gradient estimated at point x. 
  
 ## Implementing a user defined function
+For convenience, all objective problems have been stored in the PROBLEMS folder of the existing distribution, although the programmer can easily create his own objective function simply by overriding the class Problem. The user can also implement the methods of class UserProblem found in the PROBLEMS subdirectory in order to create a new test function. The contents of the file userproblem.cpp are shown below
+```
+#include "userproblem.h" 
+# include <stdio.h> 
+UserProblem::UserProblem() :Problem(1) 
+{
+}
+double  UserProblem::funmin(Data &x) 
+{     
+	printf("This is a simple test function.\n");     
+	return 0.0; 
+}
+Data UserProblem::gradient(Data &x) 
+{     
+	Data g;     
+	g.resize(x.size());     
+	return g; 
+}
+void    UserProblem::init(QJsonObject &params) 
+{
+}
+QJsonObject UserProblem::done(Data &x)
+{
+}
+UserProblem::~UserProblem() {
+}
+```
+The class has two additional methods that may be used by the user:
+1. void init(QJsonObject &params). The function init() is called before the objective function is executed and its purpose is to pass parameters from the execution environment to the objective function. 
+2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The point x is the global minimum for the function f(x). 
 
 ## The script runfunmin.sh
-It is a scrip to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
+It is a script to simplify the optimization tasks, used in Unix environments. A similar script for Windows environments is called runfunmin.bat
 
 ## Testing
 The program GlobalOptimus will print at the end of the execution the following information
