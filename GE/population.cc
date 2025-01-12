@@ -126,6 +126,26 @@ void	Population::select()
 	}
 }
 
+int Population::tournament()
+{
+    const int tournament_size =(genome_count<=100)?4:20;
+
+    double max_fitness=1e+10;
+    int    max_index=-1;
+int r;
+// Select the best parents of  the candidates
+    for(int j=0;j<tournament_size;j++)
+    {
+r= rand() % (genome_count);
+            if(j==0 || fitness_array[r]<max_fitness)
+            {
+                    max_index=r;
+                    max_fitness=fitness_array[r];
+            }
+    }
+    return max_index;
+}
+
 /* Crossover operation: based on tournament selection */
 /* Select the tournament_size based on the genome count : */
 /*     (if genome_count > 100 ) tournament_size = 10   else   tournament_size = 4 */
@@ -143,21 +163,7 @@ void	Population::crossover()
 		// The two parents are selected here according to the tournament selection procedure
                 for(int i=0;i<2;i++)
                 {
-                        double max_fitness=1e+10;
-                        int    max_index=-1;
-			int r;
-			// Select the best parents of  the candidates 
-                        for(int j=0;j<tournament_size;j++)
-                        {
-                r= rand() % (genome_count);
-                                if(j==0 || fitness_array[r]<max_fitness)
-                                {
-                                        max_index=r;
-                                        max_fitness=fitness_array[r];
-                                }
-                        }
-                        parent[i]=max_index;
-			
+                        parent[i]=tournament();
                 }
 		int pt1,pt2;
 		// The one-point crossover is performed here (the point is pt1)
@@ -303,7 +309,7 @@ void	Population::nextGeneration()
 	
     const int mod=localsearch_generations;
     const int count=localsearch_items;
-	if((generation+1) % mod==0) 
+    if(mod && (generation+1) % mod==0)
 	{
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
@@ -474,9 +480,39 @@ void	Population::localSearch(int pos)
     if(localMethod==GELOCAL_MUTATE)
     {
 		
+        int randomA,randomB,randomC;
+        do
+        {
+            randomA =  tournament();
+            randomB =  tournament();
+            randomC =  tournament();
+        }while(randomA == randomB || randomB == randomC || randomC == randomA);
+        double CR= 0.9;
+        double F = 0.8;
+        int randomIndex = rand() % genome_size;
     for(int i=0;i<genome_size;i++)
 	{
-        int ipos =rand() % genome_size;
+        if(i==randomIndex || rand()*1.0/RAND_MAX <=CR)
+        {
+            int old_value = genome[pos][i];
+            F = -0.5 + 2.0 * rand()*1.0/RAND_MAX;
+            genome[pos][i]=genome[randomA][i]+F*(genome[randomB][i]-genome[randomC][i]);
+            if(genome[pos][i]<0)
+            {
+             genome[pos][i]=old_value;
+             continue;
+            }
+
+            for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
+            double trial_fitness=fitness(g);
+            if(fabs(trial_fitness)<fabs(fitness_array[pos]))
+            {
+            //    printf("NEW DE VALUE[%d] = %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
+                fitness_array[pos]=trial_fitness;
+            }
+            else	genome[pos][i]=old_value;
+        }
+/*        int ipos =rand() % genome_size;
                 int new_value;
                 for(int k=0;k<20;k++)
                 {
@@ -493,12 +529,10 @@ again:
                 double trial_fitness=fitness(g);
                 if(fabs(trial_fitness)<fabs(fitness_array[pos]))
                 {
-//                    printf("MUTATE[%d] %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
-
                     fitness_array[pos]=trial_fitness;
                 }
                 else	genome[pos][ipos]=old_value;
-                }
+                }*/
 	}
     }
     else

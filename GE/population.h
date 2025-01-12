@@ -65,6 +65,7 @@ class Population
         void    setCrossoverItems(int n);
         int     getCrossoverItems() const;
         void    setRandomSeed(int s);
+        int tournament() ;
 		~Population();
 		
 };

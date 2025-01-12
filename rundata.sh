@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=rule
+MODEL=nnc
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -36,7 +36,7 @@ then
 	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=500 --rule_popsize=200 --rule_popgens=1000 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_poplrate=0.000  --rule_lsearchmethod=crossover"
 elif [ $MODEL = "nnc" ]
 then
-	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.000 --nnc_lsearchmethod=mutate --nnc_crossitems=10 --nnc_lsearchiters=5 --nnc_lsearchitems=5"
+	MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.000 --nnc_lsearchmethod=mutate --nnc_crossitems=10 --nnc_lsearchiters=10 --nnc_lsearchitems=20"
 fi
 
 if [ $METHOD = "Bfgs" ]
