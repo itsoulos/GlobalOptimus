@@ -496,7 +496,7 @@ void	Population::localSearch(int pos)
         {
             int old_value = genome[pos][i];
             F = -0.5 + 2.0 * rand()*1.0/RAND_MAX;
-            genome[pos][i]=genome[randomA][i]+F*(genome[randomB][i]-genome[randomC][i]);
+            genome[pos][i]=genome[randomA][i]+abs(F*(genome[randomB][i]-genome[randomC][i]));
             if(genome[pos][i]<0)
             {
              genome[pos][i]=old_value;

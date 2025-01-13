@@ -86,16 +86,32 @@ void    NNCModel::trainModel()
                     localSearchItem(pos);
                 }
         }*/
+	//if(g%50==0) localSearchItem(0);
        }
 
     pop->evaluateBestFitness();
-  // setParam("nnc_lsearchmethod","bfgs");
-  // localSearchItem(0);
+   setParam("nnc_lsearchmethod","bfgs");
+   localSearchItem(0);
+   setParam("nnc_lsearchmethod",Lmethod);
+    if(Lmethod == "none")
+        pop->setLocalMethod(GELOCAL_NONE);
+    else
+        if(Lmethod == "crossover")
+        pop->setLocalMethod(GELOCAL_CROSSOVER);
+    else
+        if(Lmethod == "mutate")
+        pop->setLocalMethod(GELOCAL_MUTATE);
+    else
+        if(Lmethod == "bfgs")
+        pop->setLocalMethod(GELOCAL_BFGS);
+    else
+        pop->setLocalMethod(GELOCAL_SIMAN);
 }
 
 void        NNCModel::localSearchItem(int pos)
 {
        QString Lmethod = getParam("nnc_lsearchmethod").getValue();
+       Lmethod = "bfgs";
        if(Lmethod == "random")
        {
         pop->localSearch(pos);
@@ -104,6 +120,7 @@ void        NNCModel::localSearchItem(int pos)
         vector<int> xx;
         double yy;
         pop->getChromosome(pos,xx,yy);
+	vector<int> oldx = xx;
         if(fabs(yy)>1e+10) return;
         int redo = 0;
         string st = program->printRandomProgram(xx,redo);
@@ -167,6 +184,7 @@ void        NNCModel::localSearchItem(int pos)
             printf("Local Search[%lf]->%lf\n",yy,newy);
             pop->setChromosome(pos,xx,newy);
         }
+	else pop->evaluateBestFitness();
 }
 
 NNCModel::~NNCModel()
