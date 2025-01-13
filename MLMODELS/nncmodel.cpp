@@ -16,6 +16,7 @@ NNCModel::NNCModel()
     addParam(Parameter("nnc_lsearchitems","5","Number of items in local search"));
     addParam(Parameter("nnc_lsearchrate",0.0,0.0,1.0,"Local search rate for nnc"));
     addParam(Parameter("nnc_crossitems",100,10,10000,"Crossover items"));
+    addParam(Parameter("nnc_steadystate","no","Enable or disable steady state"));
     QStringList methods;
     methods<<"crossover"<<"mutate"<<"bfgs"<<"none";
     addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
@@ -57,6 +58,11 @@ void    NNCModel::trainModel()
     if(parser!=NULL) delete parser;
     parser =new NeuralParser(trainDataset->dimension());
     QString Lmethod = getParam("nnc_lsearchmethod").getValue();
+    QString hasSteadyState = getParam("nnc_steadystate").getValue();
+    if(hasSteadyState=="yes")
+	    pop->enableSteadyState();
+    else
+	    pop->disableSteadyState();
     if(Lmethod == "none")
         pop->setLocalMethod(GELOCAL_NONE);
     else

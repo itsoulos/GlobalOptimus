@@ -185,11 +185,19 @@ void	Population::crossover()
 	
 	for(int i=0;i<nchildren;i++)
 	{
-		//for(int j=0;j<g.size();j++) g[j]=children[i][j];
-		//double f=fitness(g);
-		//if(fabs(f)<fabs(fitness_array[genome_count-i-1]))
+		if(hasSteadyState)
+		{
+		for(int j=0;j<g.size();j++) g[j]=children[i][j];
+		double f=fitness(g);
+		if(fabs(f)<fabs(fitness_array[genome_count-i-1]))
 		memcpy(genome[genome_count-i-1],
 				children[i],genome_size * sizeof(int));
+		}
+		else
+		{
+		memcpy(genome[genome_count-i-1],
+				children[i],genome_size * sizeof(int));
+		}
 	}
 }
 
@@ -202,6 +210,9 @@ void	Population::setElitism(int s)
 /* Standard mutation algorithm: mutate all chromosomes in the population based on the mutation probability */
 void	Population::mutate()
 {
+	vector<int> g;
+	g.resize(genome_size);
+	
 	int start = elitism * (int)(genome_count*selection_rate);
 	start = elitism;
 	start = 1;
@@ -212,7 +223,7 @@ void	Population::mutate()
             double r=rand()*1.0/RAND_MAX;
 			if(r<mutation_rate)
 			{
-                genome[i][j]=rand() % MAX_RULE;
+				genome[i][j]=rand() % MAX_RULE;
 			}
 		}
 	}
@@ -314,9 +325,9 @@ void	Population::nextGeneration()
 		for(int i=0;i<count;i++)
 			localSearch(rand()%genome_count);
     }
-	
 	select();
 	crossover();
+	
 	if(generation) mutate();
 	++generation;
 }
@@ -495,7 +506,7 @@ void	Population::localSearch(int pos)
         if(i==randomIndex || rand()*1.0/RAND_MAX <=CR)
         {
             int old_value = genome[pos][i];
-            F = -0.5 + 2.0 * rand()*1.0/RAND_MAX;
+            F = 0.5;//-0.5 + 2.0 * rand()*1.0/RAND_MAX;
             genome[pos][i]=genome[randomA][i]+abs(F*(genome[randomB][i]-genome[randomC][i]));
             if(genome[pos][i]<0)
             {
@@ -601,6 +612,15 @@ void    Population::setRandomSeed(int s)
     generator.seed(randomSeed);
 }
 
+void	Population::enableSteadyState()
+{
+	hasSteadyState = true;
+}
+
+void	Population::disableSteadyState()
+{
+	hasSteadyState=false;
+}
 /* Destructor */
 Population::~Population()
 {

@@ -30,6 +30,7 @@ class Population
 		void	calcFitnessArray();
 		void	replaceWorst();
 		int	elitism;
+		bool	hasSteadyState=false;
         int localsearch_generations;
         int localsearch_items;
         int randomSeed=1;
@@ -65,6 +66,8 @@ class Population
         void    setCrossoverItems(int n);
         int     getCrossoverItems() const;
         void    setRandomSeed(int s);
+	void	enableSteadyState();
+	void	disableSteadyState();
         int tournament() ;
 		~Population();
 		
