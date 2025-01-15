@@ -215,7 +215,7 @@ debug  = params["problem_debug"].toString();
 ```
 2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The vector x represents the last located value from the used global optimizer, i.e. the estimated global minimum. The function done() may use this information for any purpose, such as to store this value to a file or use the vector x as the weights of a neural network and to estimate subsequently the test error for this neural network.
 
-Having completed the coding of userproblem.cpp, the user should re - compile the software.  A simple execution of the user problem could be the following one:
+Having completed the coding of userproblem.cpp, the user should re - compile the software. This is also needed if the user have installed the software using the accompanyied .msi file from the distribution. After the re - compilation  a simple execution of the user problem could be the following one:
 ```
 ./GlobalOptimus --opt_problem=userproblem --opt_method=Genetic --opt_iters=1  --opt_debug=yes
 ```
