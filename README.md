@@ -201,8 +201,19 @@ UserProblem::~UserProblem() {
 }
 ```
 The class has two additional methods that may be used by the user:
-1. void init(QJsonObject &params). The function init() is called before the objective function is executed and its purpose is to pass parameters from the execution environment to the objective function. 
-2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The point x is the global minimum for the function f(x). 
+1. void init(QJsonObject &params). The function init() is called before the objective function is executed and its purpose is to pass parameters from the execution environment to the objective function. These parameters are passed from the main executed program and as an example consider the following json object:
+```
+ {
+    "problem_atoms":3,
+    "problem_debug":"yes"
+ }
+```
+This information could be the number of atoms for a molecular potential and a flag to enable or disable debug messages. This information can be obtained in the init() function with the following sample of c++ code:
+```
+natoms = params["problem_atoms"].toString().toInt();
+debug  = params["problem_debug"].toString();
+```
+2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The vector x represents the last located value from the used global optimizer, i.e. the estimated global minimum. The function done() may use this information for any purpose, such as to store this value to a file or use the vector x as the weights of a neural network and to estimate subsequently the test error for this neural network.
 
 Having completed the coding of userproblem.cpp, the user should re - compile the software.  A simple execution of the user problem could be the following one:
 ```
