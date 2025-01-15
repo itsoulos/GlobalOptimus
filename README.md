@@ -213,7 +213,8 @@ This information could be the number of atoms for a molecular potential and a fl
 natoms = params["problem_atoms"].toString().toInt();
 debug  = params["problem_debug"].toString();
 ```
-These parameters are those that do not belong to the main program and do not belong to any of the global optimization methods available in this software package.
+These parameters are passed on the command line to the `Optimus` program by using keys that do not belong to the main program or any of the global optimization methods available in this software package.
+If the parameters are not passed to the function, sensible default values should be provided. 
 
 2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The vector x represents the last located value from the used global optimizer, i.e. the estimated global minimum. The function done() may use this information for any purpose, such as to store this value to a file or use the vector x as the weights of a neural network and to estimate subsequently the test error for this neural network. The function returns a Json object that may contain valuable information about the termnination of the whole process, such as the estimated test error of the neural network exampled mentioned before. An example of this process could be the following:
 ```
