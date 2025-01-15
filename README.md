@@ -244,7 +244,7 @@ it can also be used to verify the correctness of writing any test function.  The
 
 3. Problem options. The remaining command line options are considered as options that should be passed to the optimization problem.
 
-As a full working example, that may be used to test the effectiveness of the Genetic Algorithm to estimate the global minimum of the function $ f(x)= \frac{1}{2}\sum_{i=1}^{n}(x_{i}^4-16x_i^{2}+5x_i)$. This function has $2^{n}$ local minima in the range $[-5,5]^{n}$ and it is represented by the name test2n in the optimization package.  During the first test, the test2n function where $n=4$ is minimized with the following command:
+As a full working example, that may be used to test the effectiveness of the Genetic Algorithm to estimate the global minimum of the function $f(x)= \frac{1}{2}\sum_{i=1}^{n}(x_{i}^4-16x_i^{2}+5x_i)$. This function has $2^{n}$ local minima in the range $[-5,5]^{n}$ and it is represented by the name test2n in the optimization package.  During the first test, the test2n function where $n=4$ is minimized with the following command:
 ```
 ./GlobalOptimus  --opt_problem=test2n --opt_method=Genetic --opt_debug=no --opt_iters=10 --opt_dimension=4
 ```
