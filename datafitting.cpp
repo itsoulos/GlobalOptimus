@@ -148,8 +148,6 @@ void loadProblem()
        {
         MlpProblem *p = (MlpProblem *)mainModel;
         p->init(problemParams);
-        qDebug()<<"Problem Params are "<<problemParams;
-        printf("initialize problem \n");
        }
        else
       if(modelName == "frbf")

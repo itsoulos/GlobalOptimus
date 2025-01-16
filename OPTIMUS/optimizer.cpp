@@ -10,7 +10,7 @@ Optimizer::Optimizer()
     myProblem = NULL;
     QStringList opt_debug;opt_debug<<"yes"<<"no";
     QStringList opt_localsearch;
-    opt_localsearch<<"bfgs"<<"lbfgs"<<"nelderMead"<<"gradient"<<"adam";
+    opt_localsearch<<"bfgs"<<"lbfgs"<<"nelderMead"<<"gradient"<<"adam"<<"none";
     QStringList opt_sampler;
     opt_sampler<<"uniform"<<"triangular"<<"maxwell"<<"mlp"<<"rbf"<<"kmeans";
 
@@ -63,6 +63,7 @@ void        Optimizer::setParams(QJsonObject &x)
 void        Optimizer::setProblem(Problem *p)
 {
     myProblem = p;
+
 }
 
 void        Optimizer::addParam(Parameter p)
@@ -202,6 +203,10 @@ double  Optimizer::localSearch(Data &x)
     QString localMethod = getParam("opt_localsearch").getValue();
     double y=1e+10;
     Optimizer *local=NULL;
+    if(localMethod=="none" || localMethod=="")
+    {
+        return myProblem->funmin(x);
+    }
     if(localMethod == "gradient")
     {
         local = new GradientDescent();
@@ -226,6 +231,7 @@ double  Optimizer::localSearch(Data &x)
     else
     if(localMethod == "lbfgs")
     {
+
         local = new Lbfgs();
         local->setProblem(myProblem);
         ((Lbfgs *)local)->setPoint(x,y);

@@ -1,6 +1,5 @@
 #include "nncmodel.h"
 
-
 NNCModel::NNCModel()
 {
     program = NULL;
@@ -17,6 +16,10 @@ NNCModel::NNCModel()
     addParam(Parameter("nnc_lsearchrate",0.0,0.0,1.0,"Local search rate for nnc"));
     addParam(Parameter("nnc_crossitems",100,10,10000,"Crossover items"));
     addParam(Parameter("nnc_steadystate","no","Enable or disable steady state"));
+    addParam(Parameter("nnc_weightfactor",2.0,1.0,10.0,"The weight factor for local optimization"));
+    QStringList yesno;
+    yesno<<"no"<<"yes";
+    addParam(Parameter("nnc_enablebound",yesno[0],yesno,"Enable (yes) or disable (no) the bounding solution for MLP"));
     QStringList methods;
     methods<<"crossover"<<"mutate"<<"bfgs"<<"none";
     addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
@@ -76,14 +79,18 @@ void    NNCModel::trainModel()
         pop->setLocalMethod(GELOCAL_BFGS);
     else
         pop->setLocalMethod(GELOCAL_SIMAN);
+
+    /**
+     */
+    pop->setLocalMethod(GELOCAL_NONE);
     pop->setLocalSearchGenerations(LI);
     pop->setLocalSearchItems(LC);
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
-        if(g%50==0)
+        if(g%10==0)
         printf(" generation = %d best value= %20.10lg\n",g,pop->getBestFitness());
-        /*if(g%LI==0)
+        if(g%LI==0)
             {
                 for(int i=1;i<=LC;i++)
                 {
@@ -91,50 +98,35 @@ void    NNCModel::trainModel()
 
                     localSearchItem(pos);
                 }
-        }*/
-	//if(g%50==0) localSearchItem(0);
-       }
+        }
 
+       }
     pop->evaluateBestFitness();
-   setParam("nnc_lsearchmethod","bfgs");
-   localSearchItem(0);
-   setParam("nnc_lsearchmethod",Lmethod);
-    if(Lmethod == "none")
-        pop->setLocalMethod(GELOCAL_NONE);
-    else
-        if(Lmethod == "crossover")
-        pop->setLocalMethod(GELOCAL_CROSSOVER);
-    else
-        if(Lmethod == "mutate")
-        pop->setLocalMethod(GELOCAL_MUTATE);
-    else
-        if(Lmethod == "bfgs")
-        pop->setLocalMethod(GELOCAL_BFGS);
-    else
-        pop->setLocalMethod(GELOCAL_SIMAN);
 }
 
 void        NNCModel::localSearchItem(int pos)
 {
-       QString Lmethod = getParam("nnc_lsearchmethod").getValue();
-       Lmethod = "bfgs";
+    Data w;
+    vector<int> xx;
+    double yy;
+    int redo = 0;
+    double wf = getParam("nnc_weightfactor").getValue().toDouble();
+ QString Lmethod = getParam("nnc_lsearchmethod").getValue();
+
        if(Lmethod == "random")
        {
         pop->localSearch(pos);
         return;
        }
-        vector<int> xx;
-        double yy;
+
         pop->getChromosome(pos,xx,yy);
-	vector<int> oldx = xx;
+        vector<int> oldx = xx;
         if(fabs(yy)>1e+10) return;
-        int redo = 0;
         string st = program->printRandomProgram(xx,redo);
         if(!program->Parse(st)) return;
         parser->makeVector(st);
         string pt = parser->print();
 
-       Data w;
         parser->getWeights(w);
         trialProblem->resetFunctionCalls();
         trialProblem->setWeights(w);
@@ -144,12 +136,18 @@ void        NNCModel::localSearchItem(int pos)
         xl.resize(w.size());
         for(int j=0;j<w.size();j++)
         {
-            xl[j]=-4.0*fabs(w[j]);
-            xu[j]= 4.0*fabs(w[j]);
+            xl[j]=-wf*fabs(w[j]);
+            xu[j]= wf*fabs(w[j]);
 
         }
         trialProblem->setLeftMargin(xl);
         trialProblem->setRightMargin(xu);
+
+        if(getParam("nnc_enablebound").getValue()=="yes")
+            trialProblem->enableBound();
+        else
+            trialProblem->disableBound();
+
         Optimizer *method=NULL;
         if(Lmethod == "bfgs")
             method=new Bfgs();
@@ -160,9 +158,15 @@ void        NNCModel::localSearchItem(int pos)
         if(Lmethod == "adam")
             method = new Adam();
         else
-        if(Lmethod == "genetic")
+        {
             method = new Genetic();
-        method->setProblem(trialProblem);
+            method->setParam("gen_maxiters","20");
+            method->setParam("gen_lrate","0.00");
+            method->setParam("opt_localsearch","bfgs");
+        }
+        method->setParam("opt_debug","no");
+
+        trialProblem->setOptimizer(method);
 
         if(Lmethod == "bfgs")
             ((Bfgs *)method)->setPoint(w,yy);
@@ -173,9 +177,8 @@ void        NNCModel::localSearchItem(int pos)
         if(Lmethod=="adam")
             ((Adam *)method)->setPoint(w,yy);
         else
-        if(Lmethod == "genetic")
             ((Genetic *)method)->setBest(w,yy);
-        method->solve();
+        trialProblem->trainModel();
         w=trialProblem->getBestx();
         delete method;
         Converter con(w,w.size()/(trainDataset->dimension()+2),trainDataset->dimension());
@@ -190,7 +193,7 @@ void        NNCModel::localSearchItem(int pos)
             printf("Local Search[%lf]->%lf\n",yy,newy);
             pop->setChromosome(pos,xx,newy);
         }
-	else pop->evaluateBestFitness();
+    else pop->evaluateFitnessAt(pos);
 }
 
 NNCModel::~NNCModel()

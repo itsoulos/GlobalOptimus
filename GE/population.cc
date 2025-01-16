@@ -229,6 +229,15 @@ void	Population::mutate()
 	}
 }
 
+void    Population::evaluateFitnessAt(int pos)
+{
+    vector<int> g;
+    g.resize(genome_size);
+    for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
+    fitness_array[pos]=fitness(g);
+}
+
+
 /* Evaluate the fitness for all chromosomes in the current population */
 void	Population::calcFitnessArray()
 {

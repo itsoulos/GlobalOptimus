@@ -14,7 +14,6 @@ Model::Model()
 void    Model::trainModel()
 {
     method->setProblem(dynamic_cast<Problem*>(this));
-
     if(method!=NULL)
         method->solve();
 }

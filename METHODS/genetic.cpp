@@ -54,6 +54,7 @@ void    Genetic::init()
     lsearchGens=getParam("gen_lsearchgens").getValue().toInt();
     lsearchItems=getParam("gen_lsearchitems").getValue().toInt();
     localSearchMethod = getParam("gen_lsearchmethod").getValue();
+
     generation = 0;
     //init process
     population.resize(chromosomeCount);
@@ -71,7 +72,6 @@ void    Genetic::init()
         fitnessArray[0]=besty;
         hasInitialized=false;
     }
-
 }
 
 void    Genetic::step()

@@ -246,6 +246,10 @@ Data    MlpProblem::getDerivative(Data &x)
     return G;
 }
 
+void    MlpProblem::enableBound()
+{
+    usebound_flag=true;
+}
 double  MlpProblem::getDerivative1(vector<double> xpoint,int pos)
 {
     int nodes=weight.size()/ (xpoint.size() + 2);
@@ -266,6 +270,10 @@ double  MlpProblem::getDerivative1(vector<double> xpoint,int pos)
     return per;
 }
 
+void    MlpProblem::disableBound()
+{
+    usebound_flag = false;
+}
 double	MlpProblem::getDerivative2(vector<double> xpoint,int pos)
 {
     int nodes=weight.size()/ (xpoint.size() + 2);

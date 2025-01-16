@@ -71,6 +71,8 @@ public:
     virtual void initModel();
     void    findBoundsWithSiman(Data &x0,Data &xl,Data &xr);
     Data    getSampleNoViolate();
+    void    enableBound();
+    void    disableBound();
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H

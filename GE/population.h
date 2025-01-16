@@ -66,9 +66,10 @@ class Population
         void    setCrossoverItems(int n);
         int     getCrossoverItems() const;
         void    setRandomSeed(int s);
-	void	enableSteadyState();
-	void	disableSteadyState();
-        int tournament() ;
+        void	enableSteadyState();
+        void	disableSteadyState();
+        int     tournament() ;
+        void    evaluateFitnessAt(int pos);
 		~Population();
 		
 };
