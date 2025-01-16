@@ -21,7 +21,7 @@ NNCModel::NNCModel()
     yesno<<"no"<<"yes";
     addParam(Parameter("nnc_enablebound",yesno[0],yesno,"Enable (yes) or disable (no) the bounding solution for MLP"));
     QStringList methods;
-    methods<<"crossover"<<"mutate"<<"bfgs"<<"none";
+    methods<<"crossover"<<"mutate"<<"bfgs"<<"none"<<"genetic";
     addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
 }
 
@@ -160,9 +160,9 @@ void        NNCModel::localSearchItem(int pos)
         else
         {
             method = new Genetic();
-            method->setParam("gen_maxiters","20");
+            method->setParam("gen_maxiters","50");
             method->setParam("gen_lrate","0.00");
-            method->setParam("opt_localsearch","bfgs");
+            method->setParam("opt_localsearch","none");
         }
         method->setParam("opt_debug","no");
 
@@ -179,6 +179,23 @@ void        NNCModel::localSearchItem(int pos)
         else
             ((Genetic *)method)->setBest(w,yy);
         trialProblem->trainModel();
+        w=trialProblem->getBestx();
+	yy=trialProblem->funmin(w);
+	if(Lmethod == "genetic")
+	{
+		Bfgs *tmethod = new Bfgs();
+            	trialProblem->disableBound();
+		tmethod->setProblem(trialProblem);
+        	for(int j=0;j<w.size();j++)
+        	{
+            		xl[j]=-wf*fabs(w[j]);
+            		xu[j]= wf*fabs(w[j]);
+        	}
+        	trialProblem->setLeftMargin(xl);
+        	trialProblem->setRightMargin(xu);
+		tmethod->setPoint(w,yy);
+		tmethod->solve();
+	}
         w=trialProblem->getBestx();
         delete method;
         Converter con(w,w.size()/(trainDataset->dimension()+2),trainDataset->dimension());
