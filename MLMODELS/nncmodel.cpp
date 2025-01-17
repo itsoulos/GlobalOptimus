@@ -82,14 +82,15 @@ void    NNCModel::trainModel()
 
     /**
      */
-    pop->setLocalMethod(GELOCAL_NONE);
+    pop->setLocalMethod(GELOCAL_MUTATE);
     pop->setLocalSearchGenerations(LI);
-    pop->setLocalSearchItems(LC);
+    pop->setLocalSearchItems(0);//LC);
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
         if(g%10==0)
         printf(" generation = %d best value= %20.10lg\n",g,pop->getBestFitness());
+	
         if(g%LI==0)
             {
                 for(int i=1;i<=LC;i++)
@@ -101,6 +102,7 @@ void    NNCModel::trainModel()
         }
 
        }
+    localSearchItem(0);
     pop->evaluateBestFitness();
 }
 
@@ -186,13 +188,6 @@ void        NNCModel::localSearchItem(int pos)
 		Bfgs *tmethod = new Bfgs();
             	trialProblem->disableBound();
 		tmethod->setProblem(trialProblem);
-        	for(int j=0;j<w.size();j++)
-        	{
-            		xl[j]=-wf*fabs(w[j]);
-            		xu[j]= wf*fabs(w[j]);
-        	}
-        	trialProblem->setLeftMargin(xl);
-        	trialProblem->setRightMargin(xu);
 		tmethod->setPoint(w,yy);
 		tmethod->solve();
 	}
@@ -207,7 +202,8 @@ void        NNCModel::localSearchItem(int pos)
         double newy = pop->fitness(xx);
         if(fabs(newy)<fabs(yy))
         {
-            printf("Local Search[%lf]->%lf\n",yy,newy);
+           // printf("Local Search[%lf]->%lf\n",yy,newy);
+
             pop->setChromosome(pos,xx,newy);
         }
     else pop->evaluateFitnessAt(pos);
