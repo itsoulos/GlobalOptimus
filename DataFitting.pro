@@ -78,42 +78,7 @@ SOURCES += \
         OPTIMUS/collection.cpp \
         OPTIMUS/doublebox.cpp \
         OPTIMUS/similarity.cpp \
-        PROBLEMS/bf1.cpp \
-        PROBLEMS/bf2.cpp \
-        PROBLEMS/branin.cpp \
-        PROBLEMS/camel.cpp \
-        PROBLEMS/cm.cpp \
-        PROBLEMS/diffpower.cpp \
-        PROBLEMS/diracproblem.cpp \
-        PROBLEMS/easom.cpp \
-        PROBLEMS/elp.cpp \
-        PROBLEMS/exp.cpp \
-        PROBLEMS/fuch1.cpp \
-        PROBLEMS/fuchss.cpp \
-        PROBLEMS/gkls.cpp \
-        PROBLEMS/gkls2100.cpp \
-        PROBLEMS/gkls250.cpp \
-    PROBLEMS/E_ev.cpp \
-        PROBLEMS/gkls350.cpp \
-        PROBLEMS/goldstein.cpp \
-        PROBLEMS/griewank10.cpp \
-        PROBLEMS/griewank2.cpp \
-        PROBLEMS/hansen.cpp \
-        PROBLEMS/hartman3.cpp \
-        PROBLEMS/hartman6.cpp \
-        PROBLEMS/hess.cpp \
-        PROBLEMS/levy.cpp \
-        PROBLEMS/potential.cpp \
-        PROBLEMS/rosenbrock.cpp \
-        PROBLEMS/salkin.cpp \
-        PROBLEMS/shekel10.cpp \
-        PROBLEMS/shekel5.cpp \
-	PROBLEMS/gross.cpp\
-        PROBLEMS/shekel7.cpp \
-        PROBLEMS/sinu.cpp \
-        PROBLEMS/test30n.cpp \
         MLMODELS/dataset.cpp \
-        PROBLEMS/userproblem.cpp \
         SAMPLER/kmeanssampler.cpp \
         SAMPLER/maxwellsampler.cpp \
         SAMPLER/neuralsampler.cpp \
@@ -122,14 +87,10 @@ SOURCES += \
         SAMPLER/uniformsampler.cpp \
         datafitting.cpp \
         OPTIMUS/optimizer.cpp \
-	PROBLEMS/discus.cpp \
-	PROBLEMS/cigar.cpp \
         OPTIMUS/parameter.cpp \
         OPTIMUS/problem.cpp \
 	MLMODELS/converter.cc \
 	MLMODELS/neuralparser.cc \
-        PROBLEMS/rastriginproblem.cpp \
-        PROBLEMS/test2nproblem.cpp \
         SAMPLER/problemsampler.cpp
 
 contains(DEFINES,OPTIMUS_ARMADILLO){
@@ -163,9 +124,6 @@ HEADERS += \
     OPTIMUS/logger.h \
     OPTIMUS/mean.h \
     OPTIMUS/methodloader.h \
-    PROBLEMS/discus.h \
-    PROBLEMS/cigar.h \
-    PROBLEMS/E_ev.h \
     GE/integeranneal.h\
     GE/nncprogram.h \
     GE/ruleprogram.h \
@@ -204,43 +162,7 @@ HEADERS += \
     OPTIMUS/parameter.h \
     OPTIMUS/problem.h \
     OPTIMUS/similarity.h \
-    PROBLEMS/bf1.h \
-    PROBLEMS/bf2.h \
-    PROBLEMS/branin.h \
-    PROBLEMS/camel.h \
-    PROBLEMS/cm.h \
-    PROBLEMS/diffpower.h \
-    PROBLEMS/diracproblem.h \
-    PROBLEMS/easom.h \
-    PROBLEMS/elp.h \
-    PROBLEMS/exp.h \
-    PROBLEMS/fuch1.h \
-    PROBLEMS/fuchss.h \
-    PROBLEMS/gkls.h \
-    PROBLEMS/gkls2100.h \
-    PROBLEMS/gkls250.h \
-    PROBLEMS/gkls350.h \
-    PROBLEMS/gross.h \
-    PROBLEMS/goldstein.h \
-    PROBLEMS/griewank10.h \
-    PROBLEMS/griewank2.h \
-    PROBLEMS/hansen.h \
-    PROBLEMS/hartman3.h \
-    PROBLEMS/hartman6.h \
-    PROBLEMS/hess.h \
-    PROBLEMS/levy.h \
-    PROBLEMS/potential.h \
-    PROBLEMS/rastriginproblem.h \
-    PROBLEMS/rosenbrock.h \
-    PROBLEMS/salkin.h \
-    PROBLEMS/shekel10.h \
-    PROBLEMS/shekel5.h \
-    PROBLEMS/shekel7.h \
-    PROBLEMS/sinu.h \
-    PROBLEMS/test2nproblem.h \
-    PROBLEMS/test30n.h \
     MLMODELS/dataset.h \
-    PROBLEMS/userproblem.h \
     SAMPLER/kmeanssampler.h \
     SAMPLER/maxwellsampler.h \
     SAMPLER/neuralsampler.h \

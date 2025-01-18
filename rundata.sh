@@ -43,7 +43,7 @@ elif [ $MODEL = "nnc" ]; then
 ### nnc_steadystate: Enable or disable the steady state feature.
 ### nnc_weightfactor: The weight factor used in the local search procedure.
 ### nnc_enablebound: Enable or disable the usage of bounding techniques during the local search procedure.
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=200 --nnc_popgens=200 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=genetic --nnc_crossitems=10 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=no"
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=200 --nnc_popgens=200 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=genetic --nnc_crossitems=10 --nnc_lsearchiters=10 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=yes"
 fi
 
 if [ $METHOD = "Bfgs" ]; then

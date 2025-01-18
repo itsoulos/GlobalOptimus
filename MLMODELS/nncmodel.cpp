@@ -202,7 +202,7 @@ void        NNCModel::localSearchItem(int pos)
         double newy = pop->fitness(xx);
         if(fabs(newy)<fabs(yy))
         {
-           // printf("Local Search[%lf]->%lf\n",yy,newy);
+            printf("Local Search[%lf]->%lf\n",yy,newy);
 
             pop->setChromosome(pos,xx,newy);
         }

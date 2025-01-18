@@ -108,42 +108,7 @@ SOURCES       = GE/cprogram.cc \
 		OPTIMUS/collection.cpp \
 		OPTIMUS/doublebox.cpp \
 		OPTIMUS/similarity.cpp \
-		PROBLEMS/bf1.cpp \
-		PROBLEMS/bf2.cpp \
-		PROBLEMS/branin.cpp \
-		PROBLEMS/camel.cpp \
-		PROBLEMS/cm.cpp \
-		PROBLEMS/diffpower.cpp \
-		PROBLEMS/diracproblem.cpp \
-		PROBLEMS/easom.cpp \
-		PROBLEMS/elp.cpp \
-		PROBLEMS/exp.cpp \
-		PROBLEMS/fuch1.cpp \
-		PROBLEMS/fuchss.cpp \
-		PROBLEMS/gkls.cpp \
-		PROBLEMS/gkls2100.cpp \
-		PROBLEMS/gkls250.cpp \
-		PROBLEMS/E_ev.cpp \
-		PROBLEMS/gkls350.cpp \
-		PROBLEMS/goldstein.cpp \
-		PROBLEMS/griewank10.cpp \
-		PROBLEMS/griewank2.cpp \
-		PROBLEMS/hansen.cpp \
-		PROBLEMS/hartman3.cpp \
-		PROBLEMS/hartman6.cpp \
-		PROBLEMS/hess.cpp \
-		PROBLEMS/levy.cpp \
-		PROBLEMS/potential.cpp \
-		PROBLEMS/rosenbrock.cpp \
-		PROBLEMS/salkin.cpp \
-		PROBLEMS/shekel10.cpp \
-		PROBLEMS/shekel5.cpp \
-		PROBLEMS/gross.cpp \
-		PROBLEMS/shekel7.cpp \
-		PROBLEMS/sinu.cpp \
-		PROBLEMS/test30n.cpp \
 		MLMODELS/dataset.cpp \
-		PROBLEMS/userproblem.cpp \
 		SAMPLER/kmeanssampler.cpp \
 		SAMPLER/maxwellsampler.cpp \
 		SAMPLER/neuralsampler.cpp \
@@ -152,14 +117,10 @@ SOURCES       = GE/cprogram.cc \
 		SAMPLER/uniformsampler.cpp \
 		datafitting.cpp \
 		OPTIMUS/optimizer.cpp \
-		PROBLEMS/discus.cpp \
-		PROBLEMS/cigar.cpp \
 		OPTIMUS/parameter.cpp \
 		OPTIMUS/problem.cpp \
 		MLMODELS/converter.cc \
 		MLMODELS/neuralparser.cc \
-		PROBLEMS/rastriginproblem.cpp \
-		PROBLEMS/test2nproblem.cpp \
 		SAMPLER/problemsampler.cpp 
 OBJECTS       = cprogram.o \
 		doublestack.o \
@@ -217,42 +178,7 @@ OBJECTS       = cprogram.o \
 		collection.o \
 		doublebox.o \
 		similarity.o \
-		bf1.o \
-		bf2.o \
-		branin.o \
-		camel.o \
-		cm.o \
-		diffpower.o \
-		diracproblem.o \
-		easom.o \
-		elp.o \
-		exp.o \
-		fuch1.o \
-		fuchss.o \
-		gkls.o \
-		gkls2100.o \
-		gkls250.o \
-		E_ev.o \
-		gkls350.o \
-		goldstein.o \
-		griewank10.o \
-		griewank2.o \
-		hansen.o \
-		hartman3.o \
-		hartman6.o \
-		hess.o \
-		levy.o \
-		potential.o \
-		rosenbrock.o \
-		salkin.o \
-		shekel10.o \
-		shekel5.o \
-		gross.o \
-		shekel7.o \
-		sinu.o \
-		test30n.o \
 		dataset.o \
-		userproblem.o \
 		kmeanssampler.o \
 		maxwellsampler.o \
 		neuralsampler.o \
@@ -261,14 +187,10 @@ OBJECTS       = cprogram.o \
 		uniformsampler.o \
 		datafitting.o \
 		optimizer.o \
-		discus.o \
-		cigar.o \
 		parameter.o \
 		problem.o \
 		converter.o \
 		neuralparser.o \
-		rastriginproblem.o \
-		test2nproblem.o \
 		problemsampler.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -378,9 +300,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		OPTIMUS/logger.h \
 		OPTIMUS/mean.h \
 		OPTIMUS/methodloader.h \
-		PROBLEMS/discus.h \
-		PROBLEMS/cigar.h \
-		PROBLEMS/E_ev.h \
 		GE/integeranneal.h \
 		GE/nncprogram.h \
 		GE/ruleprogram.h \
@@ -419,43 +338,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		OPTIMUS/parameter.h \
 		OPTIMUS/problem.h \
 		OPTIMUS/similarity.h \
-		PROBLEMS/bf1.h \
-		PROBLEMS/bf2.h \
-		PROBLEMS/branin.h \
-		PROBLEMS/camel.h \
-		PROBLEMS/cm.h \
-		PROBLEMS/diffpower.h \
-		PROBLEMS/diracproblem.h \
-		PROBLEMS/easom.h \
-		PROBLEMS/elp.h \
-		PROBLEMS/exp.h \
-		PROBLEMS/fuch1.h \
-		PROBLEMS/fuchss.h \
-		PROBLEMS/gkls.h \
-		PROBLEMS/gkls2100.h \
-		PROBLEMS/gkls250.h \
-		PROBLEMS/gkls350.h \
-		PROBLEMS/gross.h \
-		PROBLEMS/goldstein.h \
-		PROBLEMS/griewank10.h \
-		PROBLEMS/griewank2.h \
-		PROBLEMS/hansen.h \
-		PROBLEMS/hartman3.h \
-		PROBLEMS/hartman6.h \
-		PROBLEMS/hess.h \
-		PROBLEMS/levy.h \
-		PROBLEMS/potential.h \
-		PROBLEMS/rastriginproblem.h \
-		PROBLEMS/rosenbrock.h \
-		PROBLEMS/salkin.h \
-		PROBLEMS/shekel10.h \
-		PROBLEMS/shekel5.h \
-		PROBLEMS/shekel7.h \
-		PROBLEMS/sinu.h \
-		PROBLEMS/test2nproblem.h \
-		PROBLEMS/test30n.h \
 		MLMODELS/dataset.h \
-		PROBLEMS/userproblem.h \
 		SAMPLER/kmeanssampler.h \
 		SAMPLER/maxwellsampler.h \
 		SAMPLER/neuralsampler.h \
@@ -520,42 +403,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		OPTIMUS/collection.cpp \
 		OPTIMUS/doublebox.cpp \
 		OPTIMUS/similarity.cpp \
-		PROBLEMS/bf1.cpp \
-		PROBLEMS/bf2.cpp \
-		PROBLEMS/branin.cpp \
-		PROBLEMS/camel.cpp \
-		PROBLEMS/cm.cpp \
-		PROBLEMS/diffpower.cpp \
-		PROBLEMS/diracproblem.cpp \
-		PROBLEMS/easom.cpp \
-		PROBLEMS/elp.cpp \
-		PROBLEMS/exp.cpp \
-		PROBLEMS/fuch1.cpp \
-		PROBLEMS/fuchss.cpp \
-		PROBLEMS/gkls.cpp \
-		PROBLEMS/gkls2100.cpp \
-		PROBLEMS/gkls250.cpp \
-		PROBLEMS/E_ev.cpp \
-		PROBLEMS/gkls350.cpp \
-		PROBLEMS/goldstein.cpp \
-		PROBLEMS/griewank10.cpp \
-		PROBLEMS/griewank2.cpp \
-		PROBLEMS/hansen.cpp \
-		PROBLEMS/hartman3.cpp \
-		PROBLEMS/hartman6.cpp \
-		PROBLEMS/hess.cpp \
-		PROBLEMS/levy.cpp \
-		PROBLEMS/potential.cpp \
-		PROBLEMS/rosenbrock.cpp \
-		PROBLEMS/salkin.cpp \
-		PROBLEMS/shekel10.cpp \
-		PROBLEMS/shekel5.cpp \
-		PROBLEMS/gross.cpp \
-		PROBLEMS/shekel7.cpp \
-		PROBLEMS/sinu.cpp \
-		PROBLEMS/test30n.cpp \
 		MLMODELS/dataset.cpp \
-		PROBLEMS/userproblem.cpp \
 		SAMPLER/kmeanssampler.cpp \
 		SAMPLER/maxwellsampler.cpp \
 		SAMPLER/neuralsampler.cpp \
@@ -564,14 +412,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		SAMPLER/uniformsampler.cpp \
 		datafitting.cpp \
 		OPTIMUS/optimizer.cpp \
-		PROBLEMS/discus.cpp \
-		PROBLEMS/cigar.cpp \
 		OPTIMUS/parameter.cpp \
 		OPTIMUS/problem.cpp \
 		MLMODELS/converter.cc \
 		MLMODELS/neuralparser.cc \
-		PROBLEMS/rastriginproblem.cpp \
-		PROBLEMS/test2nproblem.cpp \
 		SAMPLER/problemsampler.cpp
 QMAKE_TARGET  = DataFitting
 DESTDIR       = 
@@ -774,8 +618,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mewoa.h METHODS/woa.h MLMODELS/fcmodel.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h PROBLEMS/discus.h PROBLEMS/cigar.h PROBLEMS/E_ev.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/diracproblem.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/fuch1.h PROBLEMS/fuchss.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/gross.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/hess.h PROBLEMS/levy.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/salkin.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h MLMODELS/dataset.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.cc GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mewoa.cpp METHODS/woa.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/diracproblem.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/fuch1.cpp PROBLEMS/fuchss.cpp PROBLEMS/gkls.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/E_ev.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/hess.cpp PROBLEMS/levy.cpp PROBLEMS/potential.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/salkin.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/gross.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test30n.cpp MLMODELS/dataset.cpp PROBLEMS/userproblem.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp PROBLEMS/discus.cpp PROBLEMS/cigar.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc PROBLEMS/rastriginproblem.cpp PROBLEMS/test2nproblem.cpp SAMPLER/problemsampler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mewoa.h METHODS/woa.h MLMODELS/fcmodel.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.cc GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mewoa.cpp METHODS/woa.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1865,190 +1709,9 @@ doublebox.o: OPTIMUS/doublebox.cpp OPTIMUS/doublebox.h \
 similarity.o: OPTIMUS/similarity.cpp OPTIMUS/similarity.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o similarity.o OPTIMUS/similarity.cpp
 
-bf1.o: PROBLEMS/bf1.cpp PROBLEMS/bf1.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bf1.o PROBLEMS/bf1.cpp
-
-bf2.o: PROBLEMS/bf2.cpp PROBLEMS/bf2.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bf2.o PROBLEMS/bf2.cpp
-
-branin.o: PROBLEMS/branin.cpp PROBLEMS/branin.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o branin.o PROBLEMS/branin.cpp
-
-camel.o: PROBLEMS/camel.cpp PROBLEMS/camel.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camel.o PROBLEMS/camel.cpp
-
-cm.o: PROBLEMS/cm.cpp PROBLEMS/cm.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cm.o PROBLEMS/cm.cpp
-
-diffpower.o: PROBLEMS/diffpower.cpp PROBLEMS/diffpower.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o diffpower.o PROBLEMS/diffpower.cpp
-
-diracproblem.o: PROBLEMS/diracproblem.cpp PROBLEMS/diracproblem.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o diracproblem.o PROBLEMS/diracproblem.cpp
-
-easom.o: PROBLEMS/easom.cpp PROBLEMS/easom.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o easom.o PROBLEMS/easom.cpp
-
-elp.o: PROBLEMS/elp.cpp PROBLEMS/elp.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o elp.o PROBLEMS/elp.cpp
-
-exp.o: PROBLEMS/exp.cpp PROBLEMS/exp.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o exp.o PROBLEMS/exp.cpp
-
-fuch1.o: PROBLEMS/fuch1.cpp PROBLEMS/fuch1.h \
-		OPTIMUS/problem.h \
-		MLMODELS/mlpproblem.h \
-		MLMODELS/dataset.h \
-		MLMODELS/model.h \
-		OPTIMUS/parameterlist.h \
-		OPTIMUS/parameter.h \
-		OPTIMUS/optimizer.h \
-		OPTIMUS/doublebox.h \
-		OPTIMUS/similarity.h \
-		OPTIMUS/mean.h \
-		SAMPLER/maxwellsampler.h \
-		SAMPLER/problemsampler.h \
-		SAMPLER/neuralsampler.h \
-		SAMPLER/triangularsampler.h \
-		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h \
-		SAMPLER/kmeanssampler.h \
-		OPTIMUS/logger.h \
-		OPTIMUS/filelogger.h \
-		OPTIMUS/editlogger.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fuch1.o PROBLEMS/fuch1.cpp
-
-fuchss.o: PROBLEMS/fuchss.cpp PROBLEMS/fuchss.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fuchss.o PROBLEMS/fuchss.cpp
-
-gkls.o: PROBLEMS/gkls.cpp PROBLEMS/gkls.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls.o PROBLEMS/gkls.cpp
-
-gkls2100.o: PROBLEMS/gkls2100.cpp PROBLEMS/gkls2100.h \
-		OPTIMUS/problem.h \
-		PROBLEMS/gkls.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls2100.o PROBLEMS/gkls2100.cpp
-
-gkls250.o: PROBLEMS/gkls250.cpp PROBLEMS/gkls250.h \
-		OPTIMUS/problem.h \
-		PROBLEMS/gkls.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls250.o PROBLEMS/gkls250.cpp
-
-E_ev.o: PROBLEMS/E_ev.cpp PROBLEMS/E_ev.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o E_ev.o PROBLEMS/E_ev.cpp
-
-gkls350.o: PROBLEMS/gkls350.cpp PROBLEMS/gkls350.h \
-		OPTIMUS/problem.h \
-		PROBLEMS/gkls.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gkls350.o PROBLEMS/gkls350.cpp
-
-goldstein.o: PROBLEMS/goldstein.cpp PROBLEMS/goldstein.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o goldstein.o PROBLEMS/goldstein.cpp
-
-griewank10.o: PROBLEMS/griewank10.cpp PROBLEMS/griewank10.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o griewank10.o PROBLEMS/griewank10.cpp
-
-griewank2.o: PROBLEMS/griewank2.cpp PROBLEMS/griewank2.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o griewank2.o PROBLEMS/griewank2.cpp
-
-hansen.o: PROBLEMS/hansen.cpp PROBLEMS/hansen.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hansen.o PROBLEMS/hansen.cpp
-
-hartman3.o: PROBLEMS/hartman3.cpp PROBLEMS/hartman3.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hartman3.o PROBLEMS/hartman3.cpp
-
-hartman6.o: PROBLEMS/hartman6.cpp PROBLEMS/hartman6.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hartman6.o PROBLEMS/hartman6.cpp
-
-hess.o: PROBLEMS/hess.cpp PROBLEMS/hess.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hess.o PROBLEMS/hess.cpp
-
-levy.o: PROBLEMS/levy.cpp PROBLEMS/levy.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o levy.o PROBLEMS/levy.cpp
-
-potential.o: PROBLEMS/potential.cpp PROBLEMS/potential.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o potential.o PROBLEMS/potential.cpp
-
-rosenbrock.o: PROBLEMS/rosenbrock.cpp PROBLEMS/rosenbrock.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rosenbrock.o PROBLEMS/rosenbrock.cpp
-
-salkin.o: PROBLEMS/salkin.cpp PROBLEMS/salkin.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o salkin.o PROBLEMS/salkin.cpp
-
-shekel10.o: PROBLEMS/shekel10.cpp PROBLEMS/shekel10.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o shekel10.o PROBLEMS/shekel10.cpp
-
-shekel5.o: PROBLEMS/shekel5.cpp PROBLEMS/shekel5.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o shekel5.o PROBLEMS/shekel5.cpp
-
-gross.o: PROBLEMS/gross.cpp PROBLEMS/gross.h \
-		OPTIMUS/problem.h \
-		MLMODELS/mlpproblem.h \
-		MLMODELS/dataset.h \
-		MLMODELS/model.h \
-		OPTIMUS/parameterlist.h \
-		OPTIMUS/parameter.h \
-		OPTIMUS/optimizer.h \
-		OPTIMUS/doublebox.h \
-		OPTIMUS/similarity.h \
-		OPTIMUS/mean.h \
-		SAMPLER/maxwellsampler.h \
-		SAMPLER/problemsampler.h \
-		SAMPLER/neuralsampler.h \
-		SAMPLER/triangularsampler.h \
-		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h \
-		SAMPLER/kmeanssampler.h \
-		OPTIMUS/logger.h \
-		OPTIMUS/filelogger.h \
-		OPTIMUS/editlogger.h \
-		MLMODELS/rbfproblem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gross.o PROBLEMS/gross.cpp
-
-shekel7.o: PROBLEMS/shekel7.cpp PROBLEMS/shekel7.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o shekel7.o PROBLEMS/shekel7.cpp
-
-sinu.o: PROBLEMS/sinu.cpp PROBLEMS/sinu.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sinu.o PROBLEMS/sinu.cpp
-
-test30n.o: PROBLEMS/test30n.cpp PROBLEMS/test30n.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test30n.o PROBLEMS/test30n.cpp
-
 dataset.o: MLMODELS/dataset.cpp MLMODELS/dataset.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dataset.o MLMODELS/dataset.cpp
-
-userproblem.o: PROBLEMS/userproblem.cpp PROBLEMS/userproblem.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o userproblem.o PROBLEMS/userproblem.cpp
 
 kmeanssampler.o: SAMPLER/kmeanssampler.cpp SAMPLER/kmeanssampler.h \
 		SAMPLER/problemsampler.h \
@@ -2198,14 +1861,6 @@ optimizer.o: OPTIMUS/optimizer.cpp OPTIMUS/optimizer.h \
 		METHODS/adam.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optimizer.o OPTIMUS/optimizer.cpp
 
-discus.o: PROBLEMS/discus.cpp PROBLEMS/discus.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o discus.o PROBLEMS/discus.cpp
-
-cigar.o: PROBLEMS/cigar.cpp PROBLEMS/cigar.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cigar.o PROBLEMS/cigar.cpp
-
 parameter.o: OPTIMUS/parameter.cpp OPTIMUS/parameter.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parameter.o OPTIMUS/parameter.cpp
 
@@ -2217,14 +1872,6 @@ converter.o: MLMODELS/converter.cc MLMODELS/converter.h
 
 neuralparser.o: MLMODELS/neuralparser.cc MLMODELS/neuralparser.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o neuralparser.o MLMODELS/neuralparser.cc
-
-rastriginproblem.o: PROBLEMS/rastriginproblem.cpp PROBLEMS/rastriginproblem.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rastriginproblem.o PROBLEMS/rastriginproblem.cpp
-
-test2nproblem.o: PROBLEMS/test2nproblem.cpp PROBLEMS/test2nproblem.h \
-		OPTIMUS/problem.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test2nproblem.o PROBLEMS/test2nproblem.cpp
 
 problemsampler.o: SAMPLER/problemsampler.cpp SAMPLER/problemsampler.h \
 		OPTIMUS/problem.h
