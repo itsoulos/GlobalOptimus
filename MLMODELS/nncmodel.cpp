@@ -102,6 +102,7 @@ void    NNCModel::trainModel()
         }
 
        }
+    if(LC!=0)
     localSearchItem(0);
     pop->evaluateBestFitness();
 }
