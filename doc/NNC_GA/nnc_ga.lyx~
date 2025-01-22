@@ -882,8 +882,65 @@ Select
 \end_layout
 
 \begin_layout Standard
-The incorporated grammar for the neural construction method is outlined
- in Figure 
+The process of producing valid programs through the Grammatical Evolution
+ method is depicted graphically in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:geProcess"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename GEFC.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The Grammatical Evolution process used to produce valid programs.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:geProcess"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+The grammar used for the neural construction procedure is shown in Figure
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:nncGrammar"
@@ -894,13 +951,13 @@ noprefix "false"
 \end_inset
 
 .
- The number in parentheses denote the sequence number of each rule for every
- non - terminal symbol.
- The symbol 
+ The numbers shown in parentheses are the increasing numbers of the production
+ rules for each non - terminal symbol.
+ The constant 
 \begin_inset Formula $n$
 \end_inset
 
- represents the number of features for the used dataset.
+ denotes the number of features in every pattern of the input dataset.
 \end_layout
 
 \begin_layout Standard
@@ -911,31 +968,31 @@ sideways false
 status collapsed
 
 \begin_layout LyX-Code
-S:=<sigexpr>                          (0)
+S:=<Sigval>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-<sigexpr>::=<Node>                    (0)
+<Sigval>::=<Node>                    (0)
 \end_layout
 
 \begin_layout LyX-Code
-           | <Node> + <sigexpr>       (1)
+           | <Node> + <Sigval>       (1)
 \end_layout
 
 \begin_layout LyX-Code
-<Node>::=<number>*sig(<sum>+<number>) (0)
+<Node>::=<Number>*sig(<Sum>+<Number>) (0)
 \end_layout
 
 \begin_layout LyX-Code
-<sum>::= <number>*<xxlist>            (0)
+<Sum>::= <Number>*<Xlist>            (0)
 \end_layout
 
 \begin_layout LyX-Code
-           |    <sum>+<sum>           (1)
+           |    <Sum>+<Sum>           (1)
 \end_layout
 
 \begin_layout LyX-Code
-<xxlist>::= x1        (0)
+<Xlist>::= x1        (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -951,23 +1008,23 @@ S:=<sigexpr>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-<number>::= (<digitlist>.<digitlist>)        (0)
+<Number>::= (<Dlist>.<Dlist>)        (0)
 \end_layout
 
 \begin_layout LyX-Code
-             |    (-<digitlist>.<digitlist>) (1)
+             |    (-<Dlist>.<Dlist>) (1)
 \end_layout
 
 \begin_layout LyX-Code
-<digitlist>::= <digit>            (0)
+<Dlist>::= <Digit>            (0)
 \end_layout
 
 \begin_layout LyX-Code
-             | <digit><digitlist> (1)
+             | <Digit><Dlist> (1)
 \end_layout
 
 \begin_layout LyX-Code
-<digit>::= 0      (0)
+<Digit>::= 0      (0)
 \end_layout
 
 \begin_layout LyX-Code
@@ -986,7 +1043,8 @@ S:=<sigexpr>                          (0)
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The grammar used by the neural construction method.
+The proposed grammar for the construction of artificial neural networks
+ through Grammatical Evolution.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:nncGrammar"
@@ -1003,7 +1061,8 @@ name "fig:nncGrammar"
 
 \end_inset
 
-This grammar can produce artificial neural networks in the form:
+The used grammar produces artificial neural networks with the following
+ form:
 \end_layout
 
 \begin_layout Standard
@@ -1014,16 +1073,16 @@ N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(n+2)i-(n+1
 
 \end_inset
 
-The symbol 
+The term 
 \begin_inset Formula $H$
 \end_inset
 
- corresponds to the number of weights or processing units.
- The function 
+ stands for the number of processing units (weights) of the neural network.
+ The The function 
 \begin_inset Formula $\sigma(x)$
 \end_inset
 
- denotes the sigmoid function, and it has the following definition: 
+ represents the sigmoid function with the following definition: 
 \series bold
 
 \begin_inset Formula 
@@ -1035,48 +1094,39 @@ The symbol
 
 
 \series default
-The grammar of the present method can construct artificial neural networks
- with a hidden processing layer and with a variable number of computing
- units.
- This kind of architecture is sufficient to approach any problem, as according
- to Hornik's theorem 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Hornik"
-literal "false"
-
-\end_inset
-
-.
- According to this theorem, an artificial neural network with a sufficient
- number of computing units and a processing level can approximate any function.
-\end_layout
-
-\begin_layout Standard
-As an example consider a problem with 3 inputs: 
-\begin_inset Formula $x_{1},x_{2},x_{3}$
-\end_inset
-
- An example neural network that can be constructed by the Grammatical Evolution
- procedure could be the following:
+For example the following form:
 \begin_inset Formula 
 \begin{equation}
-N(x)=2.1\mbox{sig}\left(10.5x_{2}+9.2x_{3}+5.7\right)+3.2\mbox{sig}\left(2.2x_{1}-4.3x_{3}+6.2\right)
+N(x)=1.9\mbox{sig}\left(10.5x_{1}+3.2x_{3}+1.4\right)+2.1\mbox{sig}\left(2.2x_{2}-3.3x_{3}+3.2\right)
 \end{equation}
 
 \end_inset
 
-This previously artificial neural network has two processing nodes, and
- not all inputs are necessarily connected to each processing node, since
- the Grammatical Evolution process may miss some connections.
+denotes a produced neural network for a problem with 3 inputs 
+\begin_inset Formula $\left(x_{1},x_{2},x_{3}\right)$
+\end_inset
+
+ and the number of processing nodes is 
+\begin_inset Formula $H=2$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
 The used genetic algorithm 
 \end_layout
 
+\begin_layout Standard
+(.....)
+\end_layout
+
 \begin_layout Subsection
 The final algorithm
+\end_layout
+
+\begin_layout Standard
+(....)
 \end_layout
 
 \begin_layout Section
@@ -1534,7 +1584,7 @@ Ring
 \series bold
 Saheart
 \series default
-, used for the detection of heart diseases.
+, used for the detection of heart diseases
 \begin_inset CommandInset citation
 LatexCommand citep
 key "saheart"
