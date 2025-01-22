@@ -726,6 +726,13 @@ This section provides a details description of the original neural network
 
 \begin_layout Subsection
 The neural construction method 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-neural-construction"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -954,7 +961,7 @@ noprefix "false"
  The numbers shown in parentheses are the increasing numbers of the production
  rules for each non - terminal symbol.
  The constant 
-\begin_inset Formula $n$
+\begin_inset Formula $d$
 \end_inset
 
  denotes the number of features in every pattern of the input dataset.
@@ -1004,7 +1011,7 @@ S:=<Sigval>                          (0)
 \end_layout
 
 \begin_layout LyX-Code
-             |    xn  (n-1)
+             |    xd  (d-1)
 \end_layout
 
 \begin_layout LyX-Code
@@ -1068,7 +1075,7 @@ The used grammar produces artificial neural networks with the following
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(n+2)i-(n+1)}\sigma\left(\sum_{j=1}^{n}x_{j}w_{(n+2)i-(n+1)+j}+w_{(n+2)i}\right)\label{eq:nn}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
 \end{equation}
 
 \end_inset
@@ -1082,18 +1089,20 @@ The term
 \begin_inset Formula $\sigma(x)$
 \end_inset
 
- represents the sigmoid function with the following definition: 
-\series bold
+ represents the sigmoid function.
 
+\series bold
+ 
+\series default
+The total number of parameters for this network are computed through the
+ following equation:
 \begin_inset Formula 
 \begin{equation}
-\sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
+n=\left(d+2\right)H
 \end{equation}
 
 \end_inset
 
-
-\series default
 For example the following form:
 \begin_inset Formula 
 \begin{equation}
@@ -1111,22 +1120,1277 @@ denotes a produced neural network for a problem with 3 inputs
 \end_inset
 
 .
+ The neural network produced can be shown graphically in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nnExample"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename example_diagram.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+An example of a produced neural network.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:nnExample"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 The used genetic algorithm 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-used-genetic"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-(.....)
+In the original method of constructing artificial neural networks, it is
+ proposed in this work to introduce the concept of local search, through
+ the periodic application of a genetic algorithm which should maintain the
+ structure of the neural network constructed by the original method.
+ Additionally, a second goal of this genetic algorithm should be to avoid
+ the problem of overfitting that could arise from simply applying a local
+ optimization method to the previous artificial neural network.
+ For the first goal of the modified genetic algorithm consider the example
+ neural network shown before:
+\begin_inset Formula 
+\begin{equation}
+N(x)=1.9\mbox{sig}\left(10.5x_{1}+3.2x_{3}+1.4\right)+2.1\mbox{sig}\left(2.2x_{2}-3.3x_{3}+3.2\right)
+\end{equation}
+
+\end_inset
+
+The weight vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ for this neural network would be 
+\begin_inset Formula 
+\begin{equation}
+\overrightarrow{w}=\left[1.9,10.5,0.0,3.2,1.4,2.1,0.0,2.2,-3.3,3.2\right]\label{eq:exampleNN}
+\end{equation}
+
+\end_inset
+
+In order to protect the structure of this artificial neural network, the
+ modified genetic algorithm should allow changes in the parameters of this
+ network within a value interval, which can be considered to be the pair
+ of vectors 
+\begin_inset Formula $\left[\overrightarrow{L,}\overrightarrow{R}\right]$
+\end_inset
+
+.
+ The elements for the vector 
+\begin_inset Formula $\overrightarrow{L}$
+\end_inset
+
+ are defined as 
+\begin_inset Formula 
+\begin{equation}
+L_{i}=-F\times\left|w_{i}\right|,\ i=1,\ldots,n\label{eq:createL}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $F$
+\end_inset
+
+ is positive number with 
+\begin_inset Formula $F>1$
+\end_inset
+
+.
+ Likewise the right bound for the parameters 
+\begin_inset Formula $\overrightarrow{R}$
+\end_inset
+
+ is defined from the following equation:
+\begin_inset Formula 
+\begin{equation}
+R_{i}=F\times\left|w_{i}\right|,i=1,\ldots,n\label{eq:createR}
+\end{equation}
+
+\end_inset
+
+For the example weight vector of equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:exampleNN"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and for 
+\begin_inset Formula $F=2$
+\end_inset
+
+ the following vectors are used:
+\begin_inset Formula 
+\[
+\begin{array}{ccc}
+L & = & \left[-3.8,-21.0,0.0,-6.4,-2.8,-4.2,0.0,-4.4,-6.6,-6.4\right]\\
+R & = & \left[\ \ \ 3.8,\ \ \ 21.0,0.0,\ \ \ 6.4,\ \ \ \ 2.8,\ \ \ \ 4.2,0.0,\ \ \ 4.4,\ \ \ 6.6,\ \ \ \ 6.4\right]
+\end{array}
+\]
+
+\end_inset
+
+The modified genetic algorithm should also prevent the artificial neural
+ networks it trains from the phenomenon of overfitting, which would lead
+ to poor results on the test dataset.
+ For this reason a quantity derived from the publication of Anastasopoulos
+ et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnt_bound"
+literal "false"
+
+\end_inset
+
+ is utilized here.
+ The sigmoid function, that is used as the activation function of neural
+ networks is defined as:
+\begin_inset Formula 
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}
+\end{equation}
+
+\end_inset
+
+A plot for this function is shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:plotsigma"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename sig.eps
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Plot of the sigmoid function 
+\begin_inset Formula $\sigma(x)$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:plotsigma"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+As is clear from the equation and the figure, as the value of the parameter
+ x increases, the function tends very quickly to 1.
+ On the other hand, the function will take values very close to 0 as the
+ parameter x decreases.
+ This means that the function very quickly loses the generalizing abilities
+ it has and therefore large changes in the value of the parameter x will
+ not cause proportional variations in the value of the sigmoid function.
+ Therefore, the quantity 
+\begin_inset Formula $B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+\end_inset
+
+ was introduced in that paper to measure this effect.
+ This quantity is calculated through the process of Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:CalculationBound"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The algorithm used to calculate the bounding quantity for neural network
+ 
+\begin_inset Formula $N(x,w)$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:CalculationBound"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+function
+\series default
+ 
+\begin_inset Formula $\mbox{evalB}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Inputs
+\series default
+: The Neural network 
+\begin_inset Formula $N\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ and the double precision value 
+\begin_inset Formula $a,\ a>1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $s=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1..H$
+\end_inset
+
+ 
+\series bold
+Do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $j=1..M$
+\end_inset
+
+ 
+\series bold
+Do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ 
+\begin_inset Formula $v=\sum_{kT=1}^{d}w_{(d+2)i-(d+i)+k}x_{jk}+w_{(d+2)i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $\left|v\right|>a$
+\end_inset
+
+ 
+\series bold
+set
+\series default
+ 
+\begin_inset Formula $s=s+1$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+EndFor
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Return
+\series default
+ 
+\begin_inset Formula $\frac{s}{H\star M}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+End Function
+\end_layout
+
+\end_inset
+
+The overall proposed modified genetic algorithm is shown in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:The-modified-Genetic"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The modified Genetic Algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:The-modified-Genetic"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+Function
+\series default
+ 
+\begin_inset Formula $\mbox{mGA}\left(\overrightarrow{L},\overrightarrow{R,}a,\lambda\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Input
+\series default
+s: The bound vectors 
+\begin_inset Formula $\overrightarrow{L,}\overrightarrow{R}$
+\end_inset
+
+ and the bounding factor 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ a positive value with 
+\begin_inset Formula $\lambda>1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{K}$
+\end_inset
+
+the number of allowed generations and as 
+\begin_inset Formula $N_{G}$
+\end_inset
+
+ the number of used chromosomes.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $p_{S}$
+\end_inset
+
+ the selection rate and as 
+\begin_inset Formula $p_{M}$
+\end_inset
+
+ the mutation rate.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ 
+\begin_inset Formula $N_{G}$
+\end_inset
+
+ chromosomes inside the bounding boxes 
+\begin_inset Formula $\overrightarrow{L,}\overrightarrow{R}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=0$
+\end_inset
+
+, the generation number.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{G}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:For"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the corresponding neural network 
+\begin_inset Formula $N_{i}\left(\overrightarrow{x},\overrightarrow{g_{i}}\right)$
+\end_inset
+
+ for the chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $e_{i}=\sum_{j=1}^{M}\left(N_{i}\left(\overrightarrow{x}_{j},\overrightarrow{w_{i}}\right)-y_{j}\right)^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $B_{i}=\mbox{eval}\left(N_{i}\left(\overrightarrow{x},\overrightarrow{g_{i}}\right),a\right)$
+\end_inset
+
+ using the algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:CalculationBound"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $f_{i}=e_{i}\times\left(1+\lambda B_{i}^{2}\right)$
+\end_inset
+
+ as the fitness value of chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ the best 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{G}$
+\end_inset
+
+ chromosomes, that will be copied intact to the next generation.
+ The remaining will be substituted by individuals produced by crossover
+ and mutation.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\le N_{K}$
+\end_inset
+
+ 
+\series bold
+goto
+\series default
+ step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:For"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+End function
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
-The final algorithm
+The overall algorithm
 \end_layout
 
 \begin_layout Standard
-(....)
+The overall algorithm uses the procedures presented previously to achieve
+ greater accuracy in calculations as well as to avoid overfitting phenomena.
+ The steps of the overall algorithm have as follows:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{C}$
+\end_inset
+
+ the number of chromosomes for the Grammatical Evolution procedure and as
+ 
+\begin_inset Formula $N_{G}$
+\end_inset
+
+ the maximum number of allowed generations.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $p_{S}$
+\end_inset
+
+ the selection rate and as 
+\begin_inset Formula $p_{M}$
+\end_inset
+
+ the mutation rate.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Let
+\series default
+ 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ be the number of chromosomes to which the modified genetic algorithm will
+ be periodically applied.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Let
+\series default
+ 
+\begin_inset Formula $N_{T}$
+\end_inset
+
+ be the number of generations that will pass before applying the modified
+ genetic algorithm to randomly selected chromosomes.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the weight factor 
+\begin_inset Formula $F$
+\end_inset
+
+ with 
+\begin_inset Formula $F>1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the values 
+\begin_inset Formula $N_{K},\ a,\ \lambda$
+\end_inset
+
+ used in the modified genetic algorithm.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ randomly the 
+\begin_inset Formula $N_{C}$
+\end_inset
+
+ chromosomes as sets of randomly selected integers.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the generation number 
+\begin_inset Formula $k=0$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Fitness Calculation
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{C}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the corresponding neural network 
+\begin_inset Formula $N_{i}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ using Grammatical Evolution.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the fitness value 
+\begin_inset Formula $f_{i}=\sum_{j=1}^{M}\left(N_{i}\left(\overrightarrow{x}_{j},\overrightarrow{w}\right)-y_{j}\right)^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Genetic Operations
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Select
+\series default
+ the best 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{G}$
+\end_inset
+
+ chromosomes, that will be copied intact to the next generation.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ 
+\begin_inset Formula $p_{S}N$
+\end_inset
+
+ chromosomes using one - point crossover.
+ For every couple 
+\begin_inset Formula $\left(c_{1},c_{2}\right)$
+\end_inset
+
+ of produced offsprings two distinct chromosomes are selected from the current
+ population using tournament selection.
+ An example of the one - point crossover procedure is shown graphically
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:onePoint"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+For every chromosome and for each element select a random number 
+\begin_inset Formula $r\le1$
+\end_inset
+
+.
+ Alter the current element when 
+\begin_inset Formula $r\le p_{M}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Local search.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\ \mbox{mod}\ N_{T}=0$
+\end_inset
+
+ 
+\series bold
+then
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $S=\left\{ g_{r_{1}},g_{r_{2}},\ldots,g_{r_{N_{I}}}\right\} $
+\end_inset
+
+ a group of 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ randomly selected chromosomes from the genetic population.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every member 
+\begin_inset Formula $g\in S$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the corresponding neural network 
+\begin_inset Formula $N_{g}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ for the chromosome 
+\begin_inset Formula $g$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the left bound vector 
+\begin_inset Formula $\overrightarrow{L_{g}}$
+\end_inset
+
+ and the right bound vector 
+\begin_inset Formula $\overrightarrow{R_{g}}$
+\end_inset
+
+ for 
+\begin_inset Formula $g$
+\end_inset
+
+ using the equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:createL"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:createR"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ respectively.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $g=\mbox{mga}\left(\overrightarrow{L_{g}},\overrightarrow{R_{g},}a,\lambda\right)$
+\end_inset
+
+ using the steps of algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:The-modified-Genetic"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Endif
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination Check
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k\le N_{G}$
+\end_inset
+
+ goto 
+\series bold
+Fitness Calculation
+\series default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Application to the test set
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the chromosome 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+ with the lowest fitness value and create through Grammatical Evolution
+ the corresponding neural network 
+\begin_inset Formula $N^{*}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the neural network 
+\begin_inset Formula $N^{*}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ and report the corresponding error value.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename onepoint_crossover.eps
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+An example of the one - point crossover procedure.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:onePoint"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1141,18 +2405,14 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Standard
-A series of experiments were carried out to determine the effectiveness
- of the proposed technique and its ability to achieve low generalization
- errors in classification and data fitting problems.
- In addition, a series of experiments were performed to determine the stability
- of the method when critical parameters take different values.
- In order to perform the experiments a series of classification and regression
- datasets from the relevant literature was obtained.
- These datasets can be found in the following websites:
+The validation of the proposed method was performed using a wide series
+ of classification and regression datasets, available from various sources
+ from the Internet.
+ These datasets were downloaded from:
 \end_layout
 
 \begin_layout Enumerate
-The UCI website, 
+The UCI database, 
 \begin_inset Flex URL
 status open
 
@@ -1163,7 +2423,7 @@ https://archive.ics.uci.edu/
 
 \end_inset
 
-(accessed on 9 January 2025)
+(accessed on 22 January 2025)
 \begin_inset CommandInset citation
 LatexCommand citep
 key "uci"
@@ -1186,7 +2446,7 @@ https://sci2s.ugr.es/keel/datasets.php
 
 \end_inset
 
-(accessed on 9 January 2025)
+(accessed on 22 January 2025)
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Keel"
@@ -1209,7 +2469,7 @@ https://lib.stat.cmu.edu/datasets/index
 
 \end_inset
 
-(accessed on 9 January 2025).
+(accessed on 22 January 2025).
  
 \end_layout
 
@@ -1218,7 +2478,24 @@ Experimental datasets
 \end_layout
 
 \begin_layout Standard
-The following series of classification datasets was used:
+The following datasets were utilized in the conducted experiments:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Appendictis
+\series default
+ which is a medical dataset 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "appendicitis"
+literal "false"
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Enumerate
@@ -1226,7 +2503,7 @@ The following series of classification datasets was used:
 \series bold
 Alcohol
 \series default
-, which is related to some experiments regarding alcohol consumption 
+, which is dataset regarding alcohol consumption 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "alcohol"
@@ -1243,26 +2520,10 @@ literal "false"
 \series bold
 Australian
 \series default
-, which is related to bank transactions 
+, which is a dataset produced from various bank transactions 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "australian"
-literal "false"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Bands,
-\series default
- regarding printing problems 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "bands"
 literal "false"
 
 \end_inset
@@ -1283,7 +2544,7 @@ literal "false"
 
 \end_inset
 
-, which is related to psychological experiments.
+, produced from various psychological experiments.
 \end_layout
 
 \begin_layout Enumerate
@@ -1291,8 +2552,7 @@ literal "false"
 \series bold
 Cleveland
 \series default
-, a medical dataset which was thoroughly studied in the past in a series
- of research papers 
+, a medical dataset which was discussed in a series of papers 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "cleveland1,cleveland2"
@@ -1309,8 +2569,7 @@ literal "false"
 \series bold
 Circular
 \series default
- dataset, which created artificially.
- 
+ dataset, which is an artificial dataset.
 \end_layout
 
 \begin_layout Enumerate
@@ -1318,7 +2577,7 @@ Circular
 \series bold
 Dermatology
 \series default
-, a medical dataset related to dermatology problems 
+, a medical dataset for dermatology problems 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "dermatology"
@@ -1334,7 +2593,7 @@ literal "false"
 \series bold
 Ecoli
 \series default
-, which is related to protein issues 
+, which is related to protein problems 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ecoli"
@@ -1348,9 +2607,18 @@ literal "false"
 \begin_layout Enumerate
 
 \series bold
+Glass
+\series default
+ dataset, that contains measurements from glass component analysis.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
 Haberman
 \series default
-, a medical dataset used for breast cancer detection.
+, a medical dataset related to breast cancer.
 \end_layout
 
 \begin_layout Enumerate
@@ -1374,7 +2642,7 @@ literal "false"
 \series bold
 Heart
 \series default
-, a dataset related to heart diseases 
+, which is a dataset related to heart diseases 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "heart"
@@ -1390,7 +2658,7 @@ literal "false"
 \series bold
 HeartAttack
 \series default
-, a dataset related to heart diseases
+, which is a medical dataset for the detection of heart diseases
 \end_layout
 
 \begin_layout Enumerate
@@ -1398,7 +2666,7 @@ HeartAttack
 \series bold
 Hepatitis
 \series default
-, a medical dataset regarding hepatitis.
+, a medical dataset related to the hepatitis.
  
 \end_layout
 
@@ -1407,7 +2675,7 @@ Hepatitis
 \series bold
 Housevotes
 \series default
-, that was used in the Congressional voting in USA 
+, a dataset which is related to the Congressional voting in USA 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "housevotes"
@@ -1423,7 +2691,7 @@ literal "false"
 \series bold
 Ionosphere
 \series default
-, a dataset related to measurements from the ionosphere 
+, a dataset that contains measurements from the ionosphere 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ion1,ion2"
@@ -1439,7 +2707,7 @@ literal "false"
 \series bold
 Liverdisorder
 \series default
-, which is a medical dataset studied in a series of papers
+, a medical dataset that was studied thoroughly in a series of papers
 \begin_inset CommandInset citation
 LatexCommand citep
 key "liver,liver1"
@@ -1471,7 +2739,7 @@ literal "false"
 \series bold
 Mammographic
 \series default
-, a medical dataset related to breast cancer 
+, which is a medical dataset used for the prediction of breast cancer 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "mammographic"
@@ -1485,25 +2753,10 @@ literal "false"
 \begin_layout Enumerate
 
 \series bold
-Page Blocks 
-\series default
-dataset 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "pageblocks"
-literal "false"
-
-\end_inset
-
-, related to the page layout of documents.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
 Parkinsons
 \series default
-, a medical dataset for the detection of Parkinson's disease 
+, which is a medical dataset used for the detection of Parkinson's disease
+ 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "parkinsons1,parkinsons2"
@@ -1519,7 +2772,7 @@ literal "false"
 \series bold
 Pima
 \series default
-, a medical dataset related to the presence of diabetes
+, which is a medical dataset for the detection of diabetes
 \begin_inset CommandInset citation
 LatexCommand citep
 key "pima"
@@ -1535,7 +2788,7 @@ literal "false"
 \series bold
 Phoneme
 \series default
-, a dataset regarding sounds.
+, a dataset that contains sound measurements.
 \end_layout
 
 \begin_layout Enumerate
@@ -1543,7 +2796,7 @@ Phoneme
 \series bold
 Popfailures
 \series default
-, a dataset related to measurements from climate experiments 
+, a dataset related to experiments regarding climate 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "popfailures"
@@ -1557,7 +2810,7 @@ literal "false"
 \begin_layout Enumerate
 
 \series bold
-Regions2
+(OK)Regions2
 \series default
 , a medical dataset used for the detection of issues in the liver 
 \begin_inset CommandInset citation
@@ -1568,15 +2821,6 @@ literal "false"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Ring
-\series default
-, a dataset related to a series of multivariate normal distributions.
- 
 \end_layout
 
 \begin_layout Enumerate
@@ -1617,15 +2861,6 @@ literal "false"
 Statheart
 \series default
 , a medical dataset used for the detection of heart diseases.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Spambase
-\series default
-, a dataset used to recognize spam emails.
- 
 \end_layout
 
 \begin_layout Enumerate
@@ -2946,6 +4181,21 @@ C.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "nnt_bound"
+literal "false"
+
+\end_inset
+
+Anastasopoulos, N., Tsoulos, I.G., Karvounis, E.
+ et al.
+ Locate the Bounding Box of Neural Networks with Intervals.
+ Neural Process Lett 52, 2241–2251 (2020).
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 label "(1989)"
 key "uci"
 literal "false"
@@ -2983,6 +4233,20 @@ J.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "appendicitis"
+literal "false"
+
+\end_inset
+
+Weiss, Sholom M.
+ and Kulikowski, Casimir A., Computer Systems That Learn: Classification
+ and Prediction Methods from Statistics, Neural Nets, Machine Learning,
+ and Expert Systems, Morgan Kaufmann Publishers Inc, 1991.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 label "Tzimourta(2018)"
 key "alcohol"
 literal "false"
@@ -3014,26 +4278,6 @@ J.R.
 , pp.
  221-234, 1987.
  
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-label "Evans(1994)"
-key "bands"
-literal "false"
-
-\end_inset
-
-B.
- Evans, D.
- Fisher, Overcoming process delays with decision tree induction.
- IEEE Expert 
-\series bold
-9
-\series default
-, pp.
- 60-66, 1994.
 \end_layout
 
 \begin_layout Bibliography
@@ -3382,27 +4626,6 @@ J.W.
  Johannes, Using the ADAP learning algorithm to forecast the onset of diabetes
  mellitus, In: Proceedings of the Symposium on Computer Applications and
  Medical Care IEEE Computer Society Press, pp.261-265, 1988.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "pageblocks"
-literal "false"
-
-\end_inset
-
-F.
- Esposito F., D.
- Malerba, G.
- Semeraro, Multistrategy Learning for Document Recognition, Applied Artificial
- Intelligence 
-\series bold
-8
-\series default
-, pp.
- 33-84, 1994.
- 
 \end_layout
 
 \begin_layout Bibliography
