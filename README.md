@@ -322,3 +322,32 @@ Minimum Function Value:         -195.8308285
 Percent Minimum  Found:                90.00%
 ```
 As we can see, the incorporation of the local search method increased the success rate of the genetic algorithm from 60% to 90%. 
+
+## The script runfunmin.sh
+runfunmin.sh is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
+
+**runfunmin.sh uses different parameters to:** 
+1.To choose the optimization method to be used 
+2.To configure the parameters of the method 
+3.To specify local search, sampling, and termination mode.
+
+
+**1.Declaration of Variables** 
+- METHOD: Specifies which optimization method will be used 
+- LOCALSEARCH: Specifies the local search method 
+- SAMPLER: Selects the sampling method 
+- TERMINATION: Defines the termination criterion
+
+**2. Setting Methods**
+runfunmin.sh checks which method is selected via the METHOD variable. For each method, the appropriate parameters are added to the METHODPARAMS variable. 
+
+**3. Problem and Dimensions**
+runfunmin.sh expects two additional parameters from the command line:
+- PROBLEM: The name of the problem
+- DIMENSION: The dimensions of the problem
+
+**4. Run GlobalOptimus**
+Finally, it runs the GlobalOptimus application with the configured parameters
+
+runfunmin.sh is great for testing different methods on different problems.  Parameter selection gives a lot of control to the user. It supports excellent extensibility as new methods or parameters can be added.
+
