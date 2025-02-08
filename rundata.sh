@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=nnc
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FcCon/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -15,7 +15,7 @@ DATAFILE=$1
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]; then
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=false --mlpboundlimit=10.0"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=true --mlpboundlimit=10.0"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
@@ -99,7 +99,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none"
+  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=de"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples

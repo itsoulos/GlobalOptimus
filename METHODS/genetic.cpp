@@ -24,7 +24,7 @@ Genetic::Genetic()
                        gen_mutation,
                        "Mutation method. Available values random, double"));
     QStringList gen_lsearchmethod;
-    gen_lsearchmethod<<"none"<<"crossover"<<"mutate"<<"siman";
+    gen_lsearchmethod<<"none"<<"crossover"<<"mutate"<<"siman"<<"de";
     addParam(Parameter("gen_lsearchmethod",gen_lsearchmethod[0],
                        gen_lsearchmethod,
                        "Available methods: none,crossover,mutate,siman"));
@@ -432,6 +432,49 @@ void    Genetic::LocalSearch(int pos)
     else
     if(localSearchMethod == LOCAL_SIMAN)
         localSiman(pos);
+    else
+    if(localSearchMethod=="de")
+    {
+        vector<double> g;
+        g.resize(population[0].size());
+
+            int randomA,randomB,randomC;
+            do
+            {
+                randomA =  selectWithTournament(tournamentSize);
+                randomB =  selectWithTournament(tournamentSize);
+                randomC = selectWithTournament(tournamentSize);
+            }while(randomA == randomB || randomB == randomC ||
+                   randomC == randomA);
+            double CR= 0.9;
+            double F = 0.8;
+            int n = myProblem->getDimension();
+            int randomIndex = rand() % n;
+        for(int i=0;i<n;i++)
+        {
+            if(i==randomIndex || myProblem->randomDouble() <=CR)
+            {
+                double old_value = population[pos][i];
+                F = -0.5 + 2.0 * rand()*1.0/RAND_MAX;
+                population[pos][i]=population[randomA][i]+abs(F*(population[randomB][i]-population[randomC][i]));
+                if(!myProblem->isPointIn(population[pos]))
+                {
+                    population[pos][i]=old_value;
+                    continue;
+                }
+
+                for(int j=0;j<n;j++) g[j]=population[pos][j];
+                double trial_fitness=myProblem->statFunmin(g);
+                if(fabs(trial_fitness)<fabs(fitnessArray[pos]))
+                {
+                 printf("NEW DE VALUE[%d] = %lf=>%lf\n",pos,fitnessArray[pos],trial_fitness);
+                    fitnessArray[pos]=trial_fitness;
+                }
+                else	population[pos][i]=old_value;
+            }
+        }
+    }
+
 }
 
 void    Genetic::Crossover()
