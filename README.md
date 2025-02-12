@@ -323,13 +323,23 @@ Percent Minimum  Found:                90.00%
 ```
 As we can see, the incorporation of the local search method increased the success rate of the genetic algorithm from 60% to 90%. 
 
+## Comparing with known global optima
+The user can set the known global minimum using the following method in Problem class:
+``    
+void setKnownOptimum(double value, const Data& location);
+``
+This method defines the expected global minimum that will be discovered by any applied global optimization method. In several of the available software examples, the expected global minimum has been defined. These expected minima are available from the relevant literature. If the user has defined the expected minimum, then the main program will display at the end the percentage of runs in which this minimum was found by the global optimization method used. As an example of output consider the following line obtained by the application of the Genetic Algorithm to the Griewank10 test problem
+``
+Percentage of known global minimum found: 93.33%
+``
+
 ## The script runfunmin.sh
 runfunmin.sh is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
 
 **runfunmin.sh uses different parameters to:** 
-1.To choose the optimization method to be used 
-2.To configure the parameters of the method 
-3.To specify local search, sampling, and termination mode.
+1. To choose the optimization method to be used 
+2. To configure the parameters of the method 
+3. To specify local search, sampling, and termination mode.
 
 
 **1.Declaration of Variables** 

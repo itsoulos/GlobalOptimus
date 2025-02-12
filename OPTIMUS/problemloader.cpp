@@ -73,29 +73,69 @@ QString ProblemLoader::getProblemReport(QString selectedproblem,
 Problem *ProblemLoader::getProblemFromName(QString name)
 {
     Problem *myProblem=NULL;
+    Data xx;
+    double yy;
     if(name == "rastrigin")
+    {
         myProblem = new RastriginProblem();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=1;
+        yy= -2.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "ackley")
+    {
         myProblem = new Ackley();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=0;
+        yy= 0.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "bf3")
+    {
+
         myProblem = new bf3();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=0;
+        yy= 0.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "extendedf10")
+    {
+
         myProblem = new Extended_f10();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=0;
+        yy= 0.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "schwefel")
+    {
+
         myProblem = new schwefel();
+    }
     else
     if(name == "schwefel221")
-        myProblem = new schwefel221();
+    {
+       myProblem = new schwefel221();
+    }
     else
     if(name == "schwefel222")
         myProblem = new schwefel222();
     else
     if(name  == "schaffer")
+    {
+
         myProblem = new schaffer();
+    }
     else
     if(name == "f16")
         myProblem = new f16();
@@ -128,16 +168,45 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new Test2nProblem();
     else
     if(name == "bf1")
+    {
+
         myProblem = new Bf1();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=0;
+        yy= 0.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "bf2")
+    {
         myProblem = new Bf2();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=0;
+        yy= 0.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "branin")
+    {
         myProblem = new Branin();
+        xx.resize(2);
+        xx[0]=-3.141593;
+        xx[1]=5.683451;
+        yy= 0.397887;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "camel")
+    {
         myProblem = new Camel();
+        xx.resize(2);
+        xx[0]=-0.089842;
+        xx[1]=0.712656;
+        yy= -1.031628 ;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "cm")
         myProblem = new Cm();
@@ -146,7 +215,14 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new DiffPower();
     else
     if(name == "easom")
+    {
         myProblem = new Easom();
+        xx.resize(2);
+        xx[0]=-87.964594;
+        xx[1]= 85.636858;
+        yy= -1.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "exp")
         myProblem = new Exp();
@@ -155,31 +231,101 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new Elp();
     else
     if(name == "gkls250")
+    {
         myProblem = new Gkls250();
+        xx.resize(2);
+        xx[0]=0.225168;
+        xx[1]=0.283428;
+        yy= -1.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "gkls2100")
+    {
         myProblem = new Gkls2100();
+        xx.resize(2);
+        xx[0]=0.315437;
+        xx[1]=0.374783;
+        yy= -1.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "gkls350")
+    {
         myProblem = new Gkls350();
+        xx.resize(3);
+        xx[0]=0.006579;
+        xx[1]= -0.291979;
+        xx[2]=0.082807;
+        yy= -1.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "goldstein")
+    {
         myProblem = new Goldstein();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=-1.0;
+        yy=3.0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "griewank2")
+    {
         myProblem = new Griewank2();
+        xx.resize(2);
+        xx[0]=0;
+        xx[1]=0;
+        yy=0;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "griewank10")
+    {
         myProblem = new Griewank10();
+        xx.resize(10);
+        for(int i=0;i<10;i++) xx[i]=0.0;
+        yy=0.0;
+        myProblem->setKnownOptimum(yy,xx);
+
+    }
     else
     if(name == "hansen")
+    {
         myProblem = new Hansen();
+        xx.resize(2);
+        xx[0]=4.976478;
+        xx[1]=-7.708314;
+        yy=-176.541793;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "hartman3")
+    {
         myProblem = new Hartman3();
+        xx.resize(3);
+        xx[0]=0.114614;
+        xx[1]=0.555649;
+        xx[2]=0.852547;
+        yy=-3.862782;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "hartman6")
+    {
         myProblem = new Hartman6();
+        xx.resize(6);
+        xx[0]=0.201690;
+        xx[1]=0.150011;
+        xx[2]=0.476874;
+        xx[3]=0.275332;
+        xx[4]=0.311652;
+        xx[5]=0.657301;
+
+        yy=-3.322368;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "potential")
         myProblem = new Potential();
@@ -188,13 +334,40 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new Rosenbrock();
     else
     if(name == "shekel5")
+    {
         myProblem = new Shekel5();
+        xx.resize(4);
+        xx[0]=3.999953 ;
+        xx[1]=4.000049;
+        xx[2]=3.999953;
+        xx[3]=4.000049;
+        yy=-10.107749;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "shekel7")
+    {
         myProblem = new Shekel7();
+        xx.resize(4);
+        xx[0]=4.000420;
+        xx[1]=4.000537;
+        xx[2]=3.999474;
+        xx[3]=3.999591;
+        yy=-10.342378;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "shekel10")
+    {
         myProblem = new Shekel10();
+        xx.resize(4);
+        xx[0]=4.000747 ;
+        xx[1]=4.000593;
+        xx[2]=3.999663;
+        xx[3]= 3.999510 ;
+        yy=-10.536410;
+        myProblem->setKnownOptimum(yy,xx);
+    }
     else
     if(name == "sinu")
         myProblem = new Sinu();

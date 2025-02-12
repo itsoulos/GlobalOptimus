@@ -230,18 +230,42 @@ int main(int argc, char *argv[])
     unloadProblem();
     Statistics stat;
     int times = getIters();
-
+    Data xx;
+    double yy;
+    int match_found = 0;
+    bool hasKnownSolution = false;
     for(int t=1;t<=times;t++)
     {
         srand(t);
         loadProblem();
         runMethod();
         stat.addProblem(mainProblem);
+
+        /**
+         * TESTING
+         */
+        xx= mainProblem->getBestx();
+        yy = mainProblem->getBesty();
+        if(mainProblem->hasOptimum())
+        {
+            hasKnownSolution =true;
+            match_found+=fabs(mainProblem->getKnownOptimumValue()-mainProblem->getBesty())<=1e-6;
+        }
         unloadProblem();
     }
 
 
+
     stat.printStatistics();
+
+
+
+    if(hasKnownSolution)
+    {
+        printf("Percentage of known global minimum found: %.2lf%%\n",
+               match_found*100.0/times);
+    }
     unloadMethods();
+
     return 0;
 }

@@ -38,6 +38,9 @@ typedef vector<Data> Matrix;
 class Problem
 {
 protected:
+    double knownOptimumValue;
+        Data knownOptimumLocation;
+        bool hasKnownOptimum;
     /**
      * @brief dimension, the dimension of the target problem
      */
@@ -63,6 +66,10 @@ protected:
      */
     int functionCalls;
 public:
+    void setKnownOptimum(double value, const Data& location);
+        bool hasOptimum() const;
+        double getKnownOptimumValue() const;
+        Data getKnownOptimumLocation() const;
     /**
      * @brief Problem, the base constructor of the class
      * @param n, the problem dimension

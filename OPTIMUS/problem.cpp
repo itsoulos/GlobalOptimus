@@ -1,12 +1,13 @@
 #include "problem.h"
 
 Problem::Problem(int n)
-{
-    setDimension(n);
+    : hasKnownOptimum(false),
+      besty(std::numeric_limits<double>::infinity()),
+      functionCalls(0) {
+        setDimension(n);
 }
 
-Problem::Problem()
-{
+Problem::Problem() : hasKnownOptimum(false), besty(std::numeric_limits<double>::infinity()), functionCalls(0) {
     setDimension(1);
 }
 
@@ -167,6 +168,24 @@ void    Problem::granal(Data &x,Data &g)
 QJsonObject Problem::done(Data &x)
 {
     return QJsonObject();
+}
+
+void Problem::setKnownOptimum(double value, const Data& location) {
+    knownOptimumValue = value;
+    knownOptimumLocation = location;
+    hasKnownOptimum = true;
+}
+
+bool Problem::hasOptimum() const {
+    return hasKnownOptimum;
+}
+
+double Problem::getKnownOptimumValue() const {
+    return knownOptimumValue;
+}
+
+Data Problem::getKnownOptimumLocation() const {
+    return knownOptimumLocation;
 }
 Problem::~Problem()
 {
