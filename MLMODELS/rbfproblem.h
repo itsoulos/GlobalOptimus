@@ -51,6 +51,7 @@ public:
     void  matrix_inverse(Matrix &x,bool &error_flag,Matrix &c);
     void  matrix_pseudoinverse(Matrix &x,bool &error_flag);
     void    originalTrain();
+    double apostasi(Data &x,Data &y);
     virtual ~RbfProblem();
 };
 

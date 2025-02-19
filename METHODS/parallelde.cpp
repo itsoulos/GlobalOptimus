@@ -28,7 +28,7 @@ ParallelDe::ParallelDe()
                        "The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
     addParam(Parameter("parde_similarityMax", 15,1,100, "Maximum allowed itearations for Similarity Stopping rule"));
     addParam(Parameter("parde_islands", 1,1,10000, "Number of thread islands"));
-    addParam(Parameter("parde_islands_enable", 1,1,10000, "the number of islands that play a role in the termination rule: [1, islands. O for global check."));
+    addParam(Parameter("parde_islands_enable", 0,0,10000, "the number of islands that play a role in the termination rule: [1, islands. O for global check."));
 }
 
 int ParallelDe::selectAtom(int islandIndex)
@@ -265,14 +265,26 @@ bool ParallelDe::terminated()
         int index;
         double bestValue;
         getBestValue(index,bestValue);
-        if(fabs(bestValue-global_sim_value)>1e-5)
+        if(generation%10==0)
         {
-            global_sim_value = bestValue;
-            global_sim_count=0;
+            getBestValue(index,bestValue);
+            printf("PARDE. Iteration = %4d Best Value=%20.10lg \n",generation,bestValue);
         }
-        else global_sim_count++;
-
-        return generation >= parde_generations || global_sim_count>=similarity_max_count;
+        int maxGenerations = getParam("parde_generations").getValue().toInt();
+        if(generation>=maxGenerations) return true;
+        if(terminationMethod=="doublebox")
+            return doubleBox.terminate(bestValue);
+        else
+            if(terminationMethod=="similarity")
+                return similarity.terminate(bestValue);
+        return false;
+    }
+    if(generation%10==0)
+    {
+        int index;
+        double bestValue;
+        getBestValue(index,bestValue);
+        printf("PARDE. Iteration = %4d Best Value=%20.10lg \n",generation,bestValue);
     }
     int c = 0;
 
@@ -365,7 +377,7 @@ void ParallelDe::step()
     for (int j = 0; j < islands; j++)
     {
         newMO.at(j) = (double)newSum.at(j)/islands;
-        this->checkIsland(j);
+      //  this->checkIsland(j);
     }
     if (generation % parde_propagate_rate)
         propagateIslandValues();
@@ -376,17 +388,7 @@ void ParallelDe::done()
     int bestIndex = 0, bestI = 0;
     double bestValue = 1e+100, bestV = 1e+100;
     getBestValue(bestIndex, bestValue);
-    /*
-    for (int i = 0;i < islands; i++)
-    {
-        this->getBestValue(i,bestI, bestV);
-        if (bestV<bestValue)
-        {
-            bestValue = bestV;
-            bestIndex = bestI;
-        }
-    }
-    */
+
     bestValue = localSearch(population[bestIndex]);    
 }
 

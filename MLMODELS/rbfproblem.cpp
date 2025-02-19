@@ -10,6 +10,14 @@ RbfProblem::RbfProblem()
     addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
     trainA.resize(0);
 }
+
+double RbfProblem::apostasi(Data &x,Data &y)
+{
+    double s= 0.0;
+    for(int i=0;i<(int)x.size();i++)
+        s+=(x[i]-y[i])*(x[i]-y[i]);
+    return s;
+}
 double  RbfProblem::getDerivative(Data &x,int pos)
 {
 
@@ -49,11 +57,8 @@ double  RbfProblem::getSecondDerivative(Data &x,int pos)
 
 double  RbfProblem::gaussian(Data &x,Data &center,double variance)
 {
-    double arg = getDistance(x,center);
-    arg = (arg * arg)/(variance * variance);
-  //  if(isnan(arg) || isinf(arg)) return 0.0;
- //   if(arg>10) return 0.0;
-    return exp(-arg);
+    double d= getDistance(x,center);
+      return exp(-d*d / (2.0* variance * variance));
 }
 
 void    RbfProblem::setParameters(Data &x)
@@ -99,26 +104,26 @@ void    RbfProblem::getParameters(Data &x)
 
 void    RbfProblem::getWeightDerivative(int index,Data &x,double &g)
 {
-    double val =lastGaussianValues[index];// gaussian(x,centers[index],variances[index]);
+    double val = gaussian(x,centers[index],variances[index]);
     g=val;
 }
 
 void    RbfProblem::getVarianceDerivative(int index,Data &x,double &g)
 {
-    double val = lastGaussianValues[index];// gaussian(x,centers[index],variances[index]);
-    double v3 = variances[index]*variances[index]*variances[index];
+    double val =  gaussian(x,centers[index],variances[index]);
+    double v3 = variances[index];
     double d2 = getDistance(x,centers[index]);
-    d2 = d2 * d2;
-    g =weight[index]* val * (-2.0) * (-d2/v3);
+    g = val * d2*d2 /( v3 * v3 * v3);
 }
 
 void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
 {
-    double val = lastGaussianValues[index];// gaussian(x,centers[index],variances[index]);
+    double val =  gaussian(x,centers[index],variances[index]);
     int d = trainDataset->dimension();
     for(int j=0;j<d;j++)
     {
-        g[j]=(-1.0)*val * 2.0 * (x[j]-centers[index][j])*(1.0/(variances[index]*variances[index]));
+        g[j]=val *  (x[j]-centers[index][j])*
+                (1.0/(variances[index]*variances[index]));
     }
 }
 
@@ -143,7 +148,7 @@ Data    RbfProblem::gradient(Data &x)
 
    for(int i=0;i<g.size();i++)
         g[i]=0.0;
-    Data gtemp ;
+   Data gtemp ;
     gtemp.resize(dimension);
     Data g1;
     int d = trainDataset->dimension();
@@ -177,7 +182,7 @@ Data    RbfProblem::gradient(Data &x)
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
 
-    return g;
+   return g;
 
     Data g2;
     g2.resize(dimension);
@@ -191,15 +196,16 @@ Data    RbfProblem::gradient(Data &x)
         g2[i]=(v1-v2)/(2.0 * eps);
         if(fabs(g[i]-g2[i])>1e-3)
         {
-            g[i]=g2[i];/*
-            printf("DIFFERENCE[%4d]=%.8lf\n",i,fab(g[i]-g2[i]));
+
+            printf("DIFFERENCE[%4d]=%.8lf\n",i,fabs(g[i]-g2[i]));
             if(i<nodes*d)
                 printf("Center difference \n");
             else
                 if(i>=nodes *d && i<nodes*d+nodes)
-                printf("Varince difference \n");
+                printf("Variance difference \n");
             else
-                printf("Weight difference\n");*/
+                printf("Weight difference\n");
+              g[i]=g2[i];
         }
         x[i]+=eps;
     }
@@ -210,7 +216,6 @@ double  RbfProblem::getOutput(Data &x)
 {
     int nodes = weight.size();
     double sum = 0.0;
-    if(error_flag) return 1e+100;
     for(int i=0;i<nodes;i++)
     {
         double val = gaussian(x,centers[i],variances[i]);
@@ -352,15 +357,14 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
     for(int i=0;i<variances.size();i++)
         {
             if(teamElements[i]==0)
-                variances[i]=sqrt(variances[i]);
+                variances[i]=0.01;//sqrt(variances[i]);
             else
 
         variances[i]=sqrt(variances[i]/teamElements[i]);
-            if(variances[i]<1e-6 || isnan(variances[i]) || isinf(variances[i]))
-                variances[i]=0.0001;
+
     }
 
-    double var_diag = 0.0;
+   /*double var_diag = 0.0;
     for(int i=0;i<variances.size();i++)
     {
         var_diag+=variances[i];
@@ -369,7 +373,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
     for(int i=0;i<variances.size();i++)
         variances[i]=var_diag;
 
-
+*/
 }
 
 void    RbfProblem::initModel()

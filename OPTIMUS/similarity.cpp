@@ -1,5 +1,6 @@
 #include "similarity.h"
 # include <math.h>
+# include <stdio.h>
 Similarity::Similarity()
 {
     minimumIters = 5;
@@ -37,6 +38,8 @@ bool    Similarity::terminate(double value)
         similarityCount++;
     }
     else similarityCount=0;
+
+
     oldBest =value;
     if(iteration<minimumIters) return false;
     if(similarityCount>=similarityIterations)
