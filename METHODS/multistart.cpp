@@ -69,8 +69,7 @@ void    Multistart::done()
          //printf("MINIMA X=[ %lf, %lf] Y=%lf\n",x[0]/33.29,x[1]/33.29,y);
         }
     }
-    printf("MIN[0]=%lf MAX[0]=%lf \n",
-           minx0/33.29,maxx0/33.29);
+
 }
 
 void    Multistart::getBest(Data &x,double &y)

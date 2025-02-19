@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all, sumfitness (only for DE)
 TERMINATION=doublebox
 ### GLOBAL PARAMS
-GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION"
+GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_enabletesting=yes"
 if [ $METHOD = "bfgs" ]
 then
 
@@ -140,7 +140,7 @@ fi
 
 if [ -z "$DIMENSION" ] 
 then
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=30 --opt_debug=yes
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=30 --opt_debug=no
 else
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=30 --opt_debug=yes
+	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=30 --opt_debug=no
 fi

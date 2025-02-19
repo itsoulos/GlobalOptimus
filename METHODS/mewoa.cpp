@@ -170,7 +170,6 @@ void MEWOA::done()
     after = std::chrono::system_clock::now();
     auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     auto ms = milliseconds.count();
-    std::cout << "Douration: " << (double)ms / 1000.0 << " sec" << std::endl;
 }
 
 MEWOA::~MEWOA()

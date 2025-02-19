@@ -178,7 +178,6 @@ void jDElsgo::done()
     after = std::chrono::system_clock::now();
     auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     auto ms = milliseconds.count();
-    std::cout << "Duration: " << static_cast<double>(ms) / 1000.0 << " sec" << std::endl;
 }
 
 jDElsgo::~jDElsgo()

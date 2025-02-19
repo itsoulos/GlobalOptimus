@@ -51,6 +51,9 @@ void makeMainParams()
     mainParams<<Parameter("opt_seed","1","Random Seed");
     mainParams<<Parameter("opt_iters","30","Number of iterations");
     mainParams<<Parameter("opt_threads","1","Number of threads");
+    QStringList t;
+    t<<"no"<<"yes";
+    mainParams<<Parameter("opt_enabletesting",t[0],t,"Enable or disable testing. The default value is no.");
 }
 void loadMethods()
 {
@@ -218,6 +221,45 @@ int getIters()
     }
     return 0;
 }
+void runAllTests(int iterations) {
+    int matchFound = 0;
+    int triesCount = 0;
+    QStringList methodList;
+    methodList<<"Multistart"<<"Armadillo"<<"Ofa"<<"Genetic"<<"iPso"<<"NelderMead"<<"DifferentialEvolution";
+    for (int i = 0; i < methodName.size()-1; i++) {
+        if(methodList.contains(methodName[i])==false) continue;
+        qDebug() << "Running method: " << methodName[i];
+        Statistics stat;
+
+        for (int t = 1; t <= iterations; t++) {
+            srand(t);
+            triesCount++;
+
+            loadProblem();
+
+            methodLoader->getSelectedMethod(methodName[i])->setProblem(mainProblem);
+            methodLoader->getSelectedMethod(methodName[i])->solve();
+
+            stat.addProblem(mainProblem);
+
+            Data xx = mainProblem->getBestx();
+            double yy = mainProblem->getBesty();
+
+            bool match_found = false;
+            if (mainProblem->hasOptimum()) {
+                match_found = fabs(mainProblem->getKnownOptimumValue() - yy) <= 1e-6;
+            }
+            if (match_found) {
+                matchFound++;
+            }
+            unloadProblem();
+        }
+        stat.printStatistics();
+
+    }
+    qDebug() << "Percentage of global minimum found: " << matchFound*100.0/triesCount<<"%";
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc,argv);
@@ -226,10 +268,22 @@ int main(int argc, char *argv[])
     loadMethods();
     parseCmdLine(app.arguments());
 
+    int times = getIters();
 
+    for(int i=0;i<mainParams.size();i++)
+    {
+        if(mainParams[i].getName()=="opt_enabletesting")
+        {
+            if(mainParams[i].getValue()=="yes")
+            {
+                runAllTests(times);
+                unloadMethods();
+                return 0;
+            }
+        }
+    }
     unloadProblem();
     Statistics stat;
-    int times = getIters();
     Data xx;
     double yy;
     int match_found = 0;

@@ -333,6 +333,33 @@ This method defines the expected global minimum that will be discovered by any a
 Percentage of known global minimum found: 93.33%
 ``
 
+Furthermore, the option "--opt_enabletesting" can be used to require the software to perform a series of global optimization 
+methods on the selected problem. For example the following command
+``
+./GlobalOptimus  --opt_problem=bf1 --opt_enabletesting=yes
+``
+will apply a series of global optimization methods on the test problem bf1 and the final line of the printing will be
+``
+Percentage of global minimum found:  79.5238 %
+`` 
+which indicates the number of all executions where the global minima was discovered successfully. The global optimization methods used in this test are:
+1. The Multistart method.
+2. A simple Genetic algorithm.
+3. The Giant Armadillo method.
+4. The Particle Swarm Optimization method.
+5. The Nelder Mead method.
+6. The Differential Evolution method.
+
+
+The following table presents the percentage of global minimum usin the previous procesure for a series of problems with known global minimum.
+| Problem    | Percentage found |
+| -------- | ------- |
+| Bf1  | 83.33%    |
+| Bf2 |  80.95%    |
+| Rastrigin    | 83.81%    |
+| Griewank2    | 81.43%    |
+| Griewank10    |62.86%    |
+
 ## The script runfunmin.sh
 runfunmin.sh is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
 
