@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=mlp
+MODEL=frbf
 
 BASEPATH=~/Desktop/ERGASIES/FcCon/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -24,6 +24,8 @@ elif [ $MODEL = "fc" ]; then
   EVALPARAMS='\"--opt_method=Bfgs\"\"--mlp_nodes=10\"\"--rbf_nodes=10\"\"--opt_debug=no\"\"--rbf_factor=5\"\"--opt_termination=maxiters\"'
   MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS"
 elif [ $MODEL = "rbf" ]; then
+  MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+elif [ $MODEL = "frbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "gdf" ]; then
   MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
@@ -144,10 +146,10 @@ elif [ $METHOD = "ParallelDe" ]; then
   #parde_propagate_method: The used propagation method between islands (to1|1toN|Nto1|NtoN)
   #parde_islands: The number of parallel islands for the method.
 
-  METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=20 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=5 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=10 --parde_islands_enable=0 --opt_localsearch=$LOCALSEARCH"
+  METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=20 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=10 --parde_islands_enable=10 --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "ParallelPso" ]; then
-  METHODPARAMS="--parallelPso_particles=200 --parallelPso_generations=200 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=15 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=1 --parallelPso_subClusterEnable=1 --parallelPso_pnumber=1 --opt_localsearch=$LOCALSEARCH"
+  METHODPARAMS="--parallelPso_particles=20 --parallelPso_generations=500 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=5 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=10 --parallelPso_subClusterEnable=10 --parallelPso_pnumber=3 --opt_localsearch=$LOCALSEARCH"
 fi
 
 PROBLEM=$1

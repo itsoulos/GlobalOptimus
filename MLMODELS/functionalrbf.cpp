@@ -36,13 +36,13 @@ void    FunctionalRbf::init(QJsonObject &params)
 
 
     int icount=0;
-    for(int i=0;i<trainx.size();i++)
+    for(int i=0;i<(int)trainx.size();i++)
     {
-        for(int j=0;j<trainx[0].size();j++)
+        for(int j=0;j<(int)trainx[0].size();j++)
             xinput[icount++]=trainx[i][j];
         yinput[i]=trainy[i];
         bool found=false;
-        for(int j=0;j<dclass.size();j++)
+        for(int j=0;j<(int)dclass.size();j++)
         {
             if(fabs(dclass[j]-trainy[i])<1e-7)
             {
@@ -66,7 +66,7 @@ void    FunctionalRbf::init(QJsonObject &params)
         double f=3.0;
         for(int i=0;i<nodes;i++)
         {
-            for(int j=0;j<trainx[0].size();j++)
+            for(int j=0;j<(int)trainx[0].size();j++)
             {
 
                 double cx=fabs(centers[i * trainx[0].size()+j]);
@@ -82,7 +82,7 @@ void    FunctionalRbf::init(QJsonObject &params)
         for(int i=0;i<nodes;i++)
         {
             double maxvx=0.0;
-            for(int j=0;j<trainx[0].size();j++)
+            for(int j=0;j<(int)trainx[0].size();j++)
             {
                 double vx=variances[i * trainx[0].size()+j];
                 maxvx+=vx;
@@ -99,6 +99,7 @@ void    FunctionalRbf::init(QJsonObject &params)
     }
     delete[] xinput;
     delete[] yinput;
+
 }
 
 void FunctionalRbf::Kmeans(double * data_vectors,
@@ -298,7 +299,7 @@ double FunctionalRbf::nearestClass(double y)
 {
     int ifound=-1;
     double dmin=1e+100;
-    for(int i=0;i<dclass.size();i++)
+    for(int i=0;i<(int)dclass.size();i++)
     {
         if(fabs(dclass[i]-y)<dmin)
         {
@@ -320,7 +321,7 @@ QJsonObject FunctionalRbf::done(Data &x)
     {
         Data pattern = testx[i];
         arma::vec neuronOuts(nodes);
-        for(unsigned j = 0; j < nodes;j++){
+        for(int j = 0; j < nodes;j++){
             neuronOuts[j] = neuronOutput(x,pattern,pattern.size(),j);
         }
         double tempOut = arma::dot(neuronOuts,Linear);
@@ -385,7 +386,7 @@ adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double>
             neuronOuts[j] = aneuronOutput(x,pattern,pattern.size(),j);
         }
         adept::adouble tempOut = 0;
-        for(unsigned j = 0; j < nodes; j++) tempOut+= neuronOuts[j]*Linear[j];
+        for(int j = 0; j < nodes; j++) tempOut+= neuronOuts[j]*Linear[j];
         errorSum += ( tempOut - trainy[i] ) * ( tempOut - trainy[i] );
 	icount+= (fabs(tempOut)>=1e+4);
     }

@@ -241,8 +241,8 @@ bool ParallelPso::checkSubCluster(int subClusterName)
 {
     //double difference = fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName));
     parallelPso_termination = terminationMethod;
-    if(parallelPso_termination == "doublebox" && doubleBox.terminate(fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName)))) return true;
-    if(parallelPso_termination == "similarity" && similarity.terminate(fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName)))) return true; //similarity
+    if(parallelPso_termination == "doublebox" && threadDoublebox[subClusterName].terminate(fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName)))) return true;
+    if(parallelPso_termination == "similarity" && threadSimilarity[subClusterName].terminate(fabs(bestF2xInClusterOLD.at(subClusterName) - bestF2xInCluster.at(subClusterName)))) return true; //similarity
     if(generation>=parallelPsoGenerations) return true;
 
     return false;
@@ -461,6 +461,8 @@ void ParallelPso::init()
     }
     omp_set_dynamic(0);
     omp_set_num_threads(subCluster);
+    threadSimilarity.resize(subCluster);
+    threadDoublebox.resize(subCluster);
 }
 
 void ParallelPso::done()

@@ -127,9 +127,13 @@ void loadProblem()
     else
     if(modelName == "fc")
         mainModel = new FcModel();
-   // else
-   // if(modelName =="frbf")
-     //  mainModel = new FunctionalRbf();
+    else
+   if(modelName =="frbf")
+#ifdef OPTIMUS_ARMADILLO
+      mainModel = new FunctionalRbf();
+#else
+       ;
+#endif
     QStringList modelParams = mainModel->getParameterNames();
     for(int i=0;i<problemParams.keys().size();i++)
     {
@@ -152,8 +156,12 @@ void loadProblem()
        else
       if(modelName == "frbf")
       {
-      //    FunctionalRbf *p=(FunctionalRbf *)mainModel;
-      //    p->init(problemParams);
+
+#ifdef OPTIMUS_ARMADILLO
+    FunctionalRbf *p=(FunctionalRbf *)mainModel;
+     p->init(problemParams);
+#endif
+
       }
       else
        {

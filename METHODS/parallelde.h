@@ -48,6 +48,8 @@ private:
     int global_sim_count;
 
     double start,end;
+    vector<Similarity> threadSimilarity;
+    vector<DoubleBox> threadDoublebox;
 public:
     ParallelDe();
     virtual bool terminated();

@@ -152,6 +152,11 @@ void ParallelDe::init()
     parde_islands_enable =      getParam("parde_islands_enable").getValue().toInt();
     parde_weight_method =       getParam("parde_weight_method").getValue();
     parde_propagate_rate =      getParam("parde_propagate_rate").getValue().toInt();
+    threadSimilarity.resize(islands);
+    threadDoublebox.resize(islands);
+    doubleBox.setMinIters(10);
+    for(int i=0;i<islands;i++)
+        threadDoublebox[i].setMinIters(10);
 }
 
 void ParallelDe::replaceValueInIsland(int islandIndex, Data &x, double &y)
@@ -249,9 +254,11 @@ int ParallelDe::tournament(int islandIndex, int tsize)
 bool ParallelDe::checkIsland(int islandName)
 {
     parde_termination = terminationMethod;
-    if(parde_termination == "doublebox" && doubleBox.terminate(similarity_best_value.at(islandName))) return true;
-    //if(parde_termination == "similarity" && similarity.terminate(similarity_best_value.at(islandName))) return true; //similarity
-    if(parde_termination == "similarity" && similarity.terminate(fabs(newSum.at(islandName) - sum.at(islandName)))) return true;                             //sum similarity
+    if(parde_termination == "doublebox" &&
+            threadDoublebox[islandName].terminate(bestIslandValues[islandName])) return true;
+    if(parde_termination == "similarity" &&
+            threadSimilarity[islandName].terminate(bestIslandValues[islandName])
+            ) return true;                             //sum similarity
     if(generation>=parde_generations) return true;
 
     return false;

@@ -1,3 +1,4 @@
+
 #ifndef PARALLELPSO_H
 #define PARALLELPSO_H
 # include <OPTIMUS/collection.h>
@@ -30,6 +31,8 @@ private:
     void getBestValue(int islandName, int &index, double &value);
     void replace(int subClusterIndex, vector<pair<double,Data>> proParticles);
     bool checkSubCluster(int subClusterName);
+    vector<Similarity> threadSimilarity;
+    vector<DoubleBox> threadDoublebox;
 public:
     ParallelPso();
     virtual bool terminated();
