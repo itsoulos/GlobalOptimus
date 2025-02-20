@@ -317,6 +317,13 @@ QJsonObject FunctionalRbf::done(Data &x)
     double per;
     double classError = 0.0;
     double sum = 0.0;
+    double miny = testy[0],maxy=testy[0];
+    for(int i=0;i<testy.size();i++)
+    {
+	    if(testy[i]>maxy) maxy=testy[i];
+	    if(testy[i]<miny) miny=testy[i];
+    }
+
     for(int i=0;i<testx.size();i++)
     {
         Data pattern = testx[i];
@@ -325,6 +332,8 @@ QJsonObject FunctionalRbf::done(Data &x)
             neuronOuts[j] = neuronOutput(x,pattern,pattern.size(),j);
         }
         double tempOut = arma::dot(neuronOuts,Linear);
+	if(tempOut<miny) tempOut = miny;
+	if(tempOut>maxy) tempOut = maxy;
 
         per=tempOut-testy[i];
         classError+=fabs(testy[i]-nearestClass(tempOut))>1e-7;
