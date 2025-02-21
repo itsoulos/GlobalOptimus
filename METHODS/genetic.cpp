@@ -110,7 +110,7 @@ void    Genetic::showDebug()
 {
     double besty;
     besty = fitnessArray[0];
-     if(getParam("opt_debug").getValue()=="yes")
+     if(generation %50==0 && getParam("opt_debug").getValue()=="yes")
         methodLogger->printMessage(
             QString::asprintf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg",
                                generation,besty));
@@ -467,7 +467,6 @@ void    Genetic::LocalSearch(int pos)
                 double trial_fitness=myProblem->statFunmin(g);
                 if(fabs(trial_fitness)<fabs(fitnessArray[pos]))
                 {
-                 printf("NEW DE VALUE[%d] = %lf=>%lf\n",pos,fitnessArray[pos],trial_fitness);
                     fitnessArray[pos]=trial_fitness;
                 }
                 else	population[pos][i]=old_value;
