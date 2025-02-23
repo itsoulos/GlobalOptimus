@@ -44,6 +44,10 @@ MethodLoader::MethodLoader()
     methodName<<"MeWoa";
     methodName<<"JDE";
     method<<new jDElsgo;
+    method<<new SAOP;
+    methodName<<"SAOP";
+    method<<new ACOP;
+    methodName<<"ACOP";
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

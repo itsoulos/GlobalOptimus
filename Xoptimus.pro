@@ -48,10 +48,12 @@ SOURCES += \
     GE/rule.cc \
     GE/ruleprogram.cpp \
     GE/symbol.cc \
+    METHODS/acop.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
     METHODS/jDElsgo.cpp \
     METHODS/mewoa.cpp \
+    METHODS/saop.cpp \
     METHODS/woa.cpp \
     OPTIMUS/editlogger.cpp \
     OPTIMUS/filelogger.cpp \
@@ -189,10 +191,12 @@ HEADERS += \
     GE/rule.h \
     GE/ruleprogram.h \
     GE/symbol.h \
+    METHODS/acop.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \
     METHODS/jDElsgo.h \
     METHODS/mewoa.h \
+    METHODS/saop.h \
     METHODS/woa.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \

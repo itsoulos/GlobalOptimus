@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE
-METHOD=Genetic
+METHOD=SAOP
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=lbfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all, sumfitness (only for DE)
 TERMINATION=doublebox
 ### GLOBAL PARAMS
-GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_enabletesting=yes"
+GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION "
 if [ $METHOD = "bfgs" ]
 then
 
@@ -25,8 +25,12 @@ then
 ##de_localsearch: Enable or disable the incorporation of local search at every iteration. Values: yes,no
 ##de_selection:   The selection method used in every iteration. Values: random, tournament
 	METHODPARAMS="--de_np=200 --de_maxiters=500 --de_selection=tournament --de_fselection=random --de_lrate=0.005 --opt_termination=sumfitness"
-
-
+elif [ $METHOD = "SAOP" ]
+then
+	METHODPARAMS="--population=500 --maxiters=200 --localsearchRate=0.00 --subPopulation=10 --subPopEnable=1 --prop=1 --propagationNumber=1 --propagationMethod=NtoN --propagationRate=1"
+elif [ $METHOD = "ACOP" ]
+then
+	METHODPARAMS="--population=500 --maxiters=200 --localsearchRate=0.00 --subPopulation=10 --subPopEnable=1 --prop=1 --propagationNumber=1 --propagationMethod=NtoN --propagationRate=1"
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex

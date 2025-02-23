@@ -22,6 +22,8 @@
 # include <METHODS/woa.h>
 # include <METHODS/mewoa.h>
 # include <METHODS/jDElsgo.h>
+# include <METHODS/saop.h>
+# include <METHODS/acop.h>
 # include <QStringList>
 # include <QJsonObject>
 /**

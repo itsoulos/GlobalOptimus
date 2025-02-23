@@ -35,10 +35,12 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
+    METHODS/acop.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
     METHODS/jDElsgo.cpp \
     METHODS/mewoa.cpp \
+    METHODS/saop.cpp \
     METHODS/woa.cpp \
     MLMODELS/fcmodel.cpp \
     OPTIMUS/editlogger.cpp \
@@ -113,10 +115,12 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    METHODS/acop.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \
     METHODS/jDElsgo.h \
     METHODS/mewoa.h \
+    METHODS/saop.h \
     METHODS/woa.h \
     MLMODELS/fcmodel.h \
     OPTIMUS/editlogger.h \
