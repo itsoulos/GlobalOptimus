@@ -1,5 +1,5 @@
 ---
-title: 'OPTIMUS: a multidimensional global optimization package'
+title: 'OPTIMUS: A Multidimensional Global Optimization Package'
 tags:
   - Global optimization
   - Evolutionary methods
@@ -33,7 +33,7 @@ bibliography: paper.bib
 
 # Summary
 <p style="text-align: justify;">
-The location of global minima is applied in a variety of problems derived from physics [@duan1992effective_1992], chemistry [@liwo1999protein_1999], medicine [@lee2007large_2007] etc. Also, global optimization can be used in complex problems, such as the training of neural networks [@chiroma2017neural_2017]. Methods used in the global optimization process can be divided into stochastic and deterministic and  a comparison between methods of these categories can be found in the work of Sergeyev et al.[@sergeyev2018efficiency_2018]. This article proposes a software that incorporates a variety of stochastic methods to handle optimization methods of multidimensional functions.
+The location of global minima is applied in a variety of problems derived from physics [@duan1992effective_1992], chemistry [@liwo1999protein_1999], medicine [@lee2007large_2007] etc. Also, global optimization can be used in complex problems, such as the training of neural networks [@chiroma2017neural_2017]. Methods used in the global optimization process can be divided into stochastic and deterministic and  a comparison between methods of these categories can be found in the work of Sergeyev et al.[@sergeyev2018efficiency_2018]. This article proposes a software that incorporates a variety of stochastic methods to handle the optimization of multidimensional functions.
 </p>
 
 
@@ -41,12 +41,12 @@ The location of global minima is applied in a variety of problems derived from p
 <p style="text-align: justify;">
 This paper presents the `GlobalOptimus` software,  written in ANSI C++, which allows researchers wanting to solve optimization problems in their domain to formulate their optimization problems and apply different global optimization methods to identify the global minimum of the problem. The main features of the proposed software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to solve the objective problem c) Parameterization of global optimization methods using user-defined parameters d) Usage of a GUI application to control the optimization strategy.
 <br>
-Some of the frequently used optimization tools are MATLAB Optimization Toolbox, SciPy optimization module and Gurobi. MATLAB and SciPy are usually based on high-level languages, which can limit performance when computational problems are required. GlobalOptimus is an algorithmic optimization tool written in C++ that combines high performance and ease of parameterization for solving optimization problems in many domains. While other optimization platforms exist, GlobalOptimus stands out for its openness and customizability.GlobalOptimus differs from other optimization tools in that it offers full support for using various optimization algorithms, such as genetic algorithms, differential evolution, and others.  Unlike tools like MATLAB or SciPy, GlobalOptimus allows users to work with an environment that is fully customizable and integrate software from other platforms without restrictions. The fact that it is open source enhances its modifiability.  Closing Gurobi which focuses on mathematical optimization requires a commercial license, while GlobalOptimus is open source.
+Some of the frequently used optimization tools are MATLAB Optimization Toolbox, SciPy optimization module and Gurobi. MATLAB and SciPy are usually based on high-level languages, which can limit performance when computational problems are required. GlobalOptimus is an algorithmic optimization tool written in C++ that combines high performance and ease of parameterization for solving optimization problems in many domains. While other optimization platforms exist, GlobalOptimus stands out for its openness and customizability. GlobalOptimus differs from other optimization tools in that it offers full support for using various optimization algorithms, such as genetic algorithms, differential evolution, and others. Unlike tools like MATLAB or SciPy, GlobalOptimus allows users to work with an environment that is fully customizable and integrate software from other platforms without restrictions. The fact that it is open source enhances its modifiability. Using Gurobi which focuses on mathematical optimization requires a commercial license, while GlobalOptimus is open source.
 </p>
 
-##  Software 
+# Usage of the Software 
 <p style="text-align: justify;">
-The software can be compiled using the QT library, available from  https://qt.io. The researcher should code their objective function and a number of other mandatory functions in the C++ programming language, specifying the dimension of the objective function and the bound of the function domain. Subsequently, the user can select a global optimization method to apply to the problem from a wide range of available methods.</p>
+The software is compiled using the QT library, available from  https://qt.io. The researcher should code their objective function and a number of other mandatory functions in the C++ programming language, specifying the dimension of the objective function and the bounds of the function domain. Subsequently, they can select a global optimization method to apply to the problem from a wide range of available methods.</p>
 
 ## Implemented global optimization methods
 <p style="text-align: justify?">
@@ -80,7 +80,7 @@ METHOD |  DESCRIPTION |
 | **The Nelder Mead method**  |The Nelder Mead simplex procedure for local optimization  is also included in the software [@olsson1975nelder_1975].   |
 |  **The adam method**  |  The adam  optimizer [@kingma2014adam_2014].  |
 
-## Implementing a user - defined optimization method
+## Implementing a user-defined optimization method
 <p style="text-align: justify;">
 The software can be extended by implementing custom optimization techniques by extending the optimization method class `UserMethod` and implementing the provided functions according to the requirements of the method.
 </p>
@@ -93,18 +93,18 @@ Method   |  DESCRIPTION |
 |    **done()**    |   This function will be called when the optimization method terminates.|                                       
 |   **~UserMethod()**     |    This is the destructor of the optimization method.  |                                            
 
-A flowchart of any used optimization process is outlined in Figure \autoref{FIG:optimization}.
+A flowchart of any used optimization process is outlined in \autoref{FIG:optimization}.
 
 
 ![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
 
-Also, an example run for the function rastrigin  and the Genetic algorithm is outlined in Figure \autoref{FIG:rastrigin}.
+An example run for the Rastrigin function and the Genetic algorithm is outlined in \autoref{FIG:rastrigin}.
 
-![An example run for the function rastrigin \label{FIG:rastrigin}](rastrigin.png)
+![An example run for the Rastrigin function \label{FIG:rastrigin}](rastrigin.png)
 
 #  Conclusions
 <p style="text-align: justify;">
-In this work, an environment for executing global optimization problems was presented, where the user can implement their optimization problem using a set of predefined functions and then has the possibility to choose among several global optimization methods to solve the defined problem. In addition, it is given the possibility to choose to use some local optimization method to enhance the reliability of the produced results. This programming environment is freely available and easy to extend to accommodate more global optimization techniques. 
+In this work, an environment for executing global optimization problems was presented, where the user can implement their optimization problem using a set of predefined functions and then has the possibility to choose among several global optimization methods to solve the defined problem. In addition, it is given the possibility to choose to use a local optimization method to enhance the reliability of the produced results. This programming environment is freely available and easy to extend to accommodate more global optimization techniques. 
 </p>
 
 # References
