@@ -100,32 +100,32 @@ From this dialog, the user can select the global optimization method from a drop
 
 ## Available Global Optimization methods
 The implemented Global Optimization methods are:
-1. The Differential Evolution denoted as DifferentialEvolution.
-2. The Parallel Differential Evolution method (utilizing the OpenMP library), denoted as ParallelDe.
-3. A genetic algorithm, denoted as Genetic in the package.
-4. An improved version of the Particle Swarm Optimizer, denoted as iPSO
-5. A simple Multistart method, which initiates many local optimization procedures to discover the global optimum of a function.
-6. The NeuralMinimizer method, which constructs an estimated function of the objective problem using Neural Networks.
-7. A parallel Particle Swarm Optimizer (using the OpenMP library), denoted as ParallelPso.
-8. A Simulated Annealing optimizer, denoted as Simman.
-9. The optimal foraging algorithm (OFA), donated as Ofa.
-10. Bio-inspired metaheuristic algorithm Giant Armadillo Optimization (GAO), donated as armadillo1.
-11. The Gray Wolf Optimizer (GWO), donated as Gwo.
+1. The Differential Evolution denoted as **DifferentialEvolution**.
+2. The Parallel Differential Evolution method (utilizing the OpenMP library), denoted as **ParallelDe**.
+3. A genetic algorithm, denoted as **Genetic** in the package.
+4. An improved version of the Particle Swarm Optimizer, denoted as **iPSO**.
+5. A simple **Multistart** method, which initiates many local optimization procedures to discover the global optimum of a function.
+6. The **NeuralMinimizer** method, which constructs an estimated function of the objective problem using Neural Networks. 
+7. A parallel Particle Swarm Optimizer (using the OpenMP library), denoted as **ParallelPso**.
+8. A Simulated Annealing optimizer, denoted as **Simman**.
+9. The optimal foraging algorithm (OFA), donated as **Ofa**.
+10. Bio-inspired metaheuristic algorithm Giant Armadillo Optimization (GAO), denoted as **armadillo1**.
+11. The Gray Wolf Optimizer (GWO), donated as **Gwo**.
 
 ## Available Local Optimization methods
 All global optimization methods can be enhanced by applying a local minimization method after they are terminated. The parameter used to determine the used local optimization procedure is the --opt_localsearch parameter. The implemented local optimization methods are the following:
-1. The bfgs method. The Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm was implemented using a variant of Powell.
-2. The limited memory BFGS method (lbfgs).
-3. The Gradient descent method. This method is denoted as gradient.
-4. The Nelder Mead method (denoted as nelderMead).
-5. The Adam optimizer (denoted as adam).
+1. The **bfgs** method. The Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm was implemented using a variant of Powell.
+2. The limited memory BFGS method (**lbfgs**).
+3. The Gradient descent method. This method is denoted as **gradient**.
+4. The Nelder Mead method (denoted as **nelderMead**).
+5. The Adam optimizer (denoted as **adam**).
 
 ## Problem example
 Consider the Rastrigin problem, defined as: 
  $f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_1)-\cos(18x_2)$. This function is implemented as rastriginproblem.cpp in the PROBLEMS subdirectory of the distribution.  The RastriginProblem class contains the following main methods:
- 1. The constructor method RastriginProblem. In this function dimension of the objective function should be 
+ 1. The constructor method `RastriginProblem`. In this function dimension of the objective function should be 
  defined as well as the bounds of this function.  For the case of this function the bounds are defined in $[-1,1]^2$. The code for this method has as follows
- ```
+ ```c++
  RastriginProblem::RastriginProblem()
     : Problem(2)
 {
@@ -141,17 +141,17 @@ Consider the Rastrigin problem, defined as:
     setRightMargin(r);
 }
  ```
- The method setLeftMargin() is used to change the left bound of the objective function and the method setRightMargin() is used for the corresponding right bound of the objective function. The dimension of the objective function is set to 2 and this is defined using the call to the Problem constructor with the line Problem(2).
- 2. The method funmin. This method defines the objective function that should be minimized by any optimization method. For the case of the Rastrigin Problem the following definition is used:
- ```
+ The method `setLeftMargin()` is used to change the left bound of the objective function and the method `setRightMargin()` is used for the corresponding right bound of the objective function. The dimension of the objective function is set to 2 and this is defined using the call to the Problem constructor with the line Problem(2).
+ 2. The method `funmin`. This method defines the objective function that should be minimized by any optimization method. For the case of the Rastrigin Problem the following definition is used:
+ ```c++
  double RastriginProblem::funmin(Data &x)
 {
     return x[0] * x[0] + x[1] * x[1] - cos(18.0 * x[0]) - cos(18.0 * x[1]);
 }
  ```
  The vector x defined the point where the objective function should be evaluated.
- 3. The method gradient. This method stands for the gradient of the objective function, evaluated at a specific point. If the gradient vector can be calculated analytically, then the user should enter the code in this function. Otherwise, he can use some numerical calculation method such as finite differences. The code for the gradient of the Rastrigin problem has as follows:
- ```
+ 3. The method `gradient`. This method stands for the gradient of the objective function, evaluated at a specific point. If the gradient vector can be calculated analytically, then the user should enter the code in this function. Otherwise, he can use some numerical calculation method such as finite differences. The code for the gradient of the Rastrigin problem has as follows:
+ ```c++
 Data RastriginProblem::gradient(Data &x)
 {
     Data g;
@@ -172,9 +172,8 @@ This command will optimize the rastrigin test function using the Genetic Algorit
 3. The parameter --opt_debug indicates if the genetic algorithm will print debug messages in the standard output.
 
  
-## Implementing a user defined function
 For convenience, all objective problems have been stored in the PROBLEMS folder of the existing distribution, although the programmer can easily create his own objective function simply by overriding the class Problem. The user can also implement the methods of class UserProblem found in the PROBLEMS subdirectory in order to create a new test function. The contents of the file userproblem.cpp are shown below
-```
+```c++
 #include "userproblem.h" 
 # include <stdio.h> 
 UserProblem::UserProblem() :Problem(1) 
@@ -201,15 +200,15 @@ UserProblem::~UserProblem() {
 }
 ```
 The class has two additional methods that may be used by the user:
-1. void init(QJsonObject &params). The function init() is called before the objective function is executed and its purpose is to pass parameters from the execution environment to the objective function. These parameters are passed from the main executed program and as an example consider the following json object:
+1. `void init(QJsonObject &params)`. The function `init()` is called before the objective function is executed and its purpose is to pass parameters from the execution environment to the objective function. These parameters are passed from the main executed program and as an example consider the following json object:
 ```
  {
     "problem_atoms":3,
     "problem_debug":"yes"
  }
 ```
-This information could be the number of atoms for a molecular potential and a flag to enable or disable debug messages. This information can be obtained in the init() function with the following sample of c++ code:
-```
+This information could be the number of atoms for a molecular potential and a flag to enable or disable debug messages. This information can be obtained in the `init()` function with the following sample of c++ code:
+```c++
 natoms = params["problem_atoms"].toString().toInt();
 debug  = params["problem_debug"].toString();
 ```
@@ -217,8 +216,8 @@ These parameters are passed on the command line to the `Optimus` program by usin
 If the parameters are not passed to the function, sensible default values should be provided. 
 
 
-2. QJsonObject done(Data &x). This function is executed after the objective function optimization process is completed. The vector x represents the last located value from the used global optimizer, i.e. the estimated global minimum. The function done() may use this information for any purpose, such as to store this value to a file or use the vector x as the weights of a neural network and to estimate subsequently the test error for this neural network. The function returns a Json object that may contain valuable information about the termnination of the whole process, such as the estimated test error of the neural network exampled mentioned before. An example of this process could be the following:
-```
+2. `QJsonObject done(Data &x)`. This function is executed after the objective function optimization process is completed. The vector x represents the last located value from the used global optimizer, i.e. the estimated global minimum. The function done() may use this information for any purpose, such as to store this value to a file or use the vector x as the weights of a neural network and to estimate subsequently the test error for this neural network. The function returns a Json object that may contain valuable information about the termnination of the whole process, such as the estimated test error of the neural network exampled mentioned before. An example of this process could be the following:
+```c++
 QJsonObject info;
 info["test_error"]=value;
 return info;
@@ -244,7 +243,7 @@ it can also be used to verify the correctness of writing any test function.  The
     c. --opt_iters. This parameter defines the number of different executions for the global optimization method chosen by the user. With this option, the  stability of the selected  global optimization can be measured in the location of the global minimum.
     d. --opt_debug. This option has two values: yes and no. If the used pass the value yes, then the program will print debug messages for every used global optimization method.
     e. --opt_localsearch. This option is used to select the local optimization method that will be used by the global optimizer.
-    f. --opt_sampler. This option sets the sampling technique used in a series of global optimization methods, such as genetic algorithm, pso, multistart etc. The available values are: uniform, maxwell, triangular, mlp, rbf, kmeans
+    f. --opt_sampler. This option sets the sampling technique used in a series of global optimization methods, such as genetic algorithm, pso, multistart etc. The available values are: **uniform**, **maxwell**, **triangular**, **mlp**, **rbf**, **kmeans**.
 
 
 2. Optimizer options. All global optimization techniques included in this software use a series of parameters to improve their performance. For example, the user can set the number of chromosomes to 200 in the genetic algorithm with the parameter --gen_count=200. The list with all parameters used by the global optimization methods can be printed using the following command:
@@ -300,9 +299,9 @@ Minimum Function Value:         -195.8308285
 Percent Minimum  Found:                60.00%
 ```
 As it was expected, the required number of function calls increased but the success rate of the genetic algorithm dropped from 90% to 60%, because of the increase in the dimension of the objective function. The following command
-``
+```
 ./GlobalOptimus  --opt_problem=test2n --opt_method=Genetic --opt_debug=no --opt_iters=10 --opt_dimension=5 --gen_lrate=0.05
-``
+```
 utilizes again the Genetic Algorithm for the test2n function with $n=5$, but the local search rate is set to 0.05 (5%). This parameter determines the number of chromosomes to which a local minimization method will be applied in each generation. The output from the previous command is:
 ```
 Executions:   10
@@ -325,9 +324,9 @@ As we can see, the incorporation of the local search method increased the succes
 
 ## Comparing with known global optima
 The user can set the known global minimum using the following method in Problem class:
-``    
+```c++    
 void setKnownOptimum(double value, const Data& location);
-``
+```
 This method defines the expected global minimum that will be discovered by any applied global optimization method. In several of the available software examples, the expected global minimum has been defined. These expected minima are available from the relevant literature. If the user has defined the expected minimum, then the main program will display at the end the percentage of runs in which this minimum was found by the global optimization method used. As an example of output consider the following line obtained by the application of the Genetic Algorithm to the Griewank10 test problem
 ``
 Percentage of known global minimum found: 93.33%
@@ -362,6 +361,7 @@ The following table presents the percentage of global minimum usin the previous 
 
 ## The script runfunmin.sh
 runfunmin.sh is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
+This script can be used to automate experiments on functions and to define the parameters of each global optimization method. By changing a series of simple variables contained within it, the user can facilitate the execution of the required experiments and accelerate their implementation.
 
 **runfunmin.sh uses different parameters to:** 
 1. To choose the optimization method to be used 
