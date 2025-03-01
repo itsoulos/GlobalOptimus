@@ -41,7 +41,10 @@ The location of global minima is applied in a variety of problems derived from p
 <p style="text-align: justify;">
 This paper presents the `GlobalOptimus` software,  written in ANSI C++, which allows researchers wanting to solve optimization problems in their domain to formulate their optimization problems and apply different global optimization methods to identify the global minimum of the problem. The main features of the proposed software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to solve the objective problem c) Parameterization of global optimization methods using user-defined parameters d) Usage of a GUI application to control the optimization strategy.
 <br>
-Some of the frequently used optimization tools are MATLAB Optimization Toolbox, SciPy optimization module and Gurobi. MATLAB and SciPy are usually based on high-level languages, which can limit performance when computational problems are required. GlobalOptimus is an algorithmic optimization tool written in C++ that combines high performance and ease of parameterization for solving optimization problems in many domains. While other optimization platforms exist, GlobalOptimus stands out for its openness and customizability. GlobalOptimus differs from other optimization tools in that it offers full support for using various optimization algorithms, such as genetic algorithms, differential evolution, and others. Unlike tools like MATLAB or SciPy, GlobalOptimus allows users to work with an environment that is fully customizable and integrate software from other platforms without restrictions. The fact that it is open source enhances its modifiability. Using Gurobi which focuses on mathematical optimization requires a commercial license, while GlobalOptimus is open source.
+Some of the frequently used optimization tools are MATLAB Optimization Toolbox, SciPy optimization module and Gurobi. MATLAB and SciPy are usually based on high-level languages, which can limit performance when computational problems are required.
+<br>
+GlobalOptimus is an algorithmic optimization tool written in C++, which combines high performance with ease of parameterization for solving optimization problems in various domains. Unlike other tools, it stands out for its open architecture and adaptability, allowing full customization and integration of software from other platforms without restrictions. In addition, GlobalOptimus supports multiple optimization algorithms, such as genetic algorithms and differential evolution, giving flexibility in formulating the optimal method for each problem. Although both MATLAB and SciPy offer support for such algorithms, GlobalOptimus provides one extensible approach.
+Finally, Gurobi is an extremely powerful tool for mathematical optimization, but it requires a commercial license. Instead, GlobalOptimus is open source, which makes it more accessible to researchers and developers who wish to adapt it to their needs.
 </p>
 
 # Usage of the Software 
@@ -101,6 +104,10 @@ A flowchart of any used optimization process is outlined in \autoref{FIG:optimiz
 An example run for the Rastrigin function and the Genetic algorithm is outlined in \autoref{FIG:rastrigin}.
 
 ![An example run for the Rastrigin function \label{FIG:rastrigin}](rastrigin.png)
+In addition, the user can create his own objective function by implementing the methods of category `UserProblem`,
+the methods of which are presented in the following diagram.
+![The diagram of the user defined problem UserProblem \label{FIG:userproblem}](userproblem.png)
+
 
 #  Conclusions
 <p style="text-align: justify;">
