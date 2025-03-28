@@ -53,7 +53,8 @@ The software is compiled using the QT library, available from  https://qt.io. Th
 
 In addition, the user can create his own objective function by implementing the methods of category `UserProblem`,
 the methods of which are presented in the following diagram.
-![The diagram of the user defined problem UserProblem \label{FIG:userproblem}](userproblem.png)
+![The diagram of the user defined problem UserProblem \label{FIG:userproblem}](userproblem.png){width= 50% }
+
 ## Implemented global optimization methods
 <p style="text-align: justify?">
  In the proposed software, each implemented global optimization method has a set of parameters that can determine the overall optimization path and the effectiveness of the method. Some of the global optimization methods are as follows: </p>
@@ -102,7 +103,7 @@ Method   |  DESCRIPTION |
 A flowchart of any used optimization process is outlined in \autoref{FIG:optimization}.
 
 
-![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
+![The diagram of the optimization process \label{FIG:optimization}](usermethod.png){width= 50% }
 
 An example run for the Rastrigin function and the Genetic algorithm is outlined in \autoref{FIG:rastrigin}.
 
