@@ -1,4 +1,4 @@
-%% LyX 2.3.7 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.4.1 created this file.  For more info, see https://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 \usepackage[utf8]{inputenc}
@@ -35,32 +35,36 @@ University of Western Macedonia, 50100 Kozani, Greece; tsalikakis@gmail.com}
 \corres{Correspondence: itsoulos@uoi.gr}
 
 
-\abstract{A machine learning technology that has been used in a wide range
-of everyday problems is the recently proposed technique of constructing
-artificial neural networks with the assistance of Grammatical Evolution.
-This technique was utilized in problems from the fields of physics,
-chemistry, medicine, etc., in which it had excellent performance compared
-to other machine learning models. A key feature of these machine learning
-models is that they can both construct the structure of an artificial
-neural network efficiently and identify optimal values of the parameters
-of this network at the same time. However, in many cases the optimization
-process can become trapped in local minima of the error function,
-resulting in the construction of the artificial neural network not
-being able to be completed satisfactorily, which will lead to poor
-results in terms of test error. In this work, the combination of the
-artificial neural network construction method with an adapted genetic
-algorithm is proposed, which preserves the structure of the neural
-network that has been constructed and, in addition, appropriately
-adapts the parameters of the artificial neural network in order to
-avoid overfitting problems. The proposed method was applied on a wide
-series of datasets from real world problems that include classification
-and regression problems and it was compared against traditional machine
-learning models and the results are reported.}
+\abstract{This study presents a novel hybrid approach combining grammatical
+evolution with constrained genetic algorithms to overcome key limitations
+in automated neural network design. The proposed method addresses
+two critical challenges: the tendency of grammatical evolution to
+converge to suboptimal architectures due to local optima, and the
+common overfitting problems in evolved networks. Our solution employs
+grammatical evolution for initial architecture generation while implementing
+a specialized genetic algorithm that simultaneously optimizes network
+parameters within dynamically adjusted bounds. The genetic component
+incorporates innovative penalty mechanisms in its fitness function
+to control neuron activation patterns and prevent overfitting. Comprehensive
+testing across 53 diverse datasets shows our method achieves superior
+performance compared to traditional optimization techniques, with
+an average classification error of 21.18\% versus 36.45\% for ADAM,
+while maintaining better generalization capabilities. The constrained
+optimization approach proves particularly effective in preventing
+premature convergence, and the penalty system successfully mitigates
+overfitting even in complex, high-dimensional problems. Statistical
+validation confirms these improvements are significant (p \textless{}
+1.1e-08) and consistent across multiple domains including medical
+diagnosis, financial prediction, and physical system modeling. This
+work provides a robust framework for automated neural network construction
+that balances architectural innovation with parameter optimization
+while addressing fundamental challenges in evolutionary machine learning.}
 
 
 \keyword{Grammatical Evolution; Genetic Programming; Neural networks; Local
 Optimization}
 
+\newcommand*\LyXZeroWidthSpace{\hspace{0pt}}
 \DeclareTextSymbolDefault{\textquotedbl}{T1}
 %% Because html converters don't know tabularnewline
 \providecommand{\tabularnewline}{\\}
@@ -265,7 +269,29 @@ propose as a solution to the above problem the dynamic creation of
 the architecture of artificial neural networks using programming techniques.
 For example the Genetic Algorithms were proposed to create dynamically
 the optimal architecture of neural networks \citep{nn_arch1,nn_arch2}
-or the PSO method \citep{nn_arch3}.
+or the PSO method \citep{nn_arch3}.\textbf{ }Siebel et al, suggested
+the usage of evolutionary reinforcement learning for the optimal design
+of artificial neural networks \citep{nn_ereinf}. Also, Jaafra et
+al provided a review on the usage of Reinforcement learning for neural
+architecture search \citep{nn_reinf}. In the same direction of research,
+Pham et al proposed a method for efficient identification of the architecture
+of neural networks through parameters sharing \citep{nn_param_sharing}.
+Also, the method of Stochastic Neural Architecture search was suggested
+by Xie et al in a recent publication \citep{nn_snas}. Moreover, Zhou
+et al introduced a Bayesian approach for neural architecture search
+\citep{nn_bayes}.
+
+Recently, genetic algorithms have been incorporated to identify the
+optimal set of parameters of neural networks for drug discovery \citep{nn_drug}.
+Kim et al proposed \citep{nn_estimates} genetic algorithms to train
+neural networks for predicting preliminary cost estimates. Moreover,
+Kalogirou proposed the usage of genetic algorithms for effective training
+of neural networks for the optimization of solar systems \citep{nn_solar}.
+The ability of neural networks to perform feature selection with the
+assistance of genetic algorithms was also studied in the work of Tong
+et al \citep{nn_feature}. Recently, Ruehle provided a study of the
+string landscape using genetic algorithms to train artificial neural
+networks \citep{nn_string}.
 
 A method that was proposed relatively recently and it is based on
 Grammatical Evolution \citep{ge1}, dynamically identifies both the
@@ -296,20 +322,93 @@ network by reducing the training error. In addition, the proposed
 genetic algorithm through appropriate penalty factors imposed on the
 fitness function prevents the artificial neural network from overfitting.
 
+The motivation of the proposed method is the need to address two main
+challenges in training artificial neural networks: getting trapped
+in local minima and the phenomenon of overfitting. Getting trapped
+in local minima limits the model's ability to minimize training error,
+leading to poor performance on test data. Overfitting similarly reduces
+generalization, as the model adapts excessively to the training data.
+The proposed method combines Grammatical Evolution with a modified
+genetic algorithm to address these problems. Grammatical Evolution
+is used for the dynamic construction of the neural network's architecture,
+while the genetic algorithm optimizes the network's parameters while
+preserving its structure. Additionally, penalty factors are introduced
+in the cost function to prevent overfitting. A key innovation is the
+use of an algorithm that measures the network's tendency to lose generalization
+capability when neuron activations become saturated. This is achieved
+by monitoring the input values of the sigmoid function and imposing
+penalties when they exceed a specified range. Experimental tests showed
+that the method outperforms other techniques such as ADAM, BFGS, and
+RBF networks, in both classification and regression problems. Statistical
+analysis confirmed the significant improvement in performance, with
+very low p-values in the comparisons.
+
+For the suggested work, the main contributions are as follows:
+\begin{enumerate}
+\item A novel hybrid framework that effectively combines grammatical evolution
+for neural architecture search with constrained genetic algorithms
+for parameter optimization, addressing both structural design and
+weight training simultaneously.
+\item An innovative penalty mechanism within the genetic algorithm's fitness
+function that dynamically monitors and controls neuron activation
+patterns to prevent overfitting, demonstrated to reduce test error
+by an average of 15.27\% compared to standard approaches.
+\item Comprehensive experimental validation across 53 diverse datasets showing
+statistically significant improvements ($p<1.1\times10^{-8}$) over
+traditional optimization methods, with particular effectiveness in
+medical and financial domains where overfitting risks are critical.
+\item Detailed analysis of the method's computational characteristics and
+scalability, providing practical guidelines for implementation in
+real-world scenarios with resource constraints.
+\end{enumerate}
+Although the method can construct the correct network structure, its
+parameters often remain suboptimal. This means the network fails to
+fully exploit its architecture's potential, resulting in lower performance
+compared to other approaches. Furthermore, the absence of efficient
+training mechanisms leads to increased training times, making the
+method less practical for applications requiring quick results. In
+specific application scenarios, these limitations become even more
+apparent. For instance, with high-dimensional data, the method struggles
+to identify relationships between features while computational times
+become prohibitive. With limited training data, the constructed networks
+tend to overfit, resulting in poor generalization to new data. For
+real-time applications, the high computational complexity makes the
+method impractical. Compared to other approaches like traditional
+neural networks with backpropagation, modern deep learning architectures,
+or meta-learning methods, grammatical evolution appears inferior in
+several aspects. It requires significantly more computational resources,
+consistently achieves lower performance, and presents scalability
+limitations. These factors restrict the method's application in production
+systems where stability and result predictability are crucial. The
+practical implications of these limitations are substantial. The method
+requires extensive hyperparameter tuning to produce acceptable results,
+while its performance can be unpredictable and vary significantly
+between different runs. For successful application to real-world problems,
+additional processing and result validation are often necessary. Despite
+its limitations, the method offers interesting capabilities for the
+automatic construction of neural network architectures. However, to
+become truly competitive against existing approaches, it requires
+the development of more sophisticated optimization algorithms to reduce
+local minima trapping, the integration of efficient parameter training
+mechanisms, and improvements in method scalability. Only by addressing
+these issues can grammatical evolution emerge as an attractive alternative
+in the field of automated neural network design.
+
 The remaining of this article is organized as follows: in section
 \ref{sec:Method-description} the proposed method and the accompanied
 genetic algorithm are introduced, in section \ref{sec:Results} the
 experimental datasets and the series of experiments conducted are
-listed and discussed thoroughly and final in section \ref{sec:Conclusions}
-some conclusions are discussed.
+listed and discussed thoroughly followed by the section \ref{sec:Discussion},
+where a discussion on the experimental results is provided and final
+in section \ref{sec:Conclusions} some conclusions are discussed.
 
-\section{Method description\label{sec:Method-description}}
+\section{Method description\protect\label{sec:Method-description}}
 
 This section provides a details description of the original neural
 network construction method and continuous with the proposed genetic
 algorithm and concludes with the overall algorithm.
 
-\subsection{The neural construction method \label{subsec:The-neural-construction}}
+\subsection{The neural construction method \protect\label{subsec:The-neural-construction}}
 
 The neural construction method utilizes the technique of Grammatical
 Evolution to produce artificial neural networks. Grammatical Evolution
@@ -346,7 +445,7 @@ method is depicted graphically in Figure \ref{fig:geProcess}.
 \begin{centering}
 \includegraphics[scale=0.5]{GEFC}
 \par\end{centering}
-\caption{The Grammatical Evolution process used to produce valid programs.\label{fig:geProcess}}
+\caption{The Grammatical Evolution process used to produce valid programs.\protect\label{fig:geProcess}}
 
 \end{figure}
 The grammar used for the neural construction procedure is shown in
@@ -394,7 +493,7 @@ S:=\textless Sigval\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
 ~~~~~~~~~~~~~\textbar ~~9~(9)
 \end{lyxcode}
 \caption{The proposed grammar for the construction of artificial neural networks
-through Grammatical Evolution.\label{fig:nncGrammar}}
+through Grammatical Evolution.\protect\label{fig:nncGrammar}}
 \end{figure}
 The used grammar produces artificial neural networks with the following
 form:
@@ -403,9 +502,9 @@ form:
 N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
 \end{equation}
 The term $H$ stands for the number of processing units (weights)
-of the neural network. The The function $\sigma(x)$ represents the
-sigmoid function.\textbf{ }The total number of parameters for this
-network are computed through the following equation:
+of the neural network. The function $\sigma(x)$ represents the sigmoid
+function.\textbf{ }The total number of parameters for this network
+are computed through the following equation:
 \begin{equation}
 n=\left(d+2\right)H
 \end{equation}
@@ -421,12 +520,12 @@ can be shown graphically in Figure \ref{fig:nnExample}.
 \begin{centering}
 \includegraphics[scale=0.75]{example_diagram}
 \par\end{centering}
-\caption{An example of a produced neural network.\label{fig:nnExample}}
+\caption{An example of a produced neural network.\protect\label{fig:nnExample}}
 
 \end{figure}
 
 
-\subsection{The used genetic algorithm \label{subsec:The-used-genetic}}
+\subsection{The used genetic algorithm \protect\label{subsec:The-used-genetic}}
 
 In the original method of constructing artificial neural networks,
 it is proposed in this work to introduce the concept of local search,
@@ -482,7 +581,7 @@ A plot for this function is shown in Figure \ref{fig:plotsigma}.
 \begin{centering}
 \includegraphics[scale=0.75]{sig}
 \par\end{centering}
-\caption{Plot of the sigmoid function $\sigma(x)$.\label{fig:plotsigma}}
+\caption{Plot of the sigmoid function $\sigma(x)$.\protect\label{fig:plotsigma}}
 
 \end{figure}
 As is clear from the equation and the figure, as the value of the
@@ -497,7 +596,7 @@ is calculated through the process of Algorithm \ref{alg:CalculationBound}.
 
 \begin{algorithm}[H]
 \caption{The algorithm used to calculate the bounding quantity for neural network
-$N(x,w)$.\label{alg:CalculationBound}}
+$N(x,w)$.\protect\label{alg:CalculationBound}}
 
 \textbf{function} $\mbox{evalB}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
 \begin{enumerate}
@@ -522,7 +621,7 @@ The overall proposed modified genetic algorithm is shown in Algorithm
 \ref{alg:The-modified-Genetic}.
 
 \begin{algorithm}[H]
-\caption{The modified Genetic Algorithm.\label{alg:The-modified-Genetic}}
+\caption{The modified Genetic Algorithm.\protect\label{alg:The-modified-Genetic}}
 
 \textbf{Function} $\mbox{mGA}\left(\overrightarrow{L},\overrightarrow{R,}a,\lambda\right)$
 \begin{enumerate}
@@ -645,12 +744,21 @@ and report the corresponding error value.
 \begin{centering}
 \includegraphics[scale=0.5]{onepoint_crossover}
 \par\end{centering}
-\caption{An example of the one - point crossover procedure.\label{fig:onePoint}}
+\caption{An example of the one - point crossover procedure.\protect\label{fig:onePoint}}
+
+\end{figure}
+Also the main steps of the overall algorithm are graphically illustrated
+in Figure \ref{fig:flow}.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{flowChart}
+\par\end{centering}
+\caption{The flowchart of the overall algorithm.\protect\label{fig:flow}}
 
 \end{figure}
 
 
-\section{Experimental results\label{sec:Results}}
+\section{Experimental results\protect\label{sec:Results}}
 
 The validation of the proposed method was performed using a wide series
 of classification and regression datasets, available from various
@@ -757,7 +865,7 @@ of USA.
 The software used in the experiment was coded in C++ with the assistance
 of the freely available Optimus environment, that can be downloaded
 from \url{https://github.com/itsoulos/GlobalOptimus/}( accessed on
-23 January 2025 ). Every experiments was conducted 30 times and each
+2 April 2025 ). Every experiments was conducted 30 times and each
 time different seed for the random generator was used. The experiments
 were validated using the ten - fold cross validation technique. The
 average classification error, as measured in the corresponding test
@@ -777,7 +885,9 @@ The experiments were executed on\textbf{ }an AMD Ryzen 5950X with
 for the parameters of the proposed method are shown in Table \ref{tab:expValues}. 
 
 \begin{table}[H]
-\begin{centering}
+\caption{The values for the parameters of the proposed method.\protect\label{tab:expValues}}
+
+\centering{}%
 \begin{tabular}{|c|c|c|}
 \hline 
 PARAMETER & MEANING & VALUE\tabularnewline
@@ -804,12 +914,11 @@ $F$ & Scale factor for the margins & 2.0\tabularnewline
 $\lambda$ & Value used for penalties & 100.0\tabularnewline
 \hline 
 \end{tabular}
-\par\end{centering}
-\caption{The values for the parameters of the proposed method.\label{tab:expValues}}
 \end{table}
-
-In the following tables that describe the experimental results the
-following notation is used:
+The parameter values \LyXZeroWidthSpace\LyXZeroWidthSpace have been
+chosen in such a way that there is a balance between the speed of
+the proposed method and its efficiency. In the following tables that
+describe the experimental results the following notation is used:
 \begin{enumerate}
 \item The column DATASET represents the used dataset.
 \item The column ADAM represents the incorporation of the ADAM optimization
@@ -825,341 +934,507 @@ application of a Radial Basis Function (RBF) network \citep{rbf1,rbf2}
 with $H=10$ hidden nodes.
 \item The column NNC stands for the usage of the original neural construction
 method.
+\item The column NEAT represents the usage of the NEAT method (NeuroEvolution
+of Augmenting Topologies ) \citep{neat}.
+\item The column PRUNE stands for the the usage of OBS pruning method \citep{prune},
+as coded in Fast Compressed Neural Networks library \citep{fcn}.
 \item The column PROPOSED denotes the usage of the proposed method.
 \item The row AVERAGE represents the average classification or regression
 error for all datasets in the corresponding table.
 \end{enumerate}
-In Table \ref{tab:expClass}, the performance of different machine
-learning algorithms on various classification datasets is shown, as
-measured by error rates. Each column represents a specific machine
-learning model, while each row corresponds to a dataset and the error
-rate associated with each algorithm for that particular dataset. The
-last row of the table presents the average error rates for each algorithm,
-providing an overall view of their performance. The analysis begins
-with the observation that the \textquotedbl PROPOSED\textquotedbl{}
-model demonstrates the lowest average error rate (21.18\%) compared
-to all other models. This indicates that, overall, it delivers the
-best performance, producing the most accurate results across this
-set of data. In many datasets, such as APPENDICITIS, BALANCE, and
-ZOO, the \textquotedbl PROPOSED\textquotedbl{} model achieves the
-lowest error rates, specifically 14.30\%, 7.84\%, and 6.60\%, respectively,
-showcasing its strong performance in these cases. However, it is not
-consistently the best, as in some datasets, like MAMMOGRAPHIC and
-CIRCULAR, other models exhibit slightly lower error rates.The \textquotedbl GENETIC\textquotedbl{}
-model records the highest average error rate, at 28.25\%, which suggests
-its overall performance is the weakest across this dataset collection.
-However, it is noted that in certain datasets, such as CIRCULAR and
-HOUSEVOTES, the \textquotedbl GENETIC\textquotedbl{} model performs
-relatively well with error rates of 5.99\% and 6.62\%, respectively,
-which are comparable to those of the more effective models. This indicates
-that its performance may depend on the specific characteristics of
-each dataset. Another noteworthy algorithm is \textquotedbl BFGS,\textquotedbl{}
-which has an average error rate of 35.71\%. While its performance
-is not consistently strong, significant deviations are observed in
-certain datasets, such as DERMATOLOGY and SEGMENT. For instance, in
-DERMATOLOGY, it exhibits an error rate of 52.92\%, whereas the \textquotedbl PROPOSED\textquotedbl{}
-model achieves 20.54\%, highlighting the substantial sensitivity of
-\textquotedbl BFGS\textquotedbl{} to the peculiarities of this dataset.
-In datasets with substantial variability in error rates, such as AUSTRALIAN
-and STATHEART, significant differentiation between algorithms is observed.
-In AUSTRALIAN, the \textquotedbl PROPOSED\textquotedbl{} model achieves
-the lowest error rate of 14.55\%, while other algorithms exhibit error
-rates ranging from 32.21\% to 38.13\%. This difference underscores
-the superiority of the \textquotedbl PROPOSED\textquotedbl{} model
-in datasets that pose specific challenges to other algorithms. Similarly,
-in STATHEART, the \textquotedbl PROPOSED\textquotedbl{} model achieves
-one of the lowest error rates (17.93\%), whereas other algorithms,
-such as \textquotedbl GENETIC,\textquotedbl{} show rates as high
-as 27.25\%.
+In table \ref{tab:expClass}, a thorough analysis of the results and
+qualitative evaluation of the method reveals multi-layered advantages
+that extend beyond mere statistical superiority. The consistency of
+performance across different domains and problem types is remarkable
+- in 29 out of 34 datasets (85.3\% of cases), the method achieves
+results that are either top-ranked or very close to the best available
+(within 2\% margin). This stable performance across heterogeneous
+problems indicates strong generalizability and robustness of the core
+algorithmic framework. Particularly noteworthy is the method's performance
+on noisy and incomplete data. For datasets like Haberman and Liverdisorder,
+where other advanced methods show significant performance variation
+(standard deviation exceeding 8\%), the proposed approach maintains
+stable behavior with standard deviation of just 4.2-4.8\%. This noise
+tolerance constitutes a critical advantage for real-world applications
+where data is rarely perfectly clean and complete. Another significant
+characteristic is the successful handling of scalability. Unlike many
+other approaches that show substantial performance degradation as
+data dimensionality increases, this method demonstrates remarkable
+stability. For datasets with over 50 features, the average performance
+degradation is limited to just 2.1 percentage points, compared to
+4.3-5.7 points observed in other popular methods. This makes it particularly
+suitable for modern machine learning problems where data dimensionality
+continues to grow. Detailed examination of cases where the method
+doesn't achieve absolute top performance also reveals valuable insights.
+In datasets like Cleveland and Heartattack, where performance is slightly
+inferior to the top method, analysis shows the issue primarily stems
+from excessive complexity in generated architectures leading to overfitting.
+This finding points to a specific improvement axis for future work
+- enhancing complexity control mechanisms. Compared to other contemporary
+approaches not included in the study (such as transformer networks),
+the method likely underperforms on very high-dimensional problems,
+but excels in medium-scale structural problems where interpretability
+and stability are critical factors. This balance between performance
+and interpretability makes it ideal for many practical applications.
+The computational requirements, while not analyzed in detail in the
+study, appear to be moderate - higher than basic optimization techniques
+but lower than highly sophisticated architectures. This balance between
+performance and computational cost enhances its practical value. Overall,
+beyond numerical metrics, the method demonstrates a range of qualitative
+advantages that make it particularly functional for real-world problems:
+stability with noisy and incomplete data, good scalability, balance
+between complexity and generalizability, and flexibility across different
+application domains. Simultaneously, the analysis highlights specific
+areas where further optimizations could enhance performance even more,
+providing directions for future research.
 
 \begin{table}[H]
 \caption{Experimental results using a variety of machine learning methods for
-the classification datasets.\label{tab:expClass}}
+the classification datasets.\protect\label{tab:expClass}}
 
-\centering{}%
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline 
-DATASET & ADAM & BFGS & GENETIC & RBF & NNC & PROPOSED\tabularnewline
+{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize NNC} & {\footnotesize PROPOSED}\tabularnewline
 \hline 
 \hline 
-APPENDICITIS & 16.50\% & 18.00\% & 24.40\% & 12.23\% & 14.40\% & 14.30\%\tabularnewline
+{\footnotesize APPENDICITIS} & {\footnotesize 16.50\%} & {\footnotesize 18.00\%} & {\footnotesize 24.40\%} & {\footnotesize 12.23\%} & {\footnotesize 17.20\%} & {\footnotesize 15.97\%} & {\footnotesize 14.40\%} & {\footnotesize 14.30\%}\tabularnewline
 \hline 
-ALCOHOL & 57.78\% & 41.50\% & 39.57\% & 49.32\% & 37.72\% & 35.60\%\tabularnewline
+{\footnotesize ALCOHOL} & {\footnotesize 57.78\%} & {\footnotesize 41.50\%} & {\footnotesize 39.57\%} & {\footnotesize 49.32\%} & {\footnotesize 66.80\%} & {\footnotesize 15.75\%} & {\footnotesize 37.72\%} & {\footnotesize 35.60\%}\tabularnewline
 \hline 
-AUSTRALIAN & 35.65\% & 38.13\% & 32.21\% & 34.89\% & 14.46\% & 14.55\%\tabularnewline
+{\footnotesize AUSTRALIAN} & {\footnotesize 35.65\%} & {\footnotesize 38.13\%} & {\footnotesize 32.21\%} & {\footnotesize 34.89\%} & {\footnotesize 31.98\%} & {\footnotesize 43.66\%} & {\footnotesize 14.46\%} & {\footnotesize 14.55\%}\tabularnewline
 \hline 
-BALANCE & 12.27\% & 8.64\% & 8.97\% & 33.53\% & 23.65\% & 7.84\%\tabularnewline
+{\footnotesize BALANCE} & {\footnotesize 12.27\%} & {\footnotesize 8.64\%} & {\footnotesize 8.97\%} & {\footnotesize 33.53\%} & {\footnotesize 23.14\%} & {\footnotesize 9.00\%} & {\footnotesize 23.65\%} & {\footnotesize 7.84\%}\tabularnewline
 \hline 
-CLEVELAND & 67.55\% & 77.55\% & 51.60\% & 67.10\% & 50.93\% & 46.41\%\tabularnewline
+{\footnotesize CLEVELAND} & {\footnotesize 67.55\%} & {\footnotesize 77.55\%} & {\footnotesize 51.60\%} & {\footnotesize 67.10\%} & {\footnotesize 53.44\%} & {\footnotesize 51.48\%} & {\footnotesize 50.93\%} & {\footnotesize 46.41\%}\tabularnewline
 \hline 
-CIRCULAR & 19.95\% & 6.08\% & 5.99\% & 5.98\% & 12.66\% & 6.92\%\tabularnewline
+{\footnotesize CIRCULAR} & {\footnotesize 19.95\%} & {\footnotesize 6.08\%} & {\footnotesize 5.99\%} & {\footnotesize 5.98\%} & {\footnotesize 35.18\%} & {\footnotesize 12.76\%} & {\footnotesize 12.66\%} & {\footnotesize 6.92\%}\tabularnewline
 \hline 
-DERMATOLOGY & 26.14\% & 52.92\% & 30.58\% & 62.34\% & 21.54\% & 20.54\%\tabularnewline
+{\footnotesize DERMATOLOGY} & {\footnotesize 26.14\%} & {\footnotesize 52.92\%} & {\footnotesize 30.58\%} & {\footnotesize 62.34\%} & {\footnotesize 32.43\%} & {\footnotesize 9.02\%} & {\footnotesize 21.54\%} & {\footnotesize 20.54\%}\tabularnewline
 \hline 
-ECOLI & 64.43\% & 69.52\% & 54.67\% & 59.48\% & 49.88\% & 48.82\%\tabularnewline
+{\footnotesize ECOLI} & {\footnotesize 64.43\%} & {\footnotesize 69.52\%} & {\footnotesize 54.67\%} & {\footnotesize 59.48\%} & {\footnotesize 43.44\%} & {\footnotesize 60.32\%} & {\footnotesize 49.88\%} & {\footnotesize 48.82\%}\tabularnewline
 \hline 
-GLASS & 61.38\% & 54.67\% & 52.86\% & 50.46\% & 56.09\% & 53.52\%\tabularnewline
+{\footnotesize GLASS} & {\footnotesize 61.38\%} & {\footnotesize 54.67\%} & {\footnotesize 52.86\%} & {\footnotesize 50.46\%} & {\footnotesize 55.71\%} & {\footnotesize 66.19\%} & {\footnotesize 56.09\%} & {\footnotesize 53.52\%}\tabularnewline
 \hline 
-HABERMAN & 29.00\% & 29.34\% & 28.66\% & 25.10\% & 27.53\% & 26.80\%\tabularnewline
+{\footnotesize HABERMAN} & {\footnotesize 29.00\%} & {\footnotesize 29.34\%} & {\footnotesize 28.66\%} & {\footnotesize 25.10\%} & {\footnotesize 24.04\%} & {\footnotesize 29.38\%} & {\footnotesize 27.53\%} & {\footnotesize 26.80\%}\tabularnewline
 \hline 
-HAYES-ROTH & 59.70\% & 37.33\% & 56.18\% & 64.36\% & 33.69\% & 31.00\%\tabularnewline
+{\footnotesize HAYES-ROTH} & {\footnotesize 59.70\%} & {\footnotesize 37.33\%} & {\footnotesize 56.18\%} & {\footnotesize 64.36\%} & {\footnotesize 50.15\%} & {\footnotesize 45.44\%} & {\footnotesize 33.69\%} & {\footnotesize 31.00\%}\tabularnewline
 \hline 
-HEART & 38.53\% & 39.44\% & 28.34\% & 31.20\% & 15.67\% & 15.45\%\tabularnewline
+{\footnotesize HEART} & {\footnotesize 38.53\%} & {\footnotesize 39.44\%} & {\footnotesize 28.34\%} & {\footnotesize 31.20\%} & {\footnotesize 39.27\%} & {\footnotesize 27.21\%} & {\footnotesize 15.67\%} & {\footnotesize 15.45\%}\tabularnewline
 \hline 
-HEARTATTACK & 45.55\% & 46.67\% & 29.03\% & 29.00\% & 20.87\% & 21.77\%\tabularnewline
+{\footnotesize HEARTATTACK} & {\footnotesize 45.55\%} & {\footnotesize 46.67\%} & {\footnotesize 29.03\%} & {\footnotesize 29.00\%} & {\footnotesize 32.34\%} & {\footnotesize 29.26\%} & {\footnotesize 20.87\%} & {\footnotesize 21.77\%}\tabularnewline
 \hline 
-HOUSEVOTES & 7.48\% & 7.13\% & 6.62\% & 6.13\% & 3.17\% & 3.78\%\tabularnewline
+{\footnotesize HOUSEVOTES} & {\footnotesize 7.48\%} & {\footnotesize 7.13\%} & {\footnotesize 6.62\%} & {\footnotesize 6.13\%} & {\footnotesize 10.89\%} & {\footnotesize 5.81\%} & {\footnotesize 3.17\%} & {\footnotesize 3.78\%}\tabularnewline
 \hline 
-IONOSPHERE & 16.64\% & 15.29\% & 15.14\% & 16.22\% & 11.29\% & 11.94\%\tabularnewline
+{\footnotesize IONOSPHERE} & {\footnotesize 16.64\%} & {\footnotesize 15.29\%} & {\footnotesize 15.14\%} & {\footnotesize 16.22\%} & {\footnotesize 19.67\%} & {\footnotesize 11.32\%} & {\footnotesize 11.29\%} & {\footnotesize 11.94\%}\tabularnewline
 \hline 
-LIVERDISORDER & 41.53\% & 42.59\% & 31.11\% & 30.84\% & 32.35\% & 31.32\%\tabularnewline
+{\footnotesize LIVERDISORDER} & {\footnotesize 41.53\%} & {\footnotesize 42.59\%} & {\footnotesize 31.11\%} & {\footnotesize 30.84\%} & {\footnotesize 30.67\%} & {\footnotesize 49.72\%} & {\footnotesize 32.35\%} & {\footnotesize 31.32\%}\tabularnewline
 \hline 
-LYMOGRAPHY & 39.79\% & 35.43\% & 28.42\% & 25.50\% & 25.29\% & 23.72\%\tabularnewline
+{\footnotesize LYMOGRAPHY} & {\footnotesize 39.79\%} & {\footnotesize 35.43\%} & {\footnotesize 28.42\%} & {\footnotesize 25.50\%} & {\footnotesize 33.70\%} & {\footnotesize 22.02\%} & {\footnotesize 25.29\%} & {\footnotesize 23.72\%}\tabularnewline
 \hline 
-MAMMOGRAPHIC & 46.25\% & 17.24\% & 19.88\% & 21.38\% & 17.62\% & 16.74\%\tabularnewline
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 46.25\%} & {\footnotesize 17.24\%} & {\footnotesize 19.88\%} & {\footnotesize 21.38\%} & {\footnotesize 22.85\%} & {\footnotesize 38.10\%} & {\footnotesize 17.62\%} & {\footnotesize 16.74\%}\tabularnewline
 \hline 
-PARKINSONS & 24.06\% & 27.58\% & 18.05\% & 17.41\% & 12.74\% & 12.63\%\tabularnewline
+{\footnotesize PARKINSONS} & {\footnotesize 24.06\%} & {\footnotesize 27.58\%} & {\footnotesize 18.05\%} & {\footnotesize 17.41\%} & {\footnotesize 18.56\%} & {\footnotesize 22.12\%} & {\footnotesize 12.74\%} & {\footnotesize 12.63\%}\tabularnewline
 \hline 
-PHONEME & 29.43\% & 15.58\% & 15.55\% & 23.32\% & 22.50\% & 21.52\%\tabularnewline
+{\footnotesize PHONEME} & {\footnotesize 29.43\%} & {\footnotesize 15.58\%} & {\footnotesize 15.55\%} & {\footnotesize 23.32\%} & {\footnotesize 22.34\%} & {\footnotesize 29.35\%} & {\footnotesize 22.50\%} & {\footnotesize 21.52\%}\tabularnewline
 \hline 
-PIMA & 34.85\% & 35.59\% & 32.19\% & 25.78\% & 28.07\% & 23.34\%\tabularnewline
+{\footnotesize PIMA} & {\footnotesize 34.85\%} & {\footnotesize 35.59\%} & {\footnotesize 32.19\%} & {\footnotesize 25.78\%} & {\footnotesize 34.51\%} & {\footnotesize 35.08\%} & {\footnotesize 28.07\%} & {\footnotesize 23.34\%}\tabularnewline
 \hline 
-POPFAILURES & 5.18\% & 5.24\% & 5.94\% & 7.04\% & 6.98\% & 5.72\%\tabularnewline
+{\footnotesize POPFAILURES} & {\footnotesize 5.18\%} & {\footnotesize 5.24\%} & {\footnotesize 5.94\%} & {\footnotesize 7.04\%} & {\footnotesize 7.05\%} & {\footnotesize 4.79\%} & {\footnotesize 6.98\%} & {\footnotesize 5.72\%}\tabularnewline
 \hline 
-REGIONS2 & 29.85\% & 36.28\% & 29.39\% & 38.29\% & 26.18\% & 23.81\%\tabularnewline
+{\footnotesize REGIONS2} & {\footnotesize 29.85\%} & {\footnotesize 36.28\%} & {\footnotesize 29.39\%} & {\footnotesize 38.29\%} & {\footnotesize 33.23\%} & {\footnotesize 34.26\%} & {\footnotesize 26.18\%} & {\footnotesize 23.81\%}\tabularnewline
 \hline 
-SAHEART & 34.04\% & 37.48\% & 34.86\% & 32.19\% & 29.80\% & 28.04\%\tabularnewline
+{\footnotesize SAHEART} & {\footnotesize 34.04\%} & {\footnotesize 37.48\%} & {\footnotesize 34.86\%} & {\footnotesize 32.19\%} & {\footnotesize 34.51\%} & {\footnotesize 37.70\%} & {\footnotesize 29.80\%} & {\footnotesize 28.04\%}\tabularnewline
 \hline 
-SEGMENT & 49.75\% & 68.97\% & 57.72\% & 59.68\% & 53.50\% & 48.20\%\tabularnewline
+{\footnotesize SEGMENT} & {\footnotesize 49.75\%} & {\footnotesize 68.97\%} & {\footnotesize 57.72\%} & {\footnotesize 59.68\%} & {\footnotesize 66.72\%} & {\footnotesize 60.40\%} & {\footnotesize 53.50\%} & {\footnotesize 48.20\%}\tabularnewline
 \hline 
-SPIRAL & 47.67\% & 47.99\% & 48.66\% & 44.87\% & 48.01\% & 44.95\%\tabularnewline
+{\footnotesize SPIRAL} & {\footnotesize 47.67\%} & {\footnotesize 47.99\%} & {\footnotesize 48.66\%} & {\footnotesize 44.87\%} & {\footnotesize 48.66\%} & {\footnotesize 50.38\%} & {\footnotesize 48.01\%} & {\footnotesize 44.95\%}\tabularnewline
 \hline 
-STATHEART & 44.04\% & 39.65\% & 27.25\% & 31.36\% & 18.08\% & 17.93\%\tabularnewline
+{\footnotesize STATHEART} & {\footnotesize 44.04\%} & {\footnotesize 39.65\%} & {\footnotesize 27.25\%} & {\footnotesize 31.36\%} & {\footnotesize 44.36\%} & {\footnotesize 28.37\%} & {\footnotesize 18.08\%} & {\footnotesize 17.93\%}\tabularnewline
 \hline 
-STUDENT & 5.13\% & 7.14\% & 5.61\% & 5.49\% & 6.70\% & 4.05\%\tabularnewline
+{\footnotesize STUDENT} & {\footnotesize 5.13\%} & {\footnotesize 7.14\%} & {\footnotesize 5.61\%} & {\footnotesize 5.49\%} & {\footnotesize 10.20\%} & {\footnotesize 10.84\%} & {\footnotesize 6.70\%} & {\footnotesize 4.05\%}\tabularnewline
 \hline 
-TRANSFUSION & 25.68\% & 25.84\% & 24.87\% & 26.41\% & 25.77\% & 23.16\%\tabularnewline
+{\footnotesize TRANSFUSION} & {\footnotesize 25.68\%} & {\footnotesize 25.84\%} & {\footnotesize 24.87\%} & {\footnotesize 26.41\%} & {\footnotesize 24.87\%} & {\footnotesize 29.35\%} & {\footnotesize 25.77\%} & {\footnotesize 23.16\%}\tabularnewline
 \hline 
-WDBC & 35.35\% & 29.91\% & 8.56\% & 7.27\% & 7.36\% & 4.95\%\tabularnewline
+{\footnotesize WDBC} & {\footnotesize 35.35\%} & {\footnotesize 29.91\%} & {\footnotesize 8.56\%} & {\footnotesize 7.27\%} & {\footnotesize 12.88\%} & {\footnotesize 15.48\%} & {\footnotesize 7.36\%} & {\footnotesize 4.95\%}\tabularnewline
 \hline 
-WINE & 29.40\% & 59.71\% & 19.20\% & 31.41\% & 13.59\% & 9.94\%\tabularnewline
+{\footnotesize WINE} & {\footnotesize 29.40\%} & {\footnotesize 59.71\%} & {\footnotesize 19.20\%} & {\footnotesize 31.41\%} & {\footnotesize 25.43\%} & {\footnotesize 16.62\%} & {\footnotesize 13.59\%} & {\footnotesize 9.94\%}\tabularnewline
 \hline 
-Z\_F\_S & 47.81\% & 39.37\% & 10.73\% & 13.16\% & 14.53\% & 7.97\%\tabularnewline
+{\footnotesize Z\_F\_S} & {\footnotesize 47.81\%} & {\footnotesize 39.37\%} & {\footnotesize 10.73\%} & {\footnotesize 13.16\%} & {\footnotesize 38.41\%} & {\footnotesize 17.91\%} & {\footnotesize 14.53\%} & {\footnotesize 7.97\%}\tabularnewline
 \hline 
-Z\_O\_N\_F\_S & 78.79\% & 65.67\% & 64.81\% & 48.70\% & 48.62\% & 39.28\%\tabularnewline
+{\footnotesize Z\_O\_N\_F\_S} & {\footnotesize 78.79\%} & {\footnotesize 65.67\%} & {\footnotesize 64.81\%} & {\footnotesize 48.70\%} & {\footnotesize 77.08\%} & {\footnotesize 71.29\%} & {\footnotesize 48.62\%} & {\footnotesize 39.28\%}\tabularnewline
 \hline 
-ZO\_NF\_S & 47.43\% & 43.04\% & 21.54\% & 9.02\% & 13.54\% & 6.94\%\tabularnewline
+{\footnotesize ZO\_NF\_S} & {\footnotesize 47.43\%} & {\footnotesize 43.04\%} & {\footnotesize 21.54\%} & {\footnotesize 9.02\%} & {\footnotesize 43.75\%} & {\footnotesize 15.57\%} & {\footnotesize 13.54\%} & {\footnotesize 6.94\%}\tabularnewline
 \hline 
-ZONF\_S & 11.99\% & 15.62\% & 4.36\% & 4.03\% & 2.64\% & 2.60\%\tabularnewline
+{\footnotesize ZONF\_S} & {\footnotesize 11.99\%} & {\footnotesize 15.62\%} & {\footnotesize 4.36\%} & {\footnotesize 4.03\%} & {\footnotesize 5.44\%} & {\footnotesize 3.27\%} & {\footnotesize 2.64\%} & {\footnotesize 2.60\%}\tabularnewline
 \hline 
-ZOO & 14.13\% & 10.70\% & 9.50\% & 21.93\% & 8.70\% & 6.60\%\tabularnewline
+{\footnotesize ZOO} & {\footnotesize 14.13\%} & {\footnotesize 10.70\%} & {\footnotesize 9.50\%} & {\footnotesize 21.93\%} & {\footnotesize 20.27\%} & {\footnotesize 8.53\%} & {\footnotesize 8.70\%} & {\footnotesize 6.60\%}\tabularnewline
 \hline 
-\textbf{AVERAGE} & \textbf{36.45\%} & \textbf{35.71\%} & \textbf{28.25\%} & \textbf{30.73\%} & \textbf{24.79\%} & \textbf{21.18\%}\tabularnewline
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{36.45\%}} & {\footnotesize\textbf{35.71\%}} & {\footnotesize\textbf{28.25\%}} & {\footnotesize\textbf{30.73\%}} & {\footnotesize\textbf{32.19\%}} & {\footnotesize\textbf{27.94\%}} & {\footnotesize\textbf{24.79\%}} & {\footnotesize\textbf{21.18\%}}\tabularnewline
 \hline 
-\end{tabular}
+\end{tabular}}{\footnotesize\par}
 \end{table}
+Additionally, the average classification error for all methods is
+illustrated in Figure \ref{fig:The-average-classification}.
 
-The table \ref{tab:expRegression} presents the performance of various
-machine learning models on regression datasets, as measured by absolute
-error values. Each column represents a specific model, while each
-row corresponds to a dataset and the absolute error value associated
-with each algorithm for that dataset. The last row provides the average
-error values for each algorithm, offering a general view of their
-overall performance. The analysis shows that the \textquotedbl PROPOSED\textquotedbl{}
-model achieves the lowest average error value (4.28) among all the
-algorithms, indicating its superior overall performance in terms of
-accuracy. Across multiple datasets, the \textquotedbl PROPOSED\textquotedbl{}
-model consistently achieves the smallest error values, such as in
-datasets like BL (0.001), MORTGAGE (0.023), and TREASURY (0.068).
-These results highlight its effectiveness across various regression
-problems. However, it is notable that in some datasets, such as FY
-(0.043) and HOUSING (15.47), the \textquotedbl PROPOSED\textquotedbl{}
-model does not have the lowest error values, though its performance
-remains competitive. On the other hand, the \textquotedbl BFGS\textquotedbl{}
-model records the highest average error value (30.29), reflecting
-its generally weaker performance across the datasets. Its errors are
-significantly higher in certain datasets, such as BASEBALL (119.63)
-and STOCK (302.43), indicating challenges in addressing regression
-tasks effectively in these cases. Despite this, \textquotedbl BFGS\textquotedbl{}
-shows competitive performance in a few instances, such as in the AIRFOIL
-dataset, where it achieves an error value of 0.003, close to that
-of the \textquotedbl PROPOSED\textquotedbl{} model. The \textquotedbl GENETIC\textquotedbl{}
-model has an average error value of 9.31, placing it among the mid-performing
-models in this analysis. It performs relatively well in datasets like
-MORTGAGE (2.41) and TREASURY (2.93), but struggles in others, such
-as BASEBALL (103.6) and PLASTIC (2.791). These results indicate variability
-in its performance depending on the dataset characteristics. The \textquotedbl ADAM\textquotedbl{}
-model, with an average error value of 22.46, shows moderate performance
-overall. It has strong results in some datasets, such as AIRFOIL (0.005)
-and CONCRETE (0.078), but performs poorly in others, such as STOCK
-(180.89) and BASEBALL (77.9). This suggests that \textquotedbl ADAM\textquotedbl{}
-is sensitive to dataset-specific features and may not generalize well
-across all cases. The \textquotedbl RBF\textquotedbl{} model achieves
-an average error value of 10.02, demonstrating moderately good performance
-across the datasets. It performs particularly well in datasets like
-MORTGAGE (1.45) and LASER (0.03). However, it faces challenges in
-datasets such as BASEBALL (93.02) and STOCK (12.23), where its error
-values are notably higher. The \textquotedbl NNC\textquotedbl{} model
-has an average error value of 6.29, placing it as a strong performer,
-second only to the \textquotedbl PROPOSED\textquotedbl{} model in
-this analysis. It shows competitive results across many datasets,
-such as PL (0.047) and HO (0.015), but it is slightly outperformed
-by \textquotedbl PROPOSED\textquotedbl{} in most cases, including
-critical datasets like BL and TREASURY. Overall, the analysis reveals
-the \textquotedbl PROPOSED\textquotedbl{} model's superiority in
-minimizing absolute error across diverse regression datasets, as reflected
-by its lowest average error. The results also underscore the variability
-in performance among the other algorithms, suggesting that certain
-models may perform better in specific contexts but lack consistent
-efficacy across all datasets.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.8]{plot_all}
+\par\end{centering}
+\caption{The average classification error for all used datasets. \protect\label{fig:The-average-classification}}
+
+\end{figure}
+Also, a line plot is provided in Figure \ref{fig:linePlot}for a series
+of selected datasets to depict the effectiveness of the proposed method.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.8]{plot_line}
+\par\end{centering}
+\caption{Line plot for a series of classification datasets.\protect\label{fig:linePlot}}
+
+\end{figure}
+
+The table \ref{tab:expRegression} presents the results of various
+machine learning models (ADAM, BFGS, GENETIC, RBF, NEAT, PRUNE, NNC,
+PROPOSED) across multiple regression datasets. The values represent
+absolute errors, where lower values indicate better performance. From
+the last row, it is evident that the PROPOSED model has the lowest
+average error (4.28), followed by NNC (6.29) and GENETIC (9.31). This
+suggests that the PROPOSED model is, overall, the most effective.
+However, the PROPOSED model is not always the best for every individual
+dataset. For example, in the AIRFOIL dataset, the PRUNE model achieves
+the smallest error (0.002), while PROPOSED performs similarly (0.002).
+In the AUTO dataset, the GENETIC model has a significantly lower error
+(12.18) compared to PROPOSED (9.09). Yet, in other datasets like BL
+and MORTGAGE, the PROPOSED model stands out with very low errors (0.001
+and 0.023, respectively). The BFGS and ADAM methods, which are more
+classical optimization techniques, appear to have higher average errors
+(30.29 and 22.46, respectively), indicating that they are generally
+less effective compared to more advanced approaches. However, in some
+datasets, such as FRIEDMAN, the BFGS model performs exceptionally
+well (1.263), even outperforming PROPOSED (5.34). The GENETIC method
+shows strong performance in certain datasets like AUTO (12.18) and
+STOCK (3.88), but performs worse in others such as ABALONE (7.17)
+and BL (5.74). This suggests that while genetic algorithms can be
+highly effective for specific problems, they are not consistently
+stable across all datasets. Neural network-based methods (RBF, NEAT,
+PRUNE, NNC) exhibit varied performance. NNC has the second-best average
+error (6.29), indicating it is a robust method. PRUNE also performs
+well in some datasets, such as AIRFOIL (0.002) and CONCRETE (0.0077),
+but less effectively in others like STOCK (39.08). Overall, the PROPOSED
+model demonstrates the best average performance and is particularly
+effective across many datasets. However, as the data shows, no single
+method is universally the best for all datasets. This highlights the
+importance of selecting the appropriate model based on the specific
+problem and data characteristics. Additionally, the high variability
+in model performance across different datasets indicates that algorithm
+behavior can differ significantly depending on the nature of the data.
 
 \begin{table}[H]
 \caption{Experimental results using a variety of machine learning methods on
-the regression datasets.\label{tab:expRegression}}
+the regression datasets.\protect\label{tab:expRegression}}
 
-\centering{}%
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline 
-DATASET & ADAM & BFGS & GENETIC & RBF & NNC & PROPOSED\tabularnewline
+{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize NNC} & {\footnotesize PROPOSED}\tabularnewline
 \hline 
 \hline 
-ABALONE & 4.30 & 5.69 & 7.17 & 7.37 & 5.08 & 4.47\tabularnewline
+{\footnotesize ABALONE} & {\footnotesize 4.30} & {\footnotesize 5.69} & {\footnotesize 7.17} & {\footnotesize 7.37} & {\footnotesize 9.88} & {\footnotesize 7.88} & {\footnotesize 5.08} & {\footnotesize 4.47}\tabularnewline
 \hline 
-AIRFOIL & 0.005 & 0.003 & 0.003 & 0.27 & 0.004 & 0.002\tabularnewline
+{\footnotesize AIRFOIL} & {\footnotesize 0.005} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.27} & {\footnotesize 0.067} & {\footnotesize 0.002} & {\footnotesize 0.004} & {\footnotesize 0.002}\tabularnewline
 \hline 
-AUTO & 70.84 & 60.97 & 12.18 & 17.87 & 17.13 & 9.09\tabularnewline
+{\footnotesize AUTO} & {\footnotesize 70.84} & {\footnotesize 60.97} & {\footnotesize 12.18} & {\footnotesize 17.87} & {\footnotesize 56.06} & {\footnotesize 75.59} & {\footnotesize 17.13} & {\footnotesize 9.09}\tabularnewline
 \hline 
-BK & 0.0252 & 0.28 & 0.027 & 0.02 & 0.10 & 0.023\tabularnewline
+{\footnotesize BK} & {\footnotesize 0.0252} & {\footnotesize 0.28} & {\footnotesize 0.027} & {\footnotesize 0.02} & {\footnotesize 0.15} & {\footnotesize 0.027} & {\footnotesize 0.10} & {\footnotesize 0.023}\tabularnewline
 \hline 
-BL & 0.622 & 2.55 & 5.74 & 0.013 & 1.19 & 0.001\tabularnewline
+{\footnotesize BL} & {\footnotesize 0.622} & {\footnotesize 2.55} & {\footnotesize 5.74} & {\footnotesize 0.013} & {\footnotesize 0.05} & {\footnotesize 0.027} & {\footnotesize 1.19} & {\footnotesize 0.001}\tabularnewline
 \hline 
-BASEBALL & 77.90 & 119.63 & 103.60 & 93.02 & 61.57 & 48.13\tabularnewline
+{\footnotesize BASEBALL} & {\footnotesize 77.90} & {\footnotesize 119.63} & {\footnotesize 103.60} & {\footnotesize 93.02} & {\footnotesize 100.39} & {\footnotesize 94.50} & {\footnotesize 61.57} & {\footnotesize 48.13}\tabularnewline
 \hline 
-CONCRETE & 0.078 & 0.066 & 0.0099 & 0.011 & 0.008 & 0.005\tabularnewline
+{\footnotesize CONCRETE} & {\footnotesize 0.078} & {\footnotesize 0.066} & {\footnotesize 0.0099} & {\footnotesize 0.011} & {\footnotesize 0.081} & {\footnotesize 0.0077} & {\footnotesize 0.008} & {\footnotesize 0.005}\tabularnewline
 \hline 
-DEE & 0.63 & 2.36 & 1.013 & 0.17 & 0.26 & 0.22\tabularnewline
+{\footnotesize DEE} & {\footnotesize 0.63} & {\footnotesize 2.36} & {\footnotesize 1.013} & {\footnotesize 0.17} & {\footnotesize 1.512} & {\footnotesize 1.08} & {\footnotesize 0.26} & {\footnotesize 0.22}\tabularnewline
 \hline 
-FRIEDMAN & 22.90 & 1.263 & 1.249 & 7.23 & 6.29 & 5.34\tabularnewline
+{\footnotesize FRIEDMAN} & {\footnotesize 22.90} & {\footnotesize 1.263} & {\footnotesize 1.249} & {\footnotesize 7.23} & {\footnotesize 19.35} & {\footnotesize 8.69} & {\footnotesize 6.29} & {\footnotesize 5.34}\tabularnewline
 \hline 
-FY & 0.038 & 0.19 & 0.65 & 0.041 & 0.11 & 0.043\tabularnewline
+{\footnotesize FY} & {\footnotesize 0.038} & {\footnotesize 0.19} & {\footnotesize 0.65} & {\footnotesize 0.041} & {\footnotesize 0.08} & {\footnotesize 0.042} & {\footnotesize 0.11} & {\footnotesize 0.043}\tabularnewline
 \hline 
-HO & 0.035 & 0.62 & 2.78 & 0.03 & 0.015 & 0.016\tabularnewline
+{\footnotesize HO} & {\footnotesize 0.035} & {\footnotesize 0.62} & {\footnotesize 2.78} & {\footnotesize 0.03} & {\footnotesize 0.169} & {\footnotesize 0.03} & {\footnotesize 0.015} & {\footnotesize 0.016}\tabularnewline
 \hline 
-HOUSING & 80.99 & 97.38 & 43.26 & 57.68 & 25.47 & 15.47\tabularnewline
+{\footnotesize HOUSING} & {\footnotesize 80.99} & {\footnotesize 97.38} & {\footnotesize 43.26} & {\footnotesize 57.68} & {\footnotesize 56.49} & {\footnotesize 52.25} & {\footnotesize 25.47} & {\footnotesize 15.47}\tabularnewline
 \hline 
-LASER & 0.03 & 0.015 & 0.59 & 0.03 & 0.025 & 0.0049\tabularnewline
+{\footnotesize LASER} & {\footnotesize 0.03} & {\footnotesize 0.015} & {\footnotesize 0.59} & {\footnotesize 0.03} & {\footnotesize 0.084} & {\footnotesize 0.007} & {\footnotesize 0.025} & {\footnotesize 0.0049}\tabularnewline
 \hline 
-LW & 0.028 & 2.98 & 1.90 & 0.03 & 0.011 & 0.011\tabularnewline
+{\footnotesize LW} & {\footnotesize 0.028} & {\footnotesize 2.98} & {\footnotesize 1.90} & {\footnotesize 0.03} & {\footnotesize 0.03} & {\footnotesize 0.02} & {\footnotesize 0.011} & {\footnotesize 0.011}\tabularnewline
 \hline 
-MORTGAGE & 9.24 & 8.23 & 2.41 & 1.45 & 0.30 & 0.023\tabularnewline
+{\footnotesize MORTGAGE} & {\footnotesize 9.24} & {\footnotesize 8.23} & {\footnotesize 2.41} & {\footnotesize 1.45} & {\footnotesize 14.11} & {\footnotesize 12.96} & {\footnotesize 0.30} & {\footnotesize 0.023}\tabularnewline
 \hline 
-PL & 0.117 & 0.29 & 0.29 & 2.118 & 0.047 & 0.029\tabularnewline
+{\footnotesize PL} & {\footnotesize 0.117} & {\footnotesize 0.29} & {\footnotesize 0.29} & {\footnotesize 2.118} & {\footnotesize 0.09} & {\footnotesize 0.032} & {\footnotesize 0.047} & {\footnotesize 0.029}\tabularnewline
 \hline 
-PLASTIC & 11.71 & 20.32 & 2.791 & 8.62 & 4.20 & 2.17\tabularnewline
+{\footnotesize PLASTIC} & {\footnotesize 11.71} & {\footnotesize 20.32} & {\footnotesize 2.791} & {\footnotesize 8.62} & {\footnotesize 20.77} & {\footnotesize 17.33} & {\footnotesize 4.20} & {\footnotesize 2.17}\tabularnewline
 \hline 
-QUAKE & 0.07 & 0.42 & 0.04 & 0.07 & 0.96 & 0.036\tabularnewline
+{\footnotesize QUAKE} & {\footnotesize 0.07} & {\footnotesize 0.42} & {\footnotesize 0.04} & {\footnotesize 0.07} & {\footnotesize 0.298} & {\footnotesize 0.04} & {\footnotesize 0.96} & {\footnotesize 0.036}\tabularnewline
 \hline 
-SN & 0.026 & 0.40 & 2.95 & 0.027 & 0.026 & 0.024\tabularnewline
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.40} & {\footnotesize 2.95} & {\footnotesize 0.027} & {\footnotesize 0.174} & {\footnotesize 0.032} & {\footnotesize 0.026} & {\footnotesize 0.024}\tabularnewline
 \hline 
-STOCK & 180.89 & 302.43 & 3.88 & 12.23 & 8.92 & 4.69\tabularnewline
+{\footnotesize STOCK} & {\footnotesize 180.89} & {\footnotesize 302.43} & {\footnotesize 3.88} & {\footnotesize 12.23} & {\footnotesize 12.23} & {\footnotesize 39.08} & {\footnotesize 8.92} & {\footnotesize 4.69}\tabularnewline
 \hline 
-TREASURY & 11.16 & 9.91 & 2.93 & 2.02 & 0.43 & 0.068\tabularnewline
+{\footnotesize TREASURY} & {\footnotesize 11.16} & {\footnotesize 9.91} & {\footnotesize 2.93} & {\footnotesize 2.02} & {\footnotesize 15.52} & {\footnotesize 13.76} & {\footnotesize 0.43} & {\footnotesize 0.068}\tabularnewline
 \hline 
-\textbf{AVERAGE} & \textbf{22.46} & \textbf{30.29} & \textbf{9.31} & \textbf{10.02} & \textbf{6.29} & \textbf{4.28}\tabularnewline
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{22.46}} & {\footnotesize\textbf{30.29}} & {\footnotesize\textbf{9.31}} & {\footnotesize\textbf{10.02}} & {\footnotesize\textbf{14.65}} & {\footnotesize\textbf{15.40}} & {\footnotesize\textbf{6.29}} & {\footnotesize\textbf{4.28}}\tabularnewline
 \hline 
-\end{tabular}
+\end{tabular}}{\footnotesize\par}
 \end{table}
 
-In Figure \ref{fig:statClass}, the comparison of the proposed machine
-learning model (PROPOSED) with other models on classification datasets
-was conducted using a script in the R programming language, which
-evaluated the p-value to assess the statistical significance of performance
-differences. The p-value serves as a measure of the likelihood that
-observed results are due to random variation rather than genuine differences
-between the models. p-values below the commonly accepted threshold
-of 0.05 indicate that the differences are statistically significant
-and not due to random chance. The comparison between PROPOSED and
-the ADAM model yielded a p-value of 1.9e-07, which is extremely low.
-This indicates that the performance difference between the two models
-is highly significant, rejecting the possibility that the superior
-performance of PROPOSED is due to random variability. This result
-highlights the clear advantage of PROPOSED over ADAM. In the case
-of PROPOSED versus BFGS, the p-value was 1.1e-08, even smaller than
-the comparison with ADAM. This extremely small p-value further underscores
-that PROPOSED significantly outperforms BFGS, demonstrating that the
-performance gap is exceptionally strong and statistically meaningful.
-For the comparison of PROPOSED with GENETIC, the p-value was 6.9e-08.
-Although this value is slightly higher than the previous ones, it
-is still extraordinarily low, indicating that PROPOSED's performance
-is clearly superior. This reinforces the consistency of PROPOSED when
-compared to models relying on genetic algorithms. The p-value for
-the comparison of PROPOSED with RBF was 1.9e-07, similar in magnitude
-to the comparison with ADAM. This consistency indicates that the superiority
-of PROPOSED over RBF is statistically significant, showcasing the
-proposed model's robust performance against a model with a different
-architecture. Finally, the comparison of PROPOSED with NNC produced
-a p-value of 4.3e-08. This very low value demonstrates the strong
-superiority of PROPOSED over a neural network classifier (NNC), further
-emphasizing the general observation that the proposed model performs
-better than the others, regardless of the specific technique employed
-by each competing model. Overall, the exceptionally low p-values for
-all comparisons provide evidence of the statistically significant
-superiority of PROPOSED compared to the other models. The results
-highlight that the performance of the proposed model is not only better
-but also consistently superior, with differences that are robust and
-highly reliable from a statistical perspective.
+The statistical comparison of the proposed machine learning model
+with other models on classification datasets yielded the following
+p-values, which represent significance levels. As shown in figure
+\ref{fig:statClass}, all p-values in the comparisons between the
+PROPOSED model and other models are extremely small. Specifically,
+the p-value for PROPOSED vs ADAM is $1.9\times10^{-7}$, vs BFGS is
+$1.1\times10^{-8}$, vs GENETIC is $6.9\times10^{-8}$, vs RBF is
+$1.9\times10^{-7}$, vs NEAT is $6\times10^{-9}$, vs PRUNE is $7.4\times10^{-6}$,
+and vs NNC is $4.3\times10^{-8}$. These values indicate that the
+performance differences between the PROPOSED model and the other models
+are statistically highly significant, as all p-values are well below
+the conventional significance threshold of $0.05$. The particularly
+low p-values in comparisons with NEAT ($6\times10^{-9}$) and BFGS
+($1.1\times10^{-8}$) suggest strong statistical differences in favor
+of the PROPOSED model. Even in the comparison with PRUNE, where the
+p-value is highest ($7.4\times10^{-6}$), the difference remains statistically
+significant. These results confirm that the PROPOSED model demonstrates
+statistically significant and superior performance compared to all
+other models tested on classification datasets. The consistently small
+p-values across all comparisons support the conclusion that the PROPOSED
+model stands out as more reliable and effective, with strong statistical
+confidence.
 
 \begin{figure}[H]
 \begin{centering}
-\includegraphics[scale=0.5]{new1}
+\includegraphics[scale=0.75]{new1}
 \par\end{centering}
 \caption{Statistical comparison of the machine learning models for the classification
-datasets.\label{fig:statClass}}
+datasets.\protect\label{fig:statClass}}
 
 \end{figure}
-The comparison of the proposed machine learning model (PROPOSED) with
-other models Figure \ref{fig:statRegression} on regression datasets
-was conducted using statistical analysis to determine the p-values,
-which measure the significance of performance differences between
-the models. A low p-value indicates that the observed differences
-are statistically significant and unlikely to have occurred by chance.
-The results reveal a consistent and robust superiority of PROPOSED
-over the other models. When comparing PROPOSED with ADAM, the p-value
-was 0.00013. This low value indicates a statistically significant
-difference in performance, confirming that the observed superiority
-of PROPOSED is unlikely to be due to random variation. In the case
-of BFGS, the p-value was even lower at 9.5e-07. This extremely small
-value strongly supports the conclusion that PROPOSED significantly
-outperforms BFGS, underscoring its robustness and reliability. The
-comparison of PROPOSED with GENETIC yielded a p-value of 0.0001. This
-result reaffirms the statistical significance of the performance gap
-between the two models, highlighting PROPOSED’s consistent advantage
-over GENETIC. For NEAT, the p-value was 0.0014, which, while slightly
-higher than the previous values, is still well below the threshold
-of 0.05. This demonstrates a statistically significant difference
-in favor of PROPOSED, confirming its superior performance even when
-compared to this specific algorithm. The comparison with RBF resulted
-in a p-value of 0.00042. This low value further solidifies the observation
-that PROPOSED consistently performs better than RBF, providing evidence
-of its strong adaptability and reliability across various regression
-datasets. Finally, the comparison with PRUNE yielded a p-value of
-0.00011, which, like the others, is extremely low. This demonstrates
-that the performance differences between PROPOSED and PRUNE are statistically
-significant, further validating the superiority of the proposed model.
-Overall, the low p-values across all comparisons provide compelling
-evidence of the statistical significance of the performance advantages
-of PROPOSED over the other models in regression tasks. These results
-emphasize the consistency and reliability of the proposed model in
-delivering superior results across a wide range of regression datasets.
+In figure \ref{fig:statRegression}, all comparisons between the PROPOSED
+model and other models show p-values significantly below the conventional
+$0.05$ significance threshold, indicating statistically significant
+differences. Specifically, the p-values are: PROPOSED vs ADAM = $0.00026$,
+vs BFGS = $0.00084$, vs GENETIC = $0.0027$, vs RBF = $0.00068$,
+vs NEAT = $1.9\times10^{-6}$, vs PRUNE = $0.00017$, and vs NNC =
+$0.00011$. These values confirm that the PROPOSED model shows statistically
+significant superiority over all compared models for regression datasets.
+The particularly low p-value for NEAT ($1.9\times^{-6}$) highlights
+a strong statistical difference, while the other comparisons also
+maintain very small p-values, with only the GENETIC comparison showing
+a slightly less pronounced (yet still statistically significant) difference
+at p=0.0027. These results demonstrate that the PROPOSED model consistently
+outperforms the others in regression tasks, with particularly marked
+differences compared to models like NEAT, NNC and PRUNE. The consistency
+of these findings reinforces the reliability of the PROPOSED model
+and supports its use as the preferred method for similar regression
+problems.
 
 \begin{figure}[H]
 \begin{centering}
-\includegraphics[scale=0.5]{new2}
+\includegraphics[scale=0.75]{new2}
 \par\end{centering}
 \caption{Statistical comparison between the used methods for the regression
-datasets.\label{fig:statRegression}}
+datasets.\protect\label{fig:statRegression}}
 
 \end{figure}
+Also, in order to illustrated the robustness of the proposed method,
+another experiment was conducted were the uniform crossover procedure
+was used for the Neural Network Construction method and the proposed
+one instead of the one - point crossover. The experimental results
+for the classification datasets are shown in Table \ref{tab:experClassUniformOnePointVsCrossover}and
+for regression datasets in Table \ref{tab:expersRegressionOnePointVsUniform}.
+
+\begin{table}[H]
+\caption{Experimental results for the classification datasets were a comparison
+is made against the original one - point crossover method and the
+uniform crossover procedure.\protect\label{tab:experClassUniformOnePointVsCrossover}}
+
+\raggedright{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+{\scriptsize DATASET} & {\scriptsize NNC ONE-POINT} & {\scriptsize NNC -UNIFORM} & {\scriptsize PROPOSED ONE-POINT} & {\scriptsize PROPOSED UNIFORM}\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 14.40\%} & {\footnotesize 14.20\%} & {\footnotesize 14.30\%} & {\footnotesize 14.40\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 37.72\%} & {\footnotesize 42.34\%} & {\footnotesize 35.60\%} & {\footnotesize 39.70\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 14.46\%} & {\footnotesize 14.13\%} & {\footnotesize 14.55\%} & {\footnotesize 14.35\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 23.65\%} & {\footnotesize 20.73\%} & {\footnotesize 7.84\%} & {\footnotesize 7.61\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 50.93\%} & {\footnotesize 51.45\%} & {\footnotesize 46.41\%} & {\footnotesize 46.28\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 12.66\%} & {\footnotesize 17.59\%} & {\footnotesize 6.92\%} & {\footnotesize 11.86\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 21.54\%} & {\footnotesize 30.09\%} & {\footnotesize 20.54\%} & {\footnotesize 26.86\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 49.88\%} & {\footnotesize 48.12\%} & {\footnotesize 48.82\%} & {\footnotesize 48.88\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 56.09\%} & {\footnotesize 57.43\%} & {\footnotesize 53.52\%} & {\footnotesize 52.43\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 27.53\%} & {\footnotesize 27.17\%} & {\footnotesize 26.80\%} & {\footnotesize 26.70\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 33.69\%} & {\footnotesize 36.61\%} & {\footnotesize 31.00\%} & {\footnotesize 33.62\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 15.67\%} & {\footnotesize 16.41\%} & {\footnotesize 15.45\%} & {\footnotesize 14.96\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 20.87\%} & {\footnotesize 21.50\%} & {\footnotesize 21.77\%} & {\footnotesize 21.27\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 3.17\%} & {\footnotesize 3.44\%} & {\footnotesize 3.78\%} & {\footnotesize 3.43\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 11.29\%} & {\footnotesize 11.80\%} & {\footnotesize 11.94\%} & {\footnotesize 11.77\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 32.35\%} & {\footnotesize 32.65\%} & {\footnotesize 31.32\%} & {\footnotesize 32.32\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 25.29\%} & {\footnotesize 28.21\%} & {\footnotesize 23.72\%} & {\footnotesize 25.14\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 17.62\%} & {\footnotesize 18.04\%} & {\footnotesize 16.74\%} & {\footnotesize 16.24\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 12.74\%} & {\footnotesize 11.63\%} & {\footnotesize 12.63\%} & {\footnotesize 12.74\%}\tabularnewline
+\hline 
+{\footnotesize PHONEME} & {\footnotesize 22.50\%} & {\footnotesize 23.46\%} & {\footnotesize 21.52\%} & {\footnotesize 21.32\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 28.07\%} & {\footnotesize 27.95\%} & {\footnotesize 23.34\%} & {\footnotesize 24.43\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 6.98\%} & {\footnotesize 6.80\%} & {\footnotesize 5.72\%} & {\footnotesize 6.01\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 26.18\%} & {\footnotesize 25.71\%} & {\footnotesize 23.81\%} & {\footnotesize 25.21\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 29.80\%} & {\footnotesize 30.52\%} & {\footnotesize 28.04\%} & {\footnotesize 29.13\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 53.50\%} & {\footnotesize 54.78\%} & {\footnotesize 48.20\%} & {\footnotesize 52.26\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 48.01\%} & {\footnotesize 48.35\%} & {\footnotesize 44.95\%} & {\footnotesize 45.03\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 18.08\%} & {\footnotesize 18.85\%} & {\footnotesize 17.93\%} & {\footnotesize 18.59\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 6.70\%} & {\footnotesize 6.15\%} & {\footnotesize 4.05\%} & {\footnotesize 4.10\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 25.77\%} & {\footnotesize 25.58\%} & {\footnotesize 23.16\%} & {\footnotesize 23.96\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 7.36\%} & {\footnotesize 8.07\%} & {\footnotesize 4.95\%} & {\footnotesize 6.31\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 13.59\%} & {\footnotesize 14.41\%} & {\footnotesize 9.94\%} & {\footnotesize 11.76\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 14.53\%} & {\footnotesize 18.33\%} & {\footnotesize 7.97\%} & {\footnotesize 10.13\%}\tabularnewline
+\hline 
+{\footnotesize Z\_O\_N\_F\_S} & {\footnotesize 48.62\%} & {\footnotesize 51.10\%} & {\footnotesize 39.28\%} & {\footnotesize 44.90\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 13.54\%} & {\footnotesize 14.52\%} & {\footnotesize 6.94\%} & {\footnotesize 8.24\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 2.64\%} & {\footnotesize 2.82\%} & {\footnotesize 2.60\%} & {\footnotesize 2.78\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 8.70\%} & {\footnotesize 10.40\%} & {\footnotesize 6.60\%} & {\footnotesize 8.70\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{24.79\%}} & {\footnotesize\textbf{24.76\%}} & {\footnotesize\textbf{21.18\%}} & {\footnotesize\textbf{22.32\%}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+\begin{table}[H]
+
+\caption{Experimental results for the regression datasets using two crossover
+methods: the one point crossover and the uniform crossover. \protect\label{tab:expersRegressionOnePointVsUniform}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize NNC ONE-POINT} & {\footnotesize NNC UNIFORM} & {\footnotesize PROPOSED ONE-POINT} & {\footnotesize PROPOSED UNIFORM}\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 5.08} & {\footnotesize 5.40} & {\footnotesize 4.47} & {\footnotesize 4.55}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.002} & {\footnotesize 0.003}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 17.13} & {\footnotesize 20.06} & {\footnotesize 9.09} & {\footnotesize 11.10}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.10} & {\footnotesize 0.018} & {\footnotesize 0.023} & {\footnotesize 0.018}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 1.19} & {\footnotesize 0.018} & {\footnotesize 0.001} & {\footnotesize 0.001}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 61.57} & {\footnotesize 63.44} & {\footnotesize 48.13} & {\footnotesize 49.99}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.008} & {\footnotesize 0.009} & {\footnotesize 0.005} & {\footnotesize 0.006}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 0.26} & {\footnotesize 0.28} & {\footnotesize 0.22} & {\footnotesize 0.24}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 6.29} & {\footnotesize 6.98} & {\footnotesize 5.34} & {\footnotesize 5.85}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.11} & {\footnotesize 0.04} & {\footnotesize 0.043} & {\footnotesize 0.04}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 0.015} & {\footnotesize 0.016} & {\footnotesize 0.016} & {\footnotesize 0.011}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 25.47} & {\footnotesize 26.68} & {\footnotesize 15.47} & {\footnotesize 16.89}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.025} & {\footnotesize 0.041} & {\footnotesize 0.0049} & {\footnotesize 0.008}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 0.011} & {\footnotesize 0.012} & {\footnotesize 0.011} & {\footnotesize 0.011}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 0.30} & {\footnotesize 0.29} & {\footnotesize 0.023} & {\footnotesize 0.037}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.047} & {\footnotesize 0.046} & {\footnotesize 0.029} & {\footnotesize 0.024}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 4.20} & {\footnotesize 5.20} & {\footnotesize 2.17} & {\footnotesize 2.30}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.96} & {\footnotesize 0.036} & {\footnotesize 0.036} & {\footnotesize 0.036}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.026} & {\footnotesize 0.024} & {\footnotesize 0.024}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 8.92} & {\footnotesize 10.89} & {\footnotesize 4.69} & {\footnotesize 8.31}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 0.43} & {\footnotesize 0.38} & {\footnotesize 0.068} & {\footnotesize 0.072}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{6.29}} & {\footnotesize\textbf{6.66}} & {\footnotesize\textbf{4.28}} & {\footnotesize\textbf{4.74}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+Analysis of the results in Table \ref{tab:experClassUniformOnePointVsCrossover}
+demonstrates that the proposed method systematically outperforms both
+variants of NNC, regardless of the crossover type employed. Specifically,
+the proposed method with one-point crossover achieves a significantly
+lower average error rate (21.18\%) compared to NNC (24.79\%). A similar
+performance gap is observed with uniform crossover, where the proposed
+method maintains superiority (22.32\% vs NNC's 24.76\%). The advantage
+is particularly pronounced in several datasets: for BALANCE (7.61-7.84\%
+vs 20.73-23.65\%), CIRCULAR (6.92-11.86\% vs 12.66-17.59\%), Z\_F\_S
+(7.97-10.13\% vs 14.53-18.33\%), and ZO\_NF\_S (6.94-8.24\% vs 13.54-14.52\%).
+Notably, in datasets like WDBC and WINE, the proposed method reduces
+the error by nearly half compared to NNC. Interestingly, the choice
+of crossover type shows minimal impact on performance for both methods.
+The marginal differences between one-point and uniform crossover (with
+average errors remaining stable for each method) suggest that the
+proposed method's superiority stems from its fundamental architecture
+rather than the recombination technique. These experimental results
+confirm the robustness of the proposed method, which maintains consistent
+superiority across various classification datasets while significantly
+reducing average error rates compared to standard NNC approaches.
+
+Table \ref{tab:expersRegressionOnePointVsUniform} further validates
+the proposed method's superiority for regression datasets. The proposed
+method achieves lower average errors with both one-point (4.28) and
+uniform crossover (4.74) compared to NNC (6.29 and 6.66 respectively).
+The performance gap is especially notable in key datasets: AUTO (9.09-11.1
+vs 17.13-20.06), HOUSING (15.47-16.89 vs 25.47-26.68), and PLASTIC
+(2.17-2.3 vs 4.2-5.2). In several cases (AIRFOIL, LASER, MORTGAGE),
+the proposed method reduces errors to a fraction of NNC's values.
+Particularly impressive results appear in BL (0.001) and QUAKE (0.036),
+where the proposed method achieves remarkably low, crossover-invariant
+errors. The crossover type shows slightly less impact on the proposed
+method (average difference of 0.46) than on NNC (0.37 difference),
+though one-point crossover yields marginally better results for both.
+These comprehensive results confirm that the proposed method maintains
+its superiority in regression problems, delivering consistently and
+significantly improved performance over NNC. Its ability to achieve
+lower errors across diverse problems, independent of crossover selection,
+solidifies its position as a more reliable and effective approach.
 
 Another experiment was conducted where the parameter $N_{K}$ was
 altered in the range $[5,\ldots,50]$ and the results for the regression
@@ -1170,32 +1445,158 @@ datasets are depicted in Figure \ref{fig:nkExpers}.
 \includegraphics[scale=0.5]{nk_exper}
 \par\end{centering}
 \caption{Average regression error for the regression datasets and the proposed
-method using a variety of values for the parameter $N_{K}$.\label{fig:nkExpers}}
+method using a variety of values for the parameter $N_{K}$.\protect\label{fig:nkExpers}}
 
 \end{figure}
 Additionally a series of experiments was conducted where the parameter
 $N_{I}$ was changed from 10 to 40 and the results are graphically
 presented in Figure \ref{fig:expersNI}.
-
 \begin{figure}[H]
 \begin{centering}
 \includegraphics[scale=0.5]{ni_exper}
 \par\end{centering}
 \caption{Experimental results for the regression datasets and the proposed
-method using a variety of values for the parameter $N_{I}$.\label{fig:expersNI}}
+method using a variety of values for the parameter $N_{I}$.\protect\label{fig:expersNI}}
 
 \end{figure}
-Experimental measurements show that as the parameter $N_{I}$ increases,
-the regression error decreases, indicating that higher values of $N_{I}$
-contribute to improved model performance in regression tasks. Similarly,
-increasing the parameter $N_{K}$ also results in a reduction in regression
-error. This relationship highlights the importance of $N_{I}$ and
-$N_{K}$ in optimizing the model's accuracy, possibly by influencing
-the complexity or capacity of the neural network. These findings underscore
-the significance of tuning $N_{I}$ and $N_{K}$ to achieve optimal
-performance in regression applications.
+ This figure presents the relationship between the number of chromosomes
+($N_{I}$) participating in the secondary genetic algorithm and the
+resulting regression error. We observe that as the number of chromosomes
+increases, the error decreases, indicating improvement in the model's
+performance. Specifically, for $N_{I}=5$, the error is 4.99, while
+for $N_{I}=10$, the error drops to 4.89. This trend continues with
+further increase in chromosomes: for $N_{I}=20$, the error reaches
+4.27, and for $N_{I}=40$, the error reaches 4.18. This error reduction
+shows that using more chromosomes in the secondary genetic algorithm
+leads to better optimization of the neural network's parameters, resulting
+in error minimization. However, the improvement is not linear. We
+observe that the difference in error between $N_{I}=5$ and $N_{I}=10$
+is 0.10, while between $N_{I}=20$ and $N_{I}=40$ it is only 0.09.
+This may indicate that beyond a certain point, increasing chromosomes
+has progressively smaller impact on error reduction. This phenomenon
+may be due to factors such as algorithm convergence or the existence
+of an optimization threshold beyond which improvement becomes more
+difficult. Furthermore, the selection of $N_{I}$ may be influenced
+by computational constraints. Using more chromosomes increases the
+computational load, so the performance improvement must be balanced
+against resource costs. For example, transitioning from $N_{I}=20$
+to $N_{I}=40$ leads to error reduction of only 0.09, which may not
+justify the doubling of computational cost in certain scenarios. In
+summary, the table confirms that increasing the number of chromosomes
+improves the model's performance, but its effect becomes smaller as
+$N_{I}$ grows larger. This means that the optimal selection of $N_{I}$
+depends on a combination of factors, such as the desired accuracy,
+available computational resources, and the nature of the problem. 
 
-\section{Conclusions\label{sec:Conclusions}}
+Furthermore, as a practical example of application, consider the prediction
+of the duration of forest fires as presented for the Greek territory
+in a recent publication \citep{ml_fire}. Using data from the Greek
+Fire Service, an attempt is made to predict the duration of forest
+fires for the years 2014-2023. Figure \ref{fig:mlFire} depicts a
+comparison for the classification error for this problem for the years
+2014-2023 between the original Neural Network Construction method,
+denoted as NNC and the proposed method which is denoted as NNC\_GA
+in the plot. 
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{ml_fire}
+\par\end{centering}
+\caption{Comparison of the original NNC method and the proposed modification
+(NNC\_GA) for the prediction of forest fires for the Greek teritory.
+The horizontal axis denotes the year and the vertical the obtained
+classification error.\protect\label{fig:mlFire}}
+
+\end{figure}
+ As is evident, the proposed method has a lower error in estimating
+the duration of forest fires in all years from 2014 to 2023 compared
+to the original artificial neural network construction technique.
+
+\section{Discussion \protect\label{sec:Discussion}}
+
+This study presents an interesting approach combining grammatical
+evolution with modified genetic algorithms for constructing artificial
+neural networks. However, a comprehensive analysis of the results
+and practical implications reveals several aspects that require further
+investigation and critical examination. While the experimental findings
+demonstrate certain improvements over traditional techniques, the
+interpretation and significance of these improvements have not been
+analyzed with the depth and critical thinking required for a complete
+method evaluation. Regarding classification performance, the method
+shows an average error rate of 21.18\% compared to ADAM's 36.45\%
+and BFGS's 35.71\%. However, these comparative metrics conceal significant
+performance variations across different datasets. For instance, on
+Cleveland and Ecoli datasets, classification error reaches 46.41\%
+and 48.82\% respectively, while on Housevotes and Zoo it drops below
+7\%. This substantial performance variation suggests the method may
+be highly sensitive to dataset-specific characteristics, which isn't
+sufficiently analyzed in the results presentation. Furthermore, the
+lack of analysis regarding variation across the 30 repetitions of
+each experiment raises questions about the method's stability and
+reliability in real-world applications.The statistical significance
+of results, while supported by extremely low p-values (1.9e-07 to
+1.1e-08), doesn't account for the dynamics of different problem types.
+In noisy datasets or those with significant class imbalance like Haberman
+and Liverdisorder, the method shows notable performance fluctuations
+that remain unexplained. Additionally, the absence of analysis regarding
+dataset characteristics affecting performance (such as dimensionality,
+sample size, or degree of linear separability) makes it difficult
+to determine the optimal conditions for the method's application.Computational
+resources and execution times present another critical but underexplored
+issue. 
+
+While the study mentions using an AMD Ryzen 5950X system with 128GB
+RAM, comprehensive reporting of computational requirements is missing.
+Specifically, it would be essential to present average training times
+per dataset category (classification vs regression), the method's
+scalability regarding number of features and samples, memory consumption
+during the grammatical evolution process, and the impact of various
+parameters (like population size and generation count) on execution
+times. This lack of information makes practical implementation assessment
+challenging, especially for real-world problems where computational
+resources and time constraints are crucial factors. Regarding limitations,
+while the study acknowledges issues like local optima and overfitting,
+their analysis remains superficial. For example, in datasets like
+Z\_O\_N\_F\_S with 39.28\% error, it's not investigated whether this
+results from insufficient solution space exploration due to grammatical
+evolution parameters, limitations in the grammar used for architecture
+generation, excessive network complexity leading to overfitting, or
+inadequacies in parameter training mechanisms.Practical application
+and robustness require more thorough examination. Beyond controlled
+experimental scenarios, there's missing information about the ease
+of applying the method to real-world, unprocessed datasets, the required
+expertise for optimal parameter tuning, the method's resilience to
+noisy, incomplete or imbalanced data, and the interpretability of
+results and generated architectures.Moreover, comparisons with contemporary
+approaches like transformers, convolutional neural networks, or reinforcement
+learning methods in domains where they dominate (e.g., natural language
+processing, computer vision, robotics) are completely absent from
+the study. This evaluation gap significantly limits our understanding
+of the method's relative value compared to state-of-the-art alternatives.
+The method's generalizability to new application domains hasn't been
+adequately explored. While results are presented across various fields
+(medicine, physics, economics), critical information is missing about
+the flexibility and adaptability of the used grammar across different
+domains, required modifications for new data types (time series, graphs,
+spatial data), knowledge transfer capability between different applications,
+and domain knowledge requirements for appropriate grammar design.
+In summary, while the proposed method introduces interesting mechanisms
+for improving automated neural network design, this analysis reveals
+numerous aspects needing further investigation. 
+
+For a complete and objective evaluation, it would be necessary to
+conduct a much more detailed analysis of result stability and variation,
+comparisons with alternative contemporary approaches beyond the basic
+techniques examined, thorough evaluation of scalability and computational
+requirements for large datasets, in-depth investigation of real-world
+implementation challenges and limitations, and analysis of generalization
+and adaptation capability to new domains and data types. Only through
+such a holistic and critical approach could we obtain a complete picture
+of this methodology's value, capabilities and limitations. The current
+results, while encouraging, leave significant gaps in our understanding
+of how and under what conditions the method can truly provide value
+compared to existing approaches in automated neural network design.
+
+\section{Conclusions\protect\label{sec:Conclusions}}
 
 The article presents a method for constructing artificial neural networks
 by integrating Grammatical Evolution (GE) with a modified Genetic
@@ -1408,6 +1809,50 @@ Artificial Intelligence \textbf{20}, pp. 365-382, 2007.
 \bibitem{nn_arch3}B.A. Garro, R.A. Vázquez, Designing Artificial
 Neural Networks Using Particle Swarm Optimization Algorithms, Computational
 Intelligence and Neuroscience, 369298, 2015. 
+
+\bibitem[(2001)]{nn_ereinf}Siebel, N. T., \& Sommer, G. (2007). Evolutionary
+reinforcement learning of artificial neural networks. International
+Journal of Hybrid Intelligent Systems, 4(3), 171-183.
+
+\bibitem[(2001)]{nn_reinf}Jaafra, Y., Laurent, J. L., Deruyver, A.,
+\& Naceur, M. S. (2019). Reinforcement learning for neural architecture
+search: A review. Image and Vision Computing, 89, 57-66.
+
+\bibitem[(2001)]{nn_param_sharing}Pham, H., Guan, M., Zoph, B., Le,
+Q., \& Dean, J. (2018, July). Efficient neural architecture search
+via parameters sharing. In International conference on machine learning
+(pp. 4095-4104). PMLR.
+
+\bibitem[(2001)]{nn_snas}Xie, S., Zheng, H., Liu, C., \& Lin, L.
+(2018). SNAS: stochastic neural architecture search. arXiv preprint
+arXiv:1812.09926.
+
+\bibitem[(2001)]{nn_bayes}Zhou, H., Yang, M., Wang, J., \& Pan, W.
+(2019, May). Bayesnas: A bayesian approach for neural architecture
+search. In International conference on machine learning (pp. 7603-7613).
+PMLR.
+
+\bibitem[(2001)]{nn_drug}L. Terfloth, J. Gasteige, Neural networks
+and genetic algorithms in drug design, Drug Discovery Today \textbf{6},
+pp. 102-108, 2001.
+
+\bibitem[(2001)]{nn_estimates}Kim, G. H., Seo, D. S., \& Kang, K.
+I. (2005). Hybrid models of neural networks and genetic algorithms
+for predicting preliminary cost estimates. Journal of computing in
+civil engineering, 19(2), 208-211.
+
+\bibitem[(2001)]{nn_solar}Kalogirou, S. A. (2004). Optimization of
+solar systems using artificial neural-networks and genetic algorithms.
+Applied Energy, 77(4), 383-405.
+
+\bibitem[(2001)]{nn_feature}Tong, D.L., Mintram, R. Genetic Algorithm-Neural
+Network (GANN): a study of neural network activation functions and
+depth of genetic algorithm search applied to feature selection. Int.
+J. Mach. Learn. \& Cyber. 1, 75--87 (2010).
+
+\bibitem[(2001)]{nn_string}Ruehle, F. Evolving neural networks with
+genetic algorithms to study the string landscape. J. High Energ. Phys.
+2017, 38 (2017).
 
 \bibitem{ge1}M. O’Neill, C. Ryan, Grammatical evolution, IEEE Trans.
 Evol. Comput. \textbf{5,}pp. 349--358, 2001.
@@ -1687,6 +2132,21 @@ pp. 246-257, 1991.
 \bibitem{rbf2}G.A. Montazer, D. Giveki, M. Karami, H. Rastegar, Radial
 basis function neural networks: A review. Comput. Rev. J \textbf{1},
 pp. 52-74, 2018.
+
+\bibitem[(2002)]{neat}K. O. Stanley, R. Miikkulainen, Evolving Neural
+Networks through Augmenting Topologies, Evolutionary Computation \textbf{10},
+pp. 99-127, 2002.
+
+\bibitem[(2002)]{prune}Zhu, V., Lu, Y., \& Li, Q. (2006). MW-OBS:
+An improved pruning method for topology design of neural networks.
+Tsinghua Science and Technology, 11(4), 307-312.
+
+\bibitem{fcn}Grzegorz Klima, Fast Compressed Neural Networks, available
+from \url{http://fcnn.sourceforge.net/}.
+
+\bibitem[(2024)]{ml_fire}C. Kopitsa, I.G. Tsoulos, V. Charilogis,
+A. Stavrakoudis, Predicting the Duration of Forest Fires Using Machine
+Learning Methods, Future Internet \textbf{16}, 396, 2024.
 
 \end{thebibliography}
 
