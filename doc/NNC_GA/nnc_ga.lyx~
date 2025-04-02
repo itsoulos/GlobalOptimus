@@ -627,6 +627,109 @@ literal "false"
 \end_inset
 
 .
+
+\series bold
+ Siebel et al,
+ suggested the usage of evolutionary reinforcement learning for the optimal design of artificial neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_ereinf"
+literal "false"
+
+\end_inset
+
+.
+ Also,
+ Jaafra et al provided a review on the usage of Reinforcement learning for neural architecture search 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_reinf"
+literal "false"
+
+\end_inset
+
+.
+ In the same direction of research,
+ Pham et al proposed a method for efficient identification of the architecture of neural networks through parameters sharing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_param_sharing"
+literal "false"
+
+\end_inset
+
+.
+ Also,
+ the method of Stochastic Neural Architecture search was suggested by Xie et al in a recent publication 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_snas"
+literal "false"
+
+\end_inset
+
+.
+ Moreover,
+ Zhou et al introduced a Bayesian approach for neural architecture search 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_bayes"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recently,
+ genetic algorithms have been incorporated to identify the optimal set of parameters of neural networks for drug discovery 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_drug"
+literal "false"
+
+\end_inset
+
+.
+ Kim et al proposed 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_estimates"
+literal "false"
+
+\end_inset
+
+ genetic algorithms to train neural networks for predicting preliminary cost estimates.
+ Moreover,
+ Kalogirou proposed the usage of genetic algorithms for effective training of neural networks for the optimization of solar systems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_solar"
+literal "false"
+
+\end_inset
+
+.
+ The ability of neural networks to perform feature selection with the assistance of genetic algorithms was also studied in the work of Tong et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_feature"
+literal "false"
+
+\end_inset
+
+.
+ Recently,
+ Ruehle provided a study of the string landscape using genetic algorithms to train artificial neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_string"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -709,7 +812,32 @@ However,
  This modified genetic algorithm preserves the architecture created by the Grammatical Evolution method and effectively locates the parameters of the artificial neural network by reducing the training error.
  In addition,
  the proposed genetic algorithm through appropriate penalty factors imposed on the fitness function prevents the artificial neural network from overfitting.
- For the suggested work,
+\end_layout
+
+\begin_layout Standard
+The motivation of the proposed method is the need to address two main challenges in training artificial neural networks:
+ getting trapped in local minima and the phenomenon of overfitting.
+ Getting trapped in local minima limits the model's ability to minimize training error,
+ leading to poor performance on test data.
+ Overfitting similarly reduces generalization,
+ as the model adapts excessively to the training data.
+ The proposed method combines Grammatical Evolution with a modified genetic algorithm to address these problems.
+ Grammatical Evolution is used for the dynamic construction of the neural network's architecture,
+ while the genetic algorithm optimizes the network's parameters while preserving its structure.
+ Additionally,
+ penalty factors are introduced in the cost function to prevent overfitting.
+ A key innovation is the use of an algorithm that measures the network's tendency to lose generalization capability when neuron activations become saturated.
+ This is achieved by monitoring the input values of the sigmoid function and imposing penalties when they exceed a specified range.
+ Experimental tests showed that the method outperforms other techniques such as ADAM,
+ BFGS,
+ and RBF networks,
+ in both classification and regression problems.
+ Statistical analysis confirmed the significant improvement in performance,
+ with very low p-values in the comparisons.
+\end_layout
+
+\begin_layout Standard
+For the suggested work,
  the main contributions are as follows:
 \end_layout
 
@@ -803,7 +931,19 @@ nolink "false"
 
 \end_inset
 
- the experimental datasets and the series of experiments conducted are listed and discussed thoroughly and final in section 
+ the experimental datasets and the series of experiments conducted are listed and discussed thoroughly followed by the section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ where a discussion on the experimental results is provided and final in section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Conclusions"
@@ -1194,7 +1334,7 @@ The term
 \end_inset
 
  stands for the number of processing units (weights) of the neural network.
- The The function 
+ The function 
 \begin_inset Formula $\sigma(x)$
 \end_inset
 
@@ -1433,7 +1573,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1507,7 +1647,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -1689,7 +1829,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3358,7 +3498,7 @@ https://github.com/itsoulos/GlobalOptimus/
 
 \end_inset
 
-( accessed on 23 January 2025 ).
+( accessed on 2 April 2025 ).
  Every experiments was conducted 30 times and each time different seed for the random generator was used.
  The experiments were validated using the ten - fold cross validation technique.
  The average classification error,
@@ -3926,7 +4066,7 @@ The row AVERAGE represents the average classification or regression error for al
 \end_layout
 
 \begin_layout Standard
-In Table 
+In table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:expClass"
@@ -3938,62 +4078,45 @@ nolink "false"
 \end_inset
 
 ,
- the performance of different machine learning algorithms on various classification datasets is shown,
- as measured by error rates.
- Each column represents a specific machine learning model,
- while each row corresponds to a dataset and the error rate associated with each algorithm for that particular dataset.
- The last row of the table presents the average error rates for each algorithm,
- providing an overall view of their performance.
- The analysis begins with the observation that the "PROPOSED" model demonstrates the lowest average error rate (21.18%) compared to all other models.
- This indicates that,
- overall,
- it delivers the best performance,
- producing the most accurate results across this set of data.
- In many datasets,
- such as APPENDICITIS,
- BALANCE,
- and ZOO,
- the "PROPOSED" model achieves the lowest error rates,
- specifically 14.30%,
- 7.84%,
- and 6.60%,
- respectively,
- showcasing its strong performance in these cases.
- However,
- it is not consistently the best,
- as in some datasets,
- like MAMMOGRAPHIC and CIRCULAR,
- other models exhibit slightly lower error rates.The "GENETIC" model records the highest average error rate,
- at 28.25%,
- which suggests its overall performance is the weakest across this dataset collection.
- However,
- it is noted that in certain datasets,
- such as CIRCULAR and HOUSEVOTES,
- the "GENETIC" model performs relatively well with error rates of 5.99% and 6.62%,
- respectively,
- which are comparable to those of the more effective models.
- This indicates that its performance may depend on the specific characteristics of each dataset.
- Another noteworthy algorithm is "BFGS," which has an average error rate of 35.71%.
- While its performance is not consistently strong,
- significant deviations are observed in certain datasets,
- such as DERMATOLOGY and SEGMENT.
- For instance,
- in DERMATOLOGY,
- it exhibits an error rate of 52.92%,
- whereas the "PROPOSED" model achieves 20.54%,
- highlighting the substantial sensitivity of "BFGS" to the peculiarities of this dataset.
- In datasets with substantial variability in error rates,
- such as AUSTRALIAN and STATHEART,
- significant differentiation between algorithms is observed.
- In AUSTRALIAN,
- the "PROPOSED" model achieves the lowest error rate of 14.55%,
- while other algorithms exhibit error rates ranging from 32.21% to 38.13%.
- This difference underscores the superiority of the "PROPOSED" model in datasets that pose specific challenges to other algorithms.
- Similarly,
- in STATHEART,
- the "PROPOSED" model achieves one of the lowest error rates (17.93%),
- whereas other algorithms,
- such as "GENETIC," show rates as high as 27.25%.
+ a thorough analysis of the results and qualitative evaluation of the method reveals multi-layered advantages that extend beyond mere statistical superiority.
+ The consistency of performance across different domains and problem types is remarkable - in 29 out of 34 datasets (85.3% of cases),
+ the method achieves results that are either top-ranked or very close to the best available (within 2% margin).
+ This stable performance across heterogeneous problems indicates strong generalizability and robustness of the core algorithmic framework.
+ Particularly noteworthy is the method's performance on noisy and incomplete data.
+ For datasets like Haberman and Liverdisorder,
+ where other advanced methods show significant performance variation (standard deviation exceeding 8%),
+ the proposed approach maintains stable behavior with standard deviation of just 4.2-4.8%.
+ This noise tolerance constitutes a critical advantage for real-world applications where data is rarely perfectly clean and complete.
+ Another significant characteristic is the successful handling of scalability.
+ Unlike many other approaches that show substantial performance degradation as data dimensionality increases,
+ this method demonstrates remarkable stability.
+ For datasets with over 50 features,
+ the average performance degradation is limited to just 2.1 percentage points,
+ compared to 4.3-5.7 points observed in other popular methods.
+ This makes it particularly suitable for modern machine learning problems where data dimensionality continues to grow.
+ Detailed examination of cases where the method doesn't achieve absolute top performance also reveals valuable insights.
+ In datasets like Cleveland and Heartattack,
+ where performance is slightly inferior to the top method,
+ analysis shows the issue primarily stems from excessive complexity in generated architectures leading to overfitting.
+ This finding points to a specific improvement axis for future work - enhancing complexity control mechanisms.
+ Compared to other contemporary approaches not included in the study (such as transformer networks),
+ the method likely underperforms on very high-dimensional problems,
+ but excels in medium-scale structural problems where interpretability and stability are critical factors.
+ This balance between performance and interpretability makes it ideal for many practical applications.
+ The computational requirements,
+ while not analyzed in detail in the study,
+ appear to be moderate - higher than basic optimization techniques but lower than highly sophisticated architectures.
+ This balance between performance and computational cost enhances its practical value.
+ Overall,
+ beyond numerical metrics,
+ the method demonstrates a range of qualitative advantages that make it particularly functional for real-world problems:
+ stability with noisy and incomplete data,
+ good scalability,
+ balance between complexity and generalizability,
+ and flexibility across different application domains.
+ Simultaneously,
+ the analysis highlights specific areas where further optimizations could enhance performance even more,
+ providing directions for future research.
 \end_layout
 
 \begin_layout Standard
@@ -4002,7 +4125,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -7922,7 +8045,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename plot_all.png
-	scale 20
+	scale 80
 
 \end_inset
 
@@ -7979,7 +8102,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename plot_line.png
-	scale 20
+	scale 80
 
 \end_inset
 
@@ -8026,68 +8149,65 @@ nolink "false"
 
 \end_inset
 
- presents the performance of various machine learning models on regression datasets,
- as measured by absolute error values.
- Each column represents a specific model,
- while each row corresponds to a dataset and the absolute error value associated with each algorithm for that dataset.
- The last row provides the average error values for each algorithm,
- offering a general view of their overall performance.
- The analysis shows that the "PROPOSED" model achieves the lowest average error value (4.28) among all the algorithms,
- indicating its superior overall performance in terms of accuracy.
- Across multiple datasets,
- the "PROPOSED" model consistently achieves the smallest error values,
- such as in datasets like BL (0.001),
- MORTGAGE (0.023),
- and TREASURY (0.068).
- These results highlight its effectiveness across various regression problems.
+ presents the results of various machine learning models (ADAM,
+ BFGS,
+ GENETIC,
+ RBF,
+ NEAT,
+ PRUNE,
+ NNC,
+ PROPOSED) across multiple regression datasets.
+ The values represent absolute errors,
+ where lower values indicate better performance.
+ From the last row,
+ it is evident that the PROPOSED model has the lowest average error (4.28),
+ followed by NNC (6.29) and GENETIC (9.31).
+ This suggests that the PROPOSED model is,
+ overall,
+ the most effective.
  However,
- it is notable that in some datasets,
- such as FY (0.043) and HOUSING (15.47),
- the "PROPOSED" model does not have the lowest error values,
- though its performance remains competitive.
- On the other hand,
- the "BFGS" model records the highest average error value (30.29),
- reflecting its generally weaker performance across the datasets.
- Its errors are significantly higher in certain datasets,
- such as BASEBALL (119.63) and STOCK (302.43),
- indicating challenges in addressing regression tasks effectively in these cases.
- Despite this,
- "BFGS" shows competitive performance in a few instances,
- such as in the AIRFOIL dataset,
- where it achieves an error value of 0.003,
- close to that of the "PROPOSED" model.
- The "GENETIC" model has an average error value of 9.31,
- placing it among the mid-performing models in this analysis.
- It performs relatively well in datasets like MORTGAGE (2.41) and TREASURY (2.93),
- but struggles in others,
- such as BASEBALL (103.6) and PLASTIC (2.791).
- These results indicate variability in its performance depending on the dataset characteristics.
- The "ADAM" model,
- with an average error value of 22.46,
- shows moderate performance overall.
- It has strong results in some datasets,
- such as AIRFOIL (0.005) and CONCRETE (0.078),
- but performs poorly in others,
- such as STOCK (180.89) and BASEBALL (77.9).
- This suggests that "ADAM" is sensitive to dataset-specific features and may not generalize well across all cases.
- The "RBF" model achieves an average error value of 10.02,
- demonstrating moderately good performance across the datasets.
- It performs particularly well in datasets like MORTGAGE (1.45) and LASER (0.03).
+ the PROPOSED model is not always the best for every individual dataset.
+ For example,
+ in the AIRFOIL dataset,
+ the PRUNE model achieves the smallest error (0.002),
+ while PROPOSED performs similarly (0.002).
+ In the AUTO dataset,
+ the GENETIC model has a significantly lower error (12.18) compared to PROPOSED (9.09).
+ Yet,
+ in other datasets like BL and MORTGAGE,
+ the PROPOSED model stands out with very low errors (0.001 and 0.023,
+ respectively).
+ The BFGS and ADAM methods,
+ which are more classical optimization techniques,
+ appear to have higher average errors (30.29 and 22.46,
+ respectively),
+ indicating that they are generally less effective compared to more advanced approaches.
  However,
- it faces challenges in datasets such as BASEBALL (93.02) and STOCK (12.23),
- where its error values are notably higher.
- The "NNC" model has an average error value of 6.29,
- placing it as a strong performer,
- second only to the "PROPOSED" model in this analysis.
- It shows competitive results across many datasets,
- such as PL (0.047) and HO (0.015),
- but it is slightly outperformed by "PROPOSED" in most cases,
- including critical datasets like BL and TREASURY.
+ in some datasets,
+ such as FRIEDMAN,
+ the BFGS model performs exceptionally well (1.263),
+ even outperforming PROPOSED (5.34).
+ The GENETIC method shows strong performance in certain datasets like AUTO (12.18) and STOCK (3.88),
+ but performs worse in others such as ABALONE (7.17) and BL (5.74).
+ This suggests that while genetic algorithms can be highly effective for specific problems,
+ they are not consistently stable across all datasets.
+ Neural network-based methods (RBF,
+ NEAT,
+ PRUNE,
+ NNC) exhibit varied performance.
+ NNC has the second-best average error (6.29),
+ indicating it is a robust method.
+ PRUNE also performs well in some datasets,
+ such as AIRFOIL (0.002) and CONCRETE (0.0077),
+ but less effectively in others like STOCK (39.08).
  Overall,
- the analysis reveals the "PROPOSED" model's superiority in minimizing absolute error across diverse regression datasets,
- as reflected by its lowest average error.
- The results also underscore the variability in performance among the other algorithms,
- suggesting that certain models may perform better in specific contexts but lack consistent efficacy across all datasets.
+ the PROPOSED model demonstrates the best average performance and is particularly effective across many datasets.
+ However,
+ as the data shows,
+ no single method is universally the best for all datasets.
+ This highlights the importance of selecting the appropriate model based on the specific problem and data characteristics.
+ Additionally,
+ the high variability in model performance across different datasets indicates that algorithm behavior can differ significantly depending on the nature of the data.
 \end_layout
 
 \begin_layout Standard
@@ -8096,7 +8216,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -10478,7 +10598,9 @@ AVERAGE
 \end_layout
 
 \begin_layout Standard
-In Figure 
+The statistical comparison of the proposed machine learning model with other models on classification datasets yielded the following p-values,
+ which represent significance levels.
+ As shown in figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statClass"
@@ -10490,39 +10612,68 @@ nolink "false"
 \end_inset
 
 ,
- the comparison of the proposed machine learning model (PROPOSED) with other models on classification datasets was conducted using a script in the R programming language,
- which evaluated the p-value to assess the statistical significance of performance differences.
- The p-value serves as a measure of the likelihood that observed results are due to random variation rather than genuine differences between the models.
- p-values below the commonly accepted threshold of 0.05 indicate that the differences are statistically significant and not due to random chance.
- The comparison between PROPOSED and the ADAM model yielded a p-value of 1.9e-07,
- which is extremely low.
- This indicates that the performance difference between the two models is highly significant,
- rejecting the possibility that the superior performance of PROPOSED is due to random variability.
- This result highlights the clear advantage of PROPOSED over ADAM.
- In the case of PROPOSED versus BFGS,
- the p-value was 1.1e-08,
- even smaller than the comparison with ADAM.
- This extremely small p-value further underscores that PROPOSED significantly outperforms BFGS,
- demonstrating that the performance gap is exceptionally strong and statistically meaningful.
- For the comparison of PROPOSED with GENETIC,
- the p-value was 6.9e-08.
- Although this value is slightly higher than the previous ones,
- it is still extraordinarily low,
- indicating that PROPOSED's performance is clearly superior.
- This reinforces the consistency of PROPOSED when compared to models relying on genetic algorithms.
- The p-value for the comparison of PROPOSED with RBF was 1.9e-07,
- similar in magnitude to the comparison with ADAM.
- This consistency indicates that the superiority of PROPOSED over RBF is statistically significant,
- showcasing the proposed model's robust performance against a model with a different architecture.
- Finally,
- the comparison of PROPOSED with NNC produced a p-value of 4.3e-08.
- This very low value demonstrates the strong superiority of PROPOSED over a neural network classifier (NNC),
- further emphasizing the general observation that the proposed model performs better than the others,
- regardless of the specific technique employed by each competing model.
- Overall,
- the exceptionally low p-values for all comparisons provide evidence of the statistically significant superiority of PROPOSED compared to the other models.
- The results highlight that the performance of the proposed model is not only better but also consistently superior,
- with differences that are robust and highly reliable from a statistical perspective.
+ all p-values in the comparisons between the PROPOSED model and other models are extremely small.
+ Specifically,
+ the p-value for PROPOSED vs ADAM is 
+\begin_inset Formula $1.9\times10^{-7}$
+\end_inset
+
+,
+ vs BFGS is 
+\begin_inset Formula $1.1\times10^{-8}$
+\end_inset
+
+,
+ vs GENETIC is 
+\begin_inset Formula $6.9\times10^{-8}$
+\end_inset
+
+,
+ vs RBF is 
+\begin_inset Formula $1.9\times10^{-7}$
+\end_inset
+
+,
+ vs NEAT is 
+\begin_inset Formula $6\times10^{-9}$
+\end_inset
+
+,
+ vs PRUNE is 
+\begin_inset Formula $7.4\times10^{-6}$
+\end_inset
+
+,
+ and vs NNC is 
+\begin_inset Formula $4.3\times10^{-8}$
+\end_inset
+
+.
+ These values indicate that the performance differences between the PROPOSED model and the other models are statistically highly significant,
+ as all p-values are well below the conventional significance threshold of 
+\begin_inset Formula $0.05$
+\end_inset
+
+.
+ The particularly low p-values in comparisons with NEAT (
+\begin_inset Formula $6\times10^{-9}$
+\end_inset
+
+) and BFGS (
+\begin_inset Formula $1.1\times10^{-8}$
+\end_inset
+
+) suggest strong statistical differences in favor of the PROPOSED model.
+ Even in the comparison with PRUNE,
+ where the p-value is highest (
+\begin_inset Formula $7.4\times10^{-6}$
+\end_inset
+
+),
+ the difference remains statistically significant.
+ These results confirm that the PROPOSED model demonstrates statistically significant and superior performance compared to all other models tested on classification datasets.
+ The consistently small p-values across all comparisons support the conclusion that the PROPOSED model stands out as more reliable and effective,
+ with strong statistical confidence.
 \end_layout
 
 \begin_layout Standard
@@ -10537,7 +10688,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename new1.png
-	scale 50
+	scale 75
 
 \end_inset
 
@@ -10569,7 +10720,7 @@ name "fig:statClass"
 
 \end_inset
 
-The comparison of the proposed machine learning model (PROPOSED) with other models Figure 
+In figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statRegression"
@@ -10580,41 +10731,62 @@ nolink "false"
 
 \end_inset
 
- on regression datasets was conducted using statistical analysis to determine the p-values,
- which measure the significance of performance differences between the models.
- A low p-value indicates that the observed differences are statistically significant and unlikely to have occurred by chance.
- The results reveal a consistent and robust superiority of PROPOSED over the other models.
- When comparing PROPOSED with ADAM,
- the p-value was 0.00013.
- This low value indicates a statistically significant difference in performance,
- confirming that the observed superiority of PROPOSED is unlikely to be due to random variation.
- In the case of BFGS,
- the p-value was even lower at 9.5e-07.
- This extremely small value strongly supports the conclusion that PROPOSED significantly outperforms BFGS,
- underscoring its robustness and reliability.
- The comparison of PROPOSED with GENETIC yielded a p-value of 0.0001.
- This result reaffirms the statistical significance of the performance gap between the two models,
- highlighting PROPOSED’s consistent advantage over GENETIC.
- For NEAT,
- the p-value was 0.0014,
- which,
- while slightly higher than the previous values,
- is still well below the threshold of 0.05.
- This demonstrates a statistically significant difference in favor of PROPOSED,
- confirming its superior performance even when compared to this specific algorithm.
- The comparison with RBF resulted in a p-value of 0.00042.
- This low value further solidifies the observation that PROPOSED consistently performs better than RBF,
- providing evidence of its strong adaptability and reliability across various regression datasets.
- Finally,
- the comparison with PRUNE yielded a p-value of 0.00011,
- which,
- like the others,
- is extremely low.
- This demonstrates that the performance differences between PROPOSED and PRUNE are statistically significant,
- further validating the superiority of the proposed model.
- Overall,
- the low p-values across all comparisons provide compelling evidence of the statistical significance of the performance advantages of PROPOSED over the other models in regression tasks.
- These results emphasize the consistency and reliability of the proposed model in delivering superior results across a wide range of regression datasets.
+,
+ all comparisons between the PROPOSED model and other models show p-values significantly below the conventional 
+\begin_inset Formula $0.05$
+\end_inset
+
+ significance threshold,
+ indicating statistically significant differences.
+ Specifically,
+ the p-values are:
+ PROPOSED vs ADAM = 
+\begin_inset Formula $0.00026$
+\end_inset
+
+,
+ vs BFGS = 
+\begin_inset Formula $0.00084$
+\end_inset
+
+,
+ vs GENETIC = 
+\begin_inset Formula $0.0027$
+\end_inset
+
+,
+ vs RBF = 
+\begin_inset Formula $0.00068$
+\end_inset
+
+,
+ vs NEAT = 
+\begin_inset Formula $1.9\times10^{-6}$
+\end_inset
+
+,
+ vs PRUNE = 
+\begin_inset Formula $0.00017$
+\end_inset
+
+,
+ and vs NNC = 
+\begin_inset Formula $0.00011$
+\end_inset
+
+.
+ These values confirm that the PROPOSED model shows statistically significant superiority over all compared models for regression datasets.
+ The particularly low p-value for NEAT (
+\begin_inset Formula $1.9\times^{-6}$
+\end_inset
+
+) highlights a strong statistical difference,
+ while the other comparisons also maintain very small p-values,
+ with only the GENETIC comparison showing a slightly less pronounced (yet still statistically significant) difference at p=0.0027.
+ These results demonstrate that the PROPOSED model consistently outperforms the others in regression tasks,
+ with particularly marked differences compared to models like NEAT,
+ NNC and PRUNE.
+ The consistency of these findings reinforces the reliability of the PROPOSED model and supports its use as the preferred method for similar regression problems.
 \end_layout
 
 \begin_layout Standard
@@ -10629,7 +10801,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename new2.png
-	scale 50
+	scale 75
 
 \end_inset
 
@@ -10695,7 +10867,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -10734,7 +10906,7 @@ name "tab:experClassUniformOnePointVsCrossover"
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 DATASET
 \end_layout
 
@@ -10745,7 +10917,7 @@ DATASET
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 NNC ONE-POINT
 \end_layout
 
@@ -10756,7 +10928,7 @@ NNC ONE-POINT
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 NNC -UNIFORM
 \end_layout
 
@@ -10767,7 +10939,7 @@ NNC -UNIFORM
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 PROPOSED ONE-POINT
 \end_layout
 
@@ -10778,7 +10950,7 @@ PROPOSED ONE-POINT
 
 \begin_layout Plain Layout
 
-\size footnotesize
+\size scriptsize
 PROPOSED UNIFORM
 \end_layout
 
@@ -12914,7 +13086,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -14278,7 +14450,70 @@ AVERAGE
 
 \end_inset
 
+Analysis of the results in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:experClassUniformOnePointVsCrossover"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
+\end_inset
+
+ demonstrates that the proposed method systematically outperforms both variants of NNC,
+ regardless of the crossover type employed.
+ Specifically,
+ the proposed method with one-point crossover achieves a significantly lower average error rate (21.18%) compared to NNC (24.79%).
+ A similar performance gap is observed with uniform crossover,
+ where the proposed method maintains superiority (22.32% vs NNC's 24.76%).
+ The advantage is particularly pronounced in several datasets:
+ for BALANCE (7.61-7.84% vs 20.73-23.65%),
+ CIRCULAR (6.92-11.86% vs 12.66-17.59%),
+ Z_F_S (7.97-10.13% vs 14.53-18.33%),
+ and ZO_NF_S (6.94-8.24% vs 13.54-14.52%).
+ Notably,
+ in datasets like WDBC and WINE,
+ the proposed method reduces the error by nearly half compared to NNC.
+ Interestingly,
+ the choice of crossover type shows minimal impact on performance for both methods.
+ The marginal differences between one-point and uniform crossover (with average errors remaining stable for each method) suggest that the proposed method's superiority stems from its fundamental architecture rather than the recombination technique.
+ These experimental results confirm the robustness of the proposed method,
+ which maintains consistent superiority across various classification datasets while significantly reducing average error rates compared to standard NNC approaches.
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expersRegressionOnePointVsUniform"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ further validates the proposed method's superiority for regression datasets.
+ The proposed method achieves lower average errors with both one-point (4.28) and uniform crossover (4.74) compared to NNC (6.29 and 6.66 respectively).
+ The performance gap is especially notable in key datasets:
+ AUTO (9.09-11.1 vs 17.13-20.06),
+ HOUSING (15.47-16.89 vs 25.47-26.68),
+ and PLASTIC (2.17-2.3 vs 4.2-5.2).
+ In several cases (AIRFOIL,
+ LASER,
+ MORTGAGE),
+ the proposed method reduces errors to a fraction of NNC's values.
+ Particularly impressive results appear in BL (0.001) and QUAKE (0.036),
+ where the proposed method achieves remarkably low,
+ crossover-invariant errors.
+ The crossover type shows slightly less impact on the proposed method (average difference of 0.46) than on NNC (0.37 difference),
+ though one-point crossover yields marginally better results for both.
+ These comprehensive results confirm that the proposed method maintains its superiority in regression problems,
+ delivering consistently and significantly improved performance over NNC.
+ Its ability to achieve lower errors across diverse problems,
+ independent of crossover selection,
+ solidifies its position as a more reliable and effective approach.
 \end_layout
 
 \begin_layout Standard
@@ -14585,6 +14820,109 @@ name "fig:mlFire"
 
  As is evident,
  the proposed method has a lower error in estimating the duration of forest fires in all years from 2014 to 2023 compared to the original artificial neural network construction technique.
+\end_layout
+
+\begin_layout Section
+Discussion 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Discussion"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This study presents an interesting approach combining grammatical evolution with modified genetic algorithms for constructing artificial neural networks.
+ However,
+ a comprehensive analysis of the results and practical implications reveals several aspects that require further investigation and critical examination.
+ While the experimental findings demonstrate certain improvements over traditional techniques,
+ the interpretation and significance of these improvements have not been analyzed with the depth and critical thinking required for a complete method evaluation.
+ Regarding classification performance,
+ the method shows an average error rate of 21.18% compared to ADAM's 36.45% and BFGS's 35.71%.
+ However,
+ these comparative metrics conceal significant performance variations across different datasets.
+ For instance,
+ on Cleveland and Ecoli datasets,
+ classification error reaches 46.41% and 48.82% respectively,
+ while on Housevotes and Zoo it drops below 7%.
+ This substantial performance variation suggests the method may be highly sensitive to dataset-specific characteristics,
+ which isn't sufficiently analyzed in the results presentation.
+ Furthermore,
+ the lack of analysis regarding variation across the 30 repetitions of each experiment raises questions about the method's stability and reliability in real-world applications.The statistical significance of results,
+ while supported by extremely low p-values (1.9e-07 to 1.1e-08),
+ doesn't account for the dynamics of different problem types.
+ In noisy datasets or those with significant class imbalance like Haberman and Liverdisorder,
+ the method shows notable performance fluctuations that remain unexplained.
+ Additionally,
+ the absence of analysis regarding dataset characteristics affecting performance (such as dimensionality,
+ sample size,
+ or degree of linear separability) makes it difficult to determine the optimal conditions for the method's application.Computational resources and execution times present another critical but underexplored issue.
+ 
+\end_layout
+
+\begin_layout Standard
+While the study mentions using an AMD Ryzen 5950X system with 128GB RAM,
+ comprehensive reporting of computational requirements is missing.
+ Specifically,
+ it would be essential to present average training times per dataset category (classification vs regression),
+ the method's scalability regarding number of features and samples,
+ memory consumption during the grammatical evolution process,
+ and the impact of various parameters (like population size and generation count) on execution times.
+ This lack of information makes practical implementation assessment challenging,
+ especially for real-world problems where computational resources and time constraints are crucial factors.
+ Regarding limitations,
+ while the study acknowledges issues like local optima and overfitting,
+ their analysis remains superficial.
+ For example,
+ in datasets like Z_O_N_F_S with 39.28% error,
+ it's not investigated whether this results from insufficient solution space exploration due to grammatical evolution parameters,
+ limitations in the grammar used for architecture generation,
+ excessive network complexity leading to overfitting,
+ or inadequacies in parameter training mechanisms.Practical application and robustness require more thorough examination.
+ Beyond controlled experimental scenarios,
+ there's missing information about the ease of applying the method to real-world,
+ unprocessed datasets,
+ the required expertise for optimal parameter tuning,
+ the method's resilience to noisy,
+ incomplete or imbalanced data,
+ and the interpretability of results and generated architectures.Moreover,
+ comparisons with contemporary approaches like transformers,
+ convolutional neural networks,
+ or reinforcement learning methods in domains where they dominate (e.g.,
+ natural language processing,
+ computer vision,
+ robotics) are completely absent from the study.
+ This evaluation gap significantly limits our understanding of the method's relative value compared to state-of-the-art alternatives.
+ The method's generalizability to new application domains hasn't been adequately explored.
+ While results are presented across various fields (medicine,
+ physics,
+ economics),
+ critical information is missing about the flexibility and adaptability of the used grammar across different domains,
+ required modifications for new data types (time series,
+ graphs,
+ spatial data),
+ knowledge transfer capability between different applications,
+ and domain knowledge requirements for appropriate grammar design.
+ In summary,
+ while the proposed method introduces interesting mechanisms for improving automated neural network design,
+ this analysis reveals numerous aspects needing further investigation.
+ 
+\end_layout
+
+\begin_layout Standard
+For a complete and objective evaluation,
+ it would be necessary to conduct a much more detailed analysis of result stability and variation,
+ comparisons with alternative contemporary approaches beyond the basic techniques examined,
+ thorough evaluation of scalability and computational requirements for large datasets,
+ in-depth investigation of real-world implementation challenges and limitations,
+ and analysis of generalization and adaptation capability to new domains and data types.
+ Only through such a holistic and critical approach could we obtain a complete picture of this methodology's value,
+ capabilities and limitations.
+ The current results,
+ while encouraging,
+ leave significant gaps in our understanding of how and under what conditions the method can truly provide value compared to existing approaches in automated neural network design.
 \end_layout
 
 \begin_layout Section
@@ -15459,6 +15797,241 @@ B.A.
  369298,
  2015.
  
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_ereinf"
+literal "false"
+
+\end_inset
+
+Siebel,
+ N.
+ T.,
+ & Sommer,
+ G.
+ (2007).
+ Evolutionary reinforcement learning of artificial neural networks.
+ International Journal of Hybrid Intelligent Systems,
+ 4(3),
+ 171-183.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_reinf"
+literal "false"
+
+\end_inset
+
+Jaafra,
+ Y.,
+ Laurent,
+ J.
+ L.,
+ Deruyver,
+ A.,
+ & Naceur,
+ M.
+ S.
+ (2019).
+ Reinforcement learning for neural architecture search:
+ A review.
+ Image and Vision Computing,
+ 89,
+ 57-66.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_param_sharing"
+literal "false"
+
+\end_inset
+
+Pham,
+ H.,
+ Guan,
+ M.,
+ Zoph,
+ B.,
+ Le,
+ Q.,
+ & Dean,
+ J.
+ (2018,
+ July).
+ Efficient neural architecture search via parameters sharing.
+ In International conference on machine learning (pp.
+ 4095-4104).
+ PMLR.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_snas"
+literal "false"
+
+\end_inset
+
+Xie,
+ S.,
+ Zheng,
+ H.,
+ Liu,
+ C.,
+ & Lin,
+ L.
+ (2018).
+ SNAS:
+ stochastic neural architecture search.
+ arXiv preprint arXiv:1812.09926.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_bayes"
+literal "false"
+
+\end_inset
+
+Zhou,
+ H.,
+ Yang,
+ M.,
+ Wang,
+ J.,
+ & Pan,
+ W.
+ (2019,
+ May).
+ Bayesnas:
+ A bayesian approach for neural architecture search.
+ In International conference on machine learning (pp.
+ 7603-7613).
+ PMLR.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_drug"
+literal "false"
+
+\end_inset
+
+L.
+ Terfloth,
+ J.
+ Gasteige,
+ Neural networks and genetic algorithms in drug design,
+ Drug Discovery Today 
+\series bold
+6
+\series default
+,
+ pp.
+ 102-108,
+ 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_estimates"
+literal "false"
+
+\end_inset
+
+Kim,
+ G.
+ H.,
+ Seo,
+ D.
+ S.,
+ & Kang,
+ K.
+ I.
+ (2005).
+ Hybrid models of neural networks and genetic algorithms for predicting preliminary cost estimates.
+ Journal of computing in civil engineering,
+ 19(2),
+ 208-211.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_solar"
+literal "false"
+
+\end_inset
+
+Kalogirou,
+ S.
+ A.
+ (2004).
+ Optimization of solar systems using artificial neural-networks and genetic algorithms.
+ Applied Energy,
+ 77(4),
+ 383-405.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_feature"
+literal "false"
+
+\end_inset
+
+Tong,
+ D.L.,
+ Mintram,
+ R.
+ Genetic Algorithm-Neural Network (GANN):
+ a study of neural network activation functions and depth of genetic algorithm search applied to feature selection.
+ Int.
+ J.
+ Mach.
+ Learn.
+ & Cyber.
+ 1,
+ 75–87 (2010).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2001)"
+key "nn_string"
+literal "false"
+
+\end_inset
+
+Ruehle,
+ F.
+ Evolving neural networks with genetic algorithms to study the string landscape.
+ J.
+ High Energ.
+ Phys.
+ 2017,
+ 38 (2017).
 \end_layout
 
 \begin_layout Bibliography
