@@ -66,7 +66,8 @@
 # include <PROBLEMS/vincent.h>
 # include <PROBLEMS/E_ev.h>
 /**
- * @brief The ProblemLoader class
+ * @brief The ProblemLoader class is used to load
+ * in a table all test problems in the distribution.
  */
 class ProblemLoader
 {
@@ -90,7 +91,7 @@ private:
 
 public:
     /**
-     * @brief ProblemLoader
+     * @brief ProblemLoader the constructor of the class
      */
     ProblemLoader();
     /**

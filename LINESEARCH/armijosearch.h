@@ -11,16 +11,20 @@ class ArmijoSearch : public LineSearch
 private:
     double ArmijoLambda;
 public:
+    /**
+     * @brief ArmijoSearch The constructor of the line search for problem p.
+     * @param p
+     */
     ArmijoSearch(Problem *p);
     /**
-     * @brief setLambda
+     * @brief setLambda Sets the lambda value.
      * @param l
      */
     void setLambda(double l);
     /**
      * @brief getDirection
      * @param x
-     * @return
+     * @return a new direction using line search.
      */
     virtual double getDirection(Data &x);
 };

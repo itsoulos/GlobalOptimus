@@ -4,6 +4,9 @@
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
 
+/**
+ * @brief The NelderMead class implements the Nelder Mead optimizer.
+ */
 class NelderMead : public Optimizer
 {
 private:

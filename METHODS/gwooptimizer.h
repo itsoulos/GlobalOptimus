@@ -2,6 +2,9 @@
 #define GWOOPTIMIZER_H
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
+/**
+ * @brief The GWOoptimizer class implements the Grey Wolf Optimizer.
+ */
 class GWOoptimizer : public Optimizer
 {
 private:
@@ -13,11 +16,30 @@ private:
     int iter;
     double sumMean;
 public:
+    /**
+     * @brief GWOoptimizer  The constructor of the method.
+     */
     GWOoptimizer();
+    /**
+     * @brief init  Initializes the optimizer.
+     */
     virtual void init();
+    /**
+     * @brief step Performs a step of GWO.
+     */
     virtual void step();
+    /**
+     * @brief terminated
+     * @return true when the GWO should be terminated.
+     */
     virtual bool terminated();
+    /**
+     * @brief showDebug Displays debug information.
+     */
     virtual void showDebug();
+    /**
+     * @brief done It is executed when GWO finishes.
+     */
     virtual void done();
     virtual ~GWOoptimizer();
 };

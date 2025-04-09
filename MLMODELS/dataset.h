@@ -3,158 +3,178 @@
 # include <OPTIMUS/problem.h>
 typedef vector<Data>   Matrix;
 
+/**
+ * @brief The Dataset class
+ */
 class Dataset
 {
 private:
-    // xpoint = > ta protypa
     Matrix xpoint;
-
-    //oi monadikes katigories sta protypa
     Data patternClass;
-    //sto pararadeigma tou wine sto patternClass mpainoune mesa treis times 0, 0.5, 1.0
-    /** **/
-    //
-    // ypoint = > exodos gia kathe protypo
     Data   ypoint;
-
 public:
+    /**
+     * @brief Dataset. Samples N point from problem p.
+     * @param p
+     * @param N
+     */
     Dataset(Problem *p,int N);
     /**
-     * @brief Dataset, i prokathorismeni synartisi dimioyrgias
+     * @brief Dataset, the Default constructor.
      */
-    Dataset(); // => default synartisi dimiourgias
+    Dataset();
     /**
-     * @brief Dataset, diabazei ta protypa apo to arxeio filename
-     * @param filaname
+     * @brief Dataset, reads data from filename.
+     * @param filename
      */
-    Dataset(QString filaname);
+    Dataset(QString filename);
 
     /**
-     * @brief setData, orizei ta protypa apo pinaka
-     * @param x,  o pinakas ton protypon
-     * @param y, oi exodoi gia kathe protypo
+     * @brief setData, sets the data values (x,y)
+     * @param x,  the patterns
+     * @param y,  the labels
      */
     void    setData(Matrix &x,Data &y);
+    /**
+     * @brief addPoint Adds a new point to the dataset.
+     * @param x
+     * @param y
+     */
     void    addPoint(Data &x,double y);
 
     /**
-     * @brief saveData Apothikeyei ta protypa kai tis exodous se arxeio.
+     * @brief saveData Saves dataset to filename.
      * @param filename
      */
     void    saveData(char *filename);
 
     /**
-     * @brief getXPoint, epistrefei to protypo se mia dedomeni thesi
-     * @param pos, i thesi toy protypou
-     * @return
+     * @brief getXPoint
+     * @param @pos
+     * @return the pattern in position pos.
      */
     Data    getXPoint(int pos) const;
 
     /**
-     * @brief getYPoint, epistrefei tin exodo enos protypou
-     * @param pos, i thesi tou protypou
-     * @return
+     * @brief getYPoint
+     * @param pos
+     * @return the label in position pos.
      */
     double  getYPoint(int pos) const;
 
     /**
-     * @brief maxx, epistrefei tin megisti timi gia to feature stin thesi pos
-     * @param pos, i thesi tou feature
-     * @return
+     * @brief maxx
+     * @param pos
+     * @return the maximum value for feature pos.
      */
     double  maxx(int pos) const;
 
     /**
-     * @brief minx, epistrefei tin elaxisti timi gia to feature stin thesi pos
-     * @param pos, i thesi tou feature
-     * @return
+     * @brief minx
+     * @param pos
+     * @return the minimum value for feature pos.
      */
     double  minx(int pos) const;
 
     /**
-     * @brief miny, Epistrefei tin elaxisti timi ton exodon
-     * @return
+     * @brief miny
+     * @return the minimum label.
      */
     double  miny() const;
 
     /**
-     * @brief maxy, Epistrefei tin megisti timi ton exodon
-     * @return
+     * @brief maxy
+     * @return the maximum label.
      */
     double  maxy() const;
 
     /**
-     * @brief meanx, Epistrefei tin mesi timi tou feature stin thesi pos
+     * @brief meanx
      * @param pos
-     * @return
+     * @return the median value for feature pos.
      */
     double  meanx(int pos) const;
 
     /**
-     * @brief stdx, epistrefei to standard deviation gia to feature stin
-     * thesi pos
+     * @brief stdx
      * @param pos
-     * @return
+     * @return the standard deviation for feature pos.
      */
     double  stdx(int pos) const;
 
     /**
-     * @brief meany, epistrefei ton meso oro ton exodon gia tis y times.
-     * @return
+     * @brief meany
+     * @return the median value for labels.
      */
     double  meany() const;
 
     /**
-     * @brief stdy, epistrefei to standard deviation ton exodon gia tis y times.
-     * @return
+     * @brief stdy
+     * @return the standard deviation for labels.
      */
     double  stdy() const;
 
     /**
-     * @brief count, epistrefei to plithos ton protypon sto dataset
-     * @return
+     * @brief count
+     * @return the number of features.
      */
     int     count() const;
 
     /**
-     * @brief dimension, epistrefei tin diastasi ton protypon (arithmos features)
-     * @return
+     * @brief dimension
+     * @return the pattern dimension.
      */
     int     dimension() const;
 
     /**
-     * @brief normalizeMinMax, kanonikopoiei to dataset
+     * @brief normalizeMinMax Normalizes dataset.
      */
     void    normalizeMinMax();
 
     /**
-     * @brief getPatternClass, epistrefei ton pinaka ton monadikon katigorion
-     * @return
+     * @brief getPatternClass
+     * @return the list of distinct classes.
      */
     Data    getPatternClass();
 
     /**
-     * @brief getClass, epistrefei tin katigoria gia to protypo stin thesi pos
-     * @param pos, i thesi tou protypou
-     * @return
+     * @brief getClass
+     * @param pos
+     * @return the nearest class for pattern in position pos.
      */
     double  getClass(int pos) const;
 
     /**
-     * @brief getClass, epistrefei tin katigoria stin opoia prepei na mpei i timi value
+     * @brief getClass
      * @param value
-     * @return
+     * @return the corresponding class for value (nearest class).
      */
-    double  getClass(double value)const;
-    vector<Data> getAllXpoint();
-    Data         getAllYpoint();
-    void        clearPoints();
+    double          getClass(double value)const;
     /**
-     * @brief makePatternClass, dimiourgei tis monadikes katigories pou yparxoun
-     * mesa sto dataset.
+     * @brief getAllXpoint
+     * @return a list with all patterns.
+     */
+    vector<Data>    getAllXpoint();
+    /**
+     * @brief getAllYpoint
+     * @return a list with all labels.
+     */
+    Data            getAllYpoint();
+    /**
+     * @brief clearPoints Removes all patterns and labels.
+     */
+    void            clearPoints();
+    /**
+     * @brief makePatternClass Creates the vector with the distinct classes of the problem.
      */
     void makePatternClass();
 
+    /**
+     * @brief setPoint Sets the pattern and the label for position pos.
+     * @param pos
+     * @param x
+     * @param y
+     */
     void    setPoint(int pos,Data &x,double y);
     ~Dataset();
 };

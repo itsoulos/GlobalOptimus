@@ -66,10 +66,7 @@ protected:
      */
     int functionCalls;
 public:
-    void setKnownOptimum(double value, const Data& location);
-        bool hasOptimum() const;
-        double getKnownOptimumValue() const;
-        Data getKnownOptimumLocation() const;
+
     /**
      * @brief Problem, the base constructor of the class
      * @param n, the problem dimension
@@ -180,23 +177,23 @@ public:
      */
     virtual QJsonObject done(Data &x);
     /**
-     * @brief getleftmargin
+     * @brief getleftmargin returns in x the left bound of the problem.
      * @param x
      */
     void    getleftmargin(double *x);
     /**
-     * @brief getrightmargin
+     * @brief getrightmargin returns in x the right bound of the problem.
      * @param x
      */
     void    getrightmargin(double *x);
     /**
      * @brief getDimension
-     * @return
+     * @return the dimension of the objective problem.
      */
     int     getDimension();
     /**
      * @brief getdimension
-     * @return
+     * @return the dimension of the objective problem.
      */
     int     getdimension();
     /**
@@ -206,20 +203,42 @@ public:
     void    randomize(int seed=1);
     /**
      * @brief randomDouble
-     * @return
+     * @return a random double in range [0,1].
      */
     double  randomDouble();
     /**
      * @brief getGradientCriterion
      * @param x1
      * @param x2
-     * @return
+     * @return true if the gradient criterion holds for x1,x2
      */
     bool     getGradientCriterion(Data &x1,Data &x2);
     /**
-     * @brief resetFunctionCalls
+     * @brief resetFunctionCalls Reset the counter used for function calls.
      */
     void    resetFunctionCalls();
+    /**
+     * @brief setKnownOptimum This method is used in testing. Sets
+     * the known location and value for the global minimum.
+     * @param value
+     * @param location
+     */
+    void    setKnownOptimum(double value, const Data& location);
+    /**
+     * @brief hasOptimum
+     * @return true if the problem has a known global optimum.
+     */
+    bool    hasOptimum() const;
+    /**
+     * @brief getKnownOptimumValue
+     * @return the known global minimum value.
+     */
+    double  getKnownOptimumValue() const;
+    /**
+     * @brief getKnownOptimumLocation
+     * @return the known global minimum location.
+     */
+    Data    getKnownOptimumLocation() const;
     /**
      * @brief ~Problem
      */

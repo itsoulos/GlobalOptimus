@@ -97,7 +97,9 @@
 #define WORD_CON 1 /*  the subspace minimization converged. */
 #define WORD_BND 2 /* the subspace minimization stopped at a bound. */
 #define WORD_TNT 3 /*  the truncated Newton step has been used. */
-
+/**
+ * @brief The Lbfgs class implements the Limited Memory BFGS local optimizer.
+ */
 class Lbfgs : public Optimizer
 {
 private:
@@ -214,12 +216,35 @@ private:
               double *, integer *, integer *);
 
 public:
+    /**
+     * @brief Lbfgs The constructor of the local method.
+     */
     Lbfgs();
+    /**
+     * @brief init Initializes the parameters of the LBFGS.
+     */
     virtual void init();
+    /**
+     * @brief step Performs a step of LBFGS.
+     */
     virtual void step();
+    /**
+     * @brief terminated
+     * @return true when LBFGS should be terminated.
+     */
     virtual bool terminated();
-    void setPoint(Data &x,double &y);
-    void getPoint(Data &x,double &y);
+    /**
+     * @brief setPoint Sets the initial point of the optimizer.
+     * @param x
+     * @param y
+     */
+    void    setPoint(Data &x,double &y);
+    /**
+     * @brief getPoint Returns the located local minimum.
+     * @param x
+     * @param y
+     */
+    void    getPoint(Data &x,double &y);
     virtual ~Lbfgs();
 };
 

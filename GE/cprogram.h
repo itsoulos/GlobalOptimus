@@ -4,6 +4,10 @@
 # include <GE/fparser.hh>
 # include <GE/program.h>
 # include <MLMODELS/model.h>
+/**
+ * @brief The Cprogram class implements a basic program
+ * in C - like language used in the Grammatical Evolution.
+ */
 class Cprogram : public Program
 {
 	protected:
@@ -24,15 +28,60 @@ class Cprogram : public Program
         virtual void			makeTerminals();
         virtual void			makeNonTerminals();
         virtual void			makeRules();
-	public:
+    public:
+        /**
+         * @brief Cprogram The constructor of the class.
+         * @param dim The input dimension
+         * @param m The used machine learning model
+         */
         Cprogram(int dim,Model *m);
+        /**
+         * @brief makeGrammar Creates the grammar of the program.
+         */
         void makeGrammar();
+        /**
+         * @brief Parse
+         * @param expr
+         * @return 1 if the program can be parsed from the grammar
+         */
 		int	Parse(string expr);
+        /**
+         * @brief Eval
+         * @param X
+         * @return the value of the program estimated at X
+         */
 		double	Eval(const double *X);
+        /**
+         * @brief EvalDeriv
+         * @param X
+         * @param pos
+         * @return the derivative of the program evaluated at X and
+         * for pos variable.
+         */
         double  EvalDeriv(const double *X,int pos);
+        /**
+         * @brief EvalDeriv2
+         * @param X
+         * @param pos
+         * @return the second derivative of the program evaluated at X and
+         * for pos variable.
+         */
         double  EvalDeriv2(const double *X,int pos);
-		int	EvalError();
-		Symbol	*getStartSymbol();
+        /**
+         * @brief EvalError
+         * @return 1 if there was an evaluation error in the parsing process.
+         */
+        int     EvalError();
+        /**
+         * @brief getStartSymbol
+         * @return  the start symbol of the grammar.
+         */
+        Symbol          *getStartSymbol();
+        /**
+         * @brief fitness
+         * @param genome
+         * @return the fitness value for chromosome genome.
+         */
         virtual double	fitness(vector<int> &genome);
         virtual ~Cprogram();
 };

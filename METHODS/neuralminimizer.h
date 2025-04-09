@@ -3,6 +3,9 @@
 
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
+/**
+ * @brief The NeuralMinimizer class implements the recently introduced method of Neural Minimizer.
+ */
 class NeuralMinimizer : public Optimizer
 {
 private:
@@ -28,13 +31,32 @@ private:
 
     Data minima;
 public:
+    /**
+     * @brief NeuralMinimizer The constructor of the class.
+     */
     NeuralMinimizer();
+    /**
+     * @brief terminated
+     * @return true when the method should be terminated.
+     */
     virtual bool terminated();
+    /**
+     * @brief step Performs a step of the method.
+     */
     virtual void step();
+    /**
+     * @brief init Initializes the samples used in the method.
+     */
     virtual void init();
+    /**
+     * @brief done It is called when the NeuralMinimizer terminates.
+     */
     virtual void done();
+    /**
+     * @brief showDebug Displays debug information.
+     */
     virtual void showDebug();
-    virtual         ~NeuralMinimizer();
+    virtual ~NeuralMinimizer();
 };
 
 #endif // NEURALMINIMIZER_H

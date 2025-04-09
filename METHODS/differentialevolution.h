@@ -3,6 +3,9 @@
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
 
+/**
+ * @brief The DifferentialEvolution class implements the Differential Evolution global optimizer.
+ */
 class DifferentialEvolution : public Optimizer
 {
 private:
@@ -20,13 +23,36 @@ private:
     int    sumItersCount = 0;
      vector<double> migrantWeights;
 public:
+    /**
+     * @brief DifferentialEvolution The constructor of the class.
+     */
     DifferentialEvolution();
+    /**
+     * @brief init Initializes the agents.
+     */
     virtual void init();
+    /**
+     * @brief step Performs a step of the method.
+     */
     virtual void step();
+    /**
+     * @brief terminated
+     * @return true if DE should be terminated.
+     */
     virtual bool terminated();
+    /**
+     * @brief showDebug Displays debug  information.
+     */
     virtual void showDebug();
+    /**
+     * @brief done Called when DE terminates.
+     */
     virtual void done();
-    void calculateMigrantWeights();
+    /**
+     * @brief calculateMigrantWeights Calculate migration weights
+     * for the migration de scheme.
+     */
+    void    calculateMigrantWeights();
     virtual ~DifferentialEvolution();
 
 };

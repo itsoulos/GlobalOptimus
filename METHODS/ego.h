@@ -2,6 +2,10 @@
 #define EGO_H
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/optimizer.h>
+
+/**
+ * @brief The EGO class implements the EEL optimizer.
+ */
 class EGO:  public Optimizer
 {
 
@@ -47,15 +51,48 @@ private:
     int mod1, mod2, mod3;
 
 public:
+    /**
+     * @brief EGO The constructor of the class.
+     */
     EGO();
+    /**
+     * @brief init Initializes the population.
+     */
     virtual void init();
-    double evaluate( vector<double>& solution, double& grouperBestFitness);
+    /**
+     * @brief evaluate
+     * @param solution
+     * @param grouperBestFitness
+     * @return the fitness of an item.
+     */
+    double  evaluate( vector<double>& solution, double& grouperBestFitness);
+    /**
+     * @brief step Performs a step of the method.
+     */
     virtual void step();
+    /**
+     * @brief done It is called when the optimizer finishes.
+     */
     virtual void   done();
+    /**
+     * @brief terminated
+     * @return true if the optimizer should be terminated.
+     */
     virtual bool terminated();
+    /**
+     * @brief Selection Sorts the population according to the fitness values.
+     */
     void    Selection();
-    void  CalcFitnessArray();
-    bool Feasibility(const vector<double>& solution);
+    /**
+     * @brief CalcFitnessArray Calculates the fitness values for all items.
+     */
+    void    CalcFitnessArray();
+    /**
+     * @brief Feasibility
+     * @param solution
+     * @return true if the solution is inside the bounds of the problem.
+     */
+    bool    Feasibility(const vector<double>& solution);
     virtual ~EGO();
 };
 

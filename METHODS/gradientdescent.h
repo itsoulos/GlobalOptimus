@@ -6,6 +6,9 @@
 # include <LINESEARCH/goldensearch.h>
 # include <LINESEARCH/armijosearch.h>
 
+/**
+ * @brief The GradientDescent class implements the gradient descent local optimizer.
+ */
 class GradientDescent : public Optimizer
 {
 public:
@@ -19,14 +22,46 @@ public:
     LineSearch *lt;
     QString lineSearchMethod;//available values: none, armijo, golden, fibonacci
 public:
+    /**
+     * @brief GradientDescent The constructor of the class.
+     */
     GradientDescent();
+    /**
+     * @brief init Initializes the parameters of the method.
+     */
     virtual void init();
+    /**
+     * @brief step Performs a step of the optimizer.
+     */
     virtual void step();
+    /**
+     * @brief terminated
+     * @return true when the optimizer should be finished.
+     */
     virtual bool terminated();
+    /**
+     * @brief updaterate Updates the search rate.
+     */
     void    updaterate();
+    /**
+     * @brief updatepoint Updates the current point.
+     */
     void    updatepoint();
+    /**
+     * @brief showDebug Displays debug information.
+     */
     virtual void showDebug();
+    /**
+     * @brief setPoint Sets the initial point.
+     * @param x
+     * @param y
+     */
     void    setPoint(Data &x,double &y);
+    /**
+     * @brief getPoint Returns the located local minimum.
+     * @param x
+     * @param y
+     */
     void    getPoint(Data &x,double &y);
     virtual ~GradientDescent();
 };

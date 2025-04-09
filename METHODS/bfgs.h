@@ -139,12 +139,35 @@ double *a,*xl,*xu,*xp,*b;
 long *iact;
 double *par,*w;
 public:
+    /**
+     * @brief Bfgs The constructor of the local optimizer.
+     */
     Bfgs();
+    /**
+     * @brief init Initializes the optimizer.
+     */
     virtual void init();
+    /**
+     * @brief step Performs a step of the method.
+     */
     virtual void step();
+    /**
+     * @brief terminated
+     * @return true when the optimizer should be terminated.
+     */
     virtual bool terminated();
-    void setPoint(Data &x,double &y);
-    void getPoint(Data &x,double &y);
+    /**
+     * @brief setPoint Sets the starting point of the optimizer.
+     * @param x
+     * @param y
+     */
+    void    setPoint(Data &x,double &y);
+    /**
+     * @brief getPoint Returns the located local minimum.
+     * @param x
+     * @param y
+     */
+    void    getPoint(Data &x,double &y);
     virtual ~Bfgs();
 };
 

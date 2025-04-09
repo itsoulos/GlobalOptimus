@@ -2,6 +2,10 @@
 #define COLLECTION_H
 # include "problem.h"
 
+/**
+ * @brief The Collection class implements a collection
+ * of points (x,y) used in various optimization methods.
+ */
 class Collection
 {
 private:
@@ -9,17 +13,21 @@ private:
     Data   ydata;
 public:
     /**
-     * @brief Collection Synartisi dimioyrgias
+     * @brief Collection The constructor of the class
      */
     Collection();
     /**
-     * @brief addPoint prosthetei ena neo simeio stin syllogi
+     * @brief addPointNoCheck This method adds (x,y) to the list of points
+     * without checking for existance of y value.
      * @param x
      * @param y
      */
-
     void    addPointNoCheck(Data &x,double &y);
-
+    /**
+     * @brief addPoint This method adds (x,y) to the list of points.
+     * @param x
+     * @param y
+     */
     void    addPoint(Data &x,double &y);
     /**
      * @brief getPoint Epistrefei ena simeio sto deigma
@@ -29,7 +37,7 @@ public:
      */
     void    getPoint(int pos,Data &x,double &y);
     /**
-     * @brief haveGraphMinima Epistrefei alithes an exei graph minima mesa sto deigma
+     * @brief haveGraphMinima Checks for the existance of a graph minima
      * @param x
      * @param y
      * @param distance
@@ -37,18 +45,18 @@ public:
      */
     bool    haveGraphMinima(Data &x,double &y,double distance);
     /**
-     * @brief resizeInFraction krataei ta fraction % kalytera simeia sto deigma
+     * @brief resizeInFraction Reduces the number of points to fraction percent.
      * @param fraction
      */
     void    resizeInFraction(double fraction);
     /**
-     * @brief getSize epistrefei to plithos ton simeion stin syllogi
-     * @return
+     * @brief getSize
+     * @return the size of the collection
      */
     int     getSize() const;
 
     /**
-     * @brief getDistance Eyklidia apostasi
+     * @brief getDistance Eyklidean distance between x and y.
      * @param x
      * @param y
      * @return
@@ -56,18 +64,34 @@ public:
     double  getDistance(Data &x,Data &y);
 
     /**
-     * @brief isPointIn epistrefei alithes an ena deigma yparxei idi mesa
+     * @brief isPointIn checks for existance of points.
      * @param x
      * @param y
-     * @return
+     * @return true if point (x,y) is in collection.
      */
     bool isPointIn(Data &x,double  &y);
-    /** Synartisi diagrafis
-     */
 
+    /**
+     * @brief replacePoint the point in position pos with (x,y)
+     * @param pos
+     * @param x
+     * @param y
+     */
     void    replacePoint(int pos,Data &x,double &y);
+    /**
+     * @brief getBestWorstValues return the minimum and the maximum
+     * values in collection.
+     * @param besty
+     * @param worsty
+     */
     void    getBestWorstValues(double &besty,double &worsty);
+    /**
+     * @brief sort This method sorts the point according to y values.
+     */
     void    sort();
+    /**
+     * @brief clear Remove any point in the collection.
+     */
     void    clear();
     ~Collection();
 };

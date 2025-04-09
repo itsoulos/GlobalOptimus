@@ -6,6 +6,9 @@
 #include <random>
 using namespace std;
 
+/**
+ * @brief The Model class implements an abstract class for Machine Learning models.
+ */
 class Model : public ParameterList
 {
 protected:

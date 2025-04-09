@@ -3,7 +3,9 @@
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/optimizer.h>
 
-
+/**
+ * @brief The Armadillo1 class implements the Giant Armadillo Optimizer.
+ */
 class Armadillo1: public Optimizer
 {
 private:
@@ -41,21 +43,61 @@ private:
     double similarityValue;
     int similarityCount;
     int iters;
-
-
-
 public:
+    /**
+     * @brief Armadillo1 The constructor of the class.
+     */
     Armadillo1();
-    double evaluate(const vector<double>& solution,double f, double& worstSpeed) ;
-    void initialize(vector<vector<double>>& population, int GaoCount);
-    void GAO(int GaoCount, vector<double>& bestValues);
+    /**
+     * @brief evaluate
+     * @param solution
+     * @param f
+     * @param worstSpeed
+     * @return The fitness value for an element.
+     */
+    double  evaluate(const vector<double>& solution,double f, double& worstSpeed) ;
+    /**
+     * @brief initialize Initialize the population.
+     * @param population
+     * @param GaoCount
+     */
+    void    initialize(vector<vector<double>>& population, int GaoCount);
+    /**
+     * @brief GAO Perform the main step.
+     * @param GaoCount
+     * @param bestValues
+     */
+    void    GAO(int GaoCount, vector<double>& bestValues);
+    /**
+     * @brief init Initializes the optimizer.
+     */
     virtual void init();
-    void CalcFitnessArray();
+    /**
+     * @brief CalcFitnessArray Calculate fitness values.
+     */
+    void    CalcFitnessArray();
+    /**
+     * @brief step Perform a step of the method.
+     */
     virtual void step();
+    /**
+     * @brief done Called when the optimizer finishes.
+     */
     virtual void   done();
+    /**
+     * @brief terminated
+     * @return true if the optimizer should be terminated.
+     */
     virtual bool terminated();
-     virtual void Selection();
+    /**
+     * @brief Selection Sorts the elements according to the fitness values.
+     */
+    virtual void Selection();
+    /**
+     * @brief showDebug Displays debug information.
+     */
     virtual void showDebug();
+
     virtual ~Armadillo1();
 };
 

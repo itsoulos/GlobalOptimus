@@ -2,6 +2,10 @@
 #define OFALGORITHM_H
 # include <OPTIMUS/problem.h>
 # include <OPTIMUS/optimizer.h>
+
+/**
+ * @brief The OFAlgorithm class
+ */
 class OFAlgorithm:  public Optimizer
 {
 
@@ -37,21 +41,21 @@ private:
     vector<vector<double>> newPopulation;
 public:
     OFAlgorithm();
-    double evaluate( vector<double>& solution, double& bestFitness);
-    double calculateK(int generation, int  maxGenerations) ;
+    double  evaluate( vector<double>& solution, double& bestFitness);
+    double  calculateK(int generation, int  maxGenerations) ;
     virtual void init();
-    double randomInRange();
-    void quicksort(vector<vector<double>>& population, vector<double>& fitness, int left, int right);
-    void updatePopulationByComparison(vector<vector<double>>& population, vector<double>& fitness,  vector<vector<double>>& children);
-    int PartitionPopulation(vector<vector<double>>& population, vector<double>& fitness, int left, int right);
-    bool BetterSolution(double fitness_xt, double fitness_xt1, int generation);
-    bool CheckFeasibility(const vector<double>& solution);
-    void CalcFitnessArray();
+    double  randomInRange();
+    void    quicksort(vector<vector<double>>& population, vector<double>& fitness, int left, int right);
+    void    updatePopulationByComparison(vector<vector<double>>& population, vector<double>& fitness,  vector<vector<double>>& children);
+    int     PartitionPopulation(vector<vector<double>>& population, vector<double>& fitness, int left, int right);
+    bool    BetterSolution(double fitness_xt, double fitness_xt1, int generation);
+    bool    CheckFeasibility(const vector<double>& solution);
+    void    CalcFitnessArray();
     virtual void step();
     virtual void   done();
     virtual bool terminated();
-    void Selection();
-    void ChildrenArray();
+    void    Selection();
+    void    ChildrenArray();
     virtual ~OFAlgorithm();
 };
 
