@@ -225,7 +225,7 @@ void runAllTests(int iterations) {
     int matchFound = 0;
     int triesCount = 0;
     QStringList methodList;
-    methodList<<"Multistart"<<"Armadillo"<<"Ofa"<<"Genetic"<<"iPso"<<"NelderMead"<<"DifferentialEvolution";
+    methodList<<"Multistart"<<"Armadillo"<<"Genetic"<<"iPso"<<"NelderMead"<<"DifferentialEvolution";
     for (int i = 0; i < methodName.size()-1; i++) {
         if(methodList.contains(methodName[i])==false) continue;
         qDebug() << "Running method: " << methodName[i];

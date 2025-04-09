@@ -1,7 +1,10 @@
 # The Optimus optimization package
 This projects proposes a programming tool written in ANSI C+ for global optimization problems. The main components of the software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to tackle the objective problem c)Parameterization of global optimization methods using user-defined parameters.
 The  documentation of each class in the package can be found at [manual](
-https://raw.githack.com/itsoulos/GlobalOptimus/master/MANUAL/docs/html/index.html)
+https://raw.githack.com/itsoulos/GlobalOptimus/master/MANUAL/docs/html/index.html) The manual files are located in the MANUAL subdirectory and the manual can be updated using the command 
+```
+doxygen doxyfile
+```
 #  Requirements
 1. A C++ compiler (GNU GCC is recommended).
 2. The GNU make utility
@@ -360,6 +363,22 @@ The following table presents the percentage of global minimum usin the previous 
 | Rastrigin    | 83.81%    |
 | Griewank2    | 81.43%    |
 | Griewank10    |62.86%    |
+
+## Automatic testing
+The distribution includes three distinct scripts to perform automatic tests for functions with known global optimum
+1. The script single_test.sh that is used to apply a series of optimization methods to a selected problem. The user can invoke this script using the following command
+```
+./single_test.sh bf1
+```
+This line will apply a series of optimization methods to bf1 test function and will be reported the produced results.
+2. The script all_test.sh is used to apply the series of optimization methods to all test problems having known global minimum. The user can invoke this script using the following command:
+```
+./all_test.sh
+``` 
+3. The script install_and_test.sh is used to compile the software using the qmake utility and test the problem provided as its first argument. The user can invoke this script as in the following example:
+```
+./install_and_test.sh bf2
+```
 
 ## The script runfunmin.sh
 runfunmin.sh is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
