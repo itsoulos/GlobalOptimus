@@ -1,5 +1,7 @@
 # The Optimus optimization package
 This projects proposes a programming tool written in ANSI C+ for global optimization problems. The main components of the software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to tackle the objective problem c)Parameterization of global optimization methods using user-defined parameters.
+The  documentation of each class in the package can be found at [manual](
+https://raw.githack.com/itsoulos/GlobalOptimus/master/MANUAL/docs/html/index.html)
 #  Requirements
 1. A C++ compiler (GNU GCC is recommended).
 2. The GNU make utility
