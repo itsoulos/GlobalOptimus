@@ -1,6 +1,6 @@
 # The Optimus optimization package
 This projects proposes a programming tool written in ANSI C+ for global optimization problems. The main components of the software are: a) Coding of the objective problem in a high level language such as ANSI C++ b) Incorporation of many global optimization techniques to tackle the objective problem c)Parameterization of global optimization methods using user-defined parameters.
-The  documentation of each class in the package can be found at [manual](
+The  documentation of each class in the package can be found in [the manual](
 https://raw.githack.com/itsoulos/GlobalOptimus/master/MANUAL/docs/html/index.html) The manual files are located in the MANUAL subdirectory and the manual can be updated using the command 
 ```
 doxygen doxyfile
@@ -238,17 +238,18 @@ This line optimizes the userproblem with the Genetic Algorithm optimizer.
 
 
 ## Testing
+> See also [Automatic Testing](#automatic-testing)
+
 The main executable GlobalOptimus has a series of command line options that will be used to optimize the objective functions located under PROBLEMS subdirectory.
 Also, the program can be used for testing puproses in order to validate the efficiency of the implemeted global optimization methods as well as 
 it can also be used to verify the correctness of writing any test function.  The command line options of the GlobalOptimus are divided into 3 categories:
 1. Global options. These parameters configure the overall behavior of the software and begin with the prefix opt in their name. Among these, one can identify the following:
-
-    a. --opt_problem. This option is used to define the objective function to be used.
-    b. --opt_method. This option determines the global optimization method to be used during optimization. 
-    c. --opt_iters. This parameter defines the number of different executions for the global optimization method chosen by the user. With this option, the  stability of the selected  global optimization can be measured in the location of the global minimum.
-    d. --opt_debug. This option has two values: yes and no. If the used pass the value yes, then the program will print debug messages for every used global optimization method.
-    e. --opt_localsearch. This option is used to select the local optimization method that will be used by the global optimizer.
-    f. --opt_sampler. This option sets the sampling technique used in a series of global optimization methods, such as genetic algorithm, pso, multistart etc. The available values are: **uniform**, **maxwell**, **triangular**, **mlp**, **rbf**, **kmeans**.
+    - `--opt_problem`: This option is used to define the objective function to be used.
+    - `--opt_method`: This option determines the global optimization method to be used during optimization. 
+    - `--opt_iters`: This parameter defines the number of different executions for the global optimization method chosen by the user. With this option, the  stability of the selected  global optimization can be measured in the location of the global minimum.
+    - `--opt_debug`: This option has two values: yes and no. If the used pass the value yes, then the program will print debug messages for every used global optimization method.
+    - `--opt_localsearch`: This option is used to select the local optimization method that will be used by the global optimizer.
+    - `--opt_sampler`: This option sets the sampling technique used in a series of global optimization methods, such as genetic algorithm, pso, multistart etc. The available values are: **uniform**, **maxwell**, **triangular**, **mlp**, **rbf**, **kmeans**.
 
 
 2. Optimizer options. All global optimization techniques included in this software use a series of parameters to improve their performance. For example, the user can set the number of chromosomes to 200 in the genetic algorithm with the parameter --gen_count=200. The list with all parameters used by the global optimization methods can be printed using the following command:
@@ -371,6 +372,7 @@ The distribution includes three distinct scripts to perform automatic tests for 
 ./single_test.sh bf1
 ```
 This line will apply a series of optimization methods to bf1 test function and will be reported the produced results.
+
 2. The script all_test.sh is used to apply the series of optimization methods to all test problems having known global minimum. The user can invoke this script using the following command:
 ```
 ./all_test.sh
@@ -381,7 +383,7 @@ This line will apply a series of optimization methods to bf1 test function and w
 ```
 
 ## The script runfunmin.sh
-runfunmin.sh is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
+`runfunmin.sh` is a script used to run the GlobalOptimus application, which is an optimization platform. The script is designed to provide flexibility, allowing the selection of various optimization methods, local searches, sampling methods, and termination criteria.
 This script can be used to automate experiments on functions and to define the parameters of each global optimization method. By changing a series of simple variables contained within it, the user can facilitate the execution of the required experiments and accelerate their implementation.
 
 **runfunmin.sh uses different parameters to:** 
