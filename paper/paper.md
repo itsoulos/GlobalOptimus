@@ -102,6 +102,7 @@ Method   |  DESCRIPTION |
 
 A flowchart of any used optimization process provided below:
 
+
 ![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
 
 An example run for the Rastrigin function and the Genetic algorithm is outlined in \autoref{FIG:rastrigin}.
