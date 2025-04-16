@@ -49,11 +49,11 @@ Finally, Gurobi is an extremely powerful tool for mathematical optimization, but
 
 # Usage of the Software 
 <p style="text-align: justify;">
-The software is compiled using the QT library, available from  https://qt.io. The researcher should code their objective function and a number of other mandatory functions in the C++ programming language, specifying the dimension of the objective function and the bounds of the function domain. Subsequently, they can select a global optimization method to apply to the problem from a wide range of available methods.</p>
+The software is compiled using the QT library, available from  [Qt site](https://qt.io) . The researcher should code their objective function and a number of other mandatory functions in the C++ programming language, specifying the dimension of the objective function and the bounds of the function domain. Subsequently, they can select a global optimization method to apply to the problem from a wide range of available methods.</p>
 
 In addition, the user can create his own objective function by implementing the methods of category `UserProblem`,
 the methods of which are presented in the following diagram.
-![The diagram of the user defined problem UserProblem \label{FIG:userproblem}](userproblem.png){width= 50% }
+![The diagram of the user defined problem UserProblem \label{FIG:userproblem}](userproblem.png)
 
 ## Implemented global optimization methods
 <p style="text-align: justify?">
@@ -100,10 +100,10 @@ Method   |  DESCRIPTION |
 |    **done()**    |   This function will be called when the optimization method terminates.|                                       
 |   **~UserMethod()**     |    This is the destructor of the optimization method.  |                                            
 
-A flowchart of any used optimization process is outlined in \autoref{FIG:optimization}.
+A flowchart of any used optimization process provided below:
 
 
-![The diagram of the optimization process \label{FIG:optimization}](usermethod.png){width= 50% }
+![The diagram of the optimization process \label{FIG:optimization}](usermethod.png)
 
 An example run for the Rastrigin function and the Genetic algorithm is outlined in \autoref{FIG:rastrigin}.
 
