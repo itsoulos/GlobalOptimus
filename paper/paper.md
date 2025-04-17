@@ -53,7 +53,9 @@ The software is compiled using the QT library, available from  [Qt main url](htt
 
 In addition, the user can create his own objective function by implementing the methods of category `UserProblem`,
 the methods of which are presented in the following diagram.
-![The diagram of the user defined problem UserProblem. ](userproblem.png) { width=75% }
+
+![The diagram of the user defined problem UserProblem ](userproblem.png){ width=40% }
+
 
 ## Implemented global optimization methods
 <p style="text-align: justify?">
