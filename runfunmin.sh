@@ -31,6 +31,9 @@ then
 elif [ $METHOD = "ACOP" ]
 then
 	METHODPARAMS="--population=500 --maxiters=200 --localsearchRate=0.00 --subPopulation=10 --subPopEnable=1 --prop=1 --propagationNumber=1 --propagationMethod=NtoN --propagationRate=1"
+elif [ $METHOD = "EO" ]
+then
+	METHODPARAMS="--population=200 --maxiters=200 --localsearchRate=0.02 --technique=0 --reject=0"
 elif [ $METHOD = "NelderMead" ]
 then
 #nm_population: number of items in simplex

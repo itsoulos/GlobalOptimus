@@ -48,6 +48,8 @@ MethodLoader::MethodLoader()
     methodName<<"SAOP";
     method<<new ACOP;
     methodName<<"ACOP";
+    methodName<<"EO";
+    method<<new EO;
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

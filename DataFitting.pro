@@ -35,6 +35,7 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
+	METHODS/eo.cpp \
     METHODS/acop.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
@@ -115,6 +116,7 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
+    METHODS/eo.h \
     METHODS/acop.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \

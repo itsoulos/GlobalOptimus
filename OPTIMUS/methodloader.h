@@ -24,6 +24,7 @@
 # include <METHODS/jDElsgo.h>
 # include <METHODS/saop.h>
 # include <METHODS/acop.h>
+# include <METHODS/eo.h>
 # include <QStringList>
 # include <QJsonObject>
 /**

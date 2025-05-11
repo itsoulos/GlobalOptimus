@@ -27,6 +27,7 @@ SOURCES += \
         GE/rule.cc \
         GE/symbol.cc \
 	GE/integeranneal.cpp \
+	METHODS/eo.cpp \
     METHODS/acop.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
@@ -165,6 +166,7 @@ HEADERS += \
     GE/rule.h \
     GE/symbol.h \
     GE/integeranneal.h\
+    METHODS/eo.h \
     METHODS/acop.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \

@@ -48,6 +48,7 @@ SOURCES += \
     GE/rule.cc \
     GE/ruleprogram.cpp \
     GE/symbol.cc \
+    METHODS/eo.cpp \
     METHODS/acop.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
@@ -191,6 +192,7 @@ HEADERS += \
     GE/rule.h \
     GE/ruleprogram.h \
     GE/symbol.h \
+    METHODS/eo.h \
     METHODS/acop.h \
     METHODS/ego.h \
     METHODS/hybridmethod.h \

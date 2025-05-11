@@ -1,0 +1,1595 @@
+%% LyX 2.4.3 created this file.  For more info, see https://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+\usepackage[utf8]{inputenc}
+\usepackage{cprotect}
+\usepackage{float}
+\usepackage{url}
+\usepackage{varwidth}
+\usepackage{amsmath}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+
+\Title{Next-Gen Evolutionary Algorithms: A Modified Differential Evolution
+Approach}
+
+\TitleCitation{Next-Gen Evolutionary Algorithms: A Modified Differential Evolution
+Approach}
+
+\Author{Anna Maria Gianni$^{1}$, Ioannis G. Tsoulos$^{2,*}$ , Vasileios
+Charilogis$^{3}$ and Glykeria Kyrou$^{4}$}
+
+\AuthorNames{A.M. Gianni, Ioannis G. Tsoulos, Vasileios Charilogis and Glykeria
+Kyrou}
+
+\AuthorCitation{Gianni A.M.; Tsoulos, I.G.; Charilogis, V. ;Kyrou, G.}
+
+
+\address{$^{1}$\quad{}Department of Informatics and Telecommunications,
+University of Ioannina, 47150 Kostaki Artas, Greece; am.gianni@uoi.gr\\
+$^{2}$\quad{}Department of Informatics and Telecommunications, University
+of Ioannina, 47150 Kostaki Artas, Greece; itsoulos@uoi.gr\\
+$^{3}$\quad{}Department of Informatics and Telecommunications, University
+of Ioannina, 47150 Kostaki Artas, Greece; v.charilog@uoi.gr\\
+$^{4}$\quad{}Department of Informatics and Telecommunications, University
+of Ioannina, 47150 Kostaki Artas, Greece; g.kyrou@uoi.gr}
+
+
+\corres{Correspondence: itsoulos@uoi.gr}
+
+
+\abstract{This paper presents an innovative optimization algorithm based on
+Differential Evolution (DE) that combines advanced mutation techniques
+with intelligent termination mechanisms. The proposed algorithm is
+designed to address the main limitations of classical DE, offering
+enhanced performance for complex optimization problems. The core scientific
+contribution of this research focuses on three key aspects. First,
+we develop a hybrid dual-strategy mutation system where the first
+strategy emphasizes exploration of the solution space through monitoring
+of the optimal solution, while the second strategy focuses on exploitation
+of promising regions using dynamically weighted differential terms.
+This dual mechanism ensures a balanced approach between discovering
+new solutions and improving existing ones. Second, the algorithm incorporates
+a novel Majority Dimension Mechanism that evaluates candidate solutions
+through dimension-wise comparison with elite references (best sample
+and worst sample). This mechanism dynamically guides the search process
+by determining whether to intensify local exploitation or initiate
+global exploration based on majority voting across all dimensions.
+Third, the work presents numerous new termination rules based on quantitative
+evaluation of metric value homogeneity. These rules extend beyond
+traditional convergence checks by incorporating multidimensional criteria
+that consider both solution distribution and evolutionary dynamics.
+This system enables more sophisticated and adaptive decision-making
+regarding the optimal stopping point of the optimization process.
+The methodology is validated through extensive experimental procedures
+covering a wide range of optimization problems. The results demonstrate
+significant improvements in both solution quality and computational
+efficiency, particularly for high-dimensional problems with numerous
+local optima. The algorithm's practical applications span multiple
+domains of modern technology and science. In engineering design, it
+demonstrates capability for solving complex parametric optimization
+problems. For artificial intelligence and machine learning, it provides
+a powerful tool for automated hyperparameter tuning. Additionally,
+the method finds applications in economic modeling and biological
+systems analysis. The study concludes with a critical analysis of
+the proposed method's advantages and limitations, along with suggestions
+for future research directions. Special emphasis is placed on extending
+the algorithm for dynamic optimization problems and integrating deep
+learning techniques for automated parameter configuration. The research
+findings highlight the proposed algorithm's potential as a high-performance
+tool for solving complex optimization challenges in contemporary scientific
+and technological contexts.}
+
+
+\keyword{Optimization; Differential Evolution; Evolutionary Algorithms; Global
+Optimization; Adaptive Termination; Mutation Strategies; Metaheuristics;}
+
+\DeclareTextSymbolDefault{\textquotedbl}{T1}
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+%% Variable width box for table cells
+\newenvironment{cellvarwidth}[1][t]
+    {\begin{varwidth}[#1]{\linewidth}}
+    {\@finalstrut\@arstrutbox\end{varwidth}}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%  LaTeX support: latex@mdpi.com 
+%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+
+%=================================================================
+
+
+% For posting an early version of this manuscript as a preprint, you may use "preprints" as the journal and change "submit" to "accept". The document class line would be, e.g., \documentclass[preprints,article,accept,moreauthors,pdftex]{mdpi}. This is especially recommended for submission to arXiv, where line numbers should be removed before posting. For preprints.org, the editorial staff will make this change immediately prior to posting.
+
+%--------------------
+% Class Options:
+%--------------------
+%----------
+% journal
+%----------
+% Choose between the following MDPI journals:
+% acoustics, actuators, addictions, admsci, adolescents, aerospace, agriculture, agriengineering, agronomy, ai, algorithms, allergies, alloys, analytica, animals, antibiotics, antibodies, antioxidants, applbiosci, appliedchem, appliedmath, applmech, applmicrobiol, applnano, applsci, aquacj, architecture, arts, asc, asi, astronomy, atmosphere, atoms, audiolres, automation, axioms, bacteria, batteries, bdcc, behavsci, beverages, biochem, bioengineering, biologics, biology, biomass, biomechanics, biomed, biomedicines, biomedinformatics, biomimetics, biomolecules, biophysica, biosensors, biotech, birds, bloods, blsf, brainsci, breath, buildings, businesses, cancers, carbon, cardiogenetics, catalysts, cells, ceramics, challenges, chemengineering, chemistry, chemosensors, chemproc, children, chips, cimb, civileng, cleantechnol, climate, clinpract, clockssleep, cmd, coasts, coatings, colloids, colorants, commodities, compounds, computation, computers, condensedmatter, conservation, constrmater, cosmetics, covid, crops, cryptography, crystals, csmf, ctn, curroncol, currophthalmol, cyber, dairy, data, dentistry, dermato, dermatopathology, designs, diabetology, diagnostics, dietetics, digital, disabilities, diseases, diversity, dna, drones, dynamics, earth, ebj, ecologies, econometrics, economies, education, ejihpe, electricity, electrochem, electronicmat, electronics, encyclopedia, endocrines, energies, eng, engproc, ent, entomology, entropy, environments, environsciproc, epidemiologia, epigenomes, est, fermentation, fibers, fintech, fire, fishes, fluids, foods, forecasting, forensicsci, forests, foundations, fractalfract, fuels, futureinternet, futureparasites, futurepharmacol, futurephys, futuretransp, galaxies, games, gases, gastroent, gastrointestdisord, gels, genealogy, genes, geographies, geohazards, geomatics, geosciences, geotechnics, geriatrics, hazardousmatters, healthcare, hearts, hemato, heritage, highthroughput, histories, horticulturae, humanities, humans, hydrobiology, hydrogen, hydrology, hygiene, idr, ijerph, ijfs, ijgi, ijms, ijns, ijtm, ijtpp, immuno, informatics, information, infrastructures, inorganics, insects, instruments, inventions, iot, j, jal, jcdd, jcm, jcp, jcs, jdb, jeta, jfb, jfmk, jimaging, jintelligence, jlpea, jmmp, jmp, jmse, jne, jnt, jof, joitmc, jor, journalmedia, jox, jpm, jrfm, jsan, jtaer, jzbg, kidney, kidneydial, knowledge, land, languages, laws, life, liquids, literature, livers, logics, logistics, lubricants, lymphatics, machines, macromol, magnetism, magnetochemistry, make, marinedrugs, materials, materproc, mathematics, mca, measurements, medicina, medicines, medsci, membranes, merits, metabolites, metals, meteorology, methane, metrology, micro, microarrays, microbiolres, micromachines, microorganisms, microplastics, minerals, mining, modelling, molbank, molecules, mps, msf, mti, muscles, nanoenergyadv, nanomanufacturing, nanomaterials, ncrna, network, neuroglia, neurolint, neurosci, nitrogen, notspecified, nri, nursrep, nutraceuticals, nutrients, obesities, oceans, ohbm, onco, oncopathology, optics, oral, organics, organoids, osteology, oxygen, parasites, parasitologia, particles, pathogens, pathophysiology, pediatrrep, pharmaceuticals, pharmaceutics, pharmacoepidemiology, pharmacy, philosophies, photochem, photonics, phycology, physchem, physics, physiologia, plants, plasma, pollutants, polymers, polysaccharides, poultry, powders, preprints, proceedings, processes, prosthesis, proteomes, psf, psych, psychiatryint, psychoactives, publications, quantumrep, quaternary, qubs, radiation, reactions, recycling, regeneration, religions, remotesensing, reports, reprodmed, resources, rheumato, risks, robotics, ruminants, safety, sci, scipharm, seeds, sensors, separations, sexes, signals, sinusitis, skins, smartcities, sna, societies, socsci, software, soilsystems, solar, solids, sports, standards, stats, stresses, surfaces, surgeries, suschem, sustainability, symmetry, synbio, systems, taxonomy, technologies, telecom, test, textiles, thalassrep, thermo, tomography, tourismhosp, toxics, toxins, transplantology, transportation, traumacare, traumas, tropicalmed, universe, urbansci, uro, vaccines, vehicles, venereology, vetsci, vibration, viruses, vision, waste, water, wem, wevj, wind, women, world, youth, zoonoticdis 
+
+%---------
+% article
+%---------
+% The default type of manuscript is "article", but can be replaced by: 
+% abstract, addendum, article, book, bookreview, briefreport, casereport, comment, commentary, communication, conferenceproceedings, correction, conferencereport, entry, expressionofconcern, extendedabstract, datadescriptor, editorial, essay, erratum, hypothesis, interestingimage, obituary, opinion, projectreport, reply, retraction, review, perspective, protocol, shortnote, studyprotocol, systematicreview, supfile, technicalnote, viewpoint, guidelines, registeredreport, tutorial
+% supfile = supplementary materials
+
+%----------
+% submit
+%----------
+% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g., the logo of the journal will get visible), the headings, and the copyright information. Also, line numbering will be removed. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
+
+%------------------
+% moreauthors
+%------------------
+% If there is only one author the class option oneauthor should be used. Otherwise use the class option moreauthors.
+
+%---------
+% pdftex
+%---------
+% The option pdftex is for use with pdfLaTeX. If eps figures are used, remove the option pdftex and use LaTeX and dvi2pdf.
+
+%=================================================================
+% MDPI internal commands - do not modify
+\firstpage{1} 
+ 
+\setcounter{page}{\@firstpage} 
+
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2024}
+\copyrightyear{2024}
+%\externaleditor{Academic Editor: Firstname Lastname} % For journal Automation, please change Academic Editor to "Communicated by"
+\datereceived{}
+\daterevised{ } % Comment out if no revised date
+\dateaccepted{}
+\datepublished{}
+%\datecorrected{} % Corrected papers include a "Corrected: XXX" date in the original paper.
+%\dateretracted{} % Corrected papers include a "Retracted: XXX" date in the original paper.
+\hreflink{https://doi.org/} % If needed use \linebreak
+%\doinum{}
+%------------------------------------------------------------------
+% The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
+%\pdfoutput=1
+
+%=================================================================
+% Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, lineno, float, amsmath, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, cleveref, amsthm, hyphenat, natbib, hyperref, footmisc, url, geometry, newfloat, caption
+
+%=================================================================
+%% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
+%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
+
+%=================================================================
+% The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
+%\PACS{J0101}
+%\MSC{}
+%\JEL{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Diversity
+%\LSID{\url{http://}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Applied Sciences:
+%\featuredapplication{Authors are encouraged to provide a concise description of the specific application or a potential application of the work. This section is not mandatory.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Data:
+%\dataset{DOI number or link to the deposited data set in cases where the data set is published or set to be published separately. If the data set is submitted and will be published as a supplement to this paper in the journal Data, this field will be filled by the editors of the journal. In this case, please make sure to submit the data set as a supplement when entering your manuscript into our manuscript editorial system.}
+
+%\datasetlicense{license under which the data set is made available (CC0, CC-BY, CC-BY-SA, CC-BY-NC, etc.)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Toxins
+%\keycontribution{The breakthroughs or highlights of the manuscript. Authors can write one or two sentences to describe the most important part of the paper.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Encyclopedia
+%\encyclopediadef{Instead of the abstract}
+%\entrylink{The Link to this entry published on the encyclopedia platform.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Advances in Respiratory Medicine
+%\addhighlights{yes}
+%\renewcommand{\addhighlights}{%
+
+%\noindent This is an obligatory section in â€œAdvances in Respiratory Medicineâ€, whose goal is to increase the discoverability and readability of the article via search engines and other scholars. Highlights should not be a copy of the abstract, but a simple text allowing the reader to quickly and simplified find out what the article is about and what can be cited from it. Each of these parts should be devoted up to 2~bullet points.\vspace{3pt}\\
+%\textbf{What are the main findings?}
+% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+% \item First bullet.
+% \item Second bullet.
+% \end{itemize}\vspace{3pt}
+%\textbf{What is the implication of the main finding?}
+% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+% \item First bullet.
+% \item Second bullet.
+% \end{itemize}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Added by lyx2lyx
+\usepackage{array}
+
+\makeatother
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Global optimization is concerned with finding the global minimum of
+a continuous objective function $f:S\rightarrow R$\textbf{ }where
+$S\subseteq R^{n}$ is a compact set. Formally, the problem is defined
+as:
+
+\begin{equation}
+x^{*}=\mbox{arg}\min_{x\in S}f(x).
+\end{equation}
+where $x^{*}$is the global minimizer. Typically, is an n-dimensional
+hyperrectangle:
+
+\textbf{
+\[
+S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n},b_{n}\right]
+\]
+}
+
+with, $a_{i}$ and $b_{i}$ representing lower and upper bounds for
+each variable $x_{i}$.
+
+This paper focuses on the development of an innovative optimization
+algorithm based on DE. DE has emerged as one of the most popular tools
+for optimizing complex problems across various fields, such as artificial
+intelligence, machine learning, biological systems analysis, and engineering
+optimization applications\citep{diffe1,diffe2,key-29,mult_minfinder}.
+According to the literature, DE is characterized by its simplicity
+and flexibility, enabling it to solve high-complexity problems \citep{genetic3,diffe2,crs2,mult_cfo}.
+
+This novel approach introduces three key scientific contributions.
+First, a hybrid dual-strategy mutation system is developed that balances
+exploration of the solution space with exploitation of promising regions.
+Exploration is achieved through linearly decreasing disturbance coefficients,
+while exploitation relies on dynamically weighted differential terms,
+as discussed in earlier research \citep{Charilogis,genetic3}. Second,
+a system of five pioneering termination rules is introduced, based
+on multidimensional criteria that consider the distribution of solutions
+and evolutionary dynamics, focusing on stabilization and solution
+quality \citep{simann1,fish,key-17,WOA1}.
+
+Additionally, the proposed algorithm includes improvements related
+to parameter optimization using techniques such as modified swarm
+strategies and hybrid exploration methods \citep{key-18,key-14,key-4}.
+This approach has proven highly effective in addressing multimodal
+problems with high computational requirements {[}\citep{key-6,key-20}{]}.
+The algorithm’s validation is carried out through extensive experimental
+trials, utilizing a wide range of benchmark functions to evaluate
+its performance and stability {[}\citep{key-8,key-9,key-21}{]}.
+
+The findings of this study highlight the algorithm's applicability
+across various fields. Specifically, in engineering technologies,
+the algorithm offers solutions for the parameterization of complex
+systems {[}\citep{key-33,key-34}{]}. In machine learning, it provides
+exceptional accuracy in hyperparameter tuning for neural networks,
+while in economic modeling, it contributes to trend forecasting and
+resource optimization \citep{key-25,Charilogis,key-26}.
+
+The research concludes with a critical analysis of the method's advantages
+and limitations, focusing on opportunities for future improvements.
+Specifically, it suggests incorporating dynamic optimization techniques
+and leveraging deep learning technologies for automated parameter
+configuration \citep{key-28,key-35,key-22}. These prospects underscore
+the contribution of this study to the optimization literature, utilizing
+hybrid methodologies to solve high-complexity and multimodal problems
+\citep{Geetha,testfunc2,pde}.
+
+Furthermore, the study's results demonstrate the proposed algorithm's
+capability to solve high-dimensional problems with numerous local
+minima, making it valuable for modern scientific and technological
+challenges \citep{diffe1,key-29}. This algorithm is successfully
+applied in domains such as engineering design, automated hyperparameter
+configuration in machine learning, and economic modeling \citep{crs2,fish,key-14}.
+Its potential for extension to dynamic problems and integration with
+deep learning techniques for automated parameterization presents exciting
+prospects for the future \citep{Charilogis,key-28}. This work highlights
+the importance of hybrid methodologies in contemporary optimization
+research and emphasizes their contribution to solving complex problems
+\citep{key-33,testfunc2,pde}.
+
+The rest of the paper is organized as follows:
+\begin{itemize}
+\item Section 1: Introduction
+\item Section 2: Materials and Methods\ref{sec:Materials-and-Methods}
+\begin{itemize}
+\item Section 2.1: The original DE\ref{subsec:originalDE}
+\item Section 2.2: Detailed formulation of the modified DE algorithm\ref{subsec:modifiedDE}
+\item Section 2.3: Majority Dimension Mechanism (MDM)
+\item Section 2.4: The termination rules\ref{subsec:terminationsRules}
+\begin{enumerate}
+\item Section 2.4.1: Best solution similarity (BSS)
+\item Section 2.4.2: Worst solution similarity (WSS)
+\item Section 2.4.3: Top Solutions Similarity (TSS)
+\item Section 2.4.4: Bottom Solutions Similarity (BOSS)
+\item Section 2.4.5: Solution Range Similarity (SRS)
+\item Section 2.4.6: Improvement Rate Similarity (IRS)
+\item Section 2.4.7: Termination rule: Double box similarity (Double box)
+\item Section 2.4.9: All
+\end{enumerate}
+\end{itemize}
+\item Section 3: Experimental setup and benchmark results.\ref{sec:Results}
+\begin{itemize}
+\item Section 3.1: Test functions\ref{subsec:testFunctions}
+\item Section 3.2: Experimental results.\ref{subsec:experimentalResults}
+\end{itemize}
+\item Section 4: Discussion of findings and comparative analysis\ref{sec:discussion}
+\item Section 5: Conclusions and future research directions\ref{sec:Conclusions}
+\end{itemize}
+
+\section{Materials and Methods\label{sec:Materials-and-Methods}}
+
+\subsection{\textbf{The original DE\label{subsec:originalDE}}}
+
+\begin{algorithm}[H]
+\begin{enumerate}
+\item Initialization:
+\begin{enumerate}
+\item Set parameters:
+\begin{enumerate}
+\item Population size $NP$
+\item Crossover probability $CR\in[0,1]$
+\item Differential weight $F\in[0,2]$
+\item Maximum iterations maxIterations
+\end{enumerate}
+\item Randomly initialize population samples$[1..NP]$ within bounds
+\item Evaluate initial fitness $fitnessArray[i]$ for each individual
+\item Initialize global best solution $bSample$ and fitness $bF2x$
+\end{enumerate}
+\item Main Optimization Loop (for iteration = 1 to maxIterations):
+
+For each individual $x_{i}$ in population ($i=1\thinspace to\thinspace NP$):
+\begin{enumerate}
+\item Parent Selection:
+\begin{enumerate}
+\item Randomly select 3 distinct indices $indexA,indexB,indexC\neq i$
+\end{enumerate}
+\item Trial Vector Creation:
+\begin{enumerate}
+\item Select random dimension $R$
+\item For each dimension $d$ (1 to dimension):
+\begin{enumerate}
+\item $ri$= random number $\in[0,1]$
+\item If $ri$ \ensuremath{\le} $CR$ OR $d==R$:
+\end{enumerate}
+$trialsample[d]=samples[indexA][d]+F\times(samples[indexB][d]-samples[indexC][d])$
+\begin{enumerate}
+\item Apply boundary correction if needed
+\item Else:
+\end{enumerate}
+$trialsample[d]=samples[i][d]$
+\end{enumerate}
+\item Selection:
+\begin{enumerate}
+\item Evaluate trial vector: $minValue=f(trialsample)$
+\item If $minValue$ \ensuremath{\le} $fitnessArray[i]$:
+\begin{enumerate}
+\item Update $samples[i]=trialsample$
+\item Update $fitnessArray[i]=minValue$
+\item Update global best $bSample$ if improved
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\item Local Search Phase (optional):
+
+For each individual $i$:
+\begin{enumerate}
+\item If $random[0,1]$ \textless{} $localSearchRate$:
+
+$refinedFitness=localSearch(samples[i])$
+
+If $refinedFitness$ \textless{} $fitnessArray[i]$:
+
+Update $samples[i]$ and $fitnessArray[i]$
+
+Update global best $bSample$ if improved
+\end{enumerate}
+\item Termination:
+\begin{enumerate}
+\item When max iterations reachedor any of the termination rules is verified\ref{subsec:terminationsRules}
+\item Return best solution bSample found
+\end{enumerate}
+\end{enumerate}
+\caption{Pseudocode for Standard DE Algorithm}
+
+\end{algorithm}
+
+
+\subsection{\textbf{Detailed formulation of the algorithm \label{subsec:modifiedDE} }}
+
+\begin{algorithm}[H]
+\begin{enumerate}
+\item Initialization Phase:
+\begin{enumerate}
+\item Set population size $NP$
+\item Initialize parameters:
+\begin{enumerate}
+\item Crossover probability $CR\in[0,1]$
+\item Local search probability localSearchRate
+\item Problem boundaries $lmargin[],rmargin[]$
+\end{enumerate}
+\item Randomly initialize population $samples[i],i=1..NP$
+\item Evaluate initial fitness $fitnessArray[i]$ for all individuals
+\item Identify global best solution$bSample$ and fitness $bF2x$
+\end{enumerate}
+\item Main Optimization Loop (until max iterations reached):
+
+For each individual $x_{i}$ in population ($i=1toNP$):
+\begin{enumerate}
+\item Strategy Selection:
+\begin{enumerate}
+\item Generate random number $randStrategy\in[0,1]$
+\item If $randStrategy$ \textless{} 0.2: Use Strategy 1
+\item Else: Use Strategy 2
+\end{enumerate}
+\item Mutation Phase:
+
+Strategy 1 (Exploration):
+\begin{enumerate}
+\item For each dimension j:
+
+Generate random numbers $r=\in[0,1]$
+
+$distance=\mid samples[i][j]-bestSample[j]\mid$ 
+
+$trialsample[j]=bSamply[j]-r\times distance$
+
+Apply boundary repair if needed
+\end{enumerate}
+Strategy 2 (Exploitation):
+\begin{enumerate}
+\item Select $dimension+1$ distinct random indices from population ($\neq i$)
+\item Choose random dimension $R$
+\item For each dimension $d$:
+\begin{enumerate}
+\item $r_{i}=random[0,1]$
+\item If $r_{i}$ \textgreater$CR$ or $d==R$:
+
+Generate random number$R_{a}=\in[-0.0,1.0]$
+
+$differentialWeight=\frac{1}{2}+2\times R_{a}$\citep{Charilogis}
+
+$trialsample[d]=samples[index_{1}][d]+differentialWeight\times(samples[index_{2}][d]-samples[otherindices_{i}][d])$
+
+Apply boundary repair
+\item Else:
+
+$trialsample[d]=x_{i}[d]$
+\end{enumerate}
+\end{enumerate}
+\item Selection:
+\begin{enumerate}
+\item Evaluate trial vector: $minValue=f(trialsample)$
+\item If $minValue$ \textless{} $fitnessArray[i]$:
+
+$samples[i]=trialsample$
+
+$fitnessArray[i]=minValue$
+
+If $minValue$ \textless{} $bF2x$:
+
+Update global best $bSamply=trialsample$
+
+$bF2x=minValue$
+\end{enumerate}
+\end{enumerate}
+\item Local Search Phase (optional):
+
+For each individual $i$:
+\begin{enumerate}
+\item If $random[0,1]$ \textless{} $localSearchRate$:
+
+$refinedFitness=localSearch(samples[i])$
+
+If $refinedFitness$ \textless{} $fitnessArray[i]$:
+
+Update $samples[i]$ and $fitnessArray[i]$
+
+Update global best if improved
+\end{enumerate}
+\item Termination:
+\begin{enumerate}
+\item When max iterations reached or any of the termination rules is verified\ref{subsec:terminationsRules}
+\item Return global best solution $bSample$
+\end{enumerate}
+\end{enumerate}
+\caption{Modified Differential Evolution with Dual Mutation Strategies}
+
+\end{algorithm}
+
+
+\subsection{\textbf{Majority Dimension Mechanism}}
+
+The Majority Dimension Mechanism plays a significant role in optimization
+algorithms, where it serves as a guiding tool for the search process.
+It operates by comparing a current sample $s$ against two critical
+reference points: an optimal sample $b$ representing a known good
+solution or minimum, and a worse sample $w$ representing less desirable
+solutions. The mechanism's operation begins with a dimension-by-dimension
+analysis of the sample. For each vector element, it calculates the
+absolute differences between the sample and the corresponding elements
+of both reference vectors. The mechanism then determines which reference
+vector the current sample aligns with more closely in each individual
+dimension. When the function returns true, indicating the sample is
+closer to the optimal sample in most dimensions, this signifies the
+current position is near a previously discovered minimum. In this
+case, the optimization algorithm may make decisions such as changing
+direction, increasing the search step size, or applying randomized
+variations, aiming to avoid local minima traps and explore new regions
+of the solution space. Conversely, when the function returns false,
+indicating the sample is closer to the worse sample, this suggests
+the current position warrants further exploration. Here, the algorithm
+may focus its search on the current region, hoping for further solution
+improvement. In a Euclidean parameter space, this mechanism enables
+dynamic search adaptation. When leading to true, it encourages the
+algorithm to make larger jumps toward new directions or employ local
+minima escape methods. When leading to false, it concentrates the
+search around the current area for more detailed exploration. The
+key advantages of this mechanism include its ability to prevent stagnation
+at suboptimal solutions, its operational flexibility by focusing on
+individual dimensions rather than aggregate measures, and its broad
+applicability to various optimization algorithms - from gradient-based
+to evolutionary approaches. In summary, the Majority Dimension Mechanism
+functions as an intelligent director in optimal solution searches.
+It offers a balanced approach between exploring new regions and exploiting
+known good solutions, enhancing both the efficiency and reliability
+of the optimization process without being constrained by local optima.
+
+The formula (function) of Majority Dimension Mechanism :\medskip{}
+
+$\text{checkSample}(s,b,w)=\begin{cases}
+\text{true}, & \text{if }\sum_{d=1}^{dimension}\mathbb{I}\left(|s_{d}-b_{d}|<|s_{d}-w_{d}|\right)>\sum_{d=1}^{dimension}\mathbb{I}\left(|s_{d}-w_{d}|<|s_{d}-b_{d}|\right)\\
+\text{false}, & \text{else}
+\end{cases}$
+
+\medskip{}
+
+Where:
+
+$s=[s_{1},s_{2},\ldots,s_{d}]$ : The sample being evaluated
+
+$b=[b_{1},b_{2},\ldots,b_{d}]$ : The best sample 
+
+$w=[w_{1},w_{2},\ldots,w_{d}]$ : The worst sample
+
+\subsection{\textbf{The termination rules\label{subsec:terminationsRules}}}
+
+The algorithm's termination mechanism evaluates similarity between
+specific values in the fitness array across consecutive iterations.
+Each rule focuses on different aspects of population evolution by
+monitoring changes in critical metrics from the fitness array. For
+the best solution, the stability of its value is checked across iterations.
+If the difference remains negligible for a specified number of iterations,
+similarity is considered achieved. Similarly, an equivalent check
+is applied to the population's worst solution, monitoring the stability
+of its value. Furthermore, the mechanism evaluates similarity among
+solution groups. For top solutions, it examines the sum of a percentage
+of the best fitness values per iteration, while for worst solutions
+it performs an analogous check on the sum of corresponding values.
+An additional rule measures similarity in solution range by comparing
+the difference between best and worst values across iterations. Finally,
+a rule checks similarity in improvement rate by comparing how much
+the best and worst solutions have improved between iterations. All
+these rules aim to identify moments when fitness array values show
+significant similarity for sufficient duration, indicating the population
+has reached stability. This logic ensures the algorithm terminates
+only when adequate result stabilization occurs, optimizing runtime
+without compromising solution quality. Using multiple similarity rules
+provides a comprehensive convergence picture, covering various aspects
+of population evolution.
+
+General parameters:
+\begin{itemize}
+\item $e$ controls the precision requirement (typically set to 1e-6)
+\item $sim$ determines the required stability duration (commonly 5-10 iterations)
+\end{itemize}
+
+\subsubsection{Best solution similarity}
+
+The termination mechanism is based on a simple criterion that evaluates
+the similarity of values in the fitness array. Specifically, at each
+iteration $iter$, the difference
+
+\begin{equation}
+\delta_{sim}^{(iter)}=\left|f_{sim,min}^{(iter)}-f_{sim,min}^{(iter-1)}\right|,
+\end{equation}
+is calculated, where $f_{sim,min}^{(iter)}$ represents the best fitness
+value found up to iteration $iter$. If the difference $\delta_{sim}^{(iter)}$
+remains less than or equal to a predefined accuracy threshold $e$
+for at least $sim$ consecutive iterations, then the population is
+considered to have converged and the process terminates. This criterion
+ensures that the algorithm will stop only when minimal progress occurs
+in the best solution for a sufficient time period, thereby optimizing
+computational time.
+
+\subsubsection{Worst solution similarity}
+
+The termination mechanism is based on the difference
+
+\begin{equation}
+\delta_{sim}^{(iter)}=\left|f_{sim,max}^{(iter)}-f_{sim,max}^{(iter-1)}\right|,
+\end{equation}
+where$f_{sim,max}^{(iter)}$ represents the worst fitness value at
+iteration iter. If $\delta_{sim}^{(iter)}\le e$ for $sim$ consecutive
+iterations, the algorithm terminates, indicating the population has
+stabilized. This guarantees termination only occurs when the worst
+solution stops improving significantly. This logic provides an efficient
+way to monitor population stability, optimizing computational time
+without compromising solution quality. The mechanism is particularly
+useful in applications where fitness value variance across the population
+is a critical factor for determining convergence.
+
+\subsubsection{Top Solutions Similarity}
+
+The termination mechanism evaluates the difference
+\begin{equation}
+\delta_{best}=\left|\sum_{i=NP-K}^{NP}f_{sorted}^{(iter)}[i]-\sum_{i=NP-K}^{NP}f_{sorted}^{(iter-1)}[i]\right|,
+\end{equation}
+
+when $K=\lceil\text{population}\times\text{sumRate}\rceil$,
+
+where $f_{sorted}^{(t)}[i]$ represents the i-th best fitness value
+in the sorted population at iteration $iter$, $NP$ is the population
+size, and $K$ is an integer smaller than $NP$. The process terminates
+when the difference $\delta_{best}$ remains below a specified threshold
+$e$ for a predetermined number of iterations, indicating stabilization
+of the overall performance of the population's top solutions. This
+criterion focuses on monitoring the collective trend of the K best
+solutions, providing a robust and reliable convergence measure. It
+proves particularly valuable in optimization problems where the stability
+of the population's elite solutions serves as a critical indicator
+of the algorithm's final convergence, ensuring the process completes
+only when sufficient stability is achieved among the top-performing
+solutions.
+
+\subsubsection{Bottom Solutions similarity}
+
+The termination mechanism evaluates the difference
+
+\begin{equation}
+\delta_{worst}=\left|\sum_{i=N-K}^{N}f_{sorted}^{(iter)}[i]-\sum_{i=N-K}^{N}f_{sorted}^{(iter-1)}[i]\right|,
+\end{equation}
+
+when $K=\lceil\text{population}\times\text{sumRate}\rceil$, where
+$f_{sorted}^{(iter)}[i]$ represents the i-th worst fitness value
+in the sorted population at iteration$iter$, with $NP$ denoting
+the total population size and $K$ being an integer smaller than $NP$.
+The process terminates when the difference $\delta_{worst}$ remains
+below a predefined accuracy threshold $e$ for a specified number
+of consecutive iterations, indicating that the population's worst
+solutions have stabilized. This approach focuses on monitoring the
+collective behavior of the $K$ worst solutions, providing an additional
+convergence metric that complements classical termination criteria.
+It proves particularly valuable in optimization problems where the
+evolution of low-quality solutions serves as a critical factor for
+determining the algorithm's overall convergence. The mechanism ensures
+the optimization process completes only when stability is achieved
+in both the best and worst solutions of the population, offering a
+more comprehensive convergence assessment. The $\delta_{worst}$ metric
+serves as an effective early-warning system for population stagnation,
+particularly useful in multimodal optimization where poor solutions
+may indicate unexplored regions of the search space. By incorporating
+both solution quality extremes in termination decisions, the algorithm
+achieves more robust performance across diverse problem landscapes.
+
+\subsubsection{Solution Range Similarity}
+
+The termination mechanism calculates the range difference
+
+\begin{equation}
+\delta_{range}=|(f_{worst}^{(iter)}-f_{best}^{(iter)})-(f_{worst}^{(iter-1)}-f_{best}^{(iter-1)})|,
+\end{equation}
+
+when $\delta_{range}\leq\epsilon\quad\text{for }sim\text{ iterations}$,
+where $f_{worst}^{(iter)}$ and $f_{best}^{(iter)}$ represent the
+worst and best fitness values respectively in the current iteration.
+The process terminates when $\delta_{range}$ remains below a specified
+threshold $e$ for a predetermined number of iterations, indicating
+stabilization of the solution range within the population. This criterion
+measures the variation in fitness value range between consecutive
+iterations, providing a comprehensive perspective on convergence.
+It proves particularly effective in problems where the contraction
+of solution diversity serves as a critical convergence indicator.
+The mechanism enhances termination reliability by simultaneously monitoring
+both optimal and worst solutions, ensuring the algorithm completes
+only when the entire population reaches equilibrium. The $\delta_{range}$
+metric offers unique advantages in multimodal optimization by capturing
+global population dynamics rather than just elite solution behavior.
+When maintained below threshold $e$, it indicates the population
+has sufficiently explored the search space and is concentrating around
+promising regions. This criterion works synergistically with other
+termination rules to provide robust convergence detection across various
+problem types and population sizes.
+
+\subsubsection{Improvement Rate Similarity}
+
+\begin{equation}
+\delta_{imp}=|(f_{worst}^{(iter-1)}-f_{worst}^{(iter)})-(f_{best}^{(iter-1)}-f_{best}^{(iter)})|,
+\end{equation}
+
+$\delta_{imp}\leq\epsilon\quad\text{for }sim\text{ iterations}$
+
+\subsubsection{Termination rule: double box}
+
+The parameter $NP$ represents the number of agents participating
+in the algorithm. The termination rule is defined as follows: the
+process terminates if the value$\delta^{(iter)}$ is less than or
+equal to $e$ for a predefined number of iterations $sim$. The termination
+criterion is the so-called DoubleBox rule, which was first proposed
+in the work of Tsoulos {[}xxx{]}. According to this criterion, the
+search process terminates when sufficient coverage of the search space
+has been achieved. The coverage estimation is based on the asymptotic
+approximation of the relative proportion of points leading to local
+minima. Since the exact coverage cannot be directly calculated, sampling
+is performed over a wider region. The search is interrupted when the
+variance of the sample distribution falls below a predefined threshold,
+which is adjusted based on the most recent discovery of a new local
+minimum. According to this criterion, the algorithm terminates when
+the following condition is met: when the relative variance $\sigma^{(k)}$
+falls below half of the variance $\sigma^{(k_{last})}$ from the last
+iteration $k_{last}$ where a new optimal function value was found,
+that is when
+
+\begin{equation}
+\sigma^{(iter)}\leq\frac{\sigma^{(klast)}}{2}
+\end{equation}
+
+This logic ensures the algorithm will terminate either when the maximum
+allowed number of iterations is exhausted, or when the variance of
+results indicates that sufficient exploration of the solution space
+has been achieved. The combination of these criteria provides a balanced
+termination system that considers both computational cost and solution
+quality.
+
+\subsubsection{Termination rule: all}
+
+The work of Charilogis et al. {[}xxx{]} introduces an innovative combination
+of termination criteria, which is incorporated and expanded in the
+present article through the \textquotedbl All\textquotedbl{} criterion.
+This criterion triggers the optimization termination when any of the
+individual criteria is satisfied, ensuring an optimal balance between
+convergence speed and solution accuracy. Its dynamic adaptability
+allows optimal adjustment of the process according to the specific
+characteristics of each optimization problem. The \textquotedbl All\textquotedbl{}
+criterion operates as a logical disjunction (OR) of all basic termination
+rules, offering exceptional flexibility for both serial and parallel
+applications. In environments where different algorithms or computing
+units may converge at heterogeneous rates, this criterion ensures
+immediate termination once satisfactory convergence is achieved, avoiding
+unnecessary computations without compromising solution quality. The
+main advantages of the \textquotedbl All\textquotedbl{} criterion
+include enhanced efficiency with significant reduction in objective
+function evaluations, broad adaptability to various problem types
+(from smooth to highly multimodal functions), and easy integration
+with existing optimization methods. This integration ease makes it
+an ideal choice for both academic research and practical applications.
+In conclusion, the \textquotedbl All\textquotedbl{} criterion represents
+an optimal synthesis of multiple termination mechanisms, offering
+an intelligent solution for managing the trade-off between accuracy
+and computational cost. The success of this approach highlights the
+importance of hybrid methodologies in modern optimization research,
+paving the way for further refinements and applications to complex
+real-world problems.
+
+\section{Experimental setup and benchmark results\label{sec:Results}}
+
+\paragraph{This section begins with a description of the functions that will
+be used in the experiments and then presents in detail the experiments
+that were performed, in which the parameters available in the proposed
+algorithm were studied, in order to study its reliability and adequacy.
+The following is the table \ref{tab:settings} with the relevant parameter
+settings of the method.}
+
+\cprotect\paragraph{
+\begin{table}[H]
+\protect\caption{Parameters and settings\label{tab:settings}}
+
+\protect\centering{}%
+\begin{tabular}{|c|c|c|}
+\hline 
+PARAMETER & VALUE & EXPLANATION\tabularnewline
+\hline 
+\hline 
+ &  & \tabularnewline
+\hline 
+ &  & \tabularnewline
+\hline 
+ &  & \tabularnewline
+\hline 
+ &  & \tabularnewline
+\hline 
+ &  & \tabularnewline
+\hline 
+ &  & \tabularnewline
+\hline 
+\begin{description}
+\item 
+\end{description}
+ &  & \tabularnewline
+\hline 
+\begin{description}
+\item 
+\end{description}
+ &  & \tabularnewline
+\hline 
+\begin{description}
+\item 
+\end{description}
+ &  & \tabularnewline
+\hline 
+\begin{description}
+\item 
+\end{description}
+ &  & \tabularnewline
+\hline 
+\end{tabular}\protect
+\end{table}
+}
+
+\subsection{\textbf{Test Functions\label{subsec:testFunctions}}}
+
+The experiments were conducted on a wide range of test functions\citep{testfunc2,testfunc2-1,testfunc4}
+as shown in Table \ref{tab:benchmarkFunctions}.
+
+\begin{table}[H]
+\caption{The benchmark functions used in the conducted experiments.\label{tab:benchmarkFunctions}}
+
+\centering{}%
+\begin{tabular}{|c|c|c|}
+\hline 
+{\footnotesize NAME} & {\scriptsize FORMULA} & {\scriptsize DIMENSION}\tabularnewline
+\hline 
+\hline 
+{\footnotesize ACKLEY} & {\scriptsize$f(x)=-a\exp\left(-b\sqrt{\frac{1}{n}\sum_{i=1}^{n}x_{i}^{2}}\right)-\exp\left(\frac{1}{n}\sum_{i=1}^{n}\cos\left(cx_{i}\right)\right)+a+\exp(1)\quad a=20.0$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize BF1} & {\scriptsize$f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize BF2} & {\scriptsize$f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize CAMEL} & {\scriptsize$f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize CM} & {\scriptsize$f(x)=\sum_{i=1}^{n}x_{i}^{2}-\frac{1}{10}\sum_{i=1}^{n}\cos\left(5\pi x_{i}\right)$} & {\scriptsize 4, 10}\tabularnewline
+\hline 
+{\footnotesize DIFFPOWER} & {\scriptsize$f(x)=\sum_{i=1}^{n}|x_{i}-y_{i}|^{p}$} & {\scriptsize$n=2\ p=2,5,10$}\tabularnewline
+\hline 
+{\footnotesize BRANIN} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize$f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$}{\scriptsize\par}
+
+{\scriptsize$-5\le x_{1}\le10,\ 0\le x_{2}\le15$}
+\end{cellvarwidth} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize DISCUS} & {\scriptsize$f(x)=10^{6}x_{1}^{2}+\sum_{i=2}^{n}x_{i}^{2}$} & {\scriptsize 10}\tabularnewline
+\hline 
+{\footnotesize EASOM} & {\scriptsize$f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize ELP} & {\scriptsize$f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}$} & {\scriptsize$n=10$}\tabularnewline
+\hline 
+{\footnotesize EXP} & {\scriptsize$f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1$} & {\scriptsize$n=16$}\tabularnewline
+\hline 
+{\footnotesize F5} & {\scriptsize$f(x)=\left(\left(4.0-2.1x_{1}^{2}+\frac{x_{1}^{4}}{3.0}\right)x_{1}^{2}\right)+\left(x_{1}x_{2}\right)+\left(\left(4.0x_{2}^{2}-4.0\right)x_{2}^{2}\right)\quad-5\le x_{i}\le5$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F9} & {\scriptsize$f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad x\in[0,1]^{n}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F12} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize$f(x)=\frac{\pi}{n}\left(10\sin\left(\pi y_{1}\right)+\sum_{i=1}^{n-1}\left(\left(y_{i}-1\right)^{2}\left(1+10\sin^{2}\left(\pi y_{i+1}\right)\right)\right)+\left(y_{n}-1\right)^{2}\right)$}{\scriptsize\par}
+
+{\scriptsize$+\sum_{i=1}^{n}u\left(x_{i},10,100,4\right)$}
+\end{cellvarwidth} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F13} & {\scriptsize$f(x)=\sum_{i=1}^{n}\frac{x_{i}^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F14} & {\scriptsize$f(x)=\left(\frac{1}{500}+\sum_{j=1}^{25}\frac{1}{j+\sum_{i=1}^{n}\left(x_{i}-a_{ij}\right)^{6}}\right)^{-1}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F15} & {\scriptsize$f(x)=\sum_{i=1}^{11}\left(a_{i}-\frac{x_{1}\left(b_{i}+b_{i}x_{2}\right)}{b_{i}^{2}+b_{i}x_{3}+x_{4}}\right)^{2}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F18} & {\scriptsize$f(x)=-\sum_{i=1}^{4}c_{1}\exp\left(-\sum_{j=1}^{n}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)\quad c_{1}=0.965$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize F19} & {\scriptsize$f(x)=-\sum_{i=1}^{4}c_{1}\exp\left(-\sum_{j=1}^{n}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)\quad c_{1}=0.83$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize GKLS\citep{Gaviano}} & {\scriptsize$f(x)=\mbox{Gkls}(x,n,w)$} & {\scriptsize$n=2,3\ w=50,100$}\tabularnewline
+\hline 
+{\footnotesize GRIEWANK2} & {\scriptsize$f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize GRIEWANK10} & {\scriptsize f$(x)=1+\frac{1}{200}\sum_{i=1}^{10}x_{i}^{2}-\prod_{i=1}^{10}\frac{\cos(x_{i})}{\sqrt{(i)}}$} & {\scriptsize 10}\tabularnewline
+\hline 
+{\footnotesize HANSEN} & {\scriptsize$f(x)=\sum_{i=1}^{5}i\cos\left[(i-1)x_{1}+i\right]\sum_{j=1}^{5}j\cos\left[(j+1)x_{2}+j\right]$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize HARTMAN3} & {\scriptsize$f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)$} & {\scriptsize 3}\tabularnewline
+\hline 
+{\footnotesize HARTAMN6} & {\scriptsize$f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{6}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)$} & {\scriptsize 6}\tabularnewline
+\hline 
+{\footnotesize POTENTIAL\citep{Lennard}} & {\scriptsize$V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]$} & {\scriptsize$n=9,15,21,30$}\tabularnewline
+\hline 
+{\footnotesize RARSTIGIN} & {\scriptsize$f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2})$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize ROSENBROCK} & {\tiny$f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$} & {\scriptsize$n=4,8$}\tabularnewline
+\hline 
+{\footnotesize SCHWEFEL} & {\tiny$f(x)=\sum_{i=1}^{n}\left(\sum_{j=1}^{i}x_{j}\right)^{2}$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize SCHWEFEL221} & {\tiny$f(x)=418.9829n+\sum_{i=1}^{n}-x_{i}\sin\left(\sqrt{\left|x_{i}\right|}\right)$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize SCHWEFEL222} & {\tiny$f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$} & {\scriptsize 2}\tabularnewline
+\hline 
+{\footnotesize Shekel5} & {\scriptsize$f(x)=-\sum_{i=1}^{5}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$} & {\scriptsize 4}\tabularnewline
+\hline 
+{\footnotesize Shekel7} & {\scriptsize$f(x)=-\sum_{i=1}^{7}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$} & {\scriptsize 4}\tabularnewline
+\hline 
+{\footnotesize Shekel10} & {\scriptsize$f(x)=-\sum_{i=1}^{10}\frac{1}{(x-a_{i})(x-a_{i})^{T}+c_{i}}$} & {\scriptsize 4}\tabularnewline
+\hline 
+{\footnotesize Sinusoidal\citep{Zabinsky}} & {\scriptsize$f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi$} & {\scriptsize$n=4,8$}\tabularnewline
+\hline 
+{\footnotesize Test2N} & {\scriptsize$f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i}$} & {\scriptsize$n=4,5,6$}\tabularnewline
+\hline 
+{\footnotesize Test30N} & {\scriptsize$\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)$} & {\scriptsize$n=3,4$}\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\subsection{\textbf{Experimental results\label{subsec:experimentalResults}} }
+
+For the aforementioned functions, a series of tests was conducted
+on a computer equipped with an AMD Ryzen 5950X processor and 128GB
+of RAM, running Debian Linux. Each test was repeated 30 times with
+new random values in each iteration, and the average results were
+recorded. The tool used was developed in ANSI C++ using the GLOBALOPTIMUS
+platform, which is open-source and available at \url{https://github.com/itsoulos/GLOBALOPTIMUS}
+(last accessed: 8/4/2025). The parameter settings of the method are
+shown in Table \ref{tab:settings}.
+
+In the following experimental results, the values in the cells correspond
+to the average number of function calls over 30 repetitions. The numbers
+in parentheses indicate the percentage of cases where the method successfully
+found the global minimum. If no parentheses are present, it means
+the method was 100\% successful in all tests.
+
+\begin{table}[H]
+
+\caption{Comparison of classic DE with new DE and new DE with majority dimension
+mechanism}
+
+\begin{centering}
+\begin{tabular}{|l|c|c|c|}
+\hline 
+FUNCTION & DE & NEWDE & NEWDE+MDM\tabularnewline
+\hline 
+\hline 
+ACKLAY & 19688 & 15089 & 7249\tabularnewline
+\hline 
+BF1 & 10683 & 8537 & 5204\tabularnewline
+\hline 
+BF2 & 10419 & 8416 & 4775\tabularnewline
+\hline 
+BF3 & 10013 & 7572 & 4285\tabularnewline
+\hline 
+BRANIN & 5670 & 5852 & 2762\tabularnewline
+\hline 
+CAMEL & 8116 & 9206 & 5358\tabularnewline
+\hline 
+DIFFPOWER2 & 14547 & 11793 & 10734\tabularnewline
+\hline 
+DIFFPOWER5 & 31332 & 33168 & 25736\tabularnewline
+\hline 
+DIFFPOWER10 & 39317 & 38228 & 40297\tabularnewline
+\hline 
+EASOM & 4662 & 4589 & 3664\tabularnewline
+\hline 
+ELP10 & 7834 & 7471 & 6053\tabularnewline
+\hline 
+ELP20 & 10648 & 10180 & 8809\tabularnewline
+\hline 
+ELP30 & 13003 & 12573 & 10957\tabularnewline
+\hline 
+EXP4 & 6986 & 7134 & 3824\tabularnewline
+\hline 
+EXP8 & 7326 & 7141 & 4329\tabularnewline
+\hline 
+GKLS250 & 7238 & 9351 & 3181\tabularnewline
+\hline 
+GKLS350 & 8107 & 8314 & 1811(0.96)\tabularnewline
+\hline 
+GOLDSTEIN & 9013 & 7751 & 5026\tabularnewline
+\hline 
+GRIEWANK2 & 12785 & 10309 & 4397(0.66)\tabularnewline
+\hline 
+GRIEWANK10 & 16527 & 16607 & 9553\tabularnewline
+\hline 
+HANSEN & 7748 & 7768 & 6432\tabularnewline
+\hline 
+HARTMAN3 & 6434 & 6450 & 3179\tabularnewline
+\hline 
+HARTMAN6 & 7181 & 6827 & 4790\tabularnewline
+\hline 
+POTENTIAL3 & 7871 & 7677 & 5994\tabularnewline
+\hline 
+POTENTIAL5 & 11961 & 11698 & 10653\tabularnewline
+\hline 
+POTENTIAL6 & 15460(0.56) & 15449(0.7) & 12775(0.86)\tabularnewline
+\hline 
+POTENTIAL10 & 22602 & 21695 & 20237\tabularnewline
+\hline 
+RASTRIGIN & 10597 & 9556 & 4639(0.93)\tabularnewline
+\hline 
+ROSENBROCK4 & 10336 & 10513 & 8729\tabularnewline
+\hline 
+ROSENBROCK8 & 12909 & 12799 & 11259\tabularnewline
+\hline 
+ROSENBROCK16 & 16527 & 16920 & 15377\tabularnewline
+\hline 
+SHEKEL5 & 7772 & 7533 & 5306\tabularnewline
+\hline 
+SHEKEL7 & 8013 & 7586 & 5052\tabularnewline
+\hline 
+SHEKEL10 & 8306 & 7527 & 5120\tabularnewline
+\hline 
+SINU4 & 8904 & 7515 & 6723\tabularnewline
+\hline 
+SINU8 & 8968 & 7411 & 6795\tabularnewline
+\hline 
+SINU16 & 12241 & 10472 & 8577\tabularnewline
+\hline 
+TEST2N4 & 7874 & 8107 & 4292\tabularnewline
+\hline 
+TEST2N5 & 9347 & 9109 & 3907(0.96)\tabularnewline
+\hline 
+TEST2N7 & 12006 & 11153(0.9) & 4565(0.7)\tabularnewline
+\hline 
+TEST30N3 & 7296 & 7572 & 4558\tabularnewline
+\hline 
+TEST30N4 & 9103 & 8804 & 5958\tabularnewline
+\hline 
+TOTAL & 483370(0.98) & 459422(0.99) & 332921(0.97)\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\end{table}
+
+\begin{table}[H]
+
+\caption{Comparison new DE with majority dimension mechanism method versus
+others}
+
+\centering{}%
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+FUNCTION & GA & WOA & PSO & ACO & NEWDE+MDM\tabularnewline
+\hline 
+\hline 
+ACKLAY & 10436 & 33824 & 9279 & 9091 & 7249\tabularnewline
+\hline 
+BF1 & 6265 & 13475 & 6311 & 7047(0.66) & 5204\tabularnewline
+\hline 
+BF2 & 5995 & 13693 & 5884 & 6908(0.76) & 4775\tabularnewline
+\hline 
+BF3 & 5559 & 21432 & 5509 & 6450(0.83) & 4285\tabularnewline
+\hline 
+BRANIN & 4536 & 8619 & 4667 & 5944 & 2762\tabularnewline
+\hline 
+CAMEL & 5017 & 8902 & 5050 & 4757 & 5358\tabularnewline
+\hline 
+DIFFPOWER2 & 8704 & 13806 & 10988 & 11556 & 10734\tabularnewline
+\hline 
+DIFFPOWER5 & 23774 & 41028 & 27029 & 55183 & 25736\tabularnewline
+\hline 
+DIFFPOWER10 & 25511 & 58060 & 34319 & 84710 & 40297\tabularnewline
+\hline 
+EASOM & 4080 & 5437 & 4134 & 4203 & 3664\tabularnewline
+\hline 
+ELP10 & 5663 & 22804 & 6588 & 4637 & 6053\tabularnewline
+\hline 
+ELP20 & 8800 & 36649 & 8953 & 5065 & 8809\tabularnewline
+\hline 
+ELP30 & 12757 & 42506 & 11075 & 5416 & 10957\tabularnewline
+\hline 
+EXP4 & 5163 & 8397 & 5163 & 5935 & 3824\tabularnewline
+\hline 
+EXP8 & 5318 & 11478 & 5440 & 6197 & 4329\tabularnewline
+\hline 
+GKLS250 & 4575 & 7612 & 4628 & 4459 & 3181\tabularnewline
+\hline 
+GKLS350 & 5184 & 10088 & 4769 & 4614 & 1811(0.96)\tabularnewline
+\hline 
+GOLDSTEIN & 5932 & 11804 & 6051 & 7248 & 5026\tabularnewline
+\hline 
+GRIEWANK2 & 7485 & 11135(0.83) & 5317 & 6430(0.43) & 4397(0.63)\tabularnewline
+\hline 
+GRIEWANK10 & 9393 & 51041 & 10239 & 7848 & 9553\tabularnewline
+\hline 
+HANSEN & 6025 & 15091 & 5033 & 5091(0.66) & 6432\tabularnewline
+\hline 
+HARTMAN3 & 4936 & 10911 & 5102 & 5408 & 3179\tabularnewline
+\hline 
+HARTMAN6 & 5419 & 21302 & 5825 & 6154(0.7) & 4790\tabularnewline
+\hline 
+POTENTIAL3 & 6455 & 12705 & 6998 & 6854 & 5994\tabularnewline
+\hline 
+POTENTIAL5 & 9878 & 66605 & 12339 & 9702 & 10653\tabularnewline
+\hline 
+POTENTIAL6 & 13891(0.76) & 10648(0.93) & 13945(0.46) & 11166(0.06) & 12775(0.86)\tabularnewline
+\hline 
+POTENTIAL10 & 16834 & 197044 & 17948 & 12540(0.3) & 20237\tabularnewline
+\hline 
+RASTRIGIN & 6868 & 10530 & 5756 & 5346(0.4) & 4639(0.93)\tabularnewline
+\hline 
+ROSENBROCK4 & 6414 & 18576 & 7611 & 4848 & 8729\tabularnewline
+\hline 
+ROSENBROCK8 & 8128 & 25777 & 10198 & 5374 & 11259\tabularnewline
+\hline 
+ROSENBROCK16 & 11678 & 37759 & 13529 & 5987 & 15377\tabularnewline
+\hline 
+SHEKEL5 & 5705 & 22886 & 5915 & 6815(0.56) & 5306\tabularnewline
+\hline 
+SHEKEL7 & 5741 & 26964 & 5938 & 6777(0.63) & 5052\tabularnewline
+\hline 
+SHEKEL10 & 5829 & 20334 & 5915 & 6670(0.46) & 5120\tabularnewline
+\hline 
+SINU4 & 5334 & 13266 & 5355 & 5687(0.73) & 6723\tabularnewline
+\hline 
+SINU8 & 5839 & 21358 & 6188 & 6472(0.9) & 6795\tabularnewline
+\hline 
+SINU16 & 7278 & 47713 & 6745 & 8465(0.73) & 8577\tabularnewline
+\hline 
+TEST2N4 & 5813 & 16104 & 5339 & 5752(0.56) & 4292\tabularnewline
+\hline 
+TEST2N5 & 6516 & 18131 & 5644 & 5893(0.36) & 3907(0.76)\tabularnewline
+\hline 
+TEST2N7 & 8205(0.96) & 23489(0.63) & 6057(0.93) & 6199(0.03) & 4565(0.7)\tabularnewline
+\hline 
+TEST30N3 & 5635 & 11307 & 5634 & 6591 & 4558\tabularnewline
+\hline 
+TEST30N4 & 6594 & 18229 & 6464 & 8813 & 5958\tabularnewline
+\hline 
+TOTAL & 335162(0.99) & 1098519(0.98) & 350871(0.98) & 406302(0.8) & 332921(0.97)\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{The proposed method with new different stopping rules}
+
+\begin{centering}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline 
+FUNCTION & BSS & WSS & TSS & BOSS & SRS & IRS & doublebox & All\tabularnewline
+\hline 
+\hline 
+ACKLEY & 7249 & 8063 & 21423 & 45754 & 8664 & 6187 & 8601 & 6187\tabularnewline
+\hline 
+BF1 & 5204 & 5770 & 6559 & 41602 & 6002 & 4539 & 5564 & 4539\tabularnewline
+\hline 
+BF2 & 4775 & 5297 & 5701 & 34369 & 5522 & 4077 & 5647 & 4077\tabularnewline
+\hline 
+BF3 & 4285 & 4482 & 5261 & 28391 & 4694 & 3728 & 4999 & 3728\tabularnewline
+\hline 
+BRANIN & 2762 & 3639 & 3324 & 15776 & 3696 & 2603 & 2772 & 2603\tabularnewline
+\hline 
+CAMEL & 5358 & 4386 & 5811 & 22948 & 5843 & 3497 & 10667 & 3497\tabularnewline
+\hline 
+DIFFPOWER2 & 10734 & 12276 & 9767 & 28349 & 12398 & 9767 & 11172 & 9767\tabularnewline
+\hline 
+DIFFPOWER5 & 25736 & 32486 & 24771 & 92201 & 34880 & 24771 & 26377 & 24771\tabularnewline
+\hline 
+DIFFPOWER10 & 40297 & 52420 & 31056 & 91219 & 58127 & 31056 & 55305 & 31056\tabularnewline
+\hline 
+EASOM & 3664 & 4894 & 4714 & 2789 & 4944 & 3242 & 3800 & 2789\tabularnewline
+\hline 
+ELP10 & 6053 & 5133 & 5930 & 21980 & 6459 & 4307 & 12313 & 4307\tabularnewline
+\hline 
+ELP20 & 8809 & 8781 & 9387 & 29239 & 10094 & 6587 & 18033 & 6587\tabularnewline
+\hline 
+ELP30 & 10957 & 10871 & 12290 & 23745 & 12533 & 8672 & 22989 & 8672\tabularnewline
+\hline 
+EXP4 & 3824 & 4408 & 4948 & 3092 & 4593 & 3575 & 4270 & 3092\tabularnewline
+\hline 
+EXP8 & 4329 & 4878 & 4944 & 3052 & 5457 & 3522 & 7516 & 3052\tabularnewline
+\hline 
+GKLS250 & 3181 & 3245 & 9199 & 7690 & 3245 & 2919 & 3977 & 2919\tabularnewline
+\hline 
+GKLS350 & 1811(0.96) & 2142(0.96) & 3268(0.96) & 10756(0.96) & 2142(0.96) & 1811(0.96) & 1811(0.96) & 1811(0.96)\tabularnewline
+\hline 
+GOLDSTEIN & 5026 & 5576 & 7682 & 38776 & 5867 & 4364 & 5169 & 4364\tabularnewline
+\hline 
+GRIEWANK2 & 4397(0.63) & 4761(0.63) & 8722(0.80) & 29118(0.96) & 5212(0.66) & 3559(0.53) & 4898(0.63) & 3599(0.53)\tabularnewline
+\hline 
+GRIEWANK10 & 9553 & 10698 & 11061 & 62990 & 12085 & 7866 & 16496 & 7866\tabularnewline
+\hline 
+HANSEN & 6432 & 8143 & 14493 & 88770 & 9146 & 4238 & 13116 & 4238\tabularnewline
+\hline 
+HARTMAN3 & 3179 & 3898 & 3073 & 2651 & 4121 & 3042 & 3643 & 2651\tabularnewline
+\hline 
+HARTMAN6 & 4790 & 4903 & 5811 & 3400 & 5521 & 3981 & 7438 & 3400\tabularnewline
+\hline 
+POTENTIAL3 & 5994 & 7416 & 6592 & 20224 & 7691 & 4683 & 11358 & 4683\tabularnewline
+\hline 
+POTENTIAL5 & 10653 & 12221 & 11679 & 58988 & 13108 & 8224 & 30085 & 8224\tabularnewline
+\hline 
+POTENTIAL6 & 12775(0.86) & 13968(0.86) & 13720(0.90) & 74701 & 15690(0.93) & 9616(0.7) & 35090(0.96) & 9616(0.7)\tabularnewline
+\hline 
+POTENTIAL10 & 20237 & 17453 & 46851(0.93) & 101111 & 23157 & 12650 & 56930 & 12650\tabularnewline
+\hline 
+RASTRIGIN & 4639(0.93) & 5063(0.96) & 6900 & 15210 & 5545(0.96) & 3548(0.93) & 6473(0.93) & 3548(0.93)\tabularnewline
+\hline 
+ROSENBROCK4 & 8729 & 8284 & 9075 & 34803 & 9794 & 6583 & 13961 & 6583\tabularnewline
+\hline 
+ROSENBROCK8 & 11259 & 10337 & 11512 & 51878 & 12605 & 8104 & 22692 & 8104\tabularnewline
+\hline 
+ROSENBROCK16 & 15377 & 17661 & 16644 & 64581 & 20007 & 11826 & 25043 & 11826\tabularnewline
+\hline 
+SHEKEL5 & 5306 & 6204 & 6925 & 3672 & 6452 & 4262 & 15952 & 3672\tabularnewline
+\hline 
+SHEKEL7 & 5052 & 6224 & 6907 & 3528 & 6463 & 4081 & 16879 & 3528\tabularnewline
+\hline 
+SHEKEL10 & 5120 & 5813 & 8051 & 3516 & 6232 & 4055 & 14980 & 3516\tabularnewline
+\hline 
+SINU4 & 6723 & 6508 & 11594 & 6730 & 8163 & 4310 & 20602 & 4310\tabularnewline
+\hline 
+SINU8 & 6795 & 8776 & 13952 & 4309 & 9631 & 4971 & 46245 & 4293\tabularnewline
+\hline 
+SINU16 & 8577 & 13879 & 30354 & 5761 & 14369 & 6785 & 11051 & 5761\tabularnewline
+\hline 
+TEST2N4 & 4292 & 4992 & 12290 & 26112 & 5427 & 3290 & 5930 & 3290\tabularnewline
+\hline 
+TEST2N5 & 3907(0.96) & 5199(0.96) & 10493 & 21617 & 5406(0.96) & 3226(0.93) & 4791 & 3226(0.93)\tabularnewline
+\hline 
+TEST2N7 & 4565(0.7) & 5020(0.7) & 12859(0.86) & 19407(0.86) & 5709(0.76) & 3510(0.56) & 6396(0.76) & 3510(0.56)\tabularnewline
+\hline 
+TEST30N3 & 4558 & 5402 & 3806 & 25347 & 6063 & 3384 & 8178 & 3384\tabularnewline
+\hline 
+TEST30N4 & 5958 & 6551 & 5880 & 48097 & 7383 & 4564 & 14847 & 4564\tabularnewline
+\hline 
+TOTAL & 332921(0.97) & 378121(0.97) & 465279(0.98) & 1318249(0.99) & 420140(0.98) & 263582(0.96) & 624056(0.98) & 257860(0.96)\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\end{table}
+
+
+\section{Discussion of findings and comparative analysis\label{sec:discussion}}
+
+\section{Conclusions and future research directions\label{sec:Conclusions}}
+
+\institutionalreview{Not Applicable.}
+
+\informedconsent{Not applicable.}
+
+\acknowledgments{This research has been financed by the European Union: Next Generation
+EU through the Program Greece 2.0 National Recovery and Resilience
+Plan, under the call RESEARCH--CREATE--INNOVATE, project name “iCREW:
+Intelligent small craft simulator for advanced crew training using
+Virtual Reality techniques” (project code: TAEDK-06195).}
+
+\conflictsofinterest{The authors declare no conflicts of interest.}
+
+\appendixtitles{no}
+
+\begin{adjustwidth}{-\extralength}{0cm}{}
+
+\begin{thebibliography}{999}
+\bibitem{go_math1}Carrizosa, E., Molero-Río, C., \& Romero Morales,
+D. (2021). Mathematical optimization in classification and regression
+trees. Top, 29(1), 5-33.
+
+\bibitem{go_math3}Legat, B., Dowson, O., Garcia, J. D., \& Lubin,
+M. (2022). MathOptInterface: a data structure for mathematical optimization
+problems. INFORMS Journal on Computing, 34(2), 672-689.
+
+\bibitem{go_physics2}Su, H., Zhao, D., Heidari, A. A., Liu, L., Zhang,
+X., Mafarja, M., \& Chen, H. (2023). RIME: A physics-based optimization.
+Neurocomputing, 532, 183-214.
+
+\bibitem{go_physics3}Stilck França, D., \& Garcia-Patron, R. (2021).
+Limitations of optimization algorithms on noisy quantum devices. Nature
+Physics, 17(11), 1221-1227.
+
+\bibitem{go_chem1}Zhang, J., \& Glezakou, V. A. (2021). Global optimization
+of chemical cluster structures: Methods, applications, and challenges.
+International Journal of Quantum Chemistry, 121(7), e26553.
+
+\bibitem{go_chem2}Hu, Y., Zang, Z., Chen, D., Ma, X., Liang, Y.,
+You, W., \& Zhang, Z. (2022). Optimization and evaluation of SO2 emissions
+based on WRF-Chem and 3DVAR data assimilation. Remote Sensing, 14(1),
+220.
+
+\bibitem{go_med2}Kaur, P., \& Singh, R. K. (2023). A review on optimization
+techniques for medical image analysis. Concurrency and Computation:
+Practice and Experience, 35(1), e7443.
+
+\bibitem{medicine}Houssein, E. H., Hosney, M. E., Mohamed, W. M.,
+Ali, A. A., \& Younis, E. M. (2023). Fuzzy-based hunger games search
+algorithm for global optimization and feature selection using medical
+data. Neural Computing and Applications, 35(7), 5251-5275.
+
+\bibitem{go_bio1}Wang, L., Cao, Q., Zhang, Z., Mirjalili, S., \&
+Zhao, W. (2022). Artificial rabbits optimization: A new bio-inspired
+meta-heuristic algorithm for solving engineering optimization problems.
+Engineering Applications of Artificial Intelligence, 114, 105082.
+
+\bibitem{go_bio2}Hesami, M., \& Jones, A. M. P. (2020). Application
+of artificial intelligence models and optimization algorithms in plant
+cell and tissue culture. Applied Microbiology and Biotechnology, 104(22),
+9449-9485.
+
+\bibitem{go_agri1}Filip, M., Zoubek, T., Bumbalek, R., Cerny, P.,
+Batista, C. E., Olsan, P., ... \& Findura, P. (2020). Advanced computational
+methods for agriculture machinery movement optimization with applications
+in sugarcane production. Agriculture, 10(10), 434.
+
+\bibitem{go_agri2}Akintuyi, O. B. (2024). Adaptive AI in precision
+agriculture: a review: investigating the use of self-learning algorithms
+in optimizing farm operations based on real-time data. Research Journal
+of Multidisciplinary Studies, 7(02), 016-030.
+
+\bibitem{go_econ1}Wang, Y., Ma, Y., Song, F., Ma, Y., Qi, C., Huang,
+F., ... \& Zhang, F. (2020). Economic and efficient multi-objective
+operation optimization of integrated energy system considering electro-thermal
+demand response. Energy, 205, 118022.
+
+\bibitem{go_econ2}Alirahmi, S. M., Mousavi, S. B., Razmi, A. R.,
+\& Ahmadi, P. (2021). A comprehensive techno-economic analysis and
+multi-criteria optimization of a compressed air energy storage (CAES)
+hybridized with solar and desalination units. Energy Conversion and
+Management, 236, 114053.
+
+\bibitem{interval1}Wolfe, M. A. (1996). Interval methods for global
+optimization. Applied Mathematics and Computation, 75(2-3), 179-206.
+
+\bibitem{interval2}Csendes, T., \& Ratz, D. (1997). Subdivision direction
+selection in interval methods for global optimization. SIAM Journal
+on Numerical Analysis, 34(3), 922-938.
+
+\bibitem{go_determ1}Shezan, S. A., Ishraque, M. F., Shafiullah, G.
+M., Kamwa, I., Paul, L. C., Muyeen, S. M., ... \& Kumar, P. P. (2023).
+Optimization and control of solar-wind islanded hybrid microgrid by
+using heuristic and deterministic optimization algorithms and fuzzy
+logic controller. Energy reports, 10, 3272-3288.
+
+\bibitem{go_determ3}Xu, Z., Zhao, Z., \& Liu, J. (2024). Deterministic
+Multi-Objective Optimization of Analog Circuits. Electronics, 13(13),
+2510.
+
+\bibitem{stohastic}Hsieh, Y. P., Karimi Jaghargh, M. R., Krause,
+A., \& Mertikopoulos, P. (2024). Riemannian stochastic optimization
+methods avoid strict saddle points. Advances in Neural Information
+Processing Systems, 36.
+
+\bibitem{stohastic1}Tyurin, A., \& Richtárik, P. (2024). Optimal
+time complexities of parallel stochastic optimization methods under
+a fixed computation model. Advances in Neural Information Processing
+Systems, 36.
+
+\bibitem{key-2}Sohail, A. (2023). Genetic algorithms in the fields
+of artificial intelligence and data sciences. Annals of Data Science,
+10(4), 1007-1018.
+
+\bibitem{genetic3}Charilogis, V., Tsoulos, I. G., \& Stavrou, V.
+N. (2023). An Intelligent Technique for Initial Distribution of Genetic
+Algorithms. Axioms, 12(10), 980.
+
+\bibitem{diffe1}Deng, W., Shang, S., Cai, X., Zhao, H., Song, Y.,
+\& Xu, J. (2021). An improved differential evolution algorithm and
+its application in optimization problem. Soft Computing, 25, 5277-5298.
+
+\bibitem{diffe2}Pant, M., Zaheer, H., Garcia-Hernandez, L., \& Abraham,
+A. (2020). Differential Evolution: A review of more than two decades
+of research. Engineering Applications of Artificial Intelligence,
+90, 103479.
+
+\bibitem{key-29}Price, W. (1983). Global optimization by controlled
+random search. Journal of optimization theory and applications, 40,
+333-348.
+
+\bibitem{crs2}Křivý, I., \& Tvrdik, J. (1995). The controlled random
+search algorithm in optimizing regression models. Computational statistics
+\& data analysis, 20(2), 229-234.
+
+\bibitem{simann1}Ingber, L. (1989). Very fast simulated re-annealing.
+Mathematical and computer modelling, 12(8), 967-973.
+
+\bibitem{simann2}Eglese, R. W. (1990). Simulated annealing: a tool
+for operational research. European journal of operational research,
+46(3), 271-281.
+
+\bibitem{mult_minfinder}Tsoulos, I. G., \& Lagaris, I. E. (2006).
+MinFinder: Locating all the local minima of a function. Computer Physics
+Communications, 174(2), 166-179.
+
+\bibitem{mult_cfo}Liu, Y., \& Tian, P. (2015). A multi-start central
+force optimization for global optimization. Applied Soft Computing,
+27, 92-98.
+
+\bibitem{pso_major}Shami, T. M., El-Saleh, A. A., Alswaitti, M.,
+Al-Tashi, Q., Summakieh, M. A., \& Mirjalili, S. (2022). Particle
+swarm optimization: A comprehensive survey. Ieee Access, 10, 10031-10061.
+
+\bibitem{pso1}Gad, A. G. (2022). Particle swarm optimization algorithm
+and its applications: a systematic review. Archives of computational
+methods in engineering, 29(5), 2531-2561. 
+
+\bibitem{fish}Pourpanah, F., Wang, R., Lim, C. P., Wang, X. Z., \&
+Yazdani, D. (2023). A review of artificial fish swarm algorithms:
+Recent advances and applications. Artificial Intelligence Review,
+56(3), 1867-1903.
+
+\bibitem{key-18}Zhang, C., Zhang, F. M., Li, F., \& Wu, H. S. (2014,
+June). Improved artificial fish swarm algorithm. In 2014 9th IEEE
+conference on industrial electronics and applications (pp. 748-753).
+IEEE.
+
+\bibitem{dolphin}Kareem, S. W., Mohammed, A. S., \& Khoshabaa, F.
+S. (2023). Novel nature-inspired meta-heuristic optimization algorithm
+based on hybrid dolphin and sparrow optimization. International Journal
+of Nonlinear Analysis and Applications, 14(1), 355-373. 
+
+\bibitem{key-17}Wu, T. Q., Yao, M., \& Yang, J. H. (2016). Dolphin
+swarm algorithm. Frontiers of Information Technology \& Electronic
+Engineering, 17(8), 717-729.
+
+\bibitem{WOA}Nadimi-Shahraki, M. H., Zamani, H., Asghari Varzaneh,
+Z., \& Mirjalili, S. (2023). A systematic review of the whale optimization
+algorithm: theoretical foundation, improvements, and hybridizations.
+Archives of Computational Methods in Engineering, 30(7), 4113-4159.
+
+\bibitem{WOA1}Brodzicki, A., Piekarski, M., \& Jaworek-Korjakowska,
+J. (2021). The whale optimization algorithm approach for deep neural
+networks. Sensors, 21(23), 8003.
+
+\bibitem{key-14}Rokbani, N., Kumar, R., Abraham, A., Alimi, A. M.,
+Long, H. V., Priyadarshini, I., \& Son, L. H. (2021). Bi-heuristic
+ant colony optimization-based approaches for traveling salesman problem.
+Soft Computing, 25, 3775-3794.
+
+\bibitem{aco2}Wu, L., Huang, X., Cui, J., Liu, C., \& Xiao, W. (2023).
+Modified adaptive ant colony optimization algorithm and its application
+for solving path planning of mobile robot. Expert Systems with Applications,
+215, 119410.
+
+\bibitem{key-4}Abualigah, L., Yousri, D., Abd Elaziz, M., Ewees,
+A. A., Al-Qaness, M. A., \& Gandomi, A. H. (2021). Aquila optimizer:
+a novel meta-heuristic optimization algorithm. Computers \& Industrial
+Engineering, 157, 107250.
+
+\bibitem{key-5}Zhao, J., Gao, Z. M., \& Chen, H. F. (2022). The simplified
+aquila optimization algorithm. IEEE Access, 10, 22487-22515.
+
+\bibitem{key-19}Abualigah, L., Sbenaty, B., Ikotun, A. M., Zitar,
+R. A., Alsoud, A. R., Khodadadi, N., ... \& Jia, H. (2024). Aquila
+optimizer: review, results and applications. Metaheuristic optimization
+algorithms, 89-103.
+
+\bibitem{key-6}Abualigah, L., Diabat, A., Mirjalili, S., Abd Elaziz,
+M., \& Gandomi, A. H. (2021). The arithmetic optimization algorithm.
+Computer methods in applied mechanics and engineering, 376, 113609.
+
+\bibitem{key-7}Kaveh, A., \& Hamedani, K. B. (2022, January). Improved
+arithmetic optimization algorithm and its application to discrete
+structural optimization. In Structures (Vol. 35, pp. 748-764). Elsevier.
+
+\bibitem{key-20}Zhang, J., Zhang, G., Huang, Y., \& Kong, M. (2022).
+A novel enhanced arithmetic optimization algorithm for global optimization.
+IEEE Access, 10, 75040-75062.
+
+\bibitem{key-8}Salawudeen, A. T., Mu’azu, M. B., Yusuf, A., \& Adedokun,
+A. E. (2021). A Novel Smell Agent Optimization (SAO): An extensive
+CEC study and engineering application. Knowledge-Based Systems, 232,
+107486.
+
+\bibitem{key-9}Salawudeen, A. T., Mu’azu, M. B., Sha’aban, Y. A.,
+\& Adedokun, E. A. (2018, September). On the development of a novel
+smell agent optimization (SAO) for optimization problems. In 2nd International
+Conference on Information and Communication Technology and its Applications
+(ICTA 2018), Minna.
+
+\bibitem{key-21}Salawudeen, A. T., Mu’azu, M. B., Yusuf, A., \& Adedokun,
+E. A. (2018). From smell phenomenon to smell agent optimization (SAO):
+a feasibility study. Proceedings of ICGET.
+
+\bibitem{key-33}Chakraborty, A., \& Kar, A. K. (2017). Swarm intelligence:
+A review of algorithms. Nature-inspired computing and optimization:
+Theory and applications, 475-494.
+
+\bibitem{key-34}Brezočnik, L., Fister Jr, I., \& Podgorelec, V. (2018).
+Swarm intelligence algorithms for feature selection: a review. Applied
+Sciences, 8(9), 1521.
+
+\bibitem{key-25}Mohammed, S., Sha’aban, Y. A., Umoh, I. J., Salawudeen,
+A. T., \& Ibn Shamsah, S. M. (2023). A hybrid smell agent symbiosis
+organism search algorithm for optimal control of microgrid operations.
+Plos one, 18(6), e0286695.
+
+\bibitem[(2022)]{Charilogis}Charilogis, V., Tsoulos, I.G.,Tzallas,
+A.,Karvounis, E. (2022). Modifications for the Differential Evolution
+Algorithm. Symmetry ,2022,14,447. Doi: https://doi.org/10.3390/sym14030447
+
+\bibitem{key-26}Meadows, O. A., Mu’Azu, M. B., \& Salawudeen, A.
+T. (2022, April). A smell agent optimization approach to capacitated
+vehicle routing problem for solid waste collection. In 2022 IEEE Nigeria
+4th International Conference on Disruptive Technologies for Sustainable
+Development (NIGERCON) (pp. 1-5). IEEE.
+
+\bibitem{key-27}Kotte, S., Injeti, S. K., Thunuguntla, V. K., Kumar,
+P. P., Nuvvula, R. S., Dhanamjayulu, C., ... \& Khan, B. (2024). Energy
+curve based enhanced smell agent optimizer for optimal multilevel
+threshold selection of thermographic breast image segmentation. Scientific
+Reports, 14(1), 21833.
+
+\bibitem{key-28}Arumugam, M., Thiyagarajan, A., Adhi, L., \& Alagar,
+S. (2024). Crossover smell agent optimized multilayer perceptron for
+precise brain tumor classification on MRI images. Expert Systems with
+Applications, 238, 121453.
+
+\bibitem{key-35}Charilogis, V., \& Tsoulos, I. G. (2022). Toward
+an ideal particle swarm optimizer for multidimensional functions.
+Information, 13(5), 217.
+
+\bibitem{key-22}Powell, M. J. D. (1989). A tolerant algorithm for
+linearly constrained optimization calculations. Mathematical Programming,
+45, 547-566.
+
+\bibitem[(2023)]{Eltamaly}Eltamaly, AM, Rabie, AH. A Novel Musical
+Chairs Optimization Algorithm. Arab J Sci Eng 48 , 10371--10403 (2023).
+https://doi.org/10.1007/s13369-023-07610-5
+
+\bibitem[(2013)]{Geetha}Geetha, S., Poonthalir, G. \& Vanathi, P.T.
+(2013) .Nested particle swarm optimisation for multi-depot vehicle
+routing problem. International Journal of Operational Research 16(3):329
+- 348 http://dx.doi.org/10.1504/IJOR.2013.052336
+
+\bibitem{key-10}Ali, M. M., \& Kaelo, P. (2008). Improved particle
+swarm algorithms for global optimization. Applied mathematics and
+computation, 196(2), 578-593.
+
+\bibitem{testfunc2}Koyuncu, H., \& Ceylan, R. (2019). A PSO based
+approach: Scout particle swarm algorithm for continuous global optimization
+problems. Journal of Computational Design and Engineering, 6(2), 129-142.
+
+\bibitem{testfunc2-1}Siarry, P., Berthiau, G., Durdin, F., \& Haussy,
+J. (1997). Enhanced simulated annealing for globally minimizing functions
+of many-continuous variables. ACM Transactions on Mathematical Software
+(TOMS), 23(2), 209-228.
+
+\bibitem{testfunc4}LaTorre, A., Molina, D., Osaba, E., Poyatos, J.,
+Del Ser, J., \& Herrera, F. (2021). A prescription of methodological
+guidelines for comparing bio-inspired optimization algorithms. Swarm
+and Evolutionary Computation, 67, 100973.
+
+\bibitem[(2023)]{pde}Charilogis, V.; Tsoulos, I.G. A Parallel Implementation
+of the Differential Evolution Method. Analytics 2023, 2, 17--30. 
+
+\bibitem{Gaviano} M. Gaviano, D.E. Ksasov, D. Lera, Y.D. Sergeyev,
+Software for generation of classes of test functions with known local
+and global minima for global optimization, ACM Trans. Math. Softw.
+\textbf{29}, pp. 469-480, 2003.
+
+\bibitem{Lennard} J.E. Lennard-Jones, On the Determination of Molecular
+Fields, Proc. R. Soc. Lond. A \textbf{ 106}, pp. 463--477, 1924.
+
+\bibitem{Zabinsky} Z.B. Zabinsky, D.L. Graesser, M.E. Tuttle, G.I.
+Kim, Global optimization of composite laminates using improving hit
+and run, In: Recent advances in global optimization, pp. 343-368,
+1992.
+
+\end{thebibliography}
+
+\end{adjustwidth}{}
+\end{document}
