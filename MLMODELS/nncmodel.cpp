@@ -33,7 +33,7 @@ double  NNCModel::getOutput(Data &x)
     return program->Eval(x.data());
 }
 
-void  NNCModel::preTrain(vector<int> &result)
+double  NNCModel::preTrain(vector<int> &result)
 {
     MlpProblem *tProblem = new MlpProblem();
     tProblem->disableRemoveData();
@@ -91,12 +91,12 @@ void  NNCModel::preTrain(vector<int> &result)
 
     for(int i=0;i<(int)result.size();i++)
     {
-        result[i]+=2;
-        printf("%d ",result[i]);
+        result[i]+=10;
     }
     printf("\n");
     delete method;
     delete tProblem;
+    return yy;
 }
 
 void  NNCModel::trainModel()
@@ -115,10 +115,15 @@ void  NNCModel::trainModel()
         bool preTrainFlag = getParam("nnc_pretrain").getValue()=="yes";
         if(preTrainFlag)
         {
-            preTrain(ruleResult);
+            double yy = preTrain(ruleResult);
             pop = new Population(getParam("nnc_popcount").getValue().toInt(),
                              (int)ruleResult.size(),
                              program,ruleResult,getModelSeed());
+	    for(int i=0;i<(int)ruleResult.size();i++)
+	    {
+		    ruleResult[i]-=10;
+	    }
+	    pop->setChromosome(0,ruleResult,yy);
         }
         else
         pop = new Population(getParam("nnc_popcount").getValue().toInt(),

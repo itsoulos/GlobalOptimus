@@ -20,7 +20,7 @@ private:
     MlpProblem      *trialProblem;
 public:
     NNCModel();
-    void            preTrain(vector<int> &result);
+    double            preTrain(vector<int> &result);
     virtual         double  getOutput(Data &x);
     void            localSearchItem(int pos);
     virtual void    trainModel();
