@@ -13,6 +13,19 @@
 /* Input: genome count , genome size, pointer to Program instance */
 Population::Population(int gcount,int gsize,Program *p,int seed)
 {
+	vector<int> grule;
+	grule.resize(gsize);
+	for(int i=0;i<gsize;i++)
+		grule[i]=MAX_RULE;
+	initPopulation(gcount,gsize,p,grule,seed);
+}
+
+Population::Population(int gcount,int gsize,Program *p,vector<int> &rule,int seed)
+{
+	initPopulation(gcount,gsize,p,rule,seed);
+}
+void Population::initPopulation(int gcount,int gsize,Program *p,vector<int> &rule,int seed)
+{
 	elitism=1;
 	selection_rate = 0.1;
 	mutation_rate  = 0.1;
@@ -20,6 +33,8 @@ Population::Population(int gcount,int gsize,Program *p,int seed)
 	genome_size    = gsize;
 	generation     = 0;
 	program        = p;
+	maxrule.resize(gsize);
+	for(int i=0;i<gsize;i++) maxrule[i]=rule[i];
     localMethod = GELOCAL_NONE;
     localsearch_generations=50;
     localsearch_items = 20;
@@ -42,7 +57,7 @@ Population::Population(int gcount,int gsize,Program *p,int seed)
 		genome[i]=new int[genome_size];
 		children[i]=new int[genome_size];
 			for(int j=0;j<genome_size;j++)
-                g[j]=genome[i][j]=rand()%MAX_RULE;
+                g[j]=genome[i][j]=rand()%maxrule[j];
 	}
 	fitness_array=new double[genome_count];
 }
@@ -136,7 +151,7 @@ int r;
 // Select the best parents of  the candidates
     for(int j=0;j<tournament_size;j++)
     {
-r= rand() % (genome_count);
+	r= rand() % (genome_count);
             if(j==0 || fitness_array[r]<max_fitness)
             {
                     max_index=r;
@@ -223,7 +238,7 @@ void	Population::mutate()
             double r=rand()*1.0/RAND_MAX;
 			if(r<mutation_rate)
 			{
-				genome[i][j]=rand() % MAX_RULE;
+				genome[i][j]=rand() % maxrule[j];
 			}
 		}
 	}
@@ -517,7 +532,7 @@ void	Population::localSearch(int pos)
             int old_value = genome[pos][i];
 again:
             F = -0.5 + 2.0 * rand()*1.0/RAND_MAX;
-            genome[pos][i]=((int)(genome[randomA][i]+abs(F*(genome[randomB][i]-genome[randomC][i]))))%MAX_RULE;
+            genome[pos][i]=((int)(genome[randomA][i]+abs(F*(genome[randomB][i]-genome[randomC][i]))))%maxrule[i];
             if(genome[pos][i]<0)
             {
              genome[pos][i]=old_value;

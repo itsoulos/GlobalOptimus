@@ -23,6 +23,8 @@ NNCModel::NNCModel()
     QStringList methods;
     methods<<"crossover"<<"mutate"<<"bfgs"<<"none"<<"genetic";
     addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
+
+    addParam(Parameter("nnc_pretrain",yesno[0],yesno,"Enable (yes) or disable (no) the pre - training process."));
 }
 
 double  NNCModel::getOutput(Data &x)
@@ -31,7 +33,73 @@ double  NNCModel::getOutput(Data &x)
     return program->Eval(x.data());
 }
 
-void    NNCModel::trainModel()
+void  NNCModel::preTrain(vector<int> &result)
+{
+    MlpProblem *tProblem = new MlpProblem();
+    tProblem->disableRemoveData();
+    tProblem->setTrainSet(trainDataset);
+
+    Data w;
+    const int nodes = 10;
+    w.resize( nodes * (trainDataset->dimension()+2));
+    for(int i=0;i<(int)w.size();i++)
+         w[i]=(2.0*rand()*1.0/RAND_MAX-1.0);
+
+    tProblem->setWeights(w);
+    tProblem->setDimension(w.size());
+    Data xu,xl;
+    xu.resize(w.size());
+    xl.resize(w.size());
+    for(int j=0;j<(int)w.size();j++)
+    {
+        xl[j]=-10.0;
+        xu[j]= 10.0;
+
+    }
+    tProblem->setLeftMargin(xl);
+    tProblem->setRightMargin(xu);
+
+    Optimizer *method=NULL;
+
+    method = new Genetic();
+    method->setParam("gen_maxiters","200");
+    method->setParam("gen_count","200");
+    method->setParam("gen_lrate","0.005");
+    method->setParam("opt_localsearch","crossover");
+    method->setParam("opt_debug","yes");
+    method->setParam("opt_termination","maxiters");
+
+    tProblem->setOptimizer(method);
+
+    tProblem->trainModel();
+    w=tProblem->getBestx();
+
+    double yy=tProblem->funmin(w);
+
+    Bfgs *tmethod = new Bfgs();
+    tProblem->disableBound();
+    tmethod->setProblem(tProblem);
+    tmethod->setPoint(w,yy);
+    tmethod->solve();
+     yy=tProblem->funmin(w);
+     tmethod->getPoint(w,yy);
+    delete tmethod;
+    printf("Final pre training = %20.10lg\n",yy);
+
+    Converter con(w,w.size()/(trainDataset->dimension()+2),trainDataset->dimension());
+    con.convert(result);
+
+    for(int i=0;i<(int)result.size();i++)
+    {
+        result[i]+=2;
+        printf("%d ",result[i]);
+    }
+    printf("\n");
+    delete method;
+    delete tProblem;
+}
+
+void  NNCModel::trainModel()
 {
         loadTrainSet();
         loadTestSet();
@@ -42,6 +110,17 @@ void    NNCModel::trainModel()
         program = new NncProgram(trainDataset->dimension(),this);
         program->makeGrammar();
 
+
+        vector<int> ruleResult;
+        bool preTrainFlag = getParam("nnc_pretrain").getValue()=="yes";
+        if(preTrainFlag)
+        {
+            preTrain(ruleResult);
+            pop = new Population(getParam("nnc_popcount").getValue().toInt(),
+                             (int)ruleResult.size(),
+                             program,ruleResult,getModelSeed());
+        }
+        else
         pop = new Population(getParam("nnc_popcount").getValue().toInt(),
                          getParam("nnc_popsize").getValue().toInt(),
                          program,getModelSeed());
@@ -50,6 +129,10 @@ void    NNCModel::trainModel()
         pop->setMutationRate(getParam("nnc_popmrate").getValue().toDouble());
         pop->setLocalSearchRate(getParam("nnc_lsearchrate").getValue().toDouble());
         pop->setCrossoverItems( getParam("nnc_crossitems").getValue().toInt());
+
+
+
+
 
     int gens = getParam("nnc_popgens").getValue().toInt();
     if(trialProblem==NULL)  trialProblem = new MlpProblem();

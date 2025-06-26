@@ -20,10 +20,11 @@ private:
     MlpProblem      *trialProblem;
 public:
     NNCModel();
-    virtual     double  getOutput(Data &x);
-    void        localSearchItem(int pos);
-    virtual void        trainModel();
-    virtual     ~NNCModel();
+    void            preTrain(vector<int> &result);
+    virtual         double  getOutput(Data &x);
+    void            localSearchItem(int pos);
+    virtual void    trainModel();
+    virtual          ~NNCModel();
 };
 
 #endif // NNCMODEL_H

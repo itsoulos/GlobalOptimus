@@ -19,6 +19,7 @@ class Population
 		int	**genome;
 		double *fitness_array;
 		double	mutation_rate,selection_rate;
+		vector<int>  maxrule;
 		int	genome_count;
 		int	genome_size;
 		int	generation;
@@ -41,6 +42,7 @@ class Population
         uniform_int_distribution<> intDistribGcount;
         uniform_int_distribution<> intDistribGsize;
         uniform_real_distribution<> doubleDistrib;
+        void initPopulation(int gcount,int gsize,Program *p,vector<int> &r,int seed);
 	public:
         /**
          * @brief Population The constructor of the class.
@@ -51,6 +53,7 @@ class Population
          * @param seed
          */
         Population(int gcount,int gsize,Program *p,int seed=1);
+        Population(int gcount,int gsize,Program *p,vector<int> &rule,int seed=1);
         /**
          * @brief setLocalMethod
          * @param m

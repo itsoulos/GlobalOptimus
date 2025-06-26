@@ -35,7 +35,7 @@ Data    MlpProblem::getSample()
           double b = 1;
           for(int i=0;i<dimension;i++)
           {
-              xx[i]=a+(b-a)*randomDouble();
+              xx[i]= (a+(b-a)*randomDouble());
           }
       }
       else
