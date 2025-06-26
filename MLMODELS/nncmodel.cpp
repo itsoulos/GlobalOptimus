@@ -116,6 +116,7 @@ void        NNCModel::localSearchItem(int pos)
     double wf = getParam("nnc_weightfactor").getValue().toDouble();
  QString Lmethod = getParam("nnc_lsearchmethod").getValue();
 
+ if(Lmethod == "none") return;
        if(Lmethod == "random")
        {
         pop->localSearch(pos);
