@@ -88,7 +88,7 @@ void    NNCModel::trainModel()
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
-        if(g%10==0)
+        if(g%50==0)
         printf(" generation = %d best value= %20.10lg\n",g,pop->getBestFitness());
 	
         if(g%LI==0)
@@ -102,8 +102,9 @@ void    NNCModel::trainModel()
         }
 
        }
-    if(LC!=0)
+    setParam("nnc_lsearchmethod","bfgs");
     localSearchItem(0);
+    setParam("nnc_lsearchmethod",Lmethod);
     pop->evaluateBestFitness();
 }
 
@@ -114,9 +115,9 @@ void        NNCModel::localSearchItem(int pos)
     double yy;
     int redo = 0;
     double wf = getParam("nnc_weightfactor").getValue().toDouble();
- QString Lmethod = getParam("nnc_lsearchmethod").getValue();
+    QString Lmethod = getParam("nnc_lsearchmethod").getValue();
 
- if(Lmethod == "none") return;
+    if(Lmethod == "none") return;
        if(Lmethod == "random")
        {
         pop->localSearch(pos);
@@ -198,17 +199,20 @@ void        NNCModel::localSearchItem(int pos)
         Converter con(w,w.size()/(trainDataset->dimension()+2),trainDataset->dimension());
         con.convert(xx);
         redo = 0;
-        if(xx.size()>pop->getSize()) return;
-        string ss = program->printRandomProgram(xx,redo);
-        if(!program->Parse(ss)) return ;
-        double newy = pop->fitness(xx);
-        if(fabs(newy)<fabs(yy))
+        if(xx.size()>pop->getSize())
         {
-            printf("Local Search[%lf]->%lf\n",yy,newy);
-
-            pop->setChromosome(pos,xx,newy);
+            printf("Problem in sizes: %ld -> %d \n",xx.size(),pop->getSize());
+            return;
         }
-    else pop->evaluateFitnessAt(pos);
+        string ss = program->printRandomProgram(xx,redo);
+        if(!program->Parse(ss))
+        {
+            printf("Local search problme in parsing %s \n",ss.c_str());
+            return ;
+        }
+        double newy = pop->fitness(xx);
+        printf("Local Search[%lf]->%lf\n",yy,newy);
+        pop->setChromosome(pos,xx,newy);
 }
 
 NNCModel::~NNCModel()
