@@ -11,6 +11,7 @@
 # include <METHODS/lbfgs.h>
 # include <METHODS/adam.h>
 # include <METHODS/genetic.h>
+# include <METHODS/mbfgs.h>
 class NNCModel : public Model
 {
 private:

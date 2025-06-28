@@ -19,6 +19,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	METHODS/mbfgs.cpp  \
         GE/doublestack.cc \
         GE/fparser.cc \
         GE/fpoptimizer.cc \
@@ -157,6 +158,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    METHODS/mbfgs.h \
     GE/doublestack.h \
     GE/fparser.hh \
     GE/fpconfig.hh \

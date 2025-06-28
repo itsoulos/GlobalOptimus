@@ -70,6 +70,7 @@ SOURCES       = GE/cprogram.cc \
 		METHODS/ego.cpp \
 		METHODS/hybridmethod.cpp \
 		METHODS/jDElsgo.cpp \
+		METHODS/mbfgs.cpp \
 		METHODS/mewoa.cpp \
 		METHODS/saop.cpp \
 		METHODS/woa.cpp \
@@ -143,6 +144,7 @@ OBJECTS       = cprogram.o \
 		ego.o \
 		hybridmethod.o \
 		jDElsgo.o \
+		mbfgs.o \
 		mewoa.o \
 		saop.o \
 		woa.o \
@@ -300,6 +302,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		METHODS/ego.h \
 		METHODS/hybridmethod.h \
 		METHODS/jDElsgo.h \
+		METHODS/mbfgs.h \
 		METHODS/mewoa.h \
 		METHODS/saop.h \
 		METHODS/woa.h \
@@ -374,6 +377,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		METHODS/ego.cpp \
 		METHODS/hybridmethod.cpp \
 		METHODS/jDElsgo.cpp \
+		METHODS/mbfgs.cpp \
 		METHODS/mewoa.cpp \
 		METHODS/saop.cpp \
 		METHODS/woa.cpp \
@@ -630,8 +634,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h MLMODELS/fcmodel.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.cc GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/eo.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mbfgs.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h MLMODELS/fcmodel.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.cc GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/eo.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mbfgs.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -991,6 +995,27 @@ jDElsgo.o: METHODS/jDElsgo.cpp METHODS/jDElsgo.h \
 		OPTIMUS/parameterlist.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o jDElsgo.o METHODS/jDElsgo.cpp
 
+mbfgs.o: METHODS/mbfgs.cpp METHODS/mbfgs.h \
+		OPTIMUS/optimizer.h \
+		OPTIMUS/problem.h \
+		OPTIMUS/parameter.h \
+		OPTIMUS/doublebox.h \
+		OPTIMUS/similarity.h \
+		OPTIMUS/mean.h \
+		SAMPLER/maxwellsampler.h \
+		SAMPLER/problemsampler.h \
+		SAMPLER/neuralsampler.h \
+		MLMODELS/dataset.h \
+		SAMPLER/triangularsampler.h \
+		SAMPLER/uniformsampler.h \
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
+		OPTIMUS/logger.h \
+		OPTIMUS/filelogger.h \
+		OPTIMUS/editlogger.h \
+		OPTIMUS/parameterlist.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mbfgs.o METHODS/mbfgs.cpp
+
 mewoa.o: METHODS/mewoa.cpp METHODS/mewoa.h \
 		OPTIMUS/optimizer.h \
 		OPTIMUS/problem.h \
@@ -1112,6 +1137,7 @@ fcmodel.o: MLMODELS/fcmodel.cpp MLMODELS/fcmodel.h \
 		METHODS/saop.h \
 		METHODS/acop.h \
 		METHODS/eo.h \
+		METHODS/mbfgs.h \
 		GE/fcprogram.h \
 		GE/mapper.h \
 		MLMODELS/mlpproblem.h \
@@ -1476,7 +1502,8 @@ nncmodel.o: MLMODELS/nncmodel.cpp MLMODELS/nncmodel.h \
 		LINESEARCH/fibonaccisearch.h \
 		LINESEARCH/armijosearch.h \
 		METHODS/genetic.h \
-		OPTIMUS/collection.h
+		OPTIMUS/collection.h \
+		METHODS/mbfgs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o nncmodel.o MLMODELS/nncmodel.cpp
 
 rulemodel.o: MLMODELS/rulemodel.cpp MLMODELS/rulemodel.h \
@@ -1768,7 +1795,8 @@ methodloader.o: OPTIMUS/methodloader.cpp OPTIMUS/methodloader.h \
 		METHODS/jDElsgo.h \
 		METHODS/saop.h \
 		METHODS/acop.h \
-		METHODS/eo.h
+		METHODS/eo.h \
+		METHODS/mbfgs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o methodloader.o OPTIMUS/methodloader.cpp
 
 parameterlist.o: OPTIMUS/parameterlist.cpp OPTIMUS/parameterlist.h \
@@ -1884,6 +1912,7 @@ datafitting.o: datafitting.cpp MLMODELS/mlpproblem.h \
 		LINESEARCH/armijosearch.h \
 		METHODS/genetic.h \
 		OPTIMUS/collection.h \
+		METHODS/mbfgs.h \
 		MLMODELS/rulemodel.h \
 		GE/ruleprogram.h \
 		MLMODELS/fcmodel.h \

@@ -40,6 +40,7 @@ SOURCES += \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
     METHODS/jDElsgo.cpp \
+    METHODS/mbfgs.cpp \
     METHODS/mewoa.cpp \
     METHODS/saop.cpp \
     METHODS/woa.cpp \
@@ -121,6 +122,7 @@ HEADERS += \
     METHODS/ego.h \
     METHODS/hybridmethod.h \
     METHODS/jDElsgo.h \
+    METHODS/mbfgs.h \
     METHODS/mewoa.h \
     METHODS/saop.h \
     METHODS/woa.h \

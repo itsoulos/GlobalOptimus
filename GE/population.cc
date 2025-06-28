@@ -34,7 +34,10 @@ void Population::initPopulation(int gcount,int gsize,Program *p,vector<int> &rul
 	generation     = 0;
 	program        = p;
 	maxrule.resize(gsize);
-	for(int i=0;i<gsize;i++) maxrule[i]=rule[i];
+    for(int i=0;i<gsize;i++)
+    {
+        maxrule[i]=rule[i];
+    }
     localMethod = GELOCAL_NONE;
     localsearch_generations=50;
     localsearch_items = 20;

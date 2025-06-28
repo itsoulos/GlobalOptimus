@@ -50,6 +50,8 @@ MethodLoader::MethodLoader()
     methodName<<"ACOP";
     methodName<<"EO";
     method<<new EO;
+    methodName<<"MBfgs";
+    method<<new MBfgs;
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

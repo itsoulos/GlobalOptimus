@@ -21,7 +21,7 @@ NNCModel::NNCModel()
     yesno<<"no"<<"yes";
     addParam(Parameter("nnc_enablebound",yesno[0],yesno,"Enable (yes) or disable (no) the bounding solution for MLP"));
     QStringList methods;
-    methods<<"crossover"<<"mutate"<<"bfgs"<<"none"<<"genetic";
+    methods<<"crossover"<<"mutate"<<"bfgs"<<"none"<<"genetic"<<"mbfgs"<<"siman";
     addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
 
     addParam(Parameter("nnc_pretrain",yesno[0],yesno,"Enable (yes) or disable (no) the pre - training process."));
@@ -33,6 +33,7 @@ double  NNCModel::getOutput(Data &x)
     return program->Eval(x.data());
 }
 
+const int delta = 100;
 double  NNCModel::preTrain(vector<int> &result)
 {
     MlpProblem *tProblem = new MlpProblem();
@@ -40,7 +41,7 @@ double  NNCModel::preTrain(vector<int> &result)
     tProblem->setTrainSet(trainDataset);
 
     Data w;
-    const int nodes = 10;
+    const int nodes = 5;
     w.resize( nodes * (trainDataset->dimension()+2));
     for(int i=0;i<(int)w.size();i++)
          w[i]=(2.0*rand()*1.0/RAND_MAX-1.0);
@@ -91,9 +92,8 @@ double  NNCModel::preTrain(vector<int> &result)
 
     for(int i=0;i<(int)result.size();i++)
     {
-        result[i]+=10;
+        result[i]+=delta;
     }
-    printf("\n");
     delete method;
     delete tProblem;
     return yy;
@@ -118,12 +118,12 @@ void  NNCModel::trainModel()
             double yy = preTrain(ruleResult);
             pop = new Population(getParam("nnc_popcount").getValue().toInt(),
                              (int)ruleResult.size(),
-                             program,ruleResult,getModelSeed());
+                             program,getModelSeed());
 	    for(int i=0;i<(int)ruleResult.size();i++)
 	    {
-		    ruleResult[i]-=10;
+            ruleResult[i]-=delta;
 	    }
-	    pop->setChromosome(0,ruleResult,yy);
+        pop->setChromosome(100,ruleResult,yy);
         }
         else
         pop = new Population(getParam("nnc_popcount").getValue().toInt(),
@@ -170,9 +170,8 @@ void  NNCModel::trainModel()
 
     /**
      */
-    pop->setLocalMethod(GELOCAL_MUTATE);
     pop->setLocalSearchGenerations(LI);
-    pop->setLocalSearchItems(0);//LC);
+    pop->setLocalSearchItems(LC);
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
@@ -205,7 +204,8 @@ void        NNCModel::localSearchItem(int pos)
     double wf = getParam("nnc_weightfactor").getValue().toDouble();
     QString Lmethod = getParam("nnc_lsearchmethod").getValue();
 
-    if(Lmethod == "none") return;
+    if(Lmethod == "none" || Lmethod=="siman" || Lmethod=="mutate"
+            ||Lmethod=="crossover") return;
        if(Lmethod == "random")
        {
         pop->localSearch(pos);
@@ -251,6 +251,9 @@ void        NNCModel::localSearchItem(int pos)
         if(Lmethod == "adam")
             method = new Adam();
         else
+        if(Lmethod == "mbfgs")
+            method = new MBfgs;
+        else
         {
             method = new Genetic();
             method->setParam("gen_maxiters","50");
@@ -270,6 +273,9 @@ void        NNCModel::localSearchItem(int pos)
         if(Lmethod=="adam")
             ((Adam *)method)->setPoint(w,yy);
         else
+        if(Lmethod=="mbfgs")
+            ((MBfgs *)method)->setPoint(w,yy);
+        else
             ((Genetic *)method)->setBest(w,yy);
         trialProblem->trainModel();
         w=trialProblem->getBestx();
@@ -280,9 +286,10 @@ void        NNCModel::localSearchItem(int pos)
             	trialProblem->disableBound();
 		tmethod->setProblem(trialProblem);
 		tmethod->setPoint(w,yy);
-		tmethod->solve();
+        tmethod->solve();
 	}
         w=trialProblem->getBestx();
+        yy=trialProblem->funmin(w);
         delete method;
         Converter con(w,w.size()/(trainDataset->dimension()+2),trainDataset->dimension());
         con.convert(xx);
@@ -299,6 +306,7 @@ void        NNCModel::localSearchItem(int pos)
             return ;
         }
         double newy = pop->fitness(xx);
+        if(fabs(newy)>fabs(yy)) return;
         printf("Local Search[%lf]->%lf\n",yy,newy);
         pop->setChromosome(pos,xx,newy);
 }

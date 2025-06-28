@@ -24,85 +24,93 @@ void    NncProgram::makeRules()
 
     r=newRule();
     rule[r]->addSymbol(&Out);
-    rule[r]->addSymbol(&Mult);
-    rule[r]->addSymbol(&Sig);
-    rule[r]->addSymbol(&Lpar);
-    rule[r]->addSymbol(&sx);
-    rule[r]->addSymbol(&Plus);
-    rule[r]->addSymbol(&Out);
-    rule[r]->addSymbol(&Rpar);
-    s0.addRule(rule[r]);
+        rule[r]->addSymbol(&Mult);
+        rule[r]->addSymbol(&Sig);
+        rule[r]->addSymbol(&Lpar);
+        rule[r]->addSymbol(&sx);
+        rule[r]->addSymbol(&Plus);
+        rule[r]->addSymbol(&Out);
+        rule[r]->addSymbol(&Rpar);
+        s0.addRule(rule[r]);
 
 
-    r=newRule();
-    rule[r]->addSymbol(&Out);
-    rule[r]->addSymbol(&Mult);
-    rule[r]->addSymbol(&Sig);
-    rule[r]->addSymbol(&Lpar);
-    rule[r]->addSymbol(&sx);
-    rule[r]->addSymbol(&Plus);
-    rule[r]->addSymbol(&Out);
-    rule[r]->addSymbol(&Rpar);
-    rule[r]->addSymbol(&Plus);
-    rule[r]->addSymbol(&s0);
-    s0.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Out);
+        rule[r]->addSymbol(&Mult);
+        rule[r]->addSymbol(&Sig);
+        rule[r]->addSymbol(&Lpar);
+        rule[r]->addSymbol(&sx);
+        rule[r]->addSymbol(&Plus);
+        rule[r]->addSymbol(&Out);
+        rule[r]->addSymbol(&Rpar);
+        rule[r]->addSymbol(&Plus);
+        rule[r]->addSymbol(&s0);
+        s0.addRule(rule[r]);
 
 
-    r=newRule();
-    rule[r]->addSymbol(&Out);
-    rule[r]->addSymbol(&Mult);
-    rule[r]->addSymbol(&XXlist);
-    sx.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Out);
+        rule[r]->addSymbol(&Mult);
+        rule[r]->addSymbol(&XXlist);
+        sx.addRule(rule[r]);
 
-    r=newRule();
-    rule[r]->addSymbol(&Out);
-    rule[r]->addSymbol(&Mult);
-    rule[r]->addSymbol(&XXlist);
-    rule[r]->addSymbol(&Plus);
-    rule[r]->addSymbol(&sx);
-    sx.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Out);
+        rule[r]->addSymbol(&Mult);
+        rule[r]->addSymbol(&XXlist);
+        rule[r]->addSymbol(&Plus);
+        rule[r]->addSymbol(&sx);
+        sx.addRule(rule[r]);
 
 
-    /**/
-    DigitList.cut(0);
-    smallNumber.set("SMALLNUMBER",0);
+        /**/
+        DigitList.cut(0);
+        smallNumber.set("SMALLNUMBER",0);
 
-    r=newRule();
-    rule[r]->addSymbol(&Digit0);
-    smallNumber.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Digit0);
+        smallNumber.addRule(rule[r]);
 
-    r=newRule();
-    rule[r]->addSymbol(&Digit0);
-    rule[r]->addSymbol(&Digit0);
-    smallNumber.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Digit0);
+        rule[r]->addSymbol(&Digit0);
+        smallNumber.addRule(rule[r]);
 
-    r=newRule();
-    rule[r]->addSymbol(&Digit0);
-    DigitList.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Digit0);
+        DigitList.addRule(rule[r]);
 
-    r=newRule();
-    rule[r]->addSymbol(&Digit0);
-    rule[r]->addSymbol(&DigitList);
-    DigitList.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Digit0);
+        //rule[r]->addSymbol(&Digit0);
+        rule[r]->addSymbol(&DigitList);
+        DigitList.addRule(rule[r]);
 
-    Out.set("OUT",0);
+        r=newRule();
+        rule[r]->addSymbol(&Digit0);
+        rule[r]->addSymbol(&Digit0);
+        rule[r]->addSymbol(&Digit0);
+        //rule[r]->addSymbol(&DigitList);
+        //DigitList.addRule(rule[r]);
 
-    r=newRule();
-    rule[r]->addSymbol(&Lpar);
-    rule[r]->addSymbol(&DigitList);
-    rule[r]->addSymbol(&Dot);
-    rule[r]->addSymbol(&DigitList);
-    rule[r]->addSymbol(&Rpar);
-    Out.addRule(rule[r]);
+        Out.set("OUT",0);
 
-    r=newRule();
-    rule[r]->addSymbol(&Lpar);
-    rule[r]->addSymbol(&Minus);
-    rule[r]->addSymbol(&DigitList);
-    rule[r]->addSymbol(&Dot);
-    rule[r]->addSymbol(&DigitList);
-    rule[r]->addSymbol(&Rpar);
-    Out.addRule(rule[r]);
+        r=newRule();
+        rule[r]->addSymbol(&Lpar);
+        rule[r]->addSymbol(&DigitList);
+        rule[r]->addSymbol(&Dot);
+        rule[r]->addSymbol(&DigitList);
+        rule[r]->addSymbol(&Rpar);
+        Out.addRule(rule[r]);
+
+        r=newRule();
+        rule[r]->addSymbol(&Lpar);
+        rule[r]->addSymbol(&Minus);
+        rule[r]->addSymbol(&DigitList);
+        rule[r]->addSymbol(&Dot);
+        rule[r]->addSymbol(&DigitList);
+        rule[r]->addSymbol(&Rpar);
+        Out.addRule(rule[r]);
 
 }
 
