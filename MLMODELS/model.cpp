@@ -38,6 +38,11 @@ void    Model::testModel(double &trainError,double &testError,double &classError
     }
 }
 
+double  Model::getOutput(double *x)
+{
+    return 0.0;
+}
+
 void    Model::initModel()
 {
 
@@ -104,7 +109,7 @@ double  Model::getTrainError()
 
         double yy = trainDataset->getYPoint(i);
 
-        double per = getOutput(xx);
+        double per = getOutput(xx.data());
         if(fabs(per)>=1e+10) return 1e+100;
         if(isnan(per)) return 1e+100;
         if(isinf(per)) return 1e+100;

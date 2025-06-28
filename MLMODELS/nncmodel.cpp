@@ -33,6 +33,11 @@ double  NNCModel::getOutput(Data &x)
     return program->Eval(x.data());
 }
 
+double  NNCModel::getOutput(double *x)
+{
+    return program->Eval(x);
+}
+
 const int delta = 100;
 double  NNCModel::preTrain(vector<int> &result)
 {

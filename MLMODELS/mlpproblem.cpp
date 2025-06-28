@@ -189,14 +189,19 @@ double  MlpProblem::getViolationPercent()
 /** einai i exodos tou neuronikou gia to protypo x**/
 double  MlpProblem::getOutput(Data  &x)
 {
+    return getOutput(x.data());
+}
+
+double  MlpProblem::getOutput(double  *x)
+{
     double arg=0.0;
     double per=0.0;
-    int nodes = weight.size()/(x.size()+2);
-    int d = x.size();
+    int d = trainDataset->dimension();
+    int nodes = weight.size()/(d+2);
     for(int i=1;i<=nodes;i++)
     {
         arg=0.0;
-	sigcount++;
+        sigcount++;
         for(int j=1;j<=d;j++)
         {
             int pos=(d+2)*i-(d+1)+j-1;
@@ -204,11 +209,11 @@ double  MlpProblem::getOutput(Data  &x)
 
         }
         arg+=weight[(d+2)*i-1];
-	    if(fabs(arg)>=viollimit)
-	    {
+        if(fabs(arg)>=viollimit)
+        {
 
-		    violcount++;
-	    }
+            violcount++;
+        }
         per+=weight[(d+2)*i-(d+1)-1]*sig(arg);
     }
     return per;
@@ -218,6 +223,13 @@ double  MlpProblem::getOutput(Data  &x)
  *  pros to protypo x**/
 Data    MlpProblem::getDerivative(Data &x)
 {
+    return getDerivative(x.data());
+}
+
+
+Data    MlpProblem::getDerivative(double *x)
+{
+
     double arg;
     double f,f2;
     int nodes = weight.size()/(trainDataset->dimension()+2);
@@ -245,7 +257,6 @@ Data    MlpProblem::getDerivative(Data &x)
     }
     return G;
 }
-
 void    MlpProblem::enableBound()
 {
     usebound_flag=true;

@@ -59,6 +59,8 @@ public:
      * @return the output of the model for any given pattern
      */
     virtual     double  getOutput(Data &x)=0;
+
+    virtual     double getOutput(double *x);
     /**
      * @brief getTrainError
      * @return the training error of the model

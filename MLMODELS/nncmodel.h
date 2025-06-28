@@ -23,6 +23,7 @@ public:
     NNCModel();
     double            preTrain(vector<int> &result);
     virtual         double  getOutput(Data &x);
+    virtual         double  getOutput(double *x);
     void            localSearchItem(int pos);
     virtual void    trainModel();
     virtual          ~NNCModel();

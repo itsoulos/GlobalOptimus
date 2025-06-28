@@ -55,12 +55,16 @@ public:
      * @return the output of mlp for pattern x.
      */
     double  getOutput(Data &x);
+    double  getOutput(double *x);
+
     /**
      * @brief getDerivative
      * @param x
      * @return the derivative for pattern x.
      */
     Data    getDerivative(Data &x);
+    Data    getDerivative(double *x);
+
     /**
      * @brief getDerivative1
      * @param xpoint
