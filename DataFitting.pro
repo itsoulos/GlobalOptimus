@@ -23,6 +23,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	METHODS/eo.cpp \
         GE/doublestack.cc \
     GE/fcprogram.cpp \
         GE/fparser.cc \
@@ -35,7 +36,6 @@ SOURCES += \
 	GE/integeranneal.cpp \
 	GE/nncprogram.cpp \
 	GE/ruleprogram.cpp \
-	METHODS/eo.cpp \
     METHODS/acop.cpp \
     METHODS/ego.cpp \
     METHODS/hybridmethod.cpp \
@@ -107,6 +107,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    METHODS/eo.h \
     GE/doublestack.h \
     GE/fcprogram.h \
     GE/fparser.hh \

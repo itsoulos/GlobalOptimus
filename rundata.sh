@@ -1,13 +1,13 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Genetic
+METHOD=EO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=maxiters
+TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=nnc
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -53,6 +53,8 @@ if [ $METHOD = "Bfgs" ]; then
   #bfgs_iters: the maximum number of allowed iterations
 
   METHODPARAMS="--bfgs_iters=200"
+elif [ $METHOD = "EO" ]; then
+METHODPARAMS="--population=100 --maxiters=200 --localsearchRate=0.00 --technique=0"
 elif [ $METHOD = "NelderMead" ]; then
 
   #nm_population: number of items in simplex

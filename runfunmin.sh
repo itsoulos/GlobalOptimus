@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE
-METHOD=MBfgs
+METHOD=EO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=lbfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans

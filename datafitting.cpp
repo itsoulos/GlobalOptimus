@@ -11,6 +11,7 @@
 # include <METHODS/gradientdescent.h>
 # include <METHODS/multistart.h>
 # include <METHODS/genetic.h>
+# include <METHODS/eo.h>
 # include <METHODS/bfgs.h>
 # include <METHODS/lbfgs.h>
 # include <METHODS/differentialevolution.h>
@@ -93,6 +94,8 @@ void loadMethods()
     methodName<<"Gwo";
     method<<new UserMethod;
     methodName<<"UserMethod";
+    method<<new EO;
+    methodName<<"EO";
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }
