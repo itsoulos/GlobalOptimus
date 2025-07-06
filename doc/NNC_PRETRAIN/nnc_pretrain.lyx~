@@ -341,7 +341,17 @@ A multitude of problems in contemporary literature are addressed using machine l
  the most widespread of which are artificial neural networks.
  Furthermore,
  in recent years,
- evolutionary techniques have emerged that identift both the architecture of artificial neural networks and their parameters.
+ evolutionary techniques have emerged that identify both the architecture of artificial neural networks and their corresponding parameters.
+ Among these techniques,
+ one can also identify the artificial neural networks being constructed,
+ in which the structure and parameters of the neural network are effectively identified using Grammatical Evolution.
+ In this paper,
+ we propose the use of an additional phase before the start of the construction of the artificial neural network,
+ in which phase a genetic algorithm undertakes to identify initial values for the parameters of the neural network.
+ After the end of this phase,
+ the evolution process is carried out using as initial values those identified in the above process.
+ The proposed work was applied on a series of classification and regression problems founded in the recent literature and it was compared against other methods used for neural network training as wll as against the original neural network construction method.
+ 
 \end_layout
 
 \begin_layout Keywords
@@ -434,10 +444,6 @@ https://lib.stat.cmu.edu/datasets/index
 
 (accessed on 22 January 2025).
  
-\end_layout
-
-\begin_layout Subsection
-Experimental datasets 
 \end_layout
 
 \begin_layout Standard
@@ -1189,13 +1195,137 @@ Treasury
  a dataset that contains measurements from the economy of USA.
 \end_layout
 
+\begin_layout Subsection
+Experiments
+\end_layout
+
+\begin_layout Standard
+In the following tables that describe the experimental results the following notation is used:
+\end_layout
+
+\begin_layout Enumerate
+The column DATASET represents the used dataset.
+\end_layout
+
+\begin_layout Enumerate
+The column ADAM represents the incorporation of the ADAM optimization method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_adam"
+literal "false"
+
+\end_inset
+
+ to train a neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column BFGS stands for the usage of a BFGS variant of Powell 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+ to train an artificial neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column GENETIC represents the incorporation of a Genetic Algorithm with the same parameter set as provided in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expValues"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ to train a neural network with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column RBF describes the experimental results obtained by the application of a Radial Basis Function (RBF) network 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf1,rbf2"
+literal "false"
+
+\end_inset
+
+ with 
+\begin_inset Formula $H=10$
+\end_inset
+
+ hidden nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column NNC stands for the usage of the original neural construction method.
+\end_layout
+
+\begin_layout Enumerate
+The column NEAT represents the usage of the NEAT method (NeuroEvolution of Augmenting Topologies ) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "neat"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column PRUNE stands for the the usage of OBS pruning method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "prune"
+literal "false"
+
+\end_inset
+
+,
+ as coded in Fast Compressed Neural Networks library 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fcn"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column PROPOSED denotes the usage of the proposed method.
+\end_layout
+
+\begin_layout Enumerate
+The row AVERAGE represents the average classification or regression error for all datasets in the corresponding table.
+\end_layout
+
 \begin_layout Standard
 \begin_inset Float table
 placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -4993,7 +5123,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -7394,10 +7524,16 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Experimental results using a variety of machine learning methods for the classification datasets.
+Experimental results using the proposed method and different values for the parameter 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+,
+ which defines the number of parameters for the initial phase of the method.
+ The experiments were conducted on the classification datasets.
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:expClass-1"
+name "tab:expClassIW"
 
 \end_inset
 
@@ -9203,10 +9339,16 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Experimental results using a variety of machine learning methods on the regression datasets.
+Experimental results using the proposed method and different values for the parameter 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+,
+ which is used for the number of parameters for the initial phase of the method.
+ The experiments were performed on the regression datasets.
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:expRegression-1"
+name "tab:expRegressionIW"
 
 \end_inset
 
@@ -11467,6 +11609,186 @@ D.
  pp.
  81-102,
  1978.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_adam"
+literal "false"
+
+\end_inset
+
+D.
+ P.
+ Kingma,
+ J.
+ L.
+ Ba,
+ ADAM:
+ a method for stochastic optimization,
+ in:
+ Proceedings of the 3rd International Conference on Learning Representations (ICLR 2015),
+ pp.
+ 1–15,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-2"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "powell"
+literal "true"
+
+\end_inset
+
+M.J.D Powell,
+ A Tolerant Algorithm for Linearly Constrained Optimization Calculations,
+ Mathematical Programming 
+\series bold
+45
+\series default
+,
+ pp.
+ 547-566,
+ 1989.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1991)"
+key "rbf1"
+literal "false"
+
+\end_inset
+
+J.
+ Park and I.
+ W.
+ Sandberg,
+ Universal Approximation Using Radial-Basis-Function Networks,
+ Neural Computation 
+\series bold
+3
+\series default
+,
+ pp.
+ 246-257,
+ 1991.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf2"
+literal "false"
+
+\end_inset
+
+G.A.
+ Montazer,
+ D.
+ Giveki,
+ M.
+ Karami,
+ H.
+ Rastegar,
+ Radial basis function neural networks:
+ A review.
+ Comput.
+ Rev.
+ J 
+\series bold
+1
+\series default
+,
+ pp.
+ 52-74,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2002)"
+key "neat"
+literal "false"
+
+\end_inset
+
+K.
+ O.
+ Stanley,
+ R.
+ Miikkulainen,
+ Evolving Neural Networks through Augmenting Topologies,
+ Evolutionary Computation 
+\series bold
+10
+\series default
+,
+ pp.
+ 99-127,
+ 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2002)"
+key "prune"
+literal "false"
+
+\end_inset
+
+Zhu,
+ V.,
+ Lu,
+ Y.,
+ & Li,
+ Q.
+ (2006).
+ MW-OBS:
+ An improved pruning method for topology design of neural networks.
+ Tsinghua Science and Technology,
+ 11(4),
+ 307-312.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "fcn"
+literal "true"
+
+\end_inset
+
+Grzegorz Klima,
+ Fast Compressed Neural Networks,
+ available from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://fcnn.sourceforge.net/
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
