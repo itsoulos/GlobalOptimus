@@ -768,7 +768,8 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-A method that was proposed relatively recently and it is based on Grammatical Evolution 
+Recently,
+ a method that utilizes the Grammatical Evolution 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ge1"
@@ -776,8 +777,8 @@ literal "false"
 
 \end_inset
 
-,
- dynamically identifies both the optimal architecture of artificial neural networks and the optimal values of its parameters 
+ to create the architecture of neural networks was proposed.
+ This method can dynamically discover the optimal architecture of neural networks as well as it can detect the optimal values for the corresponding parameters 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nnc"
@@ -786,8 +787,24 @@ literal "false"
 \end_inset
 
 .
- This method has been applied in a series of problems in the recent literature,
- such as problems presented in chemistry 
+ This technique creates various trial structures of artificial neural networks,
+ which,
+ using genetic operators,
+ evolve from generation to generation with the ultimate goal of minimizing the training error,
+ as provided by equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:eq1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ The method was applied with success in a series of practical problems,
+ such as the location of Amide I bonds 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nnc_amide1"
@@ -796,7 +813,11 @@ literal "false"
 \end_inset
 
 ,
- identification of the solution of differential equations 
+
+\series bold
+ 
+\series default
+solution of differential equations 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nnc_de"
@@ -814,7 +835,11 @@ literal "false"
 \end_inset
 
 ,
- problems related to education 
+
+\series bold
+ 
+\series default
+education problems
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nnc_student"
@@ -832,8 +857,36 @@ literal "false"
 \end_inset
 
  etc.
- A key advantage of this technique is that it can isolate from the initial features of the problem those that are most important in training the model,
- thus significantly reducing the required number of parameters that need to be identified.
+
+\series bold
+ 
+\series default
+A significant advantage of this particular technique over others is that it can effectively identify the characteristics of the problem that are most important for the effective training of the model,
+ thus significantly reducing the required response time of the model and thus avoiding the model from engaging in overfitting problems.
+\end_layout
+
+\begin_layout Standard
+However,
+ in many cases,
+ training the above model is not efficient and can become trapped in local minima of the error function,
+ which will directly result in poor performance on the problem data.
+ 
+\series bold
+Furthermore,
+ an important factor in the problems addressed by Grammatical Evolution is the initial values that the chromosomes of the genetic population take.
+ If the initialization is not effective,
+ then Grammatical Evolution may take a significant amount of time to find the optimal solution to the problem.
+ Furthermore,
+ in artificial neural networks,
+ an ineffective initialization of the genetic population can lead to the model becoming trapped in local minima of the error function.
+ In this paper,
+ we propose to introduce an additional phase in the artificial neural network construction algorithm.
+ In this phase,
+ an optimization method,
+ such as a genetic algorithm,
+ can be used to train an artificial neural network with a fixed number of parameters.
+ The final result of this additional phase is a trained artificial neural network,
+ which can be introduced into the initial genetic population of Grammatical Evolution.(OK)
 \end_layout
 
 \begin_layout Standard
@@ -889,6 +942,455 @@ name "sec:Materials-and-Methods"
 
 \begin_layout Subsection
 Grammatical Evolution 
+\end_layout
+
+\begin_layout Subsection
+The neural construction method 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-neural-construction"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The neural construction method utilizes the technique of Grammatical Evolution to produce artificial neural networks.
+ Grammatical Evolution is an evolutionary process where the chromosomes are vectors of positive integers.
+ These integers represent rules from a Backs - Naur form (BNF) grammar 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bnf1"
+literal "false"
+
+\end_inset
+
+ of the target language.
+
+\series bold
+ 
+\series default
+The method was incorporated in various cases,
+ such as data fitting
+\series bold
+ 
+\series default
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_program1,ge_program2"
+literal "false"
+
+\end_inset
+
+,
+ composition of music 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_music"
+literal "false"
+
+\end_inset
+
+,
+ video games 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_pacman,ge_supermario"
+literal "false"
+
+\end_inset
+
+,
+ energy problems 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_energy"
+literal "false"
+
+\end_inset
+
+,
+ cryptography 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_crypt"
+literal "false"
+
+\end_inset
+
+,
+ economics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ge_trading"
+literal "false"
+
+\end_inset
+
+ etc.
+ Any BNF grammar is defined as a set
+\series bold
+ 
+\begin_inset Formula $G=\left(N,T,S,P\right)$
+\end_inset
+
+ 
+\series default
+where the letters have the following definitions:
+\end_layout
+
+\begin_layout Itemize
+The set 
+\begin_inset Formula $N$
+\end_inset
+
+ represents the non - terminal symbols of the grammar.
+\end_layout
+
+\begin_layout Itemize
+The set 
+\begin_inset Formula $T$
+\end_inset
+
+ contains the terminal symbols of the grammar.
+ 
+\end_layout
+
+\begin_layout Itemize
+The start symbol of the grammar is denoted as 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The production rules of the grammar are enclosed in the set 
+\begin_inset Formula $P$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Grammatical Evolution production procedure initiates from the starting symbol 
+\begin_inset Formula $S$
+\end_inset
+
+ and following a series of steps,
+ the method creates valid programs by replacing non-terminal symbols with the right hand of the selected production rule.
+ The selection scheme has as:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Read
+\series default
+ the next element V from the chromosome that is being processed.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Select
+\series default
+ the next production rule following the equation:Rule = V mod 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+.
+ The symbol 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+ represents the total number of production rules for the under processing non – terminal symbol.
+ 
+\end_layout
+
+\begin_layout Standard
+The process of producing valid programs through the Grammatical Evolution method is depicted graphically in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:geProcess"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename GEFC.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The Grammatical Evolution process used to produce valid programs.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:geProcess"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+The grammar used for the neural construction procedure is shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nncGrammar"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ The numbers shown in parentheses are the increasing numbers of the production rules for each non - terminal symbol.
+ The constant 
+\begin_inset Formula $d$
+\end_inset
+
+ denotes the number of features in every pattern of the input dataset.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout LyX-Code
+S:=<Sigval>                          (0)
+\end_layout
+
+\begin_layout LyX-Code
+<Sigval>::=<Node>                    (0)
+\end_layout
+
+\begin_layout LyX-Code
+           | <Node> + <Sigval>       (1)
+\end_layout
+
+\begin_layout LyX-Code
+<Node>::=<Number>*sig(<Sum>+<Number>) (0)
+\end_layout
+
+\begin_layout LyX-Code
+<Sum>::= <Number>*<Xlist>            (0)
+\end_layout
+
+\begin_layout LyX-Code
+           |    <Sum>+<Sum>           (1)
+\end_layout
+
+\begin_layout LyX-Code
+<Xlist>::= x1        (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |    x2  (1)
+\end_layout
+
+\begin_layout LyX-Code
+             ..............
+\end_layout
+
+\begin_layout LyX-Code
+             |    xd  (d-1)
+\end_layout
+
+\begin_layout LyX-Code
+<Number>::= (<Dlist>.<Dlist>)        (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |    (-<Dlist>.<Dlist>) (1)
+\end_layout
+
+\begin_layout LyX-Code
+<Dlist>::= <Digit>            (0)
+\end_layout
+
+\begin_layout LyX-Code
+             | <Digit><Dlist> (1)
+\end_layout
+
+\begin_layout LyX-Code
+<Digit>::= 0      (0)
+\end_layout
+
+\begin_layout LyX-Code
+             |  1 (1)
+\end_layout
+
+\begin_layout LyX-Code
+             ...........
+\end_layout
+
+\begin_layout LyX-Code
+             |  9 (9)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The proposed grammar for the construction of artificial neural networks through Grammatical Evolution.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:nncGrammar"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+The used grammar produces artificial neural networks with the following form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+
+\end_inset
+
+The term 
+\begin_inset Formula $H$
+\end_inset
+
+ stands for the number of processing units (weights) of the neural network.
+ The function 
+\begin_inset Formula $\sigma(x)$
+\end_inset
+
+ represents the sigmoid function.
+
+\series bold
+ 
+\series default
+The total number of parameters for this network are computed through the following equation:
+\begin_inset Formula 
+\begin{equation}
+n=\left(d+2\right)H
+\end{equation}
+
+\end_inset
+
+For example the following form:
+\begin_inset Formula 
+\begin{equation}
+N(x)=1.9\mbox{sig}\left(10.5x_{1}+3.2x_{3}+1.4\right)+2.1\mbox{sig}\left(2.2x_{2}-3.3x_{3}+3.2\right)
+\end{equation}
+
+\end_inset
+
+denotes a produced neural network for a problem with 3 inputs 
+\begin_inset Formula $\left(x_{1},x_{2},x_{3}\right)$
+\end_inset
+
+ and the number of processing nodes is 
+\begin_inset Formula $H=2$
+\end_inset
+
+.
+ The neural network produced can be shown graphically in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nnExample"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename example_diagram.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+An example of a produced neural network.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:nnExample"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -13405,6 +13907,257 @@ E.I.
 ,
  3053,
  2024.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bnf1"
+literal "false"
+
+\end_inset
+
+J.
+ W.
+ Backus.
+ The Syntax and Semantics of the Proposed International Algebraic Language of the Zurich ACM-GAMM Conference.
+ Proceedings of the International Conference on Information Processing,
+ UNESCO,
+ 1959,
+ pp.125-132.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_program1"
+literal "false"
+
+\end_inset
+
+C.
+ Ryan,
+ J.
+ Collins,
+ M.
+ O’Neill,
+ Grammatical evolution:
+ Evolving programs for an arbitrary language.
+ In:
+ Banzhaf,
+ W.,
+ Poli,
+ R.,
+ Schoenauer,
+ M.,
+ Fogarty,
+ T.C.
+ (eds) Genetic Programming.
+ EuroGP 1998.
+ Lecture Notes in Computer Science,
+ vol 1391.
+ Springer,
+ Berlin,
+ Heidelberg,
+ 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_program2"
+literal "false"
+
+\end_inset
+
+M.
+ O’Neill,
+ M.,
+ C.
+ Ryan,
+ Evolving Multi-line Compilable C Programs.
+ In:
+ Poli,
+ R.,
+ Nordin,
+ P.,
+ Langdon,
+ W.B.,
+ Fogarty,
+ T.C.
+ (eds) Genetic Programming.
+ EuroGP 1999.
+ Lecture Notes in Computer Science,
+ vol 1598.
+ Springer,
+ Berlin,
+ Heidelberg,
+ 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_music"
+literal "false"
+
+\end_inset
+
+A.O.
+ Puente,
+ R.
+ S.
+ Alfonso,
+ M.
+ A.
+ Moreno,
+ Automatic composition of music by means of grammatical evolution,
+ In:
+ APL '02:
+ Proceedings of the 2002 conference on APL:
+ array processing languages:
+ lore,
+ problems,
+ and applications July 2002 Pages 148–155.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_pacman"
+literal "false"
+
+\end_inset
+
+E.
+ Galván-López,
+ J.M.
+ Swafford,
+ M.
+ O’Neill,
+ A.
+ Brabazon,
+ Evolving a Ms.
+ PacMan Controller Using Grammatical Evolution.
+ In:
+ ,
+ et al.
+ Applications of Evolutionary Computation.
+ EvoApplications 2010.
+ Lecture Notes in Computer Science,
+ vol 6024.
+ Springer,
+ Berlin,
+ Heidelberg,
+ 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_supermario"
+literal "false"
+
+\end_inset
+
+N.
+ Shaker,
+ M.
+ Nicolau,
+ G.
+ N.
+ Yannakakis,
+ J.
+ Togelius,
+ M.
+ O'Neill,
+ Evolving levels for Super Mario Bros using grammatical evolution,
+ 2012 IEEE Conference on Computational Intelligence and Games (CIG),
+ 2012,
+ pp.
+ 304-31.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_energy"
+literal "false"
+
+\end_inset
+
+D.
+ Martínez-Rodríguez,
+ J.
+ M.
+ Colmenar,
+ J.
+ I.
+ Hidalgo,
+ R.J.
+ Villanueva Micó,
+ S.
+ Salcedo-Sanz,
+ Particle swarm grammatical evolution for energy demand estimation,
+ Energy Science and Engineering 
+\series bold
+8
+\series default
+,
+ pp.
+ 1068-1079,
+ 2020.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_crypt"
+literal "false"
+
+\end_inset
+
+C.
+ Ryan,
+ M.
+ Kshirsagar,
+ G.
+ Vaidya,
+ G.
+ et al.
+ Design of a cryptographically secure pseudo random number generator with grammatical evolution.
+ Sci Rep 
+\series bold
+12
+\series default
+,
+ 8602,
+ 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_trading"
+literal "false"
+
+\end_inset
+
+C.
+ Martín,
+ D.
+ Quintana,
+ P.
+ Isasi,
+ Grammatical Evolution-based ensembles for algorithmic trading,
+ Applied Soft Computing 
+\series bold
+84
+\series default
+,
+ 105713,
+ 2019.
 \end_layout
 
 \begin_layout Bibliography
