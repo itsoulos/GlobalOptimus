@@ -350,7 +350,7 @@ A multitude of problems in contemporary literature are addressed using machine l
  in which phase a genetic algorithm undertakes to identify initial values for the parameters of the neural network.
  After the end of this phase,
  the evolution process is carried out using as initial values those identified in the above process.
- The proposed work was applied on a series of classification and regression problems founded in the recent literature and it was compared against other methods used for neural network training as wll as against the original neural network construction method.
+ The proposed work was applied on a series of classification and regression problems founded in the recent literature and it was compared against other methods used for neural network training as well as against the original neural network construction method.
  
 \end_layout
 
@@ -736,7 +736,7 @@ literal "false"
 
 .
  Similarly,
- Pham et al introduced a novell method for the optimal identification of the architecture of neural networks through parameters sharing 
+ Pham et al introduced a novel method for the optimal identification of the architecture of neural networks through parameters sharing 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nn_param_sharing"
@@ -870,9 +870,7 @@ However,
  in many cases,
  training the above model is not efficient and can become trapped in local minima of the error function,
  which will directly result in poor performance on the problem data.
- 
-\series bold
-Furthermore,
+ Furthermore,
  an important factor in the problems addressed by Grammatical Evolution is the initial values that the chromosomes of the genetic population take.
  If the initialization is not effective,
  then Grammatical Evolution may take a significant amount of time to find the optimal solution to the problem.
@@ -886,7 +884,12 @@ Furthermore,
  such as a genetic algorithm,
  can be used to train an artificial neural network with a fixed number of parameters.
  The final result of this additional phase is a trained artificial neural network,
- which can be introduced into the initial genetic population of Grammatical Evolution.(OK)
+ which can be introduced into the initial genetic population of Grammatical Evolution.
+ In this way,
+ the evolution of chromosomes will be accelerated and through genetic operators,
+ chromosomes will be produced that will use genetic material from the chromosome introduced from the first phase of the proposed process.
+ The final method was applied on a wide series of classification and regression problems and it was compared against the original neural network construction method and the results seem promising.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -940,10 +943,440 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
-\begin_layout Subsection
-Grammatical Evolution 
+\begin_layout Standard
+In this section,
+ the phases of the proposed methodology are analyzed in detail as well as the steps of the corresponding algorithms.
 \end_layout
 
+\begin_layout Subsection
+The first phase of the proposed method
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:The-first-phase"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the first phase of the proposed methodology,
+ an optimization method should be utilized to train an artificial neural network with a fixed number of weights.
+ In the present work,
+ a genetic algorithm was used.
+ Genetic algorithms was initially proposed by John Holland 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Holland"
+literal "false"
+
+\end_inset
+
+ can be considered as a global optimization procedure that have been applied successfully in a series of problems.
+ This method is inspired by biology and it can simulate the the evolutionary process through the genetic operations of mutation,
+ natural selection and crossover 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Stender,Goldberg,Michaelewicz"
+literal "false"
+
+\end_inset
+
+.
+ This method have been applied in cases such as robotics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Liu"
+literal "false"
+
+\end_inset
+
+,
+ energy problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Min"
+literal "false"
+
+\end_inset
+
+,
+ agriculture problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Chen"
+literal "false"
+
+\end_inset
+
+ etc.
+ The neural networks considered here are in the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+
+\end_inset
+
+In this equation,
+ the constant 
+\begin_inset Formula $H$
+\end_inset
+
+ defines the number of processing units (weights) for the neural network and the constant 
+\begin_inset Formula $d$
+\end_inset
+
+ is the dimension of the input patterns.
+ The function 
+\begin_inset Formula $\sigma(x)$
+\end_inset
+
+ stands for the sigmoid function,
+ expressed as:
+\begin_inset Formula 
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp\left(-x\right)}\label{eq:sigmoid}
+\end{equation}
+
+\end_inset
+
+From the equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:nn"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ it is derived that the total number of parameters for the neural network as computed as:
+\begin_inset Formula 
+\begin{equation}
+n=\left(d+2\right)H
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The main steps for the algorithm of the first phase have as follows:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization step
+\series default
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ the number of chromosomes and as 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ the number of allowed generations.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $p_{s}$
+\end_inset
+
+ the selection rate and as 
+\begin_inset Formula $p_{m}$
+\end_inset
+
+ the mutation rate.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+ the number of initial weights for the neural network.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ randomly the chromosomes 
+\begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
+\end_inset
+
+ of the population as vector of double numbers.
+ The dimension of each vector is calculated as:
+ 
+\begin_inset Formula $n=(d+2)I_{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=0$
+\end_inset
+
+,
+ the generation number.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Fitness calculation step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{c}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ a neural network 
+\begin_inset Formula $N_{i}=N\left(\overrightarrow{x},\overrightarrow{g_{i}}\right)$
+\end_inset
+
+ for the chromosome 
+\begin_inset Formula $\overrightarrow{g_{i}}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ the corresponding fitness value 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+ as
+\series bold
+
+\begin_inset Formula 
+\begin{equation}
+f_{i}=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Genetic operations step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Selection procedure:
+ Firstly the chromosomes are sorted according to their fitness values.
+ The best 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
+\end_inset
+
+ of them are copied without changes to the next generation.
+
+\series bold
+ 
+\series default
+The remaining will be replaced by new chromosomes that will be produced during crossover and mutation.
+\end_layout
+
+\begin_layout Enumerate
+Crossover procedure:
+ In this procedure for each pair of produced chromosomes defined as 
+\begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
+\end_inset
+
+,
+ two chromosomes 
+\begin_inset Formula $(z,w)$
+\end_inset
+
+ are selected from the current population with the process of tournament selection.
+ The new chromosomes are constructed using the following equations:
+\begin_inset Formula 
+\begin{eqnarray}
+\tilde{z_{i}} & = & a_{i}z_{i}+\left(1-a_{i}\right)w_{i}\nonumber \\
+\tilde{w_{i}} & = & a_{i}w_{i}+\left(1-a_{i}\right)z_{i}\label{eq:crossover_ali-1}
+\end{eqnarray}
+
+\end_inset
+
+The values 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ are considered as random numbers,
+ with 
+\begin_inset Formula $a_{i}\in[-0.5,1.5]$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kaelo"
+literal "true"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Mutation procedure:
+ For each element 
+\begin_inset Formula $t_{j},j=1,\ldots,n$
+\end_inset
+
+ of every chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ a random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ is selected.
+ The element is altered when 
+\begin_inset Formula $r\le p_{m}$
+\end_inset
+
+ according to the scheme:
+\begin_inset Formula 
+\begin{equation}
+t'_{j}=\begin{cases}
+t_{j}+\Delta\left(k,r_{j}-t_{j}\right), & t=0\\
+t_{j}-\Delta\left(k,t_{j}-l_{j}\right), & t=1
+\end{cases}\label{eq:delta1}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $t$
+\end_inset
+
+ is a random number that can have the values 0 or 1 and the function 
+\begin_inset Formula $\Delta(k,y)$
+\end_inset
+
+ is given by:
+\begin_inset Formula 
+\begin{equation}
+\Delta(k,y)=y\left(1-r^{\left(1-\frac{k}{N_{g}}\right)}\right)\label{eq:delta2}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination check step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k<N_{g}$
+\end_inset
+
+ then go to Fitness Calculation Step,
+ else terminate.
+\end_layout
+
+\end_deeper
 \begin_layout Subsection
 The neural construction method 
 \begin_inset CommandInset label
@@ -956,9 +1389,18 @@ name "subsec:The-neural-construction"
 \end_layout
 
 \begin_layout Standard
-The neural construction method utilizes the technique of Grammatical Evolution to produce artificial neural networks.
- Grammatical Evolution is an evolutionary process where the chromosomes are vectors of positive integers.
- These integers represent rules from a Backs - Naur form (BNF) grammar 
+The neural construction method incorporates the Grammatical Evolution procedure for the production of artificial neural networks.
+ Grammatical Evolution can be considered as a genetic algorithm,
+ where
+\series bold
+ 
+\series default
+the chromosomes are vectors of positive integers.
+ These integers are rules from a provided
+\series bold
+ 
+\series default
+Backs - Naur form (BNF) grammar 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "bnf1"
@@ -966,17 +1408,13 @@ literal "false"
 
 \end_inset
 
- of the target language.
+ of the underlying language.
 
 \series bold
  
 \series default
-The method was incorporated in various cases,
- such as data fitting
-\series bold
- 
-\series default
-
+The method of Grammatical Evolution was applied in various cases,
+ such as data fitting 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ge_program1,ge_program2"
@@ -1030,15 +1468,12 @@ literal "false"
 \end_inset
 
  etc.
- Any BNF grammar is defined as a set
-\series bold
- 
+ BNF grammars are commonly defined as sets 
 \begin_inset Formula $G=\left(N,T,S,P\right)$
 \end_inset
 
- 
-\series default
-where the letters have the following definitions:
+,
+ with the following definitions:
 \end_layout
 
 \begin_layout Itemize
@@ -1046,7 +1481,7 @@ The set
 \begin_inset Formula $N$
 \end_inset
 
- represents the non - terminal symbols of the grammar.
+ contains the non - terminal symbols of the grammar.
 \end_layout
 
 \begin_layout Itemize
@@ -1063,6 +1498,11 @@ The start symbol of the grammar is denoted as
 \begin_inset Formula $S$
 \end_inset
 
+,
+ with 
+\begin_inset Formula $S\in N$
+\end_inset
+
 .
 \end_layout
 
@@ -1071,25 +1511,26 @@ The production rules of the grammar are enclosed in the set
 \begin_inset Formula $P$
 \end_inset
 
-
+.
+ 
 \end_layout
 
 \begin_layout Standard
-The Grammatical Evolution production procedure initiates from the starting symbol 
+The procedure used to create programs in the underlying language initiates from the starting symbol 
 \begin_inset Formula $S$
 \end_inset
 
- and following a series of steps,
- the method creates valid programs by replacing non-terminal symbols with the right hand of the selected production rule.
- The selection scheme has as:
+ and using a series of steps,
+ the Grammatical Evolution produces valid programs by replacing non-terminal symbols with the right hand of the selected production rule.
+ The selection of the rule is performed using the following scheme:
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
-Read
+Obtain 
 \series default
- the next element V from the chromosome that is being processed.
+the next element from the processed chromosome and denote this element as V.
 \end_layout
 
 \begin_layout Itemize
@@ -1097,21 +1538,21 @@ Read
 \series bold
 Select
 \series default
- the next production rule following the equation:Rule = V mod 
+ the next production rule as:
+ Rule = V mod 
 \begin_inset Formula $N_{R}$
 \end_inset
 
-.
- The symbol 
+,
+ where 
 \begin_inset Formula $N_{R}$
 \end_inset
 
- represents the total number of production rules for the under processing non – terminal symbol.
- 
+ stands for the total number of production rules for non - terminal symbol that is currently under processing.
 \end_layout
 
 \begin_layout Standard
-The process of producing valid programs through the Grammatical Evolution method is depicted graphically in Figure 
+The overall process for the production of producing valid programs using the Grammatical Evolution method is shown graphically in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:geProcess"
@@ -1123,20 +1564,18 @@ nolink "false"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
+ 
 \begin_inset Float figure
 placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename GEFC.png
+	filename fchart.png
 	scale 50
 
 \end_inset
@@ -1165,7 +1604,7 @@ name "fig:geProcess"
 
 \end_inset
 
-The grammar used for the neural construction procedure is shown in Figure 
+The BNF grammar for the method of neural network construction is shown in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:nncGrammar"
@@ -1177,12 +1616,8 @@ nolink "false"
 \end_inset
 
 .
- The numbers shown in parentheses are the increasing numbers of the production rules for each non - terminal symbol.
- The constant 
-\begin_inset Formula $d$
-\end_inset
-
- denotes the number of features in every pattern of the input dataset.
+ The numbers shown in parentheses represent the increasing numbers of the production rules for every non - terminal symbol.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1191,7 +1626,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout LyX-Code
 S:=<Sigval>                          (0)
@@ -1286,40 +1721,8 @@ name "fig:nncGrammar"
 
 \end_inset
 
-The used grammar produces artificial neural networks with the following form:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
-\end{equation}
-
-\end_inset
-
-The term 
-\begin_inset Formula $H$
-\end_inset
-
- stands for the number of processing units (weights) of the neural network.
- The function 
-\begin_inset Formula $\sigma(x)$
-\end_inset
-
- represents the sigmoid function.
-
-\series bold
- 
-\series default
-The total number of parameters for this network are computed through the following equation:
-\begin_inset Formula 
-\begin{equation}
-n=\left(d+2\right)H
-\end{equation}
-
-\end_inset
-
-For example the following form:
+As an example of produced neural network,
+ consider the following following form:
 \begin_inset Formula 
 \begin{equation}
 N(x)=1.9\mbox{sig}\left(10.5x_{1}+3.2x_{3}+1.4\right)+2.1\mbox{sig}\left(2.2x_{2}-3.3x_{3}+3.2\right)
@@ -1327,16 +1730,17 @@ N(x)=1.9\mbox{sig}\left(10.5x_{1}+3.2x_{3}+1.4\right)+2.1\mbox{sig}\left(2.2x_{2
 
 \end_inset
 
-denotes a produced neural network for a problem with 3 inputs 
+This neural network stands for a network with 3 inputs 
 \begin_inset Formula $\left(x_{1},x_{2},x_{3}\right)$
 \end_inset
 
- and the number of processing nodes is 
+.
+ The number of processing units is 
 \begin_inset Formula $H=2$
 \end_inset
 
 .
- The neural network produced can be shown graphically in Figure 
+ The network can be shown graphically in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:nnExample"
@@ -1356,12 +1760,12 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename example_diagram.png
+	filename diagram2.png
 	scale 75
 
 \end_inset
@@ -1390,11 +1794,464 @@ name "fig:nnExample"
 
 \end_inset
 
+The main steps of the proposed algorithm have as follows:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Application of first phase.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+ the number of weights for the first phase.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Execute
+\series default
+ the first phase of the proposed method,
+ described in subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:The-first-phase"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the chromosome 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+ of the first phase,
+ with the lowest fitness value.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Convert
+\series default
+ the chromosome 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+ to the corresponding integer chromosome 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+.
+ This chromosome,
+ with the help of the grammar of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nncGrammar"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ can create the chromosome 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Initialization step
+\series default
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ the number of chromosomes and as 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ the number of allowed generations.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $p_{s}$
+\end_inset
+
+ the selection rate and as 
+\begin_inset Formula $p_{m}$
+\end_inset
+
+ the mutation rate.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ the chromosomes 
+\begin_inset Formula $g_{i},\ i=1,\ldots,N_{c}$
+\end_inset
+
+ as sets of positive random integers.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Insert
+\series default
+ the chromosome 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+ to a random position 
+\begin_inset Formula $r_{i}\in\left[1,N_{c}\right]$
+\end_inset
+
 
 \end_layout
 
-\begin_layout Subsection
-The proposed method
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $k=0$
+\end_inset
+
+ the generation counter.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Fitness Calculation step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{c}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the constructed neural network 
+\begin_inset Formula $N_{i}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ for the corresponding chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ using the grammar of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nncGrammar"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ the corresponding fitness value 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+ as
+\series bold
+
+\begin_inset Formula 
+\begin{equation}
+f_{i}=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x}_{j},\overrightarrow{w}\right)-y_{j}\right)^{2}\label{eq:eq1-1-1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Application of genetic operations
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Application of selection procedure:
+ Initially the chromosomes are sorted with respect to their fitness values.
+ The first 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
+\end_inset
+
+ of them are transferred without changes to the next generation.
+
+\series bold
+ 
+\series default
+The remaining chromosomes will be substituted by new chromosomes produced by crossover and mutation.
+\end_layout
+
+\begin_layout Enumerate
+Application of crossover procedure:
+ During crossover,
+ for each pair of new chromosomes defined as 
+\begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
+\end_inset
+
+,
+ two chromosomes 
+\begin_inset Formula $(z,w)$
+\end_inset
+
+ are selected from the current population using tournament selection.
+ The new offsprings are produced using one - point crossover.
+ A graphical example of the one - point crossover is outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:onepoint"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Application of mutation procedure:
+ For every element of each chromosome a random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ is selected.
+ The corresponding element is altered randomly when 
+\begin_inset Formula $r\le p_{m}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination check step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k<N_{g}$
+\end_inset
+
+ then go to Fitness Calculation Step else go to Testing Step.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Testing step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the best chromosome 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+ with the lowest fitness value.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Create
+\series default
+ the corresponding neural network 
+\begin_inset Formula $N^{*}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ using the grammar of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nncGrammar"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the neural network 
+\begin_inset Formula $N^{*}\left(\overrightarrow{x},\overrightarrow{w}\right)$
+\end_inset
+
+ to the test data of the objective problem and report the results.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename cross2.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+An example of the one - point crossover procedure.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:onepoint"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1408,14 +2265,9 @@ name "sec:Results"
 
 \end_layout
 
-\begin_layout Subsection
-Experimental datasets
-\end_layout
-
 \begin_layout Standard
-The validation of the proposed method was performed using a wide series of classification and regression datasets,
- available from various sources from the Internet.
- These datasets were downloaded from:
+The validation of the proposed method was performed with the assistance of a series of classification and regression datasets,
+ that can be downloaded freely from the Internet from the following sites:
 \end_layout
 
 \begin_layout Enumerate
@@ -1431,7 +2283,7 @@ https://archive.ics.uci.edu/
 
 \end_inset
 
-(accessed on 22 January 2025)
+(accessed on 8 July 2025)
 \begin_inset CommandInset citation
 LatexCommand citep
 key "uci"
@@ -1455,7 +2307,7 @@ https://sci2s.ugr.es/keel/datasets.php
 
 \end_inset
 
-(accessed on 22 January 2025)
+(accessed on 8 July 2025)
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Keel"
@@ -1478,12 +2330,16 @@ https://lib.stat.cmu.edu/datasets/index
 
 \end_inset
 
-(accessed on 22 January 2025).
+(accessed on 8 July 2025).
  
 \end_layout
 
+\begin_layout Subsection
+Experimental datasets
+\end_layout
+
 \begin_layout Standard
-The following datasets were utilized in the conducted experiments:
+The following datasets were used in the conducted experiments:
 \end_layout
 
 \begin_layout Enumerate
@@ -1963,7 +2819,7 @@ literal "false"
 EEG
 \series default
 ,
- which is dataset regardingEEG recordings 
+ which is dataset regarding EEG recordings 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "eeg1,eeg2"
@@ -2236,15 +3092,40 @@ Experiments
 \end_layout
 
 \begin_layout Standard
-In the following tables that describe the experimental results the following notation is used:
+The software used in the experiment was coded in C++ with the assistance of the freely available Optimus environment 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "optimus"
+literal "false"
+
+\end_inset
+
+.
+ The experiments were conducted 30 times,
+ using different seed for the random generator each time.
+ The validation of the experiments was performed using the method of ten - fold cross validation.
+ The average classification error as calculated on the test is reported for the classification datasets and the average regression error for the regression datasets.
+ The experimental settings are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expValues"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ In the following tables that describe the experimental results the following notation is used:
 \end_layout
 
 \begin_layout Enumerate
-The column DATASET represents the used dataset.
+The column DATASET stands for the used dataset.
 \end_layout
 
 \begin_layout Enumerate
-The column ADAM represents the incorporation of the ADAM optimization method 
+The column ADAM denotes the usage of the ADAM optimization method 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nn_adam"
@@ -2252,7 +3133,7 @@ literal "false"
 
 \end_inset
 
- to train a neural network with 
+ in order to train a neural network with 
 \begin_inset Formula $H=10$
 \end_inset
 
@@ -2260,7 +3141,7 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The column BFGS stands for the usage of a BFGS variant of Powell 
+The column BFGS stands for the incorporation of a BFGS variant of Powell 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "powell"
@@ -2268,7 +3149,7 @@ literal "false"
 
 \end_inset
 
- to train an artificial neural network with 
+ for the training of an artificial neural network with 
 \begin_inset Formula $H=10$
 \end_inset
 
@@ -2276,7 +3157,7 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The column GENETIC represents the incorporation of a Genetic Algorithm with the same parameter set as provided in Table 
+The column GENETIC denotes the usage of a Genetic Algorithm with the same parameter set as provided in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:expValues"
@@ -2295,7 +3176,7 @@ nolink "false"
 \end_layout
 
 \begin_layout Enumerate
-The column RBF describes the experimental results obtained by the application of a Radial Basis Function (RBF) network 
+The column RBF describes the incorporation of a Radial Basis Function (RBF) network 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "rbf1,rbf2"
@@ -2336,7 +3217,7 @@ literal "false"
 \end_inset
 
 ,
- as coded in Fast Compressed Neural Networks library 
+ provided by Fast Compressed Neural Networks library 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "fcn"
@@ -2361,7 +3242,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -2385,7 +3266,7 @@ name "tab:expValues"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="11" columns="3">
+<lyxtabular version="3" rows="6" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -2424,7 +3305,7 @@ VALUE
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $N_{C}$
+\begin_inset Formula $N_{c}$
 \end_inset
 
 
@@ -2456,7 +3337,7 @@ Chromosomes
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $N_{G}$
+\begin_inset Formula $N_{g}$
 \end_inset
 
 
@@ -2488,39 +3369,7 @@ Maximum number of generations
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $N_{K}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Number of generations for the modified Genetic Algorithm
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-50
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $p_{S}$
+\begin_inset Formula $p_{s}$
 \end_inset
 
 
@@ -2552,7 +3401,7 @@ Selection rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $p_{M}$
+\begin_inset Formula $p_{m}$
 \end_inset
 
 
@@ -2580,139 +3429,11 @@ Mutation rate
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $N_{T}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Generations before local search
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-20
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $N_{I}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Chromosomes participating in local search
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-20
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $a$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Bounding factor
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-10.0
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $F$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Scale factor for the margins
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2.0
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\lambda$
+\begin_inset Formula $I_{w}$
 \end_inset
 
 
@@ -2724,7 +3445,7 @@ Scale factor for the margins
 \begin_inset Text
 
 \begin_layout Plain Layout
-Value used for penalties
+Number of weights for the first phase
 \end_layout
 
 \end_inset
@@ -2733,7 +3454,7 @@ Value used for penalties
 \begin_inset Text
 
 \begin_layout Plain Layout
-100.0
+10
 \end_layout
 
 \end_inset
@@ -6529,7 +7250,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-36.45%
+35.75%
 \end_layout
 
 \end_inset
@@ -6541,7 +7262,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-35.71%
+35.24%
 \end_layout
 
 \end_inset
@@ -6553,7 +7274,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-28.25%
+27.64%
 \end_layout
 
 \end_inset
@@ -6565,7 +7286,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-30.73%
+29.97%
 \end_layout
 
 \end_inset
@@ -6577,7 +7298,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-32.19%
+33.40%
 \end_layout
 
 \end_inset
@@ -6589,7 +7310,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-27.94%
+28.70%
 \end_layout
 
 \end_inset
@@ -6601,7 +7322,7 @@ AVERAGE
 
 \series bold
 \size footnotesize
-24.79%
+23.82%
 \end_layout
 
 \end_inset
@@ -9238,6 +9959,17 @@ Experiments with the weight factor
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+An additional experiment was conducted,
+ where the initial weight parameter 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+,
+ used in the first phase of the current work was altered from 2 to 10.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -13910,6 +14642,183 @@ E.I.
 \end_layout
 
 \begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Holland"
+literal "false"
+
+\end_inset
+
+ Holland,
+ J.H.
+ Genetic algorithms.
+ Sci.
+ Am.
+ 1992,
+ 267,
+ 66–73.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Stender"
+literal "false"
+
+\end_inset
+
+ Stender,
+ J.
+ Parallel Genetic Algorithms:
+ Theory & Applications;
+ IOS Press:
+ Amsterdam,
+ The Netherlands,
+ 1993.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Goldberg"
+literal "false"
+
+\end_inset
+
+ Goldberg,
+ D.
+ Genetic Algorithms in Search,
+ Optimization and Machine Learning;
+ Addison-Wesley Publishing Company:
+ Reading,
+ MA,
+ USA,
+ 1989.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Michaelewicz"
+literal "false"
+
+\end_inset
+
+ Michaelewicz,
+ Z.
+ Genetic Algorithms + Data Structures = Evolution Programs;
+ Springer:
+ Berlin/Heidelberg,
+ Germany,
+ 1996.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Liu"
+literal "false"
+
+\end_inset
+
+Liu,
+ X.;
+ Jiang,
+ D.;
+ Tao,
+ B.;
+ Jiang,
+ G.;
+ Sun,
+ Y.;
+ Kong,
+ J.;
+ Chen,
+ B.
+ Genetic algorithm-based trajectory optimization for digital twin robots.
+ Front.
+ Bioeng.
+ Biotechnol.
+ 2022,
+ 9,
+ 793782.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Chen"
+literal "false"
+
+\end_inset
+
+ Chen,
+ Q.;
+ Hu,
+ X.
+ Design of intelligent control system for agricultural greenhouses based on adaptive improved genetic algorithm for multi-energy supply system.
+ Energy Rep.
+ 2022,
+ 8,
+ 12126–12138.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Min"
+literal "false"
+
+\end_inset
+
+ Min,
+ D.;
+ Song,
+ Z.;
+ Chen,
+ H.;
+ Wang,
+ T.;
+ Zhang,
+ T.
+ Genetic algorithm optimized neural network based fuel cell hybrid electric vehicle energy management strategy under start-stop condition.
+ Appl.
+ Energy 2022,
+ 306,
+ 118036
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kaelo"
+literal "true"
+
+\end_inset
+
+P.
+ Kaelo,
+ M.M.
+ Ali,
+ Integrated crossover rules in real coded genetic algorithms,
+ European Journal of Operational Research 
+\series bold
+176
+\series default
+,
+ pp.
+ 60-76,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
 key "bnf1"
@@ -15193,6 +16102,34 @@ D.
  pp.
  81-102,
  1978.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2025)"
+key "optimus"
+literal "false"
+
+\end_inset
+
+Tsoulos,
+ I.G.;
+ Charilogis,
+ V.;
+ Kyrou,
+ G.;
+ Stavrou,
+ V.N.;
+ Tzallas,
+ A.
+ OPTIMUS:
+ A Multidimensional Global Optimization Package.
+ J.
+ Open Source Softw.
+ 2025,
+ 10,
+ 7584.
 \end_layout
 
 \begin_layout Bibliography
