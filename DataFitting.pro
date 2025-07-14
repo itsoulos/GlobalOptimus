@@ -44,6 +44,7 @@ SOURCES += \
     METHODS/mewoa.cpp \
     METHODS/saop.cpp \
     METHODS/woa.cpp \
+    MLMODELS/airbf.cpp \
     MLMODELS/fcmodel.cpp \
     OPTIMUS/editlogger.cpp \
     OPTIMUS/filelogger.cpp \
@@ -127,6 +128,7 @@ HEADERS += \
     METHODS/mewoa.h \
     METHODS/saop.h \
     METHODS/woa.h \
+    MLMODELS/airbf.h \
     MLMODELS/fcmodel.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \

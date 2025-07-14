@@ -115,6 +115,7 @@ public:
      * @return the output of RBF for pattern x.
      */
     double  getOutput(Data &x);
+    double  getOutput(double *x);
     /**
      * @brief runKmeans Implements the K-means algorithm.
      * @param point
@@ -123,7 +124,7 @@ public:
      * @param variances
      */
     void    runKmeans(vector<Data> &point, int K,vector<Data> &centers,
-                                Data &variances);
+                                Data &variances,vector<int> &t);
     /**
      * @brief gaussian
      * @param x
@@ -132,6 +133,8 @@ public:
      * @return the gaussian value for pattern x.
      */
     double  gaussian(Data &x,Data &center,double variance);
+    double  gaussian(double *x,Data &center,double variance);
+
     /**
      * @brief trainModel Trains the RBF model.
      */

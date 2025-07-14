@@ -6,6 +6,7 @@
 # include <MLMODELS/nncmodel.h>
 # include <MLMODELS/rulemodel.h>
 # include <MLMODELS/fcmodel.h>
+# include <MLMODELS/airbf.h>
 
 
 # include <METHODS/gradientdescent.h>
@@ -119,6 +120,9 @@ void loadProblem()
     if(modelName == "rbf")
         mainModel = new RbfProblem();
     else
+    if(modelName == "airbf")
+        mainModel  = new AiRbf();
+    else
     if(modelName == "gdf")
         mainModel = new GdfModel();
     else
@@ -149,7 +153,7 @@ void loadProblem()
             }
         }
     }
-    if(modelName=="mlp" || modelName=="rbf" ||modelName == "frbf")
+    if(modelName=="mlp" || modelName=="rbf" ||modelName == "frbf" || modelName == "airbf")
     {
        if(modelName == "mlp")
        {
@@ -300,7 +304,7 @@ void runMethod()
             break;
         }
     }
-    if((modelName=="mlp" || modelName=="rbf" || modelName =="frbf") && index!=-1)
+    if((modelName=="mlp" || modelName=="rbf" || modelName =="frbf" || modelName == "airbf") && index!=-1)
     {
         mainModel->setOptimizer(method[index]);
     }
