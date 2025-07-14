@@ -1967,6 +1967,7 @@ datafitting.o: datafitting.cpp MLMODELS/mlpproblem.h \
 		METHODS/eo.h \
 		GE/fcprogram.h \
 		GE/mapper.h \
+		MLMODELS/airbf.h \
 		OPTIMUS/statistics.h \
 		MLMODELS/functionalrbf.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datafitting.o datafitting.cpp

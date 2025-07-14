@@ -110,7 +110,7 @@ void    Genetic::showDebug()
 {
     double besty;
     besty = fitnessArray[0];
-   //  if(generation %10==0 && getParam("opt_debug").getValue()=="yes")
+    // if(generation %10==0 && getParam("opt_debug").getValue()=="yes")
         methodLogger->printMessage(
             QString::asprintf("GENETIC. GENERATION=%4d BEST VALUE=%20.10lg",
                                generation,besty));
@@ -412,8 +412,8 @@ void    Genetic::localSiman(int pos)
         T0 =T0 * pow(alpha,k);
         k=k+1;
         if(T0<=1e-6) {
-        printf("Iteration: %4d Temperature: %20.10lg Value: %20.10lg\n",
-               k,T0,besty);
+        //printf("Iteration: %4d Temperature: %20.10lg Value: %20.10lg\n",
+        //       k,T0,besty);
 		break;
 	}
 

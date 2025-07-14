@@ -255,22 +255,38 @@ Data    AiRbf::gradient(Data &x)
     Data g;
     setParameters(x);
     g.resize(x.size());
-    RBFDerivatives d = parameterGradients(x);
-    int icount = 0;
-    //centers
-    for(int i=0;i<d.dC.size();i++)
+    for(int i=0;i<g.size();i++) g[i]=0.0;
+    int tcount = trainDataset->count();
+    Data gtemp;
+    gtemp.resize(g.size());
+    for(int i=0;i<tcount;i++)
     {
-        for(int j=0;j<d.dC[i].size();j++)
-        {
-            g[icount++]=d.dC[i][j];
-        }
+        Data xx = trainDataset->getXPoint(i);
+        double per=getOutput(xx)-trainDataset->getYPoint(i);
+    	RBFDerivatives d = parameterGradients(xx);
+    	int icount = 0;
+    	//centers
+    	for(int i=0;i<d.dC.size();i++)
+    	{
+        	for(int j=0;j<d.dC[i].size();j++)
+        	{
+            	gtemp[icount++]=d.dC[i][j];
+        	}
+    	}
+    	//variances
+    	for(int i=0;i<d.dSigma.size();i++)
+    	{
+        	gtemp[icount++]=d.dSigma[i];
+    	}
+    	//weights
+    	for(int i=0;i<d.dW.size();i++)
+    	{
+		gtemp[icount++]=d.dW[i];
+    	}
+
+        for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
     }
-    //variances
-    for(int i=0;i<d.dSigma.size();i++)
-    {
-        g[icount++]=d.dSigma[i];
-    }
-    //weights
+    for(int j=0;j<x.size();j++) g[j]*=2.0;
     return g;
 }
 
