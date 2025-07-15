@@ -47,7 +47,7 @@ void    AiRbf::kMeans(const Matrix& X, size_t K,
 
 
         // Αρχικοποίηση τυχαίων κέντρων
-        srand(1);//(unsigned) time(0));
+        srand((unsigned) time(0));
         for (size_t k = 0; k < K; ++k)
             centers[k] = X[rand() % N];
 
@@ -266,22 +266,22 @@ Data    AiRbf::gradient(Data &x)
     	RBFDerivatives d = parameterGradients(xx);
     	int icount = 0;
     	//centers
-    	for(int i=0;i<d.dC.size();i++)
+    	for(int j=0;j<d.dC.size();j++)
     	{
-        	for(int j=0;j<d.dC[i].size();j++)
+        	for(int k=0;k<d.dC[j].size();k++)
         	{
-            	gtemp[icount++]=d.dC[i][j];
+            	gtemp[icount++]=d.dC[j][k];
         	}
     	}
     	//variances
-    	for(int i=0;i<d.dSigma.size();i++)
+    	for(int j=0;j<d.dSigma.size();j++)
     	{
-        	gtemp[icount++]=d.dSigma[i];
+        	gtemp[icount++]=d.dSigma[j];
     	}
     	//weights
-    	for(int i=0;i<d.dW.size();i++)
+    	for(int j=0;j<d.dW.size();j++)
     	{
-		gtemp[icount++]=d.dW[i];
+		gtemp[icount++]=d.dW[j];
     	}
 
         for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
