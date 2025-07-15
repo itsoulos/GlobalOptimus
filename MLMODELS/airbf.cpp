@@ -196,8 +196,8 @@ void    AiRbf::initModel()
     //variances bounds
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=  0.01;
-        right[icount]= scale_factor * sigmas[i];
+        left[icount]=  -scale_factor * dmin;//0.01;
+        right[icount]= scale_factor * dmax;//sigmas[i];
         if(right[icount]<left[icount])
         {
             double t = right[icount];
