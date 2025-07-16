@@ -26,10 +26,10 @@ elif [ $MODEL = "fc" ]; then
 elif [ $MODEL = "rbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "airbf" ]; then
-##rbf_train.  Rbf trainig method. Possible values: optimus (default), rbf_gd, rbf_adam
+##rbf_train.  Rbf trainig method. Possible values: optimus (default), rbf_gd, rbf_adam, rbf_bfgs
 ##rbf_nodes.  Number of rbf nodes (default 10).
 ##rbf_factor. Scale factor for rbr (default 3.0).
-  MODELPARAMS="--rbf_train=optimus --opt_method=$METHOD --rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --opt_localsearch=none"
+  MODELPARAMS="--rbf_train=optimus --opt_method=$METHOD --rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "frbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "gdf" ]; then

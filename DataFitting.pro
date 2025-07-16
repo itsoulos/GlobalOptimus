@@ -130,6 +130,7 @@ HEADERS += \
     METHODS/woa.h \
     MLMODELS/airbf.h \
     MLMODELS/fcmodel.h \
+    MLMODELS/rbf_lbfgs.h \
     OPTIMUS/editlogger.h \
     OPTIMUS/filelogger.h \
     OPTIMUS/logger.h \

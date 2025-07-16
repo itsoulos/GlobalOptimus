@@ -1,12 +1,58 @@
 #include "airbf.h"
+# include "rbf_lbfgs.h"
 AiRbf::AiRbf()
     :Problem(1)
 {
     addParam(Parameter("rbf_nodes","1","Number of rbf nodes"));
     addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
     QStringList method;
-    method<<"optimus"<<"rbf_gd"<<"rbf_adam";
+    method<<"optimus"<<"rbf_gd"<<"rbf_adam"<<"rbf_bfgs";
     addParam(Parameter("rbf_train",method[0],method,"Rbf training method"));
+}
+
+void AiRbf::decodeParameters(const Vector& params) {
+       size_t K = numCenters, D = inputDim;
+       size_t idx = 0;
+       for (size_t j = 0; j < K; ++j) weights[j] = params[idx++];
+       for (size_t j = 0; j < K; ++j)
+           for (size_t d = 0; d < D; ++d)
+               centers[j][d] = params[idx++];
+       for (size_t j = 0; j < K; ++j)
+           sigmas[j] = std::max(params[idx++], 1e-3);
+}
+
+void AiRbf::encodeParameters(Vector& params) {
+        size_t K = numCenters, D = inputDim;
+        params.resize(K + K * D + K);
+        size_t idx = 0;
+        for (size_t j = 0; j < K; ++j) params[idx++] = weights[j];
+        for (size_t j = 0; j < K; ++j)
+            for (size_t d = 0; d < D; ++d)
+                params[idx++] = centers[j][d];
+        for (size_t j = 0; j < K; ++j) params[idx++] = sigmas[j];
+}
+
+void AiRbf::trainRBFwithLBFGS( const Matrix& X, const Vector& y)
+{
+    Vector params;
+        encodeParameters(params);
+
+        // Προσθήκη τυχαιότητας στην αρχικοποίηση αν μηδενικά
+        for (double& v : params) {
+            if (std::abs(v) < 1e-8) {
+                v = ((rand() / (double)RAND_MAX) - 0.5) * 0.1;
+            }
+        }
+
+        RBFObjective obj(*this, X, y);
+        Options opts;
+        opts.maxIter = 100;
+        double fx;
+        int iters = LBFGS::minimize(obj, params, fx, opts);
+        decodeParameters(params);
+
+        cout << "Training completed in " << iters << " iterations. Final loss: " << fx << endl;
+
 }
 
 void AiRbf::trainWithAdam(bool init,
@@ -28,6 +74,10 @@ void AiRbf::trainWithAdam(bool init,
     vector<AdamState> adamC(numCenters, AdamState(inputDim));
     AdamState adamS(numCenters);
 
+    double bestError = getTrainError();
+    Data bestX=bestx;
+    getParameters(bestX);
+
     for (int epoch = 0; epoch < epochs; ++epoch) {
         Vector dw(numCenters, 0.0);
         Matrix dc(numCenters, Vector(inputDim, 0.0));
@@ -39,6 +89,7 @@ void AiRbf::trainWithAdam(bool init,
             double y_pred = getOutput(xx);
             double error = y_pred - y[i];
             loss += error * error;
+
             RBFDerivatives grads = parameterGradients(X[i]);
             for (size_t j = 0; j < numCenters; ++j) {
                 dw[j] += 2 * error * grads.dW[j];
@@ -47,6 +98,12 @@ void AiRbf::trainWithAdam(bool init,
                      ds[j] += 2 * error * grads.dSigma[j];
                 }
             }
+        if(loss<=bestError)
+        {
+            bestError = loss;
+            getParameters(bestX);
+
+        }
 
             // Adam update
             adamW.t++;
@@ -83,6 +140,9 @@ void AiRbf::trainWithAdam(bool init,
             if(epoch%200==0)
             cout << "Epoch " << epoch << ", Loss: " << loss << endl;
         }
+
+    printf("ADAM BEST = %20.10lg \n",bestError);
+    setParameters(bestX);
 }
 
 void AiRbf::trainWithGradientDescent(const Matrix& X, const Vector& y,
@@ -132,6 +192,8 @@ void AiRbf::trainWithGradientDescent(const Matrix& X, const Vector& y,
  void AiRbf::trainModel()
 {
     QString method = getParam("rbf_train").getValue();
+    Matrix X= trainDataset->getAllXpoint();
+    Data   y= trainDataset->getAllYPoints();
     if(method=="optimus")
     {
         Model::trainModel();
@@ -139,16 +201,19 @@ void AiRbf::trainWithGradientDescent(const Matrix& X, const Vector& y,
     else
     if(method == "rbf_gd")
     {
-        Matrix X= trainDataset->getAllXpoint();
-        Data   y= trainDataset->getAllYPoints();
+
         trainWithGradientDescent(X, y, 0.005, 2000);
     }
     else
     if(method == "rbf_adam")
     {
-        Matrix X= trainDataset->getAllXpoint();
-        Data   y= trainDataset->getAllYPoints();
+
         trainWithAdam(true,X, y, 0.05, 2000);
+    }
+    else
+    if(method == "rbf_bfgs")
+    {
+        trainRBFwithLBFGS(X,y);
     }
 }
 RBFDerivatives AiRbf::parameterGradients(const Vector& x)
