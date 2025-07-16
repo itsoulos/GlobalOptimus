@@ -26,7 +26,10 @@ elif [ $MODEL = "fc" ]; then
 elif [ $MODEL = "rbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "airbf" ]; then
-  MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+##rbf_train.  Rbf trainig method. Possible values: optimus (default), rbf_gd, rbf_adam
+##rbf_nodes.  Number of rbf nodes (default 10).
+##rbf_factor. Scale factor for rbr (default 3.0).
+  MODELPARAMS="--rbf_train=optimus --opt_method=$METHOD --rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --opt_localsearch=none"
 elif [ $MODEL = "frbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "gdf" ]; then
@@ -105,7 +108,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=siman --gen_lsearchgens=20 --gen_lsearchitems=20"
+  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples

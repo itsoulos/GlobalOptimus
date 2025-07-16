@@ -8,6 +8,7 @@ RbfProblem::RbfProblem()
 {
     addParam(Parameter("rbf_nodes","1","Number of rbf nodes"));
     addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
+
     trainA.resize(0);
 }
 

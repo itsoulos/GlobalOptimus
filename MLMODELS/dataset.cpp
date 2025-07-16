@@ -17,6 +17,11 @@ Dataset::Dataset(Problem *p,int N)
     }
 }
 
+Data    Dataset::getAllYPoints()
+{
+    return ypoint;
+}
+
 void Dataset::addPoint(Data &x,double y)
 {
     xpoint.push_back(x);

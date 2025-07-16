@@ -176,6 +176,7 @@ public:
      * @param y
      */
     void    setPoint(int pos,Data &x,double y);
+    Data    getAllYPoints() ;
     ~Dataset();
 };
 

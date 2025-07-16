@@ -13,7 +13,12 @@ struct RBFDerivatives {
     Matrix dC;        // ∂y/∂c_ij
     Vector dSigma;    // ∂y/∂σ_i
 };
+struct AdamState {
+    Vector m, v;
+    int t = 0;
 
+    AdamState(size_t size) : m(size, 0.0), v(size, 0.0), t(0) {}
+};
 class AiRbf: public Problem, public Model
 {
 private:
@@ -40,6 +45,15 @@ public:
     void    getParameters(Data &x);
     double  getOutput(Data &x);
     double  getOutput(double *x);
+    void trainWithGradientDescent(const Matrix& X, const Vector& y,
+                                  double lr = 0.01, int epochs = 100);
+    void trainWithAdam(bool init,
+                       const Matrix& X, const Vector& y,
+                       double lr = 0.01, int epochs = 100,
+                       double beta1 = 0.9, double beta2 = 0.999, double eps = 1e-8);
+
+    virtual void trainModel();
+
     ~AiRbf();
 };
 

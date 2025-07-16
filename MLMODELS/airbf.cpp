@@ -4,8 +4,153 @@ AiRbf::AiRbf()
 {
     addParam(Parameter("rbf_nodes","1","Number of rbf nodes"));
     addParam(Parameter("rbf_factor","3.0","Rbf Scale factor"));
+    QStringList method;
+    method<<"optimus"<<"rbf_gd"<<"rbf_adam";
+    addParam(Parameter("rbf_train",method[0],method,"Rbf training method"));
 }
 
+void AiRbf::trainWithAdam(bool init,
+                   const Matrix& X, const Vector& y,
+                   double lr, int epochs,
+                   double beta1, double beta2, double eps)
+{
+    vector<int> assignments;
+    vector<int> t;
+    if(init)
+    {
+        kMeans(X, numCenters, centers, assignments, sigmas,t);
+        weights.assign(numCenters, 0.0);
+    }
+
+    size_t N = X.size();
+
+    AdamState adamW(numCenters);
+    vector<AdamState> adamC(numCenters, AdamState(inputDim));
+    AdamState adamS(numCenters);
+
+    for (int epoch = 0; epoch < epochs; ++epoch) {
+        Vector dw(numCenters, 0.0);
+        Matrix dc(numCenters, Vector(inputDim, 0.0));
+        Vector ds(numCenters, 0.0);
+        double loss = 0.0;
+
+        for (size_t i = 0; i < N; ++i) {
+            Data xx = X[i];
+            double y_pred = getOutput(xx);
+            double error = y_pred - y[i];
+            loss += error * error;
+            RBFDerivatives grads = parameterGradients(X[i]);
+            for (size_t j = 0; j < numCenters; ++j) {
+                dw[j] += 2 * error * grads.dW[j];
+                for (size_t k = 0; k < inputDim; ++k)
+                     dc[j][k] += 2 * error * grads.dC[j][k];
+                     ds[j] += 2 * error * grads.dSigma[j];
+                }
+            }
+
+            // Adam update
+            adamW.t++;
+            adamS.t++;
+            for (size_t j = 0; j < numCenters; ++j) {
+                // --- weights
+                double g = dw[j] / N;
+                adamW.m[j] = beta1 * adamW.m[j] + (1 - beta1) * g;
+                adamW.v[j] = beta2 * adamW.v[j] + (1 - beta2) * g * g;
+                double mhat = adamW.m[j] / (1 - pow(beta1, adamW.t));
+                double vhat = adamW.v[j] / (1 - pow(beta2, adamW.t));
+                weights[j] -= lr * mhat / (sqrt(vhat) + eps);
+
+                // --- sigmas
+                double gs = ds[j] / N;
+                adamS.m[j] = beta1 * adamS.m[j] + (1 - beta1) * gs;
+                adamS.v[j] = beta2 * adamS.v[j] + (1 - beta2) * gs * gs;
+                double mhat_s = adamS.m[j] / (1 - pow(beta1, adamS.t));
+                double vhat_s = adamS.v[j] / (1 - pow(beta2, adamS.t));
+                sigmas[j] -= lr * mhat_s / (sqrt(vhat_s) + eps);
+                sigmas[j] = max(sigmas[j], 1e-3);  // prevent collapse
+
+                // --- centers
+                adamC[j].t++;
+                for (size_t k = 0; k < inputDim; ++k) {
+                    double gc = dc[j][k] / N;
+                    adamC[j].m[k] = beta1 * adamC[j].m[k] + (1 - beta1) * gc;
+                    adamC[j].v[k] = beta2 * adamC[j].v[k] + (1 - beta2) * gc * gc;
+                    double mhat_c = adamC[j].m[k] / (1 - pow(beta1, adamC[j].t));
+                    double vhat_c = adamC[j].v[k] / (1 - pow(beta2, adamC[j].t));
+                    centers[j][k] -= lr * mhat_c / (sqrt(vhat_c) + eps);
+                }
+            }
+            if(epoch%200==0)
+            cout << "Epoch " << epoch << ", Loss: " << loss << endl;
+        }
+}
+
+void AiRbf::trainWithGradientDescent(const Matrix& X, const Vector& y,
+                              double lr , int epochs)
+{
+    vector<int> assignments;
+    vector<int> t;
+    kMeans(X, numCenters, centers, assignments, sigmas,t);
+    weights.assign(numCenters, 0.0); // Αρχικά βάρη
+    size_t N = X.size();
+    for (int epoch = 0; epoch < epochs; ++epoch) {
+        Vector dw(numCenters, 0.0);
+        Matrix dc(numCenters, Vector(inputDim, 0.0));
+        Vector ds(numCenters, 0.0);
+
+        double loss = 0.0;
+
+        for (size_t i = 0; i < N; ++i) {
+            Data xx = X[i];
+            double y_pred = getOutput(xx);
+            double error = y_pred - y[i];
+            loss += error * error;
+            RBFDerivatives grads = parameterGradients(X[i]);
+
+            for (size_t j = 0; j < numCenters; ++j) {
+                dw[j] += 2 * error * grads.dW[j];
+                for (size_t k = 0; k < inputDim; ++k)
+                    dc[j][k] += 2 * error * grads.dC[j][k];
+                    ds[j] += 2 * error * grads.dSigma[j];
+                }
+            }
+
+            // Μέση τιμή και βήμα καθόδου
+            for (size_t j = 0; j < numCenters; ++j) {
+                weights[j] -= lr * dw[j] / N;
+                sigmas[j]  -= lr * ds[j] / N;
+                for (size_t k = 0; k < inputDim; ++k)
+                    centers[j][k] -= lr * dc[j][k] / N;
+            }
+            if(epoch%200==0)
+
+            cout << "Epoch " << epoch << ", Loss: " << loss  << endl;
+        }
+
+}
+
+ void AiRbf::trainModel()
+{
+    QString method = getParam("rbf_train").getValue();
+    if(method=="optimus")
+    {
+        Model::trainModel();
+    }
+    else
+    if(method == "rbf_gd")
+    {
+        Matrix X= trainDataset->getAllXpoint();
+        Data   y= trainDataset->getAllYPoints();
+        trainWithGradientDescent(X, y, 0.005, 2000);
+    }
+    else
+    if(method == "rbf_adam")
+    {
+        Matrix X= trainDataset->getAllXpoint();
+        Data   y= trainDataset->getAllYPoints();
+        trainWithAdam(true,X, y, 0.05, 2000);
+    }
+}
 RBFDerivatives AiRbf::parameterGradients(const Vector& x)
 {
     RBFDerivatives grads;
@@ -232,7 +377,14 @@ void    AiRbf::init(QJsonObject &params)
 
 QJsonObject AiRbf::done(Data &x)
 {
-    setParameters(x);
+    QString method = getParam("rbf_train").getValue();
+    if(method == "optimus")
+    {
+        setParameters(x);
+        Matrix X= trainDataset->getAllXpoint();
+        Data   y= trainDataset->getAllYPoints();
+        trainWithAdam(false,X, y, 0.05, 5000);
+    }
     double tr=getTrainError();
     QJsonObject xx;
     double tt=getTestError(testDataset);
