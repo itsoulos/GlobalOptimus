@@ -3,10 +3,11 @@
 \documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 \usepackage[utf8]{inputenc}
 \usepackage{color}
+\usepackage{array}
 \usepackage{float}
 \usepackage{url}
 \usepackage{varwidth}
-\usepackage{amstext}
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{rotfloat}
 
@@ -241,7 +242,7 @@ evolution \citep{Deng,Pant,Charilogis,Charilogis2}, convex optimization
 methods such as the ellipsoid method \citep{Vishnoi,Vishnoi-1} and
 cutting-plane method \citep{Pi=0000F3ro}, simplex-based methods like
 the Nelder-Mead method \citep{Nelder}, response surface methods including
-kriging \citep{Jones}, trust-region methods like Bayesian optimization
+krigin \citep{Jones}, trust-region methods like Bayesian optimization
 \citep{Snoek,Mockus}, conjugate gradient methods such as Fletcher-Reeves
 \citep{Fletcher} and Polak-Ribière \citep{Polak,Nocedal}, constrained
 optimization methods including penalty function methods and interior-point
@@ -356,7 +357,7 @@ algorithm checks if a similar solution exists in the memory within
 a predefined tolerance ($e$: small number e.g. 0.5):
 
 \begin{equation}
-|echo_{d}-memory_{j,d}<e
+|echo_{d}-memory_{j,d}|<e
 \end{equation}
 
 If a match is found:
@@ -403,7 +404,7 @@ a heuristic to estimate the quality of a solution before computing
 the objective function. The approximate fitness is calculated as:
 
 \begin{equation}
-approxFitness=\sum(echo_{d}-x_{best,d}){{}^2}\cdot currentDelay
+approxFitness=\left(\sum_{d=1}^{n}(echo_{d}-x_{best,d})^{2}\right)\cdot currentDelay
 \end{equation}
 
 If: $approxFitness>approxThreshold\cdot f_{i}$: 
@@ -511,7 +512,7 @@ do}{\footnotesize\par}
 {\footnotesize 14: \hspace{0.5cm}\hspace{0.5cm}if $technique$ =
 \textquotedbl ECHO+APP\textquotedbl{} then}{\footnotesize\par}
 
-{\footnotesize 15: \hspace{0.5cm}\hspace{0.5cm}\hspace{0.5cm}$approxFitness=\sum(echo_{d}-x_{best,d}){{}^2}\cdot currentDelay$}{\footnotesize\par}
+{\footnotesize 15: \hspace{0.5cm}\hspace{0.5cm}\hspace{0.5cm}$approxFitness=\left(\sum_{d=1}^{n}(echo_{d}-x_{best,d})^{2}\right)\cdot currentDelay$}{\footnotesize\par}
 
 {\footnotesize 16: \hspace{0.5cm}\hspace{0.5cm}\hspace{0.5cm}if
 $approxFitness>approxThreshold\cdot f_{i}$ then}{\footnotesize\par}
@@ -609,14 +610,14 @@ if}{\footnotesize\par}
 
 {\footnotesize 64: \hspace{0.5cm}end for}{\footnotesize\par}
 
-{\footnotesize 65: \hspace{0.5cm}if termination criteria is meet then
-end for\ref{tab:settings}}{\footnotesize\par}
+{\footnotesize 65: \hspace{0.5cm}if termination criteria $SR$ is
+meet then end for\ref{tab:settings}}{\footnotesize\par}
 
 {\footnotesize 66: end for}{\footnotesize\par}
 
 {\footnotesize 67: return ($x_{best}$, $f_{best}$)}{\footnotesize\par}
 
-\caption{Pseudocode of Echo Optimizer\label{alg:pseudocode}}
+\caption{Pseudocode of EO\label{alg:pseudocode}}
 \end{algorithm}
 
 The EO algorithm (Algorithm \ref{alg:pseudocode}) begins by initializing
@@ -668,15 +669,71 @@ The algorithm continues to iterate until $iter_{max}$ is reached
 or a termination condition is met, at which point the best solution
 $x_{best}$ is returned as the result of the optimization process.
 
+\subsection{Parameters Sensitivity}
+
+The reflection factor ($coef$), which regulates the attraction toward
+the current best solution, directly affects the algorithm’s ability
+to escape local minima. Values around 0.5 generally work well across
+various problems, but for functions with steep gradients or many small
+local minima, fine-tuning may be necessary. In contrast, the parameters
+that control the linear decay exhibit greater stability, with default
+values providing a balanced transition from exploration to exploitation
+without causing major disruptions.
+
+The approximation threshold ($approxThreshold$) determines the tendency
+to reject candidate solutions and directly influences convergence
+speed. Values near 0.2 provide an acceptable balance between accuracy
+and speed. However, in problems with wide basins of attraction, it
+can be increased up to 0.3 to accelerate the process, whereas in problems
+with sharp ridges, it may be reduced to 0.1 to avoid mistakenly discarding
+valid solutions. The local search rate may also require attention,
+especially in problems with numerous local minima, as higher values
+tend to improve reliability at the cost of increased computational
+overhead.
+
+For practical applications, it is recommended to begin with the default
+parameter values, followed by gradual adjustments depending on the
+problem type. Avoiding extreme values in sensitive parameters is important,
+as values outside reasonable bounds can significantly degrade performance.
+Empirical testing on representative problems remains the most reliable
+strategy for parameter tuning, while the development of automatic
+parameter control mechanisms would be a valuable extension in future
+versions of the algorithm.
+
+The memory tolerance parameter ($e$) is particularly sensitive and
+directly affects the efficiency of the memory mechanism. The default
+value of e = 0.5 works well for many problems, typically corresponding
+to 5--10\% of the variable range in standard optimization benchmarks.
+However, the optimal value depends on the characteristics of the objective
+function. Small values (e \textless{} 0.2) greatly increase the number
+of stored solutions, improving accuracy but also leading to excessive
+memory usage, increased computational cost during similarity checks,
+and a risk of overfitting to local variations. On the other hand,
+large values (e \textgreater{} 1.0) reduce the effectiveness of memory
+by allowing false associations between dissimilar solutions, lowering
+reuse rates, and leading to redundant objective function evaluations.
+For functions with steep slopes or narrow valleys (e.g., ROSENBROCK),
+lower values (e = 0.2--0.4) are recommended to ensure accuracy. For
+functions with wide attraction basins (e.g., SPHERE), higher values
+(e = 0.6--0.8) improve reuse efficiency. In noisy functions, setting
+e \ensuremath{\le} 0.3 helps avoid contamination of the memory with
+unstable solutions. The interaction between e and the memory size
+(maxMemorySize) is also critical. When memory is limited, a slightly
+increased e improves coverage without overloading the system, while
+in cases with large memory availability, a smaller e allows more precise
+mapping of the search space. There is no universally optimal value;
+selection must rely on experimental evaluation across representative
+subproblems.
+
 \section{Experimental setup and benchmark results \label{sec:Results}}
 
 This section first introduces the benchmark functions selected for
 experimental evaluation, followed by a comprehensive analysis of the
 conducted experiments. The study systematically examines the various
-parameters of the proposed algorithm to assess its reliability and
-effectiveness in different optimization scenarios. The complete parameter
-configurations used throughout these experiments are documented in
-Table \ref{tab:settings}.
+parameters of the ECHO+APP+MEM algorithm to assess its reliability
+and effectiveness in different optimization scenarios. The complete
+parameter configurations used throughout these experiments are documented
+in Table \ref{tab:settings}.
 
 \begin{table}[H]
 \caption{Parameters and settings \label{tab:settings}}
@@ -702,7 +759,7 @@ Table \ref{tab:settings}.
 {\footnotesize$e$} & {\footnotesize 0.5$^{**}$} & {\footnotesize Echo memory tolerance for EO}\tabularnewline
 \hline 
 {\footnotesize$SR$} & {\footnotesize$\delta_{sim}^{(iter)}=\left|f_{sim,min}^{(iter)}-f_{sim,min}^{(iter-1)}\right|$
-\citep{Charilogis-1,Lagaris}} & {\footnotesize Stopping rule for all methods}\tabularnewline
+\citep{Gianni,Charilogis-1,Lagaris}} & {\footnotesize Stopping rule for all methods}\tabularnewline
 \hline 
 {\footnotesize$N_{s}$} & {\footnotesize 12} & {\footnotesize Similarity $count_{max}$ for stopping rule}\tabularnewline
 \hline 
@@ -727,7 +784,7 @@ Table \ref{tab:settings}.
 \hline 
 {\footnotesize$CR$} & {\footnotesize 0.5} & {\footnotesize Initial crossover rate for SaDE}\tabularnewline
 \hline 
-{\footnotesize$P_{r}$} & {\footnotesize 3} & {\footnotesize Precision control parameter for LTMA}\tabularnewline
+{\footnotesize$P_{r}$} & {\footnotesize -0.301, $\mathrm{memory_{tolerance}}=(\text{10})^{-0.301}\approx0.5$} & {\footnotesize Precision control parameter for LTMA}\tabularnewline
 \hline 
 \end{tabular}}{\footnotesize\par}
 \end{table}
@@ -837,7 +894,7 @@ for the experimental tests.
 \hline 
 {\tiny MICHALEWICZ} & {\tiny$f(\mathbf{x})=-\sum_{i=1}^{n}\sin(x_{i})\cdot\sin^{2m}\left(\frac{i\cdot x_{i}^{2}}{\pi}\right)$} & {\tiny 4} & {\tiny -3.698857098}\tabularnewline
 \hline 
-{\tiny POTENTIAL \citep{Lennard}} & {\tiny$V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]$} & {\tiny 9,15,21,30} & {\tiny -9.103852416}\tabularnewline
+{\tiny POTENTIAL \citep{Lennard}} & {\tiny$V_{LJ}(r)=4\epsilon\left[\left(\frac{\sigma}{r}\right)^{12}-\left(\frac{\sigma}{r}\right)^{6}\right]$} & {\tiny 9,15,21,} & {\tiny -9.103852416}\tabularnewline
 \hline 
 {\tiny RASTRIGIN} & {\tiny$f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2})$} & {\tiny 2} & {\tiny -2}\tabularnewline
 \hline 
@@ -847,13 +904,6 @@ for the experimental tests.
 
 {\tiny$\quad-30\le x_{i}\le30$}
 \end{cellvarwidth} & {\tiny 4-200} & {\tiny 0}\tabularnewline
-\hline 
-\begin{cellvarwidth}[t]
-\centering
-{\tiny ROTATED}{\tiny\par}
-
-{\tiny ROSENBROCK}
-\end{cellvarwidth} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n-1}\left[100\left(z_{i+1}-z_{i}^{2}\right)^{2}+\left(z_{i}-1\right)^{2}\right],\ z=Rx$} & {\tiny 10-250} & {\tiny 0}\tabularnewline
 \hline 
 {\tiny SHARP RIDGE} & {\tiny$f(\mathbf{x})=x_{1}^{2}+\alpha\sum_{i=2}^{n}x_{i}^{2},\ a>1$} & {\tiny 10-250} & {\tiny 0}\tabularnewline
 \hline 
@@ -873,10 +923,10 @@ for the experimental tests.
 \centering
 {\tiny -156.6646628}{\tiny\par}
 
-{\tiny -195.8308285}
+{\tiny -195.88285}
 \end{cellvarwidth}\tabularnewline
 \hline 
-{\tiny TEST30N} & \begin{cellvarwidth}[t]
+{\tiny TESTN} & \begin{cellvarwidth}[t]
 \centering
 {\tiny$f(\mathbf{x})=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+$}{\tiny\par}
 
@@ -904,33 +954,36 @@ for all methods is detailed in Table \ref{tab:settings}.
 The results present the mean number of objective function evaluations
 across all trials. Parenthetical values denote the success rate in
 locating the global optimum, with omitted percentages indicating perfect
-(100\%) convergence across all repetitions.In the experimental tables,
-values highlighted in green indicate the best performance, corresponding
-to the lowest number of function calls. The experiments present five
-tables that evaluate the performance of the proposed method ECHO+APP+MEM,
-along with its individual variants, in comparison with other well-known
-optimization techniques. The measurements were conducted on standard
-benchmark functions under specific experimental settings. All parameters
-and initializations not explicitly stated below follow the values
-defined in Table \ref{tab:settings}.
+(100\%) convergence across all repetitions. In the experimental tables,
+the values marked in green indicate the best performance, corresponding
+to the lowest number of function calls, while those marked in blue
+are the standard deviation from the mean of the 30 iterations for
+each reference function. The experiments present five tables that
+evaluate the performance of the ECHO+APP+MEM method , along with its
+individual variants, in comparison with other well-known optimization
+techniques. The measurements were conducted on standard benchmark
+functions under specific experimental settings. All parameters and
+initializations not explicitly stated below follow the values defined
+in Table \ref{tab:settings}.
 \begin{itemize}
-\item Table \ref{tab:echo} presents the effectiveness of the proposed ECHO+APP+MEM
+\item Table \ref{tab:echo} presents the effectiveness of the ECHO+APP+MEM
 method across a wide range of low- and medium-dimensional functions.
 The experiments were conducted using a population size of 200 and
 a 2\% local optimization rate. For comparison, the ECHO, ECHO+APP,
 ECHO+MEM, and ECHO+LTMA variants are also included.
 \item Table \ref{tab:balance} focuses on analyzing the balance between
-exploration and exploitation of the proposed method. It includes metrics
-such as $IPD$ (Initial Population Diversity), $FPD$ (Final Population
-Diversity), $AER$ (Average Exploration Ratio), $MER$ (Median Exploration
-Ratio), and $ABI$ (Average Balance Index).
-\item Table \ref{tab:callsLow200} compares the proposed method with classical
-optimization techniques (GA, PSO, SaDE \citep{Qin}, jDE \citep{Brest},
-CMA-ES \citep{Hansen}) on low- and medium-dimensional functions.
-The experimental setup used a population of 200 and a 2\% local optimization
-rate. To ensure fair comparison, whenever the number of function calls
-exceeded 10,000, the evaluations were capped at this limit.
-\item Table \ref{tab:callsHigh50} examines the performance of the proposed
+exploration and exploitation of the ECHO+APP+MEM method. It includes
+metrics such as $IPD$ (Initial Population Diversity), $FPD$ (Final
+Population Diversity), $AER$ (Average Exploration Ratio), $MER$
+(Median Exploration Ratio), and $ABI$ (Average Balance Index).
+\item Table \ref{tab:callsLow200} compares the ECHO+APP+MEM method with
+classical optimization techniques (GA, PSO, SaDE \citep{Qin}, jDE
+\citep{Brest}, CMA-ES \citep{Hansen}) on low- and medium-dimensional
+functions. The experimental setup used a population of 200 and a 2\%
+local optimization rate. To ensure fair comparison, whenever the number
+of function calls exceeded 10,000, the evaluations were capped at
+this limit.
+\item Table \ref{tab:callsHigh50} examines the performance of the ECHO+APP+MEM
 method on high-dimensional functions using a population size of 50
 and without applying local optimization. The optimization methods
 GA and PSO were removed due to poor performance and CLPSO \citep{Liang}
@@ -941,7 +994,7 @@ is computed using the formula: $Np=4+\left\lfloor 3\cdot\log(\text{dimension})\r
 Local optimization was not applied in this configuration either.
 \end{itemize}
 \begin{table}[H]
-\caption{Comparison of function calls of the different versions of the algorithm\label{tab:echo}}
+\caption{Comparison of function calls of the different versions of the EO algorithm\label{tab:echo}}
 
 \centering{}{\scriptsize{}%
 \begin{tabular}{|l|c|c|c|c|c|}
@@ -949,108 +1002,108 @@ Local optimization was not applied in this configuration either.
 {\scriptsize\textbf{FUNCTION}} & {\scriptsize\textbf{ECHO}} & {\scriptsize\textbf{ECHO+APP}} & {\scriptsize\textbf{ECHO+MEM}} & {\scriptsize\textbf{ECHO+LTMA}} & {\scriptsize\textbf{ECHO+APP+MEM}}\tabularnewline
 \hline 
 \hline 
-{\scriptsize\textbf{ACKLEY}} & {\scriptsize 11,057} & {\scriptsize 4987} & {\scriptsize 6551} & {\scriptsize 9221} & {\scriptsize 4325}\tabularnewline
+{\scriptsize\textbf{ACKLEY}} & {\scriptsize 11,057} & {\scriptsize 4987} & {\scriptsize 6551} & {\scriptsize 8364} & {\scriptsize 4325}\tabularnewline
 \hline 
-{\scriptsize\textbf{BF1}} & {\scriptsize 5807} & {\scriptsize 4899} & {\scriptsize 3448} & {\scriptsize 5053} & {\scriptsize 3430}\tabularnewline
+{\scriptsize\textbf{BF1}} & {\scriptsize 5807} & {\scriptsize 4899} & {\scriptsize 3448} & {\scriptsize 4413} & {\scriptsize 3430}\tabularnewline
 \hline 
-{\scriptsize\textbf{BF2}} & {\scriptsize 5287} & {\scriptsize 4189} & {\scriptsize 2993} & {\scriptsize 4563} & {\scriptsize 2973}\tabularnewline
+{\scriptsize\textbf{BF2}} & {\scriptsize 5287} & {\scriptsize 4189} & {\scriptsize 2993} & {\scriptsize 3935} & {\scriptsize 2973}\tabularnewline
 \hline 
-{\scriptsize\textbf{BF3}} & {\scriptsize 4729} & {\scriptsize 3632} & {\scriptsize 2502} & {\scriptsize 3994} & {\scriptsize 2472}\tabularnewline
+{\scriptsize\textbf{BF3}} & {\scriptsize 4729} & {\scriptsize 3632} & {\scriptsize 2502} & {\scriptsize 3441} & {\scriptsize 2472}\tabularnewline
 \hline 
-{\scriptsize\textbf{BRANIN}} & {\scriptsize 3967} & {\scriptsize 3018} & {\scriptsize 1395} & {\scriptsize 2897} & {\scriptsize 1377}\tabularnewline
+{\scriptsize\textbf{BRANIN}} & {\scriptsize 3967} & {\scriptsize 3018} & {\scriptsize 1395} & {\scriptsize 2746} & {\scriptsize 1377}\tabularnewline
 \hline 
-{\scriptsize\textbf{CAMEL}} & {\scriptsize 4360} & {\scriptsize 2239} & {\scriptsize 1727} & {\scriptsize 3470} & {\scriptsize 1727}\tabularnewline
+{\scriptsize\textbf{CAMEL}} & {\scriptsize 4360} & {\scriptsize 2239} & {\scriptsize 1727} & {\scriptsize 2774} & {\scriptsize 1727}\tabularnewline
 \hline 
-{\scriptsize\textbf{DIFFERENTPOWERS10}} & {\scriptsize 10,731} & {\scriptsize 9972} & {\scriptsize 8787} & {\scriptsize 10,683} & {\scriptsize 8931}\tabularnewline
+{\scriptsize\textbf{DIFFERENTPOWERS10}} & {\scriptsize 10,731} & {\scriptsize 9972} & {\scriptsize 8787} & {\scriptsize 9593} & {\scriptsize 8931}\tabularnewline
 \hline 
-{\scriptsize\textbf{DIFFPOWER2}} & {\scriptsize 9813} & {\scriptsize 8355} & {\scriptsize 6688} & {\scriptsize 6781} & {\scriptsize 6688}\tabularnewline
+{\scriptsize\textbf{DIFFPOWER2}} & {\scriptsize 9813} & {\scriptsize 8355} & {\scriptsize 6688} & {\scriptsize 6918} & {\scriptsize 6688}\tabularnewline
 \hline 
-{\scriptsize\textbf{DIFFPOWER5}} & {\scriptsize 24,766} & {\scriptsize 24,661} & {\scriptsize 22,991} & {\scriptsize 22,100} & {\scriptsize 22,319}\tabularnewline
+{\scriptsize\textbf{DIFFPOWER5}} & {\scriptsize 24,766} & {\scriptsize 24,661} & {\scriptsize 22,991} & {\scriptsize 21,761} & {\scriptsize 22,319}\tabularnewline
 \hline 
-{\scriptsize\textbf{DIFFPOWER10}} & {\scriptsize 28,913} & {\scriptsize 27,632} & {\scriptsize 27,032} & {\scriptsize 27,416} & {\scriptsize 27,034}\tabularnewline
+{\scriptsize\textbf{DIFFPOWER10}} & {\scriptsize 28,913} & {\scriptsize 27,632} & {\scriptsize 27,032} & {\scriptsize 27,216} & {\scriptsize 27,034}\tabularnewline
 \hline 
 {\scriptsize\textbf{DISCUS10}} & {\scriptsize 4009} & {\scriptsize 3668} & {\scriptsize 4009} & {\scriptsize 4009} & {\scriptsize 3668}\tabularnewline
 \hline 
 {\scriptsize\textbf{EASOM}} & {\scriptsize 3511} & {\scriptsize 786} & {\scriptsize 3062} & {\scriptsize 3511} & {\scriptsize 786}\tabularnewline
 \hline 
-{\scriptsize\textbf{ELLIPSOIDAL10}} & {\scriptsize 5734} & {\scriptsize 5393} & {\scriptsize 3678} & {\scriptsize 5726} & {\scriptsize 3665}\tabularnewline
+{\scriptsize\textbf{ELLIPSOIDAL10}} & {\scriptsize 5734} & {\scriptsize 5393} & {\scriptsize 3678} & {\scriptsize 4504} & {\scriptsize 3665}\tabularnewline
 \hline 
-{\scriptsize\textbf{EQUALMAXIMA10}} & {\scriptsize 16,493} & {\scriptsize 13,526} & {\scriptsize 14,700} & {\scriptsize 29,050} & {\scriptsize 13,525}\tabularnewline
+{\scriptsize\textbf{EQUALMAXIMA10}} & {\scriptsize 16,493} & {\scriptsize 13,526} & {\scriptsize 14,700} & {\scriptsize 16493} & {\scriptsize 13,525}\tabularnewline
 \hline 
-{\scriptsize\textbf{EXPONENTIAL10}} & {\scriptsize 4285} & {\scriptsize 2400} & {\scriptsize 2213} & {\scriptsize 2223} & {\scriptsize 2213}\tabularnewline
+{\scriptsize\textbf{EXPONENTIAL10}} & {\scriptsize 4285} & {\scriptsize 2400} & {\scriptsize 2213} & {\scriptsize 2281} & {\scriptsize 2213}\tabularnewline
 \hline 
-{\scriptsize\textbf{GKLS250}} & {\scriptsize 4091} & {\scriptsize 1749} & {\scriptsize 1072} & {\scriptsize 2587} & {\scriptsize 1075}\tabularnewline
+{\scriptsize\textbf{GKLS250}} & {\scriptsize 4091} & {\scriptsize 1749} & {\scriptsize 1072} & {\scriptsize 2539} & {\scriptsize 1075}\tabularnewline
 \hline 
-{\scriptsize\textbf{GKLS350}} & {\scriptsize 4470} & {\scriptsize 2168} & {\scriptsize 920} & {\scriptsize 1270} & {\scriptsize 920}\tabularnewline
+{\scriptsize\textbf{GKLS350}} & {\scriptsize 4470} & {\scriptsize 2168} & {\scriptsize 920} & {\scriptsize 1131} & {\scriptsize 920}\tabularnewline
 \hline 
-{\scriptsize\textbf{GOLDSTEIN}} & {\scriptsize 5318} & {\scriptsize 5318} & {\scriptsize 2433} & {\scriptsize 2904} & {\scriptsize 2433}\tabularnewline
+{\scriptsize\textbf{GOLDSTEIN}} & {\scriptsize 5318} & {\scriptsize 5318} & {\scriptsize 2433} & {\scriptsize 2748} & {\scriptsize 2433}\tabularnewline
 \hline 
-{\scriptsize\textbf{GRIEWANK2}} & {\scriptsize 6696} & {\scriptsize 2060(0.86)} & {\scriptsize 4168(0.93)} & {\scriptsize 6715} & {\scriptsize 1987(0.86)}\tabularnewline
+{\scriptsize\textbf{GRIEWANK2}} & {\scriptsize 6696} & {\scriptsize 2060(0.86)} & {\scriptsize 4168(0.93)} & {\scriptsize 5624} & {\scriptsize 1987(0.86)}\tabularnewline
 \hline 
-{\scriptsize\textbf{GRIEWANK10}} & {\scriptsize 7862} & {\scriptsize 6579} & {\scriptsize 7862} & {\scriptsize 7862} & {\scriptsize 6579}\tabularnewline
+{\scriptsize\textbf{GRIEWANK10}} & {\scriptsize 7862} & {\scriptsize 6579} & {\scriptsize 7862} & {\scriptsize 9348} & {\scriptsize 6579}\tabularnewline
 \hline 
-{\scriptsize\textbf{GRIEWANKROSENBROCK10}} & {\scriptsize 7017} & {\scriptsize 5342} & {\scriptsize 5462} & {\scriptsize 6939} & {\scriptsize 5456}\tabularnewline
+{\scriptsize\textbf{GRIEWANKROSENBROCK10}} & {\scriptsize 7017} & {\scriptsize 5342} & {\scriptsize 5462} & {\scriptsize 5985} & {\scriptsize 5456}\tabularnewline
 \hline 
-{\scriptsize\textbf{HANSEN}} & {\scriptsize 5262} & {\scriptsize 2081(0.96)} & {\scriptsize 2205} & {\scriptsize 4833} & {\scriptsize 1968(0.96)}\tabularnewline
+{\scriptsize\textbf{HANSEN}} & {\scriptsize 5262} & {\scriptsize 2081(0.96)} & {\scriptsize 2205} & {\scriptsize 4643} & {\scriptsize 1968(0.96)}\tabularnewline
 \hline 
 {\scriptsize\textbf{HARTMAN3}} & {\scriptsize 4417} & {\scriptsize 1833} & {\scriptsize 1741} & {\scriptsize 4247} & {\scriptsize 1741}\tabularnewline
 \hline 
-{\scriptsize\textbf{HARTMAN6}} & {\scriptsize 5183} & {\scriptsize 2437} & {\scriptsize 2372} & {\scriptsize 3108} & {\scriptsize 2372}\tabularnewline
+{\scriptsize\textbf{HARTMAN6}} & {\scriptsize 5183} & {\scriptsize 2437} & {\scriptsize 2372} & {\scriptsize 2800} & {\scriptsize 2372}\tabularnewline
 \hline 
-{\scriptsize\textbf{LEVY10}} & {\scriptsize 5522} & {\scriptsize 3943(0.90)} & {\scriptsize 3545(0.96)} & {\scriptsize 5353(0.96)} & {\scriptsize 3540}\tabularnewline
+{\scriptsize\textbf{LEVY10}} & {\scriptsize 5522} & {\scriptsize 3943(0.90)} & {\scriptsize 3545(0.96)} & {\scriptsize 4937(0.96)} & {\scriptsize 3540}\tabularnewline
 \hline 
-{\scriptsize\textbf{MICHALEWICZ4}} & {\scriptsize 5471(0.83)} & {\scriptsize 3197(0.73)} & {\scriptsize 3022} & {\scriptsize 4496(0.83)} & {\scriptsize 3000}\tabularnewline
+{\scriptsize\textbf{MICHALEWICZ4}} & {\scriptsize 5471(0.83)} & {\scriptsize 3197(0.73)} & {\scriptsize 3022} & {\scriptsize 3578(0.83)} & {\scriptsize 3000}\tabularnewline
 \hline 
-{\scriptsize\textbf{POTENTIAL5}} & {\scriptsize 8581} & {\scriptsize 6678} & {\scriptsize 7019} & {\scriptsize 8584} & {\scriptsize 6354}\tabularnewline
+{\scriptsize\textbf{POTENTIAL5}} & {\scriptsize 8581} & {\scriptsize 6678} & {\scriptsize 7019} & {\scriptsize 8581} & {\scriptsize 6354}\tabularnewline
 \hline 
 {\scriptsize\textbf{POTENTIAL6}} & {\scriptsize 11,695(0.73)} & {\scriptsize 9043(0.6)} & {\scriptsize 9565(0.73)} & {\scriptsize 11,694(0.73)} & {\scriptsize 8632(0.66)}\tabularnewline
 \hline 
 {\scriptsize\textbf{POTENTIAL10}} & {\scriptsize 16,044} & {\scriptsize 14,732(0.96)} & {\scriptsize 13,746} & {\scriptsize 16,041} & {\scriptsize 13,498}\tabularnewline
 \hline 
-{\scriptsize\textbf{RASTRIGIN}} & {\scriptsize 5386} & {\scriptsize 2901} & {\scriptsize 2322} & {\scriptsize 4732} & {\scriptsize 2910}\tabularnewline
+{\scriptsize\textbf{RASTRIGIN}} & {\scriptsize 5386} & {\scriptsize 2901} & {\scriptsize 2322} & {\scriptsize 4707} & {\scriptsize 2910}\tabularnewline
 \hline 
-{\scriptsize\textbf{ROSENBROCK8}} & {\scriptsize 7172} & {\scriptsize 6839} & {\scriptsize 6400} & {\scriptsize 7172} & {\scriptsize 6260}\tabularnewline
+{\scriptsize\textbf{ROSENBROCK8}} & {\scriptsize 7172} & {\scriptsize 6839} & {\scriptsize 6400} & {\scriptsize 7169} & {\scriptsize 6260}\tabularnewline
 \hline 
-{\scriptsize\textbf{ROSENBROCK16}} & {\scriptsize 9873} & {\scriptsize 9524} & {\scriptsize 9866} & {\scriptsize 9873} & {\scriptsize 9520}\tabularnewline
+{\scriptsize\textbf{ROSENBROCK16}} & {\scriptsize 9873} & {\scriptsize 9524} & {\scriptsize 9866} & {\scriptsize 9870} & {\scriptsize 9520}\tabularnewline
 \hline 
-{\scriptsize\textbf{SHARPRIDGE10}} & {\scriptsize 10,117} & {\scriptsize 9775} & {\scriptsize 8614} & {\scriptsize 10053} & {\scriptsize 8706}\tabularnewline
+{\scriptsize\textbf{SHARPRIDGE10}} & {\scriptsize 10,117} & {\scriptsize 9775} & {\scriptsize 8614} & {\scriptsize 10,053} & {\scriptsize 8706}\tabularnewline
 \hline 
 {\scriptsize\textbf{SHEKEL5}} & {\scriptsize 4886} & {\scriptsize 2903} & {\scriptsize 2580} & {\scriptsize 3738} & {\scriptsize 2580}\tabularnewline
 \hline 
 {\scriptsize\textbf{SHEKEL7}} & {\scriptsize 4926(0.96)} & {\scriptsize 2843} & {\scriptsize 2641} & {\scriptsize 3532(0.96)} & {\scriptsize 2641}\tabularnewline
 \hline 
-{\scriptsize\textbf{SHEKEL10}} & {\scriptsize 4907} & {\scriptsize 2776} & {\scriptsize 2613} & {\scriptsize 3463(0.96)} & {\scriptsize 2613}\tabularnewline
+{\scriptsize\textbf{SHEKEL10}} & {\scriptsize 4907} & {\scriptsize 2776} & {\scriptsize 2613} & {\scriptsize 3080(0.96)} & {\scriptsize 2613}\tabularnewline
 \hline 
-{\scriptsize\textbf{SPHERE10}} & {\scriptsize 3272} & {\scriptsize 2243} & {\scriptsize 1008} & {\scriptsize 3117} & {\scriptsize 1008}\tabularnewline
+{\scriptsize\textbf{SPHERE10}} & {\scriptsize 3272} & {\scriptsize 2243} & {\scriptsize 1008} & {\scriptsize 1430} & {\scriptsize 1008}\tabularnewline
 \hline 
-{\scriptsize\textbf{STEPELLIPSOIDAL4}} & {\scriptsize 3125(0.73)} & {\scriptsize 1900(0.73)} & {\scriptsize 640(0.8)} & {\scriptsize 1246(0.73)} & {\scriptsize 640(0.8)}\tabularnewline
+{\scriptsize\textbf{STEPELLIPSOIDAL4}} & {\scriptsize 3125(0.73)} & {\scriptsize 1900(0.73)} & {\scriptsize 640(0.8)} & {\scriptsize 722(0.73)} & {\scriptsize 640(0.8)}\tabularnewline
 \hline 
 {\scriptsize\textbf{SINUSOIDAL8}} & {\scriptsize 4710} & {\scriptsize 3048} & {\scriptsize 2650} & {\scriptsize 2644} & {\scriptsize 2650}\tabularnewline
 \hline 
-{\scriptsize\textbf{SINUSOIDAL16}} & {\scriptsize 5052} & {\scriptsize 5656} & {\scriptsize 2967} & {\scriptsize 3755} & {\scriptsize 2967}\tabularnewline
+{\scriptsize\textbf{SINUSOIDAL16}} & {\scriptsize 5052} & {\scriptsize 5656} & {\scriptsize 2967} & {\scriptsize 3256} & {\scriptsize 2967}\tabularnewline
 \hline 
-{\scriptsize\textbf{TEST2N4}} & {\scriptsize 4778(0.76)} & {\scriptsize 2224} & {\scriptsize 2351(0.93)} & {\scriptsize 4561(0.76)} & {\scriptsize 2222}\tabularnewline
+{\scriptsize\textbf{TEST2N4}} & {\scriptsize 4778(0.76)} & {\scriptsize 2224} & {\scriptsize 2351(0.93)} & {\scriptsize 4473(0.76)} & {\scriptsize 2222}\tabularnewline
 \hline 
-{\scriptsize\textbf{TEST2N5}} & {\scriptsize 4925} & {\scriptsize 2531(0.86)} & {\scriptsize 2821(0.76)} & {\scriptsize 4701} & {\scriptsize 2531(0.86)}\tabularnewline
+{\scriptsize\textbf{TEST2N5}} & {\scriptsize 4925} & {\scriptsize 2531(0.86)} & {\scriptsize 2821(0.76)} & {\scriptsize 4303(0.5)} & {\scriptsize 2531(0.86)}\tabularnewline
 \hline 
 {\scriptsize\textbf{TEST30N10}} & {\scriptsize 6431} & {\scriptsize 4165} & {\scriptsize 4772} & {\scriptsize 6364} & {\scriptsize 4159}\tabularnewline
 \hline 
 {\scriptsize\textbf{ZAKHAROV10}} & {\scriptsize 4054} & {\scriptsize 3583} & {\scriptsize 2072} & {\scriptsize 4048} & {\scriptsize 2072}\tabularnewline
 \hline 
-{\scriptsize\textbf{TOTAL}} & {\scriptsize\textbf{324,705(0.97)}} & {\scriptsize\textbf{249,428(0.96)}} & {\scriptsize\textbf{231,225(0.97)}} & {\scriptsize\textbf{300,329(0.96)}} & {\scriptsize\textbf{218,167(0.98)}}\tabularnewline
+{\scriptsize\textbf{TOTAL}} & {\scriptsize\textbf{324,705(0.97)}} & {\scriptsize\textbf{249,428(0.96)}} & {\scriptsize\textbf{231,225(0.97)}} & {\scriptsize\textbf{275,244(0.96)}} & {\scriptsize\textbf{218,167(0.98)}}\tabularnewline
 \hline 
 \end{tabular}}{\scriptsize\par}
 \end{table}
 
-Table \ref{tab:echo} presents comparative results of the proposed
-ECHO+APP+MEM method across a set of standard benchmark functions,
-in comparison with four other variants of the basic ECHO method. More
-specifically, the first column lists the test functions, while the
-next five columns show the performance of the following methods: ECHO,
-ECHO with the approximate evaluations technique (ECHO+APP), ECHO with
-solution memory (ECHO+MEM), ECHO with long-term memory assistance
-(ECHO+LTMA), and finally the proposed method, which integrates both
-approximate evaluations and memory lookup (ECHO+APP+MEM).
+Table \ref{tab:echo} presents comparative results of the ECHO+APP+MEM
+method across a set of standard benchmark functions, in comparison
+with four other variants of the basic ECHO method. More specifically,
+the first column lists the test functions, while the next five columns
+show the performance of the following methods: ECHO, ECHO with the
+approximate evaluations technique (ECHO+APP), ECHO with solution memory
+(ECHO+MEM), ECHO with long-term memory assistance (ECHO+LTMA), and
+finally the ECHO+APP+MEM method, which integrates both approximate
+evaluations and memory lookup (ECHO+APP+MEM).
 
 The values shown in the table represent the number of objective function
 calls required to reach the optimal solution for each test function.
@@ -1064,27 +1117,72 @@ The goal is to achieve the best possible performance, meaning the
 lowest number of objective function calls and the highest success
 rate.
 
-The proposed ECHO+APP+MEM method achieves the lowest total number
-of calls, with 218,167 function calls and a success rate of 98\%,
-clearly demonstrating its superiority over all other ECHO variants.
-The ECHO+MEM method also performs relatively well with 231,225 calls
-and a 97\% success rate, while the basic ECHO version exhibits significantly
-worse performance, requiring 324,705 calls with the same 97\% success
-rate. Using only the approximate evaluations technique (ECHO+APP)
-provides an improvement over the baseline, but not as substantial
-as when combined with solution memory. The variant with long-term
-memory assistance (ECHO+LTMA) yields intermediate performance but
-falls short compared to the proposed combination.
+The ECHO+APP+MEM method achieves the lowest total number of calls,
+with 218,167 function calls and a success rate of 98\%, clearly demonstrating
+its superiority over all other ECHO variants. The ECHO+MEM method
+also performs relatively well with 231,225 calls and a 97\% success
+rate, while the basic ECHO version exhibits significantly worse performance,
+requiring 324,705 calls with the same 97\% success rate. Using only
+the approximate evaluations technique (ECHO+APP) provides an improvement
+over the baseline, but not as substantial as when combined with solution
+memory. The variant with long-term memory assistance (ECHO+LTMA) yields
+intermediate performance but falls short compared to the ECHO+APP+MEM
+combination.
 
 Overall, the values in the Table \ref{tab:echo} demonstrate that
 combining approximate evaluations and memory lookup within the ECHO
 framework significantly reduces the required number of computations
-without sacrificing solution quality. Furthermore, in the experimental
-tables, the values highlighted in green indicate the best performance,
-that is, the lowest number of function calls.
+without sacrificing solution quality.
+
+In the same table, the reduced performance of the ECHO+APP+MEM variant
+on functions such as Rastrigin, DIFFPOWER10, GKLS250 and SHARPRIDGE10
+compared to the ECHO+APP or ECHO+MEM versions is mainly due to the
+lack of synergy between the two techniques when applied simultaneously.
+The approximation technique (APP) tends to reject candidate solutions
+based on simplified estimations, which can prematurely discard promising
+points especially in complex or multimodal landscapes. This limits
+population diversity and reduces the chances of identifying solutions
+that could later be stored and reused by the memory mechanism. At
+the same time, the effectiveness of the memory technique (MEM) depends
+on the recurrence of similar solutions in the search space, which
+is disrupted by the aggressive filtering of the approximation phase.
+As a result, the combined use of both techniques adds computational
+overhead without yielding significant benefits. In many cases, using
+only memory provides a better balance between efficiency and accuracy.
+This suggests that, depending on the nature of the optimization problem,
+activating just one of the two techniques can be more effective than
+combining them.
+
+In several cases from Table 3, the ECHO+MEM and ECHO+APP+MEM variants
+yield identical results, as observed in functions such as CAMEL, DIFFPOWER2,
+and EXPONENTIAL10. This suggests that the addition of the approximate
+evaluation technique (APP) did not further influence the optimization
+process beyond what was already achieved through the use of memory
+(MEM). The reason is that, in specific problems, the memory mechanism
+alone is sufficient to reduce the number of function evaluations without
+compromising performance. At the same time, APP may be activated infrequently
+due to mild deviations in candidate solutions or may rarely reject
+solutions, as the newly generated candidates are already effective.
+In such cases, adding APP brings no tangible benefit, and the algorithm’s
+behavior is primarily shaped by the memory component. This supports
+the notion that the selection of auxiliary techniques should depend
+on the characteristics of the problem, as increased complexity does
+not always translate into improved performance.
+
+A similar phenomenon is observed in the DISCUS10 function, where ECHO+APP
+and ECHO+APP+MEM produce identical results. This indicates that in
+some problems, the memory mechanism adds no further advantage when
+approximate evaluations are already in use. Especially in functions
+with a sharply defined optimum or limited opportunity for solution
+reuse, memory remains largely inactive or unnecessary. As a result,
+performance is determined primarily by the APP technique, while the
+memory component has little or no effect. This observation confirms
+that combining both techniques is not always essential, and that overall
+efficiency depends heavily on the nature and landscape of the optimization
+function.
 
 \begin{table}[H]
-\caption{Balance between exploration and exploitation of the proposed method
+\caption{Balance between exploration and exploitation of the ECHO+APP+MEM method
 in each benchmark function\label{tab:balance}}
 
 \begin{centering}
@@ -1205,9 +1303,9 @@ direction for future extension of the present study.
 
 The metrics presented in Table \ref{tab:balance} are related to measuring
 and monitoring the balance between exploration and exploitation during
-the execution of the proposed method. Their calculation is based on
-changes in population diversity as well as the behavior of the algorithm
-across iterations.
+the execution of the ECHO+APP+MEM method. Their calculation is based
+on changes in population diversity as well as the behavior of the
+algorithm across iterations.
 
 The $IPD$metric measures the diversity of the population at the beginning
 of the optimization process and is calculated as the average Euclidean
@@ -1253,7 +1351,7 @@ where $\epsilon$ is a very small constant to avoid division by zero.
 The $ABI$ tends to values close to 0.5 when exploration and exploitation
 are well balanced.
 
-Table \ref{tab:balance} concerns the proposed method and presents,
+Table \ref{tab:balance} concerns the ECHO+APP+MEM method and presents,
 for each test function, the number of objective function calls required,
 along with five metrics that describe the algorithm's behavior in
 terms of exploration and exploitation throughout the optimization
@@ -1321,7 +1419,7 @@ with an $ABI$ of 0.428, close to the theoretical target of 0.5 for
 optimal balance. The $AER$ value is 0.414, and $FPD$ is significantly
 lower than IPD, indicating a transition from exploration to exploitation
 in the later stages of the process. Overall, the table demonstrates
-that the proposed proposed method begins with a high level of exploration
+that the ECHO+APP+MEM method begins with a high level of exploration
 and smoothly transitions into a state of exploitation, maintaining
 a desirable balance between the two phases an essential quality for
 efficiently solving complex global optimization problems.
@@ -1334,7 +1432,7 @@ methods for low-dimensional benchmark functions}\label{tab:callsLow200}}
 \centering{}{\scriptsize{}%
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline 
-{\scriptsize\textbf{FUNCTION}} & {\scriptsize\textbf{GA}} & {\scriptsize\textbf{\textcolor{blue}{ST}}} & {\scriptsize\textbf{PSO}} & {\scriptsize\textbf{\textcolor{blue}{ST}}} & {\scriptsize\textbf{SaDE}} & {\scriptsize\textbf{\textcolor{blue}{ST}}} & {\scriptsize\textbf{jDE}} & {\scriptsize\textbf{\textcolor{blue}{ST}}} & {\scriptsize\textbf{-ES}} & {\scriptsize\textbf{\textcolor{blue}{ST}}} & {\scriptsize\textbf{PROPOSED}} & {\scriptsize\textbf{\textcolor{blue}{ST}}}\tabularnewline
+{\scriptsize\textbf{FUNCTION}} & {\scriptsize\textbf{GA}} & {\scriptsize\textbf{ST}} & {\scriptsize\textbf{PSO}} & {\scriptsize\textbf{ST}} & {\scriptsize\textbf{SaDE}} & {\scriptsize\textbf{ST}} & {\scriptsize\textbf{jDE}} & {\scriptsize\textbf{ST}} & {\scriptsize\textbf{CMA-ES}} & {\scriptsize\textbf{ST}} & {\scriptsize\textbf{ECHO+APP+MEM}} & {\scriptsize\textbf{ST}}\tabularnewline
 \hline 
 \hline 
 {\scriptsize\textbf{ACKLEY}} & {\scriptsize 7174} & {\scriptsize\textcolor{blue}{882.7}} & {\scriptsize 7638} & {\scriptsize\textcolor{blue}{820.1}} & {\scriptsize 8893} & {\scriptsize\textcolor{blue}{943.0}} & {\scriptsize 8913} & {\scriptsize\textcolor{blue}{941.4}} & {\scriptsize 5997} & {\scriptsize\textcolor{blue}{548.7}} & {\scriptsize\textbf{\textcolor{green}{4325}}} & {\scriptsize\textcolor{blue}{682.3}}\tabularnewline
@@ -1377,7 +1475,7 @@ methods for low-dimensional benchmark functions}\label{tab:callsLow200}}
 \hline 
 {\scriptsize\textbf{GRIEWANK10}} & {\scriptsize 6962(0.86)} & {\scriptsize\textcolor{blue}{1138.8}} & {\scriptsize 9090} & {\scriptsize\textcolor{blue}{744.2}} & {\scriptsize 9161(0.96)} & {\scriptsize\textcolor{blue}{857.3}} & {\scriptsize 8795} & {\scriptsize\textcolor{blue}{926.2}} & {\scriptsize 8442(0.63)} & {\scriptsize\textcolor{blue}{674.2}} & {\scriptsize\textbf{\textcolor{green}{6579}}} & {\scriptsize\textcolor{blue}{904.6}}\tabularnewline
 \hline 
-{\scriptsize\textbf{GRIEWANKROSENBROCK10}} & {\scriptsize 6497} & {\scriptsize\textcolor{blue}{615.4}} & {\scriptsize 9278} & {\scriptsize\textcolor{blue}{659.4}} & {\scriptsize 9601} & {\scriptsize\textcolor{blue}{674.3}} & {\scriptsize 9120} & {\scriptsize\textcolor{blue}{539.2}} & {\scriptsize 9469} & {\scriptsize\textcolor{blue}{559.5}} & {\scriptsize\textbf{\textcolor{green}{5456}}} & {\scriptsize\textcolor{blue}{701.1}}\tabularnewline
+{\scriptsize\textbf{GRIEWANK10}} & {\scriptsize 6497} & {\scriptsize\textcolor{blue}{615.4}} & {\scriptsize 9278} & {\scriptsize\textcolor{blue}{659.4}} & {\scriptsize 9601} & {\scriptsize\textcolor{blue}{674.3}} & {\scriptsize 9120} & {\scriptsize\textcolor{blue}{539.2}} & {\scriptsize 9469} & {\scriptsize\textcolor{blue}{559.5}} & {\scriptsize\textbf{\textcolor{green}{5456}}} & {\scriptsize\textcolor{blue}{701.1}}\tabularnewline
 \hline 
 {\scriptsize\textbf{HANSEN}} & {\scriptsize 4384} & {\scriptsize\textcolor{blue}{579.5}} & {\scriptsize 4772} & {\scriptsize\textcolor{blue}{804.1}} & {\scriptsize 5034} & {\scriptsize\textcolor{blue}{732.9}} & {\scriptsize 4888} & {\scriptsize\textcolor{blue}{674.5}} & {\scriptsize 4126(0.96)} & {\scriptsize\textcolor{blue}{152.8}} & {\scriptsize\textbf{\textcolor{green}{1968(0.96)}}} & {\scriptsize\textcolor{blue}{332.4}}\tabularnewline
 \hline 
@@ -1397,7 +1495,7 @@ methods for low-dimensional benchmark functions}\label{tab:callsLow200}}
 \hline 
 {\scriptsize\textbf{RASTRIGIN}} & {\scriptsize 5281} & {\scriptsize\textcolor{blue}{592.0}} & {\scriptsize 5439} & {\scriptsize\textcolor{blue}{561.0}} & {\scriptsize 5728} & {\scriptsize\textcolor{blue}{741.8}} & {\scriptsize 5898} & {\scriptsize\textcolor{blue}{1263.6}} & {\scriptsize 4351(0.96)} & {\scriptsize\textcolor{blue}{612.4}} & {\scriptsize\textbf{\textcolor{green}{2302}}} & {\scriptsize\textcolor{blue}{334.3}}\tabularnewline
 \hline 
-{\scriptsize\textbf{ROSENBROCK8}} & {\scriptsize\textcolor{green}{5597}} & {\scriptsize\textcolor{blue}{430.9}} & {\scriptsize 8909} & {\scriptsize\textcolor{blue}{966.3}} & {\scriptsize 8922} & {\scriptsize\textcolor{blue}{757.0}} & {\scriptsize 8070} & {\scriptsize\textcolor{blue}{703.4}} & {\scriptsize 8546(0.96)} & {\scriptsize\textcolor{blue}{564.7}} & {\scriptsize 6260} & {\scriptsize\textcolor{blue}{437.1}}\tabularnewline
+{\scriptsize\textbf{8}} & {\scriptsize\textcolor{green}{5597}} & {\scriptsize\textcolor{blue}{430.9}} & {\scriptsize 8909} & {\scriptsize\textcolor{blue}{966.3}} & {\scriptsize 8922} & {\scriptsize\textcolor{blue}{757.0}} & {\scriptsize 8070} & {\scriptsize\textcolor{blue}{703.4}} & {\scriptsize 8546(0.96)} & {\scriptsize\textcolor{blue}{564.7}} & {\scriptsize 6260} & {\scriptsize\textcolor{blue}{437.1}}\tabularnewline
 \hline 
 {\scriptsize\textbf{ROSENBROCK16}} & {\scriptsize\textcolor{green}{8298}} & {\scriptsize\textcolor{blue}{756.1}} & {\scriptsize 9956} & {\scriptsize\textcolor{blue}{197.4}} & {\scriptsize 10,000} & {\scriptsize\textcolor{blue}{1418.5}} & {\scriptsize 9900} & {\scriptsize\textcolor{blue}{301.5}} & {\scriptsize 9949} & {\scriptsize\textcolor{blue}{192.4}} & {\scriptsize 9395} & {\scriptsize\textcolor{blue}{544.4}}\tabularnewline
 \hline 
@@ -1433,54 +1531,54 @@ methods for low-dimensional benchmark functions}\label{tab:callsLow200}}
 
 From Table \ref{tab:callsLow200}, which presents a comparative analysis
 of optimization methods on low-dimensional functions, clear conclusions
-can be drawn regarding the superiority of the proposed method. The
-proposed approach achieves the lowest total number of objective function
-calls specifically 184,876 calls with a success rate of 96\%. This
-represents a significant improvement over the other methods: GA requires
-242,844 calls (97\% success), PSO 277,262 calls (97\%), SaDE 289,786
-calls (96\%), jDE 283,668 calls (95\%), and CMA-ES 270,753 calls (92\%).
-The reduction in function evaluations reaches up to 24\% compared
-to GA and 40\% compared to SaDE, highlighting the efficiency of the
-proposed method in managing computational resources.
+can be drawn regarding the superiority of the ECHO+APP+MEM method.
+The ECHO+APP+MEM approach achieves the lowest total number of objective
+function calls specifically 184,876 calls with a success rate of 96\%.
+This represents a significant improvement over the other methods:
+GA requires 242,844 calls (97\% success), PSO 277,262 calls (97\%),
+SaDE 289,786 calls (96\%), jDE 283,668 calls (95\%), and CMA-ES 270,753
+calls (92\%). The reduction in function evaluations reaches up to
+24\% compared to GA and 40\% compared to SaDE, highlighting the efficiency
+of the ECHO+APP+MEM method in managing computational resources.
 
-In many demanding test functions, the proposed method demonstrates
+In many demanding test functions, the ECHO+APP+MEM method demonstrates
 remarkable improvements. For instance, in the EASOM function, it requires
 only 786 calls, compared to over 3200 by the other methods an improvement
 of at least 75\%. Similarly, in GKLS250, it needs only 1075 calls
 versus more than 3500 in GA and CMA-ES. For the RASTRIGIN function,
 it performs with 2302 calls, while GA and SaDE require 5281 and 5728
-respectively. In the STEPELLIPSOIDAL4 function, the proposed method
+respectively. In the STEPELLIPSOIDAL4 function, the ECHO+APP+MEM method
 completes with 640 calls and an 80\% success rate, whereas CMA-ES
 requires 2959 calls for only 33\% success.
 
-In medium-dimensional or structurally complex functions, the proposed
+In medium-dimensional or structurally complex functions, the ECHO+APP+MEM
 method maintains consistent performance. In DIFFERENTPOWERS10, it
 reports 8598 calls, significantly fewer than GA’s 9073 and CMA-ES’s
 9780. In GRIEWANKROSENBROCK10, it achieves the result in 5456 calls
 approximately 30--40\% fewer than PSO’s 9278 and SaDE’s 9601. However,
 in some functions such as DIFFPOWER5, DIFFPOWER10, and EQUALMAXIMA10,
 where many methods reach the upper limit of 10,000 calls (a setting
-enforced for fair comparisons), the proposed method shows similar
+enforced for fair comparisons), the ECHO+APP+MEM method shows similar
 behavior, indicating limitations when addressing highly demanding
 problems.
 
-The high success rate of the proposed method in functions with many
-local optima demonstrates the effectiveness of its internal mechanisms.
+The high success rate of the ECHO+APP+MEM method in functions with
+many local optima demonstrates the effectiveness of its internal mechanisms.
 In the HANSEN function, with 1968 calls and 96\% success, it clearly
 outperforms CMA-ES, which requires 4126 calls to achieve the same
-success rate. Similarly, in the GOLDSTEIN function, the proposed method
-achieves the result in 2433 calls compared to over 4722 in GA, with
-a higher success rate (100\% versus 76\% for CMA-ES). These results
-confirm the method’s ability to effectively balance exploration of
-the solution space and exploitation of promising areas.
+success rate. Similarly, in the GOLDSTEIN function, the ECHO+APP+MEM
+method achieves the result in 2433 calls compared to over 4722 in
+GA, with a higher success rate (100\% versus 76\% for CMA-ES). These
+results confirm the method’s ability to effectively balance exploration
+of the solution space and exploitation of promising areas.
 
-Overall, the proposed method outperforms all other approaches in 34
-out of the 40 test functions in terms of the number of function calls.
-In 6 cases (such as DIFFPOWER5), its performance is comparable to
-the top-performing competing methods. The stability of its results
+Overall, the ECHO+APP+MEM method outperforms all other approaches
+in 34 out of the 40 test functions in terms of the number of function
+calls. In 6 cases (such as DIFFPOWER5), its performance is comparable
+to the top-performing competing methods. The stability of its results
 across different types of problems, combined with its high success
-rate, establishes the proposed method as a robust approach for low-dimensional
-optimization problems.
+rate, establishes the ECHO+APP+MEM method as a robust approach for
+low-dimensional optimization problems.
 
 \begin{figure}[H]
 \includegraphics[scale=0.65]{pop200}
@@ -1491,38 +1589,38 @@ methods for low-dimensional benchmark functions\label{fig:statCalls200}}
 \end{figure}
 
 From the execution of the Friedman statistical test for comparing
-the proposed method with other well-known optimization techniques,
+the ECHO+APP+MEM method with other well-known optimization techniques,
 a p-value of 6.49e-27 was obtained, indicating the presence of statistically
-significant differences among the methods under study (Figure pop200.png).
+significant differences among the methods under study (Figure \ref{fig:statCalls200}).
 The critical difference was calculated at 1.607, and the corresponding
 critical value from the Tukey distribution was 4.03. These results
 confirm that the overall ranking of the methods differs at a highly
 significant level, thus justifying the need for a detailed post-hoc
 pairwise analysis.
 
-Focusing on the proposed method, the post-hoc results show that its
-performance differs significantly from all other advanced techniques.
-In particular, the comparison between the proposed method and PSO
-reveals an extremely significant difference (p \textless{} 0.001),
+Focusing on the ECHO+APP+MEM method, the post-hoc results show that
+its performance differs significantly from all other advanced techniques.
+In particular, the comparison between the ECHO+APP+MEM method and
+PSO reveals an extremely significant difference (p \textless{} 0.001),
 while the difference with SaDE is marked as very extremely significant
 (p \textless{} 0.0001). The comparison with jDE is also extremely
 significant (p \textless{} 0.001), and with CMA-ES it is highly significant
 (p \textless{} 0.01). On the other hand, the differences between the
 other methods among themselves, as well as the differences between
-GA and all other techniques (including the proposed method), were
+GA and all other techniques (including the ECHO+APP+MEM method), were
 found to be not statistically significant.
 
-These findings suggest that PROPOSED is able to outperform several
+These findings suggest that ECHO+APP+MEM is able to outperform several
 well-established and state-of-the-art optimization methods in a statistically
 validated way. The strong statistical significance of the differences
 observed with PSO, SaDE, jDE, and CMA-ES clearly highlights the superiority
-of the proposed method in terms of both efficiency and reliability.
+of the ECHO+APP+MEM method in terms of both efficiency and reliability.
 The lack of significant difference with GA may be attributed to the
 high variability in GA’s performance, which, in many cases, is substantially
 lower than that of the more advanced methods. Overall, the results
 of the statistical analysis strengthen the validity of the experimental
-evaluation and support the effectiveness of the proposed method as
-a consistently strong approach across a wide range of optimization
+evaluation and support the effectiveness of the ECHO+APP+MEM method
+as a consistently strong approach across a wide range of optimization
 problems.
 
 {\footnotesize{}
@@ -1533,7 +1631,7 @@ for high-dimensional benchmark functions (population:50)\label{tab:callsHigh50}}
 \centering{}{\footnotesize{}%
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline 
-{\footnotesize\textbf{FUNCTION}} & {\footnotesize\textbf{CLPSO}} & {\footnotesize\textbf{jDE}} & {\footnotesize\textbf{SaDE}} & {\footnotesize\textbf{CMA-ES}} & {\footnotesize\textbf{PROPOSED}}\tabularnewline
+{\footnotesize\textbf{FUNCTION}} & {\footnotesize\textbf{CLPSO}} & {\footnotesize\textbf{jDE}} & {\footnotesize\textbf{SaDE}} & {\footnotesize\textbf{CMA-ES}} & {\scriptsize\textbf{ECHO+APP+MEM}}\tabularnewline
 \hline 
 \hline 
 {\footnotesize\textbf{DIFFERENTPOWERS50}} & {\footnotesize 2419} & {\footnotesize 1124} & {\footnotesize 2709} & {\footnotesize 1046} & {\footnotesize\textbf{\textcolor{green}{589}}}\tabularnewline
@@ -1645,34 +1743,34 @@ for high-dimensional benchmark functions (population:50)\label{tab:callsHigh50}}
 From Table \ref{tab:callsHigh50}, which provides a comparative analysis
 of high-dimensional functions (ranging from 50 to 250 dimensions),
 important conclusions can be drawn regarding the performance of the
-proposed method against contemporary optimization benchmarks. The
-proposed method records a total of 80,186 objective function calls,
-with a success rate of 90\%. This performance places it between jDE
-(55,380 calls) and CMA-ES (52,032 calls), but it stands out for its
-remarkable efficiency on specific types of problems.
+ECHO+APP+MEM method against contemporary optimization benchmarks.
+The ECHO+APP+MEM method records a total of 80,186 objective function
+calls, with a success rate of 90\%. This performance places it between
+jDE (55,380 calls) and CMA-ES (52,032 calls), but it stands out for
+its remarkable efficiency on specific types of problems.
 
-In several key categories of functions, the proposed method demonstrates
+In several key categories of functions, the ECHO+APP+MEM method demonstrates
 clear superiority. In exponential-type functions (EXPONENTIAL), it
 achieves dramatically fewer function calls. For example, in EXPONENTIAL50
 it requires only 95 calls, compared to 2205 for CLPSO, 1033 for jDE,
 and 4941 for SaDE. A similar pattern is observed across other dimensions
-(EXPONENTIAL100--250), where the proposed method never exceeds 109
-calls, while the competing algorithms often require more than 700.
-This showcases the method’s ability to rapidly locate global minima
-in smooth landscapes.
+(EXPONENTIAL100--250), where the ECHO+APP+MEM method never exceeds
+109 calls, while the competing algorithms often require more than
+700. This showcases the method’s ability to rapidly locate global
+minima in smooth landscapes.
 
 In functions with many local minima, such as SHARPRIDGE and SINUSOIDAL,
-the proposed method maintains competitive performance. In SHARPRIDGE50,
+the ECHO+APP+MEM method maintains competitive performance. In SHARPRIDGE50,
 it reaches the optimum with 437 calls and a 96\% success rate, outperforming
 CMA-ES (861 calls) and SaDE (5340 calls). In the SINUSOIDAL functions,
 although all methods demonstrate low success rates (0--30\%), the
-proposed method consistently requires the fewest calls for example,
+ECHO+APP+MEM method consistently requires the fewest calls for example,
 53 calls for SINUSOIDAL150 compared to 753 for CLPSO. This indicates
 strong efficiency even in rugged landscapes where exact success is
 hard to achieve.
 
 However, in some more demanding functions such as ROSENBROCK and ELLIPSOIDAL,
-the proposed method exhibits higher computational cost. In ROSENBROCK250,
+the ECHO+APP+MEM method exhibits higher computational cost. In ROSENBROCK250,
 it requires 6813 calls, significantly more than jDE (2025 calls) and
 CMA-ES (2002 calls). A similar pattern appears in the ELLIPSOIDAL
 functions, where, for 250 dimensions, it needs 5336 calls about three
@@ -1680,7 +1778,7 @@ times more than CMA-ES (1728 calls). This suggests that in problems
 characterized by strong curvature, the method may require more iterations
 to converge.
 
-Overall, with an average success rate of 90\%, the proposed method
+Overall, with an average success rate of 90\%, the ECHO+APP+MEM method
 maintains reliable accuracy, even though in some cases it lags behind
 jDE and CMA-ES in convergence speed. Its ability to drastically reduce
 function calls in exponential and non-convex functions (such as SHARPRIDGE)
@@ -1701,13 +1799,13 @@ methods for high-dimensional benchmark functions (population: 50)
 In Figure \ref{fig:statCallsPop50}, the Friedman test reported a
 p-value of 5.77e-20, indicating statistically significant differences
 among the optimization methods. The critical difference was calculated
-as 1.22, with a corresponding critical value of 3.85. The proposed
+as 1.22, with a corresponding critical value of 3.85. The ECHO+APP+MEM
 method showed very extremely significant differences compared to CLPSO
 (p \textless{} 0.0001) and SaDE (p \textless{} 0.0001), confirming
 its superiority over these methods. No statistically significant difference
 was observed when compared to jDE and CMA-ES, suggesting that its
-performance is comparable to these more advanced and modern approaches.
-Overall, the analysis highlights the proposed method as clearly superior
+performance is comparable to these more advanced approaches. Overall,
+the analysis highlights the ECHO+APP+MEM method as clearly superior
 to simpler techniques such as CLPSO and SaDE, while maintaining equivalent
 performance to established methods like jDE and CMA-ES, reinforcing
 its reliability and competitiveness in optimization problems using
@@ -1720,7 +1818,7 @@ for high-dimensional benchmark functions $Np=4+\left\lfloor 3\cdot\log(\text{dim
 \centering{}{\footnotesize{}%
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline 
-{\footnotesize\textbf{FUNCTION}} & {\footnotesize\textbf{CLPSO}} & {\footnotesize\textbf{jDE}} & {\footnotesize\textbf{SaDE}} & {\footnotesize\textbf{CMA-ES}} & {\footnotesize\textbf{PROPOSED}}\tabularnewline
+{\footnotesize\textbf{FUNCTION}} & {\footnotesize\textbf{CLPSO}} & {\footnotesize\textbf{jDE}} & {\footnotesize\textbf{SaDE}} & {\footnotesize\textbf{CMA-ES}} & {\footnotesize\textbf{ECHO+APP+MEM}}\tabularnewline
 \hline 
 \hline 
 {\footnotesize\textbf{DIFFERENTPOWERS50}} & {\footnotesize 877} & {\footnotesize 537} & {\footnotesize 1871} & {\footnotesize 555} & {\footnotesize\textbf{\textcolor{green}{362}}}\tabularnewline
@@ -1829,31 +1927,31 @@ for high-dimensional benchmark functions $Np=4+\left\lfloor 3\cdot\log(\text{dim
 \end{table}
 
 Table \ref{tab:callsHighFormula} presents the comparative performance
-of the proposed method against other modern optimization techniques
+of the ECHO+APP+MEM method against other modern optimization techniques
 on high-dimensional problems (ranging from 50 to 250 dimensions),
 where the population size is determined dynamically according to the
 formula: $Np=4+\left\lfloor 3\cdot\log(\text{dimension})\right\rfloor $.
 The first row lists the methods under comparison: CLPSO, jDE, SaDE,
-CMA-ES, and the proposed method. The first column contains the test
-functions used in the evaluation, while the table entries report the
-number of objective function calls required to reach an acceptable
+CMA-ES, and the ECHO+APP+MEM method. The first column contains the
+test functions used in the evaluation, while the table entries report
+the number of objective function calls required to reach an acceptable
 solution. In some cases, the success rate is also indicated in parentheses,
 showing the percentage of runs in which the global minimum was successfully
 found.
 
-The overall performance of the proposed method is highly satisfactory,
+The overall performance of the ECHO+APP+MEM method is highly satisfactory,
 with a total of 41,759 calls and an average success rate of 89\%,
 comparable to the other methods. jDE and CMA-ES achieve slightly fewer
 total calls (33,013 and 29,362 respectively), but in many individual
-cases the proposed method converges more quickly. For example, in
-the EXPONENTIAL150 to EXPONENTIAL250 functions, the proposed method
-requires only 70 to 80 calls, outperforming or matching the most efficient
-competitors. A similar trend is seen in the SINUSOIDAL functions,
-where all methods exhibit low success rates, yet the proposed method
-consistently requires far fewer calls only 22 or 23, compared to 269
-and above for the others.
+cases the ECHO+APP+MEM method converges more quickly. For example,
+in the EXPONENTIAL150 to EXPONENTIAL250 functions, the ECHO+APP+MEM
+method requires only 70 to 80 calls, outperforming or matching the
+most efficient competitors. A similar trend is seen in the SINUSOIDAL
+functions, where all methods exhibit low success rates, yet the ECHO+APP+MEM
+method consistently requires far fewer calls only 22 or 23, compared
+to 269 and above for the others.
 
-In the SHARPRIDGE functions, the proposed method shows very strong
+In the SHARPRIDGE functions, the ECHO+APP+MEM method shows very strong
 performance with low function evaluations and high success rates.
 For instance, in SHARPRIDGE250, it needs only 265 calls with a 96\%
 success rate, while jDE and CMA-ES require more than 420 calls. This
@@ -1861,16 +1959,16 @@ suggests an effective handling of rugged landscapes with many local
 minima and abrupt variations.
 
 However, in more demanding functions such as ROSENBROCK and ELLIPSOIDAL,
-the proposed method shows higher computational cost compared to its
-competitors. In ROSENBROCK250, for example, it requires 3628 calls,
+the ECHO+APP+MEM method shows higher computational cost compared to
+its competitors. In ROSENBROCK250, for example, it requires 3628 calls,
 while jDE and CMA-ES achieve similar results in approximately 2000
-calls. A similar pattern appears in ELLIPSOIDAL250, where the proposed
+calls. A similar pattern appears in ELLIPSOIDAL250, where the ECHO+APP+MEM
 method requires 2790 calls compared to roughly 1340 for CMA-ES. This
 indicates that for problems characterized by high curvature or strong
-inter-variable dependencies, the proposed method may require more
+inter-variable dependencies, the ECHO+APP+MEM method may require more
 iterations to converge.
 
-Overall, the results in this table suggest that the proposed method
+Overall, the results in this table suggest that the ECHO+APP+MEM method
 is particularly effective in problems with broad attraction basins,
 many local optima, or non-convex structures, as it manages to reach
 good solutions with relatively few function evaluations. In contrast,
@@ -1890,26 +1988,27 @@ methods for high-dimensional benchmark functions (population: formula)
 \end{figure}
 
 In Figure \ref{fig:statCallsPopFormula} the comparative analysis
-between the proposed method and other well-known optimization methods
-showed significant results based on the Friedman test, where the p-value
-is extremely small (9.09e-22), indicating statistically significant
-differences among the methods. The critical difference is 1.22 and
-the critical value is 3.85. The proposed method demonstrated statistically
-significant superiority compared to CLPSO (p\textless 0.01) and SaDE
-(p\textless 0.001), while there were no statistically significant
-differences compared to jDE and CMA-ES. Overall, the proposed method
-appears to perform better or at least equivalently compared to most
-of the methods tested, which reinforces its reliability and effectiveness.
+between the ECHO+APP+MEM method and other well-known optimization
+methods showed significant results based on the Friedman test, where
+the p-value is extremely small (9.09e-22), indicating statistically
+significant differences among the methods. The critical difference
+is 1.22 and the critical value is 3.85. The ECHO+APP+MEM method demonstrated
+statistically significant superiority compared to CLPSO (p\textless 0.01)
+and SaDE (p\textless 0.001), while there were no statistically significant
+differences compared to jDE and CMA-ES. Overall, the ECHO+APP+MEM
+method appears to perform better or at least equivalently compared
+to most of the methods tested, which reinforces its reliability and
+effectiveness.
 
 \begin{figure}[H]
 \begin{centering}
 \includegraphics{callsMulti}
 \par\end{centering}
-\caption{Computational performance (Function calls) of the Proposed method
+\caption{Computational performance (Function calls) of the ECHO+APP+MEM method
 on ELP and ROSENBROCK across dimensions 20-200 \label{fig:callsDim}}
 \end{figure}
 
-Figure \ref{fig:callsDim} illustrates the complexity of the proposed
+Figure \ref{fig:callsDim} illustrates the complexity of the ECHO+APP+MEM
 method in relation to the problem dimensionality, which ranges from
 20 to 200. The values represent the number of objective function calls
 for the ELP and ROSENBROCK functions. It is observed that as dimensionality
@@ -1925,26 +2024,735 @@ optimization problems.
 \begin{centering}
 \includegraphics{timeMulti}
 \par\end{centering}
-\caption{Computational performance (Time) of the Proposed method on ELP and
-ROSENBROCK across dimensions 20-200 \label{fig:timesDim}}
+\caption{Computational performance (Time) of the ECHO+APP+MEM method on ELP
+and ROSENBROCK across dimensions 20-200 \label{fig:timesDim}}
 
 \end{figure}
 
-Figure \ref{fig:timesDim} shows the complexity of the proposed method
-based on the solving time in seconds for the same functions and dimensionalities.
-The solving time also increases with dimensionality, starting from
-less than one second at dimension 20 and reaching approximately 106
-seconds for ELP and 96.5 seconds for ROSENBROCK at dimension 200.
+Figure \ref{fig:timesDim} shows the complexity of the ECHO+APP+MEM
+method based on the solving time in seconds for the same functions
+and dimensionalities. The solving time also increases with dimensionality,
+starting from less than one second at dimension 20 and reaching approximately
+106 seconds for ELP and 96.5 seconds for ROSENBROCK at dimension 200.
 The increase in time is steady and corresponds to the increase in
 the number of objective function calls, confirming that the method’s
 complexity is linked to the dimensionality and the computational effort
 required to solve the problems. Overall, both figures clearly show
-that the proposed method remains functional and scalable but with
+that the ECHO+APP+MEM method remains functional and scalable but with
 increasing computational cost as the problem dimension grows.
 
-\subsection{The echo method and neural networks}
+\subsection{Experiments on Real-World Problems}
 
-An additional experiment was conducted, where the proposed method
+In this section, experiments were conducted with a focus on real-world
+optimization problems, selected from the set of functions listed in
+Table \ref{tab:realProblems}, which represent approximately 85\%
+of the entire CEC2011 benchmark set and encompass both classical and
+contemporary challenges in global optimization. The experimental procedure
+was carefully designed to ensure strict comparability among the different
+algorithms under study. Specifically, a fixed population size of 100
+samples, generated with a uniform distribution within the feasible
+domain of each problem, was used for all methods except CMA-ES. For
+CMA-ES, standard practice from the relevant literature was followed,
+setting the population size according to the formula $Np=4+\left\lfloor 3\cdot\log(\text{dimension})\right\rfloor $
+to optimally leverage the algorithm’s dynamics relative to problem
+dimensionality. It is noteworthy that no local optimization phase
+was applied in any experiment, thus allowing the pure global search
+capability of each algorithm to be evaluated without the assistance
+of local refinement procedures. All other parameters governing the
+operation of the algorithms including evolution coefficients, stopping
+rules, and acceptance criteriaremained unchanged and were set according
+to the detailed configurations presented in Table 1, thereby ensuring
+maximum objectivity in the comparative assessment of results. Through
+this systematic approach, the experimental outcomes faithfully reflect
+the behavior of the methods on demanding real-world problems, enabling
+reliable conclusions to be drawn regarding their practical effectiveness.
+
+The analysis of the results presented in Tables \ref{tab:algorithmsBestAndMean},
+\ref{tab:rankingBestAndMean}, and \ref{tab:finalRanking} was based
+on a rigorously standardized experimental protocol to ensure the reliability
+and comparability of the methods. Specifically, for Table 9, the termination
+criterion was strictly set to a fixed number of function evaluations
+(1,500,000), providing all methods with equal opportunities for exploration
+in the solution space. For each method, the best value (i.e., the
+lowest objective function value found) and the mean value over 30
+independent runs were recorded, thus capturing both the maximum and
+average performance in a statistically substantiated manner. Subsequently,
+in Table 10, the methods were ranked for each problem according to
+their performance, with 1 corresponding to the best and 5 to the least
+effective performance among the five methods. For drawing overall
+conclusions, Table 11 presents the total sum of the ranks obtained
+by each method for both the best and mean values, and this aggregate
+score was divided by the total number of positions (i.e., the number
+of methods multiplied by two, to account for both criteria), providing
+a composite measure for comparing overall performance. Thus, the smallest
+average total score indicates the most effective method, enabling
+an objective evaluation of the comparative superiority of each approach
+across the full set of problems.
+
+{\tiny{}
+\begin{table}[H]
+{\footnotesize\caption{Real world problems CEC2011.\label{tab:realProblems}}
+}{\footnotesize\par}
+\centering{}{\tiny{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\tiny\textbf{PROBLEM}} & {\tiny\textbf{FORMULA}} & {\tiny\textbf{Dim}} & {\tiny\textbf{BOUNDS}}\tabularnewline
+\hline 
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Parameter}}{\tiny\par}
+
+{\tiny\textbf{Estimation for}}{\tiny\par}
+
+{\tiny\textbf{Frequency-Modulated}}{\tiny\par}
+
+{\tiny\textbf{Sound Waves}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{x\in[-6.4,6.35]^{6}}\;f(x)=\frac{1}{N}\sum_{n=1}^{N}\left|y(n;x)-y_{\text{target}}(n)\right|^{2}$}{\tiny\par}
+
+{\tiny$y(n;x)=x_{0}\sin\left(x_{1}n+x_{2}\sin(x_{3}n+x_{4}\sin(x_{5}n))\right)$}
+\end{cellvarwidth} & {\tiny 6} & {\tiny$x_{i}\in[-6.4,6.35]$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Lennard-Jones}}{\tiny\par}
+
+{\tiny\textbf{Potential}}
+\end{cellvarwidth} & {\tiny$\min_{x\in\mathbb{R}^{3N-6}}\;f(x)=4\sum_{i=1}^{N-1}\sum_{j=i+1}^{N}\left[\left(\frac{1}{r_{ij}}\right)^{12}-\left(\frac{1}{r_{ij}}\right)^{6}\right]$} & {\tiny 30} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$x_{0}\in(0,0,0)$}{\tiny\par}
+
+{\tiny$x_{1},x_{2}\in[0,4]$}{\tiny\par}
+
+{\tiny$x_{3}\in[0,\pi]$}{\tiny\par}
+
+{\tiny$x_{3k-3}$}{\tiny\par}
+
+{\tiny$x_{3k-2}$}{\tiny\par}
+
+{\tiny$x_{i}\in[-b_{k},+b_{k}]$}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Bifunctional}}{\tiny\par}
+
+{\tiny\textbf{Catalyst}}{\tiny\par}
+
+{\tiny\textbf{Blend}}{\tiny\par}
+
+{\tiny\textbf{Optimal}}{\tiny\par}
+
+{\tiny\textbf{Control}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\frac{dx_{1}}{dt}=-k_{1}x_{1}$, $\frac{dx_{2}}{dt}=k_{1}x_{1}-k_{2}x_{2}+k_{3}x_{2}+k_{4}x_{3}$,}{\tiny\par}
+
+{\tiny$\frac{dx_{3}}{dt}=k_{2}x_{2}$, $\frac{dx_{4}}{dt}=-k_{4}x_{4}+k_{5}x_{5}$,}{\tiny\par}
+
+{\tiny$\frac{dx_{5}}{dt}=-k_{3}x_{2}+k_{6}x_{4}-k_{5}x_{5}+k_{7}x_{6}+k_{8}x_{7}+k_{9}x_{5}+k_{10}x_{7}$}{\tiny\par}
+
+{\tiny$\frac{dx_{6}}{dt}=k_{8}x_{5}-k_{7}x_{6}$, $\frac{dx_{7}}{dt}=k_{9}x_{5}-k_{10}x_{7}$}{\tiny\par}
+
+{\tiny$k_{i}(u)=c_{i1}+c_{i2}u+c_{i3}u^{2}+c_{i4}u^{3}$}
+\end{cellvarwidth} & {\tiny 1} & {\tiny$u\in[0.6,0.9]$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Optimal}}{\tiny\par}
+
+{\tiny\textbf{Control of a}}{\tiny\par}
+
+{\tiny\textbf{Non-Linear}}{\tiny\par}
+
+{\tiny\textbf{Stirred}}{\tiny\par}
+
+{\tiny\textbf{Tank Reactor}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$J(u)=\int_{0}^{0.72}\left[x_{1}(t)^{2}+x_{2}(t)^{2}+0.1u^{2}\right]dt$}{\tiny\par}
+
+{\tiny$\frac{dx_{1}}{dt}=-2x_{1}+x_{2}+1.25u+0.5\exp\left(\frac{x_{1}}{x_{1}+2}\right)$}{\tiny\par}
+
+{\tiny$\frac{dx_{2}}{dt}=-x_{2}+0.5\exp\left(\frac{x_{1}}{x_{1}+2}\right)$}{\tiny\par}
+
+{\tiny$x_{1}(0)=0.9,\quad x_{2}(0)=0.09$, $t\in[0,0.72]$}
+\end{cellvarwidth} & {\tiny 1} & {\tiny$u\in[0,5]$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Tersoff}}{\tiny\par}
+
+{\tiny\textbf{Potential}}{\tiny\par}
+
+{\tiny\textbf{for model Si (B)}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{\mathbf{x}\in\Omega}f(\mathbf{x})=\sum_{i=1}^{N}E(\mathbf{x}_{i})$}{\tiny\par}
+
+{\tiny$E(\mathbf{x}_{i})=\frac{1}{2}\sum_{j\neq i}f_{c}(r_{ij})\left[V_{R}(r_{ij})-B_{ij}V_{A}(r_{ij})\right]$}{\tiny\par}
+
+{\tiny where $r_{ij}=\|\mathbf{x}_{i}-\mathbf{x}_{j}\|$, $V_{R}(r)=A\exp(-\lambda_{1}r)$}{\tiny\par}
+
+{\tiny$V_{A}(r)=B\exp(-\lambda_{2}r)$}{\tiny\par}
+
+{\tiny$f_{c}(r)$: cutoff function with $f_{c}(r)$: angle parameter}
+\end{cellvarwidth} & {\tiny 30} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$x_{1}\in[0,4]$}{\tiny\par}
+
+{\tiny$x_{2}\in[0,4]$}{\tiny\par}
+
+{\tiny$x_{3}\in[0,\pi]$}{\tiny\par}
+
+{\tiny$x_{i}\in\left[\frac{4(i-3)}{4},\ 4\right]$}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Tersoff}}{\tiny\par}
+
+{\tiny\textbf{Potential}}{\tiny\par}
+
+{\tiny\textbf{for model Si (C)}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{\mathbf{x}}\;V(\mathbf{x})=\sum_{i=1}^{N}\sum_{j>i}^{N}f_{C}(r_{ij})\left[a_{ij}f_{R}(r_{ij})+b_{ij}f_{A}(r_{ij})\right]$}{\tiny\par}
+
+{\tiny$f_{C}(r)=\begin{cases}
+1, & r<R-D\\
+\frac{1}{2}+\frac{1}{2}\cos\left(\frac{\pi(r-R+D)}{2D}\right), & |r-R|\leq D\\
+0, & r>R+D
+\end{cases}$}{\tiny\par}
+
+{\tiny$f_{R}(r)=A\exp(-\lambda_{1}r)$}{\tiny\par}
+
+{\tiny$f_{A}(r)=-B\exp(-\lambda_{2}r)$}{\tiny\par}
+
+{\tiny$b_{ij}=\left[1+(\beta^{n})\zeta_{ij}^{n}\right]^{-1/(2n)}$}{\tiny\par}
+
+{\tiny$\sum_{k\neq i,j}f_{C}(r_{ik})g(\theta_{ijk})\exp\left[\lambda_{3}^{3}(r_{ij}-r_{ik})^{3}\right]$}
+\end{cellvarwidth} & {\tiny 30} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$x_{1}\in[0,4]$}{\tiny\par}
+
+{\tiny$x_{2}\in[0,4]$}{\tiny\par}
+
+{\tiny$x_{3}\in[0,\pi]$}{\tiny\par}
+
+{\tiny$x_{i}\in\left[\frac{4(i-3)}{4},\ 4\right]$}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Spread}}{\tiny\par}
+
+{\tiny\textbf{Spectrum Radar}}{\tiny\par}
+
+{\tiny\textbf{Polly phase}}{\tiny\par}
+
+{\tiny\textbf{Code Design}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{x\in X}\;f(x)=\max\left\{ |\varphi_{1}(x)|,|\varphi_{2}(x)|,\ldots,|\varphi_{m}(x)|\right\} $}{\tiny\par}
+
+{\tiny$X=\{x\in\mathbb{R}^{n}\mid0\leq x_{j}\leq2\pi,\;j=1,\ldots,n\}m=2n-1$}{\tiny\par}
+
+{\tiny$\varphi_{j}(x)=\begin{cases}
+{\displaystyle \sum_{k=1}^{n-j}\cos(x_{k}-x_{k+j})} & \text{for }j=1,\ldots,n-1\\
+{\displaystyle n} & \text{for }j=n\\
+{\displaystyle \varphi_{2n-j}(x)} & \text{for }j=n+1,\ldots,2n-1
+\end{cases}$}{\tiny\par}
+
+{\tiny$\varphi_{j}(x)=\sum_{k=1}^{n-j}\cos(x_{k}-x_{k+j}),\quad j=1,\ldots,n-1$}{\tiny\par}
+
+{\tiny$\varphi_{n}(x)=n$, $\varphi_{n+\ell}(x)=\varphi_{n-\ell}(x),\quad\ell=1,\ldots,n-1$}
+\end{cellvarwidth} & {\tiny 20} & {\tiny$x_{j}\in[0,2\pi]$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Transmission}}{\tiny\par}
+
+{\tiny\textbf{Network}}{\tiny\par}
+
+{\tiny\textbf{Expansion}}{\tiny\par}
+
+{\tiny\textbf{Planning}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min\sum_{l\in\Omega}c_{l}n_{l}+W_{1}\sum_{l\in OL}|f_{l}-\bar{f}_{l}|+W_{2}\sum_{l\in\Omega}\max(0,n_{l}-\bar{n}_{l})$}{\tiny\par}
+
+{\tiny$Sf=g-d$}{\tiny\par}
+
+{\tiny$f_{l}=\gamma_{l}n_{l}\Delta\theta_{l},\quad\forall l\in\Omega$}{\tiny\par}
+
+{\tiny$|f_{l}|\leq\bar{f}_{l}n_{l},\quad\forall l\in\Omega$}{\tiny\par}
+
+{\tiny$0\leq n_{l}\leq\bar{n}_{l},\quad n_{l}\in\mathbb{Z},\quad\forall l\in\Omega$}
+\end{cellvarwidth} & {\tiny 7} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$0\leq n_{i}\leq\bar{n}_{l}$}{\tiny\par}
+
+{\tiny$n_{i}\in\mathbb{Z}$}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Electricity}}{\tiny\par}
+
+{\tiny\textbf{Transmission}}{\tiny\par}
+
+{\tiny\textbf{Pricing}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{x}\;\;f(x)=\sum_{i=1}^{N_{g}}\left(\frac{C_{i}^{gen}}{P_{i}^{gen}}-R_{i}^{gen}\right)^{2}+\sum_{j=1}^{N_{d}}\left(\frac{C_{j}^{load}}{P_{j}^{load}}-R_{j}^{load}\right)^{2}$}{\tiny\par}
+
+{\tiny$\sum_{j}GD_{i,j}+\sum_{j}BT_{i,j}=P_{i}^{gen},\quad\forall i$}{\tiny\par}
+
+{\tiny$\sum_{i}GD_{i,j}+\sum_{i}BT_{i,j}=P_{j}^{load},\quad\forall j$}{\tiny\par}
+
+{\tiny$GD_{i,j}^{max}=\min(P_{i}^{gen}-BT_{i,j},\;P_{j}^{load}-BT_{i,j})$}
+\end{cellvarwidth} & {\tiny 126} & {\tiny$GD_{i,j}\in[0,GD_{i,j}^{max}]$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Circular}}{\tiny\par}
+
+{\tiny\textbf{Antenna}}{\tiny\par}
+
+{\tiny\textbf{Array}}{\tiny\par}
+
+{\tiny\textbf{Design}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{r_{1},\ldots,r_{6},\,\varphi_{1},\ldots,\varphi_{6}}\quad f(\mathbf{x})=\max_{\theta\in\Omega}AF(\mathbf{x},\theta)$}{\tiny\par}
+
+{\tiny$AF(\mathbf{x},\theta)=\left|\sum_{k=1}^{6}\exp\left(j\left[2\pi r_{k}\cos(\theta-\theta_{k})+\varphi_{k}\frac{\pi}{180}\right]\right)\right|$}
+\end{cellvarwidth} & {\tiny 12} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$r_{k}\in[0.2,1]$}{\tiny\par}
+
+{\tiny$\varphi_{k}\in[-180,180]$}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Dynamic}}{\tiny\par}
+
+{\tiny\textbf{Economic}}{\tiny\par}
+
+{\tiny\textbf{Dispatch 1}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{\mathbf{P}}\quad f(\mathbf{P})=\sum_{t=1}^{24}\sum_{i=1}^{5}\left(a_{i}P_{i,t}^{2}+b_{i}P_{i,t}+c_{i}\right)$}{\tiny\par}
+
+{\tiny$P_{i}^{\min}\leq P_{i,t}\leq P_{i}^{\max},\quad\forall i=1,\ldots,5,\;t=1,\ldots,24$}{\tiny\par}
+
+{\tiny$\sum_{i=1}^{5}P_{i,t}=D_{t},\quad\forall t=1,\ldots,24$}{\tiny\par}
+
+{\tiny$P_{\min}=[10,20,30,40,50]$}{\tiny\par}
+
+{\tiny$P_{\max}=[75,125,175,250,300]$}
+\end{cellvarwidth} & {\tiny 120} & {\tiny$P_{i}^{\min}\leq P_{i,t}\leq P_{i}^{\max}$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Dynamic}}{\tiny\par}
+
+{\tiny\textbf{Economic}}{\tiny\par}
+
+{\tiny\textbf{Dispatch 2}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{\mathbf{P}}\quad f(\mathbf{P})=\sum_{t=1}^{24}\sum_{i=1}^{9}\left(a_{i}P_{i,t}^{2}+b_{i}P_{i,t}+c_{i}\right)$}{\tiny\par}
+
+{\tiny$P_{i}^{\min}\leq P_{i,t}\leq P_{i}^{\max},\quad\forall i=1,\ldots,5,\;t=1,\ldots,24$}{\tiny\par}
+
+{\tiny$\sum_{i=1}^{5}P_{i,t}=D_{t},\quad\forall t=1,\ldots,24$}{\tiny\par}
+
+{\tiny$P_{\min}=[150,135,73,60,73,57,20,47,20]$}{\tiny\par}
+
+{\tiny$P_{\max}=[470,460,340,300,243,160,130,120,80]$}
+\end{cellvarwidth} & {\tiny 216} & {\tiny$P_{i}^{\min}\leq P_{i,t}\leq P_{i}^{\max}$}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\tiny\textbf{Static}}{\tiny\par}
+
+{\tiny\textbf{Economic}}{\tiny\par}
+
+{\tiny\textbf{Load}}{\tiny\par}
+
+{\tiny\textbf{Dispatch}}{\tiny\par}
+
+{\tiny\textbf{(1,2,3,4,5)}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny$\min_{P_{1},\ldots,P_{N_{G}}}F=\sum_{i=1}^{N_{G}}f_{i}(P_{i})$}{\tiny\par}
+
+{\tiny$f_{i}(P_{i})=a_{i}P_{i}^{2}+b_{i}P_{i}+c_{i},\quad i=1,2,\ldots,N_{G}$}{\tiny\par}
+
+{\tiny$f_{i}(P_{i})=a_{i}P_{i}^{2}+b_{i}P_{i}+c_{i}+|e_{i}\sin(f_{i}(P_{i}^{\min}-P_{i}))|$}{\tiny\par}
+
+{\tiny$P_{i}^{\min}\leq P_{i}\leq P_{i}^{\max},\quad i=1,2,\ldots,N_{G}$}{\tiny\par}
+
+{\tiny$\sum_{i=1}^{N_{G}}P_{i}=P_{D}+P_{L}$}{\tiny\par}
+
+{\tiny$P_{L}=\sum_{i=1}^{N_{G}}\sum_{j=1}^{N_{G}}P_{i}B_{ij}P_{j}+\sum_{i=1}^{N_{G}}B_{0i}P_{i}+B_{00}$}{\tiny\par}
+
+{\tiny$P_{i}-P_{i}^{0}\leq UR_{i}\quad P_{i}^{0}-P_{i}\leq DR_{i}$}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny 6}{\tiny\par}
+
+{\tiny 13}{\tiny\par}
+
+{\tiny 15}{\tiny\par}
+
+{\tiny 40}{\tiny\par}
+
+{\tiny 140}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\tiny See}{\tiny\par}
+
+{\tiny Technical}{\tiny\par}
+
+{\tiny Report}{\tiny\par}
+
+{\tiny of}{\tiny\par}
+
+{\tiny CEC2011}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\end{tabular}}{\tiny\par}
+\end{table}
+}{\tiny{}
+\begin{sidewaystable}[H]
+{\footnotesize\caption{Algorithms’ Comparison Based on Best and Mean after 1.5e+5 FEs.+\label{tab:algorithmsBestAndMean}}
+}{\footnotesize\par}
+\centering{}{\scriptsize{}%
+\begin{tabular}{|V{\linewidth}|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+{\scriptsize\textbf{PROBLEM}} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{CLPSO}}{\scriptsize\par}
+
+{\scriptsize\textbf{best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{CLPSO}}{\scriptsize\par}
+
+{\scriptsize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{SaDE}}{\scriptsize\par}
+
+{\scriptsize\textbf{best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{SaDE}}{\scriptsize\par}
+
+{\scriptsize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{jDE}}{\scriptsize\par}
+
+{\scriptsize\textbf{Best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{jDE}}{\scriptsize\par}
+
+{\scriptsize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{CMA-ES}}{\scriptsize\par}
+
+{\scriptsize\textbf{best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{CMA-ES}}{\scriptsize\par}
+
+{\scriptsize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{EO}}{\scriptsize\par}
+
+{\scriptsize\textbf{Best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{EO}}{\scriptsize\par}
+
+{\scriptsize\textbf{Mean}}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\hline 
+{\scriptsize\textbf{Parameter Estimation for}}{\scriptsize\par}
+
+{\scriptsize\textbf{Frequency-Modulated Sound Waves}} & {\scriptsize 0.1314837477} & {\scriptsize 0.2124981688} & {\scriptsize 0.1899428536} & {\scriptsize 0.2025566839} & {\scriptsize 0.2915779318} & {\scriptsize 0.372177177} & {\scriptsize 0.18160916} & {\scriptsize 0.256863966} & {\scriptsize 0.2521750203} & {\scriptsize 0.2954215036}\tabularnewline
+\hline 
+{\scriptsize\textbf{Lennard-Jones}}{\scriptsize\par}
+
+{\scriptsize\textbf{Potential}} & {\scriptsize -13.43649135} & {\scriptsize -10.25073403} & {\scriptsize -24.86870825} & {\scriptsize -22.6693403} & {\scriptsize -26.96868295} & {\scriptsize -23.05977012} & {\scriptsize -28.42253189} & {\scriptsize -25.78783328} & {\scriptsize -15.93299933} & {\scriptsize -12.14897801}\tabularnewline
+\hline 
+{\scriptsize\textbf{BifunctionalCatalyst Blend}}{\scriptsize\par}
+
+{\scriptsize\textbf{Optimal Control}} & {\scriptsize 0.2374871493} & {\scriptsize 0.4314871688} & {\scriptsize 0.545953325} & {\scriptsize 0.624508763} & {\scriptsize 0.545624975} & {\scriptsize 0.6003624983} & {\scriptsize 0.1314837477} & {\scriptsize 0.2445629767} & {\scriptsize 0.245874592} & {\scriptsize 0.3935178477}\tabularnewline
+\hline 
+{\scriptsize\textbf{Optimal Control of a Non-}}{\scriptsize\par}
+
+{\scriptsize\textbf{Linear Stirred Tank Reactor}} & {\scriptsize 0.3903767228} & {\scriptsize 0.3903767228} & {\scriptsize 0.3903767228} & {\scriptsize 0.3903767228} & {\scriptsize 0.4913066735} & {\scriptsize 7.309621249e+10} & {\scriptsize 0.3903767228} & {\scriptsize 0.390376723} & {\scriptsize 38.94304848} & {\scriptsize 26682.93618}\tabularnewline
+\hline 
+{\scriptsize\textbf{Tersoff Potential}}{\scriptsize\par}
+
+{\scriptsize\textbf{for model Si (B)}} & {\scriptsize -28.23544117} & {\scriptsize -26.18834522} & {\scriptsize -3.107773136} & {\scriptsize 25.4711091} & {\scriptsize -22.10581388} & {\scriptsize -2.387797305} & {\scriptsize -29.26244222} & {\scriptsize -27.5889735} & {\scriptsize -26.7539495} & {\scriptsize -24.83294286}\tabularnewline
+\hline 
+{\scriptsize\textbf{Tersoff Potential}}{\scriptsize\par}
+
+{\scriptsize\textbf{for model Si (C)}} & {\scriptsize -30.85200257} & {\scriptsize -28.87349048} & {\scriptsize -11.60719468} & {\scriptsize 22.08963599} & {\scriptsize -23.1614585} & {\scriptsize -7.886665429} & {\scriptsize -33.19699356} & {\scriptsize -31.79270914} & {\scriptsize -31.49334757} & {\scriptsize -28.7003262}\tabularnewline
+\hline 
+{\scriptsize\textbf{Spread Spectrum Radar}}{\scriptsize\par}
+
+{\scriptsize\textbf{Polly phaseCode Design}} & {\scriptsize 1.085334991} & {\scriptsize 1.343956153} & {\scriptsize 1.536501579} & {\scriptsize 2.150881715} & {\scriptsize 0.9189283507} & {\scriptsize 1.616525419} & {\scriptsize 0.014848227} & {\scriptsize 0.171988666} & {\scriptsize 0.5931349058} & {\scriptsize 0.8611681213}\tabularnewline
+\hline 
+{\scriptsize\textbf{Transmission Network}}{\scriptsize\par}
+
+{\scriptsize\textbf{Expansion Planning}} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250} & {\scriptsize 250}\tabularnewline
+\hline 
+{\scriptsize\textbf{Electricity Transmission}}{\scriptsize\par}
+
+{\scriptsize\textbf{Pricing}} & {\scriptsize 13775010.1} & {\scriptsize 13775395.07} & {\scriptsize 23481009.86} & {\scriptsize 30034934.81} & {\scriptsize 13776257.77} & {\scriptsize 14484728.07} & {\scriptsize 13775841.77} & {\scriptsize 13787550.18} & {\scriptsize 13776506.06} & {\scriptsize 13777507.07}\tabularnewline
+\hline 
+{\scriptsize\textbf{Circular Antenna}}{\scriptsize\par}
+
+{\scriptsize\textbf{Array Design}} & {\scriptsize 0.006933401045} & {\scriptsize 0.05181551798} & {\scriptsize 0.02142329927} & {\scriptsize 0.03892428051} & {\scriptsize 0.04238306654} & {\scriptsize 0.1610286721} & {\scriptsize 0.007204797576} & {\scriptsize 0.008635655364} & {\scriptsize 0.03477651401} & {\scriptsize 0.1675322066}\tabularnewline
+\hline 
+{\scriptsize\textbf{Dynamic Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Dispatch 1}} & {\scriptsize 428607927.6} & {\scriptsize 435250914.5} & {\scriptsize 968042312.1} & {\scriptsize 1034679775} & {\scriptsize 968042312.1} & {\scriptsize 1071143842} & {\scriptsize 88285.6024} & {\scriptsize 102776.7103} & {\scriptsize 473972051.7} & {\scriptsize 496720571.7}\tabularnewline
+\hline 
+{\scriptsize\textbf{Dynamic Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Dispatch 2}} & {\scriptsize 33031590.31} & {\scriptsize 53906147.38} & {\scriptsize 845287898.3} & {\scriptsize 913715793.2} & {\scriptsize 350885523} & {\scriptsize 456293948.4} & {\scriptsize 502699.4187} & {\scriptsize 477720.1511} & {\scriptsize 77187145.39} & {\scriptsize 92911983.83}\tabularnewline
+\hline 
+{\scriptsize\textbf{Static Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Load Dispatch 1}} & {\scriptsize 6554.672173} & {\scriptsize 7668.333603} & {\scriptsize 16877.92071} & {\scriptsize 101588.3887} & {\scriptsize 6473.96039} & {\scriptsize 939805.3726} & {\scriptsize 6657.613028} & {\scriptsize 415917.4625} & {\scriptsize 6878.581584} & {\scriptsize 12522.32104}\tabularnewline
+\hline 
+{\scriptsize\textbf{Static Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Load Dispatch 2}} & {\scriptsize 19030.36081} & {\scriptsize 20699.00219} & {\scriptsize 2600565.214} & {\scriptsize 9329466.813} & {\scriptsize 41350.66254} & {\scriptsize 8649652.933} & {\scriptsize 763001.2185} & {\scriptsize 1425815.44} & {\scriptsize 19406.19272} & {\scriptsize 44368.22458}\tabularnewline
+\hline 
+{\scriptsize\textbf{Static Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Load Dispatch 3}} & {\scriptsize 470192288.3} & {\scriptsize 470294703.2} & {\scriptsize 478069615.3} & {\scriptsize 541898763} & {\scriptsize 474743051.8} & {\scriptsize 514454706.1} & {\scriptsize 470023232.3} & {\scriptsize 470023232.3} & {\scriptsize 470437730.6} & {\scriptsize 470713100.1}\tabularnewline
+\hline 
+{\scriptsize\textbf{Static Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Load Dispatch 4}} & {\scriptsize 884980.5569} & {\scriptsize 1423887.358} & {\scriptsize 14170362.58} & {\scriptsize 106749078.5} & {\scriptsize 14657102.04} & {\scriptsize 32906828.34} & {\scriptsize 476053.5197} & {\scriptsize 2925852.935} & {\scriptsize 149544.9615} & {\scriptsize 417426.7844}\tabularnewline
+\hline 
+{\scriptsize\textbf{Static Economic}}{\scriptsize\par}
+
+{\scriptsize\textbf{Load Dispatch 5}} & {\scriptsize 8105947615} & {\scriptsize 8110924071} & {\scriptsize 8901002004} & {\scriptsize 9943082701} & {\scriptsize 8446155955} & {\scriptsize 463055675} & {\scriptsize 8072077963} & {\scriptsize 8084017791} & {\scriptsize 8119017656} & {\scriptsize 8263919973}\tabularnewline
+\hline 
+\end{tabular}}{\scriptsize\par}
+\end{sidewaystable}
+}
+\begin{sidewaystable}[H]
+\caption{Algorithms’ Comparison Based on Best and Mean after 1.5e+5 FEs.\label{tab:rankingBestAndMean}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|V{\linewidth}|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+{\footnotesize\textbf{PROBLEM}} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{CLPSO}}{\footnotesize\par}
+
+{\footnotesize\textbf{best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{CLPSO}}{\footnotesize\par}
+
+{\footnotesize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{SaDE}}{\footnotesize\par}
+
+{\footnotesize\textbf{best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{SaDE}}{\footnotesize\par}
+
+{\footnotesize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{jDE}}{\footnotesize\par}
+
+{\footnotesize\textbf{Best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{jDE}}{\footnotesize\par}
+
+{\footnotesize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{CMA-ES}}{\footnotesize\par}
+
+{\footnotesize\textbf{best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{CMA-ES}}{\footnotesize\par}
+
+{\footnotesize\textbf{Mean}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{EO}}{\footnotesize\par}
+
+{\footnotesize\textbf{Best}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{EO}}{\footnotesize\par}
+
+{\footnotesize\textbf{Mean}}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\hline 
+{\footnotesize\textbf{Parameter Estimation for}}{\footnotesize\par}
+
+{\footnotesize\textbf{Frequency-Modulated Sound Waves}} & {\footnotesize 1} & {\footnotesize 2} & {\footnotesize 3} & {\footnotesize 1} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 2} & {\footnotesize 3} & {\footnotesize 4} & {\footnotesize 4}\tabularnewline
+\hline 
+{\footnotesize\textbf{Lennard-Jones}}{\footnotesize\par}
+
+{\footnotesize\textbf{Potential}} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 3} & {\footnotesize 3} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 4} & {\footnotesize 4}\tabularnewline
+\hline 
+{\footnotesize\textbf{BifunctionalCatalyst Blend}}{\footnotesize\par}
+
+{\footnotesize\textbf{Optimal Control}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{Optimal Control of a}}{\footnotesize\par}
+
+{\footnotesize\textbf{Non-Linear Stirred}}{\footnotesize\par}
+
+{\footnotesize\textbf{Tank Reactor}} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 4} & {\footnotesize 4}\tabularnewline
+\hline 
+{\footnotesize\textbf{Tersoff Potential}}{\footnotesize\par}
+
+{\footnotesize\textbf{for model Si (B)}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{Tersoff Potential}}{\footnotesize\par}
+
+{\footnotesize\textbf{for model Si (C)}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{Spread Spectrum Radar}}{\footnotesize\par}
+
+{\footnotesize\textbf{Polly phaseCode Design}} & {\footnotesize 4} & {\footnotesize 3} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 3} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 2} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize\textbf{Transmission Network}}{\footnotesize\par}
+
+{\footnotesize\textbf{Expansion Planning}} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize\textbf{Electricity Transmission}}{\footnotesize\par}
+
+{\footnotesize\textbf{Pricing}} & {\footnotesize 2} & {\footnotesize 1} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 1} & {\footnotesize 4} & {\footnotesize 3} & {\footnotesize 3} & {\footnotesize 4} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize\textbf{Circular Antenna}}{\footnotesize\par}
+
+{\footnotesize\textbf{Array Design}} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 2} & {\footnotesize 1} & {\footnotesize 4} & {\footnotesize 5}\tabularnewline
+\hline 
+{\footnotesize\textbf{Dynamic Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Dispatch 1}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 5} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{Dynamic Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Dispatch 2}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{Static Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Load Dispatch 1}} & {\footnotesize 2} & {\footnotesize 1} & {\footnotesize 5} & {\footnotesize 3} & {\footnotesize 1} & {\footnotesize 5} & {\footnotesize 3} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize\textbf{Static Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Load Dispatch 2}} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 5} & {\footnotesize 3} & {\footnotesize 2} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize\textbf{Static Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Load Dispatch 3}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{Static Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Load Dispatch 4}} & {\footnotesize 3} & {\footnotesize 2} & {\footnotesize 4} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 2} & {\footnotesize 3} & {\footnotesize 1} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize\textbf{Static Economic}}{\footnotesize\par}
+
+{\footnotesize\textbf{Load Dispatch 5}} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 5} & {\footnotesize 5} & {\footnotesize 4} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 1} & {\footnotesize 3} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize\textbf{TOTAL}} & {\footnotesize\textbf{35}} & {\footnotesize\textbf{34}} & {\footnotesize\textbf{68}} & {\footnotesize\textbf{66}} & {\footnotesize 60} & {\footnotesize 68} & {\footnotesize\textbf{28}} & {\footnotesize\textbf{28}} & {\footnotesize\textbf{54}} & {\footnotesize 51}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{sidewaystable}
+\begin{table}[H]
+\caption{Comparison of algorithms and final ranking\label{tab:finalRanking}}
+
+\begin{centering}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+\textbf{Problem} & \textbf{Best} & \textbf{Mean} & \textbf{Overall} & \textbf{Average} & \textbf{Rang}\tabularnewline
+\hline 
+\hline 
+\textbf{CMA-ES} & 28 & 28 & 56 & 1.647 & \textbf{1}\tabularnewline
+\hline 
+\textbf{CLPSO} & 35 & 34 & 69 & 2.029 & \textbf{2}\tabularnewline
+\hline 
+\textbf{EO} & 51 & 48 & 99 & 2.9116 & \textbf{3}\tabularnewline
+\hline 
+\textbf{jDE} & 58 & 65 & 123 & 3.617 & \textbf{4}\tabularnewline
+\hline 
+\textbf{SaDE} & 67 & 65 & 132 & 3.882 & \textbf{5}\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\end{table}
+
+In the comparative assessment conducted in this subsection, the basic
+form of the EO was benchmarked against other modern and internationally
+recognized evolutionary algorithms such as SaDE, jDE, CLPSO, and CMA-ES,
+which serve as the state-of-the-art reference for real-world global
+optimization problems. The selection of these algorithms ensures a
+fair and realistic comparison, as all are noted for their stability
+and proven effectiveness in a wide range of practical applications
+and complex problems, as also reflected in the CEC2011 benchmark.
+The EO was implemented in its pure form, without the use of additional
+memory or surrogate evaluation mechanisms, thus highlighting the intrinsic
+ability of the method to address high-dimensional and complex problems
+transparently.
+
+Analysis of the results demonstrates that EO remains highly competitive,
+and in many cases superior, to the other examined methods across a
+substantial subset of the tested problems. EO often achieves lower
+or comparable best and mean values, as well as reduced dispersion
+between independent runs a feature indicative of stable performance
+and reliability in real-world scenarios. Although in certain instances
+minor deviations are observed in favor of competing algorithms, especially
+in highly specialized problem landscapes or regions favoring intensive
+local exploitation, the overall picture confirms the effectiveness
+of EO. The uniform use of a fixed population size (100 samples, except
+for CMA-ES), identical stopping criteria and parameters (as specified
+in Table 1), and the absence of local optimization ensure absolute
+objectivity and fairness in the evaluation framework.
+
+Consequently, EO proves to be a highly promising alternative among
+contemporary global optimization algorithms, highlighting its potential
+for future development and adoption in real-world applications, where
+the balance between speed, reliability, and implementation simplicity
+remains a core requirement.
+
+
+\subsection{The Echo method and neural networks}
+
+An additional experiment was conducted, where the ECHO+APP+MEM method
 was used to train artificial neural networks \citep{nn1,nn2}, by
 minimizing the so - called training error defined as:
 \begin{equation}
@@ -1957,7 +2765,7 @@ the parameter vector of the neural network. The set $\left(\overrightarrow{x_{i}
 represents the training set of the objective problem and the values
 $y_{i}$ are the expected outputs for each pattern $\overrightarrow{x_{i}}$. 
 
-To validate the proposed method, an extensive collection of classification
+To validate the ECHO+APP+MEM method, an extensive collection of classification
 datasets was employed, sourced from various publicly available online
 repositories. These datasets were obtained from:
 \begin{enumerate}
@@ -2023,143 +2831,159 @@ and ZONF\_S.
 \begin{table}[H]
 \begin{centering}
 {\footnotesize{}%
-\begin{tabular}{|l|c|c|c|c|c|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline 
-{\footnotesize\textbf{DATASET}} & {\footnotesize\textbf{GENETIC}} & {\footnotesize\textbf{ECHO}} & {\footnotesize\textbf{ECHO+APP}} & {\footnotesize\textbf{ECHO+MEM}} & {\footnotesize\textbf{ECHO+APP+MEM}}\tabularnewline
+{\scriptsize\textbf{DATASET}} & {\footnotesize\textbf{GENETIC}} & {\footnotesize\textbf{ADAM}} & {\footnotesize\textbf{NEAT}} & {\footnotesize\textbf{PRUNE}} & {\footnotesize\textbf{ECHO}} & {\footnotesize\textbf{ECHO+APP}} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{ECHO}}\\
+{\footnotesize\textbf{+MEM}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{ECHO}}\\
+{\footnotesize\textbf{+APP+MEM}}
+\end{cellvarwidth}\tabularnewline
 \hline 
 \hline 
-{\footnotesize\textbf{Appendicitis}} & {\footnotesize 18.10\%} & {\footnotesize 22.07\%} & {\footnotesize 22.47\%} & {\footnotesize 22.60\%} & {\footnotesize 22.77\%}\tabularnewline
+{\scriptsize\textbf{Appendicitis}} & {\footnotesize 18.10\%} & {\footnotesize 16.50\%} & {\footnotesize 17.20\%} & {\footnotesize 15.97\%} & {\footnotesize 22.07\%} & {\footnotesize 22.47\%} & {\footnotesize 22.60\%} & {\footnotesize 22.77\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Alcohol}} & {\footnotesize 39.57\%} & {\footnotesize 18.91\%} & {\footnotesize 17.24\%} & {\footnotesize 17.77\%} & {\footnotesize 16.96\%}\tabularnewline
+{\scriptsize\textbf{Alcohol}} & {\footnotesize 39.57\%} & {\footnotesize 57.78\%} & {\footnotesize 66.80\%} & {\footnotesize 15.75\%} & {\footnotesize 18.91\%} & {\footnotesize 17.24\%} & {\footnotesize 17.77\%} & {\footnotesize 16.96\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Australian}} & {\footnotesize 32.10\%} & {\footnotesize 22.34\%} & {\footnotesize 22.34\%} & {\footnotesize 22.91\%} & {\footnotesize 23.16\%}\tabularnewline
+{\scriptsize\textbf{Australian}} & {\footnotesize 32.10\%} & {\footnotesize 35.65\%} & {\footnotesize 31.98\%} & {\footnotesize 43.66\%} & {\footnotesize 22.34\%} & {\footnotesize 22.34\%} & {\footnotesize 22.91\%} & {\footnotesize 23.16\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Balance}} & {\footnotesize 8.97\%} & {\footnotesize 7.10\%} & {\footnotesize 7.10\%} & {\footnotesize 7.22\%} & {\footnotesize 7.23\%}\tabularnewline
+{\scriptsize\textbf{Balance}} & {\footnotesize 8.97\%} & {\footnotesize 12.27\%} & {\footnotesize 23.14\%} & {\footnotesize 9.00\%} & {\footnotesize 7.10\%} & {\footnotesize 7.10\%} & {\footnotesize 7.22\%} & {\footnotesize 7.23\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Circular}} & {\footnotesize 5.99\%} & {\footnotesize 4.48\%} & {\footnotesize 4.48\%} & {\footnotesize 4.37\%} & {\footnotesize 4.37\%}\tabularnewline
+{\scriptsize\textbf{Circular}} & {\footnotesize 5.99\%} & {\footnotesize 19.95\%} & {\footnotesize 35.18\%} & {\footnotesize 12.76\%} & {\footnotesize 4.48\%} & {\footnotesize 4.48\%} & {\footnotesize 4.37\%} & {\footnotesize 4.37\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Cleveland}} & {\footnotesize 51.60\%} & {\footnotesize 45.74\%} & {\footnotesize 45.74\%} & {\footnotesize 46.60\%} & {\footnotesize 46.60\%}\tabularnewline
+{\scriptsize\textbf{Cleveland}} & {\footnotesize 51.60\%} & {\footnotesize 67.55\%} & {\footnotesize 53.44\%} & {\footnotesize 51.48\%} & {\footnotesize 45.74\%} & {\footnotesize 45.74\%} & {\footnotesize 46.60\%} & {\footnotesize 46.60\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Dermatology}} & {\footnotesize 30.58\%} & {\footnotesize 9.34\%} & {\footnotesize 9.34\%} & {\footnotesize 11.51\%} & {\footnotesize 11.51\%}\tabularnewline
+{\scriptsize\textbf{Dermatology}} & {\footnotesize 30.58\%} & {\footnotesize 26.14\%} & {\footnotesize 35.18\%} & {\footnotesize 12.76\%} & {\footnotesize 9.34\%} & {\footnotesize 9.34\%} & {\footnotesize 11.51\%} & {\footnotesize 11.51\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Ecoli}} & {\footnotesize 54.67\%} & {\footnotesize 45.89\%} & {\footnotesize 45.89\%} & {\footnotesize 48.94\%} & {\footnotesize 48.94\%}\tabularnewline
+{\scriptsize\textbf{Ecoli}} & {\footnotesize 54.67\%} & {\footnotesize 64.43\%} & {\footnotesize 43.44\%} & {\footnotesize 60.32\%} & {\footnotesize 45.89\%} & {\footnotesize 45.89\%} & {\footnotesize 48.94\%} & {\footnotesize 48.94\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Fert}} & {\footnotesize 28.50\%} & {\footnotesize 24.40\%} & {\footnotesize 24.13\%} & {\footnotesize 26.50\%} & {\footnotesize 24.57\%}\tabularnewline
+{\scriptsize\textbf{Fert}} & {\footnotesize 28.50\%} & {\footnotesize 23.98\%} & {\footnotesize 15.37\%} & {\footnotesize 25.20\%} & {\footnotesize 24.40\%} & {\footnotesize 24.13\%} & {\footnotesize 26.50\%} & {\footnotesize 24.57\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Glass}} & {\footnotesize 58.30\%} & {\footnotesize 50.24\%} & {\footnotesize 50.24\%} & {\footnotesize 49.43\%} & {\footnotesize 49.22\%}\tabularnewline
+{\scriptsize\textbf{Glass}} & {\footnotesize 58.30\%} & {\footnotesize 61.38\%} & {\footnotesize 55.71\%} & {\footnotesize 66.19\%} & {\footnotesize 50.24\%} & {\footnotesize 50.24\%} & {\footnotesize 49.43\%} & {\footnotesize 49.22\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Haberman}} & {\footnotesize 28.66\%} & {\footnotesize 28.71\%} & {\footnotesize 28.71\%} & {\footnotesize 28.80\%} & {\footnotesize 28.80\%}\tabularnewline
+{\scriptsize\textbf{Haberman}} & {\footnotesize 28.66\%} & {\footnotesize 29.00\%} & {\footnotesize 24.04\%} & {\footnotesize 29.38\%} & {\footnotesize 28.71\%} & {\footnotesize 28.71\%} & {\footnotesize 28.80\%} & {\footnotesize 28.80\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Hayes-roth}} & {\footnotesize 56.18\%} & {\footnotesize 35.21\%} & {\footnotesize 35.21\%} & {\footnotesize 37.46\%} & {\footnotesize 37.46\%}\tabularnewline
+{\scriptsize\textbf{Hayes-roth}} & {\footnotesize 56.18\%} & {\footnotesize 59.70\%} & {\footnotesize 50.15\%} & {\footnotesize 45.44\%} & {\footnotesize 35.21\%} & {\footnotesize 35.21\%} & {\footnotesize 37.46\%} & {\footnotesize 37.46\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Heart}} & {\footnotesize 28.34\%} & {\footnotesize 18.10\%} & {\footnotesize 18.10\%} & {\footnotesize 19.00\%} & {\footnotesize 19.02\%}\tabularnewline
+{\scriptsize\textbf{Heart}} & {\footnotesize 28.34\%} & {\footnotesize 38.53\%} & {\footnotesize 39.27\%} & {\footnotesize 27.21\%} & {\footnotesize 18.10\%} & {\footnotesize 18.10\%} & {\footnotesize 19.00\%} & {\footnotesize 19.02\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{HeartAttack}} & {\footnotesize 29.03\%} & {\footnotesize 20.06\%} & {\footnotesize 20.06\%} & {\footnotesize 20.15\%} & {\footnotesize 20.15\%}\tabularnewline
+{\scriptsize\textbf{HeartAttack}} & {\footnotesize 29.03\%} & {\footnotesize 45.55\%} & {\footnotesize 32.34\%} & {\footnotesize 29.26\%} & {\footnotesize 20.06\%} & {\footnotesize 20.06\%} & {\footnotesize 20.15\%} & {\footnotesize 20.15\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Housevotes}} & {\footnotesize 6.62\%} & {\footnotesize 7.58\%} & {\footnotesize 7.68\%} & {\footnotesize 7.20\%} & {\footnotesize 7.10\%}\tabularnewline
+{\scriptsize\textbf{Housevotes}} & {\footnotesize 6.62\%} & {\footnotesize 7.48\%} & {\footnotesize 10.89\%} & {\footnotesize 5.81\%} & {\footnotesize 7.58\%} & {\footnotesize 7.68\%} & {\footnotesize 7.20\%} & {\footnotesize 7.10\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Ionosphere}} & {\footnotesize 15.14\%} & {\footnotesize 14.53\%} & {\footnotesize 14.53\%} & {\footnotesize 15.03\%} & {\footnotesize 15.08\%}\tabularnewline
+{\scriptsize\textbf{Ionosphere}} & {\footnotesize 15.14\%} & {\footnotesize 16.64\%} & {\footnotesize 19.67\%} & {\footnotesize 11.32\%} & {\footnotesize 14.53\%} & {\footnotesize 14.53\%} & {\footnotesize 15.03\%} & {\footnotesize 15.08\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Liverdisorder}} & {\footnotesize 31.11\%} & {\footnotesize 31.82\%} & {\footnotesize 31.82\%} & {\footnotesize 32.48\%} & {\footnotesize 32.48\%}\tabularnewline
+{\scriptsize\textbf{Liverdisorder}} & {\footnotesize 31.11\%} & {\footnotesize 41.53\%} & {\footnotesize 30.67\%} & {\footnotesize 49.72\%} & {\footnotesize 31.82\%} & {\footnotesize 31.82\%} & {\footnotesize 32.48\%} & {\footnotesize 32.48\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{LYMOGRAPHY}} & {\footnotesize 28.42\%} & {\footnotesize 24.60\%} & {\footnotesize 24.60\%} & {\footnotesize 26.02\%} & {\footnotesize 25.31\%}\tabularnewline
+{\scriptsize\textbf{LYMOGRAPHY}} & {\footnotesize 28.42\%} & {\footnotesize 39.79\%} & {\footnotesize 33.70\%} & {\footnotesize 22.02\%} & {\footnotesize 24.60\%} & {\footnotesize 24.60\%} & {\footnotesize 26.02\%} & {\footnotesize 25.31\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Mammographic}} & {\footnotesize 19.88\%} & {\footnotesize 17.44\%} & {\footnotesize 17.45\%} & {\footnotesize 17.36\%} & {\footnotesize 17.36\%}\tabularnewline
+{\scriptsize\textbf{Mammographic}} & {\footnotesize 19.88\%} & {\footnotesize 46.25\%} & {\footnotesize 22.85\%} & {\footnotesize 38.10\%} & {\footnotesize 17.44\%} & {\footnotesize 17.45\%} & {\footnotesize 17.36\%} & {\footnotesize 17.36\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Parkinsons}} & {\footnotesize 18.05\%} & {\footnotesize 15.04\%} & {\footnotesize 14.95\%} & {\footnotesize 15.74\%} & {\footnotesize 15.21\%}\tabularnewline
+{\scriptsize\textbf{Parkinsons}} & {\footnotesize 18.05\%} & {\footnotesize 24.06\%} & {\footnotesize 18.56\%} & {\footnotesize 22.12\%} & {\footnotesize 15.04\%} & {\footnotesize 14.95\%} & {\footnotesize 15.74\%} & {\footnotesize 15.21\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Pima}} & {\footnotesize 32.19\%} & {\footnotesize 26.34\%} & {\footnotesize 26.34\%} & {\footnotesize 26.78\%} & {\footnotesize 26.78\%}\tabularnewline
+{\scriptsize\textbf{Pima}} & {\footnotesize 32.19\%} & {\footnotesize 34.85\%} & {\footnotesize 34.51\%} & {\footnotesize 35.08\%} & {\footnotesize 26.34\%} & {\footnotesize 26.34\%} & {\footnotesize 26.78\%} & {\footnotesize 26.78\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Popfailures}} & {\footnotesize 5.94\%} & {\footnotesize 6.88\%} & {\footnotesize 6.88\%} & {\footnotesize 6.84\%} & {\footnotesize 6.84\%}\tabularnewline
+{\scriptsize\textbf{Popfailures}} & {\footnotesize 5.94\%} & {\footnotesize 5.18\%} & {\footnotesize 7.05\%} & {\footnotesize 4.79\%} & {\footnotesize 6.88\%} & {\footnotesize 6.88\%} & {\footnotesize 6.84\%} & {\footnotesize 6.84\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Regions2}} & {\footnotesize 29.39\%} & {\footnotesize 28.21\%} & {\footnotesize 28.21\%} & {\footnotesize 30.07\%} & {\footnotesize 30.12\%}\tabularnewline
+{\scriptsize\textbf{Regions2}} & {\footnotesize 29.39\%} & {\footnotesize 29.85\%} & {\footnotesize 33.23\%} & {\footnotesize 34.26\%} & {\footnotesize 28.21\%} & {\footnotesize 28.21\%} & {\footnotesize 30.07\%} & {\footnotesize 30.12\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Saheart}} & {\footnotesize 34.86\%} & {\footnotesize 32.71\%} & {\footnotesize 32.91\%} & {\footnotesize 32.46\%} & {\footnotesize 32.46\%}\tabularnewline
+{\scriptsize\textbf{Saheart}} & {\footnotesize 34.86\%} & {\footnotesize 34.04\%} & {\footnotesize 34.51\%} & {\footnotesize 37.70\%} & {\footnotesize 32.71\%} & {\footnotesize 32.91\%} & {\footnotesize 32.46\%} & {\footnotesize 32.46\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Segment}} & {\footnotesize 57.72\%} & {\footnotesize 14.82\%} & {\footnotesize 14.82\%} & {\footnotesize 16.91\%} & {\footnotesize 16.87\%}\tabularnewline
+{\scriptsize\textbf{Segment}} & {\footnotesize 57.72\%} & {\footnotesize 49.75\%} & {\footnotesize 66.72\%} & {\footnotesize 60.40\%} & {\footnotesize 14.82\%} & {\footnotesize 14.82\%} & {\footnotesize 16.91\%} & {\footnotesize 16.87\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Sonar}} & {\footnotesize 22.40\%} & {\footnotesize 19.98\%} & {\footnotesize 20.52\%} & {\footnotesize 20.37\%} & {\footnotesize 20.07\%}\tabularnewline
+{\scriptsize\textbf{Sonar}} & {\footnotesize 22.40\%} & {\footnotesize 30.33\%} & {\footnotesize 34.10\%} & {\footnotesize 23.80\%} & {\footnotesize 19.98\%} & {\footnotesize 20.52\%} & {\footnotesize 20.37\%} & {\footnotesize 20.07\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Spiral}} & {\footnotesize 48.66\%} & {\footnotesize 41.91\%} & {\footnotesize 41.91\%} & {\footnotesize 42.24\%} & {\footnotesize 42.24\%}\tabularnewline
+{\scriptsize\textbf{Spiral}} & {\footnotesize 48.66\%} & {\footnotesize 47.67\%} & {\footnotesize 48.66\%} & {\footnotesize 50.38\%} & {\footnotesize 41.91\%} & {\footnotesize 41.91\%} & {\footnotesize 42.24\%} & {\footnotesize 42.24\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{STATHEART}} & {\footnotesize 27.25\%} & {\footnotesize 19.45\%} & {\footnotesize 19.45\%} & {\footnotesize 20.24\%} & {\footnotesize 20.24\%}\tabularnewline
+{\scriptsize\textbf{STATHEART}} & {\footnotesize 27.25\%} & {\footnotesize 44.04\%} & {\footnotesize 44.36\%} & {\footnotesize 28.37\%} & {\footnotesize 19.45\%} & {\footnotesize 19.45\%} & {\footnotesize 20.24\%} & {\footnotesize 20.24\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Student}} & {\footnotesize 5.61\%} & {\footnotesize 5.84\%} & {\footnotesize 5.84\%} & {\footnotesize 5.98\%} & {\footnotesize 5.98\%}\tabularnewline
+{\scriptsize\textbf{Student}} & {\footnotesize 5.61\%} & {\footnotesize 5.13\%} & {\footnotesize 10.20\%} & {\footnotesize 10.84\%} & {\footnotesize 5.84\%} & {\footnotesize 5.84\%} & {\footnotesize 5.98\%} & {\footnotesize 5.98\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Transfusion}} & {\footnotesize 24.87\%} & {\footnotesize 23.70\%} & {\footnotesize 23.70\%} & {\footnotesize 24.09\%} & {\footnotesize 24.09\%}\tabularnewline
+{\scriptsize\textbf{Transfusion}} & {\footnotesize 24.87\%} & {\footnotesize 25.68\%} & {\footnotesize 24.87\%} & {\footnotesize 29.35\%} & {\footnotesize 23.70\%} & {\footnotesize 23.70\%} & {\footnotesize 24.09\%} & {\footnotesize 24.09\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Wdbc}} & {\footnotesize 8.56\%} & {\footnotesize 3.92\%} & {\footnotesize 3.92\%} & {\footnotesize 4.72\%} & {\footnotesize 4.60\%}\tabularnewline
+{\scriptsize\textbf{Wdbc}} & {\footnotesize 8.56\%} & {\footnotesize 35.35\%} & {\footnotesize 12.88\%} & {\footnotesize 15.48\%} & {\footnotesize 3.92\%} & {\footnotesize 3.92\%} & {\footnotesize 4.72\%} & {\footnotesize 4.60\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Wine}} & {\footnotesize 19.20\%} & {\footnotesize 10.45\%} & {\footnotesize 10.45\%} & {\footnotesize 12.84\%} & {\footnotesize 13.88\%}\tabularnewline
+{\scriptsize\textbf{Wine}} & {\footnotesize 19.20\%} & {\footnotesize 29.40\%} & {\footnotesize 25.43\%} & {\footnotesize 16.62\%} & {\footnotesize 10.45\%} & {\footnotesize 10.45\%} & {\footnotesize 12.84\%} & {\footnotesize 13.88\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{Z\_F\_S}} & {\footnotesize 10.73\%} & {\footnotesize 8.48\%} & {\footnotesize 8.48\%} & {\footnotesize 8.71\%} & {\footnotesize 7.89\%}\tabularnewline
+{\scriptsize\textbf{Z\_F\_S}} & {\footnotesize 10.73\%} & {\footnotesize 47.81\%} & {\footnotesize 38.41\%} & {\footnotesize 17.91\%} & {\footnotesize 8.48\%} & {\footnotesize 8.48\%} & {\footnotesize 8.71\%} & {\footnotesize 7.89\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{ZO\_NF\_S}} & {\footnotesize 21.54\%} & {\footnotesize 5.15\%} & {\footnotesize 5.15\%} & {\footnotesize 5.61\%} & {\footnotesize 5.99\%}\tabularnewline
+{\scriptsize\textbf{ZO\_NF\_S}} & {\footnotesize 21.54\%} & {\footnotesize 47.43\%} & {\footnotesize 43.75\%} & {\footnotesize 15.57\%} & {\footnotesize 5.15\%} & {\footnotesize 5.15\%} & {\footnotesize 5.61\%} & {\footnotesize 5.99\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{ZONF\_S}} & {\footnotesize 4.36\%} & {\footnotesize 2.96\%} & {\footnotesize 2.96\%} & {\footnotesize 2.91\%} & {\footnotesize 2.83\%}\tabularnewline
+{\scriptsize\textbf{ZONF\_S}} & {\footnotesize 4.36\%} & {\footnotesize 11.99\%} & {\footnotesize 5.44\%} & {\footnotesize 3.27\%} & {\footnotesize 2.96\%} & {\footnotesize 2.96\%} & {\footnotesize 2.91\%} & {\footnotesize 2.83\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{ZOO}} & {\footnotesize 9.50\%} & {\footnotesize 3.60\%} & {\footnotesize 3.60\%} & {\footnotesize 3.60\%} & {\footnotesize 3.70\%}\tabularnewline
+{\scriptsize\textbf{ZOO}} & {\footnotesize 9.50\%} & {\footnotesize 14.13\%} & {\footnotesize 20.27\%} & {\footnotesize 8.53\%} & {\footnotesize 3.60\%} & {\footnotesize 3.60\%} & {\footnotesize 3.60\%} & {\footnotesize 3.70\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{26.46\%}} & {\footnotesize\textbf{19.94\%}} & {\footnotesize\textbf{19.92\%}} & {\footnotesize\textbf{20.60\%}} & {\footnotesize\textbf{20.50\%}}\tabularnewline
+{\scriptsize\textbf{AVERAGE}} & {\footnotesize\textbf{26.46\%}} & {\footnotesize\textbf{34.08\%}} & {\footnotesize\textbf{31.78\%}} & {\footnotesize\textbf{27.38\%}} & {\footnotesize\textbf{19.94\%}} & {\footnotesize\textbf{19.92\%}} & {\footnotesize\textbf{20.60\%}} & {\footnotesize\textbf{20.50\%}}\tabularnewline
 \hline 
 \end{tabular}}{\footnotesize\par}
 \par\end{centering}
 \caption{Comparative Classification Error Rates Across Datasets Using ECHO-Based
-and Genetic Optimization Methods\label{tab:mlp}}
+and a series of Optimization Methods\label{tab:mlp}}
 
 \end{table}
 
 Table \ref{tab:mlp} presents the classification error rates for a
 wide range of datasets, evaluated using a series of techniques to
 train an artificial neural network with 10 processing nodes. These
-methods include  standard Genetic Algorithm (GENETIC), the basic version
-of the proposed ECHO method, and three enhanced variants ECHO combined
-with approximate evaluations (APP), memory (MEM), and both (APP+MEM).
-Each value in the table corresponds to the percentage error for the
-respective dataset and method. The final row provides the average
-error rate across all datasets for each method, serving as an overall
-performance indicator. Lower values indicate better classification
-accuracy.
+methods include
+\begin{enumerate}
+\item A standard Genetic Algorithm (GENETIC)
+\item The column ADAM stands for the ADAM optimization method \citep{nn_adam},
+which is used to train a neural network with $H=10$ processing nodes.
+\item The column NEAT stands for the incorporation of the NEAT method (NeuroEvolution
+of Augmenting Topologies ) \citep{neat}.
+\item The column PRUNE stands for the the usage of OBS pruning method \citep{prune},
+provided by Fast Compressed Neural Networks library \citep{fcn}.
+\item The basic version of the ECHO+APP+MEM method
+\item Three enhanced variants ECHO combined with approximate evaluations
+(APP), memory (MEM), and both (APP+MEM). Each value in the table corresponds
+to the percentage error for the respective dataset and method. The
+final row provides the average error rate across all datasets for
+each method, serving as an overall performance indicator. Lower values
+indicate better classification accuracy.
+\end{enumerate}
+The comparative analysis of the error rates presented in this table
+clearly highlights the overall superiority of the ECHO and ECHO+APP
+methods compared to both classic evolutionary algorithms and the other
+variants of the same family. The average error rates for these two
+methods are particularly low (19.94\% for ECHO and 19.92\% for ECHO+APP),
+outperforming not only the Genetic Algorithm (26.46\%) but also the
+ECHO variants that include memory mechanisms (20.60\% and 20.50\%).
 
-From the analysis of the total average error rates, it is clear that
-the basic ECHO and ECHO+APP variants yield the lowest averages, 19.94\%
-and 19.92\%, respectively. These results are significantly better
-than those of the Genetic Algorithm (26.46\%) and the other two ECHO
-variants ECHO+MEM (20.60\%) and ECHO+APP+MEM (20.50\%). This demonstrates
-that, on average, ECHO and ECHO+APP achieve superior classification
-performance across the datasets.
+The consistently improved performance of ECHO and ECHO+APP demonstrates
+the strength of the core algorithm in maintaining a balance between
+exploration and exploitation, while simultaneously offering adaptability
+to a wide range of datasets and problem types. The integration of
+the approximate evaluations technique in ECHO+APP plays a significant
+role in reducing computational cost without a substantial loss in
+accuracy, as evidenced by the minimal difference in average error
+between ECHO and ECHO+APP. This result shows that the practical advantage
+of faster fitness estimation does not come at the expense of classification
+quality.
 
-The improved performance of the basic ECHO and ECHO+APP methods can
-be attributed to two key aspects. First, ECHO relies on an evolutionary
-mechanism that balances exploration and exploitation effectively,
-enabling efficient search without falling into local optima. Second,
-the incorporation of approximate evaluations in ECHO+APP reduces computational
-cost by estimating fitness more quickly, without significantly compromising
-accuracy. On the other hand, the use of memory mechanisms in ECHO+MEM
-and ECHO+APP+MEM introduces complexity, which may reduce adaptability
-across heterogeneous datasets.
+In contrast, the use of memory mechanisms (MEM), whether combined
+with or without approximate evaluations, appears to introduce additional
+complexity that limits the algorithm’s flexibility and adaptability
+to heterogeneous datasets. While in certain specific problems, such
+as Z\_F\_S, memory-based variants achieve marginally better results,
+their overall performance remains slightly inferior.
 
-In several benchmark cases such as Alcohol, Dermatology, Segment,
-and Wine the ECHO+APP method achieves the lowest error rates. Although
-in specific datasets like Z\_F\_S the ECHO+APP+MEM variant performs
-slightly better, overall, ECHO and ECHO+APP consistently yield the
-most reliable results, either matching or outperforming the more complex
-alternatives. This supports the claim that these two methods offer
-an effective and computationally efficient solution.
+In major benchmark datasets such as Alcohol, Dermatology, Segment,
+and Wine, ECHO+APP achieves the lowest error rates, demonstrating
+its stability and reliability even in challenging classification scenarios.
+The fact that the simplest variants consistently remain at the top,
+often outperforming the more complex ones, confirms the effectiveness
+and practical utility of ECHO and ECHO+APP, especially in machine
+learning applications of small to moderate complexity.
 
-Moreover, the small difference in average error between ECHO (19.94\%)
-and ECHO+APP (19.92\%) suggests that the use of approximate evaluations
-does not degrade classification quality. Instead, it may provide practical
-benefits in terms of speed and computational efficiency. While memory
-mechanisms could potentially enhance performance on problems with
-many local minima, they also risk over-exploitation and reduced flexibility
-in search dynamics.
-
-In conclusion, the statistical analysis clearly supports the effectiveness
-of the basic ECHO and its APP variant for solving classification problems
-of small to moderate complexity. Their ability to deliver high accuracy
-with minimal computational overhead makes them highly competitive
-and well-suited for practical machine learning applications.
+In conclusion, the results summarized in the table provide strong
+evidence that ECHO and ECHO+APP combine high accuracy with low computational
+overhead, offering a robust and efficient solution for a wide range
+of classification problems, with significant potential for practical
+deployment in real-world scenarios.
 
 \section{Conclusions\label{sec:Conclusions}}
 
@@ -2303,8 +3127,8 @@ two decades of research. Engineering Applications of Artificial Intelligence,
 90, 103479.
 
 \bibitem[(2022)]{Charilogis}Charilogis, V., Tsoulos, I.G.,Tzallas,
-A.,Karvounis, E. (2022). Modifications for the Differential Evolution
-Algorithm. Symmetry ,2022,14,447. Doi: https://doi.org/10.3390/sym14030447
+A., Karvounis, E. (2022). Modifications for the Differential Evolution
+Algorithm. Symmetry, 2022,14, 447. Doi: https://doi.org/10.3390/sym14030447
 
 \bibitem[(2023)]{Charilogis2}Charilogis, V.; Tsoulos, I.G. A Parallel
 Implementation of the Differential Evolution Method. Analytics 2023,
@@ -2417,6 +3241,11 @@ pp 201--216. SpringerLink, 2015. Doi: https://doi.org/10.1007/978-1-4471-5634-5\
 \bibitem[(2020)]{Lam}Lam, A. (2020). BFGS in a Nutshell: An Introduction
 to Quasi-Newton Methods Demystifying the inner workings of BFGS optimization.
 Towards Data Science.
+
+\bibitem[(2025)]{Gianni}Gianni, A. M., Tsoulos, I. G., Charilogis,
+V., \& Kyrou, G. (2025). Enhancing differential evolution: A dual
+mutation strategy with majority dimension voting and new stopping
+criteria. Symmetry, 17(6), 844. https://doi.org/10.3390/sym17060844
 
 \bibitem[(2022)]{Charilogis-1}Charilogis, V. \& Tsoulos, I.G.(2022).Toward
 an Ideal Particle Swarm Optimizer for Multidimensional Functions.
@@ -2532,7 +3361,7 @@ N. (1998). Learning Differential Diagnosis of Eryhemato-Squamous Diseases
 using Voting Feature Intervals. Artificial Intelligence in Medicine,
 13, 147--165.
 
-\bibitem[(1996)]{ecoli}P. Horton, K.Nakai, A Probabilistic Classification
+\bibitem[(1996)]{ecoli}P. Horton, K. Nakai, A Probabilistic Classification
 System for Predicting the Cellular Localization Sites of Proteins,
 In: Proceedings of International Conference on Intelligent Systems
 for Molecular Biology \textbf{4}, pp. 109-15, 1996.
@@ -2657,6 +3486,21 @@ and Artificial Neural Networks. Computational Intelligence and Neuroscience,
 \bibitem[(2004)]{zoo}M. Koivisto, K. Sood, Exact Bayesian Structure
 Discovery in Bayesian Networks, The Journal of Machine Learning Research\textbf{
 5}, pp. 549--573, 2004.
+
+\bibitem{nn_adam}D. P. Kingma, J. L. Ba, ADAM: a method for stochastic
+optimization, in: Proceedings of the 3rd International Conference
+on Learning Representations (ICLR 2015), pp. 1--15, 2015.
+
+\bibitem[(2002)]{neat}K. O. Stanley, R. Miikkulainen, Evolving Neural
+Networks through Augmenting Topologies, Evolutionary Computation \textbf{10},
+pp. 99-127, 2002.
+
+\bibitem[(2002)]{prune}Zhu, V., Lu, Y., \& Li, Q. (2006). MW-OBS:
+An improved pruning method for topology design of neural networks.
+Tsinghua Science and Technology, 11(4), 307-312.
+
+\bibitem{fcn}Grzegorz Klima, Fast Compressed Neural Networks, available
+from \url{http://fcnn.sourceforge.net/}.
 
 \end{thebibliography}
 
