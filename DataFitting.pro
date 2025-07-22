@@ -24,6 +24,7 @@ QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
 	METHODS/eo.cpp \
+	METHODS/MFO.cpp \
         GE/doublestack.cc \
     GE/fcprogram.cpp \
         GE/fparser.cc \
@@ -109,6 +110,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     GE/cprogram.h \
     METHODS/eo.h \
+    METHODS/MFO.h \
     GE/doublestack.h \
     GE/fcprogram.h \
     GE/fparser.hh \

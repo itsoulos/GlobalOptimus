@@ -26,6 +26,7 @@
 # include <METHODS/acop.h>
 # include <METHODS/eo.h>
 # include <METHODS/mbfgs.h>
+# include <METHODS/MFO.h>
 # include <QStringList>
 # include <QJsonObject>
 /**

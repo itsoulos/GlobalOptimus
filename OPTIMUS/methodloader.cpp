@@ -52,6 +52,8 @@ MethodLoader::MethodLoader()
     method<<new EO;
     methodName<<"MBfgs";
     method<<new MBfgs;
+    methodName<<"MFO";
+    method<<new MFO;
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

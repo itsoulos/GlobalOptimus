@@ -39,6 +39,7 @@ CONFIG += c++17
 SOURCES += \
     GE/cprogram.cc \
     METHODS/mbfgs.cpp\
+    METHODS/MFO.cpp \
     GE/doublestack.cc \
     GE/fparser.cc \
     GE/fpoptimizer.cc \
@@ -183,6 +184,7 @@ SOURCES += \
 HEADERS += \
     GE/cprogram.h \
     METHODS/mbfgs.h \
+    METHODS/MFO.h \
     GE/doublestack.h \
     GE/fparser.hh \
     GE/fpconfig.hh \

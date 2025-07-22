@@ -1,7 +1,7 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE
-METHOD=EO
+METHOD=MFO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
-LOCALSEARCH=lbfgs
+LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all, sumfitness (only for DE)
@@ -14,6 +14,9 @@ then
 #bfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--bfgs_iters=200"
+elif [ $METHOD = "MFO" ]
+then
+	METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
 ##de_np:          The population size. 
