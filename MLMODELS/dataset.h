@@ -176,6 +176,7 @@ public:
      * @param y
      */
     void    setPoint(int pos,Data &x,double y);
+    int     nearestClassIndex(double value);
     Data    getAllYPoints() ;
     ~Dataset();
 };

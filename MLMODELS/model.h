@@ -141,6 +141,12 @@ public:
     /**
      * @brief ~Model the used destructor
      */
+
+    void	printConfusionMatrix(vector<double> &T,
+                                 vector<double> &O,
+                                 vector<double> &precision,
+                                 vector<double> &recall);
+    void    getPrecisionRecall(double &precision,double &recall,double &fscore);
     virtual ~Model();
 };
 

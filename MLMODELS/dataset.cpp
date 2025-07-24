@@ -276,6 +276,15 @@ double  Dataset::getClass(int pos) const
     return getClass(y);
 }
 
+int Dataset::nearestClassIndex(double value)
+{
+     double f= getClass(value);
+     for(int i=0;i<patternClass.size();i++)
+     {
+         if(fabs(patternClass[i]-f)<1e-5) return i;
+     }
+     return 0;
+}
 void    Dataset::setPoint(int pos,Data &x,double y)
 {
 

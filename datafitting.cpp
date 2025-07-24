@@ -350,7 +350,9 @@ int main(int argc, char *argv[])
     double average_train_error  = 0.0;
     double average_test_error   = 0.0;
     double average_class_error  = 0.0;
-
+    double average_precision    = 0.0;
+    double average_recall       = 0.0;
+    double average_fscore       = 0.0;
         loadProblem();
     for(int t=1;t<=times;t++)
     {
@@ -362,6 +364,11 @@ int main(int argc, char *argv[])
         average_train_error+=d1;
         average_test_error+=d2;
         average_class_error+=d3;
+        double precision=0.0,recall=0.0,fscore=0.0;
+        mainModel->getPrecisionRecall(precision,recall,fscore);
+        average_precision+=precision;
+        average_recall+=recall;
+        average_fscore+=fscore;
 	red();
         printf("TRAINING... TRAIN[%2d]=%10.5lf TEST[%2d]=%10.5lf CLASS[%2d]=%5.2lf%%\n",
              t,average_train_error/t,
@@ -374,7 +381,9 @@ int main(int argc, char *argv[])
     printf("Average Train Error: %20.10lg\n",average_train_error/times);
     printf("Average Test  Error: %20.10lg\n",average_test_error/times);
     printf("Average Class Error: %20.10lg%%\n",average_class_error/times);
-
+    printf("Average Precision  : %20.10lg\n",average_precision/times);
+    printf("Average Recall     : %20.10lg\n",average_recall/times);
+    printf("Average Fscore     : %20.10lg\n",average_fscore/times);
     unloadMethods();
     return 0;
 }
