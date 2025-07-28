@@ -28,7 +28,8 @@ static double dmax(double a,double b)
 }
 Data Himmelblau::gradient(Data &x)
 
-{ int n=x.size();
+{
+    int n=x.size();
     Data g;
     g.resize(n);
     for(int i=0;i<dimension;i++)

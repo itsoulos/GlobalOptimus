@@ -19,6 +19,10 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	PROBLEMS/zakharov.cpp \
+	PROBLEMS/michalewicz.cpp \
+	PROBLEMS/gallagher21.cpp \
+	PROBLEMS/ellipsoidal.cpp \
 	METHODS/MFO.cpp \
 	METHODS/mbfgs.cpp  \
         GE/doublestack.cc \
@@ -144,6 +148,20 @@ SOURCES += \
         OPTIMUS/parameter.cpp \
 	PROBLEMS/discus.cpp \
 	PROBLEMS/cigar.cpp \
+	PROBLEMS/griewank.cpp \
+	PROBLEMS/katsuura.cpp \
+	PROBLEMS/griewank_rosenbrock.cpp \
+	PROBLEMS/lunacek_bi_rastrigin.cpp \
+	PROBLEMS/weierstrass.cpp \
+	PROBLEMS/different_powers.cpp \
+	PROBLEMS/sharp_ridge.cpp \
+	PROBLEMS/rotated_rosenbrock.cpp \
+	PROBLEMS/step_ellipsoidal.cpp \
+	PROBLEMS/attractive_sector.cpp \
+	PROBLEMS/linear_slope.cpp \
+	PROBLEMS/buche_rastrigin.cpp \
+	PROBLEMS/gallagher101.cpp \
+	PROBLEMS/rastrigin.cpp \
         OPTIMUS/problem.cpp \
         PROBLEMS/rastriginproblem.cpp \
         PROBLEMS/test2nproblem.cpp \
@@ -159,6 +177,24 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    PROBLEMS/zakharov.h \
+    PROBLEMS/michalewicz.h \
+    PROBLEMS/gallagher21.h \
+    PROBLEMS/ellipsoidal.h \
+    PROBLEMS/lunacek_bi_rastrigin.h \
+    PROBLEMS/griewank_rosenbrock.h \
+    PROBLEMS/different_powers.h \
+    PROBLEMS/rotated_rosenbrock.h \
+    PROBLEMS/step_ellipsoidal.h \
+    PROBLEMS/attractive_sector.h \
+    PROBLEMS/rastrigin.h \
+    PROBLEMS/linear_slope.h \
+    PROBLEMS/buche_rastrigin.h \
+    PROBLEMS/gallagher101.h \
+    PROBLEMS/sharp_ridge.h \
+    PROBLEMS/weierstrass.h \
+    PROBLEMS/katsuura.h \
+    PROBLEMS/griewank.h \
     METHODS/mbfgs.h \
     METHODS/MFO.h \
     GE/doublestack.h \

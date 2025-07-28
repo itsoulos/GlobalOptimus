@@ -27,9 +27,7 @@ double schaffer::funmin(Data &x)
 
 
 Data schaffer::gradient(Data &x)
-{
-
-
+{  
     Data g;
     g.resize(2);
     double x1 = x[0];

@@ -18,7 +18,6 @@ Vincent::Vincent()
 
 double  Vincent::funmin(Data &x)
 {
-
     int D = x.size();
     double sum = 0.0;
 
@@ -32,6 +31,7 @@ double  Vincent::funmin(Data &x)
 
 Data    Vincent::gradient(Data &x)
 {
+
     int D = x.size();
     std::vector<double> g(D);
 

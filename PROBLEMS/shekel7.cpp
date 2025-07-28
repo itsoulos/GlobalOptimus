@@ -30,7 +30,7 @@ double  Shekel7::funmin(Data &x)
 }
 
 Data    Shekel7::gradient(Data &x)
-{
+{    
     Data g;
     g.resize(dimension);
     for(int j=0;j<4;j++)

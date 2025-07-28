@@ -395,17 +395,13 @@ literal "false"
  is the vector of parameters for the neural network.
  The learning of these models is obtained by minimizing the so-called training error,
  which is defined as:
-\series bold
-
 \begin_inset Formula 
 \begin{equation}
-E\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\mbox{error}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
 \end{equation}
 
 \end_inset
 
-
-\series default
 In this equation,
  the set 
 \begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
@@ -13357,7 +13353,151 @@ name "fig:statRegressionIW"
 
 \end_inset
 
+A comparison in terms of precision and recall between the original neural network construction method and the proposed one is outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:precisionAndRecall"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename pre_precision_recall.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison in terms of precision and recall between the original neural network construction method and the proposed one.
+ In the experiments the following values for the critical parameter 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+ were used:
+ 2,3,5 and 10.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:precisionAndRecall"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+As can be clearly seen from this figure,
+ the proposed technique significantly improves the performance of the artificial neural network construction method on classification data,
+ achieving high rates of correct data classification.
+\end_layout
+
+\begin_layout Standard
+Although the proposed technique appears to be more efficient than the original one,
+ the addition of the first processing phase results in a significant increase in execution time,
+ as also demonstrated in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Average-execution-time"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename pre_time.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average execution time for the classification datasets using the original neural network construction method and the proposed one with different values of the critical factor 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Average-execution-time"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+It is clear that there is a significant increase in execution time,
+ as more units are added to the initial neural network of the first phase,
+ and in fact this time increases significantly between the values 
+\begin_inset Formula $I_{w}=5$
+\end_inset
+
+ and 
+\begin_inset Formula $I_{w}=10$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection

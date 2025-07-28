@@ -38,6 +38,9 @@ CONFIG += c++17
 
 SOURCES += \
     GE/cprogram.cc \
+    PROBLEMS/zakharov.cpp \
+    PROBLEMS/michalewicz.cpp \
+    PROBLEMS/gallagher21.cpp \
     METHODS/mbfgs.cpp\
     METHODS/MFO.cpp \
     GE/doublestack.cc \
@@ -140,6 +143,8 @@ SOURCES += \
     PROBLEMS/fuch1.cpp \
     PROBLEMS/fuchss.cpp \
     PROBLEMS/gkls.cpp \
+    PROBLEMS/ellipsoidal.cpp \
+    PROBLEMS/griewank.cpp \
     PROBLEMS/gkls2100.cpp \
     PROBLEMS/gkls250.cpp \
     PROBLEMS/E_ev.cpp \
@@ -165,7 +170,20 @@ SOURCES += \
     PROBLEMS/discus.cpp \
     PROBLEMS/cigar.cpp \
     PROBLEMS/test30n.cpp \
+    PROBLEMS/lunacek_bi_rastrigin.cpp \
+    PROBLEMS/katsuura.cpp \
     PROBLEMS/userproblem.cpp \
+    PROBLEMS/griewank_rosenbrock.cpp \
+    PROBLEMS/different_powers.cpp \
+    PROBLEMS/sharp_ridge.cpp \
+    PROBLEMS/weierstrass.cpp \
+    PROBLEMS/rotated_rosenbrock.cpp \
+    PROBLEMS/step_ellipsoidal.cpp \
+    PROBLEMS/attractive_sector.cpp \
+    PROBLEMS/linear_slope.cpp \
+    PROBLEMS/buche_rastrigin.cpp \
+    PROBLEMS/gallagher101.cpp \
+    PROBLEMS/rastrigin.cpp \
     SAMPLER/kmeanssampler.cpp \
     SAMPLER/maxwellsampler.cpp \
     SAMPLER/neuralsampler.cpp \
@@ -183,6 +201,24 @@ SOURCES += \
     }
 HEADERS += \
     GE/cprogram.h \
+    PROBLEMS/zakharov.h \
+    PROBLEMS/katsuura.h \
+    PROBLEMS/griewank_rosenbrock.h \
+    PROBLEMS/michalewicz.h \
+    PROBLEMS/gallagher21.h \
+    PROBLEMS/ellipsoidal.h \
+    PROBLEMS/griewank.h \
+    PROBLEMS/gallagher101.h \
+    PROBLEMS/rastrigin.h \
+    PROBLEMS/lunacek_bi_rastrigin.h \
+    PROBLEMS/step_ellipsoidal.h \
+    PROBLEMS/attractive_sector.h \
+    PROBLEMS/weierstrass.h \
+    PROBLEMS/different_powers.h \
+    PROBLEMS/sharp_ridge.h \
+    PROBLEMS/rotated_rosenbrock.h \
+    PROBLEMS/linear_slope.h \
+    PROBLEMS/buche_rastrigin.h \
     METHODS/mbfgs.h \
     METHODS/MFO.h \
     GE/doublestack.h \

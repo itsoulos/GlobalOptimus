@@ -1,13 +1,13 @@
 #include "equal_maxima.h"
 
-Equal_Maxima::Equal_Maxima()
+EqualMaxima::EqualMaxima()
  :Problem(1)
 {
 
 }
 
 
-double Equal_Maxima::funmin(Data &x) {
+double EqualMaxima::funmin(Data &x) {
     double result = 0.0;
     for (int i = 0; i < dimension; i++) {
         double sin_value = sin(5.0 * M_PI * x[i]);
@@ -17,7 +17,7 @@ double Equal_Maxima::funmin(Data &x) {
     return result;
 }
 
-Data Equal_Maxima::gradient(Data &x) {
+Data EqualMaxima::gradient(Data &x) {
     Data g(dimension);
     for (int i = 0; i < dimension; i++) {
         double sin_value = sin(5.0 * M_PI * x[i]);
@@ -28,7 +28,7 @@ Data Equal_Maxima::gradient(Data &x) {
     return g;
 }
 
-void Equal_Maxima::init(QJsonObject &params) {
+void EqualMaxima::init(QJsonObject &params) {
     int n = params["opt_dimension"].toString().toInt();
     setDimension(n);
     Data l, r;

@@ -1,129 +1,102 @@
-#include <PROBLEMS/levy.h>
-# define MARGIN_EPS 1e-5
-# define LAMBDA     1e+5
+#include "levy.h"
+
 Levy::Levy()
-    :Problem(2)
+    : Problem(1)
 {
-    left.resize(2);
-    right.resize(2);
-    left[0]=0;
-    left[1]=0;
-    right[0]=1;
-    right[1]=1;
 }
 
-int Levy::geteq()
+double Levy::funmin(Data &x)
 {
-    return 0;
-}
-
-int Levy::getineq()
-{
-    return 1;
-}
-
-double  Levy::funmin(Data &x)
-{
-
-    int fes=isFeasible(x);
-
-    vector<double> temp_eq,temp_ineq;
-    temp_eq.resize(geteq());
-    temp_ineq.resize(getineq());
-    feq(x,temp_eq);
-    fineq(x,temp_ineq);
-    double v1=0.0,v2=0.0,v3=0.0;
-
-    for(int i=0;i<temp_eq.size();i++)
-    {
-        v2=v2+pow(temp_eq[i],2.0);
+    int n = getDimension();
+    double sum = 0.0;
+    std::vector<double> w(n);
+    
+    // Compute w_i = 1 + (x_i - 1)/4
+    for (int i = 0; i < n; i++) {
+        w[i] = 1.0 + (x[i] - 1.0) / 4.0;
     }
-
-    for(int i=0;i<temp_ineq.size();i++)
-    {
-        if(temp_ineq[i]>0) v3=v3+pow(temp_ineq[i],2.0);
+    
+    // First term: sin^2(π w1)
+    sum += pow(sin(M_PI * w[0]), 2);
+    
+    // Middle terms: sum_{i=1}^{n-1} (w_i - 1)^2 [1 + 10 sin^2(π w_i + 1)]
+    for (int i = 0; i < n - 1; i++) {
+        double term = pow(w[i] - 1.0, 2) * 
+                     (1.0 + 10.0 * pow(sin(M_PI * w[i] + 1.0), 2));
+        sum += term;
     }
-    v1=-x[0]-x[1];
-    double l=qMax(LAMBDA,1000 * fabs(v1));
-
-
-    return (v1+l*(v2+v3))+0.0;//100*(1.0-fes);
+    
+    // Last term: (w_n - 1)^2 [1 + sin^2(2 π w_n)]
+    sum += pow(w[n-1] - 1.0, 2) * 
+           (1.0 + pow(sin(2.0 * M_PI * w[n-1]), 2));
+    
+    return sum;
 }
 
-Data    Levy::gradient(Data &x)
+Data Levy::gradient(Data &x)
 {
-    Data g;
-    g.resize(dimension);
-    for(int i=0;i<getdimension();i++)
-    {
-        double eps=pow(1e-18,1.0/3.0)*qMax(1.0,fabs(x[i]));
-        x[i]+=eps;
-        double v1=funmin(x);
-        x[i]-=2.0 *eps;
-        double v2=funmin(x);
-        g[i]=(v1-v2)/(2.0 * eps);
-        x[i]+=eps;
+    int n = getDimension();
+    Data g(n, 0.0);
+    std::vector<double> w(n);
+    std::vector<double> dw(n); // Derivatives of w_i w.r.t. x_i
+    
+    // Precompute w_i and dw_i/dx_i = 1/4
+    for (int i = 0; i < n; i++) {
+        w[i] = 1.0 + (x[i] - 1.0) / 4.0;
+        dw[i] = 0.25;
     }
+    
+    // Gradient for first term (i=0)
+    g[0] = 2.0 * sin(M_PI * w[0]) * cos(M_PI * w[0]) * M_PI * dw[0];
+    
+    // Gradient for middle terms (i=0 to n-2)
+    for (int i = 0; i < n - 1; i++) {
+        double base = w[i] - 1.0;
+        double sin_term = sin(M_PI * w[i] + 1.0);
+        
+        // Derivative of (w_i - 1)^2
+        double d_base = 2.0 * base * dw[i];
+        
+        // Derivative of [1 + 10 sin^2(π w_i + 1)]
+        double d_sin = 10.0 * 2.0 * sin_term * cos(M_PI * w[i] + 1.0) * M_PI * dw[i];
+        
+        // Product rule: d/dx [A*B] = A'B + AB'
+        g[i] += d_base * (1.0 + 10.0 * pow(sin_term, 2)) + 
+                pow(base, 2) * d_sin;
+    }
+    
+    // Gradient for last term (i=n-1)
+    double last_base = w[n-1] - 1.0;
+    double last_sin = sin(2.0 * M_PI * w[n-1]);
+    
+    // Derivative of (w_n - 1)^2
+    double d_last_base = 2.0 * last_base * dw[n-1];
+    
+    // Derivative of [1 + sin^2(2 π w_n)]
+    double d_last_sin = 2.0 * last_sin * cos(2.0 * M_PI * w[n-1]) * 2.0 * M_PI * dw[n-1];
+    
+    // Product rule
+    g[n-1] += d_last_base * (1.0 + pow(last_sin, 2)) + 
+              pow(last_base, 2) * d_last_sin;
+    
     return g;
 }
 
-void	Levy::feq(vector<double> &x,vector<double> &eq)
+void Levy::init(QJsonObject &params)
 {
-
-}
-
-void	Levy::fineq(vector<double> &x,vector<double> &ineq)
-{
-    double a=2.0;
-    double b=0.25;
-    ineq[0]=-(((x[0]-1)*(x[0]-1)+(x[1]-1))*(1/(2.0*a*a)-1.0/(2*b*b))+(x[0]-1)*(x[1]-1)*(1.0/(a*a)-1.0/(b*b))-1.0);
-}
-
-int     Levy::isFeasible(vector<double> &x)
-{
-    int neq=geteq();
-    int nineq=getineq();
-    double lmargin[getdimension()];
-    double rmargin[getdimension()];
-    getleftmargin(lmargin);
-    getrightmargin(rmargin);
-
-    for(int i=0;i<x.size();i++)
-    {
-        //if(x[i]-rmargin[i]>MARGIN_EPS || lmargin[i]-x[i]>MARGIN_EPS) return 0;
-        if(x[i]>rmargin[i] || lmargin[i]>x[i]) return 0;
+    int n = params["opt_dimension"].toString().toInt();
+    setDimension(n);
+    
+    Data l, r;
+    l.resize(n);
+    r.resize(n);
+    
+    // Standard range for Levy function
+    for (int i = 0; i < n; i++) {
+        l[i] = -10.0;
+        r[i] = 10.0;
     }
-    if(neq)
-    {
-        vector<double> k;
-        k.resize(neq);
-        feq(x,k);
-        double eq_max=-1;
-        double sum=0.0;
-        for(int i=0;i<k.size();i++)
-        {
-            if(fabs(k[i])>eq_max) eq_max=fabs(k[i]);
-            sum+=k[i]*k[i];
-        }
-        if(sum>1e-5) return 0;
-        //if(eq_max>MARGIN_EPS*10) return 0;
-    }
-    vector<double> t;
-    t.resize(nineq);
-    fineq(x,t);
-    if(t.size()) for(int i=0;i<t.size();i++) if(t[i]>MARGIN_EPS) {return 0;}
-    return 1;
-}
-
-QJsonObject Levy::done(Data &x)
-{
-    funmin(x);
-    int fes=isFeasible(x);
-    printf("Problem is Feasible?%s\n",(fes==1)?"YES":"NO");
-    return QJsonObject();
-}
-
-Levy::~Levy()
-{
-
+    
+    setLeftMargin(l);
+    setRightMargin(r);
 }

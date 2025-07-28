@@ -242,6 +242,7 @@ double  DiracProblem::funmin(Data &x)
 
 Data    DiracProblem::gradient(Data &x)
 {
+
     Data g;
     g.resize(x.size());
     for(int i=0;i<getDimension();i++)

@@ -22,7 +22,8 @@ double bf3::funmin(Data &x)
 }
 
 Data    bf3::gradient(Data &x)
-{double x1=x[0],x2=x[1];
+{
+    double x1=x[0],x2=x[1];
     Data g;
     g.resize(2);
     g[0] = 2.0 * x1 + 0.9 * M_PI * sin(3.0 * M_PI * x1 + 4.0 * M_PI * x2);

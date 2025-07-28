@@ -37,6 +37,7 @@ double Gkls250::funmin(Data &x)
 
 Data Gkls250::gradient(Data &x)
 {
+
     Data g;
     g.resize(dimension);
     double *tempx=new double[x.size()];

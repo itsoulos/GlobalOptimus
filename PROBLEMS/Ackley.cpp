@@ -35,7 +35,8 @@ double Ackley::funmin( Data &x)
 
 Data Ackley::gradient(Data &x)
 
-{     Data g;
+{
+    Data g;
     double a = 20;
     double b = 0.2;
       int d=x.size();
