@@ -1059,10 +1059,22 @@ n=\left(d+2\right)H
 
 \end_inset
 
+In the current work the sigmoid function is adopted with one processing layer (hidden layer),
+ due to its approximation capabilities exploited in the Hornik’s theorem 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Hornik"
+literal "false"
 
-\end_layout
+\end_inset
 
-\begin_layout Standard
+.
+ According to this theorem,
+ a neural network with sufficient number of sigmoid units can approximate any given function
+\series bold
+.
+ 
+\series default
 The main steps for the algorithm of the first phase have as follows:
 \end_layout
 
@@ -1625,75 +1637,31 @@ sideways false
 status collapsed
 
 \begin_layout LyX-Code
-S:=<Sigval>                          (0)
-\end_layout
+\begin_inset Formula 
+\begin{alignat*}{2}
+S & \ ::=\ \langle\text{Sigval}\rangle &  & (0)\\[1ex]
+\langle\text{Sigval}\rangle & \ ::=\ \langle\text{Node}\rangle &  & (0)\\
+ & \qquad|\,\langle\text{Node}\rangle+\langle\text{Sigval}\rangle &  & (1)\\[1ex]
+\langle\text{Node}\rangle & \ ::=\ \langle\text{Number}\rangle*\text{sig}(\langle\text{Sum}\rangle+\langle\text{Number}\rangle) &  & (0)\\[1ex]
+\langle\text{Sum}\rangle & \ ::=\ \langle\text{Number}\rangle*\langle\text{Xlist}\rangle &  & (0)\\
+ & \qquad|\,\langle\text{Sum}\rangle+\langle\text{Sum}\rangle &  & (1)\\[1ex]
+\langle\text{Xlist}\rangle & \ ::=\ x_{1} &  & (0)\\
+ & \qquad|\,x_{2} &  & (1)\\
+ & \qquad\vdots\\
+ & \qquad|\,x_{d} &  & (d-1)\\[1ex]
+\langle\text{Number}\rangle & \ ::=\ (\langle\text{Dlist}\rangle.\langle\text{Dlist}\rangle) &  & (0)\\
+ & \qquad|\,(-\langle\text{Dlist}\rangle.\langle\text{Dlist}\rangle) &  & (1)\\[1ex]
+\langle\text{Dlist}\rangle & \ ::=\ \langle\text{Digit}\rangle &  & (0)\\
+ & \qquad|\,\langle\text{Digit}\rangle\langle\text{Dlist}\rangle &  & (1)\\[1ex]
+\langle\text{Digit}\rangle & \ ::=\ 0 &  & (0)\\
+ & \qquad|\,1 &  & (1)\\
+ & \qquad\vdots\\
+ & \qquad|\,9 &  & (9)\\
+\end{alignat*}
 
-\begin_layout LyX-Code
-<Sigval>::=<Node>                    (0)
-\end_layout
+\end_inset
 
-\begin_layout LyX-Code
-           | <Node> + <Sigval>       (1)
-\end_layout
 
-\begin_layout LyX-Code
-<Node>::=<Number>*sig(<Sum>+<Number>) (0)
-\end_layout
-
-\begin_layout LyX-Code
-<Sum>::= <Number>*<Xlist>            (0)
-\end_layout
-
-\begin_layout LyX-Code
-           |    <Sum>+<Sum>           (1)
-\end_layout
-
-\begin_layout LyX-Code
-<Xlist>::= x1        (0)
-\end_layout
-
-\begin_layout LyX-Code
-             |    x2  (1)
-\end_layout
-
-\begin_layout LyX-Code
-             ..............
-\end_layout
-
-\begin_layout LyX-Code
-             |    xd  (d-1)
-\end_layout
-
-\begin_layout LyX-Code
-<Number>::= (<Dlist>.<Dlist>)        (0)
-\end_layout
-
-\begin_layout LyX-Code
-             |    (-<Dlist>.<Dlist>) (1)
-\end_layout
-
-\begin_layout LyX-Code
-<Dlist>::= <Digit>            (0)
-\end_layout
-
-\begin_layout LyX-Code
-             | <Digit><Dlist> (1)
-\end_layout
-
-\begin_layout LyX-Code
-<Digit>::= 0      (0)
-\end_layout
-
-\begin_layout LyX-Code
-             |  1 (1)
-\end_layout
-
-\begin_layout LyX-Code
-             ...........
-\end_layout
-
-\begin_layout LyX-Code
-             |  9 (9)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1761,7 +1729,7 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagram2.png
+	filename diagram.png
 	scale 75
 
 \end_inset
@@ -3113,6 +3081,7 @@ nolink "false"
 \end_inset
 
 .
+ The parameter values have been set so that there is a compromise between the efficiency and speed of the methodologies used when performing the experiments.
  In the following tables that describe the experimental results the following notation is used:
 \end_layout
 
@@ -3238,7 +3207,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -9790,6 +9759,10 @@ AVERAGE
 
 To determine the significance levels of the experimental results presented in the classification dataset tables,
  statistical analyses were conducted.
+ Exclusively,
+ the non-parametric,
+ paired Wilcoxon signed-rank test was used to assess the statistical significance of the differences between the proposed method and the other methods,
+ as well as for hyperparameter comparisons in both classification and regression tasks.
  These analyses were based on the critical parameter "p",
  which is used to assess the statistical significance of performance differences between models.
  As shown in Figure 
@@ -14981,6 +14954,30 @@ literal "false"
  2022,
  8,
  12126–12138.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1989)"
+key "Hornik"
+literal "false"
+
+\end_inset
+
+Hornik,
+ K.;
+ Stinchcombe,
+ M.;
+ White,
+ H.
+ Multilayer feedforward networks are universal approximators.
+ Neural Netw.
+ 1989,
+ 2,
+ 359–366.
+ 
 \end_layout
 
 \begin_layout Bibliography
