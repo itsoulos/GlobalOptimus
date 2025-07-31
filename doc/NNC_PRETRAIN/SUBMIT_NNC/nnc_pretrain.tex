@@ -45,16 +45,18 @@ have emerged that identify both the architecture of artificial neural
 networks and their corresponding parameters. Among these techniques,
 one can also identify the artificial neural networks being constructed,
 in which the structure and parameters of the neural network are effectively
-identified using Grammatical Evolution. In this paper, we propose
-the use of an additional phase before the start of the construction
-of the artificial neural network, in which phase a genetic algorithm
-undertakes to identify initial values for the parameters of the neural
-network. After the end of this phase, the evolution process is carried
-out using as initial values those identified in the above process.
-The proposed work was applied on a series of classification and regression
-problems founded in the recent literature and it was compared against
-other methods used for neural network training as well as against
-the original neural network construction method. }
+identified using Grammatical Evolution. In this work, a pre-training
+stage is introduced in which an artificial neural network with a fixed
+number of parameters is trained using some optimization technique
+such as the genetic algorithms used here. The final result of this
+additional phase is a trained artificial neural network which is introduced
+into the genetic population used by Grammatical Evolution in the second
+phase. In this way, finding the overall minimum of the error function
+will be significantly accelerated, making the second phase method
+more efficient. The proposed work was applied on a series of classification
+and regression problems found in the recent literature and it was
+compared against other methods used for neural network training as
+well as against the original neural network construction method. }
 
 
 \keyword{Neural networks; Grammatical Evolution; Genetic algorithms.}
@@ -213,11 +215,11 @@ these models are expressed as functions $N\left(\overrightarrow{x},\overrightarr
 the input vector (pattern) and the vector $\overrightarrow{w}$ is
 the vector of parameters for the neural network. The learning of these
 models is obtained by minimizing the so-called training error, which
-is defined as:\textbf{
+is defined as:
 \begin{equation}
-E\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\mbox{error}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
 \end{equation}
-}In this equation, the set $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
+In this equation, the set $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
 defines the corresponding training set for the objective problem.
 The values $y_{i}$ are the expected outputs for each pattern $\overrightarrow{x_{i}}$. 
 
@@ -320,6 +322,35 @@ series of classification and regression problems and it was compared
 against the original neural network construction method and the results
 seem promising. 
 
+Similar works in the field of pre - training neural networks was presented
+in the related literature. For example, the work of Li at el focused
+on the acceleration of the back propagation training algorithm by
+incorporating an initial weight pre-training \citep{pre_bp}. Also,
+Erhan et al \citep{pre_erhan} discussed the role of different pre-training
+mechanisms to the effectiveness of neural networks. Furthermore, a
+recent work \citep{pre_soft} discusses the effect of pre-training
+of artificial neural networks for the problem of software fault prediction.
+Saikia et al proposed a novel pre-train mechanism \citep{pre_regression}
+to improve the performance of neural network in the case of regression
+problems. Moreover, Kroshchanka et al proposed a method \citep{pre_reduction}
+to significantly reduce the number of parameters in neural networks
+using a pre-training method. Also, Noinongyao et al introduced a method
+based on Extreme Learning Machines \citep{pre_extreme} for the efficient
+pre - training of artificial neural networks.
+
+The process of constructing artificial neural networks through grammatical
+evolution, as proposed in the article, enables the model to automatically
+discover a wide range of structures that may incorporate features
+such as symmetry or asymmetry between connections and layers. This
+flexibility in designing architectures allows for the representation
+of both symmetric and asymmetric patterns, which can be important
+for neural network performance, especially when the problem at hand
+exhibits intrinsic symmetries in the data or in the relationships
+among variables. Through the evolutionary process, the proposed approach
+can result in structures with a higher degree of symmetry in the connections
+or in the distribution of weights, an aspect that is often associated
+with improved generalization and stability during training.
+
 The remaining of this article is organized as follows: in section
 \ref{sec:Materials-and-Methods} the proposed method and the accompanied
 genetic algorithm are introduced, in section \ref{sec:Results} the
@@ -329,8 +360,26 @@ where  some conclusions are discussed.
 
 \section{Materials and Methods\label{sec:Materials-and-Methods}}
 
-In this section, the phases of the proposed methodology are analyzed
-in detail as well as the steps of the corresponding algorithms.
+The proposed technique consists of two main stages, which are analyzed
+in detail in this section. In the first stage, pre-training takes
+place, during which a genetic algorithm will undertake to effectively
+train an artificial neural network with a specific number of weights,
+which is determined in advance. Of course, any optimization method
+could be used in the first stage, however, genetic algorithms were
+chosen because of their adaptability and their ability to search for
+the global minimum of functions. The final result of the first stage
+will be a trained artificial neural network, which will be introduced
+into the genetic population of the Grammatical Evolution of the second
+stage. This process will result in identifying a range of values in
+which the optimal value of the training error lies. Furthermore, the
+optimized artificial neural network that will be introduced into the
+population will be able to lead to an acceleration of finding the
+overall minimum of the error function through the application of genetic
+operators and the exchange of genetic material with other chromosomes
+of Grammatical Evolution. In the second stage, the Grammatical Evolution
+method takes place for the efficient construction of artificial neural
+networks, in which the chromosomes are naturally arrays of integers
+that represent production rules of the given grammar.
 
 \subsection{The first phase of the proposed method\label{subsec:The-first-phase}}
 
@@ -362,8 +411,24 @@ of parameters for the neural network as computed as:
 \begin{equation}
 n=\left(d+2\right)H
 \end{equation}
-
-The main steps for the algorithm of the first phase have as follows:
+In the current work the sigmoid function is adopted with one processing
+layer (hidden layer), due to its approximation capabilities exploited
+in the Hornik’s theorem \citep{Hornik}. According to this theorem,
+a neural network with sufficient number of sigmoid units can approximate
+any given function\textbf{. }The algorithm of the first phase is divided
+into the following major steps:
+\begin{enumerate}
+\item Initialization step, where the initialization of the critical parameters
+for the genetic algorithm is made.
+\item Fitness calculation step, where the fitness for each chromosome is
+performed. Each chromosome is considered as a vector of double precision
+values used as the parameters of the neural network.
+\item Application of genetic operators, where the operators of selection,
+crossover and mutation is performed.
+\item Termination check step.
+\end{enumerate}
+Hence, the detailed description of the steps of the algorithm is provided
+subsequently:
 \begin{enumerate}
 \item \textbf{Initialization step}. 
 \begin{enumerate}
@@ -479,41 +544,26 @@ non - terminal symbol.
 
 \begin{figure}[H]
 \begin{lyxcode}
-S:=\textless Sigval\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
-
-\textless Sigval\textgreater ::=\textless Node\textgreater ~~~~~~~~~~~~~~~~~~~~(0)
-
-~~~~~~~~~~~\textbar ~\textless Node\textgreater ~+~\textless Sigval\textgreater ~~~~~~~(1)
-
-\textless Node\textgreater ::=\textless Number\textgreater{*}sig(\textless Sum\textgreater +\textless Number\textgreater )~(0)
-
-\textless Sum\textgreater ::=~\textless Number\textgreater{*}\textless Xlist\textgreater ~~~~~~~~~~~~(0)
-
-~~~~~~~~~~~\textbar ~~~~\textless Sum\textgreater +\textless Sum\textgreater ~~~~~~~~~~~(1)
-
-\textless Xlist\textgreater ::=~x1~~~~~~~~(0)
-
-~~~~~~~~~~~~~\textbar ~~~~x2~~(1)
-
-~~~~~~~~~~~~~..............
-
-~~~~~~~~~~~~~\textbar ~~~~xd~~(d-1)
-
-\textless Number\textgreater ::=~(\textless Dlist\textgreater .\textless Dlist\textgreater )~~~~~~~~(0)
-
-~~~~~~~~~~~~~\textbar ~~~~(-\textless Dlist\textgreater .\textless Dlist\textgreater )~(1)
-
-\textless Dlist\textgreater ::=~\textless Digit\textgreater ~~~~~~~~~~~~(0)
-
-~~~~~~~~~~~~~\textbar ~\textless Digit\textgreater\textless Dlist\textgreater ~(1)
-
-\textless Digit\textgreater ::=~0~~~~~~(0)
-
-~~~~~~~~~~~~~\textbar ~~1~(1)
-
-~~~~~~~~~~~~~...........
-
-~~~~~~~~~~~~~\textbar ~~9~(9)
+\begin{alignat*}{2}
+S & \ ::=\ \langle\text{Sigval}\rangle &  & (0)\\[1ex]
+\langle\text{Sigval}\rangle & \ ::=\ \langle\text{Node}\rangle &  & (0)\\
+ & \qquad|\,\langle\text{Node}\rangle+\langle\text{Sigval}\rangle &  & (1)\\[1ex]
+\langle\text{Node}\rangle & \ ::=\ \langle\text{Number}\rangle*\text{sig}(\langle\text{Sum}\rangle+\langle\text{Number}\rangle) &  & (0)\\[1ex]
+\langle\text{Sum}\rangle & \ ::=\ \langle\text{Number}\rangle*\langle\text{Xlist}\rangle &  & (0)\\
+ & \qquad|\,\langle\text{Sum}\rangle+\langle\text{Sum}\rangle &  & (1)\\[1ex]
+\langle\text{Xlist}\rangle & \ ::=\ x_{1} &  & (0)\\
+ & \qquad|\,x_{2} &  & (1)\\
+ & \qquad\vdots\\
+ & \qquad|\,x_{d} &  & (d-1)\\[1ex]
+\langle\text{Number}\rangle & \ ::=\ (\langle\text{Dlist}\rangle.\langle\text{Dlist}\rangle) &  & (0)\\
+ & \qquad|\,(-\langle\text{Dlist}\rangle.\langle\text{Dlist}\rangle) &  & (1)\\[1ex]
+\langle\text{Dlist}\rangle & \ ::=\ \langle\text{Digit}\rangle &  & (0)\\
+ & \qquad|\,\langle\text{Digit}\rangle\langle\text{Dlist}\rangle &  & (1)\\[1ex]
+\langle\text{Digit}\rangle & \ ::=\ 0 &  & (0)\\
+ & \qquad|\,1 &  & (1)\\
+ & \qquad\vdots\\
+ & \qquad|\,9 &  & (9)\\
+\end{alignat*}
 \end{lyxcode}
 \caption{The proposed grammar for the construction of artificial neural networks
 through Grammatical Evolution.\label{fig:nncGrammar}}
@@ -525,11 +575,19 @@ N(x)=1.9\mbox{sig}\left(10.5x_{1}+3.2x_{3}+1.4\right)+2.1\mbox{sig}\left(2.2x_{2
 \end{equation}
 This neural network stands for a network with 3 inputs $\left(x_{1},x_{2},x_{3}\right)$.
 The number of processing units is $H=2$. The network can be shown
-graphically in Figure \ref{fig:nnExample}.
+graphically in Figure \ref{fig:nnExample}. The above procedure can
+produce artificial neural networks with one hidden layer, in which
+the number of neurons is not predetermined and is decided dynamically
+during the production of the network. In addition, the connections
+of the inputs to the neurons are decided dynamically during the construction
+of the network and therefore it is not mandatory that all inputs are
+connected to every neuron. Finally, the above grammar can be extended
+in the future to include artificial neural networks with more than
+one processing layer.
 
 \begin{figure}[H]
 \begin{centering}
-\includegraphics[scale=0.75]{diagram2}
+\includegraphics[scale=0.75]{diagram}
 \par\end{centering}
 \caption{An example of a produced neural network.\label{fig:nnExample}}
 \end{figure}
@@ -726,8 +784,10 @@ performed using the method of ten - fold cross validation. The average
 classification error as calculated on the test is reported for the
 classification datasets and the average regression error for the regression
 datasets. The experimental settings are shown in Table \ref{tab:expValues}.
-In the following tables that describe the experimental results the
-following notation is used:
+The parameter values have been set so that there is a compromise between
+the efficiency and speed of the methodologies used when performing
+the experiments. In the following tables that describe the experimental
+results the following notation is used:
 \begin{enumerate}
 \item The column DATASET stands for the used dataset.
 \item The column ADAM denotes the usage of the ADAM optimization method
@@ -991,6 +1051,10 @@ the regression datasets.\label{tab:expRegression}}
 \end{table}
 To determine the significance levels of the experimental results presented
 in the classification dataset tables, statistical analyses were conducted.
+Exclusively, the non-parametric, paired Wilcoxon signed-rank test
+was used to assess the statistical significance of the differences
+between the proposed method and the other methods, as well as for
+hyperparameter comparisons in both classification and regression tasks.
 These analyses were based on the critical parameter \textquotedbl p\textquotedbl ,
 which is used to assess the statistical significance of performance
 differences between models. As shown in Figure \ref{fig:statClass},
@@ -1295,7 +1359,79 @@ on the regression datasets, using a variety of values for the parameter
 $I_{w}$.\label{fig:statRegressionIW}}
 
 \end{figure}
+A comparison in terms of precision and recall between the original
+neural network construction method and the proposed one is outlined
+in Figure \ref{fig:precisionAndRecall}.
 
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{pre_precision_recall}
+\par\end{centering}
+\caption{Comparison in terms of precision and recall between the original neural
+network construction method and the proposed one. In the experiments
+the following values for the critical parameter $I_{w}$ were used:
+2,3,5 and 10.\label{fig:precisionAndRecall}}
+
+\end{figure}
+As can be clearly seen from this figure, the proposed technique significantly
+improves the performance of the artificial neural network construction
+method on classification data, achieving high rates of correct data
+classification.
+
+Although the proposed technique appears to be more efficient than
+the original one, the addition of the first processing phase results
+in a significant increase in execution time, as also demonstrated
+in Figure \ref{fig:Average-execution-time}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{pre_time}
+\par\end{centering}
+\caption{Average execution time for the classification datasets using the original
+neural network construction method and the proposed one with different
+values of the critical factor $I_{w}$.\label{fig:Average-execution-time}}
+
+\end{figure}
+It is clear that there is a significant increase in execution time,
+as more units are added to the initial neural network of the first
+phase, and in fact this time increases significantly between the values
+$I_{w}=5$ and $I_{w}=10$.
+
+\subsection{A real world example}
+
+As a real - world example with many instances consider the PIRvision
+datasets, initially discussed in 2023 \citep{pirvision}. This dataset
+contains occupancy detection data that was collected from a Synchronized
+Low-Energy Electronically-chopped Passive Infra-Red sensing node in
+residential and office environments. The dataset contains 15302 patterns
+and the dimension of each pattern is 59. In the conducted experiments
+the following methods were used:
+\begin{enumerate}
+\item BFGS, that defines the BFGS method incorporated to train a neural
+network with $H=10$ processing nodes.
+\item GENETIC, which is used to represent a genetic algorithm used to train
+a neural network with $H=10$ processing nodes.
+\item NNC, that represents the initial neural network construction method.
+\item The proposed method with the following values for $I_{w}$ parameter:
+$I_{w}=2,\ I_{w}=3,\ I_{w}=5$ and $I_{w}=10$.
+\end{enumerate}
+The results were validated using the ten - fold cross validation method
+and they are depicted in Figure \ref{fig:pirvision}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{pirvision}
+\par\end{centering}
+\caption{Results obtained for the PIRvision dataset, using a variety of methods
+and the proposed one. The numbers in the graph indicate average classification
+error as measured on the test set.\label{fig:pirvision}}
+
+\end{figure}
+As is evident from the specific results, the artificial neural network
+construction technique significantly outperforms the others and in
+fact the proposed procedure significantly improves the results, especially
+in the case where the parameter $I_{w}$ takes the value 10, where
+the average classification error reaches approximately 2\%.
 
 \section{Conclusions\label{sec:Conclusions}}
 
@@ -1603,6 +1739,41 @@ using machine learning, Expert Systems with Applications \textbf{225},
 I.G. Tsoulos, Utilizing Constructed Neural Networks for Autism Screening,
 Applied Sciences \textbf{14}, 3053, 2024.
 
+\bibitem[(1993)]{pre_bp}Li, G., Alnuweiri, H., Wu, Y., \& Li, H.
+(1993, March). Acceleration of back propagation through initial weight
+pre-training with delta rule. In IEEE International Conference on
+neural networks (pp. 580-585). IEEE.
+
+\bibitem[(2010)]{pre_erhan}Erhan, D., Courville, A., Bengio, Y.,
+\& Vincent, P. (2010, March). Why does unsupervised pre-training help
+deep learning?. In Proceedings of the thirteenth international conference
+on artificial intelligence and statistics (pp. 201-208). JMLR Workshop
+and Conference Proceedings.
+
+\bibitem[(1993)]{pre_soft}Owhadi-Kareshk, M., Sedaghat, Y., \& Akbarzadeh-T,
+M. R. (2017, October). Pre-training of an artificial neural network
+for software fault prediction. In 2017 7th International Conference
+on Computer and Knowledge Engineering (ICCKE) (pp. 223-228). IEEE.
+
+\bibitem[(1993)]{pre_regression}Saikia, P., Vij, P., \& Baruah, R.
+D. (2018, July). Unsupervised pre-training on improving the performance
+of neural network in regression. In 2018 International Joint Conference
+on Neural Networks (IJCNN) (pp. 01-06). IEEE.
+
+\bibitem[(1993)]{pre_reduction}Kroshchanka, A., \& Golovko, V. (2021,
+September). The reduction of fully connected neural network parameters
+using the pre-training technique. In 2021 11th IEEE International
+Conference on Intelligent Data Acquisition and Advanced Computing
+Systems: Technology and Applications (IDAACS) (Vol. 2, pp. 937-941).
+IEEE.
+
+\bibitem[(1993)]{pre_extreme}Noinongyao, P., \& Watchareeruetai,
+U. (2018, December). An extreme learning machine based pretraining
+method for multi-layer neural networks. In 2018 Joint 10th International
+Conference on Soft Computing and Intelligent Systems (SCIS) and 19th
+International Symposium on Advanced Intelligent Systems (ISIS) (pp.
+608-613). IEEE.
+
 \bibitem{Holland} Holland, J.H. Genetic algorithms. Sci. Am. 1992,
 267, 66--73.
 
@@ -1624,6 +1795,10 @@ twin robots. Front. Bioeng. Biotechnol. 2022, 9, 793782.
 \bibitem{Chen} Chen, Q.; Hu, X. Design of intelligent control system
 for agricultural greenhouses based on adaptive improved genetic algorithm
 for multi-energy supply system. Energy Rep. 2022, 8, 12126--12138.
+
+\bibitem[(1989)]{Hornik}Hornik, K.; Stinchcombe, M.; White, H. Multilayer
+feedforward networks are universal approximators. Neural Netw. 1989,
+2, 359--366. 
 
 \bibitem{Min} Min, D.; Song, Z.; Chen, H.; Wang, T.; Zhang, T. Genetic
 algorithm optimized neural network based fuel cell hybrid electric
@@ -1896,6 +2071,10 @@ Tsinghua Science and Technology, 11(4), 307-312.
 
 \bibitem{fcn}Grzegorz Klima, Fast Compressed Neural Networks, available
 from \url{http://fcnn.sourceforge.net/}.
+
+\bibitem[(2023)]{pirvision}Emad-Ud-Din, M., \& Wang, Y. (2023). Promoting
+occupancy detection accuracy using on-device lifelong learning. IEEE
+Sensors Journal, 23(9), 9595-9606.
 
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

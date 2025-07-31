@@ -345,12 +345,13 @@ A multitude of problems in contemporary literature are addressed using machine l
  Among these techniques,
  one can also identify the artificial neural networks being constructed,
  in which the structure and parameters of the neural network are effectively identified using Grammatical Evolution.
- In this paper,
- we propose the use of an additional phase before the start of the construction of the artificial neural network,
- in which phase a genetic algorithm undertakes to identify initial values for the parameters of the neural network.
- After the end of this phase,
- the evolution process is carried out using as initial values those identified in the above process.
- The proposed work was applied on a series of classification and regression problems founded in the recent literature and it was compared against other methods used for neural network training as well as against the original neural network construction method.
+ In this work,
+ a pre-training stage is introduced in which an artificial neural network with a fixed number of parameters is trained using some optimization technique such as the genetic algorithms used here.
+ The final result of this additional phase is a trained artificial neural network which is introduced into the genetic population used by Grammatical Evolution in the second phase.
+ In this way,
+ finding the overall minimum of the error function will be significantly accelerated,
+ making the second phase method more efficient.
+ The proposed work was applied on a series of classification and regression problems found in the recent literature and it was compared against other methods used for neural network training as well as against the original neural network construction method.
  
 \end_layout
 
@@ -889,6 +890,81 @@ However,
 \end_layout
 
 \begin_layout Standard
+Similar works in the field of pre - training neural networks was presented in the related literature.
+ For example,
+ the work of Li at el focused on the acceleration of the back propagation training algorithm by incorporating an initial weight pre-training 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pre_bp"
+literal "false"
+
+\end_inset
+
+.
+ Also,
+ Erhan et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pre_erhan"
+literal "false"
+
+\end_inset
+
+ discussed the role of different pre-training mechanisms to the effectiveness of neural networks.
+ Furthermore,
+ a recent work 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pre_soft"
+literal "false"
+
+\end_inset
+
+ discusses the effect of pre-training of artificial neural networks for the problem of software fault prediction.
+ Saikia et al proposed a novel pre-train mechanism 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pre_regression"
+literal "false"
+
+\end_inset
+
+ to improve the performance of neural network in the case of regression problems.
+ Moreover,
+ Kroshchanka et al proposed a method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pre_reduction"
+literal "false"
+
+\end_inset
+
+ to significantly reduce the number of parameters in neural networks using a pre-training method.
+ Also,
+ Noinongyao et al introduced a method based on Extreme Learning Machines 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pre_extreme"
+literal "false"
+
+\end_inset
+
+ for the efficient pre - training of artificial neural networks.
+\end_layout
+
+\begin_layout Standard
+The process of constructing artificial neural networks through grammatical evolution,
+ as proposed in the article,
+ enables the model to automatically discover a wide range of structures that may incorporate features such as symmetry or asymmetry between connections and layers.
+ This flexibility in designing architectures allows for the representation of both symmetric and asymmetric patterns,
+ which can be important for neural network performance,
+ especially when the problem at hand exhibits intrinsic symmetries in the data or in the relationships among variables.
+ Through the evolutionary process,
+ the proposed approach can result in structures with a higher degree of symmetry in the connections or in the distribution of weights,
+ an aspect that is often associated with improved generalization and stability during training.
+\end_layout
+
+\begin_layout Standard
 The remaining of this article is organized as follows:
  in section 
 \begin_inset CommandInset ref
@@ -940,15 +1016,24 @@ name "sec:Materials-and-Methods"
 \end_layout
 
 \begin_layout Standard
-In this section,
- the phases of the proposed methodology are analyzed in detail as well as the steps of the corresponding algorithms.
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-WHAT IS NEW IN THIS METHOD?
- Overall Description of the method.
+The proposed technique consists of two main stages,
+ which are analyzed in detail in this section.
+ In the first stage,
+ pre-training takes place,
+ during which a genetic algorithm will undertake to effectively train an artificial neural network with a specific number of weights,
+ which is determined in advance.
+ Of course,
+ any optimization method could be used in the first stage,
+ however,
+ genetic algorithms were chosen because of their adaptability and their ability to search for the global minimum of functions.
+ The final result of the first stage will be a trained artificial neural network,
+ which will be introduced into the genetic population of the Grammatical Evolution of the second stage.
+ This process will result in identifying a range of values in which the optimal value of the training error lies.
+ Furthermore,
+ the optimized artificial neural network that will be introduced into the population will be able to lead to an acceleration of finding the overall minimum of the error function through the application of genetic operators and the exchange of genetic material with other chromosomes of Grammatical Evolution.
+ In the second stage,
+ the Grammatical Evolution method takes place for the efficient construction of artificial neural networks,
+ in which the chromosomes are naturally arrays of integers that represent production rules of the given grammar.
 \end_layout
 
 \begin_layout Subsection
@@ -14992,6 +15077,149 @@ E.I.
 ,
  3053,
  2024.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1993)"
+key "pre_bp"
+literal "false"
+
+\end_inset
+
+Li,
+ G.,
+ Alnuweiri,
+ H.,
+ Wu,
+ Y.,
+ & Li,
+ H.
+ (1993,
+ March).
+ Acceleration of back propagation through initial weight pre-training with delta rule.
+ In IEEE International Conference on neural networks (pp.
+ 580-585).
+ IEEE.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2010)"
+key "pre_erhan"
+literal "false"
+
+\end_inset
+
+Erhan,
+ D.,
+ Courville,
+ A.,
+ Bengio,
+ Y.,
+ & Vincent,
+ P.
+ (2010,
+ March).
+ Why does unsupervised pre-training help deep learning?.
+ In Proceedings of the thirteenth international conference on artificial intelligence and statistics (pp.
+ 201-208).
+ JMLR Workshop and Conference Proceedings.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1993)"
+key "pre_soft"
+literal "false"
+
+\end_inset
+
+Owhadi-Kareshk,
+ M.,
+ Sedaghat,
+ Y.,
+ & Akbarzadeh-T,
+ M.
+ R.
+ (2017,
+ October).
+ Pre-training of an artificial neural network for software fault prediction.
+ In 2017 7th International Conference on Computer and Knowledge Engineering (ICCKE) (pp.
+ 223-228).
+ IEEE.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1993)"
+key "pre_regression"
+literal "false"
+
+\end_inset
+
+Saikia,
+ P.,
+ Vij,
+ P.,
+ & Baruah,
+ R.
+ D.
+ (2018,
+ July).
+ Unsupervised pre-training on improving the performance of neural network in regression.
+ In 2018 International Joint Conference on Neural Networks (IJCNN) (pp.
+ 01-06).
+ IEEE.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1993)"
+key "pre_reduction"
+literal "false"
+
+\end_inset
+
+Kroshchanka,
+ A.,
+ & Golovko,
+ V.
+ (2021,
+ September).
+ The reduction of fully connected neural network parameters using the pre-training technique.
+ In 2021 11th IEEE International Conference on Intelligent Data Acquisition and Advanced Computing Systems:
+ Technology and Applications (IDAACS) (Vol.
+ 2,
+ pp.
+ 937-941).
+ IEEE.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1993)"
+key "pre_extreme"
+literal "false"
+
+\end_inset
+
+Noinongyao,
+ P.,
+ & Watchareeruetai,
+ U.
+ (2018,
+ December).
+ An extreme learning machine based pretraining method for multi-layer neural networks.
+ In 2018 Joint 10th International Conference on Soft Computing and Intelligent Systems (SCIS) and 19th International Symposium on Advanced Intelligent Systems (ISIS) (pp.
+ 608-613).
+ IEEE.
 \end_layout
 
 \begin_layout Bibliography
