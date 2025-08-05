@@ -3,7 +3,7 @@ METHOD=MFO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=uniform
+SAMPLER=kmeans
 #Available stopping rules: maxiters, doublebox, similarity, mean, all, sumfitness (only for DE)
 TERMINATION=doublebox
 ### GLOBAL PARAMS
@@ -16,7 +16,7 @@ then
 	METHODPARAMS="--bfgs_iters=200"
 elif [ $METHOD = "MFO" ]
 then
-	METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05"
+	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=mixed"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
 ##de_np:          The population size. 

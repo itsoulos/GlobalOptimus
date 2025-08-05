@@ -10,6 +10,7 @@ private:
     double localsearchRate;
     int maxGenerations;
     vector<vector<double>> population;
+    std::string strategyMode;
      vector<double> x_star;
     vector<double> fitness;
     vector<double> lower;
