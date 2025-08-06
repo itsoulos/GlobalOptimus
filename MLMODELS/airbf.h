@@ -54,7 +54,9 @@ public:
                        double lr = 0.01, int epochs = 100,
                        double beta1 = 0.9, double beta2 = 0.999, double eps = 1e-8);
     void trainRBFwithLBFGS(const Matrix& X, const Vector& y);
-
+    void trainRBFwithAdamLS(const Matrix& X, const Vector& y, int epochs = 1000);
+    void trainRBFwithAdamLineSearch(const Matrix& X, const Vector& y,
+                                    int epochs = 1000, double lr_init = 1e-2);
     virtual void trainModel();
     struct RBFObjective {
         AiRbf& rbf;

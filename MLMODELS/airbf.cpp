@@ -8,6 +8,10 @@ AiRbf::AiRbf()
     QStringList method;
     method<<"optimus"<<"rbf_gd"<<"rbf_adam"<<"rbf_bfgs";
     addParam(Parameter("rbf_train",method[0],method,"Rbf training method"));
+    QStringList yesno;
+    yesno<<"yes"<<"no";
+    addParam(Parameter("rbf_usesigmaminmax",yesno[0],yesno,"Use min max for bounding of sigma params"));
+    addParam(Parameter("rbf_localsearchrate",0.00,0.00,1.00,"Use local search with adam"));
 }
 
 void AiRbf::decodeParameters(const Vector& params) {
@@ -35,7 +39,8 @@ void AiRbf::encodeParameters(Vector& params) {
 void AiRbf::trainRBFwithLBFGS( const Matrix& X, const Vector& y)
 {
     Vector params;
-        encodeParameters(params);
+    params.resize(dimension);
+    getParameters(params);
 
         // Προσθήκη τυχαιότητας στην αρχικοποίηση αν μηδενικά
         for (double& v : params) {
@@ -49,9 +54,120 @@ void AiRbf::trainRBFwithLBFGS( const Matrix& X, const Vector& y)
         opts.maxIter = 100;
         double fx;
         int iters = LBFGS::minimize(obj, params, fx, opts);
-        decodeParameters(params);
+        setParameters(params);
 
         cout << "Training completed in " << iters << " iterations. Final loss: " << fx << endl;
+
+}
+
+
+void AiRbf::trainRBFwithAdamLS(const Matrix& X, const Vector& y, int epochs ) {
+    Vector params;
+    params.resize(dimension);
+    getParameters(params);
+    size_t n = params.size();
+
+    Vector m(n, 0.0), v(n, 0.0), grad(n);
+    double beta1 = 0.9, beta2 = 0.999, eps = 1e-8;
+    double lr = 1e-2;
+
+    RBFObjective obj(*this,X, y);
+
+    for (int t = 1; t <= epochs; ++t) {
+        double loss = obj(params, grad);
+
+        for (size_t i = 0; i < n; ++i) {
+            m[i] = beta1 * m[i] + (1 - beta1) * grad[i];
+            v[i] = beta2 * v[i] + (1 - beta2) * grad[i] * grad[i];
+
+            double m_hat = m[i] / (1 - std::pow(beta1, t));
+            double v_hat = v[i] / (1 - std::pow(beta2, t));
+
+            // Γραμμική αναζήτηση με backtracking
+            double alpha = lr;
+            Vector trial = params;
+            for (size_t j = 0; j < n; ++j)
+                trial[j] -= alpha * m_hat / (std::sqrt(v_hat) + eps);
+            double newLoss = obj(trial, grad);
+            while (newLoss > loss && alpha > 1e-6) {
+                alpha *= 0.5;
+                for (size_t j = 0; j < n; ++j)
+                    trial[j] = params[j] - alpha * m_hat / (std::sqrt(v_hat) + eps);
+                newLoss = obj(trial, grad);
+            }
+
+            params[i] = trial[i];
+        }
+
+        if (t % 100 == 0)
+            std::cout << "[Epoch " << t << "] Loss = " << loss << std::endl;
+    }
+
+    setParameters(params);
+}
+
+
+void AiRbf::trainRBFwithAdamLineSearch(const Matrix& X, const Vector& y,
+                                int epochs, double lr_init )
+{
+    Vector params;
+    params.resize(bestx.size());
+    getParameters(params);
+    size_t n = params.size();
+
+    AdamState adamW(n);
+    double beta1 = 0.9, beta2 = 0.999, eps = 1e-8;
+
+    RBFObjective obj(*this, X, y);
+
+    for (int epoch = 1; epoch <= epochs; ++epoch) {
+            Vector grad(n);
+            double loss = obj(params, grad);
+            adamW.t++;
+
+            // Υπολογισμός biased m,v
+            for (size_t j = 0; j < n; ++j) {
+                double g = grad[j];
+                adamW.m[j] = beta1 * adamW.m[j] + (1 - beta1) * g;
+                adamW.v[j] = beta2 * adamW.v[j] + (1 - beta2) * g * g;
+            }
+
+            // Bias correction
+            double bias1 = 1.0 - std::pow(beta1, adamW.t);
+            double bias2 = 1.0 - std::pow(beta2, adamW.t);
+
+            // Υπολογισμός κατεύθυνσης ενημέρωσης (χωρίς scale lr)
+            Vector step(n);
+            for (size_t j = 0; j < n; ++j) {
+                double m_hat = adamW.m[j] / bias1;
+                double v_hat = adamW.v[j] / bias2;
+                step[j] = - m_hat / (std::sqrt(v_hat) + eps);
+            }
+
+            // --- Γραμμική αναζήτηση ---
+            double alpha = lr_init;
+            Vector trial(n), grad_trial;
+            double newLoss;
+
+            while (true) {
+                for (size_t j = 0; j < n; ++j)
+                    trial[j] = params[j] + alpha * step[j];
+                newLoss = obj(trial, grad_trial);
+
+                if (newLoss <= loss || alpha < 1e-6)
+                    break;
+                alpha *= 0.5; // backtracking
+            }
+
+            // Ενημέρωση παραμέτρων
+            params = trial;
+
+            if (epoch % 100 == 0)
+                std::cout << "[Epoch " << epoch << "] Loss = " << loss
+                          << " (lr=" << alpha << ")" << std::endl;
+        }
+
+        setParameters(params);
 
 }
 
@@ -77,13 +193,11 @@ void AiRbf::trainWithAdam(bool init,
     double bestError = getTrainError();
     Data bestX=bestx;
     getParameters(bestX);
-
     for (int epoch = 0; epoch < epochs; ++epoch) {
         Vector dw(numCenters, 0.0);
         Matrix dc(numCenters, Vector(inputDim, 0.0));
         Vector ds(numCenters, 0.0);
         double loss = 0.0;
-
         for (size_t i = 0; i < N; ++i) {
             Data xx = X[i];
             double y_pred = getOutput(xx);
@@ -137,11 +251,12 @@ void AiRbf::trainWithAdam(bool init,
                     centers[j][k] -= lr * mhat_c / (sqrt(vhat_c) + eps);
                 }
             }
-            if(epoch%200==0)
-            cout << "Epoch " << epoch << ", Loss: " << loss << endl;
+
+
+
         }
 
-    printf("ADAM BEST = %20.10lg \n",bestError);
+    printf("Adam loss: %lf \n",getTrainError());
     setParameters(bestX);
 }
 
@@ -208,7 +323,7 @@ void AiRbf::trainWithGradientDescent(const Matrix& X, const Vector& y,
     if(method == "rbf_adam")
     {
 
-        trainWithAdam(true,X, y, 0.05, 2000);
+        trainRBFwithAdamLineSearch(X,y);
     }
     else
     if(method == "rbf_bfgs")
@@ -372,6 +487,8 @@ void    AiRbf::initModel()
     setDimension(k);
     left.resize(k);
     right.resize(k);
+    QString useminmax = getParam("rbf_usesigmaminmax").getValue();
+
 
     //kmeans to estimate the range of margins
     vector<Data> xpoint = trainDataset->getAllXpoint();
@@ -406,8 +523,16 @@ void    AiRbf::initModel()
     //variances bounds
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=  -scale_factor * dmin;//0.01;
-        right[icount]= scale_factor * dmax;//sigmas[i];
+    	if(useminmax=="yes")
+       	{
+		left[icount]=  -scale_factor * dmin;//0.01;
+       		right[icount]= scale_factor * dmax;//sigmas[i];
+	}
+	else
+	{
+		left[icount]=  -scale_factor * sigmas[i];
+		right[icount]=  scale_factor * sigmas[i];
+	}
         if(right[icount]<left[icount])
         {
             double t = right[icount];
@@ -421,8 +546,8 @@ void    AiRbf::initModel()
     double y = trainDataset->maxy();
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=  -scale_factor * y;
-        right[icount]= scale_factor * y;
+        left[icount]=   -scale_factor * y;
+        right[icount]=  scale_factor * y;
 
         icount++;
     }
@@ -448,7 +573,8 @@ QJsonObject AiRbf::done(Data &x)
         setParameters(x);
         Matrix X= trainDataset->getAllXpoint();
         Data   y= trainDataset->getAllYPoints();
-        trainWithAdam(false,X, y, 0.05, 5000);
+        trainWithAdam(false,X,y,0.05,5000);
+	getParameters(x);
     }
     double tr=getTrainError();
     QJsonObject xx;
@@ -462,8 +588,17 @@ QJsonObject AiRbf::done(Data &x)
 
 double  AiRbf::funmin(Data &x)
 {
+    double rate=getParam("rbf_localsearchrate").getValue().toDouble();
     setParameters(x);
     double f =  getTrainError();
+    if(rate>=0.00 && rand()*1.0/RAND_MAX<=rate)
+    {
+        Matrix X= trainDataset->getAllXpoint();
+        Data   y= trainDataset->getAllYPoints();
+        trainWithAdam(false,X,y,0.05,2000);
+	getParameters(x);
+	f=getTrainError();
+    }
     return f;
 }
 
