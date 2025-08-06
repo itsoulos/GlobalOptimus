@@ -597,6 +597,11 @@ double  AiRbf::funmin(Data &x)
         Data   y= trainDataset->getAllYPoints();
         trainWithAdam(false,X,y,0.05,2000);
 	getParameters(x);
+	for(int i=0;i<x.size();i++)
+	{
+		if(x[i]<left[i]) left[i]=x[i];
+		if(x[i]>right[i]) right[i]=x[i];
+	}
 	f=getTrainError();
     }
     return f;
