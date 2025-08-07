@@ -372,7 +372,7 @@ void    AiRbf::kMeans(const Matrix& X, size_t K,
 
 
         // Αρχικοποίηση τυχαίων κέντρων
-        srand((unsigned) time(0));
+        //srand((unsigned) time(0));
         for (size_t k = 0; k < K; ++k)
             centers[k] = X[rand() % N];
 
@@ -573,7 +573,7 @@ QJsonObject AiRbf::done(Data &x)
         setParameters(x);
         Matrix X= trainDataset->getAllXpoint();
         Data   y= trainDataset->getAllYPoints();
-        trainWithAdam(false,X,y,0.05,5000);
+        trainWithAdam(false,X,y,0.005,5000);
 	getParameters(x);
     }
     double tr=getTrainError();
@@ -595,7 +595,7 @@ double  AiRbf::funmin(Data &x)
     {
         Matrix X= trainDataset->getAllXpoint();
         Data   y= trainDataset->getAllYPoints();
-        trainWithAdam(false,X,y,0.05,2000);
+        trainWithAdam(false,X,y,0.005,1000);
 	getParameters(x);
 	for(int i=0;i<x.size();i++)
 	{
