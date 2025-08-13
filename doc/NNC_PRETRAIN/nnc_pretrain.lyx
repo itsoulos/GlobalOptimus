@@ -13737,6 +13737,84 @@ Experiments with the number of chromosomes
 \end_layout
 
 \begin_layout Standard
+Additionally,
+ another experiment was conducted using the proposed method and a range of values for the critical parameter 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+,
+ which represents the number of used chromosomes.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expClassNC"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ presents the classification error rates of the proposed machine learning method across various datasets,
+ for four different values of 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+,
+ which corresponds to the number of chromosomes used in the evolutionary process.
+ It is observed that,
+ in a large proportion of datasets,
+ an increase in 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ is accompanied by a reduction in the error rate,
+ indicating that a greater diversity of initial solutions can lead to better final performance.
+ In certain datasets,
+ such as DERMATOLOGY,
+ ECOLI,
+ SEGMENT,
+ and Z_F_S,
+ the improvement is particularly evident at higher 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ values,
+ whereas in others,
+ such as AUSTRALIAN,
+ HEART,
+ and MAMMOGRAPHIC,
+ the change is small or nonexistent,
+ suggesting that performance in these cases is less sensitive to an increase in the number of chromosomes.
+ There are also instances where increasing 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ does not lead to improvement but rather to a slight increase in error,
+ as in GLASS and CIRCULAR,
+ a phenomenon that may be due to overfitting or random variation in performance.
+ The mean percentage error gradually decreases from 21.40% for 
+\begin_inset Formula $N_{c}=50$
+\end_inset
+
+ to 19.63% for 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+,
+ confirming the general trend of improvement with increasing 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+,
+ although the benefit from very large values appears to diminish,
+ possibly indicating saturation in the model’s ability to exploit the additional diversity.
+ Overall,
+ the statistical picture shows that increasing the number of chromosomes contributes to reducing the error,
+ but the degree of benefit depends on the characteristics of each dataset.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 alignment document
@@ -15552,7 +15630,89 @@ AVERAGE
 
 \end_inset
 
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expRegressionNC"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
+\end_inset
+
+ presents the absolute prediction errors of the proposed machine learning method across various regression datasets,
+ for four different values of 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+,
+ which represents the number of chromosomes in the evolutionary process.
+ The general trend observed is a reduction in error as 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ increases,
+ suggesting that greater solution diversity leads to more accurate predictions.
+ This is particularly evident in datasets such as AUTO,
+ BL,
+ HOUSING,
+ STOCK,
+ and TREASURY,
+ where the difference between 
+\begin_inset Formula $N_{c}=50$
+\end_inset
+
+ and 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+ is substantial.
+ In some datasets,
+ such as ABALONE,
+ AIRFOIL,
+ CONCRETE,
+ and LASER,
+ the values remain almost unchanged regardless of 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+,
+ indicating that performance in these cases is less dependent on the number of chromosomes.
+ There are also cases with non-monotonic behavior,
+ such as BK and LW,
+ where increasing 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ does not necessarily lead to a consistent reduction in error,
+ possibly due to stochastic factors or overfitting.
+ The mean error steadily decreases from 5.78 for 
+\begin_inset Formula $N_{c}=50$
+\end_inset
+
+ to 4.83 for 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+,
+ reinforcing the overall picture of improvement,
+ although the difference between the two largest 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ values is smaller,
+ which may indicate that the benefit of increasing 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ begins to saturate.
+ Overall,
+ the statistical analysis shows that increasing the number of chromosomes improves the accuracy of the method,
+ with the magnitude of the benefit depending on the specific characteristics of each dataset.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 alignment document
@@ -16709,11 +16869,215 @@ AVERAGE
 
 \end_inset
 
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statClassNC"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ presents the significance levels resulting from the comparisons of classification error rates across datasets for the proposed machine learning method.
+ The comparison between 
+\begin_inset Formula $N_{c}=50$
+\end_inset
+
+ and 
+\begin_inset Formula $N_{c}=100$
+\end_inset
+
+ shows no significant difference (p=ns),
+ indicating that increasing the number of chromosomes from 50 to 100 does not lead to a substantial improvement.
+ In contrast,
+ the transition from 
+\begin_inset Formula $N_{c}=100$
+\end_inset
+
+ to 
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+ shows a statistically significant improvement (p=**),
+ while the increase from 
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+ to 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+ is also accompanied by a significant difference (p=*),
+ albeit of lower magnitude.
+ These results suggest that higher 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ values can improve performance,
+ with the significance being more pronounced in the mid-range 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ values.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat6.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the results obtained by the application of the proposed method on the classification datasets using a range of values for the parameter 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statClassNC"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statRegressionNC"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ presents the significance levels resulting from the comparisons of prediction errors across regression datasets for the proposed machine learning method.
+ In all three comparisons between 
+\begin_inset Formula $N_{c}=50$
+\end_inset
+
+ and 
+\begin_inset Formula $N_{c}=100$
+\end_inset
+
+,
+ 
+\begin_inset Formula $N_{c}=100$
+\end_inset
+
+ and 
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+,
+ as well as 
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+ and 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+ the p-value is non-significant (p=ns),
+ indicating that increasing the number of chromosomes does not lead to a statistically significant change in the model’s performance on these datasets.
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat7.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the results obtained by the application of the proposed method to the regression datasets using a variety of values for the number of chromosomes 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statRegressionNC"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Subsection
 Comparison with a previous work
+\end_layout
+
+\begin_layout Standard
+Recently,
+ an improved version of the constructed neural networks was published with the addition of a periodical application of a local optimization procedure 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_local"
+literal "false"
+
+\end_inset
+
+.
+ In this work a local optimization procedure is applied to randomly selected chromosomes by maintaining the architecture obtained by the neural network construction procedure.
+ In the following tables this method is denoted as INNC and a comparison is made against the original neural network construction procedure (denoted as NNC) and the proposed method (denoted as PROPOSED).
 \end_layout
 
 \begin_layout Standard
@@ -16869,7 +17233,7 @@ ALCOHOL
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+29.79%
 \end_layout
 
 \end_inset
@@ -17177,7 +17541,7 @@ GLASS
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+54.24%
 \end_layout
 
 \end_inset
@@ -17529,7 +17893,7 @@ LYMOGRAPHY
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+25.29%
 \end_layout
 
 \end_inset
@@ -17925,7 +18289,7 @@ STATHEART
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+18.67%
 \end_layout
 
 \end_inset
@@ -18368,6 +18732,8 @@ AVERAGE
 
 \begin_layout Plain Layout
 
+\series bold
+20.92%
 \end_layout
 
 \end_inset
@@ -18459,6 +18825,8 @@ NNC
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 INNC
 \end_layout
 
@@ -18503,6 +18871,8 @@ ABALONE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 4.33
 \end_layout
 
@@ -18547,6 +18917,8 @@ AIRFOIL
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.002
 \end_layout
 
@@ -18592,6 +18964,8 @@ AUTO
 
 \begin_layout Plain Layout
 
+\size footnotesize
+11.01
 \end_layout
 
 \end_inset
@@ -18635,6 +19009,8 @@ BK
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.07
 \end_layout
 
@@ -18679,6 +19055,8 @@ BL
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.002
 \end_layout
 
@@ -18723,6 +19101,8 @@ BASEBALL
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 48.42
 \end_layout
 
@@ -18767,6 +19147,8 @@ CONCRETE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.005
 \end_layout
 
@@ -18811,6 +19193,8 @@ DEE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.23
 \end_layout
 
@@ -18856,6 +19240,8 @@ FRIEDMAN
 
 \begin_layout Plain Layout
 
+\size footnotesize
+4.88
 \end_layout
 
 \end_inset
@@ -18899,6 +19285,8 @@ FY
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.042
 \end_layout
 
@@ -18943,6 +19331,8 @@ HO
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.01
 \end_layout
 
@@ -18987,6 +19377,8 @@ HOUSING
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 16.01
 \end_layout
 
@@ -19032,6 +19424,8 @@ LASER
 
 \begin_layout Plain Layout
 
+\size footnotesize
+0.006
 \end_layout
 
 \end_inset
@@ -19075,6 +19469,8 @@ LW
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.012
 \end_layout
 
@@ -19119,6 +19515,8 @@ MORTGAGE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.026
 \end_layout
 
@@ -19163,6 +19561,8 @@ PL
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.022
 \end_layout
 
@@ -19208,6 +19608,8 @@ PLASTIC
 
 \begin_layout Plain Layout
 
+\size footnotesize
+2.25
 \end_layout
 
 \end_inset
@@ -19251,6 +19653,8 @@ QUAKE
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.04
 \end_layout
 
@@ -19295,6 +19699,8 @@ SN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.026
 \end_layout
 
@@ -19340,6 +19746,8 @@ STOCK
 
 \begin_layout Plain Layout
 
+\size footnotesize
+6.33
 \end_layout
 
 \end_inset
@@ -19383,6 +19791,8 @@ TREASURY
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.066
 \end_layout
 
@@ -19430,6 +19840,8 @@ AVERAGE
 
 \begin_layout Plain Layout
 
+\series bold
+4.47
 \end_layout
 
 \end_inset
@@ -22656,6 +23068,30 @@ Emad-Ud-Din,
  IEEE Sensors Journal,
  23(9),
  9595-9606.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2024)"
+key "nn_local"
+literal "false"
+
+\end_inset
+
+Tsoulos,
+ I.G.;
+ Charilogis,
+ V.;
+ Tsalikakis,
+ D.;
+ Tzallas,
+ A.
+ Improving the Generalization Abilities of Constructed Neural Networks with the Addition of Local Optimization Techniques.
+ Algorithms 2024,
+ 17,
+ 446.
+ 
 \end_layout
 
 \begin_layout Standard
