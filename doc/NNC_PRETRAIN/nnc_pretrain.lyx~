@@ -854,12 +854,23 @@ literal "false"
 \end_inset
 
  etc.
+\end_layout
 
-\series bold
- 
-\series default
-A significant advantage of this particular technique over others is that it can effectively identify the characteristics of the problem that are most important for the effective training of the model,
- thus significantly reducing the required response time of the model and thus avoiding the model from engaging in overfitting problems.
+\begin_layout Standard
+Compared to other techniques for constructing the structure of artificial neural networks,
+ the method guided by Grammatical Evolution has a number of advantages.
+ First of all,
+ this method can generates both topology and the values for the associated parameters.
+ Furthermore,
+ this method can effectively isolate the features of the dataset that are most important and furthermore can retain only those synapses in the neural network that will lead to a reduction in training error.
+ Furthermore,
+ this method does not require prior knowledge of the objective problem and can be applied without any differentiation to both classification problems and regression problems.
+ Furthermore,
+ since a grammar is used to generate the artificial neural network,
+ it is possible for the researcher to explain why one structure may be preferred over others.
+ Finally,
+ since the Grammatical Evolution procedure is used,
+ the method could be faster than others since the Grammatical Evolution utilizes integer based chromosomes to express valid programs in the underlying grammar.
 \end_layout
 
 \begin_layout Standard
@@ -3193,7 +3204,34 @@ literal "false"
  using different seed for the random generator each time.
  The validation of the experiments was performed using the method of ten - fold cross validation.
  The average classification error as calculated on the test is reported for the classification datasets and the average regression error for the regression datasets.
- The experimental settings are shown in Table 
+ The classification error is computed using the following formula:
+\begin_inset Formula 
+\begin{equation}
+E_{C}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=100\times\frac{\sum_{i=1}^{N}\left(\mbox{class}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)\right)-y_{i}\right)}{N}
+\end{equation}
+
+\end_inset
+
+For the calculation of this error,
+ the test set 
+\begin_inset Formula $T$
+\end_inset
+
+ is a set 
+\begin_inset Formula $T=\left(x_{i},y_{i}\right),\ i=1,\ldots,N$
+\end_inset
+
+ is used.
+ Similarly,
+ the average regression error is reported for the regression datasets and it is calculated as follows:
+\begin_inset Formula 
+\begin{equation}
+E_{R}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\frac{\sum_{i=1}^{N}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)-y_{i}\right)^{2}}{N}
+\end{equation}
+
+\end_inset
+
+The experimental settings are shown in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:expValues"
@@ -13598,11 +13636,11 @@ It is clear that there is a significant increase in execution time,
 \end_layout
 
 \begin_layout Subsection
-A real world example
+Some real world examples
 \end_layout
 
 \begin_layout Standard
-As a real - world example with many instances consider the PIRvision datasets,
+As real world examples with many instances consider the the PIRvision dataset,
  initially discussed in 2023 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -13611,9 +13649,22 @@ literal "false"
 
 \end_inset
 
+ and the Beed dataset presented in the work of Banu 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "beed"
+literal "false"
+
+\end_inset
+
 .
- This dataset contains occupancy detection data that was collected from a Synchronized Low-Energy Electronically-chopped Passive Infra-Red sensing node in residential and office environments.
+ 
+\end_layout
+
+\begin_layout Standard
+This PIRvision dataset contains occupancy detection data that was collected from a Synchronized Low-Energy Electronically-chopped Passive Infra-Red sensing node in residential and office environments.
  The dataset contains 15302 patterns and the dimension of each pattern is 59.
+ The Beed dataset (Bangalore EEG Epilepsy Dataset) is a comprehensive EEG collection for epileptic seizure detection and classification and contains 8000 patterns and each pattern has 16 features.
  In the conducted experiments the following methods were used:
 \end_layout
 
@@ -13658,7 +13709,8 @@ The proposed method with the following values for
 \end_layout
 
 \begin_layout Standard
-The results were validated using the ten - fold cross validation method and they are depicted in Figure 
+The results were validated using the ten - fold cross validation method.
+ For the PIRVision datasets the results are depicted in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:pirvision"
@@ -13678,7 +13730,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -13726,6 +13778,70 @@ As is evident from the specific results,
 
  takes the value 10,
  where the average classification error reaches approximately 2%.
+\end_layout
+
+\begin_layout Standard
+The results for the BEED dataset are outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:beed"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename beed.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Results obtained for the BEED dataset.
+ The numbers in the graph indicate average classification error as measured on the test set.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:beed"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+And in this case,
+ the proposed method significantly reduces the data classification error compared to a simple genetic algorithm or compared to the original method of constructing artificial neural networks.
 \end_layout
 
 \begin_layout Subsection
@@ -17016,7 +17132,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -23285,6 +23401,24 @@ Emad-Ud-Din,
  IEEE Sensors Journal,
  23(9),
  9595-9606.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2024)"
+key "beed"
+literal "false"
+
+\end_inset
+
+Banu PK,
+ N.
+ (2024).
+ Feature Engineering for Epileptic Seizure Classification Using SeqBoostNet.
+ International Journal of Computing and Digital Systems,
+ 16(1),
+ 1-14.
 \end_layout
 
 \begin_layout Bibliography

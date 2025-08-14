@@ -291,12 +291,24 @@ was applied with success in a series of practical problems, such as
 the location of Amide I bonds \citep{nnc_amide1},\textbf{ }solution
 of differential equations \citep{nnc_de}, medical problems \citep{nnc_feas},\textbf{
 }education problems\citep{nnc_student}, autism screening \citep{nnc_autism}
-etc.\textbf{ }A significant advantage of this particular technique
-over others is that it can effectively identify the characteristics
-of the problem that are most important for the effective training
-of the model, thus significantly reducing the required response time
-of the model and thus avoiding the model from engaging in overfitting
-problems.
+etc.
+
+Compared to other techniques for constructing the structure of artificial
+neural networks, the method guided by Grammatical Evolution has a
+number of advantages. First of all, this method can generate both
+topology and the values for the associated parameters. Furthermore,
+this method can effectively isolate the features of the dataset that
+are most important and furthermore can retain only those synapses
+in the neural network that will lead to a reduction in training error.
+Furthermore, this method does not require prior knowledge of the objective
+problem and can be applied without any differentiation to both classification
+problems and regression problems. Furthermore, since a grammar is
+used to generate the artificial neural network, it is possible for
+the researcher to explain why one structure may be preferred over
+others. Finally, since the Grammatical Evolution procedure is used,
+the method could be faster than others since the Grammatical Evolution
+utilizes integer based chromosomes to express valid programs in the
+underlying grammar.
 
 However, in many cases, training the above model is not efficient
 and can become trapped in local minima of the error function, which
@@ -783,7 +795,18 @@ random generator each time. The validation of the experiments was
 performed using the method of ten - fold cross validation. The average
 classification error as calculated on the test is reported for the
 classification datasets and the average regression error for the regression
-datasets. The experimental settings are shown in Table \ref{tab:expValues}.
+datasets. The classification error is computed using the following
+formula:
+\begin{equation}
+E_{C}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=100\times\frac{\sum_{i=1}^{N}\left(\mbox{class}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)\right)-y_{i}\right)}{N}
+\end{equation}
+For the calculation of this error, the test set $T$ is a set $T=\left(x_{i},y_{i}\right),\ i=1,\ldots,N$
+is used. Similarly, the average regression error is reported for the
+regression datasets and it is calculated as follows:
+\begin{equation}
+E_{R}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\frac{\sum_{i=1}^{N}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)-y_{i}\right)^{2}}{N}
+\end{equation}
+The experimental settings are shown in Table \ref{tab:expValues}.
 The parameter values have been set so that there is a compromise between
 the efficiency and speed of the methodologies used when performing
 the experiments. In the following tables that describe the experimental
@@ -1397,15 +1420,20 @@ as more units are added to the initial neural network of the first
 phase, and in fact this time increases significantly between the values
 $I_{w}=5$ and $I_{w}=10$.
 
-\subsection{A real world example}
+\subsection{Some real world examples}
 
-As a real - world example with many instances consider the PIRvision
-datasets, initially discussed in 2023 \citep{pirvision}. This dataset
-contains occupancy detection data that was collected from a Synchronized
-Low-Energy Electronically-chopped Passive Infra-Red sensing node in
-residential and office environments. The dataset contains 15302 patterns
-and the dimension of each pattern is 59. In the conducted experiments
-the following methods were used:
+As real world examples with many instances consider the the PIRvision
+dataset, initially discussed in 2023 \citep{pirvision} and the Beed
+dataset presented in the work of Banu \citep{beed}. 
+
+This PIRvision dataset contains occupancy detection data that was
+collected from a Synchronized Low-Energy Electronically-chopped Passive
+Infra-Red sensing node in residential and office environments. The
+dataset contains 15302 patterns and the dimension of each pattern
+is 59. The Beed dataset (Bangalore EEG Epilepsy Dataset) is a comprehensive
+EEG collection for epileptic seizure detection and classification
+and contains 8000 patterns and each pattern has 16 features. In the
+conducted experiments the following methods were used:
 \begin{enumerate}
 \item BFGS, that defines the BFGS method incorporated to train a neural
 network with $H=10$ processing nodes.
@@ -1415,8 +1443,8 @@ a neural network with $H=10$ processing nodes.
 \item The proposed method with the following values for $I_{w}$ parameter:
 $I_{w}=2,\ I_{w}=3,\ I_{w}=5$ and $I_{w}=10$.
 \end{enumerate}
-The results were validated using the ten - fold cross validation method
-and they are depicted in Figure \ref{fig:pirvision}.
+The results were validated using the ten - fold cross validation method.
+For the PIRVision datasets the results are depicted in Figure \ref{fig:pirvision}.
 
 \begin{figure}[H]
 \begin{centering}
@@ -1432,6 +1460,485 @@ construction technique significantly outperforms the others and in
 fact the proposed procedure significantly improves the results, especially
 in the case where the parameter $I_{w}$ takes the value 10, where
 the average classification error reaches approximately 2\%.
+
+The results for the BEED dataset are outlined in Figure \ref{fig:beed}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{beed}
+\par\end{centering}
+\caption{Results obtained for the BEED dataset. The numbers in the graph indicate
+average classification error as measured on the test set.\label{fig:beed}}
+
+\end{figure}
+And in this case, the proposed method significantly reduces the data
+classification error compared to a simple genetic algorithm or compared
+to the original method of constructing artificial neural networks.
+
+\subsection{Experiments with the number of chromosomes $N_{c}$}
+
+Additionally, another experiment was conducted using the proposed
+method and a range of values for the critical parameter $N_{c}$,
+which represents the number of used chromosomes. Table \ref{tab:expClassNC}
+presents the classification error rates of the proposed machine learning
+method across various datasets, for four different values of $N_{c}$,
+which corresponds to the number of chromosomes used in the evolutionary
+process. It is observed that, in a large proportion of datasets, an
+increase in $N_{c}$ is accompanied by a reduction in the error rate,
+indicating that a greater diversity of initial solutions can lead
+to better final performance. In certain datasets, such as DERMATOLOGY,
+ECOLI, SEGMENT, and Z\_F\_S, the improvement is particularly evident
+at higher $N_{c}$ values, whereas in others, such as AUSTRALIAN,
+HEART, and MAMMOGRAPHIC, the change is small or nonexistent, suggesting
+that performance in these cases is less sensitive to an increase in
+the number of chromosomes. There are also instances where increasing
+$N_{c}$ does not lead to improvement but rather to a slight increase
+in error, as in GLASS and CIRCULAR, a phenomenon that may be due to
+overfitting or random variation in performance. The mean percentage
+error gradually decreases from 21.40\% for $N_{c}=50$ to 19.63\%
+for $N_{c}=500$, confirming the general trend of improvement with
+increasing $N_{c}$, although the benefit from very large values appears
+to diminish, possibly indicating saturation in the model’s ability
+to exploit the additional diversity. Overall, the statistical picture
+shows that increasing the number of chromosomes contributes to reducing
+the error, but the degree of benefit depends on the characteristics
+of each dataset.
+
+\begin{table}[H]
+\caption{Experimental results using the proposed method and different values
+for the parameter $N_{c}$, which indicates the number of chromosomes
+used in the genetic algorithm. . The experiments were conducted on
+the classification datasets.\label{tab:expClassNC}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+DATASET & $N_{c}=50$ & $N_{c}=100$ & $N_{c}=200$ & $N_{c}=500$\tabularnewline
+\hline 
+\hline 
+APPENDICITIS & 20.80\% & 20.50\% & 18.50\% & 16.30\%\tabularnewline
+\hline 
+ALCOHOL & 24.74\% & 28.47\% & 20.85\% & 20.21\%\tabularnewline
+\hline 
+AUSTRALIAN & 14.26\% & 14.40\% & 14.68\% & 14.68\%\tabularnewline
+\hline 
+BALANCE & 7.71\% & 7.79\% & 6.82\% & 7.26\%\tabularnewline
+\hline 
+CLEVELAND & 45.03\% & 43.86\% & 44.42\% & 44.90\%\tabularnewline
+\hline 
+CIRCULAR & 4.67\% & 4.02\% & 4.08\% & 4.22\%\tabularnewline
+\hline 
+DERMATOLOGY & 10.26\% & 7.71\% & 6.11\% & 5.92\%\tabularnewline
+\hline 
+ECOLI & 54.70\% & 49.30\% & 44.18\% & 44.79\%\tabularnewline
+\hline 
+GLASS & 50.48\% & 52.33\% & 49.62\% & 49.43\%\tabularnewline
+\hline 
+HABERMAN & 29.57\% & 29.40\% & 29.10\% & 28.57\%\tabularnewline
+\hline 
+HAYES-ROTH & 32.47\% & 31.16\% & 31.62\% & 30.77\%\tabularnewline
+\hline 
+HEART & 18.34\% & 17.63\% & 17.85\% & 17.85\%\tabularnewline
+\hline 
+HEARTATTACK & 20.07\% & 21.00\% & 20.67\% & 20.67\%\tabularnewline
+\hline 
+HOUSEVOTES & 7.09\% & 8.22\% & 7.44\% & 7.39\%\tabularnewline
+\hline 
+IONOSPHERE & 16.91\% & 16.69\% & 15.79\% & 13.14\%\tabularnewline
+\hline 
+LIVERDISORDER & 33.77\% & 32.06\% & 33.50\% & 33.38\%\tabularnewline
+\hline 
+LYMOGRAPHY & 25.36\% & 24.86\% & 25.72\% & 25.14\%\tabularnewline
+\hline 
+MAMMOGRAPHIC & 17.23\% & 17.67\% & 17.81\% & 17.77\%\tabularnewline
+\hline 
+PARKINSONS & 13.37\% & 15.53\% & 14.95\% & 14.05\%\tabularnewline
+\hline 
+PIMA & 25.82\% & 24.64\% & 24.50\% & 24.34\%\tabularnewline
+\hline 
+POPFAILURES & 7.74\% & 7.39\% & 7.17\% & 7.19\%\tabularnewline
+\hline 
+REGIONS2 & 28.53\% & 27.29\% & 25.78\% & 25.00\%\tabularnewline
+\hline 
+SAHEART & 31.70\% & 30.74\% & 30.15\% & 30.11\%\tabularnewline
+\hline 
+SEGMENT & 16.29\% & 12.16\% & 9.08\% & 9.59\%\tabularnewline
+\hline 
+SPIRAL & 41.93\% & 42.04\% & 41.19\% & 41.25\%\tabularnewline
+\hline 
+STATHEART & 20.30\% & 19.67\% & 21.15\% & 20.26\%\tabularnewline
+\hline 
+STUDENT & 6.73\% & 7.25\% & 7.13\% & 7.18\%\tabularnewline
+\hline 
+TRANSFUSION & 25.15\% & 23.86\% & 23.69\% & 23.59\%\tabularnewline
+\hline 
+WDBC & 4.14\% & 4.16\% & 3.73\% & 3.73\%\tabularnewline
+\hline 
+WINE & 10.06\% & 10.65\% & 11.00\% & 10.41\%\tabularnewline
+\hline 
+Z\_F\_S & 12.73\% & 6.70\% & 6.27\% & 6.60\%\tabularnewline
+\hline 
+Z\_O\_N\_F\_S & 53.26\% & 55.78\% & 51.14\% & 49.66\%\tabularnewline
+\hline 
+ZO\_NF\_S & 8.12\% & 3.98\% & 3.66\% & 3.94\%\tabularnewline
+\hline 
+ZONF\_S & 2.70\% & 2.64\% & 2.66\% & 2.60\%\tabularnewline
+\hline 
+ZOO & 6.90\% & 6.80\% & 4.80\% & 5.10\%\tabularnewline
+\hline 
+\textbf{AVERAGE} & \textbf{21.40\%} & \textbf{20.81\%} & \textbf{19.91\%} & \textbf{19.63\%}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+Table \ref{tab:expRegressionNC} presents the absolute prediction
+errors of the proposed machine learning method across various regression
+datasets, for four different values of $N_{c}$, which represents
+the number of chromosomes in the evolutionary process. The general
+trend observed is a reduction in error as $N_{c}$ increases, suggesting
+that greater solution diversity leads to more accurate predictions.
+This is particularly evident in datasets such as AUTO, BL, HOUSING,
+STOCK, and TREASURY, where the difference between $N_{c}=50$ and
+$N_{c}=500$ is substantial. In some datasets, such as ABALONE, AIRFOIL,
+CONCRETE, and LASER, the values remain almost unchanged regardless
+of $N_{c}$, indicating that performance in these cases is less dependent
+on the number of chromosomes. There are also cases with non-monotonic
+behavior, such as BK and LW, where increasing $N_{c}$ does not necessarily
+lead to a consistent reduction in error, possibly due to stochastic
+factors or overfitting. The mean error steadily decreases from 5.78
+for $N_{c}=50$ to 4.83 for $N_{c}=500$, reinforcing the overall
+picture of improvement, although the difference between the two largest
+$N_{c}$ values is smaller, which may indicate that the benefit of
+increasing $N_{c}$ begins to saturate. Overall, the statistical analysis
+shows that increasing the number of chromosomes improves the accuracy
+of the method, with the magnitude of the benefit depending on the
+specific characteristics of each dataset.
+
+\begin{table}[H]
+\caption{Experimental results using the proposed method and different values
+for the parameter $N_{c}$, used to represent the number of chromosomes
+in the genetic population. The experiments were performed on the regression
+datasets.\label{tab:expRegressionNC}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+DATASET & $N_{c}=50$ & $N_{c}=100$ & $N_{c}=200$ & $N_{c}=500$\tabularnewline
+\hline 
+\hline 
+ABALONE & 4.35 & 4.38 & 4.34 & 4.41\tabularnewline
+\hline 
+AIRFOIL & 0.001 & 0.001 & 0.001 & 0.001\tabularnewline
+\hline 
+AUTO & 18.99 & 16.57 & 11.25 & 11.73\tabularnewline
+\hline 
+BK & 0.044 & 0.344 & 0.14 & 0.058\tabularnewline
+\hline 
+BL & 0.81 & 0.77 & 0.45 & 0.13\tabularnewline
+\hline 
+BASEBALL & 62.38 & 63.29 & 68.56 & 60.42\tabularnewline
+\hline 
+CONCRETE & 0.004 & 0.004 & 0.004 & 0.004\tabularnewline
+\hline 
+DEE & 0.33 & 0.33 & 0.28 & 0.26\tabularnewline
+\hline 
+FRIEDMAN & 1.24 & 1.24 & 1.23 & 1.25\tabularnewline
+\hline 
+FY & 0.33 & 0.21 & 0.26 & 0.13\tabularnewline
+\hline 
+HO & 0.046 & 0.10 & 0.22 & 0.073\tabularnewline
+\hline 
+HOUSING & 21.71 & 22.05 & 15.97 & 15.96\tabularnewline
+\hline 
+LASER & 0.003 & 0.003 & 0.003 & 0.004\tabularnewline
+\hline 
+LW & 0.30 & 0.31 & 0.68 & 0.32\tabularnewline
+\hline 
+MORTGAGE & 0.36 & 0.20 & 0.16 & 0.15\tabularnewline
+\hline 
+PL & 0.027 & 0.021 & 0.021 & 0.021\tabularnewline
+\hline 
+PLASTIC & 2.92 & 2.18 & 2.11 & 2.15\tabularnewline
+\hline 
+QUAKE & 0.076 & 0.065 & 0.059 & 0.061\tabularnewline
+\hline 
+SN & 0.30 & 0.19 & 0.14 & 0.10\tabularnewline
+\hline 
+STOCK & 6.69 & 5.23 & 4.66 & 3.96\tabularnewline
+\hline 
+TREASURY & 0.56 & 0.53 & 0.30 & 0.25\tabularnewline
+\hline 
+\textbf{AVERAGE} & \textbf{5.78} & \textbf{5.62} & \textbf{5.28} & \textbf{4.83}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+Figure \ref{fig:statClassNC} presents the significance levels resulting
+from the comparisons of classification error rates across datasets
+for the proposed machine learning method. The comparison between $N_{c}=50$
+and $N_{c}=100$ shows no significant difference (p=ns), indicating
+that increasing the number of chromosomes from 50 to 100 does not
+lead to a substantial improvement. In contrast, the transition from
+$N_{c}=100$ to $N_{c}=200$ shows a statistically significant improvement
+(p={*}{*}), while the increase from $N_{c}=200$ to $N_{c}=500$ is
+also accompanied by a significant difference (p={*}), albeit of lower
+magnitude. These results suggest that higher $N_{c}$ values can improve
+performance, with the significance being more pronounced in the mid-range
+$N_{c}$ values.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat6}
+\par\end{centering}
+\caption{Statistical comparison for the results obtained by the application
+of the proposed method on the classification datasets using a range
+of values for the parameter $N_{c}$.\label{fig:statClassNC}}
+
+\end{figure}
+Figure \ref{fig:statRegressionNC} presents the significance levels
+resulting from the comparisons of prediction errors across regression
+datasets for the proposed machine learning method. In all three comparisons
+between $N_{c}=50$ and $N_{c}=100$, $N_{c}=100$ and $N_{c}=200$,
+as well as $N_{c}=200$ and $N_{c}=500$ the p-value is non-significant
+(p=ns), indicating that increasing the number of chromosomes does
+not lead to a statistically significant change in the model’s performance
+on these datasets.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat7}
+\par\end{centering}
+\caption{Statistical comparison for the results obtained by the application
+of the proposed method to the regression datasets using a variety
+of values for the number of chromosomes $N_{c}$.\label{fig:statRegressionNC}}
+
+\end{figure}
+
+
+\subsection{Comparison with a previous work}
+
+Recently, an improved version of the constructed neural networks was
+published with the addition of a periodical application of a local
+optimization procedure \citep{nn_local}. In this work a local optimization
+procedure is applied to randomly selected chromosomes by maintaining
+the architecture obtained by the neural network construction procedure.
+In the following tables this method is denoted as INNC and a comparison
+is made against the original neural network construction procedure
+(denoted as NNC) and the proposed method (denoted as PROPOSED).
+
+In Table \ref{tab:expClassOld}, the comparison of mean error rates
+shows that the proposed method achieves the lowest average error rate,
+19.63\%, compared to 20.92\% for INNC and 23.82\% for NNC, indicating
+an overall improvement in performance. In several datasets, such as
+ALCOHOL, BALANCE, CIRCULAR, DERMATOLOGY, GLASS, SEGMENT, and ZO\_NF\_S,
+the proposed method clearly outperforms the others, recording substantially
+lower error rates than the two comparative models. However, in certain
+cases, such as HABERMAN, HEART, HOUSEVOTES, and IONOSPHERE, the proposed
+method shows slightly higher error than the best-performing of the
+other two models, suggesting that its superiority is not universal.
+There are also instances of equivalent or marginal differences, such
+as in LYMOGRAPHY and ZONF\_S, where the performances of all three
+methods are very close. The overall trend indicates that the proposed
+method often achieves a significant reduction in error, with improvements
+being more pronounced in datasets with higher complexity or diversity
+in classes.
+
+\begin{table}[H]
+\caption{Experimental results using the constructed neural networks and the
+two variations for the classification datasets.\label{tab:expClassOld}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize NNC} & INNC & {\footnotesize PROPOSED}\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 14.40\%} & 14.70\% & {\footnotesize 16.30\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 37.72\%} & 29.79\% & {\footnotesize 20.21\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 14.46\%} & 14.80\% & {\footnotesize 14.68\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 23.65\%} & 8.66\% & {\footnotesize 7.26\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 50.93\%} & 47.93\% & {\footnotesize 44.90\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 12.66\%} & 5.32\% & {\footnotesize 4.22\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 21.54\%} & 20.89\% & {\footnotesize 5.92\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 49.88\%} & 48.21\% & {\footnotesize 44.79\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 56.09\%} & 54.24\% & {\footnotesize 49.43\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 27.53\%} & 26.70\% & {\footnotesize 28.57\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 33.69\%} & 31.77\% & {\footnotesize 30.77\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 15.67\%} & 14.74\% & {\footnotesize 17.85\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 20.87\%} & 20.43\% & {\footnotesize 20.67\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 3.17\%} & 3.26\% & {\footnotesize 7.39\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 11.29\%} & 11.92\% & {\footnotesize 13.14\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 32.35\%} & 31.77\% & {\footnotesize 33.38\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 25.29\%} & 25.29\% & {\footnotesize 25.14\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 17.62\%} & 15.81\% & {\footnotesize 17.77\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 12.74\%} & 12.53\% & {\footnotesize 14.05\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 28.07\%} & 24.00\% & {\footnotesize 24.34\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 6.98\%} & 6.44\% & {\footnotesize 7.19\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 26.18\%} & 23.18\% & {\footnotesize 25.00\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 29.80\%} & 28.09\% & {\footnotesize 30.11\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 53.50\%} & 43.12\% & {\footnotesize 9.59\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 48.01\%} & 43.99\% & {\footnotesize 41.25\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 18.08\%} & 18.67\% & {\footnotesize 20.26\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 6.70\%} & 4.55\% & {\footnotesize 7.18\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 25.77\%} & 23.43\% & {\footnotesize 23.59\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 7.36\%} & 4.41\% & {\footnotesize 3.73\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 13.59\%} & 9.77\% & {\footnotesize 10.41\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 14.53\%} & 8.53\% & {\footnotesize 6.60\%}\tabularnewline
+\hline 
+{\footnotesize Z\_O\_N\_F\_S} & {\footnotesize 48.62\%} & 38.58\% & {\footnotesize 49.66\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 13.54\%} & 6.84\% & {\footnotesize 3.94\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 2.64\%} & 2.52\% & {\footnotesize 2.60\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 8.70\%} & 7.20\% & {\footnotesize 5.10\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{23.82\%}} & \textbf{20.92\%} & {\footnotesize\textbf{19.63\%}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+In Table \ref{tab:expRegressionOld}, the comparison of mean errors
+shows that INNC has the lowest average value (4.47), followed by the
+proposed method (4.83) and NNC (6.29), indicating that the proposed
+method demonstrates an overall improvement over NNC but falls slightly
+short of INNC. In several datasets, such as AIRFOIL, CONCRETE, LASER,
+PL, PLASTIC, and STOCK, the proposed method achieves the lowest or
+highly competitive error values, showing clear improvement over NNC
+and, in some cases, over INNC as well. However, in certain cases,
+such as AUTO, BASEBALL, FRIEDMAN, LW, and SN, INNC outperforms with
+lower errors, while there are also instances where NNC achieves better
+performance than the proposed method, such as in DEE and FY, although
+the differences are small. The overall picture indicates that the
+proposed method can achieve significant improvement in specific regression
+problems, but its superiority is not universal, with its performance
+depending on the characteristics of each dataset.
+\begin{table}[H]
+\caption{Experimental results using the constructed neural networks and the
+two variations on the regression datasets.\label{tab:expRegressionOld}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize NNC} & {\footnotesize INNC} & {\footnotesize PROPOSED}\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 5.08} & {\footnotesize 4.33} & {\footnotesize 4.41}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.004} & {\footnotesize 0.002} & {\footnotesize 0.001}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 17.13} & {\footnotesize 11.01} & {\footnotesize 11.73}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.10} & {\footnotesize 0.07} & {\footnotesize 0.058}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 1.19} & {\footnotesize 0.002} & {\footnotesize 0.13}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 61.57} & {\footnotesize 48.42} & {\footnotesize 60.42}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.008} & {\footnotesize 0.005} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 0.26} & {\footnotesize 0.23} & {\footnotesize 0.26}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 6.29} & {\footnotesize 4.88} & {\footnotesize 1.25}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.11} & {\footnotesize 0.042} & {\footnotesize 0.13}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 0.015} & {\footnotesize 0.01} & {\footnotesize 0.073}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 25.47} & {\footnotesize 16.01} & {\footnotesize 15.96}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.025} & {\footnotesize 0.006} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 0.011} & {\footnotesize 0.012} & {\footnotesize 0.32}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 0.30} & {\footnotesize 0.026} & {\footnotesize 0.15}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.047} & {\footnotesize 0.022} & {\footnotesize 0.021}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 4.20} & {\footnotesize 2.25} & {\footnotesize 2.15}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.96} & {\footnotesize 0.04} & {\footnotesize 0.061}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.026} & {\footnotesize 0.10}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 8.92} & {\footnotesize 6.33} & {\footnotesize 3.96}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 0.43} & {\footnotesize 0.066} & {\footnotesize 0.25}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{6.29}} & \textbf{4.47} & {\footnotesize\textbf{4.83}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:statClassOld} presents the significance levels resulting
+from the comparisons of error rates on classification datasets for
+the proposed machine learning method in relation to the NNC and INNC
+models. The comparison between NNC and INNC shows extremely high statistical
+significance (p={*}{*}), indicating a clear superiority of INNC. The
+comparison between NNC and the proposed method also shows a statistically
+significant difference (p=), indicating that the proposed method outperforms
+NNC. In contrast, the comparison between INNC and the proposed method
+does not show a statistically significant difference (p=ns), suggesting
+that the two methods perform similarly on these datasets.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat8}
+\par\end{centering}
+\caption{Statistical comparison for the experimental results on the classification
+datasets using the original neural construction method and the two
+variations.\label{fig:statClassOld}}
+
+\end{figure}
+Figure \ref{fig:statRegressionOld} presents the significance levels
+from the comparisons of error rates on classification datasets for
+the proposed machine learning method in relation to the NNC and INNC
+models. The comparison between NNC and INNC shows high statistical
+significance (p={*}), indicating a clear superiority of INNC. The
+comparison between NNC and the proposed method also shows a statistically
+significant difference (p=), demonstrating the improvement of the
+proposed method over NNC. In contrast, the comparison between INNC
+and the proposed method does not show a statistically significant
+difference (p=ns), indicating that the two methods have comparable
+performance on these datasets.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat9}
+\par\end{centering}
+\caption{Statistical comparison for the results obtained by the proposed method
+and the two variations on the regression datasets,\label{fig:statRegressionOld}}
+
+\end{figure}
+Also, should be noted that the INNC method requires significant more
+time than the proposed method, since it applies several applications
+of the local search procedure on randomly selected chromosomes.
 
 \section{Conclusions\label{sec:Conclusions}}
 
@@ -2075,6 +2582,15 @@ from \url{http://fcnn.sourceforge.net/}.
 \bibitem[(2023)]{pirvision}Emad-Ud-Din, M., \& Wang, Y. (2023). Promoting
 occupancy detection accuracy using on-device lifelong learning. IEEE
 Sensors Journal, 23(9), 9595-9606.
+
+\bibitem[(2024)]{beed}Banu PK, N. (2024). Feature Engineering for
+Epileptic Seizure Classification Using SeqBoostNet. International
+Journal of Computing and Digital Systems, 16(1), 1-14.
+
+\bibitem[(2024)]{nn_local}Tsoulos, I.G.; Charilogis, V.; Tsalikakis,
+D.; Tzallas, A. Improving the Generalization Abilities of Constructed
+Neural Networks with the Addition of Local Optimization Techniques.
+Algorithms 2024, 17, 446. 
 
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
