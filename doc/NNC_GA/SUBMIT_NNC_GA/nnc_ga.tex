@@ -1,7 +1,9 @@
 %% LyX 2.4.3 created this file.  For more info, see https://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+\usepackage{textcomp}
 \usepackage[utf8]{inputenc}
+\usepackage{color}
 \usepackage{float}
 \usepackage{url}
 \usepackage{graphicx}
@@ -394,6 +396,21 @@ mechanisms, and improvements in method scalability. Only by addressing
 these issues can grammatical evolution emerge as an attractive alternative
 in the field of automated neural network design.
 
+\textcolor{red}{The main contributions of the proposed work can be
+summarized as follows:}
+\begin{enumerate}
+\item \textcolor{red}{Periodic application of an optimization technique
+to randomly selected chromosomes with the aim of improving the performance
+of the selected neural network but also of faster finding the global
+minimum of the error function.}
+\item \textcolor{red}{The training of the artificial neural network by the
+optimization method is done in such a way as not to destroy the architecture
+of the neural network that Grammatical Evolution has already constructed.}
+\item \textcolor{red}{The training of the artificial neural network from
+the optimization function is carried out using a modified fitness
+function, where an attempt is made to adapt the network parameters
+without losing its generalization properties.}
+\end{enumerate}
 The remaining of this article is organized as follows: in section
 \ref{sec:Method-description} the proposed method and the accompanied
 genetic algorithm are introduced, in section \ref{sec:Results} the
@@ -456,13 +473,13 @@ pattern of the input dataset.
 
 \begin{figure}[H]
 \begin{lyxcode}
-S:=\textless Sigval\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
+S:=\textless Expression\textgreater ~~~~~~~~~~~~~~~~~~~~~~~~~~(0)
 
-\textless Sigval\textgreater ::=\textless Node\textgreater ~~~~~~~~~~~~~~~~~~~~(0)
+\textless Expression\textgreater ::=\textless Neuron\textgreater ~~~~~~~~~~~~~~~~~~~~(0)
 
-~~~~~~~~~~~\textbar ~\textless Node\textgreater ~+~\textless Sigval\textgreater ~~~~~~~(1)
+~~~~~~~~~~~\textbar ~\textless Neuron\textgreater ~+~\textless Expression\textgreater ~~~~~~~(1)
 
-\textless Node\textgreater ::=\textless Number\textgreater{*}sig(\textless Sum\textgreater +\textless Number\textgreater )~(0)
+\textless Neuron\textgreater ::=\textless Number\textgreater{*}sig(\textless Sum\textgreater +\textless Number\textgreater )~(0)
 
 \textless Sum\textgreater ::=~\textless Number\textgreater{*}\textless Xlist\textgreater ~~~~~~~~~~~~(0)
 
@@ -593,6 +610,13 @@ x will not cause proportional variations in the value of the sigmoid
 function. Therefore, the quantity $B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
 was introduced in that paper to measure this effect. This quantity
 is calculated through the process of Algorithm \ref{alg:CalculationBound}.
+\textcolor{red}{This function may be used to avoid overfitting, by
+limiting the parameters of the neural network to intervals that depend
+on the objective problem. The user defined parameter $a$ is used
+here as a limit for the input value of the sigmoid unit. If this value
+exceeds $a$, then probably the neural network has a reduced generalization
+ability, since the sigmoid output will be the same regardless of any
+change in the input value.}
 
 \begin{algorithm}[H]
 \caption{The algorithm used to calculate the bounding quantity for neural network
@@ -937,144 +961,225 @@ method.
 of Augmenting Topologies ) \citep{neat}.
 \item The column PRUNE stands for the the usage of OBS pruning method \citep{prune},
 as coded in Fast Compressed Neural Networks library \citep{fcn}.
+\item The column DNN represents the application of the deep neural network
+provided in the Tiny Dnn library, which is available from \url{https://github.com/tiny-dnn/tiny-dnn}(accessed
+on 7 September 2025). The network was trained using the AdaGrad optimizer
+\citep{adagrad}.
 \item The column PROPOSED denotes the usage of the proposed method.
 \item The row AVERAGE represents the average classification or regression
 error for all datasets in the corresponding table.
 \end{enumerate}
-In table \ref{tab:expClass}, a thorough analysis of the results and
-qualitative evaluation of the method reveals multi-layered advantages
-that extend beyond mere statistical superiority. The consistency of
-performance across different domains and problem types is remarkable
-- in 29 out of 34 datasets (85.3\% of cases), the method achieves
-results that are either top-ranked or very close to the best available
-(within 2\% margin). This stable performance across heterogeneous
-problems indicates strong generalizability and robustness of the core
-algorithmic framework. Particularly noteworthy is the method's performance
-on noisy and incomplete data. For datasets like Haberman and Liverdisorder,
-where other advanced methods show significant performance variation
-(standard deviation exceeding 8\%), the proposed approach maintains
-stable behavior with standard deviation of just 4.2-4.8\%. This noise
-tolerance constitutes a critical advantage for real-world applications
-where data is rarely perfectly clean and complete. Another significant
-characteristic is the successful handling of scalability. Unlike many
-other approaches that show substantial performance degradation as
-data dimensionality increases, this method demonstrates remarkable
-stability. For datasets with over 50 features, the average performance
-degradation is limited to just 2.1 percentage points, compared to
-4.3-5.7 points observed in other popular methods. This makes it particularly
-suitable for modern machine learning problems where data dimensionality
-continues to grow. Detailed examination of cases where the method
-doesn't achieve absolute top performance also reveals valuable insights.
-In datasets like Cleveland and Heartattack, where performance is slightly
-inferior to the top method, analysis shows the issue primarily stems
-from excessive complexity in generated architectures leading to overfitting.
-This finding points to a specific improvement axis for future work
-- enhancing complexity control mechanisms. Compared to other contemporary
-approaches not included in the study (such as transformer networks),
-the method likely underperforms on very high-dimensional problems,
-but excels in medium-scale structural problems where interpretability
-and stability are critical factors. This balance between performance
-and interpretability makes it ideal for many practical applications.
-The computational requirements, while not analyzed in detail in the
-study, appear to be moderate - higher than basic optimization techniques
-but lower than highly sophisticated architectures. This balance between
-performance and computational cost enhances its practical value. Overall,
-beyond numerical metrics, the method demonstrates a range of qualitative
-advantages that make it particularly functional for real-world problems:
-stability with noisy and incomplete data, good scalability, balance
-between complexity and generalizability, and flexibility across different
-application domains. Simultaneously, the analysis highlights specific
-areas where further optimizations could enhance performance even more,
-providing directions for future research.
+\textcolor{red}{Based on the table \ref{tab:expClass} with 36 classification
+datasets and nine methods (lower percentage implies lower error),
+the PROPOSED method attains the lowest mean error (21.18\%) and the
+best average rank across datasets (1.83 on a 1--9 scale). The current
+work achieves the best result in 18 out of 36 datasets. The remaining
+per-dataset best results are distributed as follows: RBF 4, PRUNE
+4, DNN 3, NEAT 3, NNC 3, and GENETIC 1, while ADAM and BFGS record
+no first-place finishes. In head-to-head, dataset-wise comparisons,
+the proposed method outperforms each alternative on the vast majority
+of datasets: versus ADAM on 35/36 datasets, versus BFGS on 33/36,
+versus GENETIC on 32/36, versus RBF on 30/36, versus NEAT on 33/36,
+versus PRUNE on 31/36, versus DNN on 32/36, and versus NNC on 32/36.
+The average absolute error reduction of PROPOSED relative to each
+competitor, computed as “competitor \textminus{} PROPOSED” in percentage
+points and then averaged over the 36 datasets, is 14.39 (ADAM), 13.51
+(BFGS), 6.12 (GENETIC), 8.60 (RBF), 11.90 (NEAT), 7.53 (PRUNE), 6.64
+(DNN), and 2.60 (NNC). The corresponding mean relative reductions,
+computed as (competitor \textminus{} PROPOSED)/competitor and then
+averaged per dataset, are 39.24\%, 34.29\%, 22.83\%, 26.50\%, 37.09\%,
+20.91\%, 22.95\%, and 12.65\%. The few datasets where the proposed
+method is worse are concentrated in specific cases: ADAM only on POPFAILURES;
+BFGS on CIRCULAR, PHONEME, and POPFAILURES; GENETIC on CIRCULAR, GLASS,
+LIVERDISORDER, and PHONEME; RBF on APPENDICITIS, CIRCULAR, GLASS,
+HABERMAN, LIVERDISORDER, and SPIRAL; NEAT on ECOLI, HABERMAN, and
+LIVERDISORDER; PRUNE on ALCOHOL, DERMATOLOGY, IONOSPHERE, LYMOGRAPHY,
+and POPFAILURES; DNN on HABERMAN, HOUSEVOTES, SEGMENT, and ZONF\_S;
+and NNC on AUSTRALIAN, HEARTATTACK, HOUSEVOTES, and IONOSPHERE. The
+table’s AVERAGE row is consistent with this picture: PROPOSED has
+the lowest mean error (21.18\%) among all methods. Relative to the
+second-best mean in that row (NNC: 24.79\%), PROPOSED reduces error
+by 3.61 percentage points, corresponding to about a 14.56\% relative
+reduction. Median errors tell the same story: PROPOSED has a median
+of 19.24\%, lower than NNC (21.21\%) and DNN (25.83\%). Overall, PROPOSED
+shows consistent superiority in terms of error, as reflected by the
+mean, the across-dataset ranking, and the dataset-wise head-to-head
+counts, with only a small number of dataset-specific exceptions.}
 
 \begin{table}[H]
 \caption{Experimental results using a variety of machine learning methods for
 the classification datasets.\label{tab:expClass}}
 
-\centering{}{\footnotesize{}%
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\centering{}{\scriptsize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline 
-{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize NNC} & {\footnotesize PROPOSED}\tabularnewline
+{\scriptsize DATASET} & {\scriptsize ADAM} & {\scriptsize BFGS} & {\scriptsize GENETIC} & {\scriptsize RBF} & {\scriptsize NEAT} & {\scriptsize PRUNE} & {\scriptsize DNN} & {\scriptsize NNC} & {\scriptsize PROPOSED}\tabularnewline
 \hline 
 \hline 
-{\footnotesize APPENDICITIS} & {\footnotesize 16.50\%} & {\footnotesize 18.00\%} & {\footnotesize 24.40\%} & {\footnotesize 12.23\%} & {\footnotesize 17.20\%} & {\footnotesize 15.97\%} & {\footnotesize 14.40\%} & {\footnotesize 14.30\%}\tabularnewline
+{\scriptsize APPENDICITIS} & {\scriptsize 16.50\%} & {\scriptsize 18.00\%} & {\scriptsize 24.40\%} & {\scriptsize 12.23\%} & {\scriptsize 17.20\%} & {\scriptsize 15.97\%} & {\scriptsize 17.30\%} & {\scriptsize 14.40\%} & {\scriptsize 14.30\%}\tabularnewline
 \hline 
-{\footnotesize ALCOHOL} & {\footnotesize 57.78\%} & {\footnotesize 41.50\%} & {\footnotesize 39.57\%} & {\footnotesize 49.32\%} & {\footnotesize 66.80\%} & {\footnotesize 15.75\%} & {\footnotesize 37.72\%} & {\footnotesize 35.60\%}\tabularnewline
+{\scriptsize ALCOHOL} & {\scriptsize 57.78\%} & {\scriptsize 41.50\%} & {\scriptsize 39.57\%} & {\scriptsize 49.32\%} & {\scriptsize 66.80\%} & {\scriptsize 15.75\%} & {\scriptsize 39.04\%} & {\scriptsize 37.72\%} & {\scriptsize 35.60\%}\tabularnewline
 \hline 
-{\footnotesize AUSTRALIAN} & {\footnotesize 35.65\%} & {\footnotesize 38.13\%} & {\footnotesize 32.21\%} & {\footnotesize 34.89\%} & {\footnotesize 31.98\%} & {\footnotesize 43.66\%} & {\footnotesize 14.46\%} & {\footnotesize 14.55\%}\tabularnewline
+{\scriptsize AUSTRALIAN} & {\scriptsize 35.65\%} & {\scriptsize 38.13\%} & {\scriptsize 32.21\%} & {\scriptsize 34.89\%} & {\scriptsize 31.98\%} & {\scriptsize 43.66\%} & {\scriptsize 35.03\%} & {\scriptsize 14.46\%} & {\scriptsize 14.55\%}\tabularnewline
 \hline 
-{\footnotesize BALANCE} & {\footnotesize 12.27\%} & {\footnotesize 8.64\%} & {\footnotesize 8.97\%} & {\footnotesize 33.53\%} & {\footnotesize 23.14\%} & {\footnotesize 9.00\%} & {\footnotesize 23.65\%} & {\footnotesize 7.84\%}\tabularnewline
+{\scriptsize BALANCE} & {\scriptsize 12.27\%} & {\scriptsize 8.64\%} & {\scriptsize 8.97\%} & {\scriptsize 33.53\%} & {\scriptsize 23.14\%} & {\scriptsize 9.00\%} & {\scriptsize 24.56\%} & {\scriptsize 23.65\%} & {\scriptsize 7.84\%}\tabularnewline
 \hline 
-{\footnotesize CLEVELAND} & {\footnotesize 67.55\%} & {\footnotesize 77.55\%} & {\footnotesize 51.60\%} & {\footnotesize 67.10\%} & {\footnotesize 53.44\%} & {\footnotesize 51.48\%} & {\footnotesize 50.93\%} & {\footnotesize 46.41\%}\tabularnewline
+{\scriptsize CLEVELAND} & {\scriptsize 67.55\%} & {\scriptsize 77.55\%} & {\scriptsize 51.60\%} & {\scriptsize 67.10\%} & {\scriptsize 53.44\%} & {\scriptsize 51.48\%} & {\scriptsize 63.28\%} & {\scriptsize 50.93\%} & {\scriptsize 46.41\%}\tabularnewline
 \hline 
-{\footnotesize CIRCULAR} & {\footnotesize 19.95\%} & {\footnotesize 6.08\%} & {\footnotesize 5.99\%} & {\footnotesize 5.98\%} & {\footnotesize 35.18\%} & {\footnotesize 12.76\%} & {\footnotesize 12.66\%} & {\footnotesize 6.92\%}\tabularnewline
+{\scriptsize CIRCULAR} & {\scriptsize 19.95\%} & {\scriptsize 6.08\%} & {\scriptsize 5.99\%} & {\scriptsize 5.98\%} & {\scriptsize 35.18\%} & {\scriptsize 12.76\%} & {\scriptsize 21.87\%} & {\scriptsize 12.66\%} & {\scriptsize 6.92\%}\tabularnewline
 \hline 
-{\footnotesize DERMATOLOGY} & {\footnotesize 26.14\%} & {\footnotesize 52.92\%} & {\footnotesize 30.58\%} & {\footnotesize 62.34\%} & {\footnotesize 32.43\%} & {\footnotesize 9.02\%} & {\footnotesize 21.54\%} & {\footnotesize 20.54\%}\tabularnewline
+{\scriptsize DERMATOLOGY} & {\scriptsize 26.14\%} & {\scriptsize 52.92\%} & {\scriptsize 30.58\%} & {\scriptsize 62.34\%} & {\scriptsize 32.43\%} & {\scriptsize 9.02\%} & {\scriptsize 24.26\%} & {\scriptsize 21.54\%} & {\scriptsize 20.54\%}\tabularnewline
 \hline 
-{\footnotesize ECOLI} & {\footnotesize 64.43\%} & {\footnotesize 69.52\%} & {\footnotesize 54.67\%} & {\footnotesize 59.48\%} & {\footnotesize 43.44\%} & {\footnotesize 60.32\%} & {\footnotesize 49.88\%} & {\footnotesize 48.82\%}\tabularnewline
+{\scriptsize ECOLI} & {\scriptsize 64.43\%} & {\scriptsize 69.52\%} & {\scriptsize 54.67\%} & {\scriptsize 59.48\%} & {\scriptsize 43.44\%} & {\scriptsize 60.32\%} & {\scriptsize 60.79\%} & {\scriptsize 49.88\%} & {\scriptsize 48.82\%}\tabularnewline
 \hline 
-{\footnotesize GLASS} & {\footnotesize 61.38\%} & {\footnotesize 54.67\%} & {\footnotesize 52.86\%} & {\footnotesize 50.46\%} & {\footnotesize 55.71\%} & {\footnotesize 66.19\%} & {\footnotesize 56.09\%} & {\footnotesize 53.52\%}\tabularnewline
+{\scriptsize GLASS} & {\scriptsize 61.38\%} & {\scriptsize 54.67\%} & {\scriptsize 52.86\%} & {\scriptsize 50.46\%} & {\scriptsize 55.71\%} & {\scriptsize 66.19\%} & {\scriptsize 56.05\%} & {\scriptsize 56.09\%} & {\scriptsize 53.52\%}\tabularnewline
 \hline 
-{\footnotesize HABERMAN} & {\footnotesize 29.00\%} & {\footnotesize 29.34\%} & {\footnotesize 28.66\%} & {\footnotesize 25.10\%} & {\footnotesize 24.04\%} & {\footnotesize 29.38\%} & {\footnotesize 27.53\%} & {\footnotesize 26.80\%}\tabularnewline
+{\scriptsize HABERMAN} & {\scriptsize 29.00\%} & {\scriptsize 29.34\%} & {\scriptsize 28.66\%} & {\scriptsize 25.10\%} & {\scriptsize 24.04\%} & {\scriptsize 29.38\%} & {\scriptsize 25.73\%} & {\scriptsize 27.53\%} & {\scriptsize 26.80\%}\tabularnewline
 \hline 
-{\footnotesize HAYES-ROTH} & {\footnotesize 59.70\%} & {\footnotesize 37.33\%} & {\footnotesize 56.18\%} & {\footnotesize 64.36\%} & {\footnotesize 50.15\%} & {\footnotesize 45.44\%} & {\footnotesize 33.69\%} & {\footnotesize 31.00\%}\tabularnewline
+{\scriptsize HAYES-ROTH} & {\scriptsize 59.70\%} & {\scriptsize 37.33\%} & {\scriptsize 56.18\%} & {\scriptsize 64.36\%} & {\scriptsize 50.15\%} & {\scriptsize 45.44\%} & {\scriptsize 44.65\%} & {\scriptsize 33.69\%} & {\scriptsize 31.00\%}\tabularnewline
 \hline 
-{\footnotesize HEART} & {\footnotesize 38.53\%} & {\footnotesize 39.44\%} & {\footnotesize 28.34\%} & {\footnotesize 31.20\%} & {\footnotesize 39.27\%} & {\footnotesize 27.21\%} & {\footnotesize 15.67\%} & {\footnotesize 15.45\%}\tabularnewline
+{\scriptsize HEART} & {\scriptsize 38.53\%} & {\scriptsize 39.44\%} & {\scriptsize 28.34\%} & {\scriptsize 31.20\%} & {\scriptsize 39.27\%} & {\scriptsize 27.21\%} & {\scriptsize 30.67\%} & {\scriptsize 15.67\%} & {\scriptsize 15.45\%}\tabularnewline
 \hline 
-{\footnotesize HEARTATTACK} & {\footnotesize 45.55\%} & {\footnotesize 46.67\%} & {\footnotesize 29.03\%} & {\footnotesize 29.00\%} & {\footnotesize 32.34\%} & {\footnotesize 29.26\%} & {\footnotesize 20.87\%} & {\footnotesize 21.77\%}\tabularnewline
+{\scriptsize HEARTATTACK} & {\scriptsize 45.55\%} & {\scriptsize 46.67\%} & {\scriptsize 29.03\%} & {\scriptsize 29.00\%} & {\scriptsize 32.34\%} & {\scriptsize 29.26\%} & {\scriptsize 32.97\%} & {\scriptsize 20.87\%} & {\scriptsize 21.77\%}\tabularnewline
 \hline 
-{\footnotesize HOUSEVOTES} & {\footnotesize 7.48\%} & {\footnotesize 7.13\%} & {\footnotesize 6.62\%} & {\footnotesize 6.13\%} & {\footnotesize 10.89\%} & {\footnotesize 5.81\%} & {\footnotesize 3.17\%} & {\footnotesize 3.78\%}\tabularnewline
+{\scriptsize HOUSEVOTES} & {\scriptsize 7.48\%} & {\scriptsize 7.13\%} & {\scriptsize 6.62\%} & {\scriptsize 6.13\%} & {\scriptsize 10.89\%} & {\scriptsize 5.81\%} & {\scriptsize 3.13\%} & {\scriptsize 3.17\%} & {\scriptsize 3.78\%}\tabularnewline
 \hline 
-{\footnotesize IONOSPHERE} & {\footnotesize 16.64\%} & {\footnotesize 15.29\%} & {\footnotesize 15.14\%} & {\footnotesize 16.22\%} & {\footnotesize 19.67\%} & {\footnotesize 11.32\%} & {\footnotesize 11.29\%} & {\footnotesize 11.94\%}\tabularnewline
+{\scriptsize IONOSPHERE} & {\scriptsize 16.64\%} & {\scriptsize 15.29\%} & {\scriptsize 15.14\%} & {\scriptsize 16.22\%} & {\scriptsize 19.67\%} & {\scriptsize 11.32\%} & {\scriptsize 12.57\%} & {\scriptsize 11.29\%} & {\scriptsize 11.94\%}\tabularnewline
 \hline 
-{\footnotesize LIVERDISORDER} & {\footnotesize 41.53\%} & {\footnotesize 42.59\%} & {\footnotesize 31.11\%} & {\footnotesize 30.84\%} & {\footnotesize 30.67\%} & {\footnotesize 49.72\%} & {\footnotesize 32.35\%} & {\footnotesize 31.32\%}\tabularnewline
+{\scriptsize LIVERDISORDER} & {\scriptsize 41.53\%} & {\scriptsize 42.59\%} & {\scriptsize 31.11\%} & {\scriptsize 30.84\%} & {\scriptsize 30.67\%} & {\scriptsize 49.72\%} & {\scriptsize 32.21\%} & {\scriptsize 32.35\%} & {\scriptsize 31.32\%}\tabularnewline
 \hline 
-{\footnotesize LYMOGRAPHY} & {\footnotesize 39.79\%} & {\footnotesize 35.43\%} & {\footnotesize 28.42\%} & {\footnotesize 25.50\%} & {\footnotesize 33.70\%} & {\footnotesize 22.02\%} & {\footnotesize 25.29\%} & {\footnotesize 23.72\%}\tabularnewline
+{\scriptsize LYMOGRAPHY} & {\scriptsize 39.79\%} & {\scriptsize 35.43\%} & {\scriptsize 28.42\%} & {\scriptsize 25.50\%} & {\scriptsize 33.70\%} & {\scriptsize 22.02\%} & {\scriptsize 24.07\%} & {\scriptsize 25.29\%} & {\scriptsize 23.72\%}\tabularnewline
 \hline 
-{\footnotesize MAMMOGRAPHIC} & {\footnotesize 46.25\%} & {\footnotesize 17.24\%} & {\footnotesize 19.88\%} & {\footnotesize 21.38\%} & {\footnotesize 22.85\%} & {\footnotesize 38.10\%} & {\footnotesize 17.62\%} & {\footnotesize 16.74\%}\tabularnewline
+{\scriptsize MAMMOGRAPHIC} & {\scriptsize 46.25\%} & {\scriptsize 17.24\%} & {\scriptsize 19.88\%} & {\scriptsize 21.38\%} & {\scriptsize 22.85\%} & {\scriptsize 38.10\%} & {\scriptsize 19.83\%} & {\scriptsize 17.62\%} & {\scriptsize 16.74\%}\tabularnewline
 \hline 
-{\footnotesize PARKINSONS} & {\footnotesize 24.06\%} & {\footnotesize 27.58\%} & {\footnotesize 18.05\%} & {\footnotesize 17.41\%} & {\footnotesize 18.56\%} & {\footnotesize 22.12\%} & {\footnotesize 12.74\%} & {\footnotesize 12.63\%}\tabularnewline
+{\scriptsize PARKINSONS} & {\scriptsize 24.06\%} & {\scriptsize 27.58\%} & {\scriptsize 18.05\%} & {\scriptsize 17.41\%} & {\scriptsize 18.56\%} & {\scriptsize 22.12\%} & {\scriptsize 21.32\%} & {\scriptsize 12.74\%} & {\scriptsize 12.63\%}\tabularnewline
 \hline 
-{\footnotesize PHONEME} & {\footnotesize 29.43\%} & {\footnotesize 15.58\%} & {\footnotesize 15.55\%} & {\footnotesize 23.32\%} & {\footnotesize 22.34\%} & {\footnotesize 29.35\%} & {\footnotesize 22.50\%} & {\footnotesize 21.52\%}\tabularnewline
+{\scriptsize PHONEME} & {\scriptsize 29.43\%} & {\scriptsize 15.58\%} & {\scriptsize 15.55\%} & {\scriptsize 23.32\%} & {\scriptsize 22.34\%} & {\scriptsize 29.35\%} & {\scriptsize 22.68\%} & {\scriptsize 22.50\%} & {\scriptsize 21.52\%}\tabularnewline
 \hline 
-{\footnotesize PIMA} & {\footnotesize 34.85\%} & {\footnotesize 35.59\%} & {\footnotesize 32.19\%} & {\footnotesize 25.78\%} & {\footnotesize 34.51\%} & {\footnotesize 35.08\%} & {\footnotesize 28.07\%} & {\footnotesize 23.34\%}\tabularnewline
+{\scriptsize PIMA} & {\scriptsize 34.85\%} & {\scriptsize 35.59\%} & {\scriptsize 32.19\%} & {\scriptsize 25.78\%} & {\scriptsize 34.51\%} & {\scriptsize 35.08\%} & {\scriptsize 32.63\%} & {\scriptsize 28.07\%} & {\scriptsize 23.34\%}\tabularnewline
 \hline 
-{\footnotesize POPFAILURES} & {\footnotesize 5.18\%} & {\footnotesize 5.24\%} & {\footnotesize 5.94\%} & {\footnotesize 7.04\%} & {\footnotesize 7.05\%} & {\footnotesize 4.79\%} & {\footnotesize 6.98\%} & {\footnotesize 5.72\%}\tabularnewline
+{\scriptsize POPFAILURES} & {\scriptsize 5.18\%} & {\scriptsize 5.24\%} & {\scriptsize 5.94\%} & {\scriptsize 7.04\%} & {\scriptsize 7.05\%} & {\scriptsize 4.79\%} & {\scriptsize 6.83\%} & {\scriptsize 6.98\%} & {\scriptsize 5.72\%}\tabularnewline
 \hline 
-{\footnotesize REGIONS2} & {\footnotesize 29.85\%} & {\footnotesize 36.28\%} & {\footnotesize 29.39\%} & {\footnotesize 38.29\%} & {\footnotesize 33.23\%} & {\footnotesize 34.26\%} & {\footnotesize 26.18\%} & {\footnotesize 23.81\%}\tabularnewline
+{\scriptsize REGIONS2} & {\scriptsize 29.85\%} & {\scriptsize 36.28\%} & {\scriptsize 29.39\%} & {\scriptsize 38.29\%} & {\scriptsize 33.23\%} & {\scriptsize 34.26\%} & {\scriptsize 33.42\%} & {\scriptsize 26.18\%} & {\scriptsize 23.81\%}\tabularnewline
 \hline 
-{\footnotesize SAHEART} & {\footnotesize 34.04\%} & {\footnotesize 37.48\%} & {\footnotesize 34.86\%} & {\footnotesize 32.19\%} & {\footnotesize 34.51\%} & {\footnotesize 37.70\%} & {\footnotesize 29.80\%} & {\footnotesize 28.04\%}\tabularnewline
+{\scriptsize SAHEART} & {\scriptsize 34.04\%} & {\scriptsize 37.48\%} & {\scriptsize 34.86\%} & {\scriptsize 32.19\%} & {\scriptsize 34.51\%} & {\scriptsize 37.70\%} & {\scriptsize 35.11\%} & {\scriptsize 29.80\%} & {\scriptsize 28.04\%}\tabularnewline
 \hline 
-{\footnotesize SEGMENT} & {\footnotesize 49.75\%} & {\footnotesize 68.97\%} & {\footnotesize 57.72\%} & {\footnotesize 59.68\%} & {\footnotesize 66.72\%} & {\footnotesize 60.40\%} & {\footnotesize 53.50\%} & {\footnotesize 48.20\%}\tabularnewline
+{\scriptsize SEGMENT} & {\scriptsize 49.75\%} & {\scriptsize 68.97\%} & {\scriptsize 57.72\%} & {\scriptsize 59.68\%} & {\scriptsize 66.72\%} & {\scriptsize 60.40\%} & {\scriptsize 32.04\%} & {\scriptsize 53.50\%} & {\scriptsize 48.20\%}\tabularnewline
 \hline 
-{\footnotesize SPIRAL} & {\footnotesize 47.67\%} & {\footnotesize 47.99\%} & {\footnotesize 48.66\%} & {\footnotesize 44.87\%} & {\footnotesize 48.66\%} & {\footnotesize 50.38\%} & {\footnotesize 48.01\%} & {\footnotesize 44.95\%}\tabularnewline
+{\scriptsize SPIRAL} & {\scriptsize 47.67\%} & {\scriptsize 47.99\%} & {\scriptsize 48.66\%} & {\scriptsize 44.87\%} & {\scriptsize 48.66\%} & {\scriptsize 50.38\%} & {\scriptsize 45.64\%} & {\scriptsize 48.01\%} & {\scriptsize 44.95\%}\tabularnewline
 \hline 
-{\footnotesize STATHEART} & {\footnotesize 44.04\%} & {\footnotesize 39.65\%} & {\footnotesize 27.25\%} & {\footnotesize 31.36\%} & {\footnotesize 44.36\%} & {\footnotesize 28.37\%} & {\footnotesize 18.08\%} & {\footnotesize 17.93\%}\tabularnewline
+{\scriptsize STATHEART} & {\scriptsize 44.04\%} & {\scriptsize 39.65\%} & {\scriptsize 27.25\%} & {\scriptsize 31.36\%} & {\scriptsize 44.36\%} & {\scriptsize 28.37\%} & {\scriptsize 30.22\%} & {\scriptsize 18.08\%} & {\scriptsize 17.93\%}\tabularnewline
 \hline 
-{\footnotesize STUDENT} & {\footnotesize 5.13\%} & {\footnotesize 7.14\%} & {\footnotesize 5.61\%} & {\footnotesize 5.49\%} & {\footnotesize 10.20\%} & {\footnotesize 10.84\%} & {\footnotesize 6.70\%} & {\footnotesize 4.05\%}\tabularnewline
+{\scriptsize STUDENT} & {\scriptsize 5.13\%} & {\scriptsize 7.14\%} & {\scriptsize 5.61\%} & {\scriptsize 5.49\%} & {\scriptsize 10.20\%} & {\scriptsize 10.84\%} & {\scriptsize 6.93\%} & {\scriptsize 6.70\%} & {\scriptsize 4.05\%}\tabularnewline
 \hline 
-{\footnotesize TRANSFUSION} & {\footnotesize 25.68\%} & {\footnotesize 25.84\%} & {\footnotesize 24.87\%} & {\footnotesize 26.41\%} & {\footnotesize 24.87\%} & {\footnotesize 29.35\%} & {\footnotesize 25.77\%} & {\footnotesize 23.16\%}\tabularnewline
+{\scriptsize TRANSFUSION} & {\scriptsize 25.68\%} & {\scriptsize 25.84\%} & {\scriptsize 24.87\%} & {\scriptsize 26.41\%} & {\scriptsize 24.87\%} & {\scriptsize 29.35\%} & {\scriptsize 25.92\%} & {\scriptsize 25.77\%} & {\scriptsize 23.16\%}\tabularnewline
 \hline 
-{\footnotesize WDBC} & {\footnotesize 35.35\%} & {\footnotesize 29.91\%} & {\footnotesize 8.56\%} & {\footnotesize 7.27\%} & {\footnotesize 12.88\%} & {\footnotesize 15.48\%} & {\footnotesize 7.36\%} & {\footnotesize 4.95\%}\tabularnewline
+{\scriptsize WDBC} & {\scriptsize 35.35\%} & {\scriptsize 29.91\%} & {\scriptsize 8.56\%} & {\scriptsize 7.27\%} & {\scriptsize 12.88\%} & {\scriptsize 15.48\%} & {\scriptsize 9.43\%} & {\scriptsize 7.36\%} & {\scriptsize 4.95\%}\tabularnewline
 \hline 
-{\footnotesize WINE} & {\footnotesize 29.40\%} & {\footnotesize 59.71\%} & {\footnotesize 19.20\%} & {\footnotesize 31.41\%} & {\footnotesize 25.43\%} & {\footnotesize 16.62\%} & {\footnotesize 13.59\%} & {\footnotesize 9.94\%}\tabularnewline
+{\scriptsize WINE} & {\scriptsize 29.40\%} & {\scriptsize 59.71\%} & {\scriptsize 19.20\%} & {\scriptsize 31.41\%} & {\scriptsize 25.43\%} & {\scriptsize 16.62\%} & {\scriptsize 27.18\%} & {\scriptsize 13.59\%} & {\scriptsize 9.94\%}\tabularnewline
 \hline 
-{\footnotesize Z\_F\_S} & {\footnotesize 47.81\%} & {\footnotesize 39.37\%} & {\footnotesize 10.73\%} & {\footnotesize 13.16\%} & {\footnotesize 38.41\%} & {\footnotesize 17.91\%} & {\footnotesize 14.53\%} & {\footnotesize 7.97\%}\tabularnewline
+{\scriptsize Z\_F\_S} & {\scriptsize 47.81\%} & {\scriptsize 39.37\%} & {\scriptsize 10.73\%} & {\scriptsize 13.16\%} & {\scriptsize 38.41\%} & {\scriptsize 17.91\%} & {\scriptsize 9.27\%} & {\scriptsize 14.53\%} & {\scriptsize 7.97\%}\tabularnewline
 \hline 
-{\footnotesize Z\_O\_N\_F\_S} & {\footnotesize 78.79\%} & {\footnotesize 65.67\%} & {\footnotesize 64.81\%} & {\footnotesize 48.70\%} & {\footnotesize 77.08\%} & {\footnotesize 71.29\%} & {\footnotesize 48.62\%} & {\footnotesize 39.28\%}\tabularnewline
+{\scriptsize Z\_O\_N\_F\_S} & {\scriptsize 78.79\%} & {\scriptsize 65.67\%} & {\scriptsize 64.81\%} & {\scriptsize 48.70\%} & {\scriptsize 77.08\%} & {\scriptsize 71.29\%} & {\scriptsize 67.80\%} & {\scriptsize 48.62\%} & {\scriptsize 39.28\%}\tabularnewline
 \hline 
-{\footnotesize ZO\_NF\_S} & {\footnotesize 47.43\%} & {\footnotesize 43.04\%} & {\footnotesize 21.54\%} & {\footnotesize 9.02\%} & {\footnotesize 43.75\%} & {\footnotesize 15.57\%} & {\footnotesize 13.54\%} & {\footnotesize 6.94\%}\tabularnewline
+{\scriptsize ZO\_NF\_S} & {\scriptsize 47.43\%} & {\scriptsize 43.04\%} & {\scriptsize 21.54\%} & {\scriptsize 9.02\%} & {\scriptsize 43.75\%} & {\scriptsize 15.57\%} & {\scriptsize 8.50\%} & {\scriptsize 13.54\%} & {\scriptsize 6.94\%}\tabularnewline
 \hline 
-{\footnotesize ZONF\_S} & {\footnotesize 11.99\%} & {\footnotesize 15.62\%} & {\footnotesize 4.36\%} & {\footnotesize 4.03\%} & {\footnotesize 5.44\%} & {\footnotesize 3.27\%} & {\footnotesize 2.64\%} & {\footnotesize 2.60\%}\tabularnewline
+{\scriptsize ZONF\_S} & {\scriptsize 11.99\%} & {\scriptsize 15.62\%} & {\scriptsize 4.36\%} & {\scriptsize 4.03\%} & {\scriptsize 5.44\%} & {\scriptsize 3.27\%} & {\scriptsize 2.52\%} & {\scriptsize 2.64\%} & {\scriptsize 2.60\%}\tabularnewline
 \hline 
-{\footnotesize ZOO} & {\footnotesize 14.13\%} & {\footnotesize 10.70\%} & {\footnotesize 9.50\%} & {\footnotesize 21.93\%} & {\footnotesize 20.27\%} & {\footnotesize 8.53\%} & {\footnotesize 8.70\%} & {\footnotesize 6.60\%}\tabularnewline
+{\scriptsize ZOO} & {\scriptsize 14.13\%} & {\scriptsize 10.70\%} & {\scriptsize 9.50\%} & {\scriptsize 21.93\%} & {\scriptsize 20.27\%} & {\scriptsize 8.53\%} & {\scriptsize 16.20\%} & {\scriptsize 8.70\%} & {\scriptsize 6.60\%}\tabularnewline
 \hline 
-{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{36.45\%}} & {\footnotesize\textbf{35.71\%}} & {\footnotesize\textbf{28.25\%}} & {\footnotesize\textbf{30.73\%}} & {\footnotesize\textbf{32.19\%}} & {\footnotesize\textbf{27.94\%}} & {\footnotesize\textbf{24.79\%}} & {\footnotesize\textbf{21.18\%}}\tabularnewline
+{\scriptsize\textbf{AVERAGE}} & {\scriptsize\textbf{36.45\%}} & {\scriptsize\textbf{35.71\%}} & {\scriptsize\textbf{28.25\%}} & {\scriptsize\textbf{30.73\%}} & {\scriptsize\textbf{32.19\%}} & {\scriptsize\textbf{27.94\%}} & {\scriptsize\textbf{27.82\%}} & {\scriptsize\textbf{24.79\%}} & {\scriptsize\textbf{21.18\%}}\tabularnewline
 \hline 
-\end{tabular}}{\footnotesize\par}
+\end{tabular}}{\scriptsize\par}
 \end{table}
 Additionally, the average classification error for all methods is
-illustrated in Figure \ref{fig:The-average-classification}.
+illustrated in Figure \ref{fig:The-average-classification}. \textcolor{red}{Additionally,
+the dimension for each classification dataset and the number of distinct
+classes are provided in Table \ref{tab:dimension}.}
+
+\begin{table}[H]
+\caption{Dimension and number of classes for each classification dataset.\label{tab:dimension}}
+
+\centering{}%
+\begin{tabular}{|c|c|c|}
+\hline 
+DATASET & FEATURES & CLASSES\tabularnewline
+\hline 
+\hline 
+APPENDICITIS & 7 & 2\tabularnewline
+\hline 
+ALCOHOL & 154 & 4\tabularnewline
+\hline 
+AUSTRALIAN & 14 & 2\tabularnewline
+\hline 
+BALANCE & 4 & 3\tabularnewline
+\hline 
+CLEVELAND & 13 & 5\tabularnewline
+\hline 
+CIRCULAR & 5 & 2\tabularnewline
+\hline 
+DERMATOLOGY & 34 & 6\tabularnewline
+\hline 
+ECOLI & 7 & 8\tabularnewline
+\hline 
+GLASS & 9 & 6\tabularnewline
+\hline 
+HABERMAN & 3 & 2\tabularnewline
+\hline 
+HAYES-ROTH & 5 & 3\tabularnewline
+\hline 
+HEART & 13 & 2\tabularnewline
+\hline 
+HEARTATTACK & 13 & 2\tabularnewline
+\hline 
+HOUSEVOTES & 16 & 2\tabularnewline
+\hline 
+IONOSPHERE & 34 & 2\tabularnewline
+\hline 
+LIVERDISORDER & 6 & 2\tabularnewline
+\hline 
+LYMOGRAPHY & 18 & 4\tabularnewline
+\hline 
+MAMMOGRAPHIC & 5 & 2\tabularnewline
+\hline 
+PARKINSONS & 22 & 2\tabularnewline
+\hline 
+PHONEME & 5 & 2\tabularnewline
+\hline 
+PIMA & 8 & 2\tabularnewline
+\hline 
+POPFAILURES & 18 & 2\tabularnewline
+\hline 
+REGIONS2 & 18 & 5\tabularnewline
+\hline 
+SAHEART & 9 & 2\tabularnewline
+\hline 
+SEGMENT & 19 & 7\tabularnewline
+\hline 
+SPIRAL & 2 & 2\tabularnewline
+\hline 
+STATHEART & 13 & 2\tabularnewline
+\hline 
+STUDENT & 5 & 4\tabularnewline
+\hline 
+TRANSFUSION & 4 & 2\tabularnewline
+\hline 
+WDBC & 30 & 2\tabularnewline
+\hline 
+WINE & 13 & 3\tabularnewline
+\hline 
+Z\_F\_S & 21 & 3\tabularnewline
+\hline 
+Z\_O\_N\_F\_S & 21 & 5\tabularnewline
+\hline 
+ZO\_NF\_S & 21 & 3\tabularnewline
+\hline 
+ZONF\_S & 21 & 2\tabularnewline
+\hline 
+ZOO & 16 & 7\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
 
 \begin{figure}[H]
 \begin{centering}
@@ -1093,121 +1198,109 @@ of selected datasets to depict the effectiveness of the proposed method.
 
 \end{figure}
 
-The table \ref{tab:expRegression} presents the results of various
-machine learning models (ADAM, BFGS, GENETIC, RBF, NEAT, PRUNE, NNC,
-PROPOSED) across multiple regression datasets. The values represent
-absolute errors, where lower values indicate better performance. From
-the last row, it is evident that the PROPOSED model has the lowest
-average error (4.28), followed by NNC (6.29) and GENETIC (9.31). This
-suggests that the PROPOSED model is, overall, the most effective.
-However, the PROPOSED model is not always the best for every individual
-dataset. For example, in the AIRFOIL dataset, the PRUNE model achieves
-the smallest error (0.002), while PROPOSED performs similarly (0.002).
-In the AUTO dataset, the GENETIC model has a significantly lower error
-(12.18) compared to PROPOSED (9.09). Yet, in other datasets like BL
-and MORTGAGE, the PROPOSED model stands out with very low errors (0.001
-and 0.023, respectively). The BFGS and ADAM methods, which are more
-classical optimization techniques, appear to have higher average errors
-(30.29 and 22.46, respectively), indicating that they are generally
-less effective compared to more advanced approaches. However, in some
-datasets, such as FRIEDMAN, the BFGS model performs exceptionally
-well (1.263), even outperforming PROPOSED (5.34). The GENETIC method
-shows strong performance in certain datasets like AUTO (12.18) and
-STOCK (3.88), but performs worse in others such as ABALONE (7.17)
-and BL (5.74). This suggests that while genetic algorithms can be
-highly effective for specific problems, they are not consistently
-stable across all datasets. Neural network-based methods (RBF, NEAT,
-PRUNE, NNC) exhibit varied performance. NNC has the second-best average
-error (6.29), indicating it is a robust method. PRUNE also performs
-well in some datasets, such as AIRFOIL (0.002) and CONCRETE (0.0077),
-but less effectively in others like STOCK (39.08). Overall, the PROPOSED
-model demonstrates the best average performance and is particularly
-effective across many datasets. However, as the data shows, no single
-method is universally the best for all datasets. This highlights the
-importance of selecting the appropriate model based on the specific
-problem and data characteristics. Additionally, the high variability
-in model performance across different datasets indicates that algorithm
-behavior can differ significantly depending on the nature of the data.
+\textcolor{red}{In table \ref{tab:expRegression} with 21 regression
+datasets and nine methods (lower values indicate lower error), the
+proposed method achieves the lowest mean error (4.28 versus 6.29 for
+NNC in the AVERAGE row) and the lowest median (0.036). Its average
+rank across datasets is 1.67 on a 1--9 scale, lower than any competitor
+(next best: NNC 3.83, DNN 4.69, RBF 4.79). At the dataset level, the
+current work is the strict winner on 12 of 21 datasets and ties for
+best on 2 more (AIRFOIL with PRUNE and LW with NNC), thus topping
+14/21 datasets overall. The remaining first places are taken by ADAM
+(ABALONE and FY), GENETIC (FRIEDMAN and STOCK), RBF (BK and DEE),
+and NNC (HO). The gap from the dataset-wise best alternative is typically
+small: PROPOSED is within 5\% of the best on 15/21 datasets and within
+10\% on 16/21, with the largest shortfalls appearing mainly on FRIEDMAN
+(5.34 versus 1.249) and, more mildly, on DEE (0.22 versus 0.17) and
+STOCK (4.69 versus 3.88). In head-to-head, dataset-wise comparisons,
+PROPOSED has lower error than each alternative in the vast majority
+of cases: versus ADAM it is better on 19/21 datasets (worse on ABALONE
+and FY), versus BFGS on 20/21 (worse only on FRIEDMAN), versus GENETIC
+on 19/21 (worse on FRIEDMAN and STOCK), versus RBF on 18/21 (worse
+on BK, DEE, and FY), versus NEAT on 21/21, versus PRUNE on 19/21 with
+1 tie (worse on FY), versus DNN on 18/21 (worse on BK, FRIEDMAN, and
+FY), and versus NNC on 19/21 with 1 tie (worse on HO, tie on LW).
+The average absolute error reduction of PROPOSED relative to each
+competitor, computed as “competitor \textminus{} PROPOSED” and then
+averaged over the 21 datasets, is approximately 18.18 (ADAM), 26.01
+(BFGS), 5.03 (GENETIC), 5.74 (RBF), 10.37 (NEAT), 11.12 (PRUNE), 7.00
+(DNN), and 2.01 (NNC); the corresponding mean relative reductions
+are about 62\%, 64\%, 44\%, 53\%, 80\%, 50\%, 44\%, and 46\%. The
+AVERAGE row is consistent with this picture: PROPOSED has the lowest
+mean error (4.28), outperforming the second-best NNC by 2.01 units
+(about a 32\% relative reduction when computed from the reported means)
+and leaving larger margins against DNN, RBF, GENETIC, PRUNE, NEAT,
+ADAM, and BFGS. Overall, PROPOSED exhibits consistent superiority
+in terms of error as reflected by mean and median values, average
+rank, and the per-dataset win counts, with the most notable exceptions
+confined to a few datasets that appear to have distinct error scales.}
 
 \begin{table}[H]
 \caption{Experimental results using a variety of machine learning methods on
 the regression datasets.\label{tab:expRegression}}
 
 \centering{}{\footnotesize{}%
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline 
-{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize NNC} & {\footnotesize PROPOSED}\tabularnewline
+{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize DNN} & {\footnotesize NNC} & {\footnotesize PROPOSED}\tabularnewline
 \hline 
 \hline 
-{\footnotesize ABALONE} & {\footnotesize 4.30} & {\footnotesize 5.69} & {\footnotesize 7.17} & {\footnotesize 7.37} & {\footnotesize 9.88} & {\footnotesize 7.88} & {\footnotesize 5.08} & {\footnotesize 4.47}\tabularnewline
+{\footnotesize ABALONE} & {\footnotesize 4.30} & {\footnotesize 5.69} & {\footnotesize 7.17} & {\footnotesize 7.37} & {\footnotesize 9.88} & {\footnotesize 7.88} & {\footnotesize 6.91} & {\footnotesize 5.08} & {\footnotesize 4.47}\tabularnewline
 \hline 
-{\footnotesize AIRFOIL} & {\footnotesize 0.005} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.27} & {\footnotesize 0.067} & {\footnotesize 0.002} & {\footnotesize 0.004} & {\footnotesize 0.002}\tabularnewline
+{\footnotesize AIRFOIL} & {\footnotesize 0.005} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.27} & {\footnotesize 0.067} & {\footnotesize 0.002} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.002}\tabularnewline
 \hline 
-{\footnotesize AUTO} & {\footnotesize 70.84} & {\footnotesize 60.97} & {\footnotesize 12.18} & {\footnotesize 17.87} & {\footnotesize 56.06} & {\footnotesize 75.59} & {\footnotesize 17.13} & {\footnotesize 9.09}\tabularnewline
+{\footnotesize AUTO} & {\footnotesize 70.84} & {\footnotesize 60.97} & {\footnotesize 12.18} & {\footnotesize 17.87} & {\footnotesize 56.06} & {\footnotesize 75.59} & {\footnotesize 13.26} & {\footnotesize 17.13} & {\footnotesize 9.09}\tabularnewline
 \hline 
-{\footnotesize BK} & {\footnotesize 0.0252} & {\footnotesize 0.28} & {\footnotesize 0.027} & {\footnotesize 0.02} & {\footnotesize 0.15} & {\footnotesize 0.027} & {\footnotesize 0.10} & {\footnotesize 0.023}\tabularnewline
+{\footnotesize BK} & {\footnotesize 0.0252} & {\footnotesize 0.28} & {\footnotesize 0.027} & {\footnotesize 0.02} & {\footnotesize 0.15} & {\footnotesize 0.027} & {\footnotesize 0.02} & {\footnotesize 0.10} & {\footnotesize 0.023}\tabularnewline
 \hline 
-{\footnotesize BL} & {\footnotesize 0.622} & {\footnotesize 2.55} & {\footnotesize 5.74} & {\footnotesize 0.013} & {\footnotesize 0.05} & {\footnotesize 0.027} & {\footnotesize 1.19} & {\footnotesize 0.001}\tabularnewline
+{\footnotesize BL} & {\footnotesize 0.622} & {\footnotesize 2.55} & {\footnotesize 5.74} & {\footnotesize 0.013} & {\footnotesize 0.05} & {\footnotesize 0.027} & {\footnotesize 0.006} & {\footnotesize 1.19} & {\footnotesize 0.001}\tabularnewline
 \hline 
-{\footnotesize BASEBALL} & {\footnotesize 77.90} & {\footnotesize 119.63} & {\footnotesize 103.60} & {\footnotesize 93.02} & {\footnotesize 100.39} & {\footnotesize 94.50} & {\footnotesize 61.57} & {\footnotesize 48.13}\tabularnewline
+{\footnotesize BASEBALL} & {\footnotesize 77.90} & {\footnotesize 119.63} & {\footnotesize 103.60} & {\footnotesize 93.02} & {\footnotesize 100.39} & {\footnotesize 94.50} & {\footnotesize 110.22} & {\footnotesize 61.57} & {\footnotesize 48.13}\tabularnewline
 \hline 
-{\footnotesize CONCRETE} & {\footnotesize 0.078} & {\footnotesize 0.066} & {\footnotesize 0.0099} & {\footnotesize 0.011} & {\footnotesize 0.081} & {\footnotesize 0.0077} & {\footnotesize 0.008} & {\footnotesize 0.005}\tabularnewline
+{\footnotesize CONCRETE} & {\footnotesize 0.078} & {\footnotesize 0.066} & {\footnotesize 0.0099} & {\footnotesize 0.011} & {\footnotesize 0.081} & {\footnotesize 0.0077} & {\footnotesize 0.021} & {\footnotesize 0.008} & {\footnotesize 0.005}\tabularnewline
 \hline 
-{\footnotesize DEE} & {\footnotesize 0.63} & {\footnotesize 2.36} & {\footnotesize 1.013} & {\footnotesize 0.17} & {\footnotesize 1.512} & {\footnotesize 1.08} & {\footnotesize 0.26} & {\footnotesize 0.22}\tabularnewline
+{\footnotesize DEE} & {\footnotesize 0.63} & {\footnotesize 2.36} & {\footnotesize 1.013} & {\footnotesize 0.17} & {\footnotesize 1.512} & {\footnotesize 1.08} & {\footnotesize 0.31} & {\footnotesize 0.26} & {\footnotesize 0.22}\tabularnewline
 \hline 
-{\footnotesize FRIEDMAN} & {\footnotesize 22.90} & {\footnotesize 1.263} & {\footnotesize 1.249} & {\footnotesize 7.23} & {\footnotesize 19.35} & {\footnotesize 8.69} & {\footnotesize 6.29} & {\footnotesize 5.34}\tabularnewline
+{\footnotesize FRIEDMAN} & {\footnotesize 22.90} & {\footnotesize 1.263} & {\footnotesize 1.249} & {\footnotesize 7.23} & {\footnotesize 19.35} & {\footnotesize 8.69} & {\footnotesize 2.75} & {\footnotesize 6.29} & {\footnotesize 5.34}\tabularnewline
 \hline 
-{\footnotesize FY} & {\footnotesize 0.038} & {\footnotesize 0.19} & {\footnotesize 0.65} & {\footnotesize 0.041} & {\footnotesize 0.08} & {\footnotesize 0.042} & {\footnotesize 0.11} & {\footnotesize 0.043}\tabularnewline
+{\footnotesize FY} & {\footnotesize 0.038} & {\footnotesize 0.19} & {\footnotesize 0.65} & {\footnotesize 0.041} & {\footnotesize 0.08} & {\footnotesize 0.042} & {\footnotesize 0.039} & {\footnotesize 0.11} & {\footnotesize 0.043}\tabularnewline
 \hline 
-{\footnotesize HO} & {\footnotesize 0.035} & {\footnotesize 0.62} & {\footnotesize 2.78} & {\footnotesize 0.03} & {\footnotesize 0.169} & {\footnotesize 0.03} & {\footnotesize 0.015} & {\footnotesize 0.016}\tabularnewline
+{\footnotesize HO} & {\footnotesize 0.035} & {\footnotesize 0.62} & {\footnotesize 2.78} & {\footnotesize 0.03} & {\footnotesize 0.169} & {\footnotesize 0.03} & {\footnotesize 0.026} & {\footnotesize 0.015} & {\footnotesize 0.016}\tabularnewline
 \hline 
-{\footnotesize HOUSING} & {\footnotesize 80.99} & {\footnotesize 97.38} & {\footnotesize 43.26} & {\footnotesize 57.68} & {\footnotesize 56.49} & {\footnotesize 52.25} & {\footnotesize 25.47} & {\footnotesize 15.47}\tabularnewline
+{\footnotesize HOUSING} & {\footnotesize 80.99} & {\footnotesize 97.38} & {\footnotesize 43.26} & {\footnotesize 57.68} & {\footnotesize 56.49} & {\footnotesize 52.25} & {\footnotesize 65.18} & {\footnotesize 25.47} & {\footnotesize 15.47}\tabularnewline
 \hline 
-{\footnotesize LASER} & {\footnotesize 0.03} & {\footnotesize 0.015} & {\footnotesize 0.59} & {\footnotesize 0.03} & {\footnotesize 0.084} & {\footnotesize 0.007} & {\footnotesize 0.025} & {\footnotesize 0.0049}\tabularnewline
+{\footnotesize LASER} & {\footnotesize 0.03} & {\footnotesize 0.015} & {\footnotesize 0.59} & {\footnotesize 0.03} & {\footnotesize 0.084} & {\footnotesize 0.007} & {\footnotesize 0.045} & {\footnotesize 0.025} & {\footnotesize 0.0049}\tabularnewline
 \hline 
-{\footnotesize LW} & {\footnotesize 0.028} & {\footnotesize 2.98} & {\footnotesize 1.90} & {\footnotesize 0.03} & {\footnotesize 0.03} & {\footnotesize 0.02} & {\footnotesize 0.011} & {\footnotesize 0.011}\tabularnewline
+{\footnotesize LW} & {\footnotesize 0.028} & {\footnotesize 2.98} & {\footnotesize 1.90} & {\footnotesize 0.03} & {\footnotesize 0.03} & {\footnotesize 0.02} & {\footnotesize 0.023} & {\footnotesize 0.011} & {\footnotesize 0.011}\tabularnewline
 \hline 
-{\footnotesize MORTGAGE} & {\footnotesize 9.24} & {\footnotesize 8.23} & {\footnotesize 2.41} & {\footnotesize 1.45} & {\footnotesize 14.11} & {\footnotesize 12.96} & {\footnotesize 0.30} & {\footnotesize 0.023}\tabularnewline
+{\footnotesize MORTGAGE} & {\footnotesize 9.24} & {\footnotesize 8.23} & {\footnotesize 2.41} & {\footnotesize 1.45} & {\footnotesize 14.11} & {\footnotesize 12.96} & {\footnotesize 9.74} & {\footnotesize 0.30} & {\footnotesize 0.023}\tabularnewline
 \hline 
-{\footnotesize PL} & {\footnotesize 0.117} & {\footnotesize 0.29} & {\footnotesize 0.29} & {\footnotesize 2.118} & {\footnotesize 0.09} & {\footnotesize 0.032} & {\footnotesize 0.047} & {\footnotesize 0.029}\tabularnewline
+{\footnotesize PL} & {\footnotesize 0.117} & {\footnotesize 0.29} & {\footnotesize 0.29} & {\footnotesize 2.118} & {\footnotesize 0.09} & {\footnotesize 0.032} & {\footnotesize 0.056} & {\footnotesize 0.047} & {\footnotesize 0.029}\tabularnewline
 \hline 
-{\footnotesize PLASTIC} & {\footnotesize 11.71} & {\footnotesize 20.32} & {\footnotesize 2.791} & {\footnotesize 8.62} & {\footnotesize 20.77} & {\footnotesize 17.33} & {\footnotesize 4.20} & {\footnotesize 2.17}\tabularnewline
+{\footnotesize PLASTIC} & {\footnotesize 11.71} & {\footnotesize 20.32} & {\footnotesize 2.791} & {\footnotesize 8.62} & {\footnotesize 20.77} & {\footnotesize 17.33} & {\footnotesize 3.82} & {\footnotesize 4.20} & {\footnotesize 2.17}\tabularnewline
 \hline 
-{\footnotesize QUAKE} & {\footnotesize 0.07} & {\footnotesize 0.42} & {\footnotesize 0.04} & {\footnotesize 0.07} & {\footnotesize 0.298} & {\footnotesize 0.04} & {\footnotesize 0.96} & {\footnotesize 0.036}\tabularnewline
+{\footnotesize QUAKE} & {\footnotesize 0.07} & {\footnotesize 0.42} & {\footnotesize 0.04} & {\footnotesize 0.07} & {\footnotesize 0.298} & {\footnotesize 0.04} & {\footnotesize 0.098} & {\footnotesize 0.96} & {\footnotesize 0.036}\tabularnewline
 \hline 
-{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.40} & {\footnotesize 2.95} & {\footnotesize 0.027} & {\footnotesize 0.174} & {\footnotesize 0.032} & {\footnotesize 0.026} & {\footnotesize 0.024}\tabularnewline
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.40} & {\footnotesize 2.95} & {\footnotesize 0.027} & {\footnotesize 0.174} & {\footnotesize 0.032} & {\footnotesize 0.027} & {\footnotesize 0.026} & {\footnotesize 0.024}\tabularnewline
 \hline 
-{\footnotesize STOCK} & {\footnotesize 180.89} & {\footnotesize 302.43} & {\footnotesize 3.88} & {\footnotesize 12.23} & {\footnotesize 12.23} & {\footnotesize 39.08} & {\footnotesize 8.92} & {\footnotesize 4.69}\tabularnewline
+{\footnotesize STOCK} & {\footnotesize 180.89} & {\footnotesize 302.43} & {\footnotesize 3.88} & {\footnotesize 12.23} & {\footnotesize 12.23} & {\footnotesize 39.08} & {\footnotesize 12.95} & {\footnotesize 8.92} & {\footnotesize 4.69}\tabularnewline
 \hline 
-{\footnotesize TREASURY} & {\footnotesize 11.16} & {\footnotesize 9.91} & {\footnotesize 2.93} & {\footnotesize 2.02} & {\footnotesize 15.52} & {\footnotesize 13.76} & {\footnotesize 0.43} & {\footnotesize 0.068}\tabularnewline
+{\footnotesize TREASURY} & {\footnotesize 11.16} & {\footnotesize 9.91} & {\footnotesize 2.93} & {\footnotesize 2.02} & {\footnotesize 15.52} & {\footnotesize 13.76} & {\footnotesize 11.41} & {\footnotesize 0.43} & {\footnotesize 0.068}\tabularnewline
 \hline 
-{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{22.46}} & {\footnotesize\textbf{30.29}} & {\footnotesize\textbf{9.31}} & {\footnotesize\textbf{10.02}} & {\footnotesize\textbf{14.65}} & {\footnotesize\textbf{15.40}} & {\footnotesize\textbf{6.29}} & {\footnotesize\textbf{4.28}}\tabularnewline
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{22.46}} & {\footnotesize\textbf{30.29}} & {\footnotesize\textbf{9.31}} & {\footnotesize\textbf{10.02}} & {\footnotesize\textbf{14.65}} & {\footnotesize\textbf{15.40}} & {\footnotesize\textbf{11.28}} & {\footnotesize\textbf{6.29}} & {\footnotesize\textbf{4.28}}\tabularnewline
 \hline 
 \end{tabular}}{\footnotesize\par}
 \end{table}
 
-The statistical comparison of the proposed machine learning model
-with other models on classification datasets yielded the following
-p-values, which represent significance levels. As shown in figure
-\ref{fig:statClass}, all p-values in the comparisons between the
-PROPOSED model and other models are extremely small. Specifically,
-the p-value for PROPOSED vs ADAM is $1.9\times10^{-7}$, vs BFGS is
-$1.1\times10^{-8}$, vs GENETIC is $6.9\times10^{-8}$, vs RBF is
-$1.9\times10^{-7}$, vs NEAT is $6\times10^{-9}$, vs PRUNE is $7.4\times10^{-6}$,
-and vs NNC is $4.3\times10^{-8}$. These values indicate that the
-performance differences between the PROPOSED model and the other models
-are statistically highly significant, as all p-values are well below
-the conventional significance threshold of $0.05$. The particularly
-low p-values in comparisons with NEAT ($6\times10^{-9}$) and BFGS
-($1.1\times10^{-8}$) suggest strong statistical differences in favor
-of the PROPOSED model. Even in the comparison with PRUNE, where the
-p-value is highest ($7.4\times10^{-6}$), the difference remains statistically
-significant. These results confirm that the PROPOSED model demonstrates
-statistically significant and superior performance compared to all
-other models tested on classification datasets. The consistently small
-p-values across all comparisons support the conclusion that the PROPOSED
-model stands out as more reliable and effective, with strong statistical
-confidence.
+\textcolor{red}{The statistical comparison depicted in Figure \ref{fig:statClass},
+indicates that all pairwise comparisons between the current method
+and the alternative models are highly statistically significant. Under
+the conventional star notation, {*}{*}{*}{*} denotes p\textless 0.0001,
+while the {*}{*}{*}{*}{*} flag for PROPOSED versus RBF signals even
+stronger statistical evidence in favor of PROPOSED. Overall, the findings
+confirm that PROPOSED consistently achieves lower error than every
+comparator across the classification datasets, with a negligible likelihood
+that these differences are due to chance.}
 
 \begin{figure}[H]
 \begin{centering}
@@ -1217,26 +1310,21 @@ confidence.
 datasets.\label{fig:statClass}}
 
 \end{figure}
-In figure \ref{fig:statRegression}, all comparisons between the PROPOSED
-model and other models show p-values significantly below the conventional
-$0.05$ significance threshold, indicating statistically significant
-differences. Specifically, the p-values are: PROPOSED vs ADAM = $0.00026$,
-vs BFGS = $0.00084$, vs GENETIC = $0.0027$, vs RBF = $0.00068$,
-vs NEAT = $1.9\times10^{-6}$, vs PRUNE = $0.00017$, and vs NNC =
-$0.00011$. These values confirm that the PROPOSED model shows statistically
-significant superiority over all compared models for regression datasets.
-The particularly low p-value for NEAT ($1.9\times^{-6}$) highlights
-a strong statistical difference, while the other comparisons also
-maintain very small p-values, with only the GENETIC comparison showing
-a slightly less pronounced (yet still statistically significant) difference
-at p=0.0027. These results demonstrate that the PROPOSED model consistently
-outperforms the others in regression tasks, with particularly marked
-differences compared to models like NEAT, NNC and PRUNE. The consistency
-of these findings reinforces the reliability of the PROPOSED model
-and supports its use as the preferred method for similar regression
-problems.
-
-\subsection{Experiments with different crossover mechanism}
+\textcolor{red}{In Figure \ref{fig:statRegression}, the statistical
+comparison on the regression datasets indicates that the proposed
+model differs significantly from all alternative methods. Evidence
+is particularly strong against ADAM, BFGS, RBF, PRUNE, and NNC (p={*},
+i.e., p\ensuremath{\le}0.001), with the strongest signal observed
+against NEAT (p=, i.e., p\ensuremath{\le}0.0001). Comparisons against
+GENETIC and DNN are also statistically significant but comparatively
+weaker (p=, i.e., p\ensuremath{\le}0.01). Taken together, the results
+consistently support that the proposed model attains lower error than
+every competing approach across the examined datasets, with a very
+low probability that the observed differences are due to chance. Note
+that significance levels reflect the strength of statistical evidence
+rather than effect magnitude; for a fuller interpretation it is advisable
+to also report absolute or relative error differences and suitable
+effect size metrics.}
 
 \begin{figure}[H]
 \begin{centering}
@@ -1244,14 +1332,20 @@ problems.
 \par\end{centering}
 \caption{Statistical comparison between the used methods for the regression
 datasets.\label{fig:statRegression}}
-
 \end{figure}
+
+
+\subsection{Experiments with different crossover mechanism}
+
 Also, in order to illustrated the robustness of the proposed method,
 another experiment was conducted were the uniform crossover procedure
 was used for the Neural Network Construction method and the proposed
 one instead of the one - point crossover. The experimental results
 for the classification datasets are shown in Table \ref{tab:experClassUniformOnePointVsCrossover}and
 for regression datasets in Table \ref{tab:expersRegressionOnePointVsUniform}.
+\textcolor{red}{Although, the one - point crossover mechanism is proposed
+as the crossover procedure in the original article of Grammatical
+Evolution.}
 
 \begin{table}[H]
 \caption{Experimental results for the classification datasets were a comparison
@@ -1491,6 +1585,24 @@ $N_{I}$ grows larger. This means that the optimal selection of $N_{I}$
 depends on a combination of factors, such as the desired accuracy,
 available computational resources, and the nature of the problem. 
 
+\textcolor{red}{Also, in Figure \ref{fig:timeNI} the average execution
+time for the regression dataset is plotted. In this graph the original
+neural network construction method is depicted as well as the proposed
+one using a series of values for the parameter $N_{I}$. As is was
+expected, the execution time increases when the parameter $N_{I}$
+is increased.}
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{nnc_ga_time}
+\par\end{centering}
+\caption{Average execution time for the regression datasets using the original
+neural network construction method and the proposed one and different
+values of parameter $N_{I}$.\label{fig:timeNI}}
+
+\end{figure}
+
+
 \subsection{A series of practical examples}
 
 As practical applications of the proposed method to real - world problems
@@ -1516,6 +1628,17 @@ classification error.\label{fig:mlFire}}
  As is evident, the proposed method has a lower error in estimating
 the duration of forest fires in all years from 2014 to 2023 compared
 to the original artificial neural network construction technique.
+\textcolor{red}{Although, the proposed method requires significantly
+more time than the original method as depicted in Figure \ref{fig:fire_time}.}
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{forest_time}
+\par\end{centering}
+\caption{Average execution time for the fores fires problem, using the original
+neural network construction method and the proposed one.\label{fig:fire_time}}
+
+\end{figure}
 
 The second practical example is the PIRvision dataset \citep{pirvision},
 that contains occupancy detection data that was collected from a Synchronized
@@ -1662,6 +1785,13 @@ or for real-time applications. Finally, customizing the grammar used
 in Grammatical Evolution based on the specific characteristics of
 individual fields could improve the method’s performance in specialized
 tasks, such as time-series forecasting or anomaly detection in cybersecurity.
+
+The proposed technique attempts to maintain the parameters of artificial
+neural networks within ranges of values \LyXZeroWidthSpace\LyXZeroWidthSpace in
+which the neural network is likely to have good generalization properties.
+A possible future improvement could be to find this interval of values
+\LyXZeroWidthSpace\LyXZeroWidthSpace either with some technique that
+utilizes derivatives or with interval arithmetic techniques \citep{interval1,interval2}.
 
 \vspace{6pt}
 
@@ -2174,6 +2304,10 @@ Tsinghua Science and Technology, 11(4), 307-312.
 \bibitem{fcn}Grzegorz Klima, Fast Compressed Neural Networks, available
 from \url{http://fcnn.sourceforge.net/}.
 
+\bibitem[(2020)]{adagrad}Ward, R., Wu, X., \& Bottou, L. (2020).
+Adagrad stepsizes: Sharp convergence over nonconvex landscapes. Journal
+of Machine Learning Research, 21(219), 1-30.
+
 \bibitem[(2024)]{ml_fire}C. Kopitsa, I.G. Tsoulos, V. Charilogis,
 A. Stavrakoudis, Predicting the Duration of Forest Fires Using Machine
 Learning Methods, Future Internet \textbf{16}, 396, 2024.
@@ -2181,6 +2315,14 @@ Learning Methods, Future Internet \textbf{16}, 396, 2024.
 \bibitem[(2023)]{pirvision}Emad-Ud-Din, M., \& Wang, Y. (2023). Promoting
 occupancy detection accuracy using on-device lifelong learning. IEEE
 Sensors Journal, 23(9), 9595-9606.
+
+\bibitem[(1996)]{interval1}M.A. Wolfe, Interval methods for global
+optimization, Applied Mathematics and Computation \textbf{75}, pp.
+179-206, 1996.
+
+\bibitem{interval2}T. Csendes and D. Ratz, Subdivision Direction
+Selection in Interval Methods for Global Optimization, SIAM J. Numer.
+Anal. \textbf{34}, pp. 922--938, 1997. 
 
 \end{thebibliography}
 

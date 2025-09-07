@@ -909,6 +909,25 @@ Although the method can construct the correct network structure,
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+The main contributions of the proposed work can be summarized as follows:
+\end_layout
+
+\begin_layout Enumerate
+Periodic application of an optimization technique to randomly selected chromosomes with the aim of improving the performance of the selected neural network but also of faster finding the global minimum of the error function.
+\end_layout
+
+\begin_layout Enumerate
+The training of the artificial neural network by the optimization method is done in such a way as not to destroy the architecture of the neural network that Grammatical Evolution has already constructed.
+\end_layout
+
+\begin_layout Enumerate
+The training of the artificial neural network from the optimization function is carried out using a modified fitness function,
+ where an attempt is made to adapt the network parameters without losing its generalization properties.
+\end_layout
+
+\begin_layout Standard
 The remaining of this article is organized as follows:
  in section 
 \begin_inset CommandInset ref
@@ -1645,7 +1664,7 @@ This function may be used to avoid overfitting,
 
 ,
  then probably the neural network has a reduced generalization ability,
- since the sigmoid output will be the same regardless of  any change in the input value.
+ since the sigmoid output will be the same regardless of any change in the input value.
 \end_layout
 
 \begin_layout Standard
@@ -4119,7 +4138,7 @@ literal "true"
 The column DNN represents the application of the deep neural network provided in the Tiny Dnn library,
  which is available from 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -4149,7 +4168,9 @@ The row AVERAGE represents the average classification or regression error for al
 \end_layout
 
 \begin_layout Standard
-In table 
+
+\color red
+Based on the table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:expClass"
@@ -4160,46 +4181,94 @@ nolink "false"
 
 \end_inset
 
-,
- a thorough analysis of the results and qualitative evaluation of the method reveals multi-layered advantages that extend beyond mere statistical superiority.
- The consistency of performance across different domains and problem types is remarkable - in 29 out of 34 datasets (85.3% of cases),
- the method achieves results that are either top-ranked or very close to the best available (within 2% margin).
- This stable performance across heterogeneous problems indicates strong generalizability and robustness of the core algorithmic framework.
- Particularly noteworthy is the method's performance on noisy and incomplete data.
- For datasets like Haberman and Liverdisorder,
- where other advanced methods show significant performance variation (standard deviation exceeding 8%),
- the proposed approach maintains stable behavior with standard deviation of just 4.2-4.8%.
- This noise tolerance constitutes a critical advantage for real-world applications where data is rarely perfectly clean and complete.
- Another significant characteristic is the successful handling of scalability.
- Unlike many other approaches that show substantial performance degradation as data dimensionality increases,
- this method demonstrates remarkable stability.
- For datasets with over 50 features,
- the average performance degradation is limited to just 2.1 percentage points,
- compared to 4.3-5.7 points observed in other popular methods.
- This makes it particularly suitable for modern machine learning problems where data dimensionality continues to grow.
- Detailed examination of cases where the method doesn't achieve absolute top performance also reveals valuable insights.
- In datasets like Cleveland and Heartattack,
- where performance is slightly inferior to the top method,
- analysis shows the issue primarily stems from excessive complexity in generated architectures leading to overfitting.
- This finding points to a specific improvement axis for future work - enhancing complexity control mechanisms.
- Compared to other contemporary approaches not included in the study (such as transformer networks),
- the method likely underperforms on very high-dimensional problems,
- but excels in medium-scale structural problems where interpretability and stability are critical factors.
- This balance between performance and interpretability makes it ideal for many practical applications.
- The computational requirements,
- while not analyzed in detail in the study,
- appear to be moderate - higher than basic optimization techniques but lower than highly sophisticated architectures.
- This balance between performance and computational cost enhances its practical value.
+ with 36 classification datasets and nine methods (lower percentage implies lower error),
+ the PROPOSED method attains the lowest mean error (21.18%) and the best average rank across datasets (1.83 on a 1–9 scale).
+ The current work achieves the best result in 18 out of 36 datasets.
+ The remaining per-dataset best results are distributed as follows:
+ RBF 4,
+ PRUNE 4,
+ DNN 3,
+ NEAT 3,
+ NNC 3,
+ and GENETIC 1,
+ while ADAM and BFGS record no first-place finishes.
+ In head-to-head,
+ dataset-wise comparisons,
+ the proposed method outperforms each alternative on the vast majority of datasets:
+ versus ADAM on 35/36 datasets,
+ versus BFGS on 33/36,
+ versus GENETIC on 32/36,
+ versus RBF on 30/36,
+ versus NEAT on 33/36,
+ versus PRUNE on 31/36,
+ versus DNN on 32/36,
+ and versus NNC on 32/36.
+ The average absolute error reduction of PROPOSED relative to each competitor,
+ computed as “competitor − PROPOSED” in percentage points and then averaged over the 36 datasets,
+ is 14.39 (ADAM),
+ 13.51 (BFGS),
+ 6.12 (GENETIC),
+ 8.60 (RBF),
+ 11.90 (NEAT),
+ 7.53 (PRUNE),
+ 6.64 (DNN),
+ and 2.60 (NNC).
+ The corresponding mean relative reductions,
+ computed as (competitor − PROPOSED)/competitor and then averaged per dataset,
+ are 39.24%,
+ 34.29%,
+ 22.83%,
+ 26.50%,
+ 37.09%,
+ 20.91%,
+ 22.95%,
+ and 12.65%.
+ The few datasets where the proposed method is worse are concentrated in specific cases:
+ ADAM only on POPFAILURES;
+ BFGS on CIRCULAR,
+ PHONEME,
+ and POPFAILURES;
+ GENETIC on CIRCULAR,
+ GLASS,
+ LIVERDISORDER,
+ and PHONEME;
+ RBF on APPENDICITIS,
+ CIRCULAR,
+ GLASS,
+ HABERMAN,
+ LIVERDISORDER,
+ and SPIRAL;
+ NEAT on ECOLI,
+ HABERMAN,
+ and LIVERDISORDER;
+ PRUNE on ALCOHOL,
+ DERMATOLOGY,
+ IONOSPHERE,
+ LYMOGRAPHY,
+ and POPFAILURES;
+ DNN on HABERMAN,
+ HOUSEVOTES,
+ SEGMENT,
+ and ZONF_S;
+ and NNC on AUSTRALIAN,
+ HEARTATTACK,
+ HOUSEVOTES,
+ and IONOSPHERE.
+ The table’s AVERAGE row is consistent with this picture:
+ PROPOSED has the lowest mean error (21.18%) among all methods.
+ Relative to the second-best mean in that row (NNC:
+ 24.79%),
+ PROPOSED reduces error by 3.61 percentage points,
+ corresponding to about a 14.56% relative reduction.
+ Median errors tell the same story:
+ PROPOSED has a median of 19.24%,
+ lower than NNC (21.21%) and DNN (25.83%).
  Overall,
- beyond numerical metrics,
- the method demonstrates a range of qualitative advantages that make it particularly functional for real-world problems:
- stability with noisy and incomplete data,
- good scalability,
- balance between complexity and generalizability,
- and flexibility across different application domains.
- Simultaneously,
- the analysis highlights specific areas where further optimizations could enhance performance even more,
- providing directions for future research.
+ PROPOSED shows consistent superiority in terms of error,
+ as reflected by the mean,
+ the across-dataset ranking,
+ and the dataset-wise head-to-head counts,
+ with only a small number of dataset-specific exceptions.
 \end_layout
 
 \begin_layout Standard
@@ -9776,7 +9845,9 @@ name "fig:linePlot"
 \end_layout
 
 \begin_layout Standard
-The table 
+
+\color red
+In table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:expRegression"
@@ -9787,65 +9858,73 @@ nolink "false"
 
 \end_inset
 
- presents the results of various machine learning models (ADAM,
- BFGS,
- GENETIC,
+ with 21 regression datasets and nine methods (lower values indicate lower error),
+ the proposed method achieves the lowest mean error (4.28 versus 6.29 for NNC in the AVERAGE row) and the lowest median (0.036).
+ Its average rank across datasets is 1.67 on a 1–9 scale,
+ lower than any competitor (next best:
+ NNC 3.83,
+ DNN 4.69,
+ RBF 4.79).
+ At the dataset level,
+ the current work is the strict winner on 12 of 21 datasets and ties for best on 2 more (AIRFOIL with PRUNE and LW with NNC),
+ thus topping 14/21 datasets overall.
+ The remaining first places are taken by ADAM (ABALONE and FY),
+ GENETIC (FRIEDMAN and STOCK),
+ RBF (BK and DEE),
+ and NNC (HO).
+ The gap from the dataset-wise best alternative is typically small:
+ PROPOSED is within 5% of the best on 15/21 datasets and within 10% on 16/21,
+ with the largest shortfalls appearing mainly on FRIEDMAN (5.34 versus 1.249) and,
+ more mildly,
+ on DEE (0.22 versus 0.17) and STOCK (4.69 versus 3.88).
+ In head-to-head,
+ dataset-wise comparisons,
+ PROPOSED has lower error than each alternative in the vast majority of cases:
+ versus ADAM it is better on 19/21 datasets (worse on ABALONE and FY),
+ versus BFGS on 20/21 (worse only on FRIEDMAN),
+ versus GENETIC on 19/21 (worse on FRIEDMAN and STOCK),
+ versus RBF on 18/21 (worse on BK,
+ DEE,
+ and FY),
+ versus NEAT on 21/21,
+ versus PRUNE on 19/21 with 1 tie (worse on FY),
+ versus DNN on 18/21 (worse on BK,
+ FRIEDMAN,
+ and FY),
+ and versus NNC on 19/21 with 1 tie (worse on HO,
+ tie on LW).
+ The average absolute error reduction of PROPOSED relative to each competitor,
+ computed as “competitor − PROPOSED” and then averaged over the 21 datasets,
+ is approximately 18.18 (ADAM),
+ 26.01 (BFGS),
+ 5.03 (GENETIC),
+ 5.74 (RBF),
+ 10.37 (NEAT),
+ 11.12 (PRUNE),
+ 7.00 (DNN),
+ and 2.01 (NNC);
+ the corresponding mean relative reductions are about 62%,
+ 64%,
+ 44%,
+ 53%,
+ 80%,
+ 50%,
+ 44%,
+ and 46%.
+ The AVERAGE row is consistent with this picture:
+ PROPOSED has the lowest mean error (4.28),
+ outperforming the second-best NNC by 2.01 units (about a 32% relative reduction when computed from the reported means) and leaving larger margins against DNN,
  RBF,
- NEAT,
+ GENETIC,
  PRUNE,
- NNC,
- PROPOSED) across multiple regression datasets.
- The values represent absolute errors,
- where lower values indicate better performance.
- From the last row,
- it is evident that the PROPOSED model has the lowest average error (4.28),
- followed by NNC (6.29) and GENETIC (9.31).
- This suggests that the PROPOSED model is,
- overall,
- the most effective.
- However,
- the PROPOSED model is not always the best for every individual dataset.
- For example,
- in the AIRFOIL dataset,
- the PRUNE model achieves the smallest error (0.002),
- while PROPOSED performs similarly (0.002).
- In the AUTO dataset,
- the GENETIC model has a significantly lower error (12.18) compared to PROPOSED (9.09).
- Yet,
- in other datasets like BL and MORTGAGE,
- the PROPOSED model stands out with very low errors (0.001 and 0.023,
- respectively).
- The BFGS and ADAM methods,
- which are more classical optimization techniques,
- appear to have higher average errors (30.29 and 22.46,
- respectively),
- indicating that they are generally less effective compared to more advanced approaches.
- However,
- in some datasets,
- such as FRIEDMAN,
- the BFGS model performs exceptionally well (1.263),
- even outperforming PROPOSED (5.34).
- The GENETIC method shows strong performance in certain datasets like AUTO (12.18) and STOCK (3.88),
- but performs worse in others such as ABALONE (7.17) and BL (5.74).
- This suggests that while genetic algorithms can be highly effective for specific problems,
- they are not consistently stable across all datasets.
- Neural network-based methods (RBF,
  NEAT,
- PRUNE,
- NNC) exhibit varied performance.
- NNC has the second-best average error (6.29),
- indicating it is a robust method.
- PRUNE also performs well in some datasets,
- such as AIRFOIL (0.002) and CONCRETE (0.0077),
- but less effectively in others like STOCK (39.08).
+ ADAM,
+ and BFGS.
  Overall,
- the PROPOSED model demonstrates the best average performance and is particularly effective across many datasets.
- However,
- as the data shows,
- no single method is universally the best for all datasets.
- This highlights the importance of selecting the appropriate model based on the specific problem and data characteristics.
- Additionally,
- the high variability in model performance across different datasets indicates that algorithm behavior can differ significantly depending on the nature of the data.
+ PROPOSED exhibits consistent superiority in terms of error as reflected by mean and median values,
+ average rank,
+ and the per-dataset win counts,
+ with the most notable exceptions confined to a few datasets that appear to have distinct error scales.
 \end_layout
 
 \begin_layout Standard
@@ -12491,9 +12570,9 @@ AVERAGE
 \end_layout
 
 \begin_layout Standard
-The statistical comparison of the proposed machine learning model with other models on classification datasets yielded the following p-values,
- which represent significance levels.
- As shown in figure 
+
+\color red
+The statistical comparison depicted in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statClass"
@@ -12505,68 +12584,13 @@ nolink "false"
 \end_inset
 
 ,
- all p-values in the comparisons between the PROPOSED model and other models are extremely small.
- Specifically,
- the p-value for PROPOSED vs ADAM is 
-\begin_inset Formula $1.9\times10^{-7}$
-\end_inset
-
-,
- vs BFGS is 
-\begin_inset Formula $1.1\times10^{-8}$
-\end_inset
-
-,
- vs GENETIC is 
-\begin_inset Formula $6.9\times10^{-8}$
-\end_inset
-
-,
- vs RBF is 
-\begin_inset Formula $1.9\times10^{-7}$
-\end_inset
-
-,
- vs NEAT is 
-\begin_inset Formula $6\times10^{-9}$
-\end_inset
-
-,
- vs PRUNE is 
-\begin_inset Formula $7.4\times10^{-6}$
-\end_inset
-
-,
- and vs NNC is 
-\begin_inset Formula $4.3\times10^{-8}$
-\end_inset
-
-.
- These values indicate that the performance differences between the PROPOSED model and the other models are statistically highly significant,
- as all p-values are well below the conventional significance threshold of 
-\begin_inset Formula $0.05$
-\end_inset
-
-.
- The particularly low p-values in comparisons with NEAT (
-\begin_inset Formula $6\times10^{-9}$
-\end_inset
-
-) and BFGS (
-\begin_inset Formula $1.1\times10^{-8}$
-\end_inset
-
-) suggest strong statistical differences in favor of the PROPOSED model.
- Even in the comparison with PRUNE,
- where the p-value is highest (
-\begin_inset Formula $7.4\times10^{-6}$
-\end_inset
-
-),
- the difference remains statistically significant.
- These results confirm that the PROPOSED model demonstrates statistically significant and superior performance compared to all other models tested on classification datasets.
- The consistently small p-values across all comparisons support the conclusion that the PROPOSED model stands out as more reliable and effective,
- with strong statistical confidence.
+ indicates that all pairwise comparisons between the current method and the alternative models are highly statistically significant.
+ Under the conventional star notation,
+ **** denotes p<0.0001,
+ while the ***** flag for PROPOSED versus RBF signals even stronger statistical evidence in favor of PROPOSED.
+ Overall,
+ the findings confirm that PROPOSED consistently achieves lower error than every comparator across the classification datasets,
+ with a negligible likelihood that these differences are due to chance.
 \end_layout
 
 \begin_layout Standard
@@ -12613,7 +12637,9 @@ name "fig:statClass"
 
 \end_inset
 
-In figure 
+
+\color red
+In Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:statRegression"
@@ -12625,65 +12651,25 @@ nolink "false"
 \end_inset
 
 ,
- all comparisons between the PROPOSED model and other models show p-values significantly below the conventional 
-\begin_inset Formula $0.05$
-\end_inset
-
- significance threshold,
- indicating statistically significant differences.
- Specifically,
- the p-values are:
- PROPOSED vs ADAM = 
-\begin_inset Formula $0.00026$
-\end_inset
-
-,
- vs BFGS = 
-\begin_inset Formula $0.00084$
-\end_inset
-
-,
- vs GENETIC = 
-\begin_inset Formula $0.0027$
-\end_inset
-
-,
- vs RBF = 
-\begin_inset Formula $0.00068$
-\end_inset
-
-,
- vs NEAT = 
-\begin_inset Formula $1.9\times10^{-6}$
-\end_inset
-
-,
- vs PRUNE = 
-\begin_inset Formula $0.00017$
-\end_inset
-
-,
- and vs NNC = 
-\begin_inset Formula $0.00011$
-\end_inset
-
-.
- These values confirm that the PROPOSED model shows statistically significant superiority over all compared models for regression datasets.
- The particularly low p-value for NEAT (
-\begin_inset Formula $1.9\times^{-6}$
-\end_inset
-
-) highlights a strong statistical difference,
- while the other comparisons also maintain very small p-values,
- with only the GENETIC comparison showing a slightly less pronounced (yet still statistically significant) difference at p=0.0027.
- These results demonstrate that the PROPOSED model consistently outperforms the others in regression tasks,
- with particularly marked differences compared to models like NEAT,
- NNC and PRUNE.
- The consistency of these findings reinforces the reliability of the PROPOSED model and supports its use as the preferred method for similar regression problems.
-\end_layout
-
-\begin_layout Subsection
-Experiments with different crossover mechanism
+ the statistical comparison on the regression datasets indicates that the proposed model differs significantly from all alternative methods.
+ Evidence is particularly strong against ADAM,
+ BFGS,
+ RBF,
+ PRUNE,
+ and NNC (p=*,
+ i.e.,
+ p≤0.001),
+ with the strongest signal observed against NEAT (p=,
+ i.e.,
+ p≤0.0001).
+ Comparisons against GENETIC and DNN are also statistically significant but comparatively weaker (p=,
+ i.e.,
+ p≤0.01).
+ Taken together,
+ the results consistently support that the proposed model attains lower error than every competing approach across the examined datasets,
+ with a very low probability that the observed differences are due to chance.
+ Note that significance levels reflect the strength of statistical evidence rather than effect magnitude;
+ for a fuller interpretation it is advisable to also report absolute or relative error differences and suitable effect size metrics.
 \end_layout
 
 \begin_layout Standard
@@ -12724,12 +12710,16 @@ name "fig:statRegression"
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
-\end_inset
+\begin_layout Subsection
+Experiments with different crossover mechanism
+\end_layout
 
+\begin_layout Standard
 Also,
  in order to illustrated the robustness of the proposed method,
  another experiment was conducted were the uniform crossover procedure was used for the Neural Network Construction method and the proposed one instead of the one - point crossover.
@@ -16690,7 +16680,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -16813,6 +16803,69 @@ name "fig:mlFire"
 
  As is evident,
  the proposed method has a lower error in estimating the duration of forest fires in all years from 2014 to 2023 compared to the original artificial neural network construction technique.
+ 
+\color red
+Although,
+ the proposed method requires significantly more time than the original method as depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:fire_time"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename forest_time.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average execution time for the fores fires problem,
+ using the original neural network construction method and the proposed one.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:fire_time"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -17041,6 +17094,23 @@ The article presents a method for constructing artificial neural networks by int
  Finally,
  customizing the grammar used in Grammatical Evolution based on the specific characteristics of individual fields could improve the method’s performance in specialized tasks,
  such as time-series forecasting or anomaly detection in cybersecurity.
+\end_layout
+
+\begin_layout Standard
+The proposed technique attempts to maintain the parameters of artificial neural networks within ranges of values \SpecialChar allowbreak
+\SpecialChar allowbreak
+in which the neural network is likely to have good generalization properties.
+ A possible future improvement could be to find this interval of values \SpecialChar allowbreak
+\SpecialChar allowbreak
+either with some technique that utilizes derivatives or with interval arithmetic techniques 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "interval1,interval2"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -19836,6 +19906,55 @@ Emad-Ud-Din,
  IEEE Sensors Journal,
  23(9),
  9595-9606.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1996)"
+key "interval1"
+literal "false"
+
+\end_inset
+
+M.A.
+ Wolfe,
+ Interval methods for global optimization,
+ Applied Mathematics and Computation 
+\series bold
+75
+\series default
+,
+ pp.
+ 179-206,
+ 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "interval2"
+literal "true"
+
+\end_inset
+
+T.
+ Csendes and D.
+ Ratz,
+ Subdivision Direction Selection in Interval Methods for Global Optimization,
+ SIAM J.
+ Numer.
+ Anal.
+ 
+\series bold
+34
+\series default
+,
+ pp.
+ 922–938,
+ 1997.
+ 
 \end_layout
 
 \begin_layout End Whole Page
