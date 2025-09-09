@@ -236,8 +236,18 @@ Artificial neural networks have been applied in a wide series of problems
 appeared in real - world problems, such as image processing \citep{nn_image},
 time series forecasting \citep{nn_timeseries}, credit card analysis
 \citep{nn_credit}, problems derived from physics \citep{nnphysics1,nnphysics2}
-etc. Due to the widespread use of these machine learning models, a
-number of techniques have been proposed to minimize the equation \ref{eq:eq1},
+etc. \textcolor{red}{Also, a series of studies have been published
+related to the correlation of symmetry and artificial neural networks,
+such as the work of Aguirre et al \citep{nnsymmetry1}, where neural
+networks were trained using data produced by systems with symmetry
+properties. Furthermore, Mattheakis et al \citep{nnsymmetry2} discussed
+on the application of physical constraints intro the structure of
+neural networks to maintain some basic symmetries in their design.
+Moreover, Krippendorf et al \citep{nnsymmetry3} proposed a method
+that identify symmetries in datasets using neural networks.}
+
+Due to the widespread use of these machine learning models, a number
+of techniques have been proposed to minimize the equation \ref{eq:eq1},
 such as the Back Propagation algorithm \citep{bpnn1,bpnn2}, the RPROP
 algorithm \citep{rpropnn-1,rpropnn-2}, the ADAM optimization method
 \citep{nn_adam} etc. Also, recently a series of more advanced global
@@ -293,7 +303,9 @@ The ability of neural networks to perform feature selection with the
 assistance of genetic algorithms was also studied in the work of Tong
 et al \citep{nn_feature}. Recently, Ruehle provided a study of the
 string landscape using genetic algorithms to train artificial neural
-networks \citep{nn_string}.
+networks \citep{nn_string}. \textcolor{red}{Also, genetic algorithms
+have been used in variety of symmetry problems from the relevant literature
+\citep{gen_symmetry1,gen_symmetry2,gen_symmetry3}. }
 
 A method that was proposed relatively recently and it is based on
 Grammatical Evolution \citep{ge1}, dynamically identifies both the
@@ -396,20 +408,19 @@ mechanisms, and improvements in method scalability. Only by addressing
 these issues can grammatical evolution emerge as an attractive alternative
 in the field of automated neural network design.
 
-\textcolor{red}{The main contributions of the proposed work can be
-summarized as follows:}
+The main contributions of the proposed work can be summarized as follows:
 \begin{enumerate}
-\item \textcolor{red}{Periodic application of an optimization technique
-to randomly selected chromosomes with the aim of improving the performance
-of the selected neural network but also of faster finding the global
-minimum of the error function.}
-\item \textcolor{red}{The training of the artificial neural network by the
-optimization method is done in such a way as not to destroy the architecture
-of the neural network that Grammatical Evolution has already constructed.}
-\item \textcolor{red}{The training of the artificial neural network from
-the optimization function is carried out using a modified fitness
-function, where an attempt is made to adapt the network parameters
-without losing its generalization properties.}
+\item Periodic application of an optimization technique to randomly selected
+chromosomes with the aim of improving the performance of the selected
+neural network but also of faster finding the global minimum of the
+error function.
+\item The training of the artificial neural network by the optimization
+method is done in such a way as not to destroy the architecture of
+the neural network that Grammatical Evolution has already constructed.
+\item The training of the artificial neural network from the optimization
+function is carried out using a modified fitness function, where an
+attempt is made to adapt the network parameters without losing its
+generalization properties.
 \end{enumerate}
 The remaining of this article is organized as follows: in section
 \ref{sec:Method-description} the proposed method and the accompanied
@@ -610,13 +621,13 @@ x will not cause proportional variations in the value of the sigmoid
 function. Therefore, the quantity $B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
 was introduced in that paper to measure this effect. This quantity
 is calculated through the process of Algorithm \ref{alg:CalculationBound}.
-\textcolor{red}{This function may be used to avoid overfitting, by
-limiting the parameters of the neural network to intervals that depend
-on the objective problem. The user defined parameter $a$ is used
-here as a limit for the input value of the sigmoid unit. If this value
-exceeds $a$, then probably the neural network has a reduced generalization
-ability, since the sigmoid output will be the same regardless of any
-change in the input value.}
+This function may be used to avoid overfitting, by limiting the parameters
+of the neural network to intervals that depend on the objective problem.
+The user defined parameter $a$ is used here as a limit for the input
+value of the sigmoid unit. If this value exceeds $a$, then probably
+the neural network has a reduced generalization ability, since the
+sigmoid output will be the same regardless of any change in the input
+value.
 
 \begin{algorithm}[H]
 \caption{The algorithm used to calculate the bounding quantity for neural network
@@ -969,27 +980,27 @@ on 7 September 2025). The network was trained using the AdaGrad optimizer
 \item The row AVERAGE represents the average classification or regression
 error for all datasets in the corresponding table.
 \end{enumerate}
-\textcolor{red}{Based on the table \ref{tab:expClass} with 36 classification
-datasets and nine methods (lower percentage implies lower error),
-the PROPOSED method attains the lowest mean error (21.18\%) and the
-best average rank across datasets (1.83 on a 1--9 scale). The current
-work achieves the best result in 18 out of 36 datasets. The remaining
-per-dataset best results are distributed as follows: RBF 4, PRUNE
-4, DNN 3, NEAT 3, NNC 3, and GENETIC 1, while ADAM and BFGS record
-no first-place finishes. In head-to-head, dataset-wise comparisons,
-the proposed method outperforms each alternative on the vast majority
-of datasets: versus ADAM on 35/36 datasets, versus BFGS on 33/36,
-versus GENETIC on 32/36, versus RBF on 30/36, versus NEAT on 33/36,
-versus PRUNE on 31/36, versus DNN on 32/36, and versus NNC on 32/36.
-The average absolute error reduction of PROPOSED relative to each
-competitor, computed as “competitor \textminus{} PROPOSED” in percentage
-points and then averaged over the 36 datasets, is 14.39 (ADAM), 13.51
-(BFGS), 6.12 (GENETIC), 8.60 (RBF), 11.90 (NEAT), 7.53 (PRUNE), 6.64
-(DNN), and 2.60 (NNC). The corresponding mean relative reductions,
-computed as (competitor \textminus{} PROPOSED)/competitor and then
-averaged per dataset, are 39.24\%, 34.29\%, 22.83\%, 26.50\%, 37.09\%,
-20.91\%, 22.95\%, and 12.65\%. The few datasets where the proposed
-method is worse are concentrated in specific cases: ADAM only on POPFAILURES;
+Based on the table \ref{tab:expClass} with 36 classification datasets
+and nine methods (lower percentage implies lower error), the PROPOSED
+method attains the lowest mean error (21.18\%) and the best average
+rank across datasets (1.83 on a 1--9 scale). The current work achieves
+the best result in 18 out of 36 datasets. The remaining per-dataset
+best results are distributed as follows: RBF 4, PRUNE 4, DNN 3, NEAT
+3, NNC 3, and GENETIC 1, while ADAM and BFGS record no first-place
+finishes. In head-to-head, dataset-wise comparisons, the proposed
+method outperforms each alternative on the vast majority of datasets:
+versus ADAM on 35/36 datasets, versus BFGS on 33/36, versus GENETIC
+on 32/36, versus RBF on 30/36, versus NEAT on 33/36, versus PRUNE
+on 31/36, versus DNN on 32/36, and versus NNC on 32/36. The average
+absolute error reduction of PROPOSED relative to each competitor,
+computed as “competitor \textminus{} PROPOSED” in percentage points
+and then averaged over the 36 datasets, is 14.39 (ADAM), 13.51 (BFGS),
+6.12 (GENETIC), 8.60 (RBF), 11.90 (NEAT), 7.53 (PRUNE), 6.64 (DNN),
+and 2.60 (NNC). The corresponding mean relative reductions, computed
+as (competitor \textminus{} PROPOSED)/competitor and then averaged
+per dataset, are 39.24\%, 34.29\%, 22.83\%, 26.50\%, 37.09\%, 20.91\%,
+22.95\%, and 12.65\%. The few datasets where the proposed method is
+worse are concentrated in specific cases: ADAM only on POPFAILURES;
 BFGS on CIRCULAR, PHONEME, and POPFAILURES; GENETIC on CIRCULAR, GLASS,
 LIVERDISORDER, and PHONEME; RBF on APPENDICITIS, CIRCULAR, GLASS,
 HABERMAN, LIVERDISORDER, and SPIRAL; NEAT on ECOLI, HABERMAN, and
@@ -1004,7 +1015,7 @@ reduction. Median errors tell the same story: PROPOSED has a median
 of 19.24\%, lower than NNC (21.21\%) and DNN (25.83\%). Overall, PROPOSED
 shows consistent superiority in terms of error, as reflected by the
 mean, the across-dataset ranking, and the dataset-wise head-to-head
-counts, with only a small number of dataset-specific exceptions.}
+counts, with only a small number of dataset-specific exceptions.
 
 \begin{table}[H]
 \caption{Experimental results using a variety of machine learning methods for
@@ -1093,9 +1104,9 @@ the classification datasets.\label{tab:expClass}}
 \end{tabular}}{\scriptsize\par}
 \end{table}
 Additionally, the average classification error for all methods is
-illustrated in Figure \ref{fig:The-average-classification}. \textcolor{red}{Additionally,
+illustrated in Figure \ref{fig:The-average-classification}. Additionally,
 the dimension for each classification dataset and the number of distinct
-classes are provided in Table \ref{tab:dimension}.}
+classes are provided in Table \ref{tab:dimension}.
 
 \begin{table}[H]
 \caption{Dimension and number of classes for each classification dataset.\label{tab:dimension}}
@@ -1198,19 +1209,19 @@ of selected datasets to depict the effectiveness of the proposed method.
 
 \end{figure}
 
-\textcolor{red}{In table \ref{tab:expRegression} with 21 regression
-datasets and nine methods (lower values indicate lower error), the
-proposed method achieves the lowest mean error (4.28 versus 6.29 for
-NNC in the AVERAGE row) and the lowest median (0.036). Its average
-rank across datasets is 1.67 on a 1--9 scale, lower than any competitor
-(next best: NNC 3.83, DNN 4.69, RBF 4.79). At the dataset level, the
-current work is the strict winner on 12 of 21 datasets and ties for
-best on 2 more (AIRFOIL with PRUNE and LW with NNC), thus topping
-14/21 datasets overall. The remaining first places are taken by ADAM
-(ABALONE and FY), GENETIC (FRIEDMAN and STOCK), RBF (BK and DEE),
-and NNC (HO). The gap from the dataset-wise best alternative is typically
-small: PROPOSED is within 5\% of the best on 15/21 datasets and within
-10\% on 16/21, with the largest shortfalls appearing mainly on FRIEDMAN
+In table \ref{tab:expRegression} with 21 regression datasets and
+nine methods (lower values indicate lower error), the proposed method
+achieves the lowest mean error (4.28 versus 6.29 for NNC in the AVERAGE
+row) and the lowest median (0.036). Its average rank across datasets
+is 1.67 on a 1--9 scale, lower than any competitor (next best: NNC
+3.83, DNN 4.69, RBF 4.79). At the dataset level, the current work
+is the strict winner on 12 of 21 datasets and ties for best on 2 more
+(AIRFOIL with PRUNE and LW with NNC), thus topping 14/21 datasets
+overall. The remaining first places are taken by ADAM (ABALONE and
+FY), GENETIC (FRIEDMAN and STOCK), RBF (BK and DEE), and NNC (HO).
+The gap from the dataset-wise best alternative is typically small:
+PROPOSED is within 5\% of the best on 15/21 datasets and within 10\%
+on 16/21, with the largest shortfalls appearing mainly on FRIEDMAN
 (5.34 versus 1.249) and, more mildly, on DEE (0.22 versus 0.17) and
 STOCK (4.69 versus 3.88). In head-to-head, dataset-wise comparisons,
 PROPOSED has lower error than each alternative in the vast majority
@@ -1233,7 +1244,7 @@ and leaving larger margins against DNN, RBF, GENETIC, PRUNE, NEAT,
 ADAM, and BFGS. Overall, PROPOSED exhibits consistent superiority
 in terms of error as reflected by mean and median values, average
 rank, and the per-dataset win counts, with the most notable exceptions
-confined to a few datasets that appear to have distinct error scales.}
+confined to a few datasets that appear to have distinct error scales.
 
 \begin{table}[H]
 \caption{Experimental results using a variety of machine learning methods on
@@ -1292,7 +1303,7 @@ the regression datasets.\label{tab:expRegression}}
 \end{tabular}}{\footnotesize\par}
 \end{table}
 
-\textcolor{red}{The statistical comparison depicted in Figure \ref{fig:statClass},
+The statistical comparison depicted in Figure \ref{fig:statClass},
 indicates that all pairwise comparisons between the current method
 and the alternative models are highly statistically significant. Under
 the conventional star notation, {*}{*}{*}{*} denotes p\textless 0.0001,
@@ -1300,7 +1311,7 @@ while the {*}{*}{*}{*}{*} flag for PROPOSED versus RBF signals even
 stronger statistical evidence in favor of PROPOSED. Overall, the findings
 confirm that PROPOSED consistently achieves lower error than every
 comparator across the classification datasets, with a negligible likelihood
-that these differences are due to chance.}
+that these differences are due to chance.
 
 \begin{figure}[H]
 \begin{centering}
@@ -1310,21 +1321,20 @@ that these differences are due to chance.}
 datasets.\label{fig:statClass}}
 
 \end{figure}
-\textcolor{red}{In Figure \ref{fig:statRegression}, the statistical
-comparison on the regression datasets indicates that the proposed
-model differs significantly from all alternative methods. Evidence
-is particularly strong against ADAM, BFGS, RBF, PRUNE, and NNC (p={*},
-i.e., p\ensuremath{\le}0.001), with the strongest signal observed
-against NEAT (p=, i.e., p\ensuremath{\le}0.0001). Comparisons against
-GENETIC and DNN are also statistically significant but comparatively
-weaker (p=, i.e., p\ensuremath{\le}0.01). Taken together, the results
-consistently support that the proposed model attains lower error than
-every competing approach across the examined datasets, with a very
-low probability that the observed differences are due to chance. Note
-that significance levels reflect the strength of statistical evidence
-rather than effect magnitude; for a fuller interpretation it is advisable
-to also report absolute or relative error differences and suitable
-effect size metrics.}
+In Figure \ref{fig:statRegression}, the statistical comparison on
+the regression datasets indicates that the proposed model differs
+significantly from all alternative methods. Evidence is particularly
+strong against ADAM, BFGS, RBF, PRUNE, and NNC (p={*}, i.e., p\ensuremath{\le}0.001),
+with the strongest signal observed against NEAT (p=, i.e., p\ensuremath{\le}0.0001).
+Comparisons against GENETIC and DNN are also statistically significant
+but comparatively weaker (p=, i.e., p\ensuremath{\le}0.01). Taken
+together, the results consistently support that the proposed model
+attains lower error than every competing approach across the examined
+datasets, with a very low probability that the observed differences
+are due to chance. Note that significance levels reflect the strength
+of statistical evidence rather than effect magnitude; for a fuller
+interpretation it is advisable to also report absolute or relative
+error differences and suitable effect size metrics.
 
 \begin{figure}[H]
 \begin{centering}
@@ -1343,9 +1353,8 @@ was used for the Neural Network Construction method and the proposed
 one instead of the one - point crossover. The experimental results
 for the classification datasets are shown in Table \ref{tab:experClassUniformOnePointVsCrossover}and
 for regression datasets in Table \ref{tab:expersRegressionOnePointVsUniform}.
-\textcolor{red}{Although, the one - point crossover mechanism is proposed
-as the crossover procedure in the original article of Grammatical
-Evolution.}
+Although, the one - point crossover mechanism is proposed as the crossover
+procedure in the original article of Grammatical Evolution.
 
 \begin{table}[H]
 \caption{Experimental results for the classification datasets were a comparison
@@ -1585,12 +1594,11 @@ $N_{I}$ grows larger. This means that the optimal selection of $N_{I}$
 depends on a combination of factors, such as the desired accuracy,
 available computational resources, and the nature of the problem. 
 
-\textcolor{red}{Also, in Figure \ref{fig:timeNI} the average execution
-time for the regression dataset is plotted. In this graph the original
-neural network construction method is depicted as well as the proposed
-one using a series of values for the parameter $N_{I}$. As is was
-expected, the execution time increases when the parameter $N_{I}$
-is increased.}
+Also, in Figure \ref{fig:timeNI} the average execution time for the
+regression dataset is plotted. In this graph the original neural network
+construction method is depicted as well as the proposed one using
+a series of values for the parameter $N_{I}$. As is was expected,
+the execution time increases when the parameter $N_{I}$ is increased.
 
 \begin{figure}[H]
 \begin{centering}
@@ -1628,8 +1636,8 @@ classification error.\label{fig:mlFire}}
  As is evident, the proposed method has a lower error in estimating
 the duration of forest fires in all years from 2014 to 2023 compared
 to the original artificial neural network construction technique.
-\textcolor{red}{Although, the proposed method requires significantly
-more time than the original method as depicted in Figure \ref{fig:fire_time}.}
+Although, the proposed method requires significantly more time than
+the original method as depicted in Figure \ref{fig:fire_time}.
 
 \begin{figure}[H]
 \begin{centering}
@@ -1851,6 +1859,19 @@ neural networks for high-energy physics, Eur. Phys. J. C \textbf{76},
 P., \& Whiteson, D. (2016). Parameterized neural networks for high-energy
 physics. The European Physical Journal C, 76(5), 1-7.
 
+\bibitem[(2004)]{nnsymmetry1}Aguirre, L. A., Lopes, R. A., Amaral,
+G. F., \& Letellier, C. (2004). Constraining the topology of neural
+networks to ensure dynamics with symmetry properties. Physical Review
+E, 69(2), 026701.
+
+\bibitem[(2004)]{nnsymmetry2}Mattheakis, M., Protopapas, P., Sondak,
+D., Di Giovanni, M., \& Kaxiras, E. (2019). Physical symmetries embedded
+in neural networks. arXiv preprint arXiv:1904.08991.
+
+\bibitem[(2004)]{nnsymmetry3}Krippendorf, S., \& Syvaeri, M. (2020).
+Detecting symmetries with neural networks. Machine Learning: Science
+and Technology, 2(1), 015010.
+
 \bibitem{bpnn1}Vora, K., \& Yagnik, S. (2014). A survey on backpropagation
 algorithms for feedforward neural networks. International Journal
 of Engineering Development and Research, 1(3), 193-197.
@@ -2009,6 +2030,19 @@ J. Mach. Learn. \& Cyber. 1, 75--87 (2010).
 \bibitem[(2001)]{nn_string}Ruehle, F. Evolving neural networks with
 genetic algorithms to study the string landscape. J. High Energ. Phys.
 2017, 38 (2017).
+
+\bibitem{gen_symmetry1}S. C. Ghosh, B. P. Sinha, N. Das, Channel
+assignment using genetic algorithm based on geometric symmetry, IEEE
+Transactions on Vehicular Technology \textbf{52}, pp. 860-875, 2003.
+
+\bibitem{gen_symmetry2}Y. Liu, D. Zhou, An Improved Genetic Algorithm
+with Initial Population Strategy for Symmetric TSP, Mathematical Problems
+in Engineering, Article ID 212794, 2015.
+
+\bibitem{gen_symmetry3}S. Han, G. Barcaro, A. Fortunelli et al, Unfolding
+the structural stability of nanoalloys via symmetry-constrained genetic
+algorithm and neural network potential. npj, Comput Mater \textbf{8},
+121 ,2022.
 
 \bibitem{ge1}M. O’Neill, C. Ryan, Grammatical evolution, IEEE Trans.
 Evol. Comput. \textbf{5,}pp. 349--358, 2001.
