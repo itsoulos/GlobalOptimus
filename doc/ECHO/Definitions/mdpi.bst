@@ -1,4 +1,4 @@
-%% Bibliography style for MDPI journals, updated on December 17, 2024
+%% Bibliography style for MDPI journals
 
 ENTRY
   { address
@@ -735,15 +735,16 @@ FUNCTION {format.website}
   if$
 }
 
+
 %% the following function is modified from kp.bst at http://arxiv.org/hypertex/bibstyles/
 FUNCTION {format.eprint}
 {eprint empty$
 	{ ""}
 	{primaryClass empty$
-		{" \href{http://arxiv.org/abs/" eprint * "}" *  "{{\normalfont " * "[" * eprint * "]" * "}}" *}
+		{" \href{http://xxx.lanl.gov/abs/" eprint * "}" *  "{{\normalfont " * "[" * eprint * "]" * "}}" *}
 		{archivePrefix empty$
-              		  {" \href{http://arxiv.org/abs/" eprint * "}" * "{{\normalfont " * "[" * "arXiv:" * primaryClass * "/" * eprint * "]" * "}}" *}
-			  {" \href{http://arxiv.org/abs/" eprint * "}" * "{{\normalfont " * "[" * archivePrefix * ":" * primaryClass * "/" * eprint * "]" * "}}" *}
+              		  {" \href{http://xxx.lanl.gov/abs/" eprint * "}" * "{{\normalfont " * "[" * "arXiv:" * primaryClass * "/" * eprint * "]" * "}}" *}
+			  {" \href{http://xxx.lanl.gov/abs/" eprint * "}" * "{{\normalfont " * "[" * archivePrefix * ":" * primaryClass * "/" * eprint * "]" * "}}" *}
 		if$
 		}
 	if$
