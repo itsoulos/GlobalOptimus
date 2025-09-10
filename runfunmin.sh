@@ -3,9 +3,9 @@ METHOD=MFO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=kmeans
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity, mean, all, sumfitness (only for DE)
-TERMINATION=doublebox
+TERMINATION=similarity
 ### GLOBAL PARAMS
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION "
 if [ $METHOD = "bfgs" ]
@@ -16,7 +16,7 @@ then
 	METHODPARAMS="--bfgs_iters=200"
 elif [ $METHOD = "MFO" ]
 then
-	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=mixed"
+	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=aggressive -stoppingRule=similarity"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
 ##de_np:          The population size. 
@@ -84,7 +84,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.01 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.01 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
 #ms_samples: number of multistart samples

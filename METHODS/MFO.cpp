@@ -21,17 +21,16 @@ void MFO::init() {
     strategyMode = getParam("mfo_strategy_mode").getValue().toStdString();
     bestFitness = std::numeric_limits<double>::max();
     generation = 0;
-    population.resize(N);
-    fitness.resize(N);
     D = myProblem->getDimension();
 
-    for (int i = 1; i < N; i++) {
+  /*  for (int i = 1; i < N; i++) {
        population[i].resize(D);
-    }
+    }*/
     sampleFromProblem(N, population, fitness);
     lower = myProblem->getLeftMargin();
     upper = myProblem->getRightMargin();
     bestValues.resize(T);
+
 }
 
 void MFO::Selection() {
@@ -133,15 +132,16 @@ void MFO::MFO1(int N, int T, vector<double>& bestValues) {
                     }
                 }
 
+		/*
                 // Έλεγχος ορίων
                 for (int j = 0; j < D; ++j) {
-                    if (newThesi[j] < lower[j]) newThesi[j] = lower[j];
-                   if (newThesi[j] > upper[j]) newThesi[j] = upper[j];
-              }
+                    if (newThesi[j] < lower[j]) newThesi[j] = population[i][j];// lower[j];
+                   if (newThesi[j] > upper[j]) newThesi[j] =  population[i][j];//upper[j];
+              }*/
 
                 // Αξιολόγηση
                 if (myProblem->isPointIn(newThesi)) {
-                    //newFitness = myProblem->statFunmin(newThesi);
+                    newFitness = myProblem->statFunmin(newThesi);
                     if (newFitness < fitness[i]) {
                         population[i] = newThesi;
                         fitness[i] = newFitness;
