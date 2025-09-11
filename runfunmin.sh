@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE
-METHOD=MFO
+METHOD=bho
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -14,6 +14,9 @@ then
 #bfgs_iters: the maximum number of allowed iterations
 
 	METHODPARAMS="--bfgs_iters=200"
+elif [ $METHOD = "bho" ]
+then
+	  METHODPARAMS="--population=100 --maxiters=500 --localSearchRate=0.00"
 elif [ $METHOD = "MFO" ]
 then
 	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=aggressive -stoppingRule=similarity"
