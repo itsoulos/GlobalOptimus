@@ -22,7 +22,7 @@ BHO::BHO()
     // BHO βασικά
     addParam(Parameter("wound_strength", 0.14, 0.0, 1.0, "Injury intensity"));
     addParam(Parameter("wp", 0.38, 0.0, 1.0,"Injury probability per dimension"));
-    addParam(Parameter("hr", 0.8, 0.0, 1.0, "Healing probability per dimension"));
+    addParam(Parameter("hr", 0.25, 0.0, 1.0, "Healing probability per dimension"));
 
     // Ήπιο DE(best/1,bin)
     addParam(Parameter("de_rate", 0.15, 0.0, 1.0, "Probability of DE(best/1,bin) move"));
