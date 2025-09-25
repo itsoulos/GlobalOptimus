@@ -6,7 +6,7 @@ MFO::MFO()  {
     addParam(Parameter("mfo_count", 200,10,10000, "Number of chromosomes"));
     addParam(Parameter("mfo_maxiters", 200,10,10000, "Maximum number of generations"));
     addParam(Parameter("mfo_lrate", 0.05,0.0,1.0, "Local search rate"));
-    addParam(Parameter("mfo_iters", 5,1,10000, "Number of iterations"));
+    addParam(Parameter("mfo_iters", 1,2,3, "Number of iterations"));
     QStringList list;
     list<<"aggressive"<<"conservative"<<"mixed";
     addParam(Parameter("mfo_strategy_mode", "mixed",list, "Movement strategy mode. Available: aggressive, conservative, mixed"));
@@ -68,7 +68,7 @@ double MFO::evaluate( vector<double>& solution, double& bestFitness) {
 void MFO::CalcFitnessArray() {
 
     for (int i = 0; i < N; i++) {
-        fitness[i] = myProblem->statFunmin(population[i]);
+       // fitness[i] = myProblem->statFunmin(population[i]);
 
         if (localsearchRate > 0.0) {
             double r = rand() * 1.0 / RAND_MAX;
@@ -132,7 +132,7 @@ void MFO::MFO1(int N, int T, vector<double>& bestValues) {
                     }
                 }
 
-		/*
+        /*
                 // Έλεγχος ορίων
                 for (int j = 0; j < D; ++j) {
                     if (newThesi[j] < lower[j]) newThesi[j] = population[i][j];// lower[j];
@@ -141,7 +141,7 @@ void MFO::MFO1(int N, int T, vector<double>& bestValues) {
 
                 // Αξιολόγηση
                 if (myProblem->isPointIn(newThesi)) {
-                    newFitness = myProblem->statFunmin(newThesi);
+                    //newFitness = myProblem->statFunmin(newThesi);
                     if (newFitness < fitness[i]) {
                         population[i] = newThesi;
                         fitness[i] = newFitness;

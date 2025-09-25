@@ -19,7 +19,7 @@ then
 	  METHODPARAMS="--population=100 --maxiters=500 --localSearchRate=0.00"
 elif [ $METHOD = "MFO" ]
 then
-	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=aggressive -stoppingRule=similarity"
+	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=aggressive --stoppingRule=similarity"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
 ##de_np:          The population size. 
