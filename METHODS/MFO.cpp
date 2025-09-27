@@ -68,7 +68,7 @@ double MFO::evaluate( vector<double>& solution, double& bestFitness) {
 void MFO::CalcFitnessArray() {
 
     for (int i = 0; i < N; i++) {
-       // fitness[i] = myProblem->statFunmin(population[i]);
+        fitness[i] = myProblem->statFunmin(population[i]);
 
         if (localsearchRate > 0.0) {
             double r = rand() * 1.0 / RAND_MAX;
@@ -141,7 +141,7 @@ void MFO::MFO1(int N, int T, vector<double>& bestValues) {
 
                 // Αξιολόγηση
                 if (myProblem->isPointIn(newThesi)) {
-                    //newFitness = myProblem->statFunmin(newThesi);
+                    newFitness = myProblem->statFunmin(newThesi);
                     if (newFitness < fitness[i]) {
                         population[i] = newThesi;
                         fitness[i] = newFitness;
@@ -170,7 +170,7 @@ void MFO::MFO1(int N, int T, vector<double>& bestValues) {
             }
 
             if (myProblem->isPointIn(newThesiDive)) {
-               // newFitnessDive = myProblem->statFunmin(newThesiDive);
+                newFitnessDive = myProblem->statFunmin(newThesiDive);
                 if (newFitnessDive < fitness[i]) {
                     population[i] = newThesiDive;
                     fitness[i] = newFitnessDive;
