@@ -1,13 +1,13 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=Genetic
+METHOD=Simman
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
-LOCALSEARCH=bfgs
+LOCALSEARCH=lbfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=nnc
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -89,7 +89,7 @@ elif [ $METHOD = "Adam" ]; then
   #adam_maxiters: maximum number of iterations allowed
   #adam_b1: the b1 parameter
   #adam_b2: the b2 parameter
-  METHODPARAMS="--adam_rate=0.001 --adam_linesearch=armijo --adam_maxiters=10000 --adam_b1=0.9 --adam_b2=0.999"
+  METHODPARAMS="--adam_rate=0.001 --adam_linesearch=armijo --adam_maxiters=2000 --adam_b1=0.9 --adam_b2=0.999"
 elif [ $METHOD = "GradientDescent" ]; then
 
   #gd_maxiters: maximum number of allowed iterations

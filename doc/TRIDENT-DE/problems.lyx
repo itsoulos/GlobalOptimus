@@ -1,0 +1,223 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{bm}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children no
+\language english
+\language_package none
+\inputencoding utf8
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Section*
+GasCycle Thermal Cycle
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Vars:
+ 
+\series default
+ 
+\begin_inset Formula $\bm{x}=[T_{1},T_{3},P_{1},P_{3}]^{\top}$
+\end_inset
+
+.
+ 
+\begin_inset space \quad{}
+\end_inset
+
+
+\begin_inset Formula $r=P_{3}/P_{1},\ \gamma=1.4.$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\eta(\bm{x})=1-r^{-(\gamma-1)/\gamma}\,\frac{T_{1}}{T_{3}},\qquad\min_{\bm{x}}f(\bm{x})=-\eta(\bm{x}).
+\]
+
+\end_inset
+
+
+\series bold
+Bounds:
+ 
+\series default
+ 
+\begin_inset Formula $300\!\le\!T_{1}\!\le\!1500,\;1200\!\le\!T_{3}\!\le\!2000,\;1\!\le\!P_{1},P_{3}\!\le\!20.$
+\end_inset
+
+ 
+\series bold
+Penalty:
+ 
+\series default
+ infeasible 
+\begin_inset Formula $\Rightarrow f=10^{20}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Tandem Space Trajectory (MGA-1DSM,
+ EVEEJ + 2
+\begin_inset Formula $\times$
+\end_inset
+
+Saturn)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Vars (
+\begin_inset Formula $D{=}18$
+\end_inset
+
+):
+ 
+\series default
+ 
+\begin_inset Formula $\bm{x}=[t_{0},T_{1},T_{2},T_{3},T_{4},T_{5A},T_{5B},s_{1},s_{2},s_{3},s_{4},s_{5A},s_{5B},r_{p},k_{A1},k_{A2},k_{B1},k_{B2}]^{\top}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+\begin{aligned} & 7000\le t_{0}\le10000,\\
+ & 30\le T_{1}\le500,\;30\le T_{2}\le600,\;30\le T_{3}\le1200,\\
+ & 30\le T_{4}\le1600,\;30\le T_{5A},T_{5B}\le2000,\\
+ & 0\le s_{1..4},s_{5A},s_{5B},r_{p},k_{A1},k_{A2},k_{B1},k_{B2}\le1.
+\end{aligned}
+\]
+
+\end_inset
+
+
+\series bold
+Objective:
+
+\series default
+ 
+\begin_inset Formula 
+\[
+\min_{\bm{x}}\ \Delta V_{\text{tot}}=\Delta V_{\text{launch}}(T_{1})+\Delta V_{\text{legs}}(T_{1}{:}T_{4})+\Delta V_{A}+\Delta V_{B}+\Delta V_{\text{DSM}}(\bm{s},r_{p})-G_{\text{GA}}-G_{J}+P_{\text{hard}}+P_{\text{soft}},
+\]
+
+\end_inset
+
+
+\begin_inset VSpace -2mm
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+P_{\text{soft}}=\beta\max\!\Big\{0,\ (T_{1}{+}\cdots{+}T_{4}+\tfrac{1}{2}(T_{5A}{+}T_{5B}))-3500\Big\}.
+\]
+
+\end_inset
+
+Notes:
+ 
+\begin_inset Formula $\Delta V_{\text{launch}}$
+\end_inset
+
+ decreases (log-like) in 
+\begin_inset Formula $T_{1}$
+\end_inset
+
+ (
+\begin_inset Formula $\ge6$
+\end_inset
+
+ km/s floor),
+ leg/branch costs decrease with TOF.
+\end_layout
+
+\end_body
+\end_document

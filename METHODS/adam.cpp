@@ -91,7 +91,7 @@ void    Adam::step()
             if(xpoint[j] < lM[j]) xpoint[j] = lM[j];
         }
         f=myProblem->statFunmin(xpoint);
-        if(i % (iterations/10) == 0 && debug)
+        if(i % 10 == 0 && debug)
             methodLogger->printMessage(
                 QString::asprintf("ADAM ITER: %4d ERROR %10.5lf ",
                                   i,f));
