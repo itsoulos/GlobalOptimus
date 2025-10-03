@@ -3,7 +3,6 @@
 UserProblem::UserProblem()
     :Problem(1)
 {
-
 }
 
 double  UserProblem::funmin(Data &x)

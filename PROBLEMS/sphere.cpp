@@ -18,7 +18,6 @@ double Sphere::funmin(Data &x)
 
 Data Sphere::gradient(Data &x)
 {
-    gradientCalls++;
     Data g;
     g.resize(getDimension());
     for (int i = 0; i < getDimension(); i++)

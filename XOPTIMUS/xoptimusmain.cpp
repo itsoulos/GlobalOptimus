@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     setlocale(LC_ALL,"C");
-
+/*
  QSettings settings("MyCompany", "MyApp");
 
     // --- Αποθήκευση γραμματοσειράς ---
@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     } else {
         qDebug() << "Invalid font string:" << fontString;
     }
+    */
 
     MainWindow w;
     w.showMaximized();
