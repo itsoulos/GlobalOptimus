@@ -26,7 +26,6 @@
 # include <METHODS/usermethod.h>
 # include <METHODS/armadillo1.h>
 # include <METHODS/gwooptimizer.h>
-# include <METHODS/bho.h>
 
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
@@ -98,8 +97,7 @@ void loadMethods()
     methodName<<"UserMethod";
     method<<new EO;
     methodName<<"EO";
-    method<<new BHO;
-    methodName<<"bho";
+
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
 }

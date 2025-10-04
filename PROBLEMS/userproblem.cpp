@@ -3,11 +3,11 @@
 UserProblem::UserProblem()
     :Problem(1)
 {
+
 }
 
 double  UserProblem::funmin(Data &x)
 {
-    printf("This is a simple test function.\n");
     return 0.0;
 }
 

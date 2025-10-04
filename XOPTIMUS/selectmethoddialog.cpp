@@ -10,8 +10,8 @@ SelectMethodDialog::SelectMethodDialog(QStringList list,
     methodLoader = loader;
 	QScreen *screen = QGuiApplication::primaryScreen();
 	QRect wd = screen->geometry();
-    width = 4*wd.width()/5;
-    height =4*wd.height()/5;
+    width = 7*wd.width()/8;
+    height =7*wd.height()/8;
     methodList = list;
     this->setWindowTitle(tr("Optimizer Selection"));
     this->setFixedSize(width,height);

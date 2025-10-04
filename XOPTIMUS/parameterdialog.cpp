@@ -23,8 +23,8 @@ void     ParameterDialog::initView(QString name,bool isJson)
 {
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect wd = screen->geometry();
-    WIDTH = 4*wd.width()/5;
-    HEIGHT =4*wd.height()/5;
+    WIDTH = 7*wd.width()/8;
+    HEIGHT =7*wd.height()/8;
     problemName=name;
     this->setWindowTitle("Problem settings for function "+name);
     this->setFixedSize(WIDTH,HEIGHT);

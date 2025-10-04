@@ -25,7 +25,6 @@ SOURCES += \
         GE/cprogram.cc \
 	METHODS/eo.cpp \
 	METHODS/MFO.cpp \
-	METHODS/bho.cpp \
         GE/doublestack.cc \
     GE/fcprogram.cpp \
         GE/fparser.cc \
@@ -122,7 +121,6 @@ HEADERS += \
     GE/program.h \
     GE/rule.h \
     GE/symbol.h \
-    METHODS/bho.h \
     METHODS/eo.h \
     METHODS/acop.h \
     METHODS/ego.h \

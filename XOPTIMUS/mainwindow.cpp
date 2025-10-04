@@ -2,6 +2,7 @@
 # include <QApplication>
 # include <QScreen>
 # include <OPTIMUS/editlogger.h>
+# include <QDesktopServices>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 
@@ -46,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
     settingsMenu->addAction("PROBLEM");
     settingsMenu->addAction("METHOD");
     settingsMenu->addAction("SEED");
+    settingsMenu->addAction("DARK THEME");
+    settingsMenu->addAction("LIGHT THEME");
 
     executeMenu = new QMenu("EXECUTE");
     executeMenu->addAction("RUN");
@@ -56,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     helpMenu    = new QMenu("HELP");
     helpMenu->addAction("TEAM");
     helpMenu->addAction("MANUAL");
-    helpMenu->addAction("ABOUT");
+
     lastEdit = NULL;
     menuBar()->addMenu(loadMenu);
     menuBar()->addMenu(settingsMenu);
@@ -237,6 +240,24 @@ void    MainWindow::settingsSlot(QAction  *action)
         }
         srand(randomSeed);
     }
+    else
+        if(action->text()=="DARK THEME")
+    {
+        QFile file(":/XOPTIMUS/dark.css"); // μπορεί να είναι και από το filesystem
+        if (file.open(QFile::ReadOnly)) {
+            QString styleSheet = QLatin1String(file.readAll());
+            qApp->setStyleSheet(styleSheet);
+        }
+    }
+    else
+        if(action->text()=="LIGHT THEME")
+    {
+        QFile file(":/XOPTIMUS/light.css"); // μπορεί να είναι και από το filesystem
+        if (file.open(QFile::ReadOnly)) {
+            QString styleSheet = QLatin1String(file.readAll());
+            qApp->setStyleSheet(styleSheet);
+        }
+    }
 }
 
 void    MainWindow::executeSlot(QAction  *action)
@@ -347,6 +368,27 @@ void    MainWindow::helpSlot(QAction *action)
         showMessageBox(appName,                             tr("Tsoulos Ioannis\n"
                                    "Charilogis Vasileios\n"
                                    "Kirou Glikeria\n")); }
+    else
+        if(action->text()=="MANUAL")
+    {
+        // Path προς resource
+        QString resourcePath(":/XOPTIMUS/optimus_paper.pdf");
+
+        // Προσωρινός φάκελος
+        QString tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/example.pdf";
+
+        // Αντιγραφή από resource στο temp
+        if (QFile::exists(tempPath)) {
+            QFile::remove(tempPath); // διαγραφή παλιού
+        }
+
+        if (QFile::copy(resourcePath, tempPath)) {
+            // Ανοίγει με το default PDF πρόγραμμα του συστήματος
+            QDesktopServices::openUrl(QUrl::fromLocalFile(tempPath));
+        } else {
+            qDebug() << "Αποτυχία αντιγραφής PDF!";
+        }
+    }
 }
 void    MainWindow::closeEvent(QCloseEvent *event)
 {

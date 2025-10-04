@@ -611,6 +611,24 @@ main
  η τιμή της συνάρτησης στο τελευταίο ελάχιστο που βρήκε η μέθοδος βελτιστοποίησης αλλά και η τιμή της παραγώγου σε εκείνο το σημείο.
 \end_layout
 
+\begin_layout Enumerate
+
+\lang english
+DARK THEME
+\lang greek
+.
+ Με αυτήν την επιλογή ο χρήστης μπορεί να αλλάξει την εμφάνιση της εφαρμογής σε σκοτεινό θέμα.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+LIGHT THEME
+\lang greek
+.
+ Με αυτήν την επιλογή ο χρήστης επιλέγει την εφαρμογή φωτεινού θέματος για την εφαρμογή.
+\end_layout
+
 \end_deeper
 \begin_layout Enumerate
 Μενού 
@@ -620,7 +638,12 @@ HELP
 \series default
 \lang greek
 .
- Με αυτήν την επιλογή εμφανίζονται στοιχεία σχετικά με την εφαρμογή.
+ Με αυτήν την επιλογή εμφανίζονται στοιχεία σχετικά με την εφαρμογή,
+ όπως για παράδειγμα η ερευνητική ομάδα της εφαρμογής καθώς και η αντίστοιχη δημοσίευση στο περιοδικό 
+\lang english
+Journal of Open Source Software
+\lang greek
+.
 \end_layout
 
 \begin_layout Chapter
@@ -689,7 +712,6 @@ status open
 
 \begin_layout Plain Layout
 
-\lang english
  int n = params["opt_dimension"].toString().toInt();
  
 \end_layout
@@ -805,45 +827,38 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\lang english
 RastriginProblem::RastriginProblem()
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     :
  Problem(2)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     Data l,
  r;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     l.resize(2);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     r.resize(2);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     for (int i = 0;
  i < 2;
  i++)
@@ -851,43 +866,36 @@ RastriginProblem::RastriginProblem()
 
 \begin_layout Plain Layout
 
-\lang english
     {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
         l[i] = -1.0;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
         r[i] = 1.0;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     }
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     setLeftMargin(l);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     setRightMargin(r);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 }
 \end_layout
 
@@ -966,50 +974,42 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\lang english
 void Test2nProblem::init(QJsonObject &params)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     int n = params["opt_dimension"].toString().toInt();
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     setDimension(n);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     Data l,
  r;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     l.resize(n);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     r.resize(n);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     for (int i = 0;
  i < n;
  i++)
@@ -1017,43 +1017,36 @@ void Test2nProblem::init(QJsonObject &params)
 
 \begin_layout Plain Layout
 
-\lang english
     {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
         l[i] = -5.0;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
         r[i] = 5.0;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     }
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     setLeftMargin(l);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     setRightMargin(r);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 }
 \end_layout
 
@@ -1066,6 +1059,8 @@ void Test2nProblem::init(QJsonObject &params)
 Json Object
 \lang greek
 .
+ Η συνάρτηση αυτή θα κληθεί από το σύστημα μόνον μια φορά όταν φορτωθεί στην μνήμη η αντικειμενική συνάρτηση και ο σκοπός της είναι να γίνει πέρασμα παραμέτρων στο αντικειμενικό πρόβλημα.
+ Για παράδειγμα στην περίπτωση των τεχνητών νευρωνικών δικτύων σε αυτήν την συνάρτηση θα μπορούσε ο χρήστης να δώσει τα πρότυπα για την εκπαίδευση του μοντέλου μηχανικής μάθησης.
 \end_layout
 
 \begin_layout Section
@@ -1163,49 +1158,41 @@ status open
 
 \begin_layout Plain Layout
 
-\lang english
 Data RastriginProblem::gradient(Data &x)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     Data g;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     g.resize(2);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     g[0] = 2.0 * x[0] + 18.0 * sin(18.0 * x[0]);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     g[1] = 2.0 * x[1] + 18.0 * sin(18.0 * x[1]);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     return g;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 }
 \end_layout
 
@@ -1240,103 +1227,86 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\lang english
 Data	TestProblem::gradient(vector<double> &x)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 	Data g;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     g.resize(x.size());
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 	for(int i=0;i<getdimension();i++)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 	{
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 	    double amax = 1.0>fabs(x[i])?1.0:fabs(x[i]);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		double eps=pow(1e-18,1.0/3.0)*amax;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		x[i]+=eps;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		double v1=funmin(x);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		x[i]-=2.0 *eps;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		double v2=funmin(x);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		g[i]=(v1-v2)/(2.0 * eps);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 		x[i]+=eps;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 	}
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     return g;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 }
 \end_layout
 
@@ -1348,7 +1318,72 @@ Data	TestProblem::gradient(vector<double> &x)
 \begin_layout Section
 Η συνάρτηση 
 \lang english
-done()
+done
+\lang greek
+()
+\end_layout
+
+\begin_layout Standard
+Η συνάρτηση done() με την ακόλουθη σύνταξη 
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status collapsed
+
+\begin_layout Plain Layout
+
+\lang english
+QJsonObject UserProblem::done(Data &x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    QJsonObject t;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    return t;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+}
+\end_layout
+
+\end_inset
+
+
+\lang greek
+ καλείται όταν τελειώσει η ζωή του αντικειμενικού προβλήματος και θα αποφορτωθεί από την μνήμη του υπολογιστή.
+ Στο 
+\lang english
+Json Object 
+\lang greek
+με το συμβολικό όνομα 
+\lang english
+x
+\lang greek
+ ο χρήστης μπορεί να επιστρέψει τιμές από την εκτέλεση της βελτιστοποίησης,
+ όπως για παράδειγμα στα τεχνητά νευρωνικά δίκτυα ο χρήστης μπορεί να επιστρέψει το σφάλμα του μοντέλου μηχανικής μάθησης στα δεδομένα ελέγχου (
+\lang english
+test set
+\lang greek
+).
 \end_layout
 
 \begin_layout Section
@@ -1357,30 +1392,2180 @@ done()
 UserProblem
 \end_layout
 
+\begin_layout Standard
+Η κατηγορία UserProblem μπορεί να χρησιμοποιηθεί για την υλοποίηση προβλημάτων βελτιστοποίησης που θέλει να ορίσει ο χρήστης και δεν συμπεριλαμβάνονται στην λίστα των προβλημάτων που έχουν υλοποιηθεί στο 
+\lang english
+Optimus
+\lang greek
+.
+ 
+\end_layout
+
 \begin_layout Chapter
 Μέθοδοι βελτιστοποίησης
+\end_layout
+
+\begin_layout Section
+Μέθοδοι τοπικής ελαχιστοποίησης
+\end_layout
+
+\begin_layout Standard
+Οι μέθοδοι τοπικής βελτιστοποίησης χρησιμοποιούνται για την εύρεση ενός τοπικού ελαχίστου μιας συνάρτησης 
+\begin_inset Formula $f(x)$
+\end_inset
+
+ και σε πολλές περιπτώσεις κάνουν και χρήση παραγώγων για την αποτελεσματική εύρεσή του.
+ Επιπλέον,
+ σχεδόν όλες οι τεχνικές καθολικής βελτιστοποίησης μπορούν να χρησιμοποιήσουν και μεθόδους τοπικής βελτιστοποίησης για την αποτελεσματικότερη εύρεση του ολικού ελαχίστου των αντικειμενικών συναρτήσεων.
+
+\lang english
+ 
+\lang greek
+Σε αυτές τις τεχνικής γίνεται αναζήτηση
+\lang english
+ 
+\begin_inset Formula $x^{*}\in S,$
+\end_inset
+
+ 
+\lang greek
+με την ιδιότητα
+\lang english
+
+\begin_inset Formula 
+\[
+f\left(x^{*}\right)<f\left(x\right),\forall x\in S,\left\Vert x-x^{*}\right\Vert \le e
+\]
+
+\end_inset
+
+
+\lang greek
+όπου e ένας μικρός θετικός αριθμός.
+ Στο λογισμικό 
+\lang english
+Optimus
+\lang greek
+ έχουν υλοποιηθεί οι παρακάτω τεχνικές τοπικής βελτιστοποίησης:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+GradientDescent
+\series default
+\lang greek
+.
+ Με την μέθοδο αυτή γίνεται χρήση της τεχνικής Gradient Descent
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gd"
+literal "false"
+
+\end_inset
+
+ για την εύρεση ενός τοπικού ελαχίστου,
+ σύμφωνα με το σχήμα:
+\begin_inset Formula 
+\[
+x'=x-n\frac{\partial f(x)}{\partial x}
+\]
+
+\end_inset
+
+όπου 
+\begin_inset Formula $n$
+\end_inset
+
+ είναι ο ρυθμός μάθησης.
+ Σε πολλές περιπτώσεις η παράμετρος 
+\begin_inset Formula $n$
+\end_inset
+
+ δεν είναι σταθερά αλλά μπορεί να υπολογιστεί με τεχνικές γραμμικής αναζήτησης σύμφωνα με τον αλγόριθμου 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Το-γενικό-σχήμα"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ Οι βασικές παράμετροι της 
+\lang english
+GradientDescent
+\lang greek
+ είναι οι ακόλουθες:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gd_maxiters
+\series default
+\lang greek
+.
+ Ορίζει τον μέγιστο αριθμό επαναλήψεων της τεχνικής.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gd_linesearch
+\series default
+\lang greek
+.
+ Ορίζει την τεχνική που θα χρησιμοποιηθεί για 
+\lang english
+Line Search
+\lang greek
+.
+ Επιτρεπτές τιμές είναι:
+ 
+\lang english
+none,
+ golden 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "goldenSearch"
+literal "false"
+
+\end_inset
+
+,
+ fibonacci 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fibonacciSearch"
+literal "false"
+
+\end_inset
+
+,
+ armijo
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "armijoSearch"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gd_epsilon
+\series default
+\lang greek
+.
+ Είναι μια πολύ μικρή τιμή (πχ 
+\begin_inset Formula $10^{-5}$
+\end_inset
+
+) που θα χρησιμοποιηθεί σαν κριτήριο τερματισμού της τεχνικής όταν η διαφορά μεταξύ των σημείων 
+\begin_inset Formula $x$
+\end_inset
+
+ και 
+\begin_inset Formula $x'$
+\end_inset
+
+ πέσει κάτω από αυτό το όριο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gd_rate
+\series default
+\lang greek
+.
+ Είναι ο ρυθμός μάθησης 
+\begin_inset Formula $n$
+\end_inset
+
+ που θα χρησιμοποιηθεί στην 
+\lang english
+Gradient Descent
+\lang greek
+ αν έχει επιλεχθεί σαν μέθοδος 
+\lang english
+line search
+\lang greek
+ η επιλογή 
+\lang english
+none
+\lang greek
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Bfgs
+\series default
+\lang greek
+.
+ Υλοποιεί μια τεχνική τοπικής βελτιστοποίησης από την οικογένεια των μεθόδων 
+\lang english
+Broyden–Fletcher–Goldfarb–Shanno (BFGS)
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bfgs"
+literal "false"
+
+\end_inset
+
+ που έχει προταθεί από τον 
+\lang english
+Powell
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "powell"
+literal "false"
+
+\end_inset
+
+ και αξιοποιεί τα όρια των αντικειμενικών συναρτήσεων.
+ Η μόνη παράμετρος που έχει αυτή η τεχνική είναι η ακέραια παράμετρος
+\lang english
+ bfgs_iters
+\lang greek
+ που ορίζει τον μέγιστο αριθμό επαναλήψεων και έχει τεθεί στην τιμή 2001.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+LBfgs
+\series default
+\lang greek
+.
+ Υλοποιεί την τεχνική 
+\lang english
+Limited Memory BFGS (LBFGS) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lbfgs"
+literal "false"
+
+\end_inset
+
+,
+
+\lang greek
+ που χρησιμοποιείται κυρίως σε προβλήματα μεγάλης κλίμακας (μεγάλος αριθμός 
+\begin_inset Formula $n$
+\end_inset
+
+).
+ Η μόνη παράμετρος που διαθέτει αυτή η μέθοδος είναι η παράμετρος 
+\lang english
+lbfgs_iters 
+\lang greek
+που ορίζει τον μέγιστο αριθμό επαναλήψεων.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+NelderMead
+\series default
+\lang greek
+.
+ Υλοποιεί την τεχνική 
+\lang english
+Nelder Mead
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nelderMead"
+literal "false"
+
+\end_inset
+
+ για τοπική ελαχιστοποίηση.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Adam
+\series default
+\lang greek
+.
+ Υλοποιεί την τεχνική 
+\lang english
+Adam 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "adamMethod"
+literal "false"
+
+\end_inset
+
+
+\lang greek
+ για τοπική ελαχιστοποίηση,
+ που αποτελεί μια βελτίωση της τεχνικής 
+\lang english
+Gradient Descent
+\lang greek
+ και έχει εφαρμοσθεί αποτελεσματικά σε μοντέλα βαθιάς μηχανικής μάθησης 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "adamDeep"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Το γενικό σχήμα της γραμμικής αναζήτησης.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Το-γενικό-σχήμα"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Δίνεται ένα σημείο 
+\begin_inset Formula $x^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Υπολογίζεται μια φθίνουσα κατεύθυνση 
+\begin_inset Formula $s^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Ελαχιστοποιείται ως προς 
+\begin_inset Formula $\lambda\ (\lambda>0)$
+\end_inset
+
+ η συνάρτηση 
+\begin_inset Formula 
+\[
+\phi(\lambda)=f\left(x^{(k)}+\lambda s^{(k)}\right)
+\]
+
+\end_inset
+
+και εντοπίζεται η βέλτιστη τιμή 
+\begin_inset Formula $\lambda^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Τίθεται 
+\begin_inset Formula $x^{(k+1)}=x^{(k)}+\lambda^{(k)}s^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+Στο σημείο 3 γίνεται η λεγόμενη 
+\series bold
+γραμμική αναζήτηση
+\series default
+.
+\end_layout
+
+\end_deeper
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Μέθοδοι καθολικής ελαχιστοποίησης
+\end_layout
+
+\begin_layout Standard
+Στην περίπτωση των τεχνικών καθολικής βελτιστοποίησης,
+ στόχος είναι η εύρεση του ολικού ελαχίστου της αντικειμενικής συνάρτησης,
+ δηλαδή 
+\lang english
+
+\begin_inset Formula 
+\[
+\min_{x}f(x),\ x\in S\subset R^{n}
+\]
+
+\end_inset
+
+ 
+\lang greek
+Στο λογισμικό έχουν υλοποιηθεί μια σειρά από τεχνικές καθολικής βελτιστοποίησης που παροσιάζονται στην συνέχεια.
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+Multistart
+\lang greek
+ (πολλαπλών εκκινήσεων)
+\end_layout
+
+\begin_layout Standard
+Υλοποιεί μια μέθοδο πολλαπλών εκκινήσεων 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "multistart"
+literal "false"
+
+\end_inset
+
+ για την εύρεση του ολικού ελαχίστου.
+ Το γενικό σχήμα αυτής της μεθόδου παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Το-γενικό-σχήμα-1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Το γενικό σχήμα της τεχνικής πολλαπλών εκκινήσεων.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Το-γενικό-σχήμα-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Λήψη Ν δειγμάτων από την συνάρτηση 
+\begin_inset Formula $f(x)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Επεξεργασία των δειγμάτων,
+ πχ εκτέλεση μεθόδου ελαχιστοποίησης
+\end_layout
+
+\begin_layout Enumerate
+Έλεγχος για τερματισμό.
+ Αν όχι μετάβαση στο 1
+\end_layout
+
+\begin_layout Enumerate
+Το δείγμα με την χαμηλότερη τιμή είναι και το τελικό αποτέλεσμα.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Οι παράμετροι της τεχνικής είναι οι ακόλουθες:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ms_samples
+\series default
+\lang greek
+.
+ Η παράμετρος ορίζει αυτή πόσα δείγματα θα λαμβάνονται σε κάθε εκτέλεση της μεθόδου Multistart.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ms_maxiters
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή ορίζει τον μέγιστο αριθμό επαναλήψεων της τεχνικής.
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+Genetic
+\lang greek
+ (Γενετικός αλγόριθμος)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\lang english
+Genetic
+\series default
+\lang greek
+.
+ Αυτή η επιλογή υλοποιεί έναν Γενετικό Αλγόριθμο 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "genetic"
+literal "false"
+
+\end_inset
+
+ για την βελτιστοποίηση πολυδιάστατων συναρτήσεων.
+ Τα χρωμοσώματα στον αλγόριθμο είναι διανύσματα δεκαδικών τιμών.
+ Ένα βασικό σχήμα ενός γενετικού αλγόριθμου (χωρίς να είναι το μόνο) παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Το-γενικό-σχήμα"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Γενικό σχήμα γενετικού αλγορίθμου.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Γενικό-σχήμα-γενετικού"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+Procedure Genetic
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+   t=0
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+   Initialize ( P(t) )
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+   Evaluate ( P(t) )
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+   while (not terminated (P(t)) )do
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+     t=t+1
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+     subP(t)=Select( P(t) )
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+     Crossover( subP(t) )
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+     Mutate ( subP(t) )
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+     P(t+1) = Recombine (P(t),
+ subP(t))
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+   end while
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\lang english
+End Genetic
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Οι βασικές παράμετροι του γενετικού αλγόριθμου είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_count
+\series default
+\lang greek
+.
+ Αυτή η ακέραια παράμετρος ορίζει το πλήθος των χρωμοσωμάτων στον γενετικό αλγόριθμο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_maxiters
+\series default
+\lang greek
+.
+ Αυτή η ακέραια παράμετρος ορίζει το μέγιστο αριθμό επαναλήψεων (γενιών) για τον γενετικό αλγόριθμο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_srate
+\series default
+\lang greek
+.
+ Αυτή η δεκαδική τιμή λαμβάνει τιμές στο διάστημα 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ και ορίζει το ρυθμό επιλογής (
+\lang english
+selection rate
+\lang greek
+) για τον γενετικό αλγόριθμο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_mrate
+\series default
+\lang greek
+.
+ Αυτή η δεκαδική τιμή λαμβάνει τιμές στο διάστημα 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ και ορίζει τον ρυθμό μετάλλαξης (
+\lang english
+mutation rate
+\lang greek
+) για τον γενετικό αλγόριθμο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_lrate
+\series default
+\lang greek
+.
+ Αυτή η δεκαδική τιμή λαμβάνει τιμές στο διάστημα 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ και ορίζει τον ρυθμό εφαρμογής μεθόδου τοπικής ελαχιστοποίησης στα χρωμοσώματα.
+ Για λόγους ταχύτητας η προκαθορισμένη τιμή είναι 0.0
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_tsize
+\series default
+\lang greek
+.
+ Αυτή η ακέραια παράμετρος ορίζει τον αριθμό των χρωμοσωμάτων που θα συμπεριλαμβάνονται στην λίστα επιλογής χρωμοσώματος με την μέθοδο του 
+\lang english
+tournament selection
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tournamentSelection"
+literal "false"
+
+\end_inset
+
+.
+ Κατά την διάρκεια εκτέλεσης αυτής της τεχνικής Ν τυχαία χρωμοσώματα επιλέγονται και το χρωμόσωμα με την χαμηλότερη συναρτησιακή τιμή είναι αυτό το οποίο θα επιλεχθεί.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_selection
+\series default
+\lang greek
+.
+ Η επιλογή αυτή λαμβάνει δύο τιμές:
+ 
+\lang english
+roulette
+\lang greek
+,
+ 
+\lang english
+tournament
+\lang greek
+ και ορίζει τον τρόπο με τον οποίο θα γίνεται η επιλογή γονέων.
+ Η πρώτη τιμή χρησιμοποιεί την τεχνική της ρουλέτας 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rouletteSelection"
+literal "false"
+
+\end_inset
+
+,
+ της οποίας ένα ενδεικτικό σχήμα παρουσιάζεται στην εικόνα 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Σχηματικό-παράδειγμα-της"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ και η δεύτερη επιλογή χρησιμοποιεί την επιλογή του 
+\lang english
+tournament selection
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_crossover
+\series default
+\lang greek
+.
+ Η επιλογή αυτή ορίζει την τεχνική που θα χρησιμοποιηθεί κατά την διαδικασία της διασταύρωσης και οι αποδεκτές τιμές είναι:
+ 
+\lang english
+double,
+ uniform,
+ onepoint
+\lang greek
+.
+ Στην πρώτη περίπτωση η δημιουργία των απογόνων
+\lang english
+ 
+\begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
+\end_inset
+
+
+\lang greek
+ γίνεται με την διαδικασία
+\lang english
+
+\begin_inset Formula 
+\begin{eqnarray}
+\tilde{z_{i}} & = & a_{i}z_{i}+\left(1-a_{i}\right)w_{i}\nonumber \\
+\tilde{w_{i}} & = & a_{i}w_{i}+\left(1-a_{i}\right)z_{i}\label{eq:crossover_ali-1}
+\end{eqnarray}
+
+\end_inset
+
+
+\lang greek
+Στο σχήμα αυτό 
+\begin_inset Formula $z$
+\end_inset
+
+ και 
+\begin_inset Formula $w$
+\end_inset
+
+ είναι οι επιλεχθέντες γονείς και
+\lang english
+ 
+\begin_inset Formula $a_{i}\in[-0.5,1.5]$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kaelo"
+literal "true"
+
+\end_inset
+
+.
+ 
+\lang greek
+Στην δεύτερη περίπτωση (ομοιόμορφη διασταύρωση) τα χρωμοσώματα δημιουργούνται με τυχαίο τρόπο λαμβάνοντας τιμές είτε από τον γονέα 
+\begin_inset Formula $z$
+\end_inset
+
+ είτε από τον γονέα 
+\begin_inset Formula $w$
+\end_inset
+
+.
+ Στην τρίτη περίπτωση,
+ που χρησιμοποιείται περισσότερο σε ακέραια χρωμοσώματα,
+ δημιουργείται ένα σημείο τομής και γίνεται ανταλλαγή γενετικού υλικού όπως παρουσιάζεται και στο σχήμα 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Σχηματικό-παράδειγμα-της"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+\SpecialChar endofsentence
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+gen_mutation
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή αποδέχεται δύο δυνατές τιμές:
+ 
+\lang english
+double,
+ random
+\lang greek
+.
+ Στην πρώτη περίπτωση για κάθε χρωμόσωμα 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ και για κάθε στοιχείο 
+\begin_inset Formula $g_{ij}$
+\end_inset
+
+ του παράγεται ένας τυχαίος αριθμός 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+.
+ Αν αυτός ο αριθμός είναι μικρότερος της πιθανότητας μετάλλαξης,
+ τότε 
+\lang english
+
+\begin_inset Formula 
+\begin{equation}
+g_{ij}=\left\{ \begin{array}{cc}
+g_{ij}+\Delta\left(\mbox{t},b_{g,i}-g_{ij}\right) & t=0\\
+g_{ij}-\Delta\left(\mbox{t},g_{ij}-a_{g,i}\right) & t=1
+\end{array}\right.\label{eq:ali_mutation}
+\end{equation}
+
+\end_inset
+
+
+\lang greek
+Ο αριθμός 
+\begin_inset Formula $t$
+\end_inset
+
+ είναι ένας τυχαίος αριθμός που λαμβάνει τις τιμές 0 και 1 και η συνάρτηση 
+\begin_inset Formula $\Delta(\mbox{t},y)$
+\end_inset
+
+ ορίζεται ως:
+\lang english
+
+\begin_inset Formula 
+\begin{equation}
+\Delta(t,y)=y\left(1-\omega^{\left(1-\frac{t}{N_{t}}\right)z}\right)\label{eq:delta_equation}
+\end{equation}
+
+\end_inset
+
+
+\lang greek
+Όπου 
+\begin_inset Formula $\omega\in[0,1]$
+\end_inset
+
+ είναι ένας ακόμα τυχαίος αριθμός και η μεταβλητή 
+\begin_inset Formula $z$
+\end_inset
+
+ ορίζεται από τον χρήστη.
+ Στην περίπτωση της επιλογής random,
+ το χρωμόσωμα διαταράσσεται τυχαία γύρω από την τρέχουσα τιμή του.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Σχηματικό παράδειγμα της επιλογής ρουλέτας.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Σχηματικό-παράδειγμα-της"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Roulette-wheel-selection-example_W640.jpg
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename cross2.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Παράδειγμα διασταύρωσης ενός σημείου.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Παράδειγμα-διασταύρωσης-ενός"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+DifferentialEvolution
+\lang greek
+ (διαφοροεξελικτική τεχνική) 
+\end_layout
+
+\begin_layout Standard
+Είναι μια από τις βασικότερες εξελικτικές τεχνικές 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de"
+literal "false"
+
+\end_inset
+
+ και όπως και ο γενετικός χρησιμοποιεί μια ομάδα υποψηφίων λύσεων (πράκτορες) που εξελίσσονται με την πάροδο του χρόνου για την εύρεση του ολικού ελαχίστου μια συνάρτησης.
+ Το βασικό σχήμα της τεχνικής αυτής παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Ο-αλγόριθμος-Differential"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Ο αλγόριθμος 
+\lang english
+Differential Evolution
+\lang greek
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Ο-αλγόριθμος-Differential"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Αρχικοποίηση
+\series default
+ όλων των πρακτόρων.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Θέσε
+\series default
+ k=0
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Για
+\series default
+ κάθε πράκτορα 
+\begin_inset Formula $x_{i},\ i=1,..,NP$
+\end_inset
+
+ 
+\series bold
+κάνε
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Επιλογή
+\series default
+ τριών πρακτόρων a,b,c από το σύνολο των πρακτόρων.
+ Οι επιλεχθέντες πράκτορες πρέπει να είναι διαφορετικοί μεταξύ τους.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Επιλογή
+\series default
+ ενός τυχαίου ακεραίου 
+\begin_inset Formula $R\in[1,n]$
+\end_inset
+
+,
+ n είναι διάσταση του προβλήματος.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Υπολογισμός
+\series default
+ του νέου πράκτορα 
+\begin_inset Formula $y=\left(y_{1},y_{2},...,y_{n}\right)$
+\end_inset
+
+ ως εξής:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Επιλογή τυχαίου αριθμού 
+\begin_inset Formula $r_{i}\in(0,1)$
+\end_inset
+
+,
+ 
+\begin_inset Formula $i=1,...,n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Αν 
+\begin_inset Formula $r_{j}<CR$
+\end_inset
+
+ ή 
+\begin_inset Formula $j=R$
+\end_inset
+
+,
+ 
+\begin_inset Formula $y_{j}=a_{j}+F\times\left(b_{j}-c_{j}\right),$
+\end_inset
+
+ αλλιώς 
+\begin_inset Formula $y_{j}=x_{i,j}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Αν 
+\begin_inset Formula $f(y)\le f\left(x_{i}\right)$
+\end_inset
+
+ Θέσε
+\series default
+ 
+\begin_inset Formula $x_{i}=y$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Τέλος Επανάληψης
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Θέσε k=k+1
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Αν
+\series default
+ ισχύει το κριτήριο τερματισμού 
+\series bold
+τερματισμός
+\series default
+,
+ 
+\series bold
+αλλιώς
+\series default
+ μετάβαση στο βήμα 2.
+\end_layout
+
+\end_deeper
+\end_inset
+
+Οι βασικές παράμετροι της τεχνικής είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_np
+\series default
+\lang greek
+.
+ Ακέραια παράμετρος που ορίζει τον αριθμό των πρακτόρων.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_f
+\series default
+\lang greek
+.
+ Ορίζει την τιμή του συντελεστή κλιμάκωσης 
+\begin_inset Formula $F$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_cr
+\series default
+\lang greek
+.
+ Ορίζει την τιμή του συντελεστή διασταύρωσης 
+\lang english
+CR
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_tsize
+\series default
+\lang greek
+.
+ Ορίζει το πλήθος των πρακτόρων που θα συμμετάσχουν στην επιλογή 
+\lang english
+tournament
+\lang greek
+,
+ αν επιλεχθεί αυτή τη τιμή για την παράμετρο 
+\series bold
+\lang english
+de_selection
+\series default
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_maxiters
+\series default
+\lang greek
+.
+ Ορίζει το μέγιστο αριθμό επαναλήψεων.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_fselection
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή χρησιμοποιείται για τον υπολογισμό του συντελεστή κλιμάκωσης 
+\begin_inset Formula $F$
+\end_inset
+
+ και έχει τις παρακάτω τιμές:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+number
+\series default
+\lang greek
+.
+ Σε αυτήν την περίπτωση η τιμή της παραμέτρου 
+\begin_inset Formula $F$
+\end_inset
+
+ καθορίζεται από την παράμετρο 
+\series bold
+\lang english
+de_f
+\series default
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ali
+\series default
+\lang greek
+.
+ Στην σχετική εργασία 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "aliF"
+literal "false"
+
+\end_inset
+
+ προτάθηκε ο ακόλουθος μηχανισμός υπολογισμού της παραμέτρου:
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Formula 
+\begin{equation}
+F=\left\{ \begin{array}{ccccc}
+\max\left(l_{\mbox{min}},1-\left|\frac{f_{\mbox{max}}}{f_{\mbox{min}}}\right|\right) & , & \mbox{if} & \left|\frac{f_{\mbox{max}}}{f_{\mbox{min}}}\right|\le1\\
+\max\left(l_{\mbox{min}},1-\left|\frac{f_{\mbox{min}}}{f_{\mbox{max}}}\right|\right) & , & \mbox{otherwise}
+\end{array}\right.\label{eq:ali_weight}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+adaptive
+\series default
+\lang greek
+.
+ Σε αυτήν την περίπτωση ο υπολογισμός γίνεται με την φόρμουλα:
+ 
+\lang english
+
+\begin_inset Formula 
+\begin{equation}
+F=-\frac{1}{2}+2\times R\label{eq:proposedF}
+\end{equation}
+
+\end_inset
+
+
+\lang greek
+όπως συστήνεται και στην σχετική εργασία 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "modifiedDE"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+migrant
+\series default
+\lang greek
+.
+ Σε αυτήν την περίπτωση ο υπολογισμός πραγματοποιείται όπως συστήνεται και στην εργασία .
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_lrate
+\series default
+\lang greek
+.
+ Αυτή η δεκαδική τιμή λαμβάνει τιμές στο διάστημα 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ και ορίζει τον ρυθμό εφαρμογής μεθόδου τοπικής ελαχιστοποίησης στους πράκτορες.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+de_selection
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή δέχεται δύο τιμές 
+\lang english
+random
+\lang greek
+ και 
+\lang english
+tournament
+\lang greek
+ και ορίζει τον τρόπο με το οποίο θα επιλέγονται οι πράκτορες 
+\begin_inset Formula $a,b,\ c$
+\end_inset
+
+ στον αλγόριθμο.
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+iPso
+\lang greek
+ (βελτιωμένη τεχνική 
+\lang english
+PSO
+\lang greek
+)
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+\lang english
+NeuralMinimizer
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+\lang english
+ParallelDe
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+\lang english
+ParallelPso
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+\lang english
+Simman
 \end_layout
 
 \begin_layout Section
 Παράμετροι μεθόδου 
 \end_layout
 
+\begin_layout Subsection
+Καθολικές παράμετροι 
+\end_layout
+
+\begin_layout Subsection
+Δημιουργία παραμέτρων
+\end_layout
+
 \begin_layout Section
+Ο κύκλος εκτέλεσης
+\end_layout
+
+\begin_layout Subsection
 Η μέθοδος 
 \lang english
-init() 
+init()
 \end_layout
 
-\begin_layout Section
+\begin_layout Standard
+Και τεχνικές δειγματοληψίας εδώ.
+\end_layout
+
+\begin_layout Subsection
 Η μέθοδος
 \lang english
- run() 
+ run()
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
+Η μέθοδος
+\lang english
+ terminated()
+\end_layout
+
+\begin_layout Standard
+Να αναφερθούν τεχνικές τερματισμού εδώ.
+\end_layout
+
+\begin_layout Subsection
 Η μέθοδος 
 \lang english
 done()
+\end_layout
+
+\begin_layout Section
+Η κατηγορία
+\lang english
+ UserMethod
+\end_layout
+
+\begin_layout Chapter
+Προβλήματα μηχανικής μάθησης
+\end_layout
+
+\begin_layout Section
+Το πρόγραμμα 
+\lang english
+DataFitting
+\end_layout
+
+\begin_layout Section
+Η κατηγορία 
+\lang english
+Dataset
+\end_layout
+
+\begin_layout Section
+Η κατηγορία 
+\lang english
+MlpProblem 
+\end_layout
+
+\begin_layout Section
+Η κατηγορία 
+\lang english
+GdfModel
+\end_layout
+
+\begin_layout Section
+Η κατηγορία 
+\lang english
+NncModel
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gd"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Ruder,
+ S.
+ (2016).
+ An overview of gradient descent optimization algorithms.
+ arXiv preprint arXiv:1609.04747.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "goldenSearch"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Pronzato,
+ L.,
+ Wynn,
+ H.
+ P.,
+ & Zhigljavsky,
+ A.
+ A.
+ (1998).
+ A generalized golden-section algorithm for line search.
+ IMA Journal of Mathematical Control and Information,
+ 15(2),
+ 185-214.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "fibonacciSearch"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Hassin,
+ R.
+ (1981).
+ On maximizing functions by Fibonacci search.
+ The Fibonacci Quarterly,
+ 19(4),
+ 347-351.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "armijoSearch"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Shi,
+ Z.,
+ & Wang,
+ S.
+ (2011).
+ Modified nonmonotone Armijo line search for descent method.
+ Numerical Algorithms,
+ 57(1),
+ 1-25.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bfgs"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Dai,
+ Y.
+ H.
+ (2002).
+ Convergence properties of the BFGS algoritm.
+ SIAM Journal on Optimization,
+ 13(3),
+ 693-701.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "powell"
+literal "false"
+
+\end_inset
+
+M.J.D Powell,
+ A Tolerant Algorithm for Linearly Constrained Optimization Calculations,
+ Mathematical Programming 
+\series bold
+45
+\series default
+,
+ pp.
+ 547-566,
+ 1989.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "lbfgs"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Zhu,
+ C.,
+ Byrd,
+ R.
+ H.,
+ Lu,
+ P.,
+ & Nocedal,
+ J.
+ (1997).
+ Algorithm 778:
+ L-BFGS-B:
+ Fortran subroutines for large-scale bound-constrained optimization.
+ ACM Transactions on mathematical software (TOMS),
+ 23(4),
+ 550-560.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nelderMead"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Lagarias,
+ J.
+ C.,
+ Reeds,
+ J.
+ A.,
+ Wright,
+ M.
+ H.,
+ & Wright,
+ P.
+ E.
+ (1998).
+ Convergence properties of the Nelder--Mead simplex method in low dimensions.
+ SIAM Journal on optimization,
+ 9(1),
+ 112-147.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "adamMethod"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Kingma,
+ D.
+ P.
+ (2014).
+ Adam:
+ A method for stochastic optimization.
+ arXiv preprint arXiv:1412.6980.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "adamDeep"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Liu,
+ R.,
+ Wu,
+ T.,
+ & Mozafari,
+ B.
+ (2020).
+ Adam with bandit sampling for deep learning.
+ Advances in Neural Information Processing Systems,
+ 33,
+ 5393-5404.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "multistart"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Martí,
+ R.,
+ Moreno-Vega,
+ J.
+ M.,
+ & Duarte,
+ A.
+ (2010).
+ Advanced multi-start methods.
+ In Handbook of metaheuristics (pp.
+ 265-281).
+ Springer,
+ Boston,
+ MA.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "genetic"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Lambora,
+ A.,
+ Gupta,
+ K.,
+ & Chopra,
+ K.
+ (2019,
+ February).
+ Genetic algorithm-A literature review.
+ In 2019 international conference on machine learning,
+ big data,
+ cloud and parallel computing (COMITCon) (pp.
+ 380-384).
+ IEEE.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "tournamentSelection"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Blickle,
+ T.
+ (2000).
+ Tournament selection.
+ Evolutionary computation,
+ 1(181-186),
+ 188.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rouletteSelection"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Lipowski,
+ A.,
+ & Lipowska,
+ D.
+ (2012).
+ Roulette-wheel selection via stochastic acceptance.
+ Physica A:
+ Statistical Mechanics and its Applications,
+ 391(6),
+ 2193-2196.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kaelo"
+literal "false"
+
+\end_inset
+
+P.
+ Kaelo,
+ M.M.
+ Ali,
+ Integrated crossover rules in real coded genetic algorithms,
+ European Journal of Operational Research 
+\series bold
+176
+\series default
+,
+ pp.
+ 60-76,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Pant,
+ M.,
+ Zaheer,
+ H.,
+ Garcia-Hernandez,
+ L.,
+ & Abraham,
+ A.
+ (2020).
+ Differential Evolution:
+ A review of more than two decades of research.
+ Engineering Applications of Artificial Intelligence,
+ 90,
+ 103479.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "aliF"
+literal "false"
+
+\end_inset
+
+M.M.
+ Ali and A.
+ Törn,
+ Population set-based global optimization algorithms:
+ some modifications and numerical studies,
+ Computers & Operations Research 
+\series bold
+31
+\series default
+,
+ pp.
+ 1703-1725,
+ 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "modifiedDE"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Charilogis,
+ V.,
+ Tsoulos,
+ I.
+ G.,
+ Tzallas,
+ A.,
+ & Karvounis,
+ E.
+ (2022).
+ Modifications for the differential evolution algorithm.
+ Symmetry,
+ 14(3),
+ 447.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "deMigration"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Yang,
+ Q.,
+ Yuan,
+ S.,
+ Gao,
+ H.,
+ & Zhang,
+ W.
+ (2024).
+ Differential evolution with migration mechanism and information reutilization for global optimization.
+ Expert Systems with Applications,
+ 238,
+ 122076.
 \end_layout
 
 \begin_layout Standard

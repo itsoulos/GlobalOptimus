@@ -53,7 +53,6 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = GE/cprogram.cc \
-		METHODS/bho.cpp \
 		PROBLEMS/zakharov.cpp \
 		PROBLEMS/michalewicz.cpp \
 		PROBLEMS/gallagher21.cpp \
@@ -218,7 +217,6 @@ SOURCES       = GE/cprogram.cc \
 		moc_selectmethoddialog.cpp \
 		moc_selectproblemdialog.cpp
 OBJECTS       = cprogram.o \
-		bho.o \
 		zakharov.o \
 		michalewicz.o \
 		gallagher21.o \
@@ -470,7 +468,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		Xoptimus.pro GE/cprogram.h \
-		METHODS/bho.h \
 		PROBLEMS/zakharov.h \
 		PROBLEMS/katsuura.h \
 		PROBLEMS/griewank_rosenbrock.h \
@@ -631,7 +628,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		XOPTIMUS/paramwidget.h \
 		XOPTIMUS/selectmethoddialog.h \
 		XOPTIMUS/selectproblemdialog.h GE/cprogram.cc \
-		METHODS/bho.cpp \
 		PROBLEMS/zakharov.cpp \
 		PROBLEMS/michalewicz.cpp \
 		PROBLEMS/gallagher21.cpp \
@@ -994,8 +990,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.h METHODS/bho.h PROBLEMS/zakharov.h PROBLEMS/katsuura.h PROBLEMS/griewank_rosenbrock.h PROBLEMS/michalewicz.h PROBLEMS/gallagher21.h PROBLEMS/ellipsoidal.h PROBLEMS/griewank.h PROBLEMS/gallagher101.h PROBLEMS/rastrigin.h PROBLEMS/lunacek_bi_rastrigin.h PROBLEMS/step_ellipsoidal.h PROBLEMS/attractive_sector.h PROBLEMS/weierstrass.h PROBLEMS/different_powers.h PROBLEMS/sharp_ridge.h PROBLEMS/rotated_rosenbrock.h PROBLEMS/linear_slope.h PROBLEMS/buche_rastrigin.h METHODS/mbfgs.h METHODS/MFO.h GE/doublestack.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/integeranneal.h GE/nncprogram.h GE/population.h GE/program.h GE/rule.h GE/ruleprogram.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h OPTIMUS/problemloader.h PROBLEMS/Ackley.h PROBLEMS/Extended_f10.h PROBLEMS/Sphere.h PROBLEMS/bf3.h PROBLEMS/discus.h PROBLEMS/cigar.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/adam.h METHODS/armadillo1.h METHODS/bfgs.h METHODS/armadillo1.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/gwooptimizer.h PROBLEMS/E_ev.h METHODS/ipso.h METHODS/lbfgs.h METHODS/multistart.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/ofalgorithm.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/usermethod.h MLMODELS/converter.h MLMODELS/dataset.h MLMODELS/functionalrbf.h MLMODELS/gdfmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h MLMODELS/neuralparser.h MLMODELS/nncmodel.h MLMODELS/rbfproblem.h MLMODELS/rulemodel.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/parameterlist.h OPTIMUS/problem.h PROBLEMS/equal_maxima.h PROBLEMS/f1.h PROBLEMS/f12.h PROBLEMS/f13.h PROBLEMS/f14.h PROBLEMS/f15.h PROBLEMS/f16.h PROBLEMS/f17.h PROBLEMS/f18.h PROBLEMS/f19.h PROBLEMS/f3.h PROBLEMS/f5.h PROBLEMS/f9.h PROBLEMS/himmelblau.h PROBLEMS/schaffer.h PROBLEMS/schwefel.h PROBLEMS/schwefel221.h PROBLEMS/schwefel222.h PROBLEMS/shubert.h PROBLEMS/vincent.h XOPTIMUS/parameterdialog.h OPTIMUS/similarity.h OPTIMUS/statistics.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/diracproblem.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/fuch1.h PROBLEMS/fuchss.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/gross.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/hess.h PROBLEMS/levy.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/salkin.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h XOPTIMUS/mainwindow.h XOPTIMUS/paramwidget.h XOPTIMUS/selectmethoddialog.h XOPTIMUS/selectproblemdialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.cc METHODS/bho.cpp PROBLEMS/zakharov.cpp PROBLEMS/michalewicz.cpp PROBLEMS/gallagher21.cpp METHODS/mbfgs.cpp METHODS/MFO.cpp GE/doublestack.cc GE/fparser.cc GE/fpoptimizer.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/population.cc GE/program.cc GE/rule.cc GE/ruleprogram.cpp GE/symbol.cc METHODS/eo.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp LINESEARCH/linesearch.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp METHODS/gwooptimizer.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/multistart.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/ofalgorithm.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/converter.cc MLMODELS/dataset.cpp MLMODELS/gdfmodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp MLMODELS/neuralparser.cc MLMODELS/nncmodel.cpp MLMODELS/rbfproblem.cpp MLMODELS/rulemodel.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/methodloader.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/parameterlist.cpp OPTIMUS/problem.cpp OPTIMUS/problemloader.cpp PROBLEMS/Ackley.cpp PROBLEMS/Extended_f10.cpp PROBLEMS/Sphere.cpp PROBLEMS/bf3.cpp PROBLEMS/equal_maxima.cpp PROBLEMS/f1.cpp PROBLEMS/f12.cpp PROBLEMS/f13.cpp PROBLEMS/f14.cpp PROBLEMS/f15.cpp PROBLEMS/f16.cpp PROBLEMS/f17.cpp PROBLEMS/f18.cpp PROBLEMS/f19.cpp PROBLEMS/f3.cpp PROBLEMS/f5.cpp PROBLEMS/f9.cpp PROBLEMS/himmelblau.cpp PROBLEMS/schaffer.cpp PROBLEMS/schwefel.cpp PROBLEMS/schwefel221.cpp PROBLEMS/schwefel222.cpp PROBLEMS/shubert.cpp PROBLEMS/vincent.cpp XOPTIMUS/parameterdialog.cpp OPTIMUS/similarity.cpp OPTIMUS/statistics.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/diracproblem.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/fuch1.cpp PROBLEMS/fuchss.cpp PROBLEMS/gkls.cpp PROBLEMS/ellipsoidal.cpp PROBLEMS/griewank.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/E_ev.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/gross.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/hess.cpp PROBLEMS/levy.cpp PROBLEMS/potential.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/salkin.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test2nproblem.cpp PROBLEMS/discus.cpp PROBLEMS/cigar.cpp PROBLEMS/test30n.cpp PROBLEMS/lunacek_bi_rastrigin.cpp PROBLEMS/katsuura.cpp PROBLEMS/userproblem.cpp PROBLEMS/griewank_rosenbrock.cpp PROBLEMS/different_powers.cpp PROBLEMS/sharp_ridge.cpp PROBLEMS/weierstrass.cpp PROBLEMS/rotated_rosenbrock.cpp PROBLEMS/step_ellipsoidal.cpp PROBLEMS/attractive_sector.cpp PROBLEMS/linear_slope.cpp PROBLEMS/buche_rastrigin.cpp PROBLEMS/gallagher101.cpp PROBLEMS/rastrigin.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/problemsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp XOPTIMUS/paramwidget.cpp XOPTIMUS/selectmethoddialog.cpp XOPTIMUS/selectproblemdialog.cpp XOPTIMUS/xoptimusmain.cpp XOPTIMUS/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.h PROBLEMS/zakharov.h PROBLEMS/katsuura.h PROBLEMS/griewank_rosenbrock.h PROBLEMS/michalewicz.h PROBLEMS/gallagher21.h PROBLEMS/ellipsoidal.h PROBLEMS/griewank.h PROBLEMS/gallagher101.h PROBLEMS/rastrigin.h PROBLEMS/lunacek_bi_rastrigin.h PROBLEMS/step_ellipsoidal.h PROBLEMS/attractive_sector.h PROBLEMS/weierstrass.h PROBLEMS/different_powers.h PROBLEMS/sharp_ridge.h PROBLEMS/rotated_rosenbrock.h PROBLEMS/linear_slope.h PROBLEMS/buche_rastrigin.h METHODS/mbfgs.h METHODS/MFO.h GE/doublestack.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/integeranneal.h GE/nncprogram.h GE/population.h GE/program.h GE/rule.h GE/ruleprogram.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h OPTIMUS/problemloader.h PROBLEMS/Ackley.h PROBLEMS/Extended_f10.h PROBLEMS/Sphere.h PROBLEMS/bf3.h PROBLEMS/discus.h PROBLEMS/cigar.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/adam.h METHODS/armadillo1.h METHODS/bfgs.h METHODS/armadillo1.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/gwooptimizer.h PROBLEMS/E_ev.h METHODS/ipso.h METHODS/lbfgs.h METHODS/multistart.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/ofalgorithm.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/usermethod.h MLMODELS/converter.h MLMODELS/dataset.h MLMODELS/functionalrbf.h MLMODELS/gdfmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h MLMODELS/neuralparser.h MLMODELS/nncmodel.h MLMODELS/rbfproblem.h MLMODELS/rulemodel.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/parameterlist.h OPTIMUS/problem.h PROBLEMS/equal_maxima.h PROBLEMS/f1.h PROBLEMS/f12.h PROBLEMS/f13.h PROBLEMS/f14.h PROBLEMS/f15.h PROBLEMS/f16.h PROBLEMS/f17.h PROBLEMS/f18.h PROBLEMS/f19.h PROBLEMS/f3.h PROBLEMS/f5.h PROBLEMS/f9.h PROBLEMS/himmelblau.h PROBLEMS/schaffer.h PROBLEMS/schwefel.h PROBLEMS/schwefel221.h PROBLEMS/schwefel222.h PROBLEMS/shubert.h PROBLEMS/vincent.h XOPTIMUS/parameterdialog.h OPTIMUS/similarity.h OPTIMUS/statistics.h PROBLEMS/bf1.h PROBLEMS/bf2.h PROBLEMS/branin.h PROBLEMS/camel.h PROBLEMS/cm.h PROBLEMS/diffpower.h PROBLEMS/diracproblem.h PROBLEMS/easom.h PROBLEMS/elp.h PROBLEMS/exp.h PROBLEMS/fuch1.h PROBLEMS/fuchss.h PROBLEMS/gkls.h PROBLEMS/gkls2100.h PROBLEMS/gkls250.h PROBLEMS/gkls350.h PROBLEMS/goldstein.h PROBLEMS/griewank10.h PROBLEMS/griewank2.h PROBLEMS/gross.h PROBLEMS/hansen.h PROBLEMS/hartman3.h PROBLEMS/hartman6.h PROBLEMS/hess.h PROBLEMS/levy.h PROBLEMS/potential.h PROBLEMS/rastriginproblem.h PROBLEMS/rosenbrock.h PROBLEMS/salkin.h PROBLEMS/shekel10.h PROBLEMS/shekel5.h PROBLEMS/shekel7.h PROBLEMS/sinu.h PROBLEMS/test2nproblem.h PROBLEMS/test30n.h PROBLEMS/userproblem.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h SAMPLER/uniformsampler.h XOPTIMUS/mainwindow.h XOPTIMUS/paramwidget.h XOPTIMUS/selectmethoddialog.h XOPTIMUS/selectproblemdialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.cc PROBLEMS/zakharov.cpp PROBLEMS/michalewicz.cpp PROBLEMS/gallagher21.cpp METHODS/mbfgs.cpp METHODS/MFO.cpp GE/doublestack.cc GE/fparser.cc GE/fpoptimizer.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/population.cc GE/program.cc GE/rule.cc GE/ruleprogram.cpp GE/symbol.cc METHODS/eo.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp LINESEARCH/linesearch.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp METHODS/gwooptimizer.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/multistart.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/ofalgorithm.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/converter.cc MLMODELS/dataset.cpp MLMODELS/gdfmodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp MLMODELS/neuralparser.cc MLMODELS/nncmodel.cpp MLMODELS/rbfproblem.cpp MLMODELS/rulemodel.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/methodloader.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/parameterlist.cpp OPTIMUS/problem.cpp OPTIMUS/problemloader.cpp PROBLEMS/Ackley.cpp PROBLEMS/Extended_f10.cpp PROBLEMS/Sphere.cpp PROBLEMS/bf3.cpp PROBLEMS/equal_maxima.cpp PROBLEMS/f1.cpp PROBLEMS/f12.cpp PROBLEMS/f13.cpp PROBLEMS/f14.cpp PROBLEMS/f15.cpp PROBLEMS/f16.cpp PROBLEMS/f17.cpp PROBLEMS/f18.cpp PROBLEMS/f19.cpp PROBLEMS/f3.cpp PROBLEMS/f5.cpp PROBLEMS/f9.cpp PROBLEMS/himmelblau.cpp PROBLEMS/schaffer.cpp PROBLEMS/schwefel.cpp PROBLEMS/schwefel221.cpp PROBLEMS/schwefel222.cpp PROBLEMS/shubert.cpp PROBLEMS/vincent.cpp XOPTIMUS/parameterdialog.cpp OPTIMUS/similarity.cpp OPTIMUS/statistics.cpp PROBLEMS/bf1.cpp PROBLEMS/bf2.cpp PROBLEMS/branin.cpp PROBLEMS/camel.cpp PROBLEMS/cm.cpp PROBLEMS/diffpower.cpp PROBLEMS/diracproblem.cpp PROBLEMS/easom.cpp PROBLEMS/elp.cpp PROBLEMS/exp.cpp PROBLEMS/fuch1.cpp PROBLEMS/fuchss.cpp PROBLEMS/gkls.cpp PROBLEMS/ellipsoidal.cpp PROBLEMS/griewank.cpp PROBLEMS/gkls2100.cpp PROBLEMS/gkls250.cpp PROBLEMS/E_ev.cpp PROBLEMS/gkls350.cpp PROBLEMS/goldstein.cpp PROBLEMS/griewank10.cpp PROBLEMS/griewank2.cpp PROBLEMS/gross.cpp PROBLEMS/hansen.cpp PROBLEMS/hartman3.cpp PROBLEMS/hartman6.cpp PROBLEMS/hess.cpp PROBLEMS/levy.cpp PROBLEMS/potential.cpp PROBLEMS/rastriginproblem.cpp PROBLEMS/rosenbrock.cpp PROBLEMS/salkin.cpp PROBLEMS/shekel10.cpp PROBLEMS/shekel5.cpp PROBLEMS/shekel7.cpp PROBLEMS/sinu.cpp PROBLEMS/test2nproblem.cpp PROBLEMS/discus.cpp PROBLEMS/cigar.cpp PROBLEMS/test30n.cpp PROBLEMS/lunacek_bi_rastrigin.cpp PROBLEMS/katsuura.cpp PROBLEMS/userproblem.cpp PROBLEMS/griewank_rosenbrock.cpp PROBLEMS/different_powers.cpp PROBLEMS/sharp_ridge.cpp PROBLEMS/weierstrass.cpp PROBLEMS/rotated_rosenbrock.cpp PROBLEMS/step_ellipsoidal.cpp PROBLEMS/attractive_sector.cpp PROBLEMS/linear_slope.cpp PROBLEMS/buche_rastrigin.cpp PROBLEMS/gallagher101.cpp PROBLEMS/rastrigin.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/problemsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp XOPTIMUS/paramwidget.cpp XOPTIMUS/selectmethoddialog.cpp XOPTIMUS/selectproblemdialog.cpp XOPTIMUS/xoptimusmain.cpp XOPTIMUS/mainwindow.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1035,7 +1031,10 @@ qrc_resources.cpp: resources.qrc \
 		XOPTIMUS/state_wait.png \
 		XOPTIMUS/state_pause.png \
 		XOPTIMUS/minus.png \
-		XOPTIMUS/state_finish.png
+		XOPTIMUS/state_finish.png \
+		XOPTIMUS/dark.css \
+		XOPTIMUS/light.css \
+		XOPTIMUS/optimus_paper.pdf
 	/usr/lib/qt5/bin/rcc -name resources resources.qrc -o qrc_resources.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -1179,7 +1178,6 @@ moc_mainwindow.cpp: XOPTIMUS/mainwindow.h \
 		METHODS/eo.h \
 		METHODS/mbfgs.h \
 		METHODS/MFO.h \
-		METHODS/bho.h \
 		XOPTIMUS/selectmethoddialog.h \
 		OPTIMUS/statistics.h \
 		moc_predefs.h \
@@ -1246,7 +1244,6 @@ moc_selectmethoddialog.cpp: XOPTIMUS/selectmethoddialog.h \
 		METHODS/eo.h \
 		METHODS/mbfgs.h \
 		METHODS/MFO.h \
-		METHODS/bho.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/sheridan/Desktop/ERGASIES/GlobalOptimus/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/sheridan/Desktop/ERGASIES/GlobalOptimus -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include XOPTIMUS/selectmethoddialog.h -o moc_selectmethoddialog.cpp
@@ -1298,27 +1295,6 @@ cprogram.o: GE/cprogram.cc GE/cprogram.h \
 		OPTIMUS/filelogger.h \
 		OPTIMUS/editlogger.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cprogram.o GE/cprogram.cc
-
-bho.o: METHODS/bho.cpp METHODS/bho.h \
-		OPTIMUS/optimizer.h \
-		OPTIMUS/problem.h \
-		OPTIMUS/parameter.h \
-		OPTIMUS/doublebox.h \
-		OPTIMUS/similarity.h \
-		OPTIMUS/mean.h \
-		SAMPLER/maxwellsampler.h \
-		SAMPLER/problemsampler.h \
-		SAMPLER/neuralsampler.h \
-		MLMODELS/dataset.h \
-		SAMPLER/triangularsampler.h \
-		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h \
-		SAMPLER/kmeanssampler.h \
-		OPTIMUS/logger.h \
-		OPTIMUS/filelogger.h \
-		OPTIMUS/editlogger.h \
-		OPTIMUS/parameterlist.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bho.o METHODS/bho.cpp
 
 zakharov.o: PROBLEMS/zakharov.cpp PROBLEMS/zakharov.h \
 		OPTIMUS/problem.h
@@ -2355,8 +2331,7 @@ methodloader.o: OPTIMUS/methodloader.cpp OPTIMUS/methodloader.h \
 		METHODS/acop.h \
 		METHODS/eo.h \
 		METHODS/mbfgs.h \
-		METHODS/MFO.h \
-		METHODS/bho.h
+		METHODS/MFO.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o methodloader.o OPTIMUS/methodloader.cpp
 
 optimizer.o: OPTIMUS/optimizer.cpp OPTIMUS/optimizer.h \
@@ -2963,8 +2938,7 @@ selectmethoddialog.o: XOPTIMUS/selectmethoddialog.cpp XOPTIMUS/selectmethoddialo
 		METHODS/acop.h \
 		METHODS/eo.h \
 		METHODS/mbfgs.h \
-		METHODS/MFO.h \
-		METHODS/bho.h
+		METHODS/MFO.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o selectmethoddialog.o XOPTIMUS/selectmethoddialog.cpp
 
 selectproblemdialog.o: XOPTIMUS/selectproblemdialog.cpp XOPTIMUS/selectproblemdialog.h \
@@ -3181,7 +3155,6 @@ xoptimusmain.o: XOPTIMUS/xoptimusmain.cpp XOPTIMUS/mainwindow.h \
 		METHODS/eo.h \
 		METHODS/mbfgs.h \
 		METHODS/MFO.h \
-		METHODS/bho.h \
 		XOPTIMUS/selectmethoddialog.h \
 		OPTIMUS/statistics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xoptimusmain.o XOPTIMUS/xoptimusmain.cpp
@@ -3310,7 +3283,6 @@ mainwindow.o: XOPTIMUS/mainwindow.cpp XOPTIMUS/mainwindow.h \
 		METHODS/eo.h \
 		METHODS/mbfgs.h \
 		METHODS/MFO.h \
-		METHODS/bho.h \
 		XOPTIMUS/selectmethoddialog.h \
 		OPTIMUS/statistics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o XOPTIMUS/mainwindow.cpp
