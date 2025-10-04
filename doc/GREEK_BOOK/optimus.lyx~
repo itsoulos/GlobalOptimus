@@ -1097,25 +1097,21 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\lang english
 double RastriginProblem::funmin(Data &x)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     return x[0] * x[0] + x[1] * x[1] - cos(18.0 * x[0]) - cos(18.0 * x[1]);
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 }
 \end_layout
 
@@ -1337,31 +1333,26 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\lang english
 QJsonObject UserProblem::done(Data &x)
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 {
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     QJsonObject t;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
     return t;
 \end_layout
 
 \begin_layout Plain Layout
 
-\lang english
 }
 \end_layout
 
@@ -2953,7 +2944,15 @@ migrant
 \series default
 \lang greek
 .
- Σε αυτήν την περίπτωση ο υπολογισμός πραγματοποιείται όπως συστήνεται και στην εργασία .
+ Σε αυτήν την περίπτωση ο υπολογισμός πραγματοποιείται όπως συστήνεται και στην εργασία 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "deMigration"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \end_deeper
@@ -3008,6 +3007,484 @@ PSO
 )
 \end_layout
 
+\begin_layout Standard
+Με την επιλογή αυτή προτείνεται μια βελτιωμένη εκδοχή της μεθόδου 
+\lang english
+Particle Swarm Optimization (PSO)
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pso"
+literal "false"
+
+\end_inset
+
+ όπως έχει προταθεί και στην αντίστοιχη δημοσίευση 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ipso"
+literal "false"
+
+\end_inset
+
+.
+ Ένα γενικό σχήμα του αλγορίθμου PSO παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Ένας-τυπικός-αλγόριθμος"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Ένας τυπικός αλγόριθμος PSO.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Ένας-τυπικός-αλγόριθμος"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Για κάθε σωμάτιο i = 1,
+ ...,
+ S 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Αρχικοποίηση της θέσης 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ κάθε σωματιού
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Αρχικοποίηση της ταχύτητας 
+\begin_inset Formula $u_{i}$
+\end_inset
+
+ κάθε σωματίου
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+\begin_inset Formula $x^{b}=\mbox{argmin}\left(f(x)\right)\,$
+\end_inset
+
+
+\begin_inset Formula $,y_{i}=x_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+
+\lang english
+Μέχρι να ισχύσει ένα κριτήριο τερματισμού
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Για κάθε σωμάτιο i = 1,
+ ...,
+ S 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Για κάθε διάσταση d = 1,
+ ...,
+ n 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Ενημέρωση της ταχύτητας 
+\begin_inset Formula $u_{i,d}=\omega u_{i,d}+r_{1}\left(x_{i,d}-y_{i,d}\right)+r_{2}\left(x_{i,d}-x_{d}^{b}\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Ενημέρωση θέσης 
+\begin_inset Formula $x_{i,d}=x_{i,d}+u_{i,d}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\lang english
+Αν 
+\begin_inset Formula $f\left(x_{i}\right)<f(\left(y_{i}\right),y_{i}=x_{i}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Αν 
+\begin_inset Formula $f\left(x_{i}\right)<f\left(x^{b}\right),x^{b}=x_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_inset
+
+Οι βασικές παράμετροι του αλγορίθμου που διαθέτει η τεχνική που υλοποιήθηκε είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_particles.
+ 
+\series default
+\lang greek
+Αυτή η ακέραια παράμετρος ορίζει τον αριθμό των σωματιδίων στον αλγόριθμο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_generations
+\series default
+\lang greek
+.
+ Αυτή η ακέραια παράμετρος ορίζει τον μέγιστο αριθμό γενιών για τον αλγόριθμο 
+\lang english
+PSO
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_c1
+\series default
+\lang greek
+.
+ Είναι μια δεκαδική παράμετρος που ορίζει την τιμή του 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ του αλγορίθμου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_c2
+\series default
+\lang greek
+.
+ Είναι μια δεκαδική παράμετρος που ορίζει την τιμή της παραμέτρου 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_inertia_start
+\series default
+\lang greek
+.
+ Ορίζει την αρχική τιμή για τον συντελεστή 
+\lang english
+inertia
+\lang greek
+ (
+\begin_inset Formula $\omega$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_inertia_end
+\series default
+\lang greek
+.
+ Ορίζει την τελική τιμή για τον συντελεστή 
+\lang english
+inertia
+\lang greek
+ (
+\begin_inset Formula $\omega$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_localsearch_rate
+\series default
+\lang greek
+.
+ Αυτή η δεκαδική τιμή λαμβάνει τιμές στο διάστημα 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ και ορίζει τον ρυθμό εφαρμογής μεθόδου τοπικής ελαχιστοποίησης στα σωματίδια του αλγορίθμου.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_gradientcheck
+\series default
+\lang greek
+.
+ Αυτή η παράμετρος παίρνει τις τιμές 
+\lang english
+true/false
+\lang greek
+ και χρησιμοποιείται για να ενεργοποιήσει/απενεργοποιήσει την χρήση του μηχανισμού απόρριψης σημείων,
+ όπως προτείνεται και στην σχετική δημοσίευση 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ipso"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+ipso_inertiatype
+\series default
+\lang greek
+.
+ Ορίζει τον τρόπο υπολογισμού της παραμέτρου 
+\lang english
+inertia
+\lang greek
+ (
+\begin_inset Formula $\omega$
+\end_inset
+
+).
+ Μια σειρά από ενδεικτικές τιμές που λαμβάνει αυτή η παράμετρος είναι:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+Random Inertia (
+\series bold
+\lang greek
+τιμή 4
+\series default
+\lang english
+).
+ 
+\lang greek
+Η παράμετρος 
+\begin_inset Formula $\omega$
+\end_inset
+
+ υπολογίζεται σύμφωνα με όσα προτείνονται στην σχετική δημοσίευση 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "random_inertia"
+literal "false"
+
+\end_inset
+
+ και ο τύπος είναι :
+\lang english
+
+\begin_inset Formula 
+\begin{equation}
+\omega_{\mbox{iter}}=0.5+\frac{r}{2}
+\end{equation}
+
+\end_inset
+
+
+\lang greek
+Όπου 
+\begin_inset Formula $r$
+\end_inset
+
+ ένας τυχαίος αριθμός με την ιδιότητα 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Linear time varying inertia ( min version) (
+\series bold
+\lang greek
+τιμή 5
+\series default
+\lang english
+).
+ 
+\lang greek
+Αυτό το σχήμα προτείνεται σε μια σειρά από δημοσιεύσεις 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "random_inertia,inertia1,inertia2"
+literal "false"
+
+\end_inset
+
+ και ορίζεται ως εξής:
+\lang english
+
+\begin_inset Formula 
+\begin{equation}
+\omega_{\mbox{iter}}=\frac{\mbox{iter}_{\mbox{max}}-\mbox{iter}}{\mbox{iter}_{\mbox{max}}}\left(\omega_{\mbox{max}}-\omega_{\mbox{min}}\right)+\omega_{\mbox{min}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Linear time varying inertia ( max version ) (
+\series bold
+\lang greek
+τιμή 8
+\series default
+\lang english
+).
+ 
+\lang greek
+Αυτή η τεχνική προτείνεται σε μια σειρά από εργασίες 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "inertia3,inertia4"
+literal "false"
+
+\end_inset
+
+ και ορίζεται ως
+\lang english
+:
+\begin_inset Formula 
+\begin{equation}
+\omega_{\mbox{iter}}=\frac{\mbox{iter}_{\mbox{max}}-\mbox{iter}}{\mbox{iter}_{\mbox{max}}}\left(\omega_{\mbox{min}}-\omega_{\mbox{max}}\right)+\omega_{\mbox{max}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Ipso variant (
+\series bold
+\lang greek
+τιμή 0
+\series default
+\lang english
+).
+ 
+\lang greek
+Σε αυτήν την περίπτωση η αδράνεια υπολογίζεται ως εξής:
+\begin_inset Formula 
+\[
+\omega_{\mbox{iter}}=\frac{1}{4+\frac{R}{2}}
+\]
+
+\end_inset
+
+ όπου R τυχαίος αριθμός στο διάστημα 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
 \begin_layout Subsection
 
 \series bold
@@ -3015,11 +3492,357 @@ PSO
 NeuralMinimizer
 \end_layout
 
+\begin_layout Standard
+Σε αυτήν την τεχνική γίνεται υλοποίηση της μεθόδου 
+\lang english
+NeuralMinimizer
+\lang greek
+,
+ όπως έχει προταθεί και στην σχετική δημοσίευση 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "neuralMinimizer"
+literal "false"
+
+\end_inset
+
+.
+ Σε αυτήν την τεχνική λαμβάνονται μερικά δείγματα από την αντικειμενική συνάρτηση και στην συνέχεια γίνεται εκπαίδευση ενός τεχνητού νευρωνικού δικτύου RBF 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbf_main1"
+literal "false"
+
+\end_inset
+
+ πάνω σε αυτά για να δημιουργηθεί μια προσέγγιση της αντικειμενικής συνάρτησης.
+ Στην συνέχεια η δειγματοληψία γίνεται αποκλειστικά από την προσεγγιστική συνάρτηση και όχι από την πραγματική.
+ Το διάγραμμα ροής για αυτήν την τεχνική παρουσιάζεται στο σχήμα 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Το-διάγραμμα-ροής"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename diagram_nm.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Το διάγραμμα ροής για την μέθοδο 
+\lang english
+NeuralMinimizer
+\lang greek
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Το-διάγραμμα-ροής"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Οι βασικές παράμετροι αυτής της τεχνικής είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+neural_weights
+\series default
+\lang greek
+.
+ Αυτή η ακέραια παράμετρος χρησιμοποιείται για τον καθορισμό των βαρών του δικτύου RBF που θα χρησιμοποιηθεί.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+neural_start_samples
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή πόσα σημεία θα λάβει αρχικά η μέθοδος για την κατασκευή του προσεγγιστικού μοντέλου της αντικειμενικής συνάρτησης.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+neural_samples
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή ορίζει πόσα δείγματα θα λαμβάνονται κάθε φορά από το προσεγγιστικό μοντέλο σε κάθε επανάληψη της μεθόδου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+neural_iterations
+\series default
+\lang greek
+.
+ Αυτή η ακέραια παράμετρος ορίζει πόσες επαναλήψεις θα κάνει η μέθοδος βελτιστοποίησης.
+\end_layout
+
 \begin_layout Subsection
 
 \series bold
 \lang english
 ParallelDe
+\end_layout
+
+\begin_layout Standard
+Η μέθοδος αυτή υλοποιεί την παράλληλη εκδοχή της 
+\lang english
+Differential Evolution 
+\lang greek
+από την σχετική δημοσίευση 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "parallelDe"
+literal "false"
+
+\end_inset
+
+.
+ Για την υλοποίηση χρησιμοποιήθηκε μια τεχνική παρόμοια με τους παράλληλους γενετικούς αλγόριθμους νησιών 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "islandGEN"
+literal "false"
+
+\end_inset
+
+,
+ όπου ο συνολικός πληθυσμός επιμερίζεται σε ανεξάρτητες υπολογιστικές μονάδες και σε κάθε μονάδα εκτελείται ένας διαφορετικός αλγόριθμος.
+ Οι βασικές παράμετροι αυτής της τεχνικής είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_agents
+\series default
+\lang greek
+.
+ Είναι το πλήθος των πρακτόρων σε κάθε νησί.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_generations
+\series default
+\lang greek
+.
+ Είναι ο μέγιστος αριθμός των επιτρεπόμενων επαναλήψεων του αλγορίθμου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_cr
+\series default
+\lang greek
+.
+ Ορίζει την τιμή του συντελεστή διασταύρωσης 
+\lang english
+CR
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_weight_method
+\series default
+\lang greek
+.
+ Είναι η μέθοδος που χρησιμοποιείται για τον υπολογισμό της παραμέτρου 
+\begin_inset Formula $F$
+\end_inset
+
+ με παρόμοιες τιμές όπως η παράμετρος 
+\series bold
+\lang english
+de_fselection 
+\series default
+\lang greek
+της 
+\lang english
+Differential Evolution.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_f
+\series default
+\lang greek
+.
+ Ορίζει την τιμή του συντελεστή κλιμάκωσης 
+\begin_inset Formula $F$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_propagate_method
+\series default
+\lang greek
+.
+ Ορίζει τον τρόπο με τον οποίο θα γίνεται η διάδοση των καλύτερων τιμών μεταξύ των διακριτών νησιών.
+ Οι αποδεκτές τιμές είναι:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+1to1
+\lang greek
+.
+ Σε αυτήν την περίπτωση κάθε νησί επιλέγει τυχαία ένα από την λίστα και στέλνει σε αυτό τον καλύτερο πράκτορα του.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+1toN
+\lang greek
+.
+ Σε αυτήν την περίπτωση κάθε νησί ενημερώνει για τον καλύτερο του πράκτορα όλα τα υπόλοιπα νησιά.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Nto1
+\lang greek
+.
+ Σε αυτήν την περίπτωση όλα τα νησιά επιλέγουν το ίδιο νησί προς ενημέρωση.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+NtoN
+\lang greek
+.
+ Σε αυτήν την περίπτωση όλα τα νησιά επιλέγουν όλα τα υπόλοιπα προς ενημέρωση.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_propagate_rate
+\series default
+\lang greek
+.
+ Είναι μια ακέραια παράμετρους που ορίζει τον αριθμό των γενιών που θα πρέπει να περάσουν πριν γίνει διάδοση των καλύτερων τιμών μεταξύ των νησιών.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_selection_method
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή δέχεται δύο τιμές 
+\lang english
+random
+\lang greek
+ και 
+\lang english
+tournament
+\lang greek
+ και ορίζει τον τρόπο με το οποίο θα επιλέγονται οι πράκτορες 
+\begin_inset Formula $a,b,\ c$
+\end_inset
+
+ στον αλγόριθμο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_islands
+\series default
+\lang greek
+.
+ Ορίζει το πλήθος των διακριτών νησιών του αλγορίθμου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parde_islands_enable
+\series default
+\lang greek
+.
+ Ορίζει το πλήθος των νησιών που θα συμμετέχουν σε απόφαση για τερματισμό ή όχι της συνολικής διαδικασίας.
+ Προφανώς θα πρέπει να ισχύει 
+\series bold
+\lang english
+parde_islands_enable<=parde_islands.
 \end_layout
 
 \begin_layout Subsection
@@ -3566,6 +4389,264 @@ Yang,
  Expert Systems with Applications,
  238,
  122076.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Kennedy,
+ J.;
+ Eberhart,
+ R.
+ Particle swarm optimization.
+ In Proceedings of the ICNN’95—
+International Conference on Neural Networks,
+ Perth,
+ Australia,
+ 1 December 1995;
+ Volume 4,
+ pp.
+ 1942–1948.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ipso"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Charilogis,
+ V.,
+ & Tsoulos,
+ I.
+ G.
+ (2022).
+ Toward an ideal particle swarm optimizer for multidimensional functions.
+ Information,
+ 13(5),
+ 217.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "random_inertia"
+literal "false"
+
+\end_inset
+
+R.C.
+ Eberhart,
+ Y.H.
+ Shi,
+ Tracking and optimizing dynamic systems with particle swarms,
+ in:
+ Congress on Evolutionary Computation,
+ Korea,
+ 2001.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "inertia1"
+literal "false"
+
+\end_inset
+
+ Y.H.
+ Shi,
+ R.C.
+ Eberhart,
+ Empirical study of particle swarm optimization,
+ in:
+ Congress on Evolutionary Computation,
+ Washington DC,
+ USA,
+ 1999.
+ 
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "inertia2"
+literal "false"
+
+\end_inset
+
+Y.H.
+ Shi,
+ R.C.
+ Eberhart,
+ Experimental study of particle swarm optimization,
+ in:
+ SCI2000 Conference,
+ Orlando,
+ 2000.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "inertia3"
+literal "false"
+
+\end_inset
+
+Y.
+ Zheng,
+ L.
+ Ma,
+ L.
+ Zhang,
+ J.
+ Qian,
+ Empirical study of particle swarm optimizer with an increasing inertia weight,
+ in:
+ IEEE Congress on Evolutionary Computation,
+ 2003.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "inertia4"
+literal "false"
+
+\end_inset
+
+Y.
+ Zheng,
+ L.
+ Ma,
+ L.
+ Zhang,
+ J.
+ Qian,
+ On the convergence analysis and param- eter selection in particle swarm optimization,
+ in:
+ Proceedings of the Second International Conference on Machine Learning and Cybernetics,
+ 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "neuralMinimizer"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Tsoulos,
+ I.
+ G.,
+ Tzallas,
+ A.,
+ Karvounis,
+ E.,
+ & Tsalikakis,
+ D.
+ (2023).
+ NeuralMinimizer:
+ A novel method for global optimization.
+ Information,
+ 14(2),
+ 66.
+\end_layout
+
+\begin_layout Bibliography
+
+\lang english
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_main1"
+literal "false"
+
+\end_inset
+
+J.
+ Park,
+ I.W.
+ Sandberg,
+ Approximation and Radial-Basis-Function Networks,
+ Neural Computation 
+\series bold
+5
+\series default
+,
+ pp.
+ 305-316,
+ 1993.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "parallelDe"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Charilogis,
+ V.,
+ & Tsoulos,
+ I.
+ G.
+ (2023).
+ A parallel implementation of the differential evolution method.
+ Analytics,
+ 2(1),
+ 17-30.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "islandGEN"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Tosun,
+ U.,
+ Dokeroglu,
+ T.,
+ & Cosar,
+ A.
+ (2013).
+ A robust island parallel genetic algorithm for the quadratic assignment problem.
+ International Journal of Production Research,
+ 51(14),
+ 4117-4133.
 \end_layout
 
 \begin_layout Standard
