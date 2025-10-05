@@ -12,7 +12,8 @@ Optimizer::Optimizer()
     QStringList opt_localsearch;
     opt_localsearch<<"bfgs"<<"lbfgs"<<"nelderMead"<<"gradient"<<"adam"<<"none";
     QStringList opt_sampler;
-    opt_sampler<<"uniform"<<"triangular"<<"maxwell"<<"mlp"<<"rbf"<<"kmeans";
+    opt_sampler<<"uniform"<<"triangular"<<"maxwell"<<"mlp"
+                <<"rbf"<<"kmeans"<<"user";
 
     addParam(Parameter("opt_debug",opt_debug[0],
                        opt_debug,
@@ -149,6 +150,10 @@ void    Optimizer::solve()
     if(sampling=="kmeans")
     {
         problemSampler=new KmeansSampler(myProblem);
+    }
+    if(sampling=="user")
+    {
+        problemSampler = new UserSampler(myProblem);
     }
     else
     {

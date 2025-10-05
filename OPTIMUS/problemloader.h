@@ -42,7 +42,6 @@
 #include <OPTIMUS/optimizer.h>
 #include <PROBLEMS/Ackley.h>
 
-#include <PROBLEMS/sphere.h>
 #include <PROBLEMS/schaffer.h>
 #include <PROBLEMS/Extended_f10.h>
 #include <PROBLEMS/bf3.h>

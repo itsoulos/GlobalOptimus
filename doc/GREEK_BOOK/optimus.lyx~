@@ -3484,6 +3484,13 @@ Ipso variant (
 .
 \end_layout
 
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
 \end_deeper
 \begin_layout Subsection
 
@@ -3590,7 +3597,11 @@ neural_weights
 \series default
 \lang greek
 .
- Αυτή η ακέραια παράμετρος χρησιμοποιείται για τον καθορισμό των βαρών του δικτύου RBF που θα χρησιμοποιηθεί.
+ Αυτή η ακέραια παράμετρος χρησιμοποιείται για τον καθορισμό των βαρών του δικτύου 
+\lang english
+RBF
+\lang greek
+ που θα χρησιμοποιηθεί.
 \end_layout
 
 \begin_layout Enumerate
@@ -3793,7 +3804,7 @@ parde_propagate_rate
 \series default
 \lang greek
 .
- Είναι μια ακέραια παράμετρους που ορίζει τον αριθμό των γενιών που θα πρέπει να περάσουν πριν γίνει διάδοση των καλύτερων τιμών μεταξύ των νησιών.
+ Είναι μια ακέραια παράμετρος που ορίζει τον αριθμό των γενιών που θα πρέπει να περάσουν πριν γίνει διάδοση των καλύτερων τιμών μεταξύ των νησιών.
 \end_layout
 
 \begin_layout Enumerate
@@ -3852,6 +3863,177 @@ parde_islands_enable<=parde_islands.
 ParallelPso
 \end_layout
 
+\begin_layout Standard
+Η επιλογή αυτή υλοποιεί την τεχνική της παράλληλης 
+\lang english
+PSO
+\lang greek
+ όπως έχει δημοσιευθεί και στην αντίστοιχη εργασία 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "islandPSO"
+literal "false"
+
+\end_inset
+
+.
+ Οι βασικές παράμετροι αυτής της τεχνικής είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_particles
+\series default
+\lang greek
+.
+ Ο αριθμός των σωματιδίων σε κάθε νησί.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_generations
+\series default
+\lang greek
+.
+ Ο μέγιστος αριθμός των επιτρεπόμενων επαναλήψεων.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_c1
+\series default
+\lang greek
+.
+ Η παράμετρος 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ του αλγορίθμου 
+\lang english
+PSO
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_c2
+\series default
+\lang greek
+.
+ Η παράμετρος 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+ του αλγορίθμου 
+\lang english
+PSO
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_propagateRate
+\series default
+\lang greek
+.
+ Είναι μια ακέραια παράμετρος που ορίζει τον αριθμό των γενιών που θα πρέπει να περάσουν πριν γίνει διάδοση των καλύτερων τιμών μεταξύ των νησιών.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_propagateMethod
+\series default
+\lang greek
+.
+ Ορίζει τον τρόπο με τον οποίο θα γίνεται η διάδοση των καλύτερων τιμών μεταξύ των διακριτών νησιών.
+ Οι αποδεκτές τιμές είναι:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+1to1
+\lang greek
+.
+ Σε αυτήν την περίπτωση κάθε νησί επιλέγει τυχαία ένα από την λίστα και στέλνει σε αυτό τον καλύτερο πράκτορα του.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+1toN
+\lang greek
+.
+ Σε αυτήν την περίπτωση κάθε νησί ενημερώνει για τον καλύτερο του πράκτορα όλα τα υπόλοιπα νησιά.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Nto1
+\lang greek
+.
+ Σε αυτήν την περίπτωση όλα τα νησιά επιλέγουν το ίδιο νησί προς ενημέρωση.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+NtoN
+\lang greek
+.
+ Σε αυτήν την περίπτωση όλα τα νησιά επιλέγουν όλα τα υπόλοιπα προς ενημέρωση.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_subCluster
+\series default
+\lang greek
+.
+ Ο αριθμός των διακριτών νησιών της τεχνικής.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_subClusterEnable
+\series default
+\lang greek
+.
+ Ορίζει το πλήθος των νησιών που θα συμμετέχουν σε απόφαση για τερματισμό ή όχι της συνολικής διαδικασίας.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+parallelPso_pNumber
+\series default
+\lang greek
+.
+ Ορίζει τον αριθμό (ελάχιστο 1) των χρωμοσωμάτων που θα ανταλλάσσονται κατά την διαδικασία της διάδοσης χρωμοσωμάτων μεταξύ των διακριτών νησιών.
+\end_layout
+
 \begin_layout Subsection
 
 \series bold
@@ -3859,12 +4041,790 @@ ParallelPso
 Simman
 \end_layout
 
+\begin_layout Standard
+Η μέθοδος 
+\lang english
+Simulated Annealing
+\lang greek
+ αναπτύχθηκε το 1983 από τον Kirkpatrik 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "siman"
+literal "false"
+
+\end_inset
+
+ κυρίως για συνδυαστικά προβλήματα και μιμείται την φυσική διαδικασία της Ανόπτυσης,
+ όπου ζεσταίνεται ένα μέταλλο σε υψηλή θερμοκρασία και εν συνεχεία μειώνεται η θερμοκρασία μέχρι να φτάσει στο 0.
+ Στην άνοδο τα μόρια του μετάλλου κινούνται γρήγορα (αναζήτηση λύσεων) αλλά στην συνέχεια όσο αυτό ψύχεται μειώνεται η ταχύτητά τους.
+ Ο τρόπος που πέφτει η θερμοκρασία ονομάζεται 
+\lang english
+cooling schedule.
+
+\lang greek
+ Ένα γενικό σχήμα αυτής της τεχνικής παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Το-γενικό-σχήμα-2"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Το γενικό σχήμα του αλγορίθμου 
+\lang english
+Simulated Annealing
+\lang greek
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Το-γενικό-σχήμα-2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Θέτουμε
+\series default
+ k = 0,
+ 
+\begin_inset Formula $T_{0}>0$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Έστω
+\series default
+ 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ το αρχικό σημείο.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Έστω
+\series default
+ 
+\begin_inset Formula $N_{\mbox{eps}}>0$
+\end_inset
+
+ ένας θετικός ακέραιος.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Έστω
+\series default
+ e> 0,
+ ένας μικρός θετικός δεκαδικός αριθμός.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Για
+\series default
+ 
+\begin_inset Formula $i=1,...,N_{\mbox{eps}}$
+\end_inset
+
+ 
+\series bold
+επανέλαβε
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Έστω
+\series default
+ 
+\begin_inset Formula $y$
+\end_inset
+
+ ένα νέο δείγμα.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Αν
+\series default
+ 
+\begin_inset Formula $f(y)\le f\left(x_{k}\right)$
+\end_inset
+
+ 
+\begin_inset Formula $x_{k+1}=y$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Διαφορετικά
+\series default
+ 
+\begin_inset Formula $x_{k+1}=y$
+\end_inset
+
+ με πιθανότητα 
+\begin_inset Formula $\min\left\{ 1,\exp\left(-\frac{f(y)-f\left(x_{k}\right)}{T_{k}}\right)\right\} $
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Τέλος Για
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Ενημέρωση
+\series default
+ θερμοκρασίας 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+ σύμφωνα με τον μηχανισμό ψύξης.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+k=k+1
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Αν
+\series default
+ 
+\begin_inset Formula $T_{k}\le e$
+\end_inset
+
+ 
+\series bold
+τερματισμός
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+Αλλιώς
+\series default
+ μετάβαση στο βήμα 5.
+\end_layout
+
+\end_deeper
+\end_inset
+
+
+\lang greek
+Στο πακέτο λογισμικού 
+\lang english
+Optimus
+\lang greek
+ έχει υλοποιηθεί με το όνομα 
+\lang english
+Simman
+\lang greek
+ και οι βασικές παράμετροι της τεχνικής είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+siman_t0
+\series default
+\lang greek
+.
+ Ορίζει την αρχική θερμοκρασία του αλγορίθμου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+siman_neps
+\series default
+\lang greek
+.
+ Ορίζει τον αριθμό των σημείων που θα δημιουργεί σε κάθε επανάληψη ο αλγόριθμος.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+siman_eps
+\series default
+\lang greek
+.
+ Ορίζει έναν πολύ μικρό αριθμό που θα χρησιμοποιηθεί στον κριτήριο τερματισμού του αλγορίθμου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+siman_coolmethod
+\series default
+\lang greek
+.
+ Ορίζει τον μηχανισμό ψύξης της τεχνικής.
+ Οι παρακάτω μηχανισμοί υποστηρίζονται:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+exp
+\lang greek
+.
+ Η μείωση γίνεται σύμφωνα με τον τύπο:
+\lang english
+
+\begin_inset Formula 
+\[
+T_{k}=T_{0}a^{k},\ 0.8\le a\le0.9
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+log
+\lang greek
+.
+ Η μείωση γίνεται σύμφωνα με τον τύπο:
+\lang english
+
+\begin_inset Formula 
+\[
+T_{k}=\frac{T_{0}}{1+a\log\left(1+k\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+linear
+\lang greek
+.
+ Η μείωση γίνεται σύμφωνα με τον τύπο:
+\lang english
+
+\begin_inset Formula 
+\[
+T_{k}=\frac{T_{0}}{1+ak}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+quad
+\lang greek
+.
+ Η μείωση γίνεται σύμφωνα με τον τύπο:
+\lang english
+
+\begin_inset Formula 
+\[
+T_{k}=\frac{T_{0}}{1+ak^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Παράμετροι μεθόδου 
 \end_layout
 
+\begin_layout Standard
+Οι παράμετροι είναι βασικό στοιχείων των τεχνικών ελαχιστοποίησης για την αποτελεσματική προσαρμογή των τεχνικών αυτών στις απαιτήσεις του χρήστη.
+ Για την υλοποίηση τους γίνεται χρήση της κατηγορίας 
+\lang english
+Parameter
+\lang greek
+ που είναι στον φάκελο 
+\lang english
+OPTIMUS
+\lang greek
+.
+ Εκτός από τις παραμέτρους κάθε τεχνικής υπάρχουν και μια σειρά από καθολικές παράμετροι που επηρεάζουν όλες τις τεχνικές ελαχιστοποίησης.
+\end_layout
+
 \begin_layout Subsection
 Καθολικές παράμετροι 
+\end_layout
+
+\begin_layout Standard
+Οι καθολικές παράμετροι συνήθως έχουν το πρόθεμα 
+\lang english
+opt_
+\lang greek
+ και οι βασικότερες από αυτές είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+opt_debug
+\series default
+\lang greek
+.
+ Αυτή η παράμετρος λαμβάνει τις τιμές 
+\lang english
+yes/no
+\lang greek
+ και μπορεί να χρησιμοποιηθεί για να ενεργοποιεί/απενεργοποιεί την εμφάνιση μηνυμάτων από τις μεθόδους βελτιστοποίησης.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+opt_localsearch
+\series default
+\lang greek
+.
+ Αυτή η παράμετρος ορίζει την τεχνική τοπικής βελτιστοποίησης που θα χρησιμοποιηθεί από την μέθοδο καθολικής βελτιστοποίησης είτε κατά την διάρκεια εκτέλεσης της είτε στο τέλος αυτής.
+ Οι επιτρεπόμενες τιμές είναι:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+bfgs
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+lbfgs
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+nelderMead
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+gradient
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+adam
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+none
+\lang greek
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+opt_sampler
+\series default
+\lang greek
+.
+ Ορίζει την τεχνική δειγματοληψίας που θα χρησιμοποιηθεί κατά την εκκίνηση της μεθόδου τεχνικής καθολικής ελαχιστοποίησης.
+ Οι αποδεκτές τιμές αυτής της παραμέτρου είναι:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+uniform
+\lang greek
+.
+ Με αυτήν την επιλογή ομοιόμορφη κατανομή θα χρησιμοποιηθεί για την δειγματοληψία από την αντικειμενική συνάρτηση.
+ Ως παράδειγμα ομοιόμορφης κατανομής θεωρήστε τον επόμενο τύπο:
+\begin_inset Formula 
+\[
+x=a+r\times(b-a)
+\]
+
+\end_inset
+
+ όπου 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ ένας τυχαίος αριθμός.
+ Ο παραπάνω τύπος παράγει τυχαία σημεία με ομοιόμορφο τρόπο στο διάστημα 
+\begin_inset Formula $[a,b]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+triangular
+\lang greek
+.
+ Χρησιμοποιείται η τριγωνική κατανομή 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "triangular"
+literal "false"
+
+\end_inset
+
+ για την λήψη δειγμάτων από την αντικειμενική συνάρτηση.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+maxwell
+\lang greek
+.
+ Χρησιμοποιείται η κατανομή maxwell 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "maxwell"
+literal "false"
+
+\end_inset
+
+ για την λήψη αρχικών δειγμάτων.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+mlp
+\lang greek
+.
+ Με αυτήν την επιλογή παράγονται αρχικά δείγματα με την χρήση ενός νευρωνικού δικτύου 
+\lang english
+MLP
+\lang greek
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "mlp"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+rbf
+\lang greek
+.
+ Με την χρήση αυτής της τιμής τα αρχικά δείγματα λαμβάνονται με την χρήση ενός 
+\lang english
+RBF
+\lang greek
+ δικτύου.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+kmeans
+\lang greek
+.
+ Σε αυτήν την περίπτωση η τεχνική των κ-μέσων 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kmeans"
+literal "false"
+
+\end_inset
+
+ χρησιμοποιείται για την παραγωγή αρχικών σημείων.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+user
+\lang greek
+.
+ Σε αυτήν την περίπτωση θα χρησιμοποιηθεί δειγματοληψία που ορίζεται από τον χρήστη.
+ Για αυτόν τον λόγο ο προγραμματιστής θα πρέπει να αλλάξει στο επιθυμητό τον κώδικα της μεθόδου 
+\lang english
+sampleFromProblem
+\lang greek
+ που βρίσκεται στην κατηγορία 
+\lang english
+UserSampler
+\lang greek
+ στον φάκελο 
+\lang english
+SAMPLER
+\lang greek
+ του λογισμικού.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+\lang english
+opt_termination
+\series default
+\lang greek
+.
+ Η παράμετρος αυτή ορίζει τον τρόπο τερματισμού της μεθόδου καθολικής βελτιστοποίησης με αποδεκτές τιμές:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\lang english
+doublebox
+\lang greek
+.
+ Το κριτήριο του διπλού κουτιού προσπαθεί να τερματίσει την τεχνική,
+ όταν με κάποια βεβαιότητα δεν έχει βρεθεί νέο ολικό ελάχιστο για μια σειρά από επαναλήψεις.
+ Τα βασικά σημεία αυτής της τεχνικής τερματισμού παρουσιάζονται στον αλγόριθμο .
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+similarity
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+maxiters
+\lang greek
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+user
+\lang greek
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float algorithm
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Τα βασικά σημεία του αλγορίθμου 
+\lang english
+Doublebox
+\lang greek
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Τα-βασικά-σημεία"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\lang english
+Η διακύμανση
+\series bold
+ 
+\begin_inset Formula $\sigma^{(iter)}$
+\end_inset
+
+ 
+\series default
+της ποσότητας 
+\begin_inset Formula $f_{\mbox{min}}$
+\end_inset
+
+ υπολογίζεται σε κάθε επανάληψη 
+\begin_inset Formula $\mbox{iter}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\lang english
+Αν ο αλγόριθμος δεν μπορεί να εντοπίσει μια νέα καλύτερη τιμή για την 
+\begin_inset Formula $f_{\mbox{min}}$
+\end_inset
+
+
+\series bold
+ 
+\series default
+για μια σειρά από επαναλήψεις,
+ τότε η μέθοδος θα πρέπει να τερματιστεί.
+\end_layout
+
+\begin_layout Itemize
+
+\lang english
+Τερματισμός αν:
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset Formula 
+\begin{equation}
+\sigma^{(\mbox{iter})}\le\frac{\sigma^{\left(\mbox{iter}_{\mbox{last}}\right)}}{2}\label{eq:termination_doublebox}
+\end{equation}
+
+\end_inset
+
+όπου 
+\begin_inset Formula $\mbox{iter}_{\mbox{last}}$
+\end_inset
+
+ είναι η τελευταία επανάληψησ στην οποία βρέθηκε μια νέα καλύτερη τιμή για το 
+\begin_inset Formula $f_{\mbox{min}}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -3873,6 +4833,53 @@ Simman
 
 \begin_layout Section
 Ο κύκλος εκτέλεσης
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename usermethod.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Ο κύκλος εκτέλεσης των τεχνικών βελτιστοποίησης.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Ο-κύκλος-εκτέλεσης"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -3888,7 +4895,7 @@ init()
 \begin_layout Subsection
 Η μέθοδος
 \lang english
- run()
+ step()
 \end_layout
 
 \begin_layout Subsection
@@ -3911,40 +4918,6 @@ done()
 Η κατηγορία
 \lang english
  UserMethod
-\end_layout
-
-\begin_layout Chapter
-Προβλήματα μηχανικής μάθησης
-\end_layout
-
-\begin_layout Section
-Το πρόγραμμα 
-\lang english
-DataFitting
-\end_layout
-
-\begin_layout Section
-Η κατηγορία 
-\lang english
-Dataset
-\end_layout
-
-\begin_layout Section
-Η κατηγορία 
-\lang english
-MlpProblem 
-\end_layout
-
-\begin_layout Section
-Η κατηγορία 
-\lang english
-GdfModel
-\end_layout
-
-\begin_layout Section
-Η κατηγορία 
-\lang english
-NncModel
 \end_layout
 
 \begin_layout Bibliography
@@ -4647,6 +5620,165 @@ Tosun,
  International Journal of Production Research,
  51(14),
  4117-4133.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "islandPSO"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Charilogis,
+ V.,
+ Tsoulos,
+ I.
+ G.,
+ & Tzallas,
+ A.
+ (2023).
+ An improved parallel particle swarm optimization.
+ SN Computer Science,
+ 4(6),
+ 766.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "siman"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Kirkpatrick,
+ S.,
+ Gelatt Jr,
+ C.
+ D.,
+ & Vecchi,
+ M.
+ P.
+ (1983).
+ Optimization by simulated annealing.
+ science,
+ 220(4598),
+ 671-680.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "triangular"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Fairchild,
+ K.
+ W.,
+ Misra,
+ L.,
+ & Shi,
+ Y.
+ (2016).
+ Using triangular distribution for business and finance simulations in Excel.
+ Journal of Financial Education,
+ 42(3-4),
+ 313-336.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "maxwell"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Bekker,
+ A.
+ J.
+ J.
+ J.,
+ & Roux,
+ J.
+ J.
+ J.
+ (2005).
+ Reliability characteristics of the Maxwell distribution:
+ A Bayes estimation study.
+ Communications in Statistics-Theory and Methods,
+ 34(11),
+ 2169-2178.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "mlp"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Abiodun,
+ O.
+ I.,
+ Jantan,
+ A.,
+ Omolara,
+ A.
+ E.,
+ Dada,
+ K.
+ V.,
+ Mohamed,
+ N.
+ A.,
+ & Arshad,
+ H.
+ (2018).
+ State-of-the-art in artificial neural network applications:
+ A survey.
+ Heliyon,
+ 4(11).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "kmeans"
+literal "false"
+
+\end_inset
+
+
+\lang english
+Ahmed,
+ M.,
+ Seraj,
+ R.,
+ & Islam,
+ S.
+ M.
+ S.
+ (2020).
+ The k-means algorithm:
+ A comprehensive survey and performance evaluation.
+ Electronics,
+ 9(8),
+ 1295.
 \end_layout
 
 \begin_layout Standard

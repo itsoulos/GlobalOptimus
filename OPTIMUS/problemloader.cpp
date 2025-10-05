@@ -8,7 +8,7 @@ ProblemLoader::ProblemLoader()
                 << "elp" << "gkls250" << "gkls2100" << "gkls350"<< "extendedf10"
                 << "goldstein" << "griewank2" << "griewank10" << "schwefel"
                 << "hansen" << "hartman3" << "hartman6" << "potential"
-                << "sphere" << "schaffer"<< "rosenbrock" << "shekel5"
+                << "schaffer"<< "rosenbrock" << "shekel5"
                 << "shekel7" << "shekel10" << "sckley" <<"rastrigin"
                 << "sinu" << "test30n" << "mlpproblem" << "rbfproblem"
                 << "brenner" << "gallagher101"<< "gallagher21"<<"ellipsoidal"
@@ -86,8 +86,6 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new Extended_f10();
     else if (name == "schaffer")
         myProblem = new schaffer();
-    else if (name == "sphere")
-        myProblem = new Sphere();
     else if (name == "test2n")
         myProblem = new Test2nProblem();
     else if (name == "bf1")

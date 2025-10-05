@@ -11,6 +11,7 @@
 # include   <SAMPLER/uniformsampler.h>
 # include   <SAMPLER/rbfsampler.h>
 # include   <SAMPLER/kmeanssampler.h>
+# include   <SAMPLER/usersampler.h>
 # include   <QJsonArray>
 # include   <QStringList>
 # include   <OPTIMUS/logger.h>

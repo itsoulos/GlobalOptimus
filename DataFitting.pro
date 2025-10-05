@@ -23,6 +23,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	SAMPLER/usersampler.cpp \
 	METHODS/eo.cpp \
 	METHODS/MFO.cpp \
         GE/doublestack.cc \
@@ -109,6 +110,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    SAMPLER/usersampler.h\
     METHODS/eo.h \
     METHODS/MFO.h \
     GE/doublestack.h \
