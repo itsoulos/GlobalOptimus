@@ -4688,7 +4688,18 @@ doublebox
 .
  Το κριτήριο του διπλού κουτιού προσπαθεί να τερματίσει την τεχνική,
  όταν με κάποια βεβαιότητα δεν έχει βρεθεί νέο ολικό ελάχιστο για μια σειρά από επαναλήψεις.
- Τα βασικά σημεία αυτής της τεχνικής τερματισμού παρουσιάζονται στον αλγόριθμο .
+ Τα βασικά σημεία αυτής της τεχνικής τερματισμού παρουσιάζονται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Τα-βασικά-σημεία"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -4696,6 +4707,33 @@ doublebox
 \lang english
 similarity
 \lang greek
+.
+ Σε κάθε επανάληψη 
+\begin_inset Formula $k$
+\end_inset
+
+ γίνεται υπολογισμός της διαφοράς
+\lang english
+
+\begin_inset Formula $\left|f_{\mbox{min}}^{(k)}-f_{\mbox{min}}^{(k-1)}\right|$
+\end_inset
+
+ 
+\lang greek
+και ο αλγόριθμος τερματίζει αν 
+\lang english
+
+\begin_inset Formula $\left|f_{\mbox{min}}^{(k)}-f_{\mbox{min}}^{(k-1)}\right|\le e$
+\end_inset
+
+
+\lang greek
+ για ένα αριθμό συνεχόμενων επαναλήψεων
+\lang english
+ 
+\begin_inset Formula $k_{\mbox{max}}$
+\end_inset
+
 .
 \end_layout
 
@@ -4705,14 +4743,7 @@ similarity
 maxiters
 \lang greek
 .
-\end_layout
-
-\begin_layout Enumerate
-
-\lang english
-user
-\lang greek
-.
+ Με τον αυτόν τον κανόνα τερματισμού η μέθοδος βελτιστοποίησης θα τερματιστεί όταν θα συμπληρωθεί ένας προκαθορισμένος αριθμός επαναλήψεων.
 \end_layout
 
 \end_deeper
@@ -4722,11 +4753,7 @@ placement document
 alignment document
 wide false
 sideways false
-status open
-
-\begin_layout Plain Layout
-
-\end_layout
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -4831,8 +4858,282 @@ name "alg:Τα-βασικά-σημεία"
 Δημιουργία παραμέτρων
 \end_layout
 
+\begin_layout Standard
+Για τον χειρισμό των παραμέτρων αρμόδια κατηγορία είναι η κατηγορία 
+\lang english
+Parameter
+\lang greek
+ στον φάκελο 
+\lang english
+OPTIMUS
+\lang greek
+.
+ Τα βασικά πεδία κάθε παραμέτρου είναι:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+QString
+\series default
+ name
+\lang greek
+.
+ Είναι το όνομα της συγκεκριμένης παραμέτρου.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+QString
+\series default
+ value
+\lang greek
+.
+ Είναι η τιμή της συγκεκριμένης παραμέτρου.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\lang english
+QString
+\series default
+ help
+\lang greek
+.
+ Μπορεί να χρησιμοποιηθεί για την εμφάνιση βοήθειας στον χρήστη.
+\end_layout
+
+\begin_layout Standard
+Επιπλέον,
+ για τον αποτελεσματικότερο χειρισμό των παραμέτρων προσφέρονται μια σειρά από συναρτήσεις δημιουργίας,
+ όπως αναφέρονται στην συνέχεια:
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Parameter(
+\series bold
+QString
+\series default
+ n,
+
+\series bold
+ QString
+\series default
+ v,
+
+\series bold
+ QString
+\series default
+ h)
+\lang greek
+;
+ Είναι η προκαθορισμένη συνάρτηση δημιουργίας.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Parameter(
+\series bold
+QString
+\series default
+ n,
+
+\series bold
+ int
+\series default
+ v,
+
+\series bold
+ int
+\series default
+ low,
+
+\series bold
+ int
+\series default
+ upper,
+ 
+\series bold
+QString
+\series default
+ h);
+
+\lang greek
+ Χρησιμοποιείται για να ορίσει μια ακέραια παράμετρο με όρια 
+\lang english
+[low,upper]
+\lang greek
+.
+ Η παράμετρος 
+\begin_inset Formula $v$
+\end_inset
+
+ είναι η προκαθορισμένη τιμή της παραμέτρου.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Parameter(
+\series bold
+QString
+\series default
+ n,
+ 
+\series bold
+double
+\series default
+ v,
+ 
+\series bold
+double
+\series default
+ low,
+ 
+\series bold
+double
+\series default
+ upper,
+ 
+\series bold
+QString
+\series default
+ h);
+ 
+\lang greek
+Χρησιμοποιείται για να ορίσει μια δεκαδική παράμετρο με όρια 
+\lang english
+[low,upper]
+\lang greek
+.
+ Η παράμετρος 
+\begin_inset Formula $v$
+\end_inset
+
+ είναι η προκαθορισμένη τιμή της παραμέτρου.
+\end_layout
+
+\begin_layout Enumerate
+
+\lang english
+Parameter(
+\series bold
+QString 
+\series default
+n,
+ 
+\series bold
+QString
+\series default
+ v,
+ 
+\series bold
+QStringList
+\series default
+ list,
+ 
+\series bold
+QString
+\series default
+ h);
+ 
+\lang greek
+Με αυτήν την συνάρτηση δημιουργίας ο χρήστης μπορεί να ορίσει μια αλφαριθμητική παράμετρο της οποίας οι πιθανές τιμές είναι στην λίστα 
+\lang english
+list
+\lang greek
+.
+ Η παράμετρος 
+\begin_inset Formula $v$
+\end_inset
+
+ είναι η προκαθορισμένη τιμή της παραμέτρου.
+\end_layout
+
+\begin_layout Standard
+Η προσθήκη παραμέτρων σε μια μέθοδο βελτιστοποίησης μπορεί να γίνει με την μέθοδο 
+\lang english
+addParam
+\lang greek
+().
+ Μια ενδεικτική χρήση της παρουσιάζεται στην συνέχεια από κώδικα που προέρχεται από την υλοποίηση του Γενετικού αλγορίθμου (αρχείο 
+\lang english
+genetic.cpp
+\lang greek
+ στον φάκελο 
+\lang english
+METHODS
+\lang greek
+).
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\lang english
+addParam(Parameter("gen_count",200,10,2000,"Number of chromosomes"));
+\end_layout
+
+\end_inset
+
+
+\lang greek
+ Η ανάκτηση της συγκεκριμένης παραμέτρου από τον χρήστη γίνεται με τον ακόλουθο κώδικα
+\lang english
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\lang english
+chromosomeCount=getParam("gen_count").getValue().toInt();
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Ο κύκλος εκτέλεσης
+\end_layout
+
+\begin_layout Standard
+Όλες οι μέθοδοι βελτιστοποίησης ακολουθούν έναν κύκλο εκτέλεσης των μεθόδων τους,
+ όπως αυτός παρουσιάζεται στο σχήμα 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ο-κύκλος-εκτέλεσης"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -4889,13 +5190,428 @@ init()
 \end_layout
 
 \begin_layout Standard
-Και τεχνικές δειγματοληψίας εδώ.
+Στην μέθοδο αυτή λαμβάνει χώρα η αρχικοποίηση των παραμέτρων της μεθόδου και πιθανώς και δειγματοληψία από την αντικειμενική συνάρτηση αν αυτό απαιτείται.
+ Ένα παράδειγμα τέτοιας συνάρτησης παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Η-μέθοδος-init()"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ για την μέθοδο του Γενετικού Αλγορίθμου.
+ Η συνάρτηση 
+\lang english
+sampleFromProblem
+\lang greek
+() εκτελεί δειγματοληψία από την αντικειμενική συνάρτηση χρησιμοποιώντας την μέθοδο δειγματοληψίας που ορίζει η καθολική παράμετρος 
+\series bold
+\lang english
+opt_sampler
+\series default
+\lang greek
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Η μέθοδος 
+\lang english
+init
+\lang greek
+() του Γενετικού Αλγορίθμου.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Η-μέθοδος-init()"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status collapsed
+
+\begin_layout Plain Layout
+
+\lang english
+void    Genetic::init()
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    chromosomeCount=getParam("gen_count").getValue().toInt();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    maxGenerations=getParam("gen_maxiters").getValue().toInt();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    selectionRate=getParam("gen_srate").getValue().toDouble();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    mutationRate=getParam("gen_mrate").getValue().toDouble();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    tournamentSize = getParam("gen_tsize").getValue().toInt();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    selectionMethod=getParam("gen_selection").getValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    crossoverMethod=getParam("gen_crossover").getValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    mutationMethod=getParam("gen_mutation").getValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    localsearchRate=getParam("gen_lrate").getValue().toDouble();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    lsearchGens=getParam("gen_lsearchgens").getValue().toInt();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    lsearchItems=getParam("gen_lsearchitems").getValue().toInt();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    localSearchMethod = getParam("gen_lsearchmethod").getValue();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    generation = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    //init process
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    population.resize(chromosomeCount);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    fitnessArray.resize(chromosomeCount);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    sampleFromProblem(chromosomeCount,population,fitnessArray);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+     childrenArray.resize(chromosomeCount);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    for(int i=0;i<chromosomeCount;i++)
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    {
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        childrenArray[i].resize(myProblem->getDimension());
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 Η μέθοδος
 \lang english
  step()
+\end_layout
+
+\begin_layout Standard
+Η συνάρτηση 
+\lang english
+step
+\lang greek
+() εκτελεί το βασικό βήμα της μεθόδου βελτιστοποίησης και επαναλαμβάνεται διαρκώς μέχρι να ισχύσει το κριτήριο τερματισμού.
+ Ένα παράδειγμα εκτέλεσης για την μέθοδο του Γενετικού Αλγορίθμου παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Η-μέθοδος-step()"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Η μέθοδος 
+\lang english
+step
+\lang greek
+() του Γενετικού Αλγορίθμου.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Η-μέθοδος-step()"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status collapsed
+
+\begin_layout Plain Layout
+
+\lang english
+void    Genetic::step()
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    ++generation;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    CalcFitnessArray();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    Selection();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    Crossover();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    Mutate();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    if(generation%lsearchGens==0 &&  localSearchMethod!=LOCAL_NONE)
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    {
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        LocalSearch(0);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        for(int i=0;i<lsearchItems;i++)
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        {
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+            int pos = rand()  % population.size();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+            LocalSearch(pos);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+	Selection();
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -4905,7 +5621,157 @@ init()
 \end_layout
 
 \begin_layout Standard
-Να αναφερθούν τεχνικές τερματισμού εδώ.
+Η μέθοδος αυτή ελέγχει το κριτήριο τερματισμού μετά την εκτέλεση της 
+\lang english
+step
+\lang greek
+() και αν είναι αληθές επιστρέφει 
+\lang english
+true
+\lang greek
+,
+ διαφορετικά επιστρέφει 
+\lang english
+false
+\lang greek
+.
+ Σαν παράδειγμα υλοποίησης στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Η-μέθοδος-terminated()"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ παρουσιάζεται ο κώδικας της μεθόδου για τον Γενετικό Αλγόριθμο.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Η μέθοδος 
+\lang english
+terminated
+\lang greek
+() του Γενετικού Αλγορίθμου.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Η-μέθοδος-terminated()"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status collapsed
+
+\begin_layout Plain Layout
+
+\lang english
+bool    Genetic::terminated()
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    double besty;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    besty = fitnessArray[0];
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    if(generation>=maxGenerations) return true;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    if(terminationMethod=="doublebox")
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        return doubleBox.terminate(besty);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    else
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        if(terminationMethod=="similarity")
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+        return similarity.terminate(besty);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    return false;
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -4914,10 +5780,173 @@ init()
 done()
 \end_layout
 
+\begin_layout Standard
+Η μέθοδος 
+\lang english
+done
+\lang greek
+() εκτελείται μόνον μια φορά και στο τέλος της μεθόδου βελτιστοποίησης.
+ Σε αυτήν συνήθως γίνεται η εκτέλεση μιας τεχνικής τοπικής βελτιστοποίησης πάνω στο καλύτερο στοιχείο που έχει παράγει η μέθοδος καθολικής βελτιστοποίησης προκειμένου να ανακτηθεί μια καλύτερη τιμή για το ολικό ελάχιστο της αντικειμενικής συνάρτησης.
+ Ένα ενδεικτικό παράδειγμα υλοποίησης παρουσιάζεται στον αλγόριθμο 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Η-μέθοδος-done()"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ για την περίπτωση του Γενετικού Αλγορίθμου.
+ Η μέθοδος 
+\lang english
+localSearch
+\lang greek
+() καλεί την επιλεγμένη τεχνική τοπικής βελτιστοποίησης που έχει οριστεί από την καθολική παράμετρο 
+\series bold
+\lang english
+opt_localsearch
+\series default
+\lang greek
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Η μέθοδος 
+\lang english
+done
+\lang greek
+() του Γενετικού Αλγορίθμου.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Η-μέθοδος-done()"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset listings
+lstparams "language={C++}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\lang english
+void    Genetic::done()
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+    fitnessArray[0]=localSearch(population[0]);
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Η κατηγορία
 \lang english
  UserMethod
+\end_layout
+
+\begin_layout Standard
+Η κατηγορία 
+\lang english
+UserMethod
+\lang greek
+ που υπάρχει στον φάκελο 
+\lang english
+METHODS
+\lang greek
+ μπορεί να χρησιμοποιηθεί για την δημιουργία μιας μεθόδου ελαχιστοποίησης που επιθυμεί ο χρήστης πέρα από αυτές που έχουν υλοποιηθεί στην διανομή.
+ Ο χρήστης θα πρέπει να υλοποιήσει τις παρακάτω μεθόδους (τουλάχιστον)
+\end_layout
+
+\begin_layout Enumerate
+Συνάρτηση δημιουργίας.
+\end_layout
+
+\begin_layout Enumerate
+Μέθοδος 
+\lang english
+init
+\lang greek
+().
+\end_layout
+
+\begin_layout Enumerate
+Μέθοδος 
+\lang english
+step
+\lang greek
+().
+\end_layout
+
+\begin_layout Enumerate
+Μέθοδος 
+\lang english
+terminated
+\lang greek
+().
+\end_layout
+
+\begin_layout Enumerate
+Μέθοδος 
+\lang english
+done
+\lang greek
+().
+\end_layout
+
+\begin_layout Standard
+Στην συνέχεια θα πρέπει να κάνει και πάλι μεταγλώττιση το λογισμικό μέσα από το περιβάλλον του Qt Creator.
 \end_layout
 
 \begin_layout Bibliography
