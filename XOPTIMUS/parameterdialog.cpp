@@ -34,6 +34,7 @@ void     ParameterDialog::initView(QString name,bool isJson)
     w1->setLayout(l1);
     if(isJson)
     {
+
         paramWidget = new ParamWidget(obj);
     }
     else

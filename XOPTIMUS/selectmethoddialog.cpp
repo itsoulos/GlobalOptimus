@@ -27,6 +27,9 @@ SelectMethodDialog::SelectMethodDialog(QStringList list,
 
     methodCombo = new QComboBox;
     methodCombo->addItems(methodList);
+
+
+    // Ορισμός γραμματοσειράς και μεγέθους για το dropdown (QAbstractItemView)
     l1->addWidget(methodCombo,0,Qt::AlignCenter);
     methodCombo->setFixedSize(QSize(95*width/100,height/15));
     connect(methodCombo,SIGNAL(currentTextChanged(QString)),this,

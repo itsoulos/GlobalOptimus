@@ -18,6 +18,9 @@ int main(int argc, char *argv[])
         QString styleSheet = QLatin1String(file.readAll());
         a.setStyleSheet(styleSheet);
     }
+    QFont font;
+    font.setPointSize(14); // Μέγεθος γραμματοσειράς
+    a.setFont(font);
     MainWindow w;
     w.showMaximized();
     return a.exec();

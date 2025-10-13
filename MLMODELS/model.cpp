@@ -5,8 +5,8 @@ Model::Model()
     trainDataset = NULL;
     testDataset = NULL;
     method=NULL;
-    addParam(Parameter("model_trainfile","","The trainfile used"));
-    addParam(Parameter("model_testfile","","The test file used"));
+    addParam(Parameter("model_trainfile","The trainfile used"));
+    addParam(Parameter("model_testfile","The test file used"));
     modelSeed=1;
     generator.seed(modelSeed);
 }
@@ -254,6 +254,16 @@ void    Model::getPrecisionRecall(double &avg_precision,
     avg_fscore/=dclass.size();
 }
 
+ParameterList Model::getParameterList()
+{
+    ParameterList list;
+    for(int i=0;i<mparams.size();i++)
+    {
+        Parameter pt = mparams[i];
+        list.addParam(pt);
+    }
+    return list;
+}
 Model::~Model()
 {
 if(noRemoveData) return;

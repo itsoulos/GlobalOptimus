@@ -147,6 +147,7 @@ public:
                                  vector<double> &precision,
                                  vector<double> &recall);
     void    getPrecisionRecall(double &precision,double &recall,double &fscore);
+    ParameterList getParameterList();
     virtual ~Model();
 };
 

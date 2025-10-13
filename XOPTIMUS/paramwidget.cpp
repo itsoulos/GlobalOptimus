@@ -110,7 +110,15 @@ QWidget *ParamWidget::addEntryWidget(int index)
             break;
         case PARAM_FILE:
         {
-            return NULL;
+            QPushButton *paramButton = new QPushButton;
+            paramButton->setText(param.getValue().length()==0?"LOAD FILE":param.getValue());
+            connect(paramButton,SIGNAL(clicked()),this,SLOT(loadFileSlot()));
+            return paramButton;
+
+            QLineEdit *paramValue=new QLineEdit();
+            paramValue->setText(param.getValue());
+            paramValue->setAlignment(Qt::AlignCenter);
+            return paramValue;
             break;
         }
         case PARAM_INTEGER:
@@ -134,6 +142,17 @@ QWidget *ParamWidget::addEntryWidget(int index)
         }
     }
     return NULL;
+}
+
+void    ParamWidget::loadFileSlot()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open File"), ".", tr("Data Files (*.train *.test *.data *.csv *.arff)"));;
+    if(fileName.length()!=0)
+    {
+        QPushButton *bt = (QPushButton *)sender();
+        bt->setText(fileName);
+    }
 }
 void    ParamWidget::updateTable()
 {
@@ -220,6 +239,8 @@ void    ParamWidget::updateSlot()
         }
         case PARAM_FILE:
         {
+            QString value=((QPushButton *)mainTable->cellWidget(position,1))->text();
+            param.setValue(value);
             break;
         }
         case PARAM_INTEGER:

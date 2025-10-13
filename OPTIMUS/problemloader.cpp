@@ -2,21 +2,28 @@
 ProblemLoader::ProblemLoader()
 {
     myProblem = NULL;
-    problemList << "rastrigin2" << "test2n" << "bf1" << "bf2"<< "bf3"
-                << "equalmaxima" << "himmelblau" << "shubert" << "vincent"
-                << "branin" << "camel" << "cm" << "diffpower" << "easom" << "exp"
+    problemList <<"rastrigin2"<< "test2n"<<
+                   "bf1"<<"bf2"<<"bf3"<<"branin" << "brenner" <<
+                   "bucherastrigin"<<"camel" << "cm" << "diffpower" <<"differentpowers"
+                << "discus"<< "diracproblem"<<"easom" << "exp"<< "equalmaxima"
                 << "elp" << "gkls250" << "gkls2100" << "gkls350"<< "extendedf10"
-                << "goldstein" << "griewank2" << "griewank10" << "schwefel"
-                << "hansen" << "hartman3" << "hartman6" << "potential"
+                << "gallagher101"<< "gallagher21"<<"ellipsoidal"
+                << "goldstein" << "griewank2" << "griewank10"
+                << "griewankrosenbrock"<<"griewank"
+                << "hansen" << "hartman3" << "hartman6"
+                << "himmelblau"<<"katsuura"<<"lunacekbirastrigin"<<"levy"<<
+                    "michalewicz"<<"potential";
+
+    problemList
+                << "shubert" << "vincent"
+               << "schwefel"
                 << "schaffer"<< "rosenbrock" << "shekel5"
                 << "shekel7" << "shekel10" << "sckley" <<"rastrigin"
-                << "sinu" << "test30n" << "mlpproblem" << "rbfproblem"
-                << "brenner" << "gallagher101"<< "gallagher21"<<"ellipsoidal"
-                <<"bucherastrigin"<<"linearslope"<<"attractivesector"<<"stepellipsoidal"
-                << "rotatedrosenbrock"<< "discus"<< "sharpridge"
-                <<"differentpowers"<<"weierstrass"<<"griewankrosenbrock"
-                <<"katsuura"<<"lunacekbirastrigin"<<"griewank"<<"diracproblem"
-                <<"michalewicz"<<"zakharov"<<"levy"<<"userproblem";
+                << "sinu" << "test30n"
+                <<"linearslope"<<"attractivesector"<<"stepellipsoidal"
+                << "rotatedrosenbrock"<<  "sharpridge"
+               <<"weierstrass"
+                <<"zakharov"<< "mlpproblem" << "rbfproblem"<<"userproblem";
     myParams["dummy"] = 1;
     selectedProblem = "";
 }

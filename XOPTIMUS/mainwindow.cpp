@@ -174,26 +174,48 @@ void    MainWindow::settingsSlot(QAction  *action)
         else
         {
             QJsonObject pt ;
+            bool isJson=true;
+            ParameterList paramList;
             if(problemLoader->getSelectedProblemName()=="mlpproblem")
             {
                 pt = ((MlpProblem *)myProblem)->getParams();
+                paramList = ((MlpProblem *)myProblem)->getParameterList();
+                isJson = false;
             }
             else
                 if(problemLoader->getSelectedProblemName()=="rbfproblem")
                 {
                     pt = ((RbfProblem *)myProblem)->getParams();
-
+                    paramList = ((RbfProblem *)myProblem)->getParameterList();
+                    isJson = false;
                 }
                 else pt = problemLoader->getParams();
-            ParameterDialog *d = new ParameterDialog(
-                pt,
-                problemLoader->getSelectedProblemName(),this);
+                ParameterDialog *d =NULL;
+                if(isJson)
+                d= new ParameterDialog(
+                            pt,
+                            problemLoader->getSelectedProblemName(),this);
+                else
+                {
+                    d= new ParameterDialog(
+                        paramList,
+                        problemLoader->getSelectedProblemName(),this);
+                }
+
             d->setModal(true);
             int v=d->exec();
 
             if(v==QDialog::Accepted)
             {
-                QJsonObject params = d->getParams();
+                QJsonObject params ;
+                if(isJson)
+                params= d->getParams();
+                else
+                {
+                    ParameterList list;
+                    list = d->getParameterList();
+                    params = list.getParams();
+                }
                 QJsonDocument doc(params);
                 QString strJson(doc.toJson(QJsonDocument::Compact));
                 addMessage("Problem params: "+strJson);
@@ -347,8 +369,28 @@ void    MainWindow::startRunning()
         myProblem->resetFunctionCalls();
         myMethod->setProblem(myProblem);
         QJsonObject p = problemLoader->getParams();
-        myProblem->init(p);
-        myMethod->solve();
+
+        //check for mlp,rbf
+        if(problemLoader->getSelectedProblemName()=="mlpproblem")
+        {
+            ((MlpProblem *)myProblem)->init(p);
+            ((MlpProblem *)myProblem)->setOptimizer(myMethod);
+            ((MlpProblem *)myProblem)->initModel();
+            ((MlpProblem *)myProblem)->trainModel();
+        }
+        else
+        if(problemLoader->getSelectedProblemName()=="rbfproblem")
+        {
+            ((RbfProblem *)myProblem)->init(p);
+            ((RbfProblem *)myProblem)->setOptimizer(myMethod);
+            ((RbfProblem *)myProblem)->initModel();
+            ((RbfProblem *)myProblem)->trainModel();
+        }
+        else
+        {
+                myProblem->init(p);
+                myMethod->solve();
+        }
         myStat->addProblem(myProblem);
     }
     endRunning();

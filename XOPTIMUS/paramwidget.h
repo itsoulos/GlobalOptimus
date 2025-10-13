@@ -15,6 +15,7 @@
 # include <QSpinBox>
 # include <QComboBox>
 # include <QFileSelector>
+# include <QFileDialog>
 # include <OPTIMUS/parameterlist.h>
 /**
  * @brief The ParamWidget class is responsible to display
@@ -47,6 +48,7 @@ public slots:
     void updateSlot();
     void deleteSlot();
     void insertSlot();
+    void loadFileSlot();
 };
 
 #endif // PARAMWIDGET_H
