@@ -81,7 +81,6 @@ SOURCES += \
     PROBLEMS/Ackley.cpp \
     PROBLEMS/E_ev.cpp \
     PROBLEMS/Extended_f10.cpp \
-    PROBLEMS/Sphere.cpp \
         PROBLEMS/bf1.cpp \
         PROBLEMS/bf2.cpp \
     PROBLEMS/bf3.cpp \
@@ -225,7 +224,6 @@ HEADERS += \
     PROBLEMS/Ackley.h \
     PROBLEMS/E_ev.h \
     PROBLEMS/Extended_f10.h \
-    PROBLEMS/Sphere.h \
     PROBLEMS/bf3.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \

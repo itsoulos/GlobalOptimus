@@ -105,7 +105,6 @@ SOURCES += \
     OPTIMUS/problemloader.cpp \
     PROBLEMS/Ackley.cpp \
     PROBLEMS/Extended_f10.cpp \
-    PROBLEMS/Sphere.cpp \
     PROBLEMS/bf3.cpp \
     PROBLEMS/equal_maxima.cpp \
     PROBLEMS/f1.cpp \
@@ -249,7 +248,6 @@ HEADERS += \
     OPTIMUS/problemloader.h \
     PROBLEMS/Ackley.h \
     PROBLEMS/Extended_f10.h \
-    PROBLEMS/Sphere.h \
     PROBLEMS/bf3.h \
     PROBLEMS/discus.h \
     PROBLEMS/cigar.h \
