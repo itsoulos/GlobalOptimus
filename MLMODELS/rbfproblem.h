@@ -59,9 +59,6 @@ private:
     Matrix matrixE;
     Matrix matrixC;
     Matrix matrixD;
-    /** test
-     */
-    Data lastGaussianValues;
 
     bool error_flag=false;
 public:
@@ -189,6 +186,12 @@ public:
      * @return the Euclidena distance between x and y.
      */
     double  apostasi(Data &x,Data &y);
+
+    /**
+     * @brief getSample
+     * @return a new weight vector.
+     */
+    virtual Data getSample();
     virtual ~RbfProblem();
 };
 

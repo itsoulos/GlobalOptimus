@@ -197,8 +197,6 @@ Data    RbfProblem::gradient(Data &x)
 
    return g;
 
-    Data g2;
-    g2.resize(dimension);
     for(int i=0;i<dimension;i++)
     {
         double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -206,21 +204,7 @@ Data    RbfProblem::gradient(Data &x)
         double v1=funmin(x);
         x[i]-=2.0 *eps;
         double v2=funmin(x);
-        g2[i]=(v1-v2)/(2.0 * eps);
-
-        if(fabs(g[i]-g2[i])>1e-3)
-        {
-
-            printf("DIFFERENCE[%4d]=%.8lf\n",i,fabs(g[i]-g2[i]));
-            if(i<nodes*d)
-                printf("Center difference \n");
-            else
-                if(i>=nodes *d && i<nodes*d+nodes)
-                printf("Variance difference \n");
-            else
-                printf("Weight difference\n");
-              g[i]=g2[i];
-        }
+        g[i]=(v1-v2)/(2.0 * eps);
         x[i]+=eps;
     }
     return g;
@@ -233,7 +217,6 @@ double  RbfProblem::getOutput(double *x)
     for(int i=0;i<nodes;i++)
     {
         double val = gaussian(x,centers[i],variances[i]);
-        lastGaussianValues[i]=val;
         sum+=weight[i]*val;
     }
     return sum;
@@ -385,7 +368,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 
     }
 
-   double var_diag = 0.0;
+    double var_diag = 0.0;
     for(int i=0;i<variances.size();i++)
     {
 
@@ -397,6 +380,19 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
         variances[i]=var_diag;
 
 
+}
+Data    RbfProblem::getSample()
+{
+    Data x;
+    x.resize(dimension);
+    for(int i=0;i<dimension;i++)
+    {
+        double a=-1,b=1;
+        if(left[i]>a) a=left[i];
+        if(right[i]<b) b=right[i];
+        x[i]=a+(b-a)*randomDouble();
+    }
+    return x;
 }
 
 void    RbfProblem::initModel()
@@ -415,7 +411,6 @@ void    RbfProblem::initModel()
     for(int i=0;i<(int)centers.size();i++)
         centers[i].resize(d);
     variances.resize(nodes);
-    lastGaussianValues.resize(nodes);
 
     //kmeans to estimate the range of margins
     vector<Data> xpoint = trainDataset->getAllXpoint();
@@ -433,7 +428,7 @@ void    RbfProblem::initModel()
         for(int j=0;j<d;j++)
         {
             double dv = centers[i][j];
-          //  if(fabs(dv)<1) dv = 1;
+            if(fabs(dv)<0.01) dv=0.01;
             left[icount]= -scale_factor * fabs(dv);
             right[icount]= scale_factor * fabs(dv);
             icount++;
@@ -455,8 +450,6 @@ void    RbfProblem::initModel()
             left[icount]=t;
         }
 
-        //if(right[icount]<0.001) right[icount]=0.001;
-
         icount++;
     }
     //weights bounds
@@ -465,6 +458,7 @@ void    RbfProblem::initModel()
     {
         left[icount]=  -scale_factor * rb;
         right[icount]= scale_factor *  rb;
+
         icount++;
     }
 
