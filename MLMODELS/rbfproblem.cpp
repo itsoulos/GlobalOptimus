@@ -7,7 +7,10 @@ RbfProblem::RbfProblem()
 {
     addParam(Parameter("rbf_nodes",1,1,100,"Number of rbf nodes"));
     addParam(Parameter("rbf_factor",3.0,1.0,100.0,"Rbf Scale factor"));
-
+    QStringList yesno;
+    yesno<<"false"<<"true";
+    addParam(Parameter("rbf_originaltrain",yesno[0],yesno,"Enable or disable the original RBF Training"));
+    addParam(Parameter("rbf_weightbound",10.0,1.0,100000.0,"The margins for weights"));
     trainA.resize(0);
 }
 
@@ -78,12 +81,7 @@ void    RbfProblem::setParameters(Data &x)
     int nodes        = getParam("rbf_nodes").getValue().toInt();
     int d = trainDataset==NULL?1:trainDataset->dimension();
 
-    weight.resize(nodes);
-    centers.resize(nodes);
-    for(int i=0;i<centers.size();i++)
-        centers[i].resize(d);
-    variances.resize(nodes);
-    lastGaussianValues.resize(nodes);
+
     for(int i=0;i<nodes;i++)
     {
         for(int j=0;j<d;j++)
@@ -154,11 +152,12 @@ static double dmax(double a,double b)
 
 Data    RbfProblem::gradient(Data &x)
 {
+
     Data g;
     setParameters(x);
     g.resize(x.size());
     
-
+    if(trainDataset==NULL) return g;
    for(int i=0;i<g.size();i++)
         g[i]=0.0;
    Data gtemp ;
@@ -377,7 +376,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
     }
     for(int i=0;i<variances.size();i++)
         {
-        printf("Team Elements[%d]=%d\n",i,teamElements[i]);
+
             if(teamElements[i]==0)
                 variances[i]=0.01;//sqrt(variances[i]);
             else
@@ -389,7 +388,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
    double var_diag = 0.0;
     for(int i=0;i<variances.size();i++)
     {
-        printf("Variances[%d]=%lf\n",i,variances[i]);
+
         var_diag+=variances[i];
     }
 
@@ -411,6 +410,11 @@ void    RbfProblem::initModel()
     setDimension(k);
     left.resize(k);
     right.resize(k);
+
+    centers.resize(nodes);
+    for(int i=0;i<(int)centers.size();i++)
+        centers[i].resize(d);
+    variances.resize(nodes);
     lastGaussianValues.resize(nodes);
 
     //kmeans to estimate the range of margins
@@ -450,53 +454,54 @@ void    RbfProblem::initModel()
             right[icount]=left[icount];
             left[icount]=t;
         }
-        printf("BOUNDS[%d]=[%lf %lf]\n",icount,left[icount],right[icount]);
+
         //if(right[icount]<0.001) right[icount]=0.001;
 
         icount++;
     }
     //weights bounds
+    double rb = getParam("rbf_weightbound").getValue().toDouble();
     for(int i=0;i<nodes;i++)
     {
-        left[icount]=  -scale_factor * 10.0;
-        right[icount]= scale_factor * 10.0;
-        if(teamElements[i]==0)
-        {
-            left[icount]=-0.0001;
-            right[icount]=0.0001;
-        }
+        left[icount]=  -scale_factor * rb;
+        right[icount]= scale_factor *  rb;
         icount++;
     }
 
 }
 void    RbfProblem::init(QJsonObject &px)
 {
-    QString trainName = px["model_trainfile"].toString();
-    QString testName =  px["model_testfile"].toString();
-    setParam("model_trainfile",trainName);
-    setParam("model_testfile",testName);
-
+    initParams(px);
     loadTrainSet();
     loadTestSet();
-    initModel();
  }
 
 QJsonObject RbfProblem::done(Data &x)
 {
-    setParameters(x);
-    double tr=getTrainError();
+    double tr=funmin(x);
     QJsonObject xx;
     double tt=getTestError(testDataset);
     double tc=getClassTestError(testDataset);
     xx["trainError"]=tr;
     xx["testError"]=tt;
     xx["classError"]=tc;
+    double precision=0.0,recall=0.0,f1score=0.0;
+    getPrecisionRecall(precision,recall,f1score);
+    xx["precision"]=precision;
+    xx["recall"]=recall;
+    xx["f1score"]=f1score;
     return xx;
 }
 
 
 void    RbfProblem::trainModel()
 {
+    QString origtrain = getParam("rbf_originaltrain").getValue();
+    if(origtrain=="true")
+    {
+        originalTrain();
+        return;
+    }
     if(method!=NULL)
     {
 

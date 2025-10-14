@@ -80,10 +80,7 @@ void    MlpProblem::initModel()
 }
 void    MlpProblem::init(QJsonObject &pt)
 {
-    QString trainName = pt["model_trainfile"].toString();
-    QString testName =  pt["model_testfile"].toString();
-    setParam("model_trainfile",trainName);
-    setParam("model_testfile",testName);
+    initParams(pt);
     if(pt.contains("mlp_nodes"))
     {
         setParam("mlp_nodes",pt["mlp_nodes"].toString());
@@ -136,6 +133,7 @@ Data    MlpProblem::gradient(Data &x)
     Data g;
     weight = x;
     g.resize(weight.size());
+    if(trainDataset==NULL) return g;
     if(usebound_flag)
     {
         for(int i=0;i<getdimension();i++)
@@ -478,6 +476,11 @@ QJsonObject MlpProblem::done(Data &x)
     xx["trainError"]=tr;
     xx["testError"]=tt;
     xx["classError"]=tc;
+    double precision=0.0,recall=0.0,f1score=0.0;
+    getPrecisionRecall(precision,recall,f1score);
+    xx["precision"]=precision;
+    xx["recall"]=recall;
+    xx["f1score"]=f1score;
     return xx;
 
 }

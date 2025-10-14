@@ -7,6 +7,13 @@ Model::Model()
     method=NULL;
     addParam(Parameter("model_trainfile","The trainfile used"));
     addParam(Parameter("model_testfile","The test file used"));
+    QStringList yesno;
+    yesno<<"false"<<"true";
+    addParam(Parameter("model_smote",yesno[0],yesno,"Enable or disable smote"));
+    QStringList format;
+    format<<"data"<<"csv"<<"arff";
+    addParam(Parameter("model_trainformat",format[0],format,"Train file format"));
+    addParam(Parameter("model_testformat",format[0],format,"Test file format"));
     modelSeed=1;
     generator.seed(modelSeed);
 }
@@ -55,18 +62,36 @@ void   Model::setOptimizer(Optimizer *p)
 void        Model::loadTrainSet()
 {
     QString tr = getParam("model_trainfile").getValue();
+    QString format = getParam("model_trainformat").getValue();
+    QString smote = getParam("model_smote").getValue();
     if(tr=="") return;
     if(trainDataset!=NULL) delete trainDataset;
-    trainDataset = new Dataset(tr);
+    trainDataset = new Dataset(tr,format);
+    if(smote=="true")
+    {
+        trainDataset->makeSmote();
+    }
     xall = trainDataset->getAllXpoint();
 }
 
+void    Model::initParams(QJsonObject &pt)
+{
+    for(QString key: pt.keys())
+    {
+        QString value=pt[key].toString();
+        setParam(key,value);
+    }
+}
 void        Model::loadTestSet()
 {
     QString tt = getParam("model_testfile").getValue();
+    QString format = getParam("model_testformat").getValue();
+
     if(tt=="") return;
     if(testDataset!=NULL) delete testDataset;
-    testDataset = new Dataset(tt);
+    testDataset = new Dataset(tt,format);
+
+
 }
 
 double      Model::getTestError()
@@ -199,11 +224,11 @@ void	Model::printConfusionMatrix(vector<double> &T,vector<double> &O,
         double sum = 0.0;
         for(j=0;j<nclass;j++)
             sum+=CM[j][i];
-        precision[i]=CM[i][i]/sum;
+        precision[i]=sum==0?-1:CM[i][i]/sum;
         sum = 0.0;
         for(j=0;j<nclass;j++)
             sum+=CM[i][j];
-         recall[i]=CM[i][i]/sum;
+         recall[i]=sum==0?-1:CM[i][i]/sum;
     }
      for(i=0;i<nclass;i++)
      {
@@ -242,16 +267,22 @@ void    Model::getPrecisionRecall(double &avg_precision,
     fscore.resize(dclass.size());
     avg_precision = 0.0, avg_recall = 0.0,avg_fscore=0.0;
     printConfusionMatrix(T,O,precision,recall);
+    int icount1=dclass.size();
+    int icount2=dclass.size();
     for(int i=0;i<dclass.size();i++)
     {
+        if(precision[i]>=0)
         avg_precision+=precision[i];
+        else icount1--;
+        if(recall[i]>=0)
         avg_recall+=recall[i];
+        else icount2--;
         fscore[i]=2.0*precision[i]*recall[i]/(precision[i]+recall[i]);
         avg_fscore+=fscore[i];
     }
-    avg_precision/=dclass.size();
-    avg_recall/=dclass.size();
-    avg_fscore/=dclass.size();
+    avg_precision/=icount1;
+    avg_recall/=icount2;
+    avg_fscore=2.0 * avg_precision * avg_recall/(avg_precision+avg_recall);
 }
 
 ParameterList Model::getParameterList()

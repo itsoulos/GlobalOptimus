@@ -148,6 +148,8 @@ public:
                                  vector<double> &recall);
     void    getPrecisionRecall(double &precision,double &recall,double &fscore);
     ParameterList getParameterList();
+
+    void initParams(QJsonObject &pt);
     virtual ~Model();
 };
 

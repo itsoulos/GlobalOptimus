@@ -1,7 +1,29 @@
 #ifndef DATASET_H
 #define DATASET_H
 # include <OPTIMUS/problem.h>
+# include <math.h>
+# include <stdlib.h>
+# include <QString>
+# include <QRegExp>
+# include <vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <cmath>
+#include <random>
+#include <algorithm>
+#include <map>
+#include <climits>
+# include <QFile>
+# include <QTextStream>
 typedef vector<Data>   Matrix;
+
+struct Sample
+{
+    vector<double> features;
+    double label;
+};
 
 /**
  * @brief The Dataset class
@@ -26,8 +48,10 @@ public:
     /**
      * @brief Dataset, reads data from filename.
      * @param filename
+     * @param format, the used format type: data,csv,arff
      */
-    Dataset(QString filename);
+    Dataset(QString filename,QString format="data");
+
 
     /**
      * @brief setData, sets the data values (x,y)
@@ -178,6 +202,23 @@ public:
     void    setPoint(int pos,Data &x,double y);
     int     nearestClassIndex(double value);
     Data    getAllYPoints() ;
+
+
+    /**
+     * @brief makeSmote balance the data using the smote method.
+     * @param k, the parameter for the KNN method.
+     */
+    void makeSmote(int k=5);
+
+    /**
+     * @brief getSamples
+     * @return  the dataset in Sample format.
+     */
+    vector<Sample>  getSamples();
+    vector<int>     kNearestNeighbors(const vector<Sample>& samples, int index, int k);
+
+
+
     ~Dataset();
 };
 

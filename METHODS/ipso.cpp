@@ -441,6 +441,8 @@ void    iPso::step()
 bool    iPso::terminated()
 {
     int max_generations = getParam("ipso_generations").getValue().toInt();
+
+    if(generation>=max_generations) return true;
     bool charilogis = false;
     bool charilogis2 = false;
     bool aliflag=false;
@@ -504,6 +506,7 @@ bool    iPso::terminated()
 
 void    iPso::showDebug()
 {
+    if(generation%10==0 && getParam("opt_debug").getValue()=="yes")
         methodLogger->printMessage(
             QString::asprintf("IPSO. Iteration=%4d besty = %10.5lg ",
                               generation,

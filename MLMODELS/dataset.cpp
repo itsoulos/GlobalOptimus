@@ -17,6 +17,181 @@ Dataset::Dataset(Problem *p,int N)
     }
 }
 
+Dataset::Dataset(QString filename,QString format)
+{
+    if(format == "data")
+    {
+        FILE *fp=fopen(filename.toStdString().c_str(),"r");
+        if(!fp) return;
+        int d,count;
+        fscanf(fp,"%d",&d);
+        fscanf(fp,"%d",&count);
+        ypoint.resize(count);
+
+        xpoint.resize(count);
+        for(int i=0;i<count;i++)
+        {
+            xpoint[i].resize(d);
+            for(int j=0;j<d;j++)
+                fscanf(fp,"%lf",&xpoint[i][j]);
+            fscanf(fp,"%lf",&ypoint[i]);
+        }
+        fclose(fp);
+    }
+    else
+    if(format=="csv")
+    {
+        QFile fp(filename);
+        if(!fp.open(QIODevice::ReadOnly | QIODevice::Text)) return ;
+        QTextStream st(&fp);
+        while(!st.atEnd())
+        {
+            QString line=st.readLine();
+            if(line.size()<=1) continue;
+            QStringList list = line.split(",");
+            Data xx;
+            for(int i=0;i<list.size()-1;i++)
+                xx.push_back(list[i].toDouble());
+            double yy=list.last().toDouble();
+            xpoint.push_back(xx);
+            ypoint.push_back(yy);
+        }
+        fp.close();
+    }
+    else
+    if(format=="arff")
+    {
+        Data ypoint;
+        QStringList classNames;
+        int nattributes=0;
+        QFile fp(filename);
+        if(!fp.open(QIODevice::ReadOnly | QIODevice::Text)) return ;
+        QTextStream st(&fp);
+        while(!st.atEnd())
+        {
+            QString line=st.readLine();
+            if(line.size()<=1) continue;
+            if(line.startsWith("@data") || line.startsWith("@relation")) continue;
+            if(line.startsWith("@attribute"))
+            {
+                QStringList list = line.split(QRegExp("[\r\n\t ]+"), QString::SkipEmptyParts);
+                if(list[1]!="class")
+                nattributes++;
+                else
+                {
+                    QString cstring=list[2];
+                    cstring=cstring.mid(1,cstring.size()-2);
+                    classNames=cstring.split(",");
+                }
+            }
+            else
+            {
+                QStringList list = line.split(QRegExp("[\r\n\t ]+"), QString::SkipEmptyParts);
+                if(list.size()<=2)
+                {
+                    continue;
+                }
+                Data xx;
+                for(int i=0;i<list.size()-1;i++)
+                   xx.push_back(list[i].toDouble());
+
+                double yy=classNames.indexOf(list[list.size()-1]);
+
+                xpoint.push_back(xx);
+                ypoint.push_back(yy);
+            }
+        }
+        fp.close();
+    }
+    makePatternClass();
+}
+double euclideanDistance(const vector<double>& a, const vector<double>& b) {
+    double sum = 0.0;
+    for (size_t i = 0; i < a.size(); i++) {
+        double diff = a[i] - b[i];
+        sum += diff * diff;
+    }
+    return sqrt(sum);
+}
+void    Dataset::makeSmote(int k)
+{
+    vector<Sample> dataset = getSamples();
+    map<double, vector<Sample>> classSamples;
+    for (auto& s : dataset) classSamples[s.label].push_back(s);
+
+    int maxCount = 0;
+    for (auto& [cls, samples] : classSamples)
+        maxCount = max(maxCount, (int)samples.size());
+
+    vector<Sample> augmented = dataset;
+    random_device rd;
+    mt19937 gen(rd());
+
+    for (auto& [cls, samples] : classSamples) {
+        int needed = maxCount - (int)samples.size();
+        if (needed <= 0) continue;
+
+        int i = 0;
+        while (needed > 0) {
+            vector<int> nnArray = kNearestNeighbors(samples, i, k);
+            uniform_int_distribution<> dis(0, nnArray.size()-1);
+            int nnIndex = nnArray[dis(gen)];
+
+            Sample newSample;
+            newSample.label = cls;  // κρατάμε το δεκαδικό label
+
+            for (size_t d = 0; d < samples[i].features.size(); d++) {
+                double gap = uniform_real_distribution<>(0,1)(gen);
+                double syntheticValue = samples[i].features[d] + gap *
+                                                                     (samples[nnIndex].features[d] - samples[i].features[d]);
+                newSample.features.push_back(syntheticValue);
+            }
+            augmented.push_back(newSample);
+
+            needed--;
+            i = (i + 1) % samples.size();
+        }
+    }
+    clearPoints();
+    for(unsigned int i=0;i<augmented.size();i++)
+    {
+        xpoint.push_back(augmented[i].features);
+        ypoint.push_back(augmented[i].label);
+    }
+}
+
+
+vector<Sample> Dataset::getSamples()
+{
+    vector<Sample> p;
+    for(int i=0;i<count();i++)
+    {
+        Sample t;
+        t.features=xpoint[i];
+        t.label=ypoint[i];
+        p.push_back(t);
+    }
+    return p;
+}
+
+
+vector<int> Dataset::kNearestNeighbors(const vector<Sample>& samples, int index, int k)
+{
+    vector<pair<double,int>> distances;
+    for (size_t i = 0; i < samples.size(); i++) {
+        if ((int)i == index) continue;
+        double dist = euclideanDistance(samples[index].features, samples[i].features);
+        distances.push_back({dist, (int)i});
+    }
+    sort(distances.begin(), distances.end());
+    vector<int> neighbors;
+    for (int i = 0; i < k && i < (int)distances.size(); i++) {
+        neighbors.push_back(distances[i].second);
+    }
+    return neighbors;
+}
+
+
 Data    Dataset::getAllYPoints()
 {
     return ypoint;
@@ -27,27 +202,7 @@ void Dataset::addPoint(Data &x,double y)
     xpoint.push_back(x);
     ypoint.push_back(y);
 }
-//arff
-Dataset::Dataset(QString filename)
-{
-    FILE *fp=fopen(filename.toStdString().c_str(),"r");
-    if(!fp) return;
-    int d,count;
-    fscanf(fp,"%d",&d);
-    fscanf(fp,"%d",&count);
-    ypoint.resize(count);
 
-    xpoint.resize(count);
-    for(int i=0;i<count;i++)
-    {
-        xpoint[i].resize(d);
-        for(int j=0;j<d;j++)
-            fscanf(fp,"%lf",&xpoint[i][j]);
-        fscanf(fp,"%lf",&ypoint[i]);
-    }
-    fclose(fp);
-    makePatternClass();
-}
 
 /** euresi monadikon katigorion **/
 void    Dataset::makePatternClass()

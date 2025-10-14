@@ -142,9 +142,14 @@ QString Statistics::getStatistics()
                 times++;
             }
         }
-        ret+=QString::asprintf("METRIC: %10s MIN VALUE: %20.10lg MAX VALUE: %20.10lg AVG VALUE: %20.10lg\n",
-               name.toStdString().c_str(),
-               minValue,maxValue,avgValue/times);
+        char string[1024];
+        sprintf(string,"METRIC: %15s MIN VALUE: %20.10lf MAX VALUE: %20.10lf AVG VALUE: %20.10lf\n",
+                name.toStdString().c_str(),
+                minValue,maxValue,avgValue/times);
+        ret+=string;
+       // ret+=QString::asprintf("METRIC: %15s MIN VALUE: %20.10lg MAX VALUE: %20.10lg AVG VALUE: %20.10lg\n",
+       //        name.toStdString().c_str(),
+       //        minValue,maxValue,avgValue/times);
     }
     return ret;
 }
