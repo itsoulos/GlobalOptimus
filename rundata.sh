@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman
-METHOD=iPso
+METHOD=ParallelDe
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -156,7 +156,7 @@ elif [ $METHOD = "ParallelDe" ]; then
   #parde_propagate_method: The used propagation method between islands (to1|1toN|Nto1|NtoN)
   #parde_islands: The number of parallel islands for the method.
 
-  METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=20 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=10 --parde_islands_enable=10 --opt_localsearch=$LOCALSEARCH"
+  METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --parde_islands_enable=10 --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "ParallelPso" ]; then
   METHODPARAMS="--parallelPso_particles=20 --parallelPso_generations=500 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=5 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=10 --parallelPso_subClusterEnable=10 --parallelPso_pnumber=3 --opt_localsearch=$LOCALSEARCH"

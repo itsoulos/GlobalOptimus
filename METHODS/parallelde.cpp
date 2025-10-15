@@ -272,7 +272,7 @@ bool ParallelDe::terminated()
         int index;
         double bestValue;
         getBestValue(index,bestValue);
-        if(generation%10==0)
+        if(generation%50==0)
         {
             getBestValue(index,bestValue);
             printf("PARDE. Iteration = %4d Best Value=%20.10lg \n",generation,bestValue);
@@ -286,7 +286,7 @@ bool ParallelDe::terminated()
                 return similarity.terminate(bestValue);
         return false;
     }
-    if(generation%10==0)
+    if(generation%50==0)
     {
         int index;
         double bestValue;
