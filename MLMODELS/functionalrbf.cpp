@@ -102,6 +102,23 @@ void    FunctionalRbf::init(QJsonObject &params)
 
 }
 
+Data FunctionalRbf::getSample()
+{
+	Data xx;
+	xx.resize(dimension);
+          for(int i=0;i<dimension;i++)
+          {
+          	double a = -1;
+          	double b = 1;
+		/*
+		if(left[i]>a) a=left[i];
+		if(right[i]<b) b=right[i];
+		if(b>a) {double t=a;a=b;b=t;}
+		*/
+              xx[i]= (a+(b-a)*randomDouble());
+          }
+	  return xx;
+}
 void FunctionalRbf::Kmeans(double * data_vectors,
             vector<double> &centers,
             vector<double> &variances,
@@ -332,8 +349,8 @@ QJsonObject FunctionalRbf::done(Data &x)
         }
         double tempOut = arma::dot(neuronOuts,Linear);
 
-	if(tempOut<miny) tempOut =miny;
-	if(tempOut>maxy) tempOut = maxy;
+	//if(tempOut<miny) tempOut =miny;
+	//if(tempOut>maxy) tempOut = maxy;
         per=tempOut-testy[i];
         classError+=fabs(testy[i]-nearestClass(tempOut))>1e-7;
         sum+=per * per;

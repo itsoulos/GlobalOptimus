@@ -45,6 +45,7 @@ public:
     virtual double  funmin(Data &x);
     virtual Data    gradient(Data &x);
     double neuronOutput( vector<double> &x, vector<double> &patt, unsigned pattDim, unsigned offset );
+    virtual Data getSample();
     arma::vec train( vector<double> &x,bool &ok );
     double nearestClass(double y);
     ~FunctionalRbf();
