@@ -108,13 +108,13 @@ Data FunctionalRbf::getSample()
 	xx.resize(dimension);
           for(int i=0;i<dimension;i++)
           {
-          	double a = -1;
-          	double b = 1;
-		/*
+		
+		  double a=-1;
+		  double b=1;
 		if(left[i]>a) a=left[i];
 		if(right[i]<b) b=right[i];
-		if(b>a) {double t=a;a=b;b=t;}
-		*/
+		if(b<a) {double t=a;a=b;b=t;}
+		
               xx[i]= (a+(b-a)*randomDouble());
           }
 	  return xx;
