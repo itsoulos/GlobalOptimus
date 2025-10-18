@@ -111,11 +111,14 @@ Data FunctionalRbf::getSample()
 		
 		  double a=-1;
 		  double b=1;
-		if(left[i]>a) a=left[i];
-		if(right[i]<b) b=right[i];
-		if(b<a) {double t=a;a=b;b=t;}
-		
-              xx[i]= (a+(b-a)*randomDouble());
+
+		 a= left[i];
+		 b  = right[i];
+		 double d = (b-a);
+		 double mid = a+d/2;
+		 a = mid -0.1*d;
+		 b = mid +0.1*d;
+              xx[i]=  (a+(b-a)*randomDouble());
           }
 	  return xx;
 }
