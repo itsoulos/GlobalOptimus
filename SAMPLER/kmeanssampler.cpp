@@ -128,10 +128,13 @@ vector<Data> KmeansSampler::runKmeans(int pop, int K)
 
 void    KmeansSampler::sampleFromProblem(int N,Matrix &xsample,Data &ysample)
 {
+	printf("Problem sample \n");
     xpoint.resize(N);
     ypoint.resize(N);
     xsample = xpoint;
     ysample = ypoint;
+    N=100;
+    sampleFromModel(N,xsample,ysample);
 }
 
 void    KmeansSampler::sampleFromModel(int &N,Matrix &xsample,Data &ysample)
@@ -161,6 +164,7 @@ void    KmeansSampler::sampleFromModel(int &N,Matrix &xsample,Data &ysample)
         ysample[i]=myProblem->statFunmin(xsample[i]);
     }
     N = xsample.size();
+    printf("FINAL KMEANS = %d \n",N);
 }
 
 KmeansSampler::~KmeansSampler()

@@ -182,6 +182,7 @@ void    Optimizer::sampleFromProblem(int &N,Matrix &xsample,Data &ysample)
     if(sampling=="kmeans")
     {
         int M = getParam("opt_kmeansamples").getValue().toInt();
+	printf("KMEANS M= %d \n",M);
         problemSampler->sampleFromProblem(M,xsample,ysample);
     }
     else
