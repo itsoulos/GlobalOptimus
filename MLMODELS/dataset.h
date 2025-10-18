@@ -4,8 +4,8 @@
 # include <math.h>
 # include <stdlib.h>
 # include <QString>
-# include <QRegExp>
 # include <vector>
+# include <QRegExp>
 #include <iostream>
 #include <fstream>
 #include <sstream>

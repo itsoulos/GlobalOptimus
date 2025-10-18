@@ -151,6 +151,7 @@ void    Optimizer::solve()
     {
         problemSampler=new KmeansSampler(myProblem);
     }
+    else
     if(sampling=="user")
     {
         problemSampler = new UserSampler(myProblem);
