@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DOPTIMUS_ARMADILLO -DADEPT_RECORDING_PAUSABLE -DADEPTSTORAGETHREADSAFE -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread -O2 -O3 -march=native -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread -O2 -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-math-optimizations -mtune=native -pthread -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I. -I/../lib64/qt5/mkspecs/linux-g++
@@ -40,7 +40,7 @@ DISTNAME      = DataFitting1.0.0
 DISTDIR = /home/sheridan/Desktop/ERGASIES/GlobalOptimus/.tmp/DataFitting1.0.0
 LINK          = g++
 LFLAGS        = -O3 -Wl,-O1
-LIBS          = $(SUBLIBS) -lm -fopenmp -larmadillo -ladept /usr/lib64/libQt5Widgets.so /usr/lib64/libQt5Gui.so /usr/lib64/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) -lm -fopenmp /usr/lib64/libQt5Widgets.so /usr/lib64/libQt5Gui.so /usr/lib64/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -129,8 +129,7 @@ SOURCES       = GE/cprogram.cc \
 		OPTIMUS/problem.cpp \
 		MLMODELS/converter.cc \
 		MLMODELS/neuralparser.cc \
-		SAMPLER/problemsampler.cpp \
-		MLMODELS/functionalrbf.cpp 
+		SAMPLER/problemsampler.cpp 
 OBJECTS       = cprogram.o \
 		trio.o \
 		usersampler.o \
@@ -208,8 +207,7 @@ OBJECTS       = cprogram.o \
 		problem.o \
 		converter.o \
 		neuralparser.o \
-		problemsampler.o \
-		functionalrbf.o
+		problemsampler.o
 DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -393,8 +391,7 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		SAMPLER/triangularsampler.h \
 		MLMODELS/converter.h \
 		MLMODELS/neuralparser.h \
-		SAMPLER/uniformsampler.h \
-		MLMODELS/functionalrbf.h GE/cprogram.cc \
+		SAMPLER/uniformsampler.h GE/cprogram.cc \
 		METHODS/trio.cpp \
 		SAMPLER/usersampler.cpp \
 		METHODS/eo.cpp \
@@ -471,8 +468,7 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		OPTIMUS/problem.cpp \
 		MLMODELS/converter.cc \
 		MLMODELS/neuralparser.cc \
-		SAMPLER/problemsampler.cpp \
-		MLMODELS/functionalrbf.cpp
+		SAMPLER/problemsampler.cpp
 QMAKE_TARGET  = DataFitting
 DESTDIR       = 
 TARGET        = DataFitting
@@ -710,8 +706,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /../lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.h METHODS/trio.h SAMPLER/usersampler.h METHODS/eo.h METHODS/MFO.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mbfgs.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h MLMODELS/airbf.h MLMODELS/fcmodel.h MLMODELS/rbf_lbfgs.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h MLMODELS/functionalrbf.h $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.cc METHODS/trio.cpp SAMPLER/usersampler.cpp METHODS/eo.cpp METHODS/MFO.cpp GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mbfgs.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp MLMODELS/airbf.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp MLMODELS/functionalrbf.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.h METHODS/trio.h SAMPLER/usersampler.h METHODS/eo.h METHODS/MFO.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mbfgs.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h MLMODELS/airbf.h MLMODELS/fcmodel.h MLMODELS/rbf_lbfgs.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.cc METHODS/trio.cpp SAMPLER/usersampler.cpp METHODS/eo.cpp METHODS/MFO.cpp GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mbfgs.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp MLMODELS/airbf.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -2192,29 +2188,6 @@ neuralparser.o: MLMODELS/neuralparser.cc MLMODELS/neuralparser.h
 problemsampler.o: SAMPLER/problemsampler.cpp SAMPLER/problemsampler.h \
 		OPTIMUS/problem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o problemsampler.o SAMPLER/problemsampler.cpp
-
-functionalrbf.o: MLMODELS/functionalrbf.cpp MLMODELS/functionalrbf.h \
-		MLMODELS/dataset.h \
-		OPTIMUS/problem.h \
-		MLMODELS/model.h \
-		OPTIMUS/parameterlist.h \
-		OPTIMUS/parameter.h \
-		OPTIMUS/optimizer.h \
-		OPTIMUS/doublebox.h \
-		OPTIMUS/similarity.h \
-		OPTIMUS/mean.h \
-		SAMPLER/maxwellsampler.h \
-		SAMPLER/problemsampler.h \
-		SAMPLER/neuralsampler.h \
-		SAMPLER/triangularsampler.h \
-		SAMPLER/uniformsampler.h \
-		SAMPLER/rbfsampler.h \
-		SAMPLER/kmeanssampler.h \
-		SAMPLER/usersampler.h \
-		OPTIMUS/logger.h \
-		OPTIMUS/filelogger.h \
-		OPTIMUS/editlogger.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o functionalrbf.o MLMODELS/functionalrbf.cpp
 
 ####### Install
 

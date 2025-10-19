@@ -150,9 +150,67 @@ static double dmax(double a,double b)
     return a>b?a:b;
 }
 
+#ifdef OPTIMUS_ARMADILLO
+
+adept::adouble RbfProblem::aneuronOutput( vector<adept::adouble> &x, vector<double> &patt, unsigned pattDim, unsigned offset )
+{
+    int nodes = weight.size();
+
+    adept::adouble out = 0;
+    for(unsigned i = 0; i < pattDim;i++){
+        out += (patt[i] - x[offset*pattDim + i]) * (patt[i] - x[offset*pattDim + i]);
+    }
+    adept::adouble darg = out / (x[nodes*pattDim + offset] * x[nodes*pattDim + offset]);
+    return exp(-out / (x[nodes*pattDim + offset] * x[nodes*pattDim + offset]) );
+
+}
+adept::adouble RbfProblem::afunmin( vector<adept::adouble> &x, vector<double> &x1 ){
+    adept::adouble errorSum=0.0;
+
+    setParameters(x1);
+    int nodes = weight.size();
+
+    Matrix trainx = trainDataset->getAllXpoint();
+    Data trainy = trainDataset->getAllYPoints();
+    for(unsigned i = 0; i < trainx.size(); i++){
+        Data pattern = trainx[i];
+        vector<adept::adouble> neuronOuts(nodes);
+        for(unsigned j = 0; j < nodes;j++){
+            neuronOuts[j] = aneuronOutput(x,pattern,pattern.size(),j);
+        }
+        adept::adouble tempOut = 0;
+        for(int j = 0; j < nodes; j++) tempOut+= neuronOuts[j]*weight[j];
+        errorSum += ( tempOut - trainy[i] ) * ( tempOut - trainy[i] );
+    }
+
+    return errorSum;
+}
+#endif
+
 Data    RbfProblem::gradient(Data &x)
 {
+#ifdef OPTIMUS_ARMADILLO
+    Data g;
+    g.resize(dimension);
 
+
+    g = vector<double>(x.size(),0.0);
+    adept::Stack s;
+    std::vector<adept::adouble> ax(g.size());
+    for(unsigned i = 0; i < x.size(); i++) ax[i] = x[i];
+    s.new_recording();
+
+    adept::adouble error = afunmin(ax, x);
+
+    error.set_gradient(1.0);
+
+    s.compute_adjoint();
+
+    for(unsigned i = 0; i < x.size();i++) {
+        g[i] = ax[i].get_gradient();
+    }
+    return g;
+#else
     Data g;
     setParameters(x);
     g.resize(x.size());
@@ -164,10 +222,11 @@ Data    RbfProblem::gradient(Data &x)
     gtemp.resize(dimension);
     Data g1;
     int d = trainDataset->dimension();
-    int nodes = weight.size();
+    int h = weight.size();
     g1.resize(d );
     int tcount = trainDataset->count();
-
+int nodes =weight.size();
+/*
     for(int i=0;i<tcount;i++)
     {
         Data xx = trainDataset->getXPoint(i);
@@ -196,7 +255,7 @@ Data    RbfProblem::gradient(Data &x)
     for(int j=0;j<x.size();j++) g[j]*=2.0;
 
    return g;
-
+*/
     for(int i=0;i<dimension;i++)
     {
         double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
@@ -208,6 +267,7 @@ Data    RbfProblem::gradient(Data &x)
         x[i]+=eps;
     }
     return g;
+#endif
 }
 
 double  RbfProblem::getOutput(double *x)
@@ -383,16 +443,24 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 }
 Data    RbfProblem::getSample()
 {
-    Data x;
-    x.resize(dimension);
+    Data xx;
+    xx.resize(dimension);
     for(int i=0;i<dimension;i++)
     {
-        double a=-1,b=1;
-        if(left[i]>a) a=left[i];
-        if(right[i]<b) b=right[i];
-        x[i]=a+(b-a)*randomDouble();
+
+        double a=-1;
+        double b=1;
+
+        a= left[i];
+        b  = right[i];
+	
+        double d = (b-a);
+        double mid = a+d/2;
+        a = mid -0.2*d;
+        b = mid +0.2*d;
+        xx[i]=  (a+(b-a)*randomDouble());
     }
-    return x;
+    return xx;
 }
 
 void    RbfProblem::initModel()

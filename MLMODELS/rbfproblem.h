@@ -5,6 +5,11 @@
 # include <MLMODELS/model.h>
 # include <OPTIMUS/problem.h>
 # include <math.h>
+#ifdef OPTIMUS_ARMADILLO
+#   include <armadillo>
+#   include <adept.h>
+#endif
+
 /**
  * @brief The RbfProblem class implements the Radial Basis Function (RBF) model.
  */
@@ -192,6 +197,10 @@ public:
      * @return a new weight vector.
      */
     virtual Data getSample();
+#ifdef OPTIMUS_ARMADILLO
+    adept::adouble aneuronOutput( vector<adept::adouble> &x, vector<double> &patt, unsigned pattDim, unsigned offset);
+    adept::adouble afunmin( vector<adept::adouble> &x, vector<double> &x1 );
+#endif
     virtual ~RbfProblem();
 };
 

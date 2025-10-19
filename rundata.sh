@@ -3,11 +3,11 @@ METHOD=ParallelDe
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
-SAMPLER=kmeans
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=frbf
+MODEL=rbf
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -111,7 +111,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
+  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples
@@ -156,7 +156,7 @@ elif [ $METHOD = "ParallelDe" ]; then
   #parde_propagate_method: The used propagation method between islands (to1|1toN|Nto1|NtoN)
   #parde_islands: The number of parallel islands for the method.
 
-  METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --parde_islands_enable=1 --opt_localsearch=$LOCALSEARCH"
+  METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=random --parde_propagate_method=1to1 --parde_islands=1 --parde_islands_enable=1 --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "ParallelPso" ]; then
   METHODPARAMS="--parallelPso_particles=20 --parallelPso_generations=500 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=5 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=10 --parallelPso_subClusterEnable=10 --parallelPso_pnumber=3 --opt_localsearch=$LOCALSEARCH"
