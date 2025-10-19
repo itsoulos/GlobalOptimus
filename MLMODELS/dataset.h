@@ -5,7 +5,7 @@
 # include <stdlib.h>
 # include <QString>
 # include <vector>
-# include <QRegExp>
+//# include <QRegExp>
 #include <iostream>
 #include <fstream>
 #include <sstream>
