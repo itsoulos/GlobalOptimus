@@ -113,16 +113,29 @@ void    MlpProblem::setWeights(Data &w)
  *  kai i timi pou elaxistopoioume **/
 double MlpProblem::funmin(Data &x)
 {
-    weight  =x ;
+    //thread safe
+    resetViolationPercent(viollimit);
+
+    double error = 0.0;
+    int xallsize  = xall.size();
+    for(int i=0;i<xallsize;i++)
+    {
+        Data xx = xall[i];
+
+        double yy = trainDataset->getYPoint(i);
+
+        double per = getOutput(x,xx.data());
+        if(fabs(per)>=1e+10) return 1e+100;
+        if(isnan(per)) return 1e+100;
+        if(isinf(per)) return 1e+100;
+        error+= (per-yy)*(per-yy);
+    }
     if(usebound_flag)
     {
-
-        resetViolationPercent(viollimit);
-        double dv = getTrainError();
         double tt = getViolationPercent();
-        return dv*(1.0 + tt * tt);
+        return error*(1.0+tt*tt);
     }
-    return getTrainError();
+    return error;
 
 }
 
@@ -153,8 +166,8 @@ Data    MlpProblem::gradient(Data &x)
     for(int i=0;i<trainDataset->count();i++)
     {
         Data xx = trainDataset->getXPoint(i);
-        Data gtemp = getDerivative(xx);
-        double per=getOutput(xx)-trainDataset->getYPoint(i);
+        Data gtemp = getDerivative(x,xx.data());
+        double per=getOutput(x,xx.data())-trainDataset->getYPoint(i);
         for(int j=0;j<g.size();j++)	g[j]+=gtemp[j]*per;
     }
     for(int j=0;j<x.size();j++) g[j]*=2.0;
@@ -192,10 +205,17 @@ double  MlpProblem::getOutput(Data  &x)
 
 double  MlpProblem::getOutput(double  *x)
 {
+    return getOutput(weight,x);
+}
+
+
+double  MlpProblem::getOutput(Data &w,double *x)
+{
+
     double arg=0.0;
     double per=0.0;
     int d = trainDataset->dimension();
-    int nodes = weight.size()/(d+2);
+    int nodes = w.size()/(d+2);
     for(int i=1;i<=nodes;i++)
     {
         arg=0.0;
@@ -203,20 +223,19 @@ double  MlpProblem::getOutput(double  *x)
         for(int j=1;j<=d;j++)
         {
             int pos=(d+2)*i-(d+1)+j-1;
-            arg+=weight[pos]*x[j-1];
+            arg+=w[pos]*x[j-1];
 
         }
-        arg+=weight[(d+2)*i-1];
+        arg+=w[(d+2)*i-1];
         if(fabs(arg)>=viollimit)
         {
 
             violcount++;
         }
-        per+=weight[(d+2)*i-(d+1)-1]*sig(arg);
+        per+=w[(d+2)*i-(d+1)-1]*sig(arg);
     }
     return per;
 }
-
 /** einai i paragogos tou neuronikou os
  *  pros to protypo x**/
 Data    MlpProblem::getDerivative(Data &x)
@@ -224,13 +243,12 @@ Data    MlpProblem::getDerivative(Data &x)
     return getDerivative(x.data());
 }
 
-
-Data    MlpProblem::getDerivative(double *x)
+Data    MlpProblem::getDerivative(Data &w,double *x)
 {
 
     double arg;
     double f,f2;
-    int nodes = weight.size()/(trainDataset->dimension()+2);
+    int nodes = w.size()/(trainDataset->dimension()+2);
     int d = trainDataset->dimension();
     Data G;
     G.resize(weight.size());
@@ -240,20 +258,24 @@ Data    MlpProblem::getDerivative(double *x)
         arg = 0.0;
         for(int j=1;j<=d;j++)
         {
-            arg+=weight[(d+2)*i-(d+1)+j-1]*x[j-1];
+            arg+=w[(d+2)*i-(d+1)+j-1]*x[j-1];
         }
-        arg+=weight[(d+2)*i-1];
+        arg+=w[(d+2)*i-1];
         f=sig(arg);
         f2=f*(1.0-f);
-        G[(d+2)*i-1]=weight[(d+2)*i-(d+1)-1]*f2;
+        G[(d+2)*i-1]=w[(d+2)*i-(d+1)-1]*f2;
         G[(d+2)*i-(d+1)-1]=f;
         for(int k=1;k<=d;k++)
         {
             G[(d+2)*i-(d+1)+k-1]=
-                x[k-1]*f2*weight[(d+2)*i-(d+1)-1];
+                x[k-1]*f2*w[(d+2)*i-(d+1)-1];
         }
     }
     return G;
+}
+Data    MlpProblem::getDerivative(double *x)
+{
+    return getDerivative(weight,x);
 }
 void    MlpProblem::enableBound()
 {

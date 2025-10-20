@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=rbf
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/

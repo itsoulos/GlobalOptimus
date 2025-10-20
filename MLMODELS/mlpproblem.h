@@ -56,6 +56,7 @@ public:
      */
     double  getOutput(Data &x);
     double  getOutput(double *x);
+    double  getOutput(Data &w,double *x);
 
     /**
      * @brief getDerivative
@@ -64,6 +65,7 @@ public:
      */
     Data    getDerivative(Data &x);
     Data    getDerivative(double *x);
+    Data    getDerivative(Data &w,double *x);
 
     /**
      * @brief getDerivative1
