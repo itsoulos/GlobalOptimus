@@ -57,7 +57,7 @@ public:
      * @param xpoint
      * @return
      */
-    virtual double eval(Data &xpoint)=0;
+    virtual double eval(Data &xpoint);
 
 
     /**
@@ -65,7 +65,7 @@ public:
      * @param x  the xpoint of the new sample
      * @param y  the ypoint of the new sample
      */
-    virtual void    addSampleFromProblem(Data &x,double y)=0;
+    virtual void    addSampleFromProblem(Data &x,double y);
 
     /**
      * @brief ~ProblemSampler, the virtual destructor of the class.

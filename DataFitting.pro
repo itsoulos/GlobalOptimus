@@ -24,6 +24,7 @@ QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
 	METHODS/trio.cpp \
+    SAMPLER/distributedsampler.cpp \
 	SAMPLER/usersampler.cpp \
 	METHODS/eo.cpp \
 	METHODS/MFO.cpp \
@@ -112,6 +113,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     GE/cprogram.h \
     METHODS/trio.h \
+    SAMPLER/distributedsampler.h \
     SAMPLER/usersampler.h\
     METHODS/eo.h \
     METHODS/MFO.h \

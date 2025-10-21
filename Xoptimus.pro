@@ -127,6 +127,7 @@ SOURCES += \
     PROBLEMS/schwefel222.cpp \
     PROBLEMS/shubert.cpp \
     PROBLEMS/vincent.cpp \
+    SAMPLER/distributedsampler.cpp \
     SAMPLER/usersampler.cpp \
     XOPTIMUS/parameterdialog.cpp \
     OPTIMUS/similarity.cpp \
@@ -312,6 +313,7 @@ HEADERS += \
     PROBLEMS/schwefel222.h \
     PROBLEMS/shubert.h \
     PROBLEMS/vincent.h \
+    SAMPLER/distributedsampler.h \
     SAMPLER/usersampler.h \
     XOPTIMUS/parameterdialog.h \
     OPTIMUS/similarity.h \

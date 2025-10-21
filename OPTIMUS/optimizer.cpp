@@ -13,8 +13,9 @@ Optimizer::Optimizer()
     opt_localsearch<<"bfgs"<<"lbfgs"<<"nelderMead"<<"gradient"<<"adam"<<"none";
     QStringList opt_sampler;
     opt_sampler<<"uniform"<<"triangular"<<"maxwell"<<"mlp"
-                <<"rbf"<<"kmeans"<<"user";
+                <<"rbf"<<"kmeans"<<"dist"<<"user";
 
+    addParam(Parameter("opt_distpartitions",10,1,1000,"Number of partitions for dist sampling"));
     addParam(Parameter("opt_debug",opt_debug[0],
                        opt_debug,
                        "Set it to yes to show messages"));
@@ -155,6 +156,12 @@ void    Optimizer::solve()
     if(sampling=="user")
     {
         problemSampler = new UserSampler(myProblem);
+    }
+    else
+    if(sampling=="dist")
+    {
+        int part = getParam("opt_distpartitions").getValue().toInt();
+        problemSampler = new DistributedSampler(myProblem,part);
     }
     else
     {
