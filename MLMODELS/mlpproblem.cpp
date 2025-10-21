@@ -70,7 +70,6 @@ void    MlpProblem::initWeights()
           left[i]=leftMargin;
           right[i]=rightMargin;
       }
-      weight.resize(k);
 
 }
 
@@ -104,10 +103,6 @@ void    MlpProblem::init(QJsonObject &pt)
     initWeights();
 }
 
-void    MlpProblem::setWeights(Data &w)
-{
-    weight  =w ;
-}
 
 /** edo ypologizoume to train error pou einai
  *  kai i timi pou elaxistopoioume **/
@@ -144,8 +139,7 @@ double MlpProblem::funmin(Data &x)
 Data    MlpProblem::gradient(Data &x)
 {
     Data g;
-    weight = x;
-    g.resize(weight.size());
+    g.resize(x.size());
     if(trainDataset==NULL) return g;
     if(usebound_flag)
     {
@@ -197,18 +191,6 @@ double  MlpProblem::getViolationPercent()
 	return violcount*100.0/sigcount;
 }
 
-/** einai i exodos tou neuronikou gia to protypo x**/
-double  MlpProblem::getOutput(Data  &x)
-{
-    return getOutput(x.data());
-}
-
-double  MlpProblem::getOutput(double  *x)
-{
-    return getOutput(weight,x);
-}
-
-
 double  MlpProblem::getOutput(Data &w,double *x)
 {
 
@@ -236,13 +218,45 @@ double  MlpProblem::getOutput(Data &w,double *x)
     }
     return per;
 }
-/** einai i paragogos tou neuronikou os
- *  pros to protypo x**/
-Data    MlpProblem::getDerivative(Data &x)
+
+double MlpProblem::getTestError(Data &x,Dataset *test)
 {
-    return getDerivative(x.data());
+    Matrix xtest = test->getAllXpoint();
+    double error = 0.0;
+    int xallsize  = xtest.size();
+    for(int i=0;i<xallsize;i++)
+    {
+        Data xx = xtest[i];
+
+        double yy = test->getYPoint(i);
+
+        double per = getOutput(x,xx.data());
+        if(fabs(per)>=1e+10) return 1e+100;
+        if(isnan(per)) return 1e+100;
+        if(isinf(per)) return 1e+100;
+        error+= (per-yy)*(per-yy);
+    }
+    return error;
 }
 
+double MlpProblem::getClassTestError(Data &x,Dataset *test)
+{
+    Matrix xtest = test->getAllXpoint();
+    double error = 0.0;
+    int xallsize  = xtest.size();
+    for(int i=0;i<xallsize;i++)
+    {
+        Data xx = xtest[i];
+
+        double realClass = test->getClass(i);
+        double per = getOutput(x,xx.data());
+        double estClass = test->getClass(per);
+        /** an apexei i pragmatiki klasi apo tin ypologismeni
+         *  pano apo 10^-5, tote exoume sfalma **/
+        error+= (fabs(estClass - realClass)>1e-5);
+    }
+    return error*100.0/test->count();
+}
 Data    MlpProblem::getDerivative(Data &w,double *x)
 {
 
@@ -251,7 +265,7 @@ Data    MlpProblem::getDerivative(Data &w,double *x)
     int nodes = w.size()/(trainDataset->dimension()+2);
     int d = trainDataset->dimension();
     Data G;
-    G.resize(weight.size());
+    G.resize(w.size());
 
     for(int i=1;i<=nodes;i++)
     {
@@ -273,15 +287,12 @@ Data    MlpProblem::getDerivative(Data &w,double *x)
     }
     return G;
 }
-Data    MlpProblem::getDerivative(double *x)
-{
-    return getDerivative(weight,x);
-}
+
 void    MlpProblem::enableBound()
 {
     usebound_flag=true;
 }
-double  MlpProblem::getDerivative1(vector<double> xpoint,int pos)
+double  MlpProblem::getDerivative1(Data &weight,vector<double> xpoint,int pos)
 {
     int nodes=weight.size()/ (xpoint.size() + 2);
     int dimension = xpoint.size();
@@ -305,7 +316,7 @@ void    MlpProblem::disableBound()
 {
     usebound_flag = false;
 }
-double	MlpProblem::getDerivative2(vector<double> xpoint,int pos)
+double	MlpProblem::getDerivative2(Data &weight,vector<double> xpoint,int pos)
 {
     int nodes=weight.size()/ (xpoint.size() + 2);
     int dimension = xpoint.size();
@@ -479,9 +490,8 @@ double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)
         {
             sample[j]=lb[j]+randomDouble()*(rb[j]-lb[j]);
         }
-        setWeights(sample);
         resetViolationPercent(limit);
-        double v=getTrainError();
+        double v=funmin(sample);
         sum = sum+v*(1.0+getViolationPercent()/100.0);
     }
     sum/=nsamples;
@@ -491,10 +501,11 @@ double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)
 
 QJsonObject MlpProblem::done(Data &x)
 {
+   usebound_flag =false;
     double tr=funmin(x);
     QJsonObject xx;
-    double tt=getTestError(testDataset);
-    double tc=getClassTestError(testDataset);
+    double tt=getTestError(x,testDataset);
+    double tc=getClassTestError(x,testDataset);
     xx["trainError"]=tr;
     xx["testError"]=tt;
     xx["classError"]=tc;

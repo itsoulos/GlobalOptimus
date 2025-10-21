@@ -51,7 +51,8 @@ double  NNCModel::preTrain(vector<int> &result)
     for(int i=0;i<(int)w.size();i++)
          w[i]=(2.0*rand()*1.0/RAND_MAX-1.0);
 
-    tProblem->setWeights(w);
+        tProblem->funmin(w);
+  //  tProblem->setWeights(w);
     tProblem->setDimension(w.size());
     Data xu,xl;
     xu.resize(w.size());
@@ -227,7 +228,8 @@ void        NNCModel::localSearchItem(int pos)
 
         parser->getWeights(w);
         trialProblem->resetFunctionCalls();
-        trialProblem->setWeights(w);
+        trialProblem->funmin(w);
+    //    trialProblem->setWeights(w);
         trialProblem->setDimension(w.size());
         Data xu,xl;
         xu.resize(w.size());

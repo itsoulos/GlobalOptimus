@@ -71,13 +71,13 @@ public:
      * @param test
      * @return  the test error for a provided dataset
      */
-    double      getTestError(Dataset *test) ;
+    virtual double      getTestError(Dataset *test) ;
     /**
      * @brief getClassTestError
      * @param test
      * @return  the class test error for a provided dataset
      */
-    double      getClassTestError(Dataset *test) ;
+    virtual double      getClassTestError(Dataset *test) ;
     /**
      * @brief getDistance
      * @param x1

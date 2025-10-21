@@ -14,17 +14,12 @@ private:
 	int violcount,sigcount;
 	double viollimit;
     bool usebound_flag=false;
-    Data weight;
 public:
     /**
      * @brief MlpProblem The main constructor of MLP.
      */
     MlpProblem();
-    /**
-     * @brief setWeights Sets the weights of MLP.
-     * @param w
-     */
-    void    setWeights(Data &w);
+
     /**
      * @brief funmin
      * @param x
@@ -49,22 +44,8 @@ public:
      * @return the derivative of sigmoid function.
      */
     double  sigder(double x);
-    /**
-     * @brief getOutput
-     * @param x
-     * @return the output of mlp for pattern x.
-     */
-    double  getOutput(Data &x);
-    double  getOutput(double *x);
+    virtual double getOutput(Data &x) {return 0.0;};
     double  getOutput(Data &w,double *x);
-
-    /**
-     * @brief getDerivative
-     * @param x
-     * @return the derivative for pattern x.
-     */
-    Data    getDerivative(Data &x);
-    Data    getDerivative(double *x);
     Data    getDerivative(Data &w,double *x);
 
     /**
@@ -73,14 +54,14 @@ public:
      * @param pos
      * @return the derivative for pattern x estimated for input pos.
      */
-    double  getDerivative1(vector<double> xpoint,int pos);
+    double  getDerivative1(Data &weight,vector<double> xpoint,int pos);
     /**
      * @brief getDerivative2
      * @param xpoint
      * @param pos
      * @return the second derivative for pattern x estimated for input pos.
      */
-    double	getDerivative2(vector<double> xpoint,int pos);
+    double	getDerivative2(Data &weight,vector<double> xpoint,int pos);
     /**
      * @brief init Initialize the MLP model.
      * @param params
@@ -110,6 +91,7 @@ public:
      * @brief getViolationPercent
      * @return
      */
+
     double  getViolationPercent();
     /**
      * @brief getViolationPercentInBounds
@@ -143,6 +125,13 @@ public:
      * @brief disableBound
      */
     void    disableBound();
+    double      getTestError(Data &x,Dataset *test) ;
+    /**
+     * @brief getClassTestError
+     * @param test
+     * @return  the class test error for a provided dataset
+     */
+    double      getClassTestError(Data &x,Dataset *test) ;
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H
