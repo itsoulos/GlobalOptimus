@@ -761,7 +761,26 @@ trio.o: METHODS/trio.cpp METHODS/trio.h \
 
 distributedsampler.o: SAMPLER/distributedsampler.cpp SAMPLER/distributedsampler.h \
 		SAMPLER/problemsampler.h \
-		OPTIMUS/problem.h
+		OPTIMUS/problem.h \
+		MLMODELS/mlpproblem.h \
+		MLMODELS/dataset.h \
+		MLMODELS/model.h \
+		OPTIMUS/parameterlist.h \
+		OPTIMUS/parameter.h \
+		OPTIMUS/optimizer.h \
+		OPTIMUS/doublebox.h \
+		OPTIMUS/similarity.h \
+		OPTIMUS/mean.h \
+		SAMPLER/maxwellsampler.h \
+		SAMPLER/neuralsampler.h \
+		SAMPLER/triangularsampler.h \
+		SAMPLER/uniformsampler.h \
+		SAMPLER/rbfsampler.h \
+		SAMPLER/kmeanssampler.h \
+		SAMPLER/usersampler.h \
+		OPTIMUS/logger.h \
+		OPTIMUS/filelogger.h \
+		OPTIMUS/editlogger.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o distributedsampler.o SAMPLER/distributedsampler.cpp
 
 usersampler.o: SAMPLER/usersampler.cpp SAMPLER/usersampler.h \

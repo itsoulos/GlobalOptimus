@@ -1,11 +1,37 @@
 #include "distributedsampler.h"
+# include <MLMODELS/mlpproblem.h>
+#include <iostream>
+#include <typeinfo>
+using namespace std;
 
+template <typename Base, typename T>
+bool instanceof(const T* ptr) {
+    return dynamic_cast<const Base*>(ptr) != nullptr;
+}
 DistributedSampler::DistributedSampler(Problem *p, int npartitions)
     :ProblemSampler("distsampler",p)
 {
     partitions = npartitions;
 }
 
+Data DistributedSampler::getSampleInPartition(int p)
+{
+    Data x;
+    x.resize(myProblem->getDimension());
+    Data left  = myProblem->getLeftMargin();
+    Data right = myProblem->getRightMargin();
+    double delta = (p+1)*1.0/partitions;
+
+    for(int j=0;j<myProblem->getDimension();j++)
+    {
+        double width = (right[j]-left[j]);
+        double mid = left[j]+width/2.0;
+        double a = mid-delta * width/2;
+        double b = mid+delta * width/2;
+        x[j]=a+(b-a)*myProblem->randomDouble();
+    }
+    return x;
+}
 void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data &ysample)
 {
     xsample.resize(N);
@@ -15,21 +41,11 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
     int total_count =0;
     for(int i=0;i<partitions;i++)
     {
-        double delta = (i+1)*1.0/partitions;
         for(int k=i*N/partitions;k<(i+1)*N/partitions;k++)
         {
-        xsample[k].resize(myProblem->getDimension());
-        total_count++;
-        for(int j=0;j<myProblem->getDimension();j++)
-        {
-            double width = (right[i]-left[j]);
-            double mid = left[j]+width/2.0;
-            double a = mid-delta * width/2;
-            double b = mid+delta * width/2;
-
-            xsample[k][j]=a+(b-a)*myProblem->randomDouble();
-        }
-        ysample[k]=myProblem->statFunmin(xsample[i]);
+            xsample[k]=getSampleInPartition(i);
+            ysample[k]=myProblem->statFunmin(xsample[k]);
+            total_count++;
         }
     }
     if(total_count<N)

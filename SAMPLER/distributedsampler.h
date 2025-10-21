@@ -11,6 +11,7 @@ public:
     DistributedSampler(Problem *p, int npartitions);
     void            sampleFromProblem(int N,Matrix &xsample,Data &ysample);
     ~DistributedSampler();
+    Data getSampleInPartition(int p);
 };
 
 #endif // DISTRIBUTEDSAMPLER_H
