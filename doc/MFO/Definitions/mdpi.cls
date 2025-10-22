@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%	MDPI class for LaTeX files	 18 June 2025
+%%%%	MDPI class for LaTeX files	 27 September 2025
 %% %%	For any information please send an e-mail to:
 %% %%		latex@mdpi.com
 %% %%
@@ -23,7 +23,7 @@
 
 %% IDENTIFICATION
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{Definitions/mdpi}[18/06/2025 MDPI paper class]
+\ProvidesClass{Definitions/mdpi}[27/09/2025 MDPI paper class]
 
  %% PRELIMINARY DECLARATIONS
 \LoadClass[10pt,a4paper]{article}
@@ -135,6 +135,7 @@
 % Urology article types
 \DeclareOption{giantsinurology}{\gdef\@arttype{Giants in Urology}}
 \DeclareOption{urologyaroundtheworld}{\gdef\@arttype{Urology around the World}}
+\DeclareOption{patentsummary}{\gdef\@arttype{Patent Summary}}
 
 %% To choose the status of the manuscript
 \DeclareOption{submit}{\gdef\@status{submit}}
@@ -279,6 +280,7 @@
 		\OR \equal{\@journal}{risks}
 		\OR \equal{\@journal}{socsci}
              \OR \equal{\@journal}{preprintschicago} %% Just use for preprints, not a real Chicago journal
+             \OR \equal{\@journal}{chicagojournal} %% Just use for chicago submission, not a real Chicago journal
 		}
 }
 
@@ -300,11 +302,13 @@
 		\OR \equal{\@journal}{journalmedia} % Transfer to APA type
 		\OR \equal{\@journal}{jrfm}              % Transfer to APA type
 		\OR \equal{\@journal}{languages}      % Transfer to APA type
+		\OR \equal{\@journal}{peacestud}      % New APA Journal
 		\OR \equal{\@journal}{psycholint}      % Transfer to APA type
 		\OR \equal{\@journal}{publications}   % Transfer to APA type
 		\OR \equal{\@journal}{tourismhosp}   % Transfer to APA type
 		\OR \equal{\@journal}{youth}             % Transfer to APA type
              \OR \equal{\@journal}{preprintsapa} %% Just use for preprints, not a real APA journal
+             \OR \equal{\@journal}{apajournal} %% Just use for APA submission, not a real APA journal
 		}
 }
 
@@ -336,12 +340,15 @@
 		\OR \equal{\@journal}{ijfs}              
 		\OR \equal{\@journal}{journalmedia}
 		\OR \equal{\@journal}{jrfm}             
-		\OR \equal{\@journal}{languages}      
+		\OR \equal{\@journal}{languages}
+		\OR \equal{\@journal}{peacestud}   
 		\OR \equal{\@journal}{psycholint}      
 		\OR \equal{\@journal}{publications}   
 		\OR \equal{\@journal}{tourismhosp}   
 		\OR \equal{\@journal}{youth}             
              \OR \equal{\@journal}{preprintsapa} 
+             \OR \equal{\@journal}{chicagojournal} %% Just use for chicago submission, not a real Chicago journal
+             \OR \equal{\@journal}{apajournal} %% Just use for APA submission, not a real APA journal
 		}
 }
 
@@ -447,6 +454,7 @@
 	urlcolor=bluecite, 
 	hyperfootnotes=true, 
 	pdfstartview={FitH},
+	pdfversion=1.7,
 	pdfpagemode= UseNone]{hyperref}
 	} 
 }
@@ -456,12 +464,19 @@
 \DeclareHookRule{begindocument}{hyperref}{before}{mdpi}
 	\AddToHook{begindocument/before}{ 
 		\hyperrefpackage
-             \crefnameDefinitions
+           \crefnameDefinitions
 		}
 	}{
-	\hyperrefpackage
-       \crefnameDefinitions
+	     \hyperrefpackage
+          \crefnameDefinitions
 }
+
+\ifdefined\XeTeXversion
+    \typeout{Check out XeLaTex!}
+    \else
+    \pdfminorversion=7  % Set PDF version
+\fi
+
 %% To have the possibility to change the urlcolor
 \newcommand{\changeurlcolor}[1]{\hypersetup{urlcolor=#1}} 
 
@@ -749,6 +764,8 @@
 \def\@CorrStatement{}
 \newcommand{\CorrStatement}[1]{\gdef\@CorrStatement{#1}}
 \newcommand{\textcorrstatement}{\textbf{Correction Statement:} This article has been republished with a minor change. The change does not affect the scientific content of the article and further details are available within the backmatter of the website version of this article.}
+\def\@IsAssociation{}
+\newcommand{\IsAssociation}[1]{\gdef\@IsAssociation{#1}}
 
 %% ORCID
 % Make Orcid icon
@@ -771,10 +788,10 @@
 		\OR \equal{\@arttype}{Monograph}}{%
 	\fancypagestyle{plain}{%
 		\fancyhf{}
-		\isPreprints{}{
+		\isPreprints{}{%
         		\fancyfoot[C]{\footnotesize\thepage}
-        		}
-		}
+        		}%
+		}%
 	}{%
 	\ifthenelse{\equal{\@arttype}{Supfile}}{
 		% page header and footer styles for supplementary files
@@ -863,14 +880,16 @@
 		\OR \equal{\@journal}{preprintsapa}
 			\OR \equal{\@arttype}{Book}
 			\OR \equal{\@arttype}{Monograph}}{}{
-				\vspace{-2 pt}%
+				\vspace{-2pt}%
 				\ifthenelse{\equal{\@status}{submit}}{%	
+				\vspace{5pt}%
 					\hfill \href{https://www.mdpi.com}{%
 					\includegraphics[height=1cm]{Definitions/logo-mdpi.pdf}}%
 					}{
 					\href{https://www.mdpi.com/journal/\@journal}{
 					\includegraphics[height=1.2cm]{Definitions/\@journal-logo.pdf}}%
 					\hfill
+					\ifthenelse{\equal{\@IsAssociation}{\@empty} \OR \isundefined{\@IsAssociation}}{%
 					\ifthenelse{\equal{\@journal}{ijom}}{%
 						\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi-ijom.pdf}}
 						}{
@@ -879,12 +898,15 @@
 						}{
 						\ifthenelse{\equal{\@journal}{scipharm}}{%
 							\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi-scipharm.pdf}}%
-							}{%
+						}{%
 							\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi.pdf}}%
-							}%
-						}%
-					}%
-				}%
+							}			
+				                 }%				
+				            }%				
+				        }{	
+				\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi-\@journal.pdf}}%	
+				      }%		
+			      }%	
 				\par
 				\rule{\fulllength}{0.4pt}%
 			}%
@@ -1456,6 +1478,7 @@
 \setcounter{graph}{0}
 }
 
+\RequirePackage{alphalph} % Provide double letters numbers
 \renewcommand{\appendix}{%
 %
 \gdef\thesection{\@Alph\c@section}%
@@ -1488,8 +1511,12 @@
 	} {0pt} {}
 \titlespacing {\section} {0pt} {12pt} {3pt}
 %
-\gdef\theHsection{\@Alph\c@section.}% for hyperref
-\gdef\theHsubsection{\@Alph\c@section.\@arabic\c@subsection}% for hyperref
+\@addtoreset{section}{part}
+\renewcommand{\thesection}{\@Alph\c@section}% for hyperref
+\setcounter{section}{0}
+\@addtoreset{subsection}{part}
+\renewcommand{\thesubsection}{\@Alph\c@section.\@arabic\c@subsection}% for hyperref
+\setcounter{subsection}{0}
 \csname appendixmore\endcsname
 \renewcommand{\thefigure}{A\arabic{figure}}
 \renewcommand{\thetable}{A\arabic{table}}
@@ -1592,7 +1619,7 @@
 }
 
 \newcommand{\finishlandscape}{
-	\clearpage
+	\clearpage 
 	\paperwidth=\pdfpageheight
 	\paperheight=\pdfpagewidth
 	\pdfpageheight=\paperheight
@@ -1696,7 +1723,7 @@
 		}{%
 		\fontsize{8}{8}\selectfont%
 		\ifthenelse{\equal{\@status}{submit}}{%
-			Version {\@ \today} submitted to {\em \journalname}%
+		      \vspace{2pt}Version {\@ \today} submitted to {\em \journalname}%
 			}{%
 			\ifthenelse{\equal{\@arttype}{Supfile}}{%
 			{\em \journalname} {\bfseries \@pubyear}, {\em \@pubvolume}, %
@@ -1714,9 +1741,9 @@
 				}{}%
 			}%
 			}\\%
-			\isPreprints{}{
+			\isPreprints{}{%
 			\rule{\fulllength}{0.4pt}%
-			}
+			}%
 		}%
 	}
 	
@@ -1731,9 +1758,9 @@
 			\fontsize{8}{8}\selectfont\thepage%
 		}%
 		}\\%
-		\isPreprints{}{
+		\isPreprints{}{%
 		\rule{\fulllength}{0.4pt}%
-            }
+            }%
 	}%
 }
 
