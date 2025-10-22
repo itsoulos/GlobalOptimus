@@ -18,16 +18,12 @@ Data DistributedSampler::getSampleInPartition(int p)
 {
     Data x;
     x.resize(myProblem->getDimension());
-    Data left  = myProblem->getLeftMargin();
-    Data right = myProblem->getRightMargin();
-    double delta = (p+1)*1.0/partitions;
+
 
     for(int j=0;j<myProblem->getDimension();j++)
     {
-        double width = (right[j]-left[j]);
-        double mid = left[j]+width/2.0;
-        double a = mid-delta * width/2;
-        double b = mid+delta * width/2;
+        double a = leftBound[j];
+        double b = rightBound[j];
         x[j]=a+(b-a)*myProblem->randomDouble();
     }
     return x;
@@ -41,6 +37,21 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
     int total_count =0;
     for(int i=0;i<partitions;i++)
     {
+        leftBound.resize(left.size());
+        rightBound.resize(right.size());
+        double delta = (i+1)*1.0/partitions;
+
+        for(int j=0;j<left.size();j++)
+        {
+            double width = (right[j]-left[j]);
+            double mid = left[j]+width/2.0;
+            double a = mid-delta * rand()*1.0/RAND_MAX* width/2;
+            double b = mid+delta * rand()*1.0/RAND_MAX* width/2;
+            if(a<left[i]) a = left[j];
+            if(b>right[j]) b = right[j];
+            leftBound[j]=a;
+            rightBound[j]=b;
+        }
         for(int k=i*N/partitions;k<(i+1)*N/partitions;k++)
         {
             xsample[k]=getSampleInPartition(i);

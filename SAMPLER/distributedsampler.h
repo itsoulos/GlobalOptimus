@@ -7,6 +7,8 @@ class DistributedSampler :public ProblemSampler
 {
 private:
     int partitions;
+    Data leftBound;
+    Data rightBound;
 public:
     DistributedSampler(Problem *p, int npartitions);
     void            sampleFromProblem(int N,Matrix &xsample,Data &ysample);

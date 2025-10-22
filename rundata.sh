@@ -156,7 +156,7 @@ elif [ $METHOD = "ParallelDe" ]; then
   #parde_propagate_method: The used propagation method between islands (to1|1toN|Nto1|NtoN)
   #parde_islands: The number of parallel islands for the method.
 
-  THREADS=1
+  THREADS=20
   TOTAL_AGENTS=200
   PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
   METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=$PAGENTS --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=random --parde_propagate_method=1to1 --parde_islands=$THREADS --parde_islands_enable=$THREADS --opt_distpartitions=$THREADS --opt_localsearch=$LOCALSEARCH"
