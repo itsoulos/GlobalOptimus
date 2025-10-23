@@ -20,23 +20,27 @@ Gross::Gross()
 }
 double Gross::neural(Data &x)
 {
-	return mlp->getOutput(x);
-	return 1.0/mlp->getOutput(x);
+    return 0.0;
+    //return mlp->getOutput(x);
+    //return 1.0/mlp->getOutput(x);
 }
 
 double Gross::neuralDeriv(Data &x)
 {
-	return mlp->getDerivative1(x,0);
-	return -1.0/(pow(mlp->getOutput(x),2.0))*mlp->getDerivative1(x,0);
+    return 0.0;
+    //return mlp->getDerivative1(x,0);
+    //return -1.0/(pow(mlp->getOutput(x),2.0))*mlp->getDerivative1(x,0);
 }
 
 double Gross::neuralDeriv2(Data &x)
 {
+    return 0.0;
+    /*
 	return mlp->getDerivative2(x,0);
 	double d0=mlp->getOutput(x);
 	double d1=mlp->getDerivative1(x,0);
 	double d2=mlp->getDerivative2(x,0);
-	return 2*d0*d1*1.0/pow(d0,4)*d1+d2*(-1.0/(d0*d0));
+    return 2*d0*d1*1.0/pow(d0,4)*d1+d2*(-1.0/(d0*d0));*/
 }
 
 double Gross::model(Data &x)
@@ -76,7 +80,7 @@ double Gross::funmin(Data &x)
     Data w;
     w.resize(x.size());
     for(int i=0;i<w.size();i++) w[i]=x[i];
-    mlp->setWeights(w);
+   // mlp->setWeights(w);
     Data xx;
     xx.resize(1);
     double sum = 0.0;

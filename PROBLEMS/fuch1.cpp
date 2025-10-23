@@ -123,8 +123,8 @@ double Fuch1::funmin(Data &x)
         w1[i]=x[i];
         w2[i]=x[x.size()/2+i];
     }
-    mlp1->setWeights(w1);
-    mlp2->setWeights(w2);
+   // mlp1->setWeights(w1);
+   // mlp2->setWeights(w2);
     Data xx;
     xx.resize(1);
     const double q00=0.1;
