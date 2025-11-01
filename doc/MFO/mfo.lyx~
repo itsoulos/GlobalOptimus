@@ -892,7 +892,7 @@ INPUT
 
 \size scriptsize
 - 
-\begin_inset Formula $\mbox{strategyMode\ensuremath{\in}\left\{ \mbox{aggresive},\mbox{conservative,\mbox{mixed}}\right\} }$
+\begin_inset Formula $\mbox{strategyMode\ensuremath{\in}\left\{  \mbox{aggresive},\mbox{conservative,\mbox{mixed}}\right\}  }$
 \end_inset
 
 .
@@ -1009,11 +1009,14 @@ MFO main pseudocode
 \begin_inset Formula $k<G_{\mbox{max}}$
 \end_inset
 
- and the termination rule proposed in 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "stopping rule2"
-literal "false"
+ and the termination rule described in subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:The-used-termination"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
 \end_inset
 
@@ -1136,7 +1139,7 @@ then
 \begin_inset Formula $\mbox{LS}(x)$
 \end_inset
 
- is a local search procedure.
+ is a local optimization procedure.
  
 \end_layout
 
@@ -1204,12 +1207,12 @@ sort
 for
 \series default
  
-\begin_inset Formula $t←1..T$
+\begin_inset Formula $t=1,\ldots,T$
 \end_inset
 
- 
+
 \series bold
-do
+ do
 \end_layout
 
 \begin_layout Plain Layout
@@ -1229,8 +1232,8 @@ do
 \series bold
 for
 \series default
- each agent 
-\begin_inset Formula $i∈\{1..N\}$
+ 
+\begin_inset Formula $i=1,\ldots,N$
 \end_inset
 
  
@@ -1280,7 +1283,11 @@ do
 \end_inset
 
 
-\begin_inset Formula $C←\{P_{k}:k≠i\ and\ f(P_{k})<f(P_{i})\}$
+\series bold
+Set 
+\series default
+
+\begin_inset Formula $C=\left\{ P_{k}:k\ne i\ \mbox{and}\ f\left(P_{k}\right)<f\left(P_{i}\right)\right\} $
 \end_inset
 
  
@@ -1305,15 +1312,14 @@ do
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
+\series bold
+Pick
+\series default
+ 
+\begin_inset Formula $SS$
 \end_inset
 
-
-\begin_inset Formula $SS←$
-\end_inset
-
- random element of 
+ a random element of 
 \begin_inset Formula $C$
 \end_inset
 
@@ -1339,16 +1345,11 @@ do
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
-\end_inset
-
-
 \series bold
 if
 \series default
  
-\begin_inset Formula $strategyMode=aggressive$
+\begin_inset Formula $\mbox{strategyMode}=\mbox{aggresive}$
 \end_inset
 
  
@@ -1380,15 +1381,16 @@ then
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1,\ldots,n$
 \end_inset
 
-for 
-\begin_inset Formula $j←1..D:r∼U(0,1),I∈\{1,2\}:$
-\end_inset
-
-
+ 
+\series bold
+do
 \end_layout
 
 \begin_layout Plain Layout
@@ -1420,15 +1422,14 @@ for
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
+\series bold
+Pick
+\series default
+ a random number 
+\begin_inset Formula $r\in[0,1]$
 \end_inset
 
-
-\begin_inset Formula $y_{j}←P_{i,j}+2·(r−0.5)·(SS_{j}−I·P_{i,j})$
-\end_inset
-
-
+.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1455,12 +1456,19 @@ for
 \end_inset
 
 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
 \series bold
-else if
+Set
 \series default
- strategyMode = conservative 
-\series bold
-then
+ 
+\begin_inset Formula $I\in\left\{ 1,2\right\} $
+\end_inset
+
+ a random integer value.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1493,13 +1501,13 @@ then
 
 
 \series bold
-for
+Set 
 \series default
- 
-\begin_inset Formula $j←1..D:r∼U(0,1)$
+
+\begin_inset Formula $y_{j}=P_{i,j}+2(r−0.5)\left(SS_{j}-IP_{i,j}\right)$
 \end_inset
 
-:
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1526,20 +1534,8 @@ for
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
-\end_inset
-
-
-\begin_inset space \hspace{}
-\length 0.5cm
-\end_inset
-
-
-\begin_inset Formula $y_{j}←P_{i,j}+0.3·(r−0.5)·(x_{best}{}_{j}−P_{i,j})$
-\end_inset
-
-
+\series bold
+endfor
 \end_layout
 
 \begin_layout Plain Layout
@@ -1561,15 +1557,12 @@ for
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
-\end_inset
-
-
 \series bold
-else
+else if
 \series default
- // mixed
+ strategyMode = conservative 
+\series bold
+then
 \end_layout
 
 \begin_layout Plain Layout
@@ -1596,11 +1589,16 @@ else
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1,\ldots,n$
 \end_inset
 
-draw op∼Bernoulli(0.5) and use the corresponding rule above
+ 
+\series bold
+do
 \end_layout
 
 \begin_layout Plain Layout
@@ -1627,8 +1625,19 @@ draw op∼Bernoulli(0.5) and use the corresponding rule above
 \end_inset
 
 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
 \series bold
-endif
+Set
+\series default
+ 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ a randomly selected number.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1655,20 +1664,19 @@ endif
 \end_inset
 
 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
 \series bold
-if
+Set 
 \series default
- 
-\begin_inset Formula $y\ ∈\ S$
+
+\begin_inset Formula $y_{j}=P_{i,j}+0.3\left(r-0.5\right)\left(x_{best,j}-P_{i,j}\right)$
 \end_inset
 
- and 
-\begin_inset Formula $f(y)<f(P_{i})$
-\end_inset
 
- 
-\series bold
-then
 \end_layout
 
 \begin_layout Plain Layout
@@ -1695,15 +1703,8 @@ then
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
-\end_inset
-
-
-\begin_inset Formula $P_{i}←y,f(P_{i})←f(y)$
-\end_inset
-
-
+\series bold
+endfor
 \end_layout
 
 \begin_layout Plain Layout
@@ -1725,13 +1726,10 @@ then
 \end_inset
 
 
-\begin_inset space \hspace{}
-\length 0.5cm
-\end_inset
-
-
 \series bold
-endif
+else
+\series default
+ // mixed strategy
 \end_layout
 
 \begin_layout Plain Layout
@@ -1753,8 +1751,11 @@ endif
 \end_inset
 
 
-\series bold
-endif
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+Select with probablity 50% the aggresive or the conservative strategy.
 \end_layout
 
 \begin_layout Plain Layout
@@ -1775,9 +1776,9 @@ endif
 \length 0.5cm
 \end_inset
 
-// Phase B (dive):
- pull towards current best solution,
- step ~ 1/t
+
+\series bold
+endif
 \end_layout
 
 \begin_layout Plain Layout
@@ -1799,10 +1800,20 @@ endif
 \end_inset
 
 
-\begin_inset Formula $b←argmin_{k}f(P_{k})$
+\series bold
+if
+\series default
+ 
+\begin_inset Formula $y\ ∈\ S$
 \end_inset
 
- // bestSolution in population after Phase A
+ and 
+\begin_inset Formula $f(y)<f\left(P_{i}\right)$
+\end_inset
+
+ 
+\series bold
+then
 \end_layout
 
 \begin_layout Plain Layout
@@ -1824,19 +1835,19 @@ endif
 \end_inset
 
 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
 \series bold
-for
+Set 
 \series default
- 
-\begin_inset Formula $j←1..D$
+
+\begin_inset Formula $P_{i}=y$
 \end_inset
 
-:
- 
-\begin_inset Formula $r∼U(0,1)$
-\end_inset
 
-:
 \end_layout
 
 \begin_layout Plain Layout
@@ -1858,15 +1869,26 @@ for
 \end_inset
 
 
+\series bold
+endif
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+32 
 \begin_inset space \hspace{}
 \length 0.5cm
 \end_inset
 
 
-\begin_inset Formula $z_{j}←P_{i,j}+(1−2·r)·(b_{j}−P_{i,j}/t$
+\begin_inset space \hspace{}
+\length 0.5cm
 \end_inset
 
 
+\series bold
+endif
 \end_layout
 
 \begin_layout Plain Layout
@@ -1878,6 +1900,122 @@ for
 \end_inset
 
 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+// Phase B (dive):
+ pull towards current best solution
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+34 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $b=\arg\min_{k}f\left(P_{k}\right)$
+\end_inset
+
+ // bestSolution in population after Phase A
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+35 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1,\ldots,n$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+36 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\series bold
+Set 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ 
+\series default
+a randomly selected number 
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+37 
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+
+\begin_inset space \hspace{}
+\length 0.5cm
+\end_inset
+
+Set 
+\begin_inset Formula $z_{j}=P_{i,j}+\left(1-2r\right)\left(b_{j}-\frac{P_{i,j}}{t}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+38 
 \begin_inset space \hspace{}
 \length 0.5cm
 \end_inset
@@ -1911,7 +2049,7 @@ then set
 \begin_layout Plain Layout
 
 \size scriptsize
-34 
+39 
 \begin_inset space \hspace{}
 \length 0.5cm
 \end_inset
@@ -1929,7 +2067,7 @@ endfor
 \begin_layout Plain Layout
 
 \size scriptsize
-35 
+40 
 \begin_inset space \hspace{}
 \length 0.5cm
 \end_inset
@@ -1942,7 +2080,7 @@ endfor
 \begin_layout Plain Layout
 
 \size scriptsize
-36 
+41 
 \begin_inset space \hspace{}
 \length 0.5cm
 \end_inset
@@ -1961,7 +2099,7 @@ Set
 \begin_layout Plain Layout
 
 \size scriptsize
-37 
+42 
 \series bold
 endwhile
 \end_layout
@@ -1969,7 +2107,7 @@ endwhile
 \begin_layout Plain Layout
 
 \size scriptsize
-38 
+43 
 \series bold
 return
 \series default
@@ -2048,6 +2186,18 @@ name "subsec:The-used-termination"
 \end_layout
 
 \begin_layout Standard
+The used termination rule is provided in the work of Charilogis and Tsoulos 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "stopping rule2"
+literal "false"
+
+\end_inset
+
+ and it has the following steps:
+\end_layout
+
+\begin_layout Itemize
 At every iteration 
 \begin_inset Formula $t$
 \end_inset
@@ -2076,7 +2226,7 @@ At every iteration
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 \align block
 The algorithm terminates when 
 \begin_inset Formula $\delta^{(t)}\le\epsilon$
@@ -4140,7 +4290,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -4164,7 +4314,7 @@ name "tab:expSettings"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="6" columns="3">
+<lyxtabular version="3" rows="5" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -4314,38 +4464,6 @@ Local search rate
 
 \begin_layout Plain Layout
 0.05
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $B_{i}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Number of iterations for BFGS
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-50
 \end_layout
 
 \end_inset
@@ -17916,217 +18034,6 @@ Gaviano,
  ACM Transactions on Mathematical Software (TOMS),
  29(4),
  469-480.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-If authors have biography,
- please use the format below
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section*
-Short Biography of Authors
-\end_layout
-
-\begin_layout Biography
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-
-Definitions/author
-\end_layout
-
-\end_inset
-
-
-\series bold
-Firstname Lastname
-\series default
- Biography of first author
-\end_layout
-
-\begin_layout Biography
-\begin_inset Argument 1
-status open
-
-\begin_layout Plain Layout
-
-Definitions/author
-\end_layout
-
-\end_inset
-
-
-\series bold
-Firstname Lastname
-\series default
- Biography of second author
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-For the MDPI journals use author-date citation,
- please follow the formatting guidelines on http://www.mdpi.com/authors/references
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-To cite two works by the same author:
- 
-\backslash
-citeauthor{ref-journal-1a} (
-\backslash
-citeyear{ref-journal-1a},
- 
-\backslash
-citeyear{ref-journal-1b}).
- This produces:
- Whittaker (1967,
- 1975).
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-To cite two works by the same author with specific pages:
- 
-\backslash
-citeauthor{ref-journal-3a} (
-\backslash
-citeyear{ref-journal-3a},
- p.
- 328;
- 
-\backslash
-citeyear{ref-journal-3b},
- p.475).
- This produces:
- Wong (1999,
- p.
- 328;
- 2000,
- p.
- 475).
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-To obtain 
-\backslash
-citeauthor{} in LyX you have to choose 
-\begin_inset Quotes eld
-\end_inset
-
-Author1
-\begin_inset Quotes erd
-\end_inset
-
- (or 
-\begin_inset Quotes eld
-\end_inset
-
-Author2
-\begin_inset Quotes erd
-\end_inset
-
-,
- or \SpecialChar ldots
-) in 
-\family sans
-Insert\SpecialChar menuseparator
-Citation\SpecialChar menuseparator
-Citation style
-\family default
-,
- as demonstrated in this citation inset:
- 
-\begin_inset CommandInset citation
-LatexCommand citeauthor
-key "go_math1"
-literal "false"
-
-\end_inset
-
- (either left- or right-click it).
-\end_layout
-
-\begin_layout Plain Layout
-To obtain 
-\backslash
-citeyear{} in LyX you have to choose 
-\begin_inset Quotes eld
-\end_inset
-
-year
-\begin_inset Quotes erd
-\end_inset
-
- in 
-\family sans
-Insert\SpecialChar menuseparator
-Citation\SpecialChar menuseparator
-Citation style
-\family default
-,
- as demonstrated in this citation inset:
- 
-\begin_inset CommandInset citation
-LatexCommand citeyear
-key "go_math1"
-literal "false"
-
-\end_inset
-
- (either left- or right-click it).
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
