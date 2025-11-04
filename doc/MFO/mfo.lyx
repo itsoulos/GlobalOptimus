@@ -4,7 +4,7 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass Definitions/mdpi
+\textclass mdpi
 \begin_preamble
 %  LaTeX support: latex@mdpi.com 
 %  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
@@ -2253,6 +2253,56 @@ The algorithm terminates when
 .
 \end_layout
 
+\begin_layout Subsection
+Movement Strategies
+\end_layout
+
+\begin_layout Standard
+The proposed optimization algorithm employs three distinct movement strategies that regulate the behavioral dynamics of seabirds during the search for optimal solutions.
+ Each strategy defines a different balance between exploration of the search space and exploitation of promising regions already identified.
+\end_layout
+
+\begin_layout Standard
+The aggressive strategy is characterized by strong stochastic dynamics and a tendency toward rapid discovery of new,
+ potentially better regions in the search space.
+ Individuals are driven toward other,
+ more successful members of the population,
+ performing large displacements that enhance diversity and dispersion.
+ This approach promotes exploration and enables the algorithm to escape local optima.
+ However,
+ it also increases the risk of generating infeasible or inefficient solutions if appropriate boundary control mechanisms are not applied.
+\end_layout
+
+\begin_layout Standard
+The conservative strategy focuses on exploitation of the best-known solution,
+ promoting smoother and more stable movements.
+ Individuals move gradually toward the current global best position with limited randomness,
+ aiming to refine the accuracy of their position over time.
+ This strategy reduces population diversity and enhances convergence.
+\end_layout
+
+\begin_layout Standard
+The mixed strategy acts as an adaptive balance mechanism between the two aforementioned approaches.
+ At each iteration,
+ the algorithm randomly decides whether to apply the aggressive or conservative movement pattern,
+ allowing dynamic transitions between exploration and exploitation phases.
+ This flexibility enables the search process to adjust to the evolving characteristics of the optimization landscape,
+ preventing premature convergence and maintaining adaptive search capability.
+\end_layout
+
+\begin_layout Standard
+The integration of these three strategies ensures that the algorithm maintains both exploratory power,
+ essential for discovering new regions,
+ and exploitative stability,
+ crucial for fine-tuning solutions.
+ In conclusion,
+ their combined action enhances the robustness and efficiency of the method.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -2304,7 +2354,7 @@ placement document
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -4525,13 +4575,77 @@ The proposed method in comparison with others
 
 \begin_layout Standard
 The comparison of results for nine optimization methods (PROPOSED,
- GENETIC,
- WOA,
- MEWOA,
- DE,
- IPSO,
- AOA,
- SAO and ACO) is based on a diverse set of benchmark functions.
+ GENETIC
+\begin_inset CommandInset citation
+LatexCommand citep
+key "genetic3"
+literal "false"
+
+\end_inset
+
+,
+ WOA
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-1"
+literal "false"
+
+\end_inset
+
+,
+ MEWOA
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-2"
+literal "false"
+
+\end_inset
+
+,
+ DE
+\begin_inset CommandInset citation
+LatexCommand citep
+key "diffe1"
+literal "false"
+
+\end_inset
+
+,
+ IPSO
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-3"
+literal "false"
+
+\end_inset
+
+,
+ AOA
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-4"
+literal "false"
+
+\end_inset
+
+,
+ SAO
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-5"
+literal "false"
+
+\end_inset
+
+ and ACO
+\begin_inset CommandInset citation
+LatexCommand citep
+key "aco1"
+literal "false"
+
+\end_inset
+
+) is based on a diverse set of benchmark functions.
  The evaluation focused on two key performance indicators:
  the total number of objective function evaluations and the corresponding success rates,
  as shown in Table 2.
@@ -4563,13 +4677,13 @@ The analysis of the total function evaluations reveals substantial differences a
 This superiority was true for almost all reference functions.
  For example,
  on the Ackley function,
- the PROPOSED method reached convergence in only 4,971 evaluations,
- while GENETIC and WOA required 5,811 and 24,766 evaluations,
+ the PROPOSED method reached convergence in only 4971 evaluations,
+ while GENETIC and WOA required 5811 and 24,766 evaluations,
  respectively.
  Similarly,
  for the Branin function,
- the PROPOSED algorithm required 2,397 evaluations,
- much fewer than GENETIC's 2,648 and AOA's 4,777 for this function.
+ the PROPOSED algorithm required 2397 evaluations,
+ much fewer than GENETIC's 2648 and AOA's 4777 for this function.
 \end_layout
 
 \begin_layout Standard
@@ -9831,6 +9945,67 @@ SUM
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figure2.png
+	scale 15
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+A statistical comparison of the proposed with other optimization methods
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure 2 summarizes the pairwise significance between the PROPOSED method and the baseline optimizers.
+ Using the conventional star notation (ns:
+ p > 0.05,
+ *:
+ p < 0.05,
+ **:
+ p < 0.01,
+ ***:
+ p < 0.001,
+ ****:
+ p < 0.0001),
+ all comparisons except ACO reach ****,
+ indicating very-extremely significant differences.
+ Specifically,
+ PROPOSED differs from GENETIC,
+ WOA,
+ MEWOA,
+ DE,
+ IPSO,
+ AOA and SAO at p < 0.0001,
+ whereas the comparison with ACO is not statistically significant (p > 0.05).
+ In conjunction with the reported performance metrics,
+ these results indicate that the advantage of PROPOSED over most baselines is highly unlikely to be due to random variation.
+\end_layout
+
 \begin_layout Subsection
 Comparative analysis of different strategic variations
 \end_layout
@@ -9850,10 +10025,10 @@ To further evaluate the internal adaptability of the proposed optimization frame
 
 \begin_layout Standard
 For example,
- the aggressive strategy in the Easom benchmark function required 2,033 evaluations and Potential5 required 4,944 evaluations.
- While in the conservative strategy Easom required 2,178 evaluations and Potential5 required 5,108 evaluations.
+ the aggressive strategy in the Easom benchmark function required 2033 evaluations and Potential5 required 4944 evaluations.
+ While in the conservative strategy Easom required 2178 evaluations and Potential5 required 5,108 evaluations.
  On the other hand,
- in the mixed strategy it required 2,100 and 4,914 evaluations in the corresponding functions.
+ in the mixed strategy it required 2100 and 4914 evaluations in the corresponding functions.
 \end_layout
 
 \begin_layout Standard
@@ -9885,7 +10060,7 @@ placement document
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -9926,7 +10101,7 @@ FUNCTION
 \begin_layout Plain Layout
 
 \series bold
-AGGRESIVE
+AGGRESSIVE
 \end_layout
 
 \end_inset
@@ -11684,6 +11859,58 @@ SUM
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figure3.png
+	scale 15
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+A statistical comparison of the proposed method with different movement strategies
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In Figure 3 we report pairwise significance for the exploration-exploitation control modes of the proposed optimizer.
+ AGGRESSIVE vs CONSERVATIVE reaches **** (p < 0.0001),
+ indicating a very-extremely significant difference.
+ CONSERVATIVE vs MIXED is ** (p < 0.01),
+ showing a highly significant separation.
+ MIXED vs AGGRESSIVE is *** (p < 0.001),
+ reflecting an extremely significant but comparatively smaller gap.
+ Overall,
+ the regimes induce materially different behaviors,
+ with MIXED lying closer to AGGRESSIVE than to CONSERVATIVE.
+\end_layout
+
 \begin_layout Subsection
 Impact of Population Size on Algorithmic Performance
 \end_layout
@@ -11701,10 +11928,10 @@ To assess the influence of population size on convergence behavior and computati
 \begin_layout Standard
 In a population size of 50 individuals,
  both algorithms demonstrated rapid convergence with low computational cost.
- The proposed algorithm required only 1,983 evaluations for the Ackley function,
- while BF1 required 1,075 and BF2 required 983.
- The Genetic Algorithm converged after 2,148 evaluations for Ackley,
- while 1,258 for BF1 and 1,105 for BF2.
+ The proposed algorithm required only 1983 evaluations for the Ackley function,
+ while BF1 required 1075 and BF2 required 983.
+ The Genetic Algorithm converged after 2148 evaluations for Ackley,
+ while 1258 for BF1 and 1105 for BF2.
  Despite their computational efficiency,
  both methods showed a slight decline in success rate in certain benchmark functions due to the limited population diversity.
  For example,
@@ -11716,15 +11943,14 @@ In a population size of 50 individuals,
 \begin_layout Standard
 When the population size was increased to 100,
  both algorithms reached their most balanced performance.
- The proposed algorithm achieved a 100% success rate on almost all test functions with 3,053 evaluations for Ackley,
- 1,862 for BF1,
- 1,734 evaluations for BF2,
- and 1,211 for Branin.
+ The proposed algorithm achieved a 100% success rate on almost all test functions with 3053 evaluations for Ackley,
+ 1862 for BF1,
+ 1734 evaluations for BF2 and 1211 for Branin.
  The Genetic Algorithm achieved comparable results,
  also maintaining a 100% success rate,
- with 3,331 evaluations for Ackley,
- 2,287 for BF1,
- and 1,353 for Branin.
+ with 3331 evaluations for Ackley,
+ 2287 for BF1,
+ and 1353 for Branin.
  This configuration provided sufficient population diversity for effective exploration without incurring significant computational overhead.
  As a result,
  a medium-sized population offered the optimal trade-off between exploration and exploitation,
@@ -11734,8 +11960,8 @@ When the population size was increased to 100,
 
 \begin_layout Standard
 Further increasing the population to 200 led to a significant increase in computational cost for both algorithms.
- The proposed algorithm required 4,971 evaluations for Ackley while 3,449 evaluations for BF1 and 3,255 for BF2.
- The GA reached 5,811 evaluations for Ackley and 3,494 for BF3.
+ The proposed algorithm required 4971 evaluations for Ackley while 3449 evaluations for BF1 and 3255 for BF2.
+ The GA reached 5811 evaluations for Ackley and 3494 for BF3.
  Although the success rate slightly improved,
  the additional computational effort did not yield proportional benefits in optimization performance.
  
@@ -11744,10 +11970,10 @@ Further increasing the population to 200 led to a significant increase in comput
 \begin_layout Standard
 When the population size was further increased to 500,
  this pattern became even more apparent.
- The proposed algorithm required up to 10,690 evaluations for Ackley while 8,346 for the BF1 function and 7,825 for the BF2 function.
+ The proposed algorithm required up to 10,690 evaluations for Ackley while 8346 for the BF1 function and 7825 for the BF2 function.
  The GA needed 13,664 evaluations for Ackley,
  10,866 for BF1,
- and 6,716 for Branin.
+ and 6716 for Branin.
  While both algorithms maintained high success rates,
  the computational effort increased drastically,
  indicating a prolonged and redundant exploratory phase that hindered convergence speed and overall efficiency.
@@ -11791,7 +12017,7 @@ placement document
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align left
@@ -11829,7 +12055,7 @@ FUNCTION
 
 \series bold
 \size tiny
-50 FRIGATEBIRDS
+N=50
 \end_layout
 
 \end_inset
@@ -11841,7 +12067,7 @@ FUNCTION
 
 \series bold
 \size tiny
-50 POPULATION GA
+GA(N=50)
 \end_layout
 
 \end_inset
@@ -11853,7 +12079,7 @@ FUNCTION
 
 \series bold
 \size tiny
-100 FRIGATEBIRDS
+N=100
 \end_layout
 
 \end_inset
@@ -11865,7 +12091,7 @@ FUNCTION
 
 \series bold
 \size tiny
-100 POPULATION GA
+GA(N=100)
 \end_layout
 
 \end_inset
@@ -11877,7 +12103,7 @@ FUNCTION
 
 \series bold
 \size tiny
-200 FRIGATEBIRDS
+N=200
 \end_layout
 
 \end_inset
@@ -11889,7 +12115,7 @@ FUNCTION
 
 \series bold
 \size tiny
-200 POPULATION GA
+GA(N=200)
 \end_layout
 
 \end_inset
@@ -11901,7 +12127,7 @@ FUNCTION
 
 \series bold
 \size tiny
-500 FRIGATEBIRDS
+N=500
 \end_layout
 
 \end_inset
@@ -11913,7 +12139,7 @@ FUNCTION
 
 \series bold
 \size tiny
-500 POPULATION GA
+GA(N=500)
 \end_layout
 
 \end_inset
@@ -16522,7 +16748,23 @@ Performance Evaluation on Practical Problems
 \begin_layout Standard
 To further examine the practical efficiency and scalability of the proposed optimization algorithm,
  two real-world engineering design problems were investigated:
- the GasCycle and the Tandem Queueing System.
+ the GasCycle
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-8"
+literal "false"
+
+\end_inset
+
+ and the Tandem Queueing System
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key-6"
+literal "false"
+
+\end_inset
+
+.
  These problems were selected because they differ significantly in mathematical formulation and computational complexity,
  providing a comprehensive framework for evaluating the algorithm’s performance under diverse and realistic conditions.
 \end_layout
@@ -16825,6 +17067,17 @@ Across all benchmarks,
 \end_layout
 
 \begin_layout Standard
+The statistical analysis further substantiates the superiority and reliability of the proposed optimization framework.
+ Pairwise significance tests revealed that the differences between the proposed method and nearly all baseline algorithms were highly significant,
+ with most comparisons achieving p-values below 0.0001.
+ This indicates that the observed performance improvements are not attributable to random fluctuations.
+ Moreover,
+ the internal comparison among the exploration–exploitation control modes demonstrated statistically significant behavioral distinctions,
+ confirming that each regime induces a distinct search dynamic.
+ These results collectively validate the robustness of the proposed approach and provide strong statistical evidence of its effectiveness across diverse optimization scenarios.
+\end_layout
+
+\begin_layout Standard
 The exploration of different internal search strategies Aggressive,
  Conservative,
  and Mixed  provided further insights into the flexibility of the proposed framework.
@@ -16881,7 +17134,18 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace 6pt
+This study presented a new optimization framework that integrates an adaptive exploration–exploitation control mechanism.
+ The experimental results obtained from a diverse set of benchmark functions demonstrated that the proposed algorithm consistently outperforms established metaheuristic approaches in terms of convergence accuracy,
+ speed,
+ and computational efficiency.
+ Overall,
+ the proposed algorithm has proven to be a flexible and reliable optimization method.
+ Its consistent superiority over well-known optimization techniques,
+ combined with statistically validated performance,
+ underlines its strong potential for real-world applications that demand precision,
+ adaptability,
+ and computational efficiency.
+\begin_inset Newline newline
 \end_inset
 
 
@@ -18038,6 +18302,185 @@ Gaviano,
  ACM Transactions on Mathematical Software (TOMS),
  29(4),
  469-480.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+Alyasseri,
+ Z.
+ A.
+ A.,
+ Ali,
+ N.
+ S.,
+ Al-Betar,
+ M.
+ A.,
+ Makhadmeh,
+ S.
+ N.,
+ Jamil,
+ N.,
+ Awadallah,
+ M.
+ A.,
+ ...
+ & Mirjalili,
+ S.
+ (2024).
+ Recent advances of whale optimization algorithm,
+ its versions and applications. Handbook of whale optimization algorithm,
+ 9-31.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-2"
+
+\end_inset
+
+Zangmo,
+ R.,
+ Sudabattula,
+ S.
+ K.,
+ Dharavat,
+ N.,
+ Mishra,
+ S.,
+ Basha,
+ C.
+ H.,
+ & Irfan,
+ M.
+ M.
+ (2025).
+ Techno-economic analysis of distribution system at various load models using MEWOA algorithm. Scientific Reports, 15(1),
+ 8273.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-3"
+
+\end_inset
+
+Masoudi,
+ M.
+ R.,
+ Haghighi,
+ M.,
+ & Sezavar,
+ H.
+ R.
+ (2025,
+ February).
+ Optimization of Energy Hub Performance Using the Improved Particle Swarm Optimization (IPSO) Algorithm for Integrated Energy Systems.
+ In 2025 12th Iranian Conference on Renewable Energies and Distributed Generation (ICREDG) (pp.
+ 1-6).
+ IEEE.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-4"
+
+\end_inset
+
+hang,
+ R.,
+ Mao,
+ S.,
+ Zhao,
+ S.,
+ & Liu,
+ C.
+ (2024).
+ An arithmetic optimization algorithm with balanced diversity and convergence for multimodal multiobjective optimization. Swarm and Evolutionary Computation, 91,
+ 101724.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-5"
+
+\end_inset
+
+Sulaiman,
+ A.
+ T.,
+ Bello-Salau,
+ H.,
+ Onumanyi,
+ A.
+ J.,
+ Mu’azu,
+ M.
+ B.,
+ Adedokun,
+ E.
+ A.,
+ Salawudeen,
+ A.
+ T.,
+ & Adekale,
+ A.
+ D.
+ (2024).
+ A particle swarm and smell agent-based hybrid algorithm for enhanced optimization. Algorithms, 17(2),
+ 53.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-8"
+
+\end_inset
+
+Luo,
+ B.,
+ Su,
+ X.,
+ Zhang,
+ S.,
+ Yan,
+ P.,
+ Liu,
+ J.,
+ & Li,
+ R.
+ (2025).
+ Analysis of a novel gas cycle cooler with large temperature glide for space cooling. Energy, 326,
+ 136294.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-6"
+
+\end_inset
+
+Keerthika,
+ R.,
+ Niranjan,
+ S.
+ P.,
+ & Komala Durga,
+ B.
+ (2025).
+ A Survey on the tandem queueing models. Scope, 14,
+ 134-148.
 \end_layout
 
 \begin_layout Standard
