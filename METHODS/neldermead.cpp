@@ -176,6 +176,7 @@ start:
     worst = (population.end())->first;
     secondWorst = population[population_count - 2].first;
     reflection();
+
     if (yreflectedPoint < secondWorst && yreflectedPoint > ybestPoint)
     {
         population[population_count - 1].second = reflectedPoint;
