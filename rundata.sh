@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=ParallelDe
+METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -15,7 +15,7 @@ DATAFILE=$1
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]; then
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=false --mlpboundlimit=10.0"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=yes"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
@@ -78,7 +78,7 @@ elif [ $METHOD = "DifferentialEvolution" ]; then
   ##de_maxiters:    The maximum number of parameters
   ##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
   ##de_selection:   The selection method used in every iteration. Values: random, tournament
-  METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_isneural=yes --de_neuralw=2 --de_lrate=0.005 --opt_termination=$TERMINATION --de_neuralsampling=no"
+  METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_lrate=0.05 --opt_termination=$TERMINATION --de_neuralsampling=no --de_isneural=yes"
 elif [ $METHOD = "bho" ]
 then
 	  METHODPARAMS="--population=100 --maxiters=500 --localSearchRate=0.00"

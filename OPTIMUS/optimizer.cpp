@@ -168,6 +168,7 @@ void    Optimizer::solve()
         problemSampler=new UniformSampler(myProblem);
 
     }
+    runnigLocalOptimizer=false;
     init();
     do
     {
@@ -211,12 +212,19 @@ void    Optimizer::sampleFromProblem(int &N,Matrix &xsample,Data &ysample)
     problemSampler->sampleFromModel(N,xsample,ysample);
 }
 
+bool    Optimizer::isLocalOptimizerRunning()
+{
+    return runnigLocalOptimizer;
+}
+
 double  Optimizer::localSearch(Data &x)
 {
 
+    runnigLocalOptimizer=true;
     QString localMethod = getParam("opt_localsearch").getValue();
     double y=1e+10;
     Optimizer *local=NULL;
+
     if(localMethod=="none" || localMethod=="")
     {
         return myProblem->funmin(x);
@@ -276,6 +284,7 @@ double  Optimizer::localSearch(Data &x)
         y = myProblem->statFunmin(x);
         delete local;
     }
+    runnigLocalOptimizer=false;
     return y;
 }
 

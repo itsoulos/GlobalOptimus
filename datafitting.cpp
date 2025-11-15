@@ -354,6 +354,7 @@ int main(int argc, char *argv[])
     double average_train_error  = 0.0;
     double average_test_error   = 0.0;
     double average_class_error  = 0.0;
+    double average_class_error2 = 0.0;
     double average_precision    = 0.0;
     double average_recall       = 0.0;
     double average_fscore       = 0.0;
@@ -363,11 +364,12 @@ int main(int argc, char *argv[])
         srand(t);
         mainModel->setModelSeed(t);
         runMethod();
-        double d1,d2,d3;
-        mainModel->testModel(d1,d2,d3);
+        double d1,d2,d3,d4;
+        mainModel->testModel(d1,d2,d3,d4);
         average_train_error+=d1;
         average_test_error+=d2;
         average_class_error+=d3;
+        average_class_error2+=d4;
         double precision=0.0,recall=0.0,fscore=0.0;
         mainModel->getPrecisionRecall(precision,recall,fscore);
         average_precision+=precision;
@@ -382,12 +384,13 @@ int main(int argc, char *argv[])
 
     }
         unloadProblem();
-    printf("Average Train Error: %20.10lg\n",average_train_error/times);
-    printf("Average Test  Error: %20.10lg\n",average_test_error/times);
-    printf("Average Class Error: %20.10lg%%\n",average_class_error/times);
-    printf("Average Precision  : %20.10lg\n",average_precision/times);
-    printf("Average Recall     : %20.10lg\n",average_recall/times);
-    printf("Average Fscore     : %20.10lg\n",average_fscore/times);
+    printf("Average Train Error     : %20.10lg\n",average_train_error/times);
+    printf("Average Test  Error     : %20.10lg\n",average_test_error/times);
+    printf("Average Class Error     : %20.10lg%%\n",average_class_error/times);
+    printf("Average Error(PER CLASS): %20.10lg%%\n",average_class_error2/times);
+    printf("Average Precision       : %20.10lg\n",average_precision/times);
+    printf("Average Recall          : %20.10lg\n",average_recall/times);
+    printf("Average Fscore          : %20.10lg\n",average_fscore/times);
     unloadMethods();
     return 0;
 }

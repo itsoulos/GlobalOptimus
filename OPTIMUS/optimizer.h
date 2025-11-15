@@ -59,6 +59,11 @@ protected:
     * @brief methodLogger the use logging class
     */
    Logger           *methodLogger;
+
+   /**
+    * @brief runnigLocalOptimizer, true when the local optimizer is running
+    */
+   bool         runnigLocalOptimizer;
 public:
     /**
      * @brief Optimizer  the constructor of the class
@@ -165,6 +170,7 @@ public:
      * @return
      */
     ParameterList getParameterList();
+    bool    isLocalOptimizerRunning();
     virtual ~Optimizer();
 };
 

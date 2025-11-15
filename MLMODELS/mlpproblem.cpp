@@ -11,9 +11,10 @@ MlpProblem::MlpProblem()
       methods<<"smallvalues"<<"xavier";
       addParam(Parameter("mlp_initmethod",methods[0],methods,"Possible values: smallvalues,xavier"));
       QStringList boolValues;
-      boolValues<<"false"<<"true";
-      addParam(Parameter("mlp_usebound",boolValues[0],boolValues,"Use bound function for weights (true|false)"));
+      boolValues<<"no"<<"yes";
+      addParam(Parameter("mlp_usebound",boolValues[0],boolValues,"Use bound function for weights (yes|no)"));
       addParam(Parameter("mlp_boundlimit",10.0,1.0,100.0,"Bound limit for weights"));
+      addParam(Parameter("mlp_balanceclass",boolValues[1],boolValues,"Enable or disabled balanced classes during train (yes|no)"));
 }
 
 Data    MlpProblem::getSample()
@@ -96,8 +97,9 @@ void    MlpProblem::init(QJsonObject &pt)
     {
         setParam("mlp_initmethod",pt["mlp_initmethod"].toString());
     }
-    usebound_flag = getParam("mlp_usebound").getValue()=="false"?false:true;
+    usebound_flag = getParam("mlp_usebound").getValue()=="no"?false:true;
     viollimit  = getParam("mlp_boundlimit").getValue().toDouble();
+    useFitnessPerClass=getParam("mlp_balanceclass").getValue()=="no"?false:true;
     loadTrainSet();
     loadTestSet();
     initWeights();
@@ -113,6 +115,11 @@ double MlpProblem::funmin(Data &x)
 
     double error = 0.0;
     int xallsize  = xall.size();
+
+    if(useFitnessPerClass && method!=NULL && !method->isLocalOptimizerRunning())
+    {
+        return getClassErrorPerClass(x,trainDataset);
+    }
     for(int i=0;i<xallsize;i++)
     {
         Data xx = xall[i];
@@ -130,6 +137,7 @@ double MlpProblem::funmin(Data &x)
         double tt = getViolationPercent();
         return error*(1.0+tt*tt);
     }
+
     return error;
 
 }
@@ -400,7 +408,6 @@ void    SimanBounds::randomBounds(Data &xl,Data &xr)
             r = X0[i]+0.05 *fabs(X0[i]);
         xl[i]=l;
         xr[i]=r;
-        //printf("In %lf ->[%lf,%lf]\n",X0[i],l,r);
     }
 }
 void    SimanBounds::Solve()
@@ -499,16 +506,58 @@ double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)
     return sum;
 }
 
+double MlpProblem::getClassErrorPerClass(Data &x, Dataset *t)
+{
+    int count = t->count();
+    Data dclass = t->getPatternClass();
+    vector<int> samplesPerClass;
+    vector<int> failPerClass;
+    samplesPerClass.resize(dclass.size());
+    failPerClass.resize(dclass.size());
+    for(int i=0;i<(int)dclass.size();i++)
+    {
+        samplesPerClass[i]=0;
+        failPerClass[i]=0;
+    }
+    for(int i=0;i<count;i++)
+    {
+        double yy = t->getYPoint(i);
+        double xclass = t->getClass(yy);
+        double oclass = t->getClass(getOutput(x,t->getXPoint(i).data()));
+        bool isError = (fabs(xclass-oclass)>1e-5);
+        for(int j=0;j<(int)dclass.size();j++)
+        {
+            if(fabs(xclass-dclass[j])<1e-5)
+            {
+                samplesPerClass[j]++;
+                if(isError)
+                    failPerClass[j]++;
+                break;
+            }
+        }
+    }
+    double sum=0.0;
+    for(int i=0;i<(int)dclass.size();i++)
+    {
+        double e=failPerClass[i]*100.0/samplesPerClass[i];
+        sum=sum+e;
+    }
+    sum=sum/dclass.size();
+    return sum;
+}
+
 QJsonObject MlpProblem::done(Data &x)
 {
-   usebound_flag =false;
+    usebound_flag =false;
     double tr=funmin(x);
     QJsonObject xx;
     double tt=getTestError(x,testDataset);
     double tc=getClassTestError(x,testDataset);
+    double ttc=getClassErrorPerClass(x,testDataset);
     xx["trainError"]=tr;
     xx["testError"]=tt;
     xx["classError"]=tc;
+    xx["classErrorPerClass"]=ttc;
     double precision=0.0,recall=0.0,f1score=0.0;
     getPrecisionRecall(precision,recall,f1score);
     xx["precision"]=precision;

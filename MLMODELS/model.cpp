@@ -26,7 +26,8 @@ void    Model::trainModel()
 }
 
 
-void    Model::testModel(double &trainError,double &testError,double &classError)
+void    Model::testModel(double &trainError,double &testError,
+                      double &classError,double &classErrorPerClass)
 {
     if(method!=NULL)
     {
@@ -36,12 +37,14 @@ void    Model::testModel(double &trainError,double &testError,double &classError
        trainError=values["trainError"].toDouble();
        testError=values["testError"].toDouble();
        classError=values["classError"].toDouble();
+       classErrorPerClass=values["classErrorPerClass"].toDouble();
     }
     else
     {
         trainError = getTrainError();
         testError  = getTestError();
         classError = getClassTestError();
+        classErrorPerClass=getClassErrorPerClass(testDataset);
     }
 }
 
@@ -142,6 +145,47 @@ double  Model::getTrainError()
     }
     return error;
 }
+
+double Model::getClassErrorPerClass(Dataset *t)
+{
+    int count = t->count();
+    Data dclass = t->getPatternClass();
+    vector<int> samplesPerClass;
+    vector<int> failPerClass;
+    samplesPerClass.resize(dclass.size());
+    failPerClass.resize(dclass.size());
+    for(int i=0;i<(int)dclass.size();i++)
+    {
+        samplesPerClass[i]=0;
+        failPerClass[i]=0;
+    }
+    for(int i=0;i<count;i++)
+    {
+        double yy = t->getYPoint(i);
+        double xclass = t->getClass(yy);
+        double oclass = t->getClass(getOutput(t->getXPoint(i).data()));
+        bool isError = (fabs(xclass-oclass)>1e-5);
+        for(int j=0;j<(int)dclass.size();j++)
+        {
+            if(fabs(xclass-dclass[j])<1e-5)
+            {
+                samplesPerClass[j]++;
+                if(isError)
+                    failPerClass[j]++;
+                break;
+            }
+        }
+    }
+    double sum=0.0;
+    for(int i=0;i<(int)dclass.size();i++)
+    {
+        double e=failPerClass[i]*100.0/samplesPerClass[i];
+        sum=sum+e;
+    }
+    sum=sum/dclass.size();
+    return sum;
+}
+
 /** kanei oti kai i getTrainError() alla gia to test set **/
 double  Model::getTestError(Dataset *test)
 {

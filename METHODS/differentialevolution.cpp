@@ -31,6 +31,7 @@ DifferentialEvolution::DifferentialEvolution()
 
     addParam(Parameter("de_neuralsampling",isNeural[0],isNeural,
                 "Set to yes to use neural sampling method"));
+
 }
 
 void    DifferentialEvolution::init()

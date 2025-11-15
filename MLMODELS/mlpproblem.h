@@ -14,6 +14,7 @@ private:
 	int violcount,sigcount;
 	double viollimit;
     bool usebound_flag=false;
+    bool useFitnessPerClass=false;
 public:
     /**
      * @brief MlpProblem The main constructor of MLP.
@@ -132,6 +133,7 @@ public:
      * @return  the class test error for a provided dataset
      */
     double      getClassTestError(Data &x,Dataset *test) ;
+    double      getClassErrorPerClass(Data &x,Dataset *t);
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H

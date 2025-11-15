@@ -196,8 +196,8 @@ void  FcModel::testModel(double &avg_trainError,
     	Dataset *mappedTestSet = new Dataset();
     	mapper->mapDataset(testDataset,mappedTestSet);
     	evaluateModel->setTestSet(mappedTestSet);
-	double trainError  =0.0,testError=0.0,classError=0.0;
-    	evaluateModel->testModel(trainError,testError,classError);
+    double trainError  =0.0,testError=0.0,classError=0.0,classErrorPerClass=0.0;
+        evaluateModel->testModel(trainError,testError,classError,classErrorPerClass);
 
     	evaluateModel->disableRemoveData();
 	avg_trainError+=trainError; 

@@ -127,7 +127,8 @@ public:
      * @param testError
      * @param classError
      */
-    virtual     void  testModel(double &trainError,double &testError,double &classError);
+    virtual     void  testModel(double &trainError,double &testError,
+                           double &classError,double &classErrorPerClass);
     /**
      * @brief setModelSeed, alters the used seed for the random number generator
      * @param seed
@@ -150,6 +151,13 @@ public:
     ParameterList getParameterList();
 
     void initParams(QJsonObject &pt);
+
+    /**
+     * @brief getClassErrorPerClass
+     * @param t
+     * @return  the average class per class. Usefull for imbalanced data.
+     */
+    double getClassErrorPerClass(Dataset *t);
     virtual ~Model();
 };
 

@@ -3,6 +3,7 @@
 # include <QScreen>
 # include <OPTIMUS/editlogger.h>
 # include <QDesktopServices>
+# include <QStandardPaths>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 
