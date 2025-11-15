@@ -149,7 +149,7 @@ Data    MlpProblem::gradient(Data &x)
     Data g;
     g.resize(x.size());
     if(trainDataset==NULL) return g;
-    if(usebound_flag)
+    if(usebound_flag || useFitnessPerClass)
     {
         for(int i=0;i<getdimension();i++)
             {
