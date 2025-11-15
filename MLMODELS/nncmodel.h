@@ -19,6 +19,7 @@ private:
     Population      *pop;
     NeuralParser    *parser;
     MlpProblem      *trialProblem;
+    bool            use_balancedclass=false;
 public:
     NNCModel();
     double            preTrain(vector<int> &result);
@@ -27,6 +28,7 @@ public:
     void            localSearchItem(int pos);
     virtual void    trainModel();
     virtual          ~NNCModel();
+    virtual double      getTrainError();
 };
 
 #endif // NNCMODEL_H

@@ -25,8 +25,16 @@ NNCModel::NNCModel()
     addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
 
     addParam(Parameter("nnc_pretrain",yesno[0],yesno,"Enable (yes) or disable (no) the pre - training process."));
+
+    addParam(Parameter("nnc_balanceclass",yesno[0],yesno,"Enable or disabled balanced classes during train (yes|no)"));
+    use_balancedclass=false;
 }
 
+double  NNCModel::getTrainError()
+{
+    if(use_balancedclass==false) return Model::getTrainError();
+    else return getClassErrorPerClass(trainDataset);
+}
 double  NNCModel::getOutput(Data &x)
 {
 
@@ -109,7 +117,7 @@ void  NNCModel::trainModel()
 {
         loadTrainSet();
         loadTestSet();
-
+        use_balancedclass=getParam( "nnc_balanceclass").getValue()=="yes";
         if(trainDataset == NULL) return;
         if(pop!=NULL) delete pop;
         if(program!=NULL) delete program;

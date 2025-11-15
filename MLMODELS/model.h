@@ -65,7 +65,7 @@ public:
      * @brief getTrainError
      * @return the training error of the model
      */
-    double      getTrainError();
+    virtual double      getTrainError();
     /**
      * @brief getTestError
      * @param test
