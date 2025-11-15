@@ -116,7 +116,7 @@ double MlpProblem::funmin(Data &x)
     double error = 0.0;
     int xallsize  = xall.size();
 
-    if(useFitnessPerClass && method!=NULL && !method->isLocalOptimizerRunning())
+    if(useFitnessPerClass)// && method!=NULL && !method->isLocalOptimizerRunning())
     {
         return getClassErrorPerClass(x,trainDataset);
     }
@@ -132,7 +132,7 @@ double MlpProblem::funmin(Data &x)
         if(isinf(per)) return 1e+100;
         error+= (per-yy)*(per-yy);
     }
-    if(usebound_flag)
+    if(usebound_flag || useFitnessPerClass)
     {
         double tt = getViolationPercent();
         return error*(1.0+tt*tt);

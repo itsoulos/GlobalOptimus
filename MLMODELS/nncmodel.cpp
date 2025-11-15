@@ -255,6 +255,10 @@ void        NNCModel::localSearchItem(int pos)
             trialProblem->enableBound();
         else
             trialProblem->disableBound();
+    	if(use_balancedclass) 
+	{
+		trialProblem->setParam("mlp_balanceclass","yes");
+	}
 
         Optimizer *method=NULL;
         if(Lmethod == "bfgs")
