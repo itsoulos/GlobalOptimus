@@ -27,6 +27,7 @@ NNCModel::NNCModel()
     addParam(Parameter("nnc_pretrain",yesno[0],yesno,"Enable (yes) or disable (no) the pre - training process."));
 
     addParam(Parameter("nnc_balanceclass",yesno[0],yesno,"Enable or disabled balanced classes during train (yes|no)"));
+    addParam(Parameter("nnc_outputfile","","The output file for nnc"));
     use_balancedclass=false;
 }
 
@@ -207,6 +208,25 @@ void  NNCModel::trainModel()
     localSearchItem(0);
     setParam("nnc_lsearchmethod",Lmethod);
     pop->evaluateBestFitness();
+
+    QString output=getParam("nnc_outputfile").getValue();
+    if(!output.isEmpty() && testDataset!=NULL)
+    {
+        QFile fp(output);
+        if(fp.open(QIODevice::WriteOnly))
+        {
+            QTextStream st(&fp);
+            int count = testDataset->count();
+            for(int i=0;i<count;i++)
+            {
+                double realValue = testDataset->getYPoint(i);
+                double estValue  = getOutput(testDataset->getXPoint(i).data());
+                double estClaSS  = testDataset->getClass(estValue);
+                st<<realValue<<"  "<<estValue<<" "<<estClaSS<<"\n";
+            }
+            fp.close();
+        }
+    }
 }
 
 void        NNCModel::localSearchItem(int pos)
