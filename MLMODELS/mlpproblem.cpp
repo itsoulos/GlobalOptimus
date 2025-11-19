@@ -15,6 +15,7 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_usebound",boolValues[0],boolValues,"Use bound function for weights (yes|no)"));
       addParam(Parameter("mlp_boundlimit",10.0,1.0,100.0,"Bound limit for weights"));
       addParam(Parameter("mlp_balanceclass",boolValues[1],boolValues,"Enable or disabled balanced classes during train (yes|no)"));
+      addParam(Parameter("mlp_outputfile","","The output file for mlp"));
 }
 
 Data    MlpProblem::getSample()
@@ -563,6 +564,25 @@ QJsonObject MlpProblem::done(Data &x)
     xx["precision"]=precision;
     xx["recall"]=recall;
     xx["f1score"]=f1score;
+
+    QString output=getParam("mlp_outputfile").getValue();
+    if(!output.isEmpty())
+    {
+        QFile fp(output);
+        if(fp.open(QIODevice::WriteOnly))
+        {
+            QTextStream st(&fp);
+            int count = testDataset->count();
+            for(int i=0;i<count;i++)
+            {
+                double realValue = testDataset->getYPoint(i);
+                double estValue  = getOutput(x,testDataset->getXPoint(i).data());
+                double estClaSS  = testDataset->getClass(estValue);
+                st<<realValue<<"  "<<estValue<<" "<<estClaSS<<"\n";
+            }
+            fp.close();
+        }
+    }
     return xx;
 
 }
