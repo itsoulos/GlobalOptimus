@@ -15,6 +15,8 @@ private:
 	double viollimit;
     bool usebound_flag=false;
     bool useFitnessPerClass=false;
+    bool hasDebug = false;
+
 public:
     /**
      * @brief MlpProblem The main constructor of MLP.

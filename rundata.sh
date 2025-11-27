@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=Genetic
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=nnc
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -15,7 +15,7 @@ DATAFILE=$1
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]; then
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=yes"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
@@ -79,7 +79,7 @@ elif [ $METHOD = "DifferentialEvolution" ]; then
   ##de_maxiters:    The maximum number of parameters
   ##de_fselection:  The selection of differential weight. Values: number, ali, random, adaptive, migrant
   ##de_selection:   The selection method used in every iteration. Values: random, tournament
-  METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_lrate=0.05 --opt_termination=$TERMINATION --de_neuralsampling=no --de_isneural=yes"
+  METHODPARAMS="--de_np=200 --de_maxiters=200 --de_selection=tournament --de_fselection=migrant --de_lrate=0.005 --opt_termination=$TERMINATION --de_neuralsampling=no --de_isneural=yes --de_neuralw=2.0"
 elif [ $METHOD = "bho" ]
 then
 	  METHODPARAMS="--population=100 --maxiters=500 --localSearchRate=0.00"
@@ -112,7 +112,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
+  METHODPARAMS="--gen_lrate=0.005 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples
@@ -132,7 +132,7 @@ elif [ $METHOD = "iPso" ]; then
   #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
   #ipso_gradientcheck: usage of gradient rejection rule (true|false)
   #ipso_inertiatype: selection of inertia calcuation mechanism
-  METHODPARAMS="--ipso_particles=500 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.001 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 "
+  METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.005 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 "
 
 elif [ $METHOD = "NeuralMinimizer" ]; then
 

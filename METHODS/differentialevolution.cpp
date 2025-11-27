@@ -1,5 +1,6 @@
 #include "differentialevolution.h"
 # include <MLMODELS/mlpproblem.h>
+# include <MLMODELS/rbfproblem.h>
 DifferentialEvolution::DifferentialEvolution()
 {
     addParam(Parameter("de_np","10n","The number of agents. Default value 10n"));
@@ -25,7 +26,7 @@ DifferentialEvolution::DifferentialEvolution()
     isNeural<<"no"<<"yes";
     addParam(Parameter("de_isneural",isNeural[0],
              isNeural,"Select yes for mlp training"));
-    addParam(Parameter("de_neuralw",2.0,-1.0,10.0,
+    addParam(Parameter("de_neuralw",2.0,-1.0,100.0,
             "Bound limit for mlp training. Set -1 for adaptive."));
 
 
@@ -106,6 +107,9 @@ static double getDistance(Data &x,Data &y)
 void DifferentialEvolution::step()
 {
     ++iter;
+    Data xl,xr;
+    xl.resize(myProblem->getDimension());
+    xr.resize(myProblem->getDimension());
     QString selection = getParam("de_selection").getValue();
     QString de_fselection = getParam("de_fselection").getValue();
     double bestMax = 0;
@@ -118,9 +122,8 @@ void DifferentialEvolution::step()
     if (de_fselection == "migrant")
     {
         calculateMigrantWeights();
-	is_migrant = true;
-
-        }
+        is_migrant = true;
+    }
 
     if (de_fselection == "ali")
     {
@@ -180,12 +183,18 @@ void DifferentialEvolution::step()
                     F = -0.5 + 2.0 * myProblem->randomDouble();
                 if (is_adaptive)
                     F = 0.8 + 0.2 * myProblem->randomDouble();
-		if(is_migrant)
-		    F = migrantWeights[i];	
-        trialx[j] = xa[j] + F * (xb[j] - xc[j]);
-        if(!de_isneural && !myProblem->isPointIn(trialx)) trialx[j]=x[j];
+                if(is_migrant)
+                    F = migrantWeights[i];
+                trialx[j] = xa[j] + F * (xb[j] - xc[j]);
+                if(fabs(trialx[j])>=1e+5 || isnan(trialx[j]))
+                {
+                    printf("F=%lf FAIL %lf=>%lf,%lf,%lf\n",
+                           F,
+                           trialx[j],xa[j],xb[j],xc[j]);
+                }
+                if(!de_isneural && !myProblem->isPointIn(trialx)) trialx[j]=x[j];
         }
-            else
+        else
                 trialx[j] = x[j];
         }
 
@@ -207,14 +216,13 @@ void DifferentialEvolution::step()
         double ft=0.0;
         if(lrate>0.0 && minDist>1e-4 && myProblem->randomDouble()<=lrate)
         {
+
             if(!de_isneural)
                 ft = localSearch(trialx);
             else
             {
                 double fv = de_neuralw;
-                Data xl,xr;
-                xl.resize(myProblem->getDimension());
-                xr.resize(myProblem->getDimension());
+
                 for(int k=0;k<myProblem->getDimension();k++)
                 {
                     xl[k]=-fv * fabs(trialx[k]);
@@ -240,9 +248,19 @@ void DifferentialEvolution::step()
                 }
                 myProblem->setLeftMargin(xl);
                 myProblem->setRightMargin(xr);
+
                 double oldf = myProblem->funmin(trialx);
-                printf("In bounds %d \n",
-                       myProblem->isPointIn(trialx));
+                if(fabs(oldf)>=1e+10)
+                {
+
+                      continue;
+                    for(int k=0;k<myProblem->getDimension();k++)
+                    {
+                        printf("trial=%lf ",trialx[k]);
+                    }
+                    printf("\n");
+
+                }
                 ft = localSearch(trialx);
                 printf("Local search found %lf=>%lf \n",oldf,ft);
             }
@@ -279,8 +297,10 @@ void DifferentialEvolution::calculateMigrantWeights()
     }
 
 
+    if(fabs(sumW)<1e-6) sumW=1.0;
     for (int i = 0; i < NP; ++i)
     {
+
         migrantWeights[i] = weights[i] / sumW;
     }
 

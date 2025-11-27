@@ -129,8 +129,17 @@ double MlpProblem::funmin(Data &x)
 
         double per = getOutput(x,xx.data());
         if(fabs(per)>=1e+10) return 1e+100;
-        if(isnan(per)) return 1e+100;
-        if(isinf(per)) return 1e+100;
+        if(isnan(per))
+        {
+            /*hasDebug = true;
+            per = getOutput(x,xx.data());
+            hasDebug = false;*/
+            return 1e+100;
+        }
+        if(isinf(per))
+        {
+            return 1e+100;
+        }
         error+= (per-yy)*(per-yy);
     }
     if(usebound_flag || useFitnessPerClass)
@@ -224,6 +233,7 @@ double  MlpProblem::getOutput(Data &w,double *x)
             violcount++;
         }
         per+=w[(d+2)*i-(d+1)-1]*sig(arg);
+
     }
     return per;
 }
@@ -478,9 +488,16 @@ SimanBounds::~SimanBounds()
 
 void    MlpProblem::findBoundsWithSiman(Data &x0,Data &xl,Data &xr)
 {
+    Data xl_old = xl;
+    Data xr_old = xr;
     SimanBounds b(x0,this,xl,xr);
+
     b.Solve();
     b.getBounds(xl,xr);
+    for(int i=0;i<xl.size();i++)
+    {
+        printf("Bounds[%d]=[%lf=>%lf,%lf=>%lf]\n",i,xl_old[i],xl[i],xr_old[i],xr[i]);
+    }
 }
 
 double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)
