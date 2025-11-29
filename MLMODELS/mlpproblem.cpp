@@ -8,7 +8,7 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_leftmargin",-10.0,-10000.0,10000.0,"Initial left margin"));
       addParam(Parameter("mlp_rightmargin",10.0,-10000.0,10000.0,"Initial right margin"));
       QStringList methods;
-      methods<<"smallvalues"<<"xavier";
+      methods<<"smallvalues"<<"xavier"<<"random";
       addParam(Parameter("mlp_initmethod",methods[0],methods,"Possible values: smallvalues,xavier"));
       QStringList boolValues;
       boolValues<<"no"<<"yes";
@@ -33,10 +33,11 @@ Data    MlpProblem::getSample()
 
       if(initmethod == "smallvalues")
       {
-          double a = -1;
-          double b = 1;
           for(int i=0;i<dimension;i++)
           {
+              double a = -1;
+              double b = 1;
+
               xx[i]= (a+(b-a)*randomDouble());
           }
       }
@@ -54,7 +55,8 @@ Data    MlpProblem::getSample()
           }
           else
           {
-              return Problem::getSample();
+              xx= Problem::getSample();
+              printf("Fx(random)=%lf \n",funmin(xx));
           }
           return xx;
 }
@@ -73,11 +75,24 @@ void    MlpProblem::initWeights()
           right[i]=rightMargin;
       }
 
+
 }
 
 void    MlpProblem::initModel()
 {
-    initWeights();
+
+
+    initWeights();/*
+    setParam("mlp_initmethod","smallvalues");
+    Data x0 = getSample();
+    Data xl = left;
+    Data xr = right;
+    findBoundsWithSiman(x0,xl,xr);
+    left  = xl;
+    right = xr;
+    setLeftMargin(xl);
+    setRightMargin(xr);
+    setParam("mlp_initmethod","random");*/
 }
 void    MlpProblem::init(QJsonObject &pt)
 {
@@ -142,6 +157,7 @@ double MlpProblem::funmin(Data &x)
         }
         error+= (per-yy)*(per-yy);
     }
+
     if(usebound_flag || useFitnessPerClass)
     {
         double tt = getViolationPercent();
@@ -401,7 +417,7 @@ void    SimanBounds::reduceTemp()
 {
     k=k+1;
     const double alpha = 0.8;
-    T0 =T0 * pow(alpha,k);
+    T0 =T0 * alpha;//pow(alpha,k);
 
 }
 
@@ -413,10 +429,10 @@ void    SimanBounds::randomBounds(Data &xl,Data &xr)
         double mid = left[i]+(right[i]-left[i])/2.0;
         double l = left[i]+gen.generateDouble()*(mid-left[i]);
         double r = mid+gen.generateDouble()*(right[i]-mid);
-        if(l<X0[i])
+        /* if(l<X0[i])
             l=X0[i]-0.05 * fabs(X0[i]);
         if(r>X0[i])
-            r = X0[i]+0.05 *fabs(X0[i]);
+            r = X0[i]+0.05 *fabs(X0[i]);*/
         xl[i]=l;
         xr[i]=r;
     }
@@ -468,8 +484,8 @@ void    SimanBounds::Solve()
         }
         reduceTemp();
         if(T0<1e-6) break;
-      //  printf("Siman Bounds Generation: %4d Besty: %10.5lf\n",
-      //         k,besty);
+       printf("Siman Bounds Generation: %4d Besty: %10.5lf\n",
+               k,besty);
     }
     left = globalLeft;
     right = globalRight;
@@ -513,11 +529,15 @@ double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)
     {
         for(int j=0;j<n;j++)
         {
-            sample[j]=lb[j]+randomDouble()*(rb[j]-lb[j]);
+            double a = lb[j];
+            double b = rb[j];
+
+            sample[j]=a+randomDouble()*(b-a);
         }
         resetViolationPercent(limit);
         double v=funmin(sample);
-        sum = sum+v*(1.0+getViolationPercent()/100.0);
+        //printf("V[%d]=%lf\n",i,v);
+        sum = sum+v*(1.0+pow(getViolationPercent()/100.0,2.0));
     }
     sum/=nsamples;
   //  printf("Fitness sum = %.10lg\n",sum);

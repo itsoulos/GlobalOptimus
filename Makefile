@@ -1848,7 +1848,8 @@ differentialevolution.o: METHODS/differentialevolution.cpp METHODS/differentiale
 		OPTIMUS/editlogger.h \
 		OPTIMUS/parameterlist.h \
 		MLMODELS/mlpproblem.h \
-		MLMODELS/model.h
+		MLMODELS/model.h \
+		MLMODELS/rbfproblem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o differentialevolution.o METHODS/differentialevolution.cpp
 
 genetic.o: METHODS/genetic.cpp METHODS/genetic.h \
