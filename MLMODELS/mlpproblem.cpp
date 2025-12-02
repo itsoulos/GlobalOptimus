@@ -1,6 +1,7 @@
 #include "mlpproblem.h"
 # include <QDebug>
-# include <QRandomGenerator>
+using Interval = vector<double>; // size = 2*dim
+using Point = vector<double>;
 MlpProblem::MlpProblem()
     :Problem(1)
 {
@@ -16,6 +17,7 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_boundlimit",10.0,1.0,100.0,"Bound limit for weights"));
       addParam(Parameter("mlp_balanceclass",boolValues[1],boolValues,"Enable or disabled balanced classes during train (yes|no)"));
       addParam(Parameter("mlp_outputfile","","The output file for mlp"));
+      addParam(Parameter("mlp_usesimanbound",boolValues[0],boolValues,"Discover bounds using siman"));
 }
 
 Data    MlpProblem::getSample()
@@ -37,7 +39,8 @@ Data    MlpProblem::getSample()
           {
               double a = -1;
               double b = 1;
-
+              if(left[i]>a) a =left[i];
+              if(right[i]<b) b = right[i];
               xx[i]= (a+(b-a)*randomDouble());
           }
       }
@@ -56,7 +59,6 @@ Data    MlpProblem::getSample()
           else
           {
               xx= Problem::getSample();
-              printf("Fx(random)=%lf \n",funmin(xx));
           }
           return xx;
 }
@@ -80,19 +82,20 @@ void    MlpProblem::initWeights()
 
 void    MlpProblem::initModel()
 {
-
-
-    initWeights();/*
-    setParam("mlp_initmethod","smallvalues");
-    Data x0 = getSample();
-    Data xl = left;
-    Data xr = right;
-    findBoundsWithSiman(x0,xl,xr);
-    left  = xl;
-    right = xr;
-    setLeftMargin(xl);
-    setRightMargin(xr);
-    setParam("mlp_initmethod","random");*/
+    initWeights();
+      QString siman = getParam("mlp_usesimanbound").getValue();
+	if(siman == "yes")
+	{
+    		enableBound();
+    		Data xl = left;
+    		Data xr = right;
+    		findBoundsWithSiman(xl,xr);
+    		left  = xl;
+    		right = xr;
+    		setLeftMargin(xl);
+    		setRightMargin(xr);
+    		disableBound();
+	}
 }
 void    MlpProblem::init(QJsonObject &pt)
 {
@@ -160,8 +163,9 @@ double MlpProblem::funmin(Data &x)
 
     if(usebound_flag || useFitnessPerClass)
     {
-        double tt = getViolationPercent();
-        return error*(1.0+tt*tt);
+        double tt = getViolationPercent()/100.0;
+        double lambda = 10;
+        return error*(1.0+lambda * tt*tt);
     }
 
     return error;
@@ -377,118 +381,149 @@ class SimanBounds
 {
 private:
     MlpProblem *problem;
+    int dim;
     Data left,right;
     double T0;
     int neps;
-    int k;
-    Data X0;
-    void    reduceTemp();
-    double  fitness(Data &xl,Data &xr);
-    void    randomBounds(Data &xl,Data &xr);
-    double  besty;
-    QRandomGenerator gen;
+    int seed;
+
+    double rand01(mt19937 &r);
+    double evaluate_interval(const Interval &I, int dim, int samples, mt19937 &rng);
+    Interval neighbor(const Interval &I,
+                      double step,
+                      const Point &GLOBAL_L,
+                      const Point &GLOBAL_U,
+                      mt19937 &rng);
+    Point GLOBAL_L,GLOBAL_U;
+
 public:
-    SimanBounds(Data &x0,MlpProblem *p,Data &xl,Data &xr);
+    SimanBounds(MlpProblem *p,Data &xl,Data &xr,int s=123);
     void    Solve();
     void    getBounds(Data &xl,Data &xr);
     ~SimanBounds();
 };
 
 
-SimanBounds::SimanBounds(Data &x0,MlpProblem *p,Data &xl,Data &xr)
+SimanBounds::SimanBounds(MlpProblem *p,Data &xl,Data &xr,int s)
 {
-    X0 = x0;
+
     problem = p;
+    seed  = s;
+    dim = p->getDimension();
+    GLOBAL_L.resize(dim);
+    GLOBAL_U.resize(dim);
+    for(int i=0;i<dim;i++)
+    {
+        GLOBAL_L[i]=xl[i];
+        GLOBAL_U[i]=xr[i];
+    }
     left = xl;
     right = xr;
-    k=0;
-    T0=1e+8;
-    besty = fitness(xl,xr);
-    neps = 50;
-    gen.seed(1);
+    neps=100;
+    T0=3.0;
 }
 
-double  SimanBounds::fitness(Data &xl,Data &xr)
+// υπολογισμός “ποιότητας” διαστήματος
+double SimanBounds::evaluate_interval(const Interval &I, int dim, int samples, mt19937 &rng)
 {
-    return problem->getViolationPercentInBounds(10.0,xl,xr);
-}
-
-void    SimanBounds::reduceTemp()
-{
-    k=k+1;
-    const double alpha = 0.8;
-    T0 =T0 * alpha;//pow(alpha,k);
-
-}
-
-
-void    SimanBounds::randomBounds(Data &xl,Data &xr)
-{
-    for(int i=0;i<(int)xl.size();i++)
-    {
-        double mid = left[i]+(right[i]-left[i])/2.0;
-        double l = left[i]+gen.generateDouble()*(mid-left[i]);
-        double r = mid+gen.generateDouble()*(right[i]-mid);
-        /* if(l<X0[i])
-            l=X0[i]-0.05 * fabs(X0[i]);
-        if(r>X0[i])
-            r = X0[i]+0.05 *fabs(X0[i]);*/
-        xl[i]=l;
-        xr[i]=r;
+    double best = 1e100;
+    double avg = 0.0;
+    for(int k=0;k<samples;k++) {
+        Point x(dim);
+        for(int i=0;i<dim;i++) {
+            double L = I[2*i];
+            double U = I[2*i+1];
+            uniform_real_distribution<double> ud(L,U);
+            x[i] = ud(rng);
+        }
+        avg+=problem->statFunmin(x);
+        best = min(best, problem->statFunmin(x));
     }
+    return avg/samples;
 }
+
+Interval SimanBounds::neighbor(const Interval &I,
+                  double step,
+                  const Point &GLOBAL_L,
+                  const Point &GLOBAL_U,
+                  mt19937 &rng)
+{
+    normal_distribution<double> N(0,step);
+    Interval J = I;
+
+    // mutation
+    for (double &v : J) 
+    {
+	    int direction = (rand()%2==1)?1:-1;
+	    v = v +direction * N(rng)*v;
+	    //v += N(rng);
+    }
+
+
+    /*
+    // impose bounds
+    for(int i=0;i<GLOBAL_L.size();i++){
+        double &L = J[2*i];
+        double &U = J[2*i+1];
+        L = max(L, GLOBAL_L[i]);
+        U = min(U, GLOBAL_U[i]);
+        if(L > U) std::swap(L,U);
+    }*/
+
+    return J;
+}
+
+double SimanBounds::rand01(mt19937 &r) {
+    return uniform_real_distribution<double>(0.0,1.0)(r);
+}
+
 void    SimanBounds::Solve()
 {
-    Data xl=left,xr=right;
-    Data globalLeft = left;
-    Data globalRight = right;
-    double ypoint = besty;
-    while(true)
-    {
-        Data testLeft = xl;
-        Data testRight = xr;
-        for(int i=1;i<=neps;i++)
-        {
-            randomBounds(testLeft,testRight);
-            double y = fitness(testLeft,testRight);
-            if(y<ypoint)
-            {
-                ypoint = y;
-                xl = testLeft;
-                xr = testRight;
-                if(ypoint<besty)
-                {
-                    besty=ypoint;
-                    globalLeft = xl;
-                    globalRight = xr;
-                }
-            }
-            else
-            {
-                double r = (rand()*1.0/RAND_MAX);
-                double ratio = exp(-(y-ypoint)/T0);
-                double xmin = ratio<1?ratio:1;
-                if(r<xmin)
-                {
-                    ypoint = y;
-                    xl = testLeft;
-                    xr = testRight;
-                    if(ypoint<besty)
-                    {
-                        besty=ypoint;
-                        globalLeft = xl;
-                        globalRight = xr;
-                    }
+    mt19937 rng(seed);
+
+    double T = T0;
+    double T_end=1e-3;
+    double alpha=0.95;
+    Interval I(2*dim);
+    for(int i=0;i<dim;i++){
+        double a = left[i];
+        double b = right[i];
+        double width = (b-a);
+        double mid = a+width/2;
+        double p = 0.1;
+
+        I[2*i]   = mid-p *rand01(rng) * width;
+        I[2*i+1] = mid+p *rand01(rng) * width;
+    }
+    double score = evaluate_interval(I,dim,25,rng);
+    Interval bestI=I;
+    double bestScore=score;
+    while(T>T_end){
+        for(int it=0;it<neps;it++){
+            Interval J = neighbor(I, 0.05, GLOBAL_L, GLOBAL_U, rng);
+            double s2  = evaluate_interval(J,dim,25,rng);
+
+            double dE = s2-score;
+
+            if(dE<0 || rand01(rng)<exp(-dE/T)){
+                I=J;
+                score=s2;
+                if(score<bestScore){
+                    bestScore=score;
+                    bestI=I;
                 }
             }
         }
-        reduceTemp();
-        if(T0<1e-6) break;
-       printf("Siman Bounds Generation: %4d Besty: %10.5lf\n",
-               k,besty);
+        T*=alpha;
+        printf("SIMAN. T=%lf BEST=%lf \n",T,bestScore);
     }
-    left = globalLeft;
-    right = globalRight;
+    cout<<"Best interval found: \n";
+    for(int i=0;i<dim;i++){
+        left[i]=bestI[2*i];
+        right[i]=bestI[2*i+1];
+        cout<<"param "<<i<<" in ["<<bestI[2*i]<<","<<bestI[2*i+1]<<"]\n";
+    }
+    cout<<"score="<<bestScore<<"\n";
 }
 
 void    SimanBounds::getBounds(Data &xl,Data &xr)
@@ -502,11 +537,12 @@ SimanBounds::~SimanBounds()
 
 }
 
-void    MlpProblem::findBoundsWithSiman(Data &x0,Data &xl,Data &xr)
+int run = 1;
+void    MlpProblem::findBoundsWithSiman(Data &xl,Data &xr)
 {
     Data xl_old = xl;
     Data xr_old = xr;
-    SimanBounds b(x0,this,xl,xr);
+    SimanBounds b(this,xl,xr,123+run++);
 
     b.Solve();
     b.getBounds(xl,xr);

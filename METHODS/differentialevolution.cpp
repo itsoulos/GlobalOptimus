@@ -237,7 +237,7 @@ void DifferentialEvolution::step()
                     }
 
                     MlpProblem *neural = dynamic_cast<MlpProblem*>(myProblem);
-                    neural->findBoundsWithSiman(trialx,xl,xr);
+                    neural->findBoundsWithSiman(xl,xr);
                     for(int k=0;k<myProblem->getDimension();k++)
                     {
                         if(trialx[k]<xl[k])

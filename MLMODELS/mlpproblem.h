@@ -114,7 +114,7 @@ public:
      * @param xl
      * @param xr
      */
-    void    findBoundsWithSiman(Data &x0,Data &xl,Data &xr);
+    void    findBoundsWithSiman(Data &xl,Data &xr);
     /**
      * @brief getSampleNoViolate
      * @return
