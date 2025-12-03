@@ -164,7 +164,7 @@ double MlpProblem::funmin(Data &x)
     if(usebound_flag || useFitnessPerClass)
     {
         double tt = getViolationPercent()/100.0;
-        double lambda = 10;
+        double lambda = 1;
         return error*(1.0+lambda * tt*tt);
     }
 
@@ -428,15 +428,24 @@ double SimanBounds::evaluate_interval(const Interval &I, int dim, int samples, m
 {
     double best = 1e100;
     double avg = 0.0;
+    mt19937 rng2(1);
     for(int k=0;k<samples;k++) {
         Point x(dim);
         for(int i=0;i<dim;i++) {
             double L = I[2*i];
             double U = I[2*i+1];
             uniform_real_distribution<double> ud(L,U);
-            x[i] = ud(rng);
+            x[i] = ud(rng2);
+        /*double a = L;
+        double b = U;
+        double width = (b-a);
+        double mid = a+width/2;
+        double p = 0.1;
+	int direction=rand()%2==0?1:-1;
+	x[i]=mid + direction * p *rand01(rng)*width;*/
         }
-        avg+=problem->statFunmin(x);
+	double f = problem->funmin(x);
+        avg+=f;
         best = min(best, problem->statFunmin(x));
     }
     return avg/samples;
@@ -500,7 +509,7 @@ void    SimanBounds::Solve()
     double bestScore=score;
     while(T>T_end){
         for(int it=0;it<neps;it++){
-            Interval J = neighbor(I, 0.05, GLOBAL_L, GLOBAL_U, rng);
+            Interval J = neighbor(I, 0.01, GLOBAL_L, GLOBAL_U, rng);
             double s2  = evaluate_interval(J,dim,25,rng);
 
             double dE = s2-score;
