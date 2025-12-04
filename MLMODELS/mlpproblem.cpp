@@ -501,8 +501,8 @@ void    SimanBounds::Solve()
         double mid = a+width/2;
         double p = 0.1;
 
-        I[2*i]   = mid-p *rand01(rng) * width;
-        I[2*i+1] = mid+p *rand01(rng) * width;
+        I[2*i]   = a;//mid-p *rand01(rng) * width;
+        I[2*i+1] = b;//mid+p *rand01(rng) * width;
     }
     double score = evaluate_interval(I,dim,25,rng);
     Interval bestI=I;

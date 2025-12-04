@@ -15,7 +15,7 @@ DATAFILE=$1
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]; then
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=yes"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
