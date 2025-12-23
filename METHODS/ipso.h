@@ -3,15 +3,30 @@
 
 # include <OPTIMUS/collection.h>
 # include <OPTIMUS/optimizer.h>
-
-/**
- * @brief The iPso class implements the Improved PSO optimizer.
- */
 class iPso : public Optimizer
 {
 
 private:
+    double wmin ;
+    double wmax ;
+    int    maxGenerations ;
+    double c1 ;
+    double c2 ;
+    bool ipso_isneural ;
+    bool ipso_neuralsampling;
+    QString t;
+
+
+    int genome_size ;
+    Data distances;
+
+    double inertia = 0.5;
     bool centerPso;
+    int lastImprovementGen;
+   double  lastBesty ;
+   vector<vector<double>> samples;
+
+   int  restartCount ;
     int ipso_particles;
     double sum,newSum, besty_tmp,zeta;
     int n,sumn;
@@ -23,62 +38,41 @@ private:
     Data bestx, worstx;
     Data fitness_array;
     Data bestFitness_array;
+    // Απλός restart μηχανισμός
+    bool restart_enabled ;
+    int stall_generations;
+    int max_grestarts;
+     int max_generations;
     vector<Data> minimax;
     int generation, bestIndex;
     double x1, x2, stopat, variance, besty, worsty, oldbesty, oldworsty;
     Data lmargin, rmargin;
     double RC;
     int localSearchCount;
+    QString mechStr ;
+    int moveMode; // 0=standard, 1=turbulence, 2=spiral
 
-    /**
-     * @brief fitness
-     * @param x
-     * @return the fitness value of particle x.
-     */
+    double turbulence_rate ;
+    double turbulence_scale;
+    double spiral_rate ;
+    double spiral_scale ;
+    double ipso_neuralw;
+
+    double mean_range = 0.0;
+
     double fitness(Data &x);
-    /**
-     * @brief checkGradientCriterion
-     * @param x
-     * @return Check if gradient criterion holds for particle x.
-     */
     bool checkGradientCriterion(Data &x);
-    /**
-     * @brief calcFitnessArray Calculates the fitness values for all particles.
-     */
+    double getDistance(Data &x, Data &y);
     void calcFitnessArray();
-    /**
-     * @brief updateBest Updates the best particle.
-     */
     void updateBest();
-    /**
-     * @brief updateCenter Updates the center particle (for center pso).
-     */
     void updateCenter();
+
 public:
-    /**
-     * @brief iPso The constructor of the class.
-     */
     iPso();
-    /**
-     * @brief init Initializes the particles and velocities.
-     */
     virtual void init();
-    /**
-     * @brief step Performs a step of the PSO.
-     */
     virtual void step();
-    /**
-     * @brief terminated
-     * @return true when PSO should be terminated.
-     */
     virtual bool terminated();
-    /**
-     * @brief showDebug Displays debug information.
-     */
     virtual void showDebug();
-    /**
-     * @brief done It is called when PSO finishes.
-     */
     virtual void done();
     virtual ~iPso();
 };

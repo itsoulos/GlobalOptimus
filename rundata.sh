@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=Genetic
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -15,7 +15,7 @@ DATAFILE=$1
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]; then
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=yes"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
@@ -132,7 +132,7 @@ elif [ $METHOD = "iPso" ]; then
   #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
   #ipso_gradientcheck: usage of gradient rejection rule (true|false)
   #ipso_inertiatype: selection of inertia calcuation mechanism
-  METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.005 --ipso_stoppingrule=best_fitness -ipso_gradientcheck=false --ipso_inertiatype=5 "
+METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=similarity --ipso_gradientcheck=false --ipso_inertiatype=20 --ipso_movemechanism=turbulence --ipso_restart=yes --ipso_restart_stall=3 --ipso_restart_max=10" 
 
 elif [ $METHOD = "NeuralMinimizer" ]; then
 

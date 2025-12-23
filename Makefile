@@ -1450,7 +1450,10 @@ ipso.o: METHODS/ipso.cpp METHODS/ipso.h \
 		OPTIMUS/logger.h \
 		OPTIMUS/filelogger.h \
 		OPTIMUS/editlogger.h \
-		OPTIMUS/parameterlist.h
+		OPTIMUS/parameterlist.h \
+		MLMODELS/mlpproblem.h \
+		MLMODELS/model.h \
+		MLMODELS/rbfproblem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ipso.o METHODS/ipso.cpp
 
 lbfgs.o: METHODS/lbfgs.cpp METHODS/lbfgs.h \
