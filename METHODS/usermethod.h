@@ -1,39 +1,41 @@
 #ifndef USERMETHOD_H
 #define USERMETHOD_H
-# include <OPTIMUS/optimizer.h>
 
-/**
- * @brief The UserMethod class is the skeleton class for the used defined optimization methods. The user should extend this class.
- */
-class UserMethod :public Optimizer
+#include <OPTIMUS/optimizer.h>
+#include <vector>
+#include <cmath>
+
+class UserMethod : public Optimizer
 {
 private:
-    int paramValue;
+    // Παράμετροι
+    int popSize;
+    int maxIters;
+    double tol;
+
+    // Μεταβλητές κατάστασης
+    std::vector<std::vector<double>> population;
+    std::vector<double> fitness;
+
+    int bestIdx;
+    int worstIdx;
+    int currentIter;
+
+    // Αποθήκευση του καλύτερου σημείου
+    std::vector<double> globalBestX;
+    double globalBestY;
+
+    // Βοηθητικές συναρτήσεις
+    void findBestWorst();
+    double randDouble(double min, double max);
+    void enforceBounds(std::vector<double> &x);
+
 public:
-    /**
-     * @brief UserMethod
-     */
     UserMethod();
-    /**
-     * @brief init
-     */
     virtual void init();
-    /**
-     * @brief step
-     */
     virtual void step();
-    /**
-     * @brief terminated
-     * @return
-     */
     virtual bool terminated();
-    /**
-     * @brief done
-     */
     virtual void done();
-    /**
-     * @brief ~UserMethod
-     */
     virtual ~UserMethod();
 };
 
