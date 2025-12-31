@@ -27,6 +27,7 @@
 # include <METHODS/armadillo1.h>
 # include <METHODS/gwooptimizer.h>
 # include <METHODS/trio.h>
+# include <METHODS/pdoublegenetic.h>
 
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
@@ -100,6 +101,8 @@ void loadMethods()
     methodName<<"EO";
     method<<new TRIO;
     methodName<<"Trident";
+    method<<new pDoubleGenetic;
+    methodName<<"PdoubleGenetic";
 
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
@@ -387,7 +390,7 @@ int main(int argc, char *argv[])
     printf("Average Train Error     : %20.10lg\n",average_train_error/times);
     printf("Average Test  Error     : %20.10lg\n",average_test_error/times);
     printf("Average Class Error     : %20.10lg%%\n",average_class_error/times);
-    printf("Average Error(PER CLASS): %20.10lg%%\n",average_class_error2/times);
+    //printf("Average Error(PER CLASS): %20.10lg%%\n",average_class_error2/times);
     printf("Average Precision       : %20.10lg\n",average_precision/times);
     printf("Average Recall          : %20.10lg\n",average_recall/times);
     printf("Average Fscore          : %20.10lg\n",average_fscore/times);

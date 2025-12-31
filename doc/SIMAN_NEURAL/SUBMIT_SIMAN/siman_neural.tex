@@ -1,0 +1,2154 @@
+%% LyX 2.4.3 created this file.  For more info, see https://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+\usepackage[utf8]{inputenc}
+\synctex=-1
+\usepackage{float}
+\usepackage{url}
+\usepackage{varwidth}
+\usepackage{amstext}
+\usepackage{graphicx}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+
+\Title{Optimizing the bounds of neural networks using a novel simulated annealing
+method}
+
+\Author{Ioannis G. Tsoulos$^{1,*}$, Vasileios Charilogis$^{2}$ and Dimitrios
+Tsalikakis$^{3}$}
+
+\AuthorNames{Ioannis G. Tsoulos, Vasileios Charilogis and Dimitrios Tsalikakis }
+
+
+\address{$^{1}$\quad{}Department of Informatics and Telecommunications,
+University of Ioannina, Greece;itsoulos@uoi.gr\\
+$^{2}$\quad{}Department of Informatics and Telecommunications, University
+of Ioannina, Greece; v.charilog@uoi.gr\\
+$^{3}\quad$Department of Engineering Informatics and Telecommunications,
+University of Western Macedonia, 50100 Kozani, Greece;tsalikakis@gmail.com}
+
+
+\corres{Correspondence: itsoulos@uoi.gr}
+
+
+\abstract{Artificial neural networks are reliable machine learning models that
+have been applied to a multitude of practical and scientific applications
+in recent decades. Among these applications there are examples from
+the areas of physics, chemistry, medicine, etc. For their effective
+application to these problems, it is necessary to adapt their parameters
+using optimization techniques. However, in order to be effective,
+optimization techniques must know the range of values for the parameters
+of the artificial neural network, so that they can adequately train
+the artificial neural network. In most cases, this is not possible,
+as these ranges are also significantly affected by the inputs to the
+artificial neural network from the objective problem it is called
+upon to solve. This situation usually results in artificial neural
+networks becoming trapped in local minima of the error function or,
+even worse, in the phenomenon of overfitting, where although the training
+error achieves low values, the artificial neural network exhibits
+low performance in the corresponding test set. The present work proposes
+the introduction of an additional stage in the training of artificial
+neural networks before the application of the optimization method,
+in which stage a method based on simulated annealing is used to effectively
+identify the optimal value interval for the parameters of the artificial
+neural network. Subsequently, the optimization method will adjust
+the parameters of the artificial neural network within the optimal
+value interval of the first stage. The proposed method has been successfully
+applied to a wide range of classification and regression problems
+and comparative results are presented in detail in the present work.}
+
+
+\keyword{Neural networks; Simulated Annealing; Optimization methods}
+
+\newcommand*\LyXZeroWidthSpace{\hspace{0pt}}
+\DeclareTextSymbolDefault{\textquotedbl}{T1}
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+%% Variable width box for table cells
+\newenvironment{cellvarwidth}[1][t]
+    {\begin{varwidth}[#1]{\linewidth}}
+    {\@finalstrut\@arstrutbox\end{varwidth}}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%  LaTeX support: latex@mdpi.com 
+%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+
+%=================================================================
+%\documentclass[preprints,article,submit,pdftex,moreauthors]{Definitions/mdpi} 
+% For posting an early version of this manuscript as a preprint, you may use "preprints" as the journal. Changing "submit" to "accept" before posting will remove line numbers.
+
+% Below journals will use APA reference format:
+% admsci, aieduc, behavsci, businesses, econometrics, economies, education, ejihpe, famsci, games, humans, ijcs, ijfs, jintelligence, journalmedia, jrfm, jsam, languages, peacestud, psycholint, publications, tourismhosp, youth
+
+% Below journals will use Chicago reference format:
+% arts, genealogy, histories, humanities, laws, literature, religions, risks, socsci
+
+%--------------------
+% Class Options:
+%--------------------
+%----------
+% journal
+%----------
+% Choose between the following MDPI journals:
+% accountaudit, acoustics, actuators, addictions, adhesives, admsci, adolescents, aerobiology, aerospace, agriculture, agriengineering, agrochemicals, agronomy, ai, aichem, aieduc, aieng, aimater, aimed, aipa, air, aisens, algorithms, allergies, alloys, amh, analog, analytica, analytics, anatomia, anesthres, animals, antibiotics, antibodies, antioxidants, applbiosci, appliedchem, appliedmath, appliedphys, applmech, applmicrobiol, applnano, applsci, aquacj, architecture, arm, arthropoda, arts, asc, asi, astronautics, astronomy, atmosphere, atoms, audiolres, automation, axioms, bacteria, batteries, bdcc, behavsci, beverages, biochem, bioengineering, biologics, biology, biomass, biomechanics, biomed, biomedicines, biomedinformatics, biomimetics, biomolecules, biophysica, bioresourbioprod, biosensors, biosphere, biotech, birds, blockchains, bloods, blsf, brainsci, breath, buildings, businesses, cancers, carbon, cardio, cardiogenetics, cardiovascmed, catalysts, cells, ceramics, challenges, chemengineering, chemistry, chemosensors, chemproc, children, chips, cimb, civileng, cleantechnol, climate, clinbioenerg, clinpract, clockssleep, cmd, cmtr, coasts, coatings, colloids, colorants, commodities, complexities, complications, compounds, computation, computers, condensedmatter, conservation, constrmater, cosmetics, covid, crops, cryo, cryptography, crystals, csmf, ctn, culture, curroncol, cyber, dairy, data, ddc, dentistry, dermato, dermatopathology, designs, devices, dhi, diabetology, diagnostics, dietetics, digital, disabilities, diseases, diversity, dna, drones, dynamics, earth, ebj, ecm, ecologies, econometrics, economies, edm, education, eesp, ejihpe, electricity, electrochem, electronicmat, electronics, encyclopedia, endocrines, energies, eng, engproc, entomology, entropy, environments, environremediat, epidemiologia, epigenomes, esa, est, famsci, fermentation, fibers, fintech, fire, fishes, fluids, foods, forecasting, forensicsci, forests, fossstud, foundations, fractalfract, fuels, future, futureinternet, futurepharmacol, futurephys, futuretransp, galaxies, games, gases, gastroent, gastrointestdisord, gastronomy, gels, genealogy, genes, geographies, geohazards, geomatics, geometry, geosciences, geotechnics, geriatrics, germs, glacies, grasses, green, greenhealth, gucdd, hardware, hazardousmatters, healthcare, hearts, hemato, hematolrep, hep, heritage, higheredu, highthroughput, histories, horticulturae, hospitals, humanities, humans, hydrobiology, hydrogen, hydrology, hydropower, hygiene, idr, iic, ijcs, ijem, ijerph, ijfs, ijgi, ijmd, ijms, ijns, ijom, ijpb, ijt, ijtm, ijtpp, ime, immuno, informatics, information, infrastructures, inorganics, insects, instruments, inventions, iot, j, jaestheticmed, jal, jcdd, jcm, jcp, jcrm, jcs, jcto, jdad, jdb, jdream, jemr, jeta, jfb, jfmk, jgbg, jgg, jimaging, jintelligence, jlpea, jmahp, jmmp, jmms, jmp, jmse, jne, jnt, jof, joi, joitmc, joma, jop, joptm, jor, journalmedia, jox, jpbi, jphytomed, jpm, jrfm, jsam, jsan, jtaer, jvd, jzbg, kidneydial, kinasesphosphatases, knowledge, labmed, laboratories, lae, land, languages, laws, life, lights, limnolrev, lipidology, liquids, literature, livers, logics, logistics, lubricants, lymphatics, machines, macromol, magnetism, magnetochemistry, make, marinedrugs, materials, materproc, mathematics, mca, measurements, medicina, medicines, medsci, membranes, merits, metabolites, metals, meteorology, methane, metrics, metrology, micro, microarrays, microbiolres, microelectronics, micromachines, microorganisms, microplastics, microwave, minerals, mining, mmphys, modelling, molbank, molecules, mps, msf, mti, multimedia, muscles, nanoenergyadv, nanomanufacturing, nanomaterials, ncrna, ndt, network, neuroglia, neuroimaging, neurolint, neurosci, nitrogen, notspecified, nursrep, nutraceuticals, nutrients, obesities, occuphealth, oceans, ohbm, onco, optics, oral, organics, organoids, osteology, oxygen, pandemics, parasites, parasitologia, particles, pathogens, pathophysiology, peacestud, pediatrrep, pets, pharmaceuticals, pharmaceutics, pharmacoepidemiology, pharmacy, philosophies, photochem, photonics, phycology, physchem, physics, physiologia, plants, plasma, platforms, pollutants, polymers, polysaccharides, populations, poultry, powders, precipitation, precisoncol, preprints, proceedings, processes, prosthesis, proteomes, psf, psychiatryint, psychoactives, psycholint, publications, purification, quantumrep, quaternary, qubs, radiation, rdt, reactions, realestate, receptors, recycling, regeneration, religions, remotesensing, reports, reprodmed, resources, rheumato, risks, rjpm, robotics, rsee, ruminants, safety, sci, scipharm, sclerosis, seeds, sensors, separations, sexes, shi, signals, sinusitis, siuj, skins, smartcities, sna, societies, socsci, software, soilsystems, solar, solids, spectroscj, sports, standards, stats, std, stratsediment, stresses, surfaces, surgeries, suschem, sustainability, symmetry, synbio, systems, tae, targets, taxonomy, technologies, telecom, test, textiles, thalassrep, therapeutics, thermo, timespace, tomography, tourismhosp, toxics, toxins, tph, transplantology, transportation, traumacare, traumas, tri, tropicalmed, universe, urbansci, uro, vaccines, vehicles, venereology, vetsci, vibration, virtualworlds, viruses, vision, waste, water, welding, wem, wevj, wild, wind, women, world, youth, zoonoticdis
+
+%---------
+% article
+%---------
+% The default type of manuscript is "article", but can be replaced by: 
+% abstract, addendum, article, book, bookreview, briefreport, casereport, comment, commentary, communication, conferenceproceedings, correction, conferencereport, entry, expressionofconcern, extendedabstract, datadescriptor, editorial, essay, erratum, hypothesis, interestingimage, obituary, opinion, projectreport, reply, retraction, review, perspective, protocol, shortnote, studyprotocol, systematicreview, supfile, technicalnote, viewpoint, guidelines, registeredreport, tutorial
+% supfile = supplementary materials
+
+%----------
+% submit
+%----------
+% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g., the logo of the journal will get visible), the headings, and the copyright information. Also, line numbering will be removed. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
+
+%------------------
+% moreauthors
+%------------------
+% If there is only one author the class option oneauthor should be used. Otherwise use the class option moreauthors.
+
+%---------
+% pdftex
+%---------
+% The option pdftex is for use with pdfLaTeX. If eps figures are used, remove the option pdftex and use LaTeX and dvi2pdf.
+
+%=================================================================
+% MDPI internal commands - do not modify
+\firstpage{1} 
+\setcounter{page}{\@firstpage}
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2026}
+\copyrightyear{2025}
+%\externaleditor{Firstname Lastname} % More than 1 editor, please add `` and '' before the last editor name
+\datereceived{}
+\daterevised{ } % Comment out if no revised date
+\dateaccepted{}
+\datepublished{}
+%\datecorrected{} % For corrected papers include a "Corrected: XXX" date in the original paper.
+%\dateretracted{} % For retracted papers include a "RETRACTED: XXX" date in the original paper.
+%\doinum{} % Used for some special journals, like molbank
+%\pdfoutput=1 % Uncommented for upload to arXiv.org
+%\CorrStatement{yes}  % For updates
+%\longauthorlist{yes} % For many authors that exceed the left citation part
+%\IsAssociation{yes} % For association journals
+
+%=================================================================
+% Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, lineno, float, amsmath, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, cleveref, amsthm, hyphenat, natbib, hyperref, footmisc, url, geometry, newfloat, caption
+
+%=================================================================
+%% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
+%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
+
+%=================================================================
+% The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
+%\PACS{J0101}
+%\MSC{}
+%\JEL{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Diversity
+%\LSID{\url{http://}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Applied Sciences:
+%\featuredapplication{Authors are encouraged to provide a concise description of the specific application or a potential application of the work. This section is not mandatory.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Data:
+%\dataset{DOI number or link to the deposited data set in cases where the data set is published or set to be published separately. If the data set is submitted and will be published as a supplement to this paper in the journal Data, this field will be filled by the editors of the journal. In this case, please make sure to submit the data set as a supplement when entering your manuscript into our manuscript editorial system.}
+
+%\datasetlicense{license under which the data set is made available (CC0, CC-BY, CC-BY-SA, CC-BY-NC, etc.)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal BioTech, Fishes, Neuroimaging and Toxins
+%\keycontribution{The breakthroughs or highlights of the manuscript. Authors can write one or two sentences to describe the most important part of the paper.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Encyclopedia
+%\encyclopediadef{Instead of the abstract}
+%\entrylink{The Link to this entry published on the encyclopedia platform.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Different journals have different requirements. Please check the specific journal guidelines in the "Instructions for Authors" on the journal's official website.
+ 
+%\addhighlights{yes}
+%\renewcommand{\addhighlights}{%
+%
+%\noindent The goal is to increase the discoverability and readability of the article via search engines and other scholars. Highlights should not be a copy of the abstract, but a simple text allowing the reader to quickly and simplified find out what the article is about and what can be cited from it. Each of these parts should be devoted up to 2 bullet points.\vspace{3pt}\\
+%\textbf{What are the main findings?}
+% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+% \item First bullet.
+% \item Second bullet.
+% \end{itemize}\vspace{3pt}
+%\textbf{What are the implications of the main findings?}
+% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+% \item First bullet.
+% \item Second bullet.
+% \end{itemize}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatother
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Artificial neural networks are among the most commonly used machine
+learning models for solving classification and regression tasks \citep{nn1,nn2}.
+These models are typically formulated as functions $N\left(\overrightarrow{x},\overrightarrow{w}\right)$,
+where the vector $\overrightarrow{x}\in\mathbb{R}^{d}$ represents
+the input pattern and $\overrightarrow{w}$ denotes the set of trainable
+parameters of the neural network. Model training is achieved by minimizing
+the training error, which is defined by the following expression:
+\begin{equation}
+\mbox{E}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\end{equation}
+The set $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$ stands
+for the associated training set of the objective problem. In this
+set each value $y_{i}$ corresponds to the desired output for the
+pattern $\overrightarrow{x_{i}}$. As suggested in \citep{nnc}, a
+neural network could be expressed as a function with the following
+definition:
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+In this equation, the value $H$ represents the number of desired
+processing units. Also, the function $\sigma(x)$ stands for the the
+sigmoid function, expressed as:
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
+\end{equation}
+The total number of parameters for neural network can be calculated
+as $n=(d+2)H$, using the equation \ref{eq:nn}.\textbf{ }Moreover,
+a series of alternative activation functions has been proposed in
+the related literature, such as the tanh expressed as:
+\begin{equation}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\end{equation}
+Additionally, Guarnieri et al proposed the incorporation of an adaptive
+spline function as the activation function\citep{activation_spline}.
+Likewise, Ertuğrul proposed the usage of a trained activation function
+\citep{activation_trained}. A systematic review on activation functions
+for neural networks can be found in the recent publication of\textbf{
+}Rasamoelina et al \citep{activation_review}.
+
+These machine learning models have been used efficiently in a series
+of practical problems, such as image processing \citep{nn_image},
+time series forecasting \citep{nn_timeseries}, economic problems
+\citep{nn_credit}, problems presented in experiments in physics \citep{nnphysics1,nnphysics2}
+etc. More recent works applied the neural networks to problems appeared
+in\textbf{ }flood simulation \citep{nn_flood}, solar radiation prediction
+\citep{nn_solar}, agricultural \citep{nn_agro}, computer networks
+\citep{nn_wireless}, medicine \citep{nnmed1,nnmed2}, mechanical
+applications \citep{nn_mech1} etc.
+
+The equation \ref{eq:eq1} has been tackled by a variety of optimization
+procedures during the past years, such as the\textbf{ }Back Propagation
+algorithm \citep{bpnn2}, the RPROP algorithm \citep{rpropnn-1,rpropnn-2},
+the ADAM method \citep{nn_adam} etc. Additionally, global optimization
+methods have been incorporated to train neural networks. Among them
+one can detect the usage of\textbf{ }Genetic Algorithms \citep{geneticnn1,geneticnn2},
+the Particle Swarm Optimization (PSO) method \citep{psonn}, the Simulated
+Annealing optimization technique \citep{nn_siman}, the Differential
+Evolution method \citep{weight_de1}, the Artificial Bee Colony (ABC)
+method \citep{nn_abc}, application of the Gray Wolf optimization
+method \citep{nn_wolf}, etc.\textbf{ }Also, Sexton et al introduced
+the usage of the tabu search algorithm in the training process of
+neural networks \citep{tabunn}.\textbf{ }Also, a hybrid algorithm
+that incorporates the PSO method and the Back Propagation algorithm
+was suggested by Zhang et al \citep{nn_hybrid}. Zhao et al introduced
+a Cascaded Forward Algorithm for optimal training of artificial neural
+networks \citep{nn_cascade}. Moreover, the extensive adoption of
+parallel computing approaches in recent years has led to numerous
+studies focusing on the training of artificial neural networks using
+these methods \citep{nn_gpu1,nn_gpu2}.
+
+Although, the previously mentioned method face a series of numeric
+problems, such as trapping in local minima of the error function provided
+in equation \ref{eq:eq1} or sometimes are prone to the issue of overifitting.
+In overfitting, the neural network demonstrates degraded performance
+when applied to data that were not present during the training phase.
+The overfitting issue has been studied by various researches during
+the past years and a variety of algorithms have been proposed for
+this problem, such as the weight sharing method \citep{nnsharing1,nnsharing2},
+pruning methods \citep{nnprunning1,nnprunning2}, early stopping techniques
+\citep{nnearly1,nnearly2}, weight decaying \citep{nndecay1,nndecay2}
+etc. Another way to handle this problem is to dynamically create the
+architecture of artificial neural networks. In this direction of research,
+various studies were presented, such as the use of genetic algorithms
+\citep{nn_arch1,nn_arch2} or the use of the PSO technique for the
+efficient creation of the architecture of artificial neural networks
+\citep{nn_arch3}. Another method that was proposed to handle the
+overfitting problem is the incorporation of reinforcement learning
+as suggested by Siebel at al. \citep{nn_ereinf}. 
+
+The current work introduces a new method, that is based on the Simulated
+Annealing approach to identify the optimal range of values for the
+parameters of the neural network before the incorporation of the training
+method. The first phase method creates various test value intervals
+which it adjusts appropriately through the usage of an innovative
+technique based on Simulated Annealing. This method starts from an
+initial range of values \LyXZeroWidthSpace\LyXZeroWidthSpace which
+can be expanded or contracted in an attempt to avoid the phenomenon
+of overfitting. After the end of the first phase, the artificial neural
+network is trained within the optimal value interval identified in
+the first phase using any optimization technique.
+
+The rest of this manuscript is organized as follows: the used dataset
+and the incorporated methods used in the conducted experiments are
+outlined in section \ref{sec:Materials-and-Methods}, the experimental
+results are shown and discussed in section \ref{sec:Results} and
+finally a detailed discussion is provided in section \ref{sec:Conclusions}.
+
+\section{Materials and Methods\label{sec:Materials-and-Methods}}
+
+In this section, the new technique for locating the value range for
+the parameters of the artificial neural network will be presented
+as well as the final method for training the parameters within the
+optimal value range of the first phase. In the current work, a genetic
+algorithm was used for the final adjustment of the parameters of the
+artificial neural network.
+
+\subsection{The proposed Simulated Annealing variant \label{subsec:The-proposed-Simulated}}
+
+A variant of the Simulated Annealing procedure is used a the method
+of the first phase of the current work. The Simulated Annealing is
+an optimization procedure \citep{siman1}, that can be used in a magnitude
+of problems, such as resource allocation \citep{sa_resource}, portfolio
+problems \citep{sa_portfolio}, energy problems \citep{sa_solar},
+biology \citep{sa_biology}, multi objective optimization \citep{sa_multi},
+the timetabling problem \citep{sa_timetable}, the traveling salesman
+problem \citep{sa_tsp} etc. The behavior of this algorithm is controlled
+by a positive parameter that resembles the annealing temperature in
+physics. At high temperatures the algorithm performs a wider search
+in the value range of the objective problem and as the temperature
+decreases the algorithm focuses on some possible minima of the objective
+function. Temperature reduction can be achieved by different cooling
+mechanisms, as reported in the relevant literature \citep{sa_cooling1,sa_cooling2}. 
+
+The proposed modification constructs candidate intervals for the neural
+network parameters and assesses each interval by generating multiple
+random parameter configurations within it. The mean error of the resulting
+neural networks is then used as the performance measure for the corresponding
+interval. Also, To avoid the phenomenon of overtraining, a technique
+proposed in the publication of Anastasopoulos et al. \citep{nnt_bound}
+is used and the quantity $B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+introduced in that publication is used here also. To calculate this
+quantity, it is assumed that the sigmoid function with the following
+definition is used as the activation function of the artificial neural
+network:
+
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}
+\end{equation}
+A typical plot for the sigmoid function in the range $[-5,5]$ is
+outlined in Figure \ref{fig:plotsigma}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{sig}
+\par\end{centering}
+\caption{Plot of the sigmoid function $\sigma(x)$ in the range $[-5,5]$.\label{fig:plotsigma}}
+\end{figure}
+As can be observed from both the analytical expression and the corresponding
+figure, the function exhibits rapid saturation, asymptotically approaching
+1 for large positive values of the parameter $x$ and converging to
+0 for large negative values. This saturation behavior significantly
+limits the function’s generalization capacity, since substantial variations
+in $x$ result in only marginal changes in the output of the sigmoid
+function. The quantity $B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+was introduced in that paper can be used to measure this effect. 
+
+This quantity is computed according to Algorithm \ref{alg:CalculationBound}.
+The resulting function can be employed as a regularization mechanism
+to mitigate overfitting by constraining the neural network parameters
+within problem-dependent intervals. The user-defined parameter $a$
+serves as an upper bound on the input of the sigmoid unit. When this
+bound is exceeded, the network is likely to exhibit diminished generalization
+performance, as the sigmoid function enters a saturation regime in
+which variations in the input no longer produce meaningful changes
+in the output.
+
+\begin{algorithm}[H]
+\caption{The following algorithm is used to calculate the quantity for neural
+network $N(x,w)$ and a provided input $a$.\label{alg:CalculationBound}}
+
+\textbf{function} $\mbox{calculateB}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+\begin{enumerate}
+\item \textbf{Inputs}: The Neural network $N\left(\overrightarrow{x},\overrightarrow{w}\right)$
+and the bound parameter $a,\ a>1$.
+\item \textbf{Set} $k=0$
+\item \textbf{For} $i=1..H$ \textbf{Do}
+\begin{enumerate}
+\item \textbf{For} $j=1..M$ \textbf{Do}
+\begin{enumerate}
+\item \textbf{Set} $b=\sum_{k=1}^{d}w_{(d+2)i-(d+i)+k}x_{jk}+w_{(d+2)i}$
+\item \textbf{If} $\left|b\right|>a$ \textbf{set} $k=k+1$
+\end{enumerate}
+\item \textbf{EndFor}
+\end{enumerate}
+\item \textbf{EndFor}
+\item \textbf{Return} $\frac{k}{H\star M}$
+\end{enumerate}
+\textbf{End Function}
+\end{algorithm}
+
+The proposed Simulated Annealing variant produces randomly intervals
+for the parameters of the neural network. Each interval is evaluated
+for its efficiency using the procedure presented in Algorithm \ref{alg:fitness}.
+The behavior of the proposed method is controlled by a variable representing
+the temperature. At high temperatures the method searches a wider
+range of the problem and may generate value ranges for the neural
+network parameters that will have a large range. However, as the temperature
+drops, the method focuses on value ranges that are more promising.
+The main steps of this method are given in Algorithm \ref{alg:simanVariant}.
+
+\begin{algorithm}[H]
+\caption{The main steps of the proposed Simulated Annealing variant.\label{alg:simanVariant}}
+
+\textbf{Function} simanMethod$\left(I_{w},T_{0},r_{T},N_{\mbox{\mbox{eps}}},a,p_{c}\right)$
+
+\textbf{Inputs}: 
+\begin{itemize}
+\item The weight factor $I_{w}$
+\item The initial temperature $T_{0}$
+\item The reduction factor used for the temperature $r_{T},\ r_{T}>0,\ r_{T}<1$
+\item The number of random intervals produced at each iteration is denoted
+as $N_{\mbox{eps}}$ 
+\item The scale factor $a$ used in the function $B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$.
+\item The perturbation factor $p_{c}>0$.
+\end{itemize}
+\begin{enumerate}
+\item \textbf{Construct} the initial bound vectors $L^{*},\ R^{*}$ as follows:
+\[
+\begin{array}{ccccc}
+L_{i}^{*} & = & -I_{w} & , & i=1,\ldots,n\\
+R_{i}^{*} & = & \text{}I_{w} & , & i=1,\ldots,n
+\end{array}
+\]
+\item Set $k=0$, the iteration counter.
+\item \textbf{Set} $x_{b}=\left[L^{*},R^{*}\right],y_{b}=\mbox{fitness}\left(L^{*},R^{*},N_{s}\right)$.
+The function $\mbox{fitness()}$ is presented in Algorithm \ref{alg:fitness}
+and it is used a measure of each interval.
+\item \textbf{Set} $x_{c}=x_{b},y_{c}=y_{b}$
+\item \textbf{For} $i=1,\ldots,N_{\mbox{eps}}$ \textbf{do\label{enu:forFitness}}
+\begin{enumerate}
+\item \textbf{Create} a new random interval $x_{t}=\left(L_{t},R_{t}\right)$
+with the incorporation of of Algorithm \ref{alg:sampling} by calling
+$x_{t}=\mbox{newInterval}\left(L_{c},R_{c},p_{c}\right)$ .
+\item \textbf{Calculate} $y_{t}=\mbox{fitness}\left(L_{t},R_{t},N_{s}\right)$
+using Algorithm \ref{alg:fitness}.
+\item \textbf{If} $y_{t}<y_{c}$ \textbf{then} \textbf{Set} $x_{c}=x_{t},y_{c}=y_{t}$
+\item \textbf{Else Set $x_{c}=x_{t}$ }with probability\textbf{ $\min\left\{ 1,\exp\left(-\frac{f_{t}-f_{c}}{T_{k}}\right)\right\} $}
+\item \textbf{End if}
+\end{enumerate}
+\item \textbf{End For}
+\item \textbf{Update }the temperature\textbf{ }using \textbf{$T_{k+1}=T_{k}r_{T}$}
+\item \textbf{Set $k=k+1$}
+\item \textbf{If $T_{k}\le\epsilon$ terminate }and\textbf{ return $x_{c}=\left[L_{c},R_{c}\right]$
+}as the discovered interval for the parameters of the neural network.
+\item \textbf{Go to} step \ref{enu:forFitness}.
+\end{enumerate}
+\textbf{End function}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{The algorithm below is used to calculate the function value for a
+specified interval of parameters.\label{alg:fitness}}
+
+\textbf{function} fitness$\left(L,R,N_{s}\right)$
+\begin{enumerate}
+\item \textbf{Produce} the set $T=\left\{ w_{1},w_{2},\ldots,w_{N_{s}}\right\} $
+with $N_{s}$ random samples in $\left[L,R\right]$. Each sample is
+a set of parameters for the neural network and its created randomly
+in $\left[L,R\right].$
+\item \textbf{Set} $k=0$
+\item \textbf{For} $i=1,\ldots,N_{s}$ \textbf{do}
+\begin{enumerate}
+\item \textbf{Create} a neural network $N\left(\overrightarrow{x},\overrightarrow{w_{i}}\right)$.
+\item \textbf{Calculate} the training error $f_{i}=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x_{j}},\overrightarrow{w_{i}}\right)-y_{j}\right)^{2}$
+for the corresponding train set.
+\item \textbf{Obtain} the quantity $b_{i}=B\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+using algorithm \ref{alg:CalculationBound}.
+\item \textbf{Set} $k=k+f_{i}\times\left(1+\lambda b_{i}\right),$where
+$\lambda>1$.
+\end{enumerate}
+\item \textbf{End For}
+\item \textbf{Set} $k=\frac{k}{N_{s}}$
+\item \textbf{Return} $k$.
+\end{enumerate}
+\textbf{End function}
+\end{algorithm}
+\begin{algorithm}[H]
+\caption{The following procedure is used to produce new random intervals for
+the bounds of the parameters of the neural network.\label{alg:sampling}}
+
+\textbf{Function} $\mbox{newInterval}\left(L,R,p_{c}\right)$
+\begin{enumerate}
+\item \textbf{For} $i=1,\ldots,n$ \textbf{do}
+\begin{enumerate}
+\item \textbf{Set} $\delta_{1}$ is a random number that could be 1 or -1.
+\item \textbf{Set} $\delta_{2}$ a random number that could be 1 or -1.
+\item \textbf{Set} $L_{i}^{x}=L_{i}+\delta_{1}p_{c}r_{1}L_{i}$, where $r_{1}\in[0,1]$
+a random value.
+\item \textbf{Set} $R_{i}^{x}=R_{i}+\delta_{2}p_{c}r_{2}R_{i}$, where $r_{2}\in[0,1]$
+a random value.
+\end{enumerate}
+\item \textbf{End For}
+\item \textbf{Return} $x=\left[L^{x},R^{x}\right]$ as the constructed interval.
+\end{enumerate}
+\textbf{End function}
+\end{algorithm}
+
+
+\subsection{The final training method}
+
+After finding a promising range of values \LyXZeroWidthSpace\LyXZeroWidthSpace for
+the parameters of the artificial neural network, the optimization
+of these parameters within this range is performed. This optimization
+minimizes the error function and any optimization method could be
+used. In this work, the Genetic Algorithm method was chosen to be
+used. The main steps of this genetic algorithm are provided subsequently: 
+\begin{enumerate}
+\item \textbf{Initialization step}.
+\begin{enumerate}
+\item \textbf{Set }the parameters of the algorithm:
+\begin{enumerate}
+\item $N_{c}$ the number of uses chromosomes.
+\item $N_{g}$ the number of allowed generations.
+\item $p_{s}$ the selection rate, with $p_{s}\le1$
+\item $p_{m}$ the mutation rate, with $p_{m}\le1$
+\end{enumerate}
+\item \textbf{Initialize} the chromosomes $g_{i},\ i=1,\ldots,N_{c}$ as
+vectors of randomly selected values. Each chromosome has $n=(d+2)H$
+elements. The initialization is performed inside the bounds $\left[\overrightarrow{L^{*}},\overrightarrow{R^{*}}\right]$,
+produced during the first phase of the method as described in subsection
+\ref{subsec:The-proposed-Simulated}.
+\item \textbf{Set} $k=0$, as the generation counter.
+\end{enumerate}
+\item \textbf{Fitness calculation step}.
+\begin{enumerate}
+\item \textbf{For} $i=1,\ldots,N_{c}$ \textbf{do}
+\begin{enumerate}
+\item \textbf{Create} the artificial neural network $N_{i}\left(\overrightarrow{x},\overrightarrow{g_{i}}\right)$
+for the corresponding chromosome $\overrightarrow{g_{i}}$.
+\item \textbf{Set} $f_{i}=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x_{j}},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}$
+as the associated fitness value.
+\end{enumerate}
+\item \textbf{End For}
+\end{enumerate}
+\item \textbf{Application of the genetic operators }.
+\begin{enumerate}
+\item \textbf{Selection}: The top $\left(1-p_{s}\right)\times N_{c}$chromosomes
+of the current population, as determined by their fitness values,
+are directly preserved and transferred to the next generation. The
+remaining chromosomes are replaced by newly generated individuals
+resulting from the application of crossover and mutation operators.
+\item \textbf{Crossover: }During this procedure a series of $p_{s}\times N_{s}$
+new chromosomes will be produced from the old ones. For each couple
+$\left(\widetilde{z},\widetilde{w}\right)$ of new chromosomes, two
+parents $\left(z,w\right)$ are selected from the current population
+with tournament selection. The new couple will be created using the
+following operations:
+\begin{eqnarray}
+\tilde{z_{i}} & = & r_{i}z_{i}+\left(1-r_{i}\right)w_{i},\ i=1,\ldots,n\nonumber \\
+\tilde{w_{i}} & = & r_{i}w_{i}+\left(1-r_{i}\right)z_{i},\ i=1,\ldots,n\label{eq:crossover_ali}
+\end{eqnarray}
+The numbers $r_{i}$ are randomly selected numbers in $[-0.5,1.5]$
+\citep{kaelo}. 
+\item \textbf{Mutation:} This procedure is applied in every element of each
+chromosome, where a random number $r\in[0,1]$ is selected. If $r\le p_{m}$
+then the corresponding element $g_{ij}$ of chromosome $g_{i}$ is
+changed using the following equation:
+\begin{equation}
+g_{ij}=\left\{ \begin{array}{cc}
+g_{ij}+\Delta\left(\mbox{t},b_{g,i}-g_{ij}\right) & t=0\\
+g_{ij}-\Delta\left(\mbox{t},g_{ij}-a_{g,i}\right) & t=1
+\end{array}\right.\label{eq:ali_mutation}
+\end{equation}
+Here $t$ is a random number that can be 0 or 1 and the function $\Delta(\mbox{t},y)$
+is defined as:
+\begin{equation}
+\Delta(t,y)=y\left(1-\omega^{\left(1-\frac{t}{N_{t}}\right)z}\right)\label{eq:delta_equation}
+\end{equation}
+The value $\omega$ is a random number in $[0,1]$ and $z$ is user
+defined parameter. 
+\end{enumerate}
+\item \textbf{Termination check}.
+\begin{enumerate}
+\item \textbf{Set} $k=k+1$
+\item \textbf{If} $k<N_{g}$ then go to Fitness Calculation step.
+\end{enumerate}
+\item \textbf{Testing step}.
+\begin{enumerate}
+\item \textbf{Denote} as $g^{*}$ the chromosome with the lowest fitness
+value and create the corresponding neural network $N\left(\overrightarrow{x},\overrightarrow{g^{*}}\right)$.
+\item \textbf{Train} the neural network $N\left(\overrightarrow{x},\overrightarrow{g^{*}}\right)$
+using a local search procedure. In the current work the BFGS variant
+of Powell \citep{powell} was selected.
+\item \textbf{Apply} the neural network on the corresponding test set of
+the objective problem and report the test error.
+\end{enumerate}
+\end{enumerate}
+
+\section{Results\label{sec:Results}}
+
+The validation of the proposed approach was conducted using a collection
+of benchmark datasets for classification and regression tasks, which
+are publicly available online through the following sources:
+\begin{enumerate}
+\item The UCI database, \url{https://archive.ics.uci.edu/}(accessed on
+31 December 2025)\citep{uci}
+\item The Keel website, \url{https://sci2s.ugr.es/keel/datasets.php}(accessed
+on 31 December 2025)\citep{Keel}.
+\item The Statlib database, \url{https://lib.stat.cmu.edu/datasets/index}(accessed
+on 9 December 2025). 
+\end{enumerate}
+
+\subsection{Experimental datasets}
+
+The classification datasets employed in the experimental evaluation
+are listed below:
+\begin{enumerate}
+\item \textbf{Appendictis} dataset, as provided in \citep{appendicitis}. 
+\item \textbf{Alcohol} dataset, which is a dataset regarding experiments
+on alcohol consumption \citep{alcohol}. 
+\item \textbf{Australian} dataset, derived from bank transactions \citep{australian}.
+\item \textbf{Balance} dataset \citep{balance}, which was used in a series
+of psychological experiments.
+\item \textbf{Cleveland}, which was studied in a series of papers \citep{cleveland1,cleveland2}. 
+\item \textbf{Circular} dataset, which is an artificial dataset with two
+classes.
+\item \textbf{Dermatology}, that provides measurements from dermatology
+problems \citep{dermatology}.
+\item \textbf{Ecoli}, which is related to protein problems \citep{ecoli}.
+\item \textbf{Glass} dataset, related to glass component analysis. 
+\item \textbf{Haberman}, a medical dataset that is used for to detect the
+presence of breast cancer.
+\item \textbf{Hayes-roth} dataset \citep{hayes-roth}.
+\item \textbf{Heart}, used to predict the presence of heart diseases \citep{heart}.
+\item \textbf{HeartAttack}, a medical dataset used in heart diseases
+\item \textbf{Housevotes}, a dataset related to the Congressional voting
+in USA \citep{housevotes}.
+\item \textbf{Ionosphere}, related to measurements from the ionosphere and
+studied in a series of papers \citep{ion1,ion2}.
+\item \textbf{Liverdisorder}, a medical dataset \citep{liver,liver1}.
+\item \textbf{Lymography} dataset\citep{lymography}.
+\item \textbf{(OK)Mammographic}, which is related to breast cancer detection
+\citep{mammographic}.
+\item \textbf{Parkinsons}, which is related to the detection of Parkinson's
+disease \citep{parkinsons1,parkinsons2}.
+\item \textbf{Pima}, related to the detection of diabetes\citep{pima}.
+\item \textbf{Phoneme}, a dataset that contains sound measurements.
+\item \textbf{Popfailures}, which is related to measurements regarding climate
+\citep{popfailures}.
+\item \textbf{Regions2}, a dataset used for the detection of liver problems
+\citep{regions2}.
+\item \textbf{Saheart}, which is a medical dataset concerning heart diseases\citep{saheart}.
+\item \textbf{Segment} dataset \citep{segment}.
+\item \textbf{Statheart}, a dataset related to the detection of heart diseases.
+\item \textbf{Spiral}, an artificial dataset with two classes.
+\item \textbf{(OK)Student}, which is a dataset regarding experiments in
+schools \citep{student}.
+\item \textbf{Transfusion} dataset \citep{transfusion}.
+\item \textbf{Wdbc}, used to detect the breast cancer \citep{wdbc1,wdbc2}.
+\item \textbf{Wine}, a dataset used to detect the quality of wines \citep{wine1,wine2}.
+\item \textbf{EEG}, that contains EEG measurements \citep{eeg1,eeg2}. From
+this dataset the following cases were studied: Z\_F\_S, ZO\_NF\_S
+and ZONF\_S.
+\item \textbf{Zoo}, a dataset used to classify animals in some categories
+\citep{zoo} .
+\end{enumerate}
+In addition, the following regression datasets were utilized in the
+experimental evaluation:
+\begin{enumerate}
+\item \textbf{Abalone}, regarding the detection of the age of abalones \citep{abalone}.
+\item \textbf{Airfoil}, a dataset derived from NASA \citep{airfoil}.
+\item \textbf{Auto}, a dataset related to the fuel consumption in cars.
+\item \textbf{BK}, related to the prediction of points scored by basketball
+players.
+\item \textbf{BL}, used in various electricity experiments.
+\item \textbf{Baseball}, related to the prediction of income of baseball
+players.
+\item \textbf{Concrete}, a dataset which is related to civil engineering
+\citep{concrete}.
+\item \textbf{DEE}, a dataset used to predict the prices of electricity. 
+\item \textbf{Friedman} dataset\citep{friedman}.
+\item \textbf{FY, }related to fruit flies. 
+\item \textbf{HO}, a dataset derived from the STATLIB repository.
+\item \textbf{Housing}, used to predict the prices of houses \citep{housing}.
+\item \textbf{Laser}, used in various experiments in physics. 
+\item \textbf{LW}, a dataset related to the weight of babes.
+\item \textbf{Mortgage}, a dataset related to economics.
+\item \textbf{PL} dataset, derived from the STALIB repository.
+\item \textbf{Plastic}, a dataset used to detect problems in plastics.
+\item \textbf{Quake}, which contains measurements from earthquakes.
+\item \textbf{SN}, a benchmark dataset commonly employed in trellising and
+pruning studies.
+\item \textbf{Stock}, regarding the prices of stocks.
+\item \textbf{Treasury}, a dataset related to economics.
+\end{enumerate}
+
+\subsection{Experimental results}
+
+The experimental software was implemented in C++ using the freely
+available Optimus framework \citep{optimus} Each experimental configuration
+was executed 30 independent times, with a distinct random seed assigned
+to each run. To ensure a reliable evaluation of the results, the ten-fold
+cross-validation methodology was employed. All experiments were repeated
+30 times, and performance was quantified using the mean classification
+error for the classification datasets and the mean regression error
+for the regression datasets. The classification error is calculated
+using the following equation:
+\begin{equation}
+E_{C}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=100\times\frac{\sum_{i=1}^{K}\left(\mbox{class}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)\right)-y_{i}\right)}{K}
+\end{equation}
+Here the set $T=\left\{ x_{i},y_{i}\right\} ,\ i=1,\ldots,K$ represents
+the associated test set of the objective problem. Similarly, the regression
+error for the test set is given from the following equation:
+\begin{equation}
+E_{R}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\frac{\sum_{i=1}^{K}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)-y_{i}\right)^{2}}{K}
+\end{equation}
+The values for every parameter of the proposed algorithm are given
+in Table \ref{tab:settings}.
+
+\begin{table}[H]
+\caption{The values for every experimental parameter.\label{tab:settings}}
+
+\begin{centering}
+\begin{tabular}{|c|c|c|}
+\hline 
+PARAMETER & MEANING & VALUE\tabularnewline
+\hline 
+\hline 
+$H$ & Number of weights & 10\tabularnewline
+\hline 
+$I_{w}$ & Weight parameter & 10.0\tabularnewline
+\hline 
+$T_{0}$ & Initial temperature & 3.0\tabularnewline
+\hline 
+$r_{t}$ & \begin{cellvarwidth}[t]
+\centering
+Decrease factor for\\
+temperature
+\end{cellvarwidth} & 0.95\tabularnewline
+\hline 
+$N_{\mbox{eps}}$ & \begin{cellvarwidth}[t]
+\centering
+Number of random\\
+interval produced
+\end{cellvarwidth} & 100\tabularnewline
+\hline 
+$a$ & Scale factor & 10.0\tabularnewline
+\hline 
+$p_{c}$ & Perturbation factor & 0.01\tabularnewline
+\hline 
+$N_{s}$ & Number of random samples & 25\tabularnewline
+\hline 
+$N_{c}$ & Number of chromosomes & 500\tabularnewline
+\hline 
+$N_{g}$ & Number of allowed generations & 500\tabularnewline
+\hline 
+$p_{s}$ & Selection rate & 0.90\tabularnewline
+\hline 
+$p_{m}$ & Mutation rate & 0.05\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\end{table}
+Moreover, the following notation is used in the tables that provide
+the experimental results:
+\begin{enumerate}
+\item The column DATASET provides the name of the dataset.
+\item The column ADAM denotes the experimental results by the usage of the
+ADAM optimization method \citep{nn_adam} to train a neural network
+having $H=10$ processing nodes.
+\item The column BFGS denotes the usage of the BFGS method to train an artificial
+neural network with $H=10$ processing nodes.
+\item The column GENETIC denotes the usage of Genetic Algorithm to train
+a neural network with $H=10$ processing nodes.
+\item The column RBF denotes the application of a Radial Basis Function
+(RBF) network \citep{rbf1,rbf2} with $H=10$ hidden nodes.
+\item The column NEAT denotes the incorporation of the NEAT method (NeuroEvolution
+of Augmenting Topologies ) \citep{neat}.
+\item The column PRUNE denotes the application of the OBS pruning method
+\citep{prune}.
+\item The column PROPOSED stands for the application of the current method.
+\item The row AVERAGE stands for the the average classification or regression
+error.
+\end{enumerate}
+The experimental results by the application of the previously mentioned
+machine learning methods to the classification datasets are depicted
+in Table \ref{tab:expClass}. Also, the corresponding results for
+the regression datasets are shown in Table \ref{tab:expRegression}.
+
+Table \ref{tab:expClass} reports classification error rates (lower
+is better) across 34 datasets for seven learning/training approaches,
+with the last row providing the average error per method. At the aggregate
+level, the proposed approach (PROPOSED) is clearly the best performer,
+achieving an average error of 20.57\%, while the second-best average
+is obtained by GENETIC at 26.55\%. This corresponds to an absolute
+improvement of 5.97 percentage points, i.e., an approximately 22.5\%
+relative error reduction compared to GENETIC. The advantage remains
+consistent against the remaining baselines: relative to PRUNE (27.44\%)
+the improvement is 6.87 points (\textasciitilde 25.0\% relative reduction),
+relative to RBF (29.42\%) it is 8.85 points (\textasciitilde 30.1\%),
+relative to NEAT (32.11\%) it is 11.54 points (\textasciitilde 35.9\%),
+and relative to ADAM/BFGS (34.48\%/34.34\%) it is about 13.9 points
+(\textasciitilde 40\% relative reduction). In addition, when considering
+variability across heterogeneous datasets, PROPOSED exhibits the lowest
+dispersion of errors (standard deviation \ensuremath{\approx} 14.31),
+which is consistent with more stable behavior across different classification
+tasks.
+
+From a per-dataset perspective (minimum error per row), PROPOSED attains
+the best result on 23 out of 34 datasets (\ensuremath{\approx}67.6\%),
+indicating that its superiority is systematic rather than driven by
+a small subset of cases. Moreover, PROPOSED ranks within the top two
+methods on 31/34 datasets and within the top three on 33/34 datasets,
+highlighting strong rank consistency. In the datasets where PROPOSED
+is not the best, it is often very close to the winner (e.g., SPIRAL:
+44.90\% vs 44.87\%, ALCOHOL: 15.99\% vs 15.75\%, POPFAILURES: 5.06\%
+vs 4.79\%), with a limited number of more pronounced gaps such as
+ECOLI (49.67\% vs 43.44\%) and DERMATOLOGY (14.83\% vs 9.02\%). Conversely,
+there are datasets where PROPOSED achieves large margins over the
+second-best method, notably SEGMENT (38.85\% vs 49.75\%), HEARTATTACK
+(18.97\% vs 29.00\%), HEART (18.37\% vs 27.21\%), and WINE (8.12\%
+vs 16.62\%). Overall, Table 2 supports that the proposed method delivers
+the best mean performance, the best average ranking, and the highest
+number of dataset-level wins, with only sporadic cases where alternative
+methods outperform it.
+
+\begin{table}[H]
+\caption{Experimental results on the classification datasets using the series
+of the machine learning methods. Numbers in cells represent average
+classification error as measured on the corresponding test set.\label{tab:expClass}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize PROPOSED}\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 16.50\%} & {\footnotesize 18.00\%} & {\footnotesize 24.40\%} & {\footnotesize 12.23\%} & {\footnotesize 17.20\%} & {\footnotesize 15.97\%} & {\footnotesize 15.50\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 57.78\%} & {\footnotesize 41.50\%} & {\footnotesize 39.57\%} & {\footnotesize 49.32\%} & {\footnotesize 66.80\%} & {\footnotesize 15.75\%} & {\footnotesize 15.99\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 35.65\%} & {\footnotesize 38.13\%} & {\footnotesize 32.21\%} & {\footnotesize 34.89\%} & {\footnotesize 31.98\%} & {\footnotesize 43.66\%} & {\footnotesize 27.22\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 12.27\%} & {\footnotesize 8.64\%} & {\footnotesize 8.97\%} & {\footnotesize 33.53\%} & {\footnotesize 23.14\%} & {\footnotesize 9.00\%} & {\footnotesize 8.60\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 67.55\%} & {\footnotesize 77.55\%} & {\footnotesize 51.60\%} & {\footnotesize 67.10\%} & {\footnotesize 53.44\%} & {\footnotesize 51.48\%} & {\footnotesize 44.48\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 19.95\%} & {\footnotesize 6.08\%} & {\footnotesize 5.99\%} & {\footnotesize 5.98\%} & {\footnotesize 35.18\%} & {\footnotesize 12.76\%} & {\footnotesize 5.88\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 26.14\%} & {\footnotesize 52.92\%} & {\footnotesize 30.58\%} & {\footnotesize 62.34\%} & {\footnotesize 32.43\%} & {\footnotesize 9.02\%} & {\footnotesize 14.83\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 64.43\%} & {\footnotesize 69.52\%} & {\footnotesize 54.67\%} & {\footnotesize 59.48\%} & {\footnotesize 43.44\%} & {\footnotesize 60.32\%} & {\footnotesize 49.67\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 61.38\%} & {\footnotesize 54.67\%} & {\footnotesize 52.86\%} & {\footnotesize 50.46\%} & {\footnotesize 55.71\%} & {\footnotesize 66.19\%} & {\footnotesize 52.57\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 29.00\%} & {\footnotesize 29.34\%} & {\footnotesize 28.66\%} & {\footnotesize 25.10\%} & {\footnotesize 24.04\%} & {\footnotesize 29.38\%} & {\footnotesize 26.87\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 59.70\%} & {\footnotesize 37.33\%} & {\footnotesize 56.18\%} & {\footnotesize 64.36\%} & {\footnotesize 50.15\%} & {\footnotesize 45.44\%} & {\footnotesize 34.23\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 38.53\%} & {\footnotesize 39.44\%} & {\footnotesize 28.34\%} & {\footnotesize 31.20\%} & {\footnotesize 39.27\%} & {\footnotesize 27.21\%} & {\footnotesize 18.37\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 45.55\%} & {\footnotesize 46.67\%} & {\footnotesize 29.03\%} & {\footnotesize 29.00\%} & {\footnotesize 32.34\%} & {\footnotesize 29.26\%} & {\footnotesize 18.97\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 7.48\%} & {\footnotesize 7.13\%} & {\footnotesize 6.62\%} & {\footnotesize 6.13\%} & {\footnotesize 10.89\%} & {\footnotesize 5.81\%} & {\footnotesize 4.96\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 16.64\%} & {\footnotesize 15.29\%} & {\footnotesize 15.14\%} & {\footnotesize 16.22\%} & {\footnotesize 19.67\%} & {\footnotesize 11.32\%} & {\footnotesize 10.17\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 41.53\%} & {\footnotesize 42.59\%} & {\footnotesize 31.11\%} & {\footnotesize 30.84\%} & {\footnotesize 30.67\%} & {\footnotesize 49.72\%} & {\footnotesize 33.71\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 39.79\%} & {\footnotesize 35.43\%} & {\footnotesize 28.42\%} & {\footnotesize 25.50\%} & {\footnotesize 33.70\%} & {\footnotesize 22.02\%} & {\footnotesize 19.93\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 46.25\%} & {\footnotesize 17.24\%} & {\footnotesize 19.88\%} & {\footnotesize 21.38\%} & {\footnotesize 22.85\%} & {\footnotesize 38.10\%} & {\footnotesize 17.13\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 24.06\%} & {\footnotesize 27.58\%} & {\footnotesize 18.05\%} & {\footnotesize 17.41\%} & {\footnotesize 18.56\%} & {\footnotesize 22.12\%} & {\footnotesize 14.58\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 34.85\%} & {\footnotesize 35.59\%} & {\footnotesize 32.19\%} & {\footnotesize 25.78\%} & {\footnotesize 34.51\%} & {\footnotesize 35.08\%} & {\footnotesize 27.90\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 5.18\%} & {\footnotesize 5.24\%} & {\footnotesize 5.94\%} & {\footnotesize 7.04\%} & {\footnotesize 7.05\%} & {\footnotesize 4.79\%} & {\footnotesize 5.06\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 29.85\%} & {\footnotesize 36.28\%} & {\footnotesize 29.39\%} & {\footnotesize 38.29\%} & {\footnotesize 33.23\%} & {\footnotesize 34.26\%} & {\footnotesize 31.48\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 34.04\%} & {\footnotesize 37.48\%} & {\footnotesize 34.86\%} & {\footnotesize 32.19\%} & {\footnotesize 34.51\%} & {\footnotesize 37.70\%} & {\footnotesize 32.15\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 49.75\%} & {\footnotesize 68.97\%} & {\footnotesize 57.72\%} & {\footnotesize 59.68\%} & {\footnotesize 66.72\%} & {\footnotesize 60.40\%} & {\footnotesize 38.85\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 47.67\%} & {\footnotesize 47.99\%} & {\footnotesize 48.66\%} & {\footnotesize 44.87\%} & {\footnotesize 48.66\%} & {\footnotesize 50.38\%} & {\footnotesize 44.90\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 44.04\%} & {\footnotesize 39.65\%} & {\footnotesize 27.25\%} & {\footnotesize 31.36\%} & {\footnotesize 44.36\%} & {\footnotesize 28.37\%} & {\footnotesize 21.07\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 5.13\%} & {\footnotesize 7.14\%} & {\footnotesize 5.61\%} & {\footnotesize 5.49\%} & {\footnotesize 10.20\%} & {\footnotesize 10.84\%} & {\footnotesize 4.50\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 25.68\%} & {\footnotesize 25.84\%} & {\footnotesize 24.87\%} & {\footnotesize 26.41\%} & {\footnotesize 24.87\%} & {\footnotesize 29.35\%} & {\footnotesize 23.59\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 35.35\%} & {\footnotesize 29.91\%} & {\footnotesize 8.56\%} & {\footnotesize 7.27\%} & {\footnotesize 12.88\%} & {\footnotesize 15.48\%} & {\footnotesize 4.21\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 29.40\%} & {\footnotesize 59.71\%} & {\footnotesize 19.20\%} & {\footnotesize 31.41\%} & {\footnotesize 25.43\%} & {\footnotesize 16.62\%} & {\footnotesize 8.12\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 47.81\%} & {\footnotesize 39.37\%} & {\footnotesize 10.73\%} & {\footnotesize 13.16\%} & {\footnotesize 38.41\%} & {\footnotesize 17.91\%} & {\footnotesize 7.70\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 47.43\%} & {\footnotesize 43.04\%} & {\footnotesize 21.54\%} & {\footnotesize 9.02\%} & {\footnotesize 43.75\%} & {\footnotesize 15.57\%} & {\footnotesize 6.66\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 11.99\%} & {\footnotesize 15.62\%} & {\footnotesize 4.36\%} & {\footnotesize 4.03\%} & {\footnotesize 5.44\%} & {\footnotesize 3.27\%} & {\footnotesize 2.78\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 14.13\%} & {\footnotesize 10.70\%} & {\footnotesize 9.50\%} & {\footnotesize 21.93\%} & {\footnotesize 20.27\%} & {\footnotesize 8.53\%} & {\footnotesize 6.90\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{34.48\%}} & {\footnotesize\textbf{34.34\%}} & {\footnotesize\textbf{26.55\%}} & {\footnotesize\textbf{29.42\%}} & {\footnotesize\textbf{32.11\%}} & {\footnotesize\textbf{27.44\%}} & {\footnotesize\textbf{20.57\%}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+The significance levels shown in Figure \ref{fig:stat_class_methods}
+were obtained via R-based analyses on the classification experiment
+tables, aiming to verify that the observed performance differences
+are statistically reliable rather than due to random variation. The
+overall Friedman test yields p=$2.89\times10^{-11}$, which is extremely
+small and therefore strongly rejects the null hypothesis that all
+methods perform equivalently. This indicates that, across the set
+of datasets, genuine performance differences exist among the considered
+models and motivates post-hoc pairwise comparisons against the proposed
+approach.
+
+The pairwise results confirm that the proposed method differs significantly
+from each baseline. In particular, the comparisons ADAM vs PROPOSED
+and BFGS vs PROPOSED produce p=$1.78\times10^{-8}$ and p=$5.17\times10^{-9}$,
+respectively, providing very strong evidence of a difference (well
+beyond the p\textless 0.0001 threshold). The PRUNE vs PROPOSED comparison
+is also highly decisive (p=$2.07\times10^{-5}$, i.e., p\textless 0.0001).
+For GENETIC and RBF, the p-values are larger but remain below 0.01
+(p=0.0076 and p=0.0085), which corresponds to a “highly significant”
+difference. Overall, Figure \ref{fig:stat_class_methods} supports
+that the proposed model’s superiority is not only reflected in the
+raw error rates, but is also substantiated by strong statistical significance
+against all competing baselines.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.6]{stat_tbl2}
+\par\end{centering}
+\caption{Statistical significance levels (Friedman and post-hoc) for classification
+experiments across learning models\label{fig:stat_class_methods}}
+\end{figure}
+
+In the regression part of Table \ref{tab:expRegression}, errors are
+reported in absolute units and span a very wide dynamic range (from
+approximately $10^{-3}$ up to hundreds), meaning that a few large-error
+cases can dominate average performance. Under this regime, the proposed
+approach (PROPOSED) delivers the most favorable aggregate outcome,
+with the lowest mean error of 5.33, compared to 9.31 for GENETIC and
+10.02 for RBF. The reduction from 9.31 to 5.33 corresponds to a 3.98-unit
+absolute gain, i.e., about a 42.8\% relative improvement over the
+best competing average (GENETIC). Importantly, PROPOSED also exhibits
+the strongest robustness against extreme values, showing the smallest
+variability across datasets (standard deviation \ensuremath{\approx}
+13.75). This point matters in regression benchmarking because heavy-tailed
+errors can materially affect the mean and may reveal instability.
+In contrast, ADAM and BFGS show very large worst-case outcomes (e.g.,
+180.89 and 302.43 on STOCK), which inflates their averages (22.46
+and 30.29, respectively) and indicates sensitivity to high-scale or
+difficult regression settings.
+
+Looking at dataset-level outcomes (row-wise minima), PROPOSED attains
+the best result or ties for best on 14 out of 21 regression datasets,
+including 11 outright wins and 3 top ties. Beyond wins, its rank consistency
+is strong: PROPOSED falls within the top two methods on 18/21 datasets
+and within the top three on 20/21 datasets, suggesting that its advantage
+is not driven by a small number of isolated successes. Several datasets
+show substantive margins rather than marginal differences, including
+HOUSING (26.76 vs 43.26 for the runner-up), TREASURY (0.20 vs 2.02),
+MORTGAGE (0.12 vs 1.45), and BASEBALL (58.86 vs 77.90). The few cases
+where PROPOSED is not the best do not overturn the overall pattern:
+on ABALONE it is essentially tied with the best value (4.31 vs 4.30),
+BL is dominated by RBF (0.013), and FY is the only dataset where PROPOSED
+falls outside the top three, yet the absolute gap remains small (0.057
+vs 0.038). Overall, Table 2 indicates that the proposed method achieves
+the strongest balance of low mean error, frequent top performance,
+and reduced exposure to severe outliers, which is particularly relevant
+for regression evaluation across heterogeneous datasets.
+
+\begin{table}[H]
+\caption{Experimental results on the regression datasets using the list of
+the provided machine learning methods. Numbers in cells represent
+average regression error on each test set.\label{tab:expRegression}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize ADAM} & {\footnotesize BFGS} & {\footnotesize GENETIC} & {\footnotesize RBF} & {\footnotesize NEAT} & {\footnotesize PRUNE} & {\footnotesize PROPOSED}\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 4.30} & {\footnotesize 5.69} & {\footnotesize 7.17} & {\footnotesize 7.37} & {\footnotesize 9.88} & {\footnotesize 7.88} & {\footnotesize 4.31}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.005} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.27} & {\footnotesize 0.067} & {\footnotesize 0.002} & {\footnotesize 0.002}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 70.84} & {\footnotesize 60.97} & {\footnotesize 12.18} & {\footnotesize 17.87} & {\footnotesize 56.06} & {\footnotesize 75.59} & {\footnotesize 12.07}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.0252} & {\footnotesize 0.28} & {\footnotesize 0.027} & {\footnotesize 0.02} & {\footnotesize 0.15} & {\footnotesize 0.027} & {\footnotesize 0.025}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 0.622} & {\footnotesize 2.55} & {\footnotesize 5.74} & {\footnotesize 0.013} & {\footnotesize 0.05} & {\footnotesize 0.027} & {\footnotesize 0.032}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 77.90} & {\footnotesize 119.63} & {\footnotesize 103.60} & {\footnotesize 93.02} & {\footnotesize 100.39} & {\footnotesize 94.50} & {\footnotesize 58.86}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.078} & {\footnotesize 0.066} & {\footnotesize 0.0099} & {\footnotesize 0.011} & {\footnotesize 0.081} & {\footnotesize 0.0077} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 0.63} & {\footnotesize 2.36} & {\footnotesize 1.013} & {\footnotesize 0.17} & {\footnotesize 1.512} & {\footnotesize 1.08} & {\footnotesize 0.23}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 22.90} & {\footnotesize 1.263} & {\footnotesize 1.249} & {\footnotesize 7.23} & {\footnotesize 19.35} & {\footnotesize 8.69} & {\footnotesize 2.58}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.038} & {\footnotesize 0.19} & {\footnotesize 0.65} & {\footnotesize 0.041} & {\footnotesize 0.08} & {\footnotesize 0.042} & {\footnotesize 0.057}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 0.035} & {\footnotesize 0.62} & {\footnotesize 2.78} & {\footnotesize 0.03} & {\footnotesize 0.169} & {\footnotesize 0.03} & {\footnotesize 0.01}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 80.99} & {\footnotesize 97.38} & {\footnotesize 43.26} & {\footnotesize 57.68} & {\footnotesize 56.49} & {\footnotesize 52.25} & {\footnotesize 26.76}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.03} & {\footnotesize 0.015} & {\footnotesize 0.59} & {\footnotesize 0.03} & {\footnotesize 0.084} & {\footnotesize 0.007} & {\footnotesize 0.003}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 0.028} & {\footnotesize 2.98} & {\footnotesize 1.90} & {\footnotesize 0.03} & {\footnotesize 0.03} & {\footnotesize 0.02} & {\footnotesize 0.016}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 9.24} & {\footnotesize 8.23} & {\footnotesize 2.41} & {\footnotesize 1.45} & {\footnotesize 14.11} & {\footnotesize 12.96} & {\footnotesize 0.12}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.117} & {\footnotesize 0.29} & {\footnotesize 0.29} & {\footnotesize 2.118} & {\footnotesize 0.09} & {\footnotesize 0.032} & {\footnotesize 0.022}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 11.71} & {\footnotesize 20.32} & {\footnotesize 2.791} & {\footnotesize 8.62} & {\footnotesize 20.77} & {\footnotesize 17.33} & {\footnotesize 2.21}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.07} & {\footnotesize 0.42} & {\footnotesize 0.04} & {\footnotesize 0.07} & {\footnotesize 0.298} & {\footnotesize 0.04} & {\footnotesize 0.04}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.40} & {\footnotesize 2.95} & {\footnotesize 0.027} & {\footnotesize 0.174} & {\footnotesize 0.032} & {\footnotesize 0.026}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 180.89} & {\footnotesize 302.43} & {\footnotesize 3.88} & {\footnotesize 12.23} & {\footnotesize 12.23} & {\footnotesize 39.08} & {\footnotesize 4.30}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 11.16} & {\footnotesize 9.91} & {\footnotesize 2.93} & {\footnotesize 2.02} & {\footnotesize 15.52} & {\footnotesize 13.76} & {\footnotesize 0.20}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{22.46}} & {\footnotesize\textbf{30.29}} & {\footnotesize\textbf{9.31}} & {\footnotesize\textbf{10.02}} & {\footnotesize\textbf{14.65}} & {\footnotesize\textbf{15.40}} & {\footnotesize\textbf{5.33}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:stat_regre_methods} reports statistical significance
+levels for the regression experiments, based on p-values computed
+through R scripts. The overall Friedman test yields p=$1.55\times10^{-4}$,
+which is well below 0.001, indicating that the compared methods do
+not behave equivalently across the regression datasets and that genuine
+performance differences exist. This justifies examining post-hoc pairwise
+comparisons against the proposed method.
+
+The pairwise outcomes reveal a more mixed pattern than in the classification
+case, which is expected in regression settings where absolute-error
+scales can vary substantially across datasets. The strongest evidence
+of a difference in favor of the proposed approach is observed against
+BFGS (p=$3.35\times10^{-4}$), which falls in the extremely significant
+range (p\textless 0.001). The comparison with GENETIC yields p=0.0113,
+i.e., significant at the 0.05 level but not highly significant, implying
+a reliable yet weaker separation. In contrast, ADAM, RBF, and PRUNE
+produce p-values of 0.0585, 0.1462, and 0.0898, respectively, all
+above 0.05, meaning that differences versus the proposed method are
+not statistically supported under the standard threshold. Overall,
+Figure \ref{fig:stat_regre_methods} suggests that, for regression,
+the proposed method exhibits statistically substantiated advantages
+primarily over BFGS and, to a lesser extent, over GENETIC, while differences
+relative to the remaining baselines are not strong enough to rule
+out random experimental variability.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.6]{stat_tbl3}
+\par\end{centering}
+\caption{Statistical significance levels (Friedman and post-hoc) for regression
+experiments across learning models\label{fig:stat_regre_methods}}
+\end{figure}
+
+
+\subsection{Experiments with the perturbation parameter $p_{c}$ }
+
+An additional experiment was performed to determine the stability
+of the proposed technique to changes in the perturbation factor $p_{c}$.
+The experimental results for this experiment on the classification
+datasets are depicted in Table \ref{tab:expClassPC} and for regression
+datasets in Table \ref{tab:expRegressionPc}.
+
+Table \ref{tab:expClassPC} provides a targeted sensitivity study
+of the proposed classifier with respect to the crossover-related parameter
+$p_{c}$, reporting error rates (lower is better) on 34 classification
+datasets for three settings ($p_{c}$=0.01, 0.02, 0.05). The averages
+at the bottom of the table are extremely close, yet they consistently
+favor $p_{c}$=0.05: 20.33\% versus 20.54\% for $p_{c}$=0.02 and
+20.57\% for$p_{c}$=0.01. The absolute gain relative to $p_{c}$=0.01
+is only 0.24 percentage points (approximately a 1.2\% relative reduction),
+which suggests that the method’s performance is not highly sensitive
+to moderate changes in $p_{c}$. This limited sensitivity is also
+reflected by the central tendency and spread: the medians are nearly
+identical (about 17.75\%, 17.85\%, and 17.90\%), and the dispersion
+across datasets remains comparable for all three settings (standard
+deviation around 14\%), indicating that $p_{c}$ mainly shifts performance
+on particular datasets rather than reshaping the overall distribution.
+
+A more informative view emerges from the dataset-wise minima. The
+setting $p_{c}$=0.05 achieves the lowest error on 13 out of 34 datasets
+and ties for best on one additional dataset (STUDENT), i.e., 14/34
+top outcomes. In comparison, $p_{c}$=0.01 is best on 11 datasets,
+while $p_{c}$=0.02 is best on 9 datasets plus one top tie. Hence,
+$p_{c}$=0.05 is the strongest default choice in terms of both average
+performance and frequency of best results, but the table also highlights
+clear dataset-specific preferences. For instance, $p_{c}$=0.05 yields
+notable improvements on LIVERDISORDER (33.71\% to 30.26\%), APPENDICITIS
+(15.50\% to 12.40\%), DERMATOLOGY (14.83\% to 11.92\%), AUSTRALIAN
+(27.22\% to 24.58\%), and ECOLI (49.67\% to 47.15\%). Conversely,
+$p_{c}$=0.01 is distinctly advantageous on SEGMENT (38.85\% vs 44.21-44.72),
+SPIRAL (44.90\% vs 45.29-47.77), and WINE (8.12\% vs 10.65-11.23).
+Overall, Table \ref{tab:expClassPC} indicates that $p_{c}$ acts
+as a fine-grained control parameter: $p_{c}$=0.05 optimizes mean
+behavior and the count of best-case outcomes, while smaller values
+such as $p_{c}$=0.01 can be preferable for specific datasets.
+
+\begin{table}[H]
+\caption{Experimental results using the proposed method and a variety values
+for the perturbation factor $p_{c}$.\label{tab:expClassPC}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & $p_{c}=0.01$ & $p_{c}=0.02$ & $p_{c}=0.05$\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 15.50\%} & {\footnotesize 13.70\%} & {\footnotesize 12.40\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 15.99\%} & {\footnotesize 16.10\%} & {\footnotesize 15.49\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 27.22\%} & {\footnotesize 27.55\%} & {\footnotesize 24.58\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 8.60\%} & {\footnotesize 8.02\%} & {\footnotesize 8.76\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 44.48\%} & {\footnotesize 45.24\%} & {\footnotesize 46.04\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 5.88\%} & {\footnotesize 6.94\%} & {\footnotesize 6.91\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 14.83\%} & {\footnotesize 12.97\%} & {\footnotesize 11.92\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 49.67\%} & {\footnotesize 47.55\%} & {\footnotesize 47.15\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 52.57\%} & {\footnotesize 50.34\%} & {\footnotesize 50.81\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 26.87\%} & {\footnotesize 27.27\%} & {\footnotesize 27.33\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 34.23\%} & {\footnotesize 37.69\%} & {\footnotesize 35.00\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 18.37\%} & {\footnotesize 18.00\%} & {\footnotesize 18.33\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 18.97\%} & {\footnotesize 20.10\%} & {\footnotesize 19.67\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 4.96\%} & {\footnotesize 4.48\%} & {\footnotesize 3.39\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 10.17\%} & {\footnotesize 7.72\%} & {\footnotesize 9.06\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 33.71\%} & {\footnotesize 32.74\%} & {\footnotesize 30.26\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 19.93\%} & {\footnotesize 21.14\%} & {\footnotesize 22.29\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 17.13\%} & {\footnotesize 17.70\%} & {\footnotesize 17.47\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 14.58\%} & {\footnotesize 13.63\%} & {\footnotesize 13.84\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 27.90\%} & {\footnotesize 27.20\%} & {\footnotesize 26.42\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 5.06\%} & {\footnotesize 4.82\%} & {\footnotesize 5.71\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 31.48\%} & {\footnotesize 30.86\%} & {\footnotesize 29.81\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 32.15\%} & {\footnotesize 31.91\%} & {\footnotesize 32.23\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 38.85\%} & {\footnotesize 44.21\%} & {\footnotesize 44.72\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 44.90\%} & {\footnotesize 45.29\%} & {\footnotesize 47.77\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 21.07\%} & {\footnotesize 19.08\%} & {\footnotesize 20.70\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 4.50\%} & {\footnotesize 3.95\%} & {\footnotesize 3.95\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 23.59\%} & {\footnotesize 23.74\%} & {\footnotesize 24.07\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 4.21\%} & {\footnotesize 4.38\%} & {\footnotesize 4.18\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 8.12\%} & {\footnotesize 11.23\%} & {\footnotesize 10.65\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 7.70\%} & {\footnotesize 8.27\%} & {\footnotesize 6.57\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 6.66\%} & {\footnotesize 6.28\%} & {\footnotesize 5.54\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 2.78\%} & {\footnotesize 2.60\%} & {\footnotesize 2.82\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 6.90\%} & {\footnotesize 5.80\%} & {\footnotesize 5.40\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{20.57\%}} & {\footnotesize\textbf{20.54\%}} & {\footnotesize\textbf{20.33\%}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:stat_class_pc} indicates that varying the pc parameter
+does not produce statistically detectable differences in the proposed
+model’s performance on the classification datasets. The overall Friedman
+test yields p=0.6556, hence the null hypothesis of equivalent settings
+is not rejected. Moreover, the pairwise comparisons $p_{c}$=0.01
+vs $p_{c}$=0.05 and $p_{c}$=0.02 vs $p_{c}$=0.05 both give p=1,
+confirming no evidence of separation. Therefore, within the tested
+range, $p_{c}$ behaves as a practically neutral tuning choice, and
+the selection can be guided by secondary considerations (e.g., stability
+or computational cost). In summary, the three pc settings are statistically
+indistinguishable for classification under the reported tests.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.6]{stat_pc_c}
+\par\end{centering}
+\caption{Statistical comparison of $p_{c}$ settings for the proposed model
+on classification datasets\label{fig:stat_class_pc}}
+\end{figure}
+
+Table \ref{tab:expRegressionPc} evaluates the proposed method on
+regression tasks under three settings of the parameter $p_{c}$(0.01,
+0.02, 0.05), reporting absolute errors per dataset. A key characteristic
+of these results is the pronounced scale heterogeneity: several datasets
+yield very small errors (on the order of $10^{-3}$ to $10^{-1}$),
+whereas a small number of datasets produce much larger values (most
+notably BASEBALL and HOUSING). Consequently, the mean is strongly
+influenced by a few large-error cases, while the median better reflects
+the ``typical” dataset behavior. Under the mean criterion, $p_{c}$=0.02
+provides the best overall outcome (average error \ensuremath{\approx}
+5.27), followed closely by $p_{c}$=0.01 (\ensuremath{\approx} 5.33),
+where as$p_{c}$=0.05 is higher (\ensuremath{\approx} 5.40). This
+ordering is consistent with the medians as well (0.050 for$p_{c}$=0.02,
+0.057 for $p_{c}$=0.01, 0.060 for $p_{c}$=0.05), indicating that
+the 0.02 setting tends to reduce central errors slightly, without
+causing a major shift in the overall distribution.
+
+At the dataset level, $p_{c}$=0.02 emerges as the most consistently
+favorable choice. It achieves the lowest error with a strict advantage
+on 11 datasets and, when ties are included, it matches the best value
+on 17 out of 21 datasets. The clearest gains for $p_{c}$=0.02 occur
+on datasets that also affect the mean, such as AUTO (11.55 vs 12.07/11.87),
+BL (0.006 vs 0.032/0.010), BASEBALL (57.83 vs 58.86/60.52), MORTGAGE
+(0.079 vs 0.12/0.085), QUAKE (0.007 vs 0.04/0.011), and STOCK (3.93
+vs 4.30/4.51). In contrast, $p_{c}$=0.05provides a clear advantage
+only on a limited subset, primarily BK (0.019), HOUSING (26.53), and
+TREASURY (0.17), while $p_{c}$=0.01 is strictly best only on PLASTIC
+(2.21). Additionally, several datasets are effectively insensitive
+to $p_{c}$ (AIRFOIL, CONCRETE, HO, PL), where all settings yield
+identical outcomes. Overall, for regression performance as summarized
+in Table \ref{tab:expRegressionPc}, $p_{c}$=0.02 is the most reliable
+default setting in terms of both average error and frequency of best
+results, with $p_{c}$=0.05 being preferable in specific datasets
+and$p_{c}$=0.01 offering isolated advantages.
+
+\begin{table}[H]
+\caption{Experimental results on the regression datasets using the proposed
+method and a series of values for the perturbation factor $p_{c}$.\label{tab:expRegressionPc}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & $p_{c}=0.01$ & $p_{c}=0.02$ & $p_{c}=0.05$\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 4.31} & {\footnotesize 4.31} & {\footnotesize 4.34}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.002} & {\footnotesize 0.002} & {\footnotesize 0.002}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 12.07} & {\footnotesize 11.55} & {\footnotesize 11.87}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.025} & {\footnotesize 0.024} & {\footnotesize 0.019}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 0.032} & {\footnotesize 0.006} & {\footnotesize 0.01}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 58.86} & {\footnotesize 57.83} & {\footnotesize 60.52}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 0.23} & {\footnotesize 0.22} & {\footnotesize 0.23}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 2.58} & {\footnotesize 2.47} & {\footnotesize 2.79}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.057} & {\footnotesize 0.05} & {\footnotesize 0.06}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 0.01} & {\footnotesize 0.01} & {\footnotesize 0.01}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 26.76} & {\footnotesize 27.66} & {\footnotesize 26.53}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.007}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 0.016} & {\footnotesize 0.015} & {\footnotesize 0.019}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 0.12} & {\footnotesize 0.079} & {\footnotesize 0.085}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.022} & {\footnotesize 0.022} & {\footnotesize 0.022}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 2.21} & {\footnotesize 2.30} & {\footnotesize 2.24}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.04} & {\footnotesize 0.007} & {\footnotesize 0.011}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.024} & {\footnotesize 0.026}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 4.30} & {\footnotesize 3.93} & {\footnotesize 4.51}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 0.20} & {\footnotesize 0.18} & {\footnotesize 0.17}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{5.33}} & {\footnotesize\textbf{5.27}} & {\footnotesize\textbf{5.40}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:stat_regree_pc} shows no statistically significant
+differences among pc settings on the regression datasets. The Friedman
+test yields p=0.092 (\textgreater 0.05), so equivalence is not rejected.
+The pairwise comparisons likewise provide no evidence of separation.
+Therefore, the tested $p_{c}$ values can be treated as practically
+equivalent for regression.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.6]{stat_pc_r}
+\par\end{centering}
+\caption{Statistical comparison of $p_{c}$ settings for the proposed model
+on regression datasets\label{fig:stat_regree_pc}}
+\end{figure}
+
+
+\subsection{Experiments with the weight parameter $I_{w}$}
+
+In order to determine the stability of the proposed method under different
+initialization conditions, another experiment was conducted using
+it in which various values for the initialization parameter $I_{w}$
+were tested. The experimental results for the classification datasets
+are shown in Table \ref{tab:expClassIw} and for regression datasets
+in Table \ref{tab:expRegressionIw}.
+
+Table \ref{tab:expClassIw} examines the sensitivity of the proposed
+classifier to the parameter $I_{w}$ using three settings (1, 10,
+20) across 34 classification datasets, where lower error rates indicate
+better performance. The aggregate trend is monotonic and unfavorable
+as $I_{w}$ increases: the average error rises from 19.45\% at $I_{w}$=1
+to 20.57\% at $I_{w}$=10 and 21.15\% at $I_{w}$=20. In practical
+terms, $I_{w}$=1 yields an absolute advantage of 1.12 percentage
+points over $I_{w}$=10 and 1.70 points over $I_{w}$=20, corresponding
+to approximately 5.5\% and 8.0\% relative error reductions, respectively.
+The same pattern is reflected in the distribution’s center, with medians
+of about 17.17\% ($I_{w}$=1), 17.75\% ($I_{w}$=10), and 18.49\%
+($I_{w}$=20). Meanwhile, the spread across datasets remains comparable
+(standard deviation close to 14\% for all three settings), suggesting
+that the degradation with higher $I_{w}$ is not driven by a small
+number of extreme cases but by a consistent upward shift in errors.
+
+A dataset-wise view further supports this conclusion. The setting
+$I_{w}$=1 achieves the lowest error on 22 of the 34 datasets, whereas
+$I_{w}$=10 and $I_{w}$=20 each win on 6 datasets, with no ties for
+best. Importantly, larger $I_{(w)}$values are not uniformly detrimental:
+there are clear instances where $I_{w}$=20 improves performance,
+such as CLEVELAND (43.20\%), CIRCULAR (5.14\%), PIMA (26.46\%), and
+SPIRAL (43.86\%). However, these gains are offset by pronounced losses
+on other datasets, including DERMATOLOGY where $I_{w}$=1 is markedly
+superior (6.03\% vs 13.97-14.83), SEGMENT (33.09\% vs 38.85-47.02),
+and WINE (6.82\% vs 8.12-12.00). Overall, Table \ref{tab:expClassIw}
+indicates that $I_{w}$=1 is the most reliable default for classification,
+while higher settings behave more like specialized adjustments that
+can benefit particular datasets but tend to reduce average performance
+across the benchmark suite.
+
+\begin{table}[H]
+\caption{Experimental results on the classification dataset using the proposed
+method and different values for the weight parameter $I_{w}$.\label{tab:expClassIw}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & $I_{w}=1$ & $I_{w}=10$ & $I_{w}=20$\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 13.30\%} & {\footnotesize 15.50\%} & {\footnotesize 15.40\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 13.19\%} & {\footnotesize 15.99\%} & {\footnotesize 18.54\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 28.41\%} & {\footnotesize 27.22\%} & {\footnotesize 29.33\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 9.66\%} & {\footnotesize 8.60\%} & {\footnotesize 9.16\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 47.48\%} & {\footnotesize 44.48\%} & {\footnotesize 43.20\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 6.65\%} & {\footnotesize 5.88\%} & {\footnotesize 5.14\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 6.03\%} & {\footnotesize 14.83\%} & {\footnotesize 13.97\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 45.06\%} & {\footnotesize 49.67\%} & {\footnotesize 50.09\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 49.86\%} & {\footnotesize 52.57\%} & {\footnotesize 52.57\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 26.83\%} & {\footnotesize 26.87\%} & {\footnotesize 27.47\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 33.62\%} & {\footnotesize 34.23\%} & {\footnotesize 39.39\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 16.93\%} & {\footnotesize 18.37\%} & {\footnotesize 18.48\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 18.53\%} & {\footnotesize 18.97\%} & {\footnotesize 21.00\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 3.26\%} & {\footnotesize 4.96\%} & {\footnotesize 5.96\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 8.17\%} & {\footnotesize 10.17\%} & {\footnotesize 12.17\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 30.09\%} & {\footnotesize 33.71\%} & {\footnotesize 32.44\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 17.43\%} & {\footnotesize 19.93\%} & {\footnotesize 18.50\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 17.41\%} & {\footnotesize 17.13\%} & {\footnotesize 17.19\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 16.16\%} & {\footnotesize 14.58\%} & {\footnotesize 13.84\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 31.12\%} & {\footnotesize 27.90\%} & {\footnotesize 26.46\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 5.09\%} & {\footnotesize 5.06\%} & {\footnotesize 4.87\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 29.84\%} & {\footnotesize 31.48\%} & {\footnotesize 31.16\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 30.37\%} & {\footnotesize 32.15\%} & {\footnotesize 32.69\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 33.09\%} & {\footnotesize 38.85\%} & {\footnotesize 47.02\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 46.67\%} & {\footnotesize 44.90\%} & {\footnotesize 43.86\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 17.63\%} & {\footnotesize 21.07\%} & {\footnotesize 18.82\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 3.60\%} & {\footnotesize 4.50\%} & {\footnotesize 4.88\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 23.92\%} & {\footnotesize 23.59\%} & {\footnotesize 23.88\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 4.98\%} & {\footnotesize 4.21\%} & {\footnotesize 4.52\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 6.82\%} & {\footnotesize 8.12\%} & {\footnotesize 12.00\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 8.03\%} & {\footnotesize 7.70\%} & {\footnotesize 7.80\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 5.60\%} & {\footnotesize 6.66\%} & {\footnotesize 6.70\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 2.72\%} & {\footnotesize 2.78\%} & {\footnotesize 2.76\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 3.60\%} & {\footnotesize 6.90\%} & {\footnotesize 7.70\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & \textbf{19.45\%} & {\footnotesize\textbf{20.57\%}} & \textbf{21.15\%}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:stat_class_iw} suggests that the Iw parameter has
+a marginal yet detectable effect on the classification datasets, as
+the overall Friedman test yields p=0.0423 and slightly rejects the
+null of equivalent settings at the 0.05 level. However, the pairwise
+comparisons do not support strong separation: $I_{w}$=1 vs $I_{w}$=10
+gives p=0.2834 (not significant) and$I_{w}$=1 vs $I_{w}$=20 gives
+p=0.069 (also not significant, but close to 0.05). This indicates
+that differences are modest and distributed across settings rather
+than producing a clear, strongly significant pairwise contrast. Practically,
+Iw behaves as a secondary tuning parameter with limited impact, where
+an overall difference is detectable but not pronounced in simple post-hoc
+tests. Hence, selecting $I_{w}$ can be guided by mean performance
+or stability, acknowledging that the statistical effects are weak.
+
+\begin{figure}[H]
+\begin{centering}
+I\_w\includegraphics[scale=0.6]{stat_iw_c}
+\par\end{centering}
+\caption{Statistical comparison of $I_{w}$ settings for the proposed model
+on classification datasets\label{fig:stat_class_iw}}
+\end{figure}
+
+Table \ref{tab:expRegressionIw} reports a regression sensitivity
+analysis of the proposed method with respect to $I_{w}$(1, 10, 20)
+using absolute error values. At the aggregate level, differences are
+modest: the average error is 6.10 for $I_{w}$=1, 5.33 for$I_{w}$=10,
+and 5.46 for $I_{w}$=20. Thus, $I_{w}$=10 is the best overall setting,
+improving the mean by 0.77 relative to $I_{w}$=1(\ensuremath{\approx}12.6\%
+reduction) and by 0.13 relative to $I_{w}$=20(\ensuremath{\approx}2.4\%).
+Given the heterogeneous error scales across datasets, these mean differences
+are influenced by a small number of high-magnitude cases, so it is
+also informative to consider the per-dataset pattern.
+
+At the dataset level, no single setting dominates uniformly, rather,
+$I_{w}$ behaves as a tuning parameter. $I_{w}$=10 attains the minimum
+error on 8 out of 21 datasets and is close to the best on several
+others, while $I_{w}$=20 is best on 7 datasets and $I_{w}$=1 on
+6 datasets. The most visible gains favoring $I_{w}$=10 occur on AUTO
+(12.07 vs 16.88), BASEBALL (58.86 vs 67.47), and TREASURY (0.20 vs
+1.98), whereas $I_{w}$=20 is clearly preferable on ABALONE (4.22),
+AIRFOIL (0.001), FRIEDMAN (2.07), MORTGAGE (0.088), and STOCK (4.13).
+Conversely, $I_{w}$=1 is best on BK (0.021), BL (0.003), FY (0.041),
+HO (0.008), HOUSING (23.12), LASER (0.005), and LW (0.012). Overall,
+Table \ref{tab:expRegressionIw} suggests $I_{w}$=10 as a reasonable
+default for regression under the mean criterion, while the optimal
+choice can vary by dataset without producing large shifts in the overall
+performance picture.
+
+\begin{table}[H]
+\caption{Experimental results with the application of the proposed method to
+the regression datasets, using a variety of values for the weight
+parameter $I_{w}$ .\label{tab:expRegressionIw}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & $i_{w}=1$ & $i_{w}=10$ & $i_{w}=20$\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 4.52} & {\footnotesize 4.31} & {\footnotesize 4.22}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.003} & {\footnotesize 0.002} & {\footnotesize 0.001}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 16.88} & {\footnotesize 12.07} & {\footnotesize 11.10}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.021} & {\footnotesize 0.025} & {\footnotesize 0.028}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 0.003} & {\footnotesize 0.032} & {\footnotesize 0.02}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 67.47} & {\footnotesize 58.86} & {\footnotesize 60.41}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.005} & {\footnotesize 0.004} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 0.23} & {\footnotesize 0.23} & {\footnotesize 0.23}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 3.28} & {\footnotesize 2.58} & {\footnotesize 2.07}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.041} & {\footnotesize 0.057} & {\footnotesize 0.12}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 0.008} & {\footnotesize 0.01} & {\footnotesize 0.01}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 23.12} & {\footnotesize 26.76} & {\footnotesize 29.55}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.005} & {\footnotesize 0.003} & {\footnotesize 0.003}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 0.012} & {\footnotesize 0.016} & {\footnotesize 0.018}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 1.08} & {\footnotesize 0.12} & {\footnotesize 0.088}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.034} & {\footnotesize 0.022} & {\footnotesize 0.023}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 3.94} & {\footnotesize 2.21} & {\footnotesize 2.23}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.04} & {\footnotesize 0.04} & {\footnotesize 0.04}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 0.025} & {\footnotesize 0.026} & {\footnotesize 0.026}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 5.37} & {\footnotesize 4.30} & {\footnotesize 4.13}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 1.98} & {\footnotesize 0.20} & {\footnotesize 0.30}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{6.10}} & {\footnotesize\textbf{5.33}} & {\footnotesize\textbf{5.46}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:stat_regre_iw} indicates that varying the Iw parameter
+does not produce statistically significant differences on the regression
+datasets. The overall Friedman test reports p=0.3050, therefore the
+null hypothesis of equivalent settings is not rejected under the standard
+0.05 threshold. The pairwise comparisons are clearly non-significant
+as well, with p=0.9856 for $I_{w}$=10 vs $I_{w}$=20 and p=0.7928
+for $I_{w}$=1 vs $I_{w}$=20. Such large p-values imply practically
+indistinguishable behavior among the examined settings, with no evidence
+of a consistent winner. Hence, for regression, $I_{w}$ can be selected
+based on secondary considerations because its statistical impact appears
+negligible.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.6]{stat_iw_r}
+\par\end{centering}
+\caption{Statistical comparison of $I_{w}$ settings for the proposed model
+on regression datasets\label{fig:stat_regre_iw}}
+\end{figure}
+
+
+\section{Conclusions\label{sec:Conclusions}}
+
+The proposed training procedure improves generalization by introducing,
+prior to the main optimization, an additional stage that identifies
+an appropriate range of values for the network weights. This stage
+is based on a Simulated Annealing variant that adjusts the admissible
+weight bounds in order to reduce the likelihood of getting trapped
+in local minima and to limit overfitting. The final training is then
+performed inside these bounds using a genetic optimization stage followed
+by a local BFGS refinement.
+
+In the classification experiments, the proposed machine-learning model
+achieves the best mean performance, with an average classification
+error of 20.57, and with clear separation from all competing approaches.
+The advantage is not confined to isolated datasets, but emerges as
+a consistent pattern across a large portion of the benchmark suite,
+while also being accompanied by reduced dispersion of errors, which
+is compatible with more stable behavior on heterogeneous classification
+tasks.
+
+The statistical analysis supports these observations. For classification,
+the overall Friedman test reports p=$2.89\times10^{-11}$, thus very
+strongly rejecting the hypothesis of equivalent performance across
+methods. The post-hoc comparisons indicate statistically significant
+differences in favor of the proposed machine-learning model against
+all main baselines, with particularly strong evidence against ADAM,
+BFGS, and PRUNE, and highly significant differences against GENETIC
+and RBF.
+
+In the regression experiments, the proposed machine-learning model
+attains the lowest mean absolute error, equal to 5.33, and the overall
+Friedman test remains significant with p=$1.55\times10^{-4}$, indicating
+that genuine performance differences exist. However, the pairwise
+picture is more nuanced. The strongest statistical separation is observed
+primarily against BFGS with p=$3.35\times10^{-4}$, and a weaker but
+still significant difference is observed against GENETIC with p=0.0113,
+whereas differences against ADAM, RBF, and PRUNE are not supported
+at the 0.05 level.
+
+The sensitivity studies suggest that variations of the $p_{c}$ parameter
+do not yield measurable statistical differences, both for classification
+and regression, indicating that this setting is not critical within
+the tested range. In contrast, the $I_{w}$ parameter in classification
+exhibits a marginal overall effect, with an overall p=0.0423, but
+without clear confirmation through simple pairwise comparisons. For
+regression, $I_{w}$ shows no statistically detectable impact, with
+an overall p=0.3050 and non-significant pairwise tests.
+
+Several directions follow naturally for future work. First, the generality
+of adaptive weight bounds should be assessed under alternative final
+optimizers and across a broader set of architectures, including deeper
+networks and different activation functions. Second, the fitness definition
+used during the Simulated Annealing phase should be redesigned to
+incorporate explicit generalization criteria, such as validation error
+or robustness to noise, so that the bound-selection stage more directly
+targets out-of-sample performance. Third, the cost-benefit trade-off
+should be quantified systematically, and CPU or GPU parallelization
+should be explored, since the Simulated Annealing phase requires repeated
+evaluations and may dominate the overall runtime.
+
+\vspace{6pt}
+
+
+\authorcontributions{V.C. and I.G.T. conducted the experiments, employing several datasets
+and provided the comparative experiments. D.T. and V.C. performed
+the statistical analysis and prepared the manuscript. All authors
+have read and agreed to the published version of the manuscript.}
+
+\funding{This research has been financed by the European Union : Next Generation
+EU through the Program Greece 2.0 National Recovery and Resilience
+Plan , under the call RESEARCH -- CREATE -- INNOVATE, project name
+“iCREW: Intelligent small craft simulator for advanced crew training
+using Virtual Reality techniques\textquotedbl{} (project code:TAEDK-06195).}
+
+\institutionalreview{Not applicable.}
+
+\informedconsent{Not applicable.}
+
+\dataavailability{The original contributions presented in this study are included in
+the article. Further inquiries can be directed to the corresponding
+author.}
+
+\conflictsofinterest{The authors declare no conflicts of interest.}
+
+\begin{adjustwidth}{-\extralength}{0cm}{}
+
+
+\reftitle{References}
+\begin{thebibliography}{999}
+\bibitem[(year)]{nn1}Abiodun, O. I., Jantan, A., Omolara, A. E.,
+Dada, K. V., Mohamed, N. A., \& Arshad, H. (2018). State-of-the-art
+in artificial neural network applications: A survey. Heliyon, 4(11).
+
+\bibitem{nn2}Suryadevara, S., \& Yanamala, A. K. Y. (2021). A Comprehensive
+Overview of Artificial Neural Networks: Evolution, Architectures,
+and Applications. Revista de Inteligencia Artificial en Medicina,
+12(1), 51-76.
+
+\bibitem{nnc}I.G. Tsoulos, D. Gavrilis, E. Glavas, Neural network
+construction and training using grammatical evolution, Neurocomputing
+\textbf{72}, pp. 269-277, 2008.
+
+\bibitem{activation_spline}S. Guarnieri, F. Piazza, A. Uncini, Multilayer
+feedforward networks with adaptive spline activation function, IEEE
+Transactions on Neural Networks \textbf{10}, pp. 672-683, 1999. 
+
+\bibitem{activation_trained}Ö.F. Ertuğrul, A novel type of activation
+function in artificial neural networks: Trained activation function,
+Neural Networks \textbf{99}, pp. 148-157, 2018.
+
+\bibitem{activation_review}A. D. Rasamoelina, F. Adjailia, P. Sinčák,
+A Review of Activation Function for Artificial Neural Network, In:
+2020 IEEE 18th World Symposium on Applied Machine Intelligence and
+Informatics (SAMI), Herlany, Slovakia, pp. 281-286, 2020.
+
+\bibitem[(year)]{nn_image}M. Egmont-Petersen, D. de Ridder, H. Handels,
+Image processing with neural networks---a review, Pattern Recognition
+\textbf{35}, pp. 2279-2301, 2002.
+
+\bibitem{nn_timeseries}G.Peter Zhang, Time series forecasting using
+a hybrid ARIMA and neural network model, Neurocomputing \textbf{50},
+pp. 159-175, 2003.
+
+\bibitem{nn_credit}Z. Huang, H. Chen, C.-Jung Hsu, W.-Hwa Chen, S.
+Wu, Credit rating analysis with support vector machines and neural
+networks: a market comparative study, Decision Support Systems \textbf{37},
+pp. 543-558, 2004.
+
+\bibitem{nnphysics1}P. Baldi, K. Cranmer, T. Faucett et al, Parameterized
+neural networks for high-energy physics, Eur. Phys. J. C \textbf{76},
+2016.
+
+\bibitem{nnphysics2}Baldi, P., Cranmer, K., Faucett, T., Sadowski,
+P., \& Whiteson, D. (2016). Parameterized neural networks for high-energy
+physics. The European Physical Journal C, 76(5), 1-7.
+
+\bibitem{nn_flood}M.B. Kia, S. Pirasteh, B. Pradhan B. et al, An
+artificial neural network model for flood simulation using GIS: Johor
+River Basin, Malaysia, Environ Earth Sci \textbf{67}, pp. 251--264,
+2012.
+
+\bibitem{nn_solar}A.K. Yadav, S.S. Chandel, Solar radiation prediction
+using Artificial Neural Network techniques: A review, Renewable and
+Sustainable Energy Reviews \textbf{33}, pp. 772-781, 2014.
+
+\bibitem{nn_agro}M.A. Getahun, S.M. Shitote, C. Zachary, Artificial
+neural network based modelling approach for strength prediction of
+concrete incorporating agricultural and construction wastes, Construction
+and Building Materials \textbf{190}, pp. 517-525, 2018.
+
+\bibitem{nn_wireless}M. Chen, U. Challita, W. Saad, C. Yin and M.
+Debbah, Artificial Neural Networks-Based Machine Learning for Wireless
+Networks: A Tutorial, IEEE Communications Surveys \& Tutorials \textbf{21},
+pp. 3039-3071, 2019.
+
+\bibitem{nnmed1}Igor I. Baskin, David Winkler and Igor V. Tetko,
+A renaissance of neural networks in drug discovery, Expert Opinion
+on Drug Discovery \textbf{11}, pp. 785-795, 2016.
+
+\bibitem{nnmed2}Ronadl Bartzatt, Prediction of Novel Anti-Ebola Virus
+Compounds Utilizing Artificial Neural Network (ANN), Chemistry Faculty
+Publications \textbf{49}, pp. 16-34, 2018.
+
+\bibitem{nn_mech1}K. Peta, J. Żurek, Prediction of air leakage in
+heat exchangers for automotive applications using artificial neural
+networks, In: 2018 9th IEEE Annual Ubiquitous Computing, Electronics
+\& Mobile Communication Conference (UEMCON), New York, NY, USA, pp.
+721-725, 2018.
+
+\bibitem{bpnn2}K. Vora, S. Yagnik, A survey on backpropagation algorithms
+for feedforward neural networks, International Journal of Engineering
+Development and Research \textbf{1}, pp. 193-197, 2014.
+
+\bibitem{rpropnn-1}Pajchrowski, T., Zawirski, K., \& Nowopolski,
+K. (2014). Neural speed controller trained online by means of modified
+RPROP algorithm. IEEE transactions on industrial informatics, 11(2),
+560-568.
+
+\bibitem{rpropnn-2}Hermanto, R. P. S., \& Nugroho, A. (2018). Waiting-time
+estimation in bank customer queues using RPROP neural networks. Procedia
+Computer Science, 135, 35-42.
+
+\bibitem{nn_adam}D. P. Kingma, J. L. Ba, ADAM: a method for stochastic
+optimization, in: Proceedings of the 3rd International Conference
+on Learning Representations (ICLR 2015), pp. 1--15, 2015.
+
+\bibitem{geneticnn1}Reynolds, J., Rezgui, Y., Kwan, A., \& Piriou,
+S. (2018). A zone-level, building energy optimisation combining an
+artificial neural network, a genetic algorithm, and model predictive
+control. Energy, 151, 729-739.
+
+\bibitem[(year)]{geneticnn2}Sharma, D. K., Hota, H. S., Brown, K.,
+\& Handa, R. (2022). Integration of genetic algorithm with artificial
+neural network for stock market forecasting. International Journal
+of System Assurance Engineering and Management, 13(Suppl 2), 828-841.
+
+\bibitem{psonn}Das, G., Pattnaik, P. K., \& Padhy, S. K. (2014).
+Artificial neural network trained by particle swarm optimization for
+non-linear channel equalization. Expert Systems with Applications,
+41(7), 3491-3496.
+
+\bibitem{nn_siman}Sexton, R. S., Dorsey, R. E., \& Johnson, J. D.
+(1999). Beyond backpropagation: using simulated annealing for training
+neural networks. Journal of Organizational and End User Computing
+(JOEUC), 11(3), 3-10.
+
+\bibitem{weight_de1}Wang, L., Zeng, Y., \& Chen, T. (2015). Back
+propagation neural network with adaptive differential evolution algorithm
+for time series forecasting. Expert Systems with Applications, 42(2),
+855-863.
+
+\bibitem{nn_abc}Karaboga, D., \& Akay, B. (2007, June). Artificial
+bee colony (ABC) algorithm on training artificial neural networks.
+In 2007 IEEE 15th Signal Processing and Communications Applications
+(pp. 1-4). IEEE.
+
+\bibitem[(year)]{nn_wolf}Mosavi, M. R., Khishe, M., \& Ghamgosar,
+A. (2016). Classification of sonar data set using neural network trained
+by gray wolf optimization. Neural Network World, 26(4), 393.
+
+\bibitem{tabunn}R.S. Sexton, B. Alidaee, R.E. Dorsey, J.D. Johnson,
+Global optimization for artificial neural networks: A tabu search
+application. European Journal of Operational Research \textbf{106},
+pp. 570-584, 1998.
+
+\bibitem{nn_hybrid}J.-R. Zhang, J. Zhang, T.-M. Lok, M.R. Lyu, A
+hybrid particle swarm optimization--back-propagation algorithm for
+feedforward neural network training, Applied Mathematics and Computation
+\textbf{185}, pp. 1026-1037, 2007.
+
+\bibitem{nn_cascade}G. Zhao, T. Wang, Y. Jin, C. Lang, Y. Li, H.
+Ling, The Cascaded Forward algorithm for neural network training,
+Pattern Recognition \textbf{161}, 111292, 2025.
+
+\bibitem{nn_gpu1}K-Su Oh, K. Jung, GPU implementation of neural networks,
+Pattern Recognition \textbf{37}, pp. 1311-1314, 2004.
+
+\bibitem{nn_gpu2}M. Zhang, K. Hibi, J. Inoue, GPU-accelerated artificial
+neural network potential for molecular dynamics simulation, Computer
+Physics Communications \textbf{285}, 108655, 2023. 
+
+\bibitem[(year)]{nnsharing1}S.J. Nowlan and G.E. Hinton, Simplifying
+neural networks by soft weight sharing, Neural Computation 4, pp.
+473-493, 1992.
+
+\bibitem{nnsharing2}Nowlan, S. J., \& Hinton, G. E. (2018). Simplifying
+neural networks by soft weight sharing. In The mathematics of generalization
+(pp. 373-394). CRC Press.
+
+\bibitem{nnprunning1}S.J. Hanson and L.Y. Pratt, Comparing biases
+for minimal network construction with back propagation, In D.S. Touretzky
+(Ed.), Advances in Neural Information Processing Systems, Volume 1,
+pp. 177-185, San Mateo, CA: Morgan Kaufmann, 1989.
+
+\bibitem{nnprunning2}M. Augasta and T. Kathirvalavakumar, Pruning
+algorithms of neural networks --- a comparative study, Central European
+Journal of Computer Science, 2003.
+
+\bibitem{nnearly1}Lutz Prechelt, Automatic early stopping using cross
+validation: quantifying the criteria, Neural Networks \textbf{11},
+pp. 761-767, 1998.
+
+\bibitem{nnearly2}X. Wu and J. Liu, A New Early Stopping Algorithm
+for Improving Neural Network Generalization, 2009 Second International
+Conference on Intelligent Computation Technology and Automation, Changsha,
+Hunan, 2009, pp. 15-18.
+
+\bibitem{nndecay1}N. K. Treadgold and T. D. Gedeon, Simulated annealing
+and weight decay in adaptive learning: the SARPROP algorithm,IEEE
+Transactions on Neural Networks \textbf{9}, pp. 662-668, 1998.
+
+\bibitem{nndecay2}M. Carvalho and T. B. Ludermir, Particle Swarm
+Optimization of Feed-Forward Neural Networks with Weight Decay, 2006
+Sixth International Conference on Hybrid Intelligent Systems (HIS'06),
+Rio de Janeiro, Brazil, 2006, pp. 5-5.
+
+\bibitem{nn_arch1}J. Arifovic, R. Gençay, Using genetic algorithms
+to select architecture of a feedforward artificial neural network,
+Physica A: Statistical Mechanics and its Applications \textbf{289},
+pp. 574-594, 2001.
+
+\bibitem{nn_arch2}P.G. Benardos, G.C. Vosniakos, Optimizing feedforward
+artificial neural network architecture, Engineering Applications of
+Artificial Intelligence \textbf{20}, pp. 365-382, 2007.
+
+\bibitem{nn_arch3}B.A. Garro, R.A. Vázquez, Designing Artificial
+Neural Networks Using Particle Swarm Optimization Algorithms, Computational
+Intelligence and Neuroscience, 369298, 2015. 
+
+\bibitem[(2001)]{nn_ereinf}Siebel, N. T., \& Sommer, G. (2007). Evolutionary
+reinforcement learning of artificial neural networks. International
+Journal of Hybrid Intelligent Systems, 4(3), 171-183.
+
+\bibitem[(2013)]{weight_gpu2}A.A. Huqqani, E. Schikuta, S. Ye Peng
+Chen, Multicore and GPU Parallelization of Neural Networks for Face
+Recognition, Procedia Computer Science \textbf{18}, pp. 349-358, 2013.
+
+\bibitem[(2006)]{siman1}L. Ingber, Very fast simulated re-annealing,
+Mathematical and Computer Modelling \textbf{12}, pp. 967-973, 1989.
+
+\bibitem[(2006)]{sa_resource}Aerts, J. C., \& Heuvelink, G. B. (2002).
+Using simulated annealing for resource allocation. International Journal
+of Geographical Information Science, 16(6), 571-587.
+
+\bibitem[(2006)]{sa_portfolio}K. Ganesh, M. Punniyamoorthy, Optimization
+of continuous-time production planning using hybrid genetic algorithms-simulated
+annealing, Int J Adv Manuf Technol \textbf{26}, pp. 148--154, 2005.
+
+\bibitem[(2006)]{sa_solar}El-Naggar, K. M., AlRashidi, M. R., AlHajri,
+M. F., \& Al-Othman, A. K. (2012). Simulated annealing algorithm for
+photovoltaic parameters identification. Solar Energy, 86(1), 266-274.
+
+\bibitem[(2006)]{sa_biology}Dupanloup, I., Schneider, S., \& Excoffier,
+L. (2002). A simulated annealing approach to define the genetic structure
+of populations. Molecular ecology, 11(12), 2571-2581.
+
+\bibitem[(2006)]{sa_multi}Suppapitnarm, A., Seffen, K. A., Parks,
+G. T., \& Clarkson, P. J. (2000). A simulated annealing algorithm
+for multiobjective optimization. Engineering optimization, 33(1),
+59-85.
+
+\bibitem[(2006)]{sa_timetable}Leite, N., Melício, F., \& Rosa, A.
+C. (2019). A fast simulated annealing algorithm for the examination
+timetabling problem. Expert Systems with Applications, 122, 137-151.
+
+\bibitem[(2006)]{sa_tsp}Geng, X., Chen, Z., Yang, W., Shi, D., \&
+Zhao, K. (2011). Solving the traveling salesman problem based on an
+adaptive simulated annealing algorithm with greedy search. Applied
+Soft Computing, 11(4), 3680-3689.
+
+\bibitem[(2006)]{sa_cooling1}Nourani, Y., \& Andresen, B. (1998).
+A comparison of simulated annealing cooling strategies. Journal of
+Physics A: Mathematical and General, 31(41), 8373.
+
+\bibitem[(2006)]{sa_cooling2}Karabin, M., \& Stuart, S. J. (2020).
+Simulated annealing with adaptive cooling rates. The Journal of Chemical
+Physics, 153(11).
+
+\bibitem[(2006)]{nnt_bound}Anastasopoulos, N., Tsoulos, I.G., Karvounis,
+E. et al. Locate the Bounding Box of Neural Networks with Intervals.
+Neural Process Lett 52, 2241--2251 (2020). 
+
+\bibitem[(year)]{powell}M.J.D Powell, A Tolerant Algorithm for Linearly
+Constrained Optimization Calculations, Mathematical Programming \textbf{45},
+pp. 547-566, 1989. 
+
+\bibitem{kaelo}P. Kaelo, M.M. Ali, Integrated crossover rules in
+real coded genetic algorithms, European Journal of Operational Research
+\textbf{176}, pp. 60-76, 2007.
+
+\bibitem[Author1(year)]{uci} M. Kelly, R. Longjohn, K. Nottingham,
+The UCI Machine Learning Repository, https://archive.ics.uci.edu.
+
+\bibitem{Keel}J. Alcalá-Fdez, A. Fernandez, J. Luengo, J. Derrac,
+S. García, L. Sánchez, F. Herrera. KEEL Data-Mining Software Tool:
+Data Set Repository, Integration of Algorithms and Experimental Analysis
+Framework. Journal of Multiple-Valued Logic and Soft Computing 17,
+pp. 255-287, 2011.
+
+\bibitem{appendicitis}Weiss, Sholom M. and Kulikowski, Casimir A.,
+Computer Systems That Learn: Classification and Prediction Methods
+from Statistics, Neural Nets, Machine Learning, and Expert Systems,
+Morgan Kaufmann Publishers Inc, 1991.
+
+\bibitem[Tzimourta(2018)]{alcohol}Tzimourta, K.D.; Tsoulos, I.; Bilero,
+I.T.; Tzallas, A.T.; Tsipouras, M.G.; Giannakeas, N. Direct Assessment
+of Alcohol Consumption in Mental State Using Brain Computer Interfaces
+and Grammatical Evolution. Inventions 2018, 3, 51.
+
+\bibitem[Quinlan(2018)]{australian}J.R. Quinlan, Simplifying Decision
+Trees. International Journal of Man-Machine Studies \textbf{27}, pp.
+221-234, 1987. 
+
+\bibitem{balance}T. Shultz, D. Mareschal, W. Schmidt, Modeling Cognitive
+Development on Balance Scale Phenomena, Machine Learning \textbf{16},
+pp. 59-88, 1994.
+
+\bibitem[(2004)]{cleveland1}Z.H. Zhou,Y. Jiang, NeC4.5: neural ensemble
+based C4.5,\textquotedbl{} in IEEE Transactions on Knowledge and Data
+Engineering \textbf{16}, pp. 770-773, 2004.
+
+\bibitem{cleveland2}R. Setiono , W.K. Leow, FERNN: An Algorithm for
+Fast Extraction of Rules from Neural Networks, Applied Intelligence
+\textbf{12}, pp. 15-25, 2000.
+
+\bibitem[(1998)]{dermatology}G. Demiroz, H.A. Govenir, N. Ilter,
+Learning Differential Diagnosis of Eryhemato-Squamous Diseases using
+Voting Feature Intervals, Artificial Intelligence in Medicine. \textbf{13},
+pp. 147--165, 1998.
+
+\bibitem[(1996)]{ecoli}P. Horton, K.Nakai, A Probabilistic Classification
+System for Predicting the Cellular Localization Sites of Proteins,
+In: Proceedings of International Conference on Intelligent Systems
+for Molecular Biology \textbf{4}, pp. 109-15, 1996.
+
+\bibitem[(1977)]{hayes-roth}B. Hayes-Roth, B., F. Hayes-Roth. Concept
+learning and the recognition and classification of exemplars. Journal
+of Verbal Learning and Verbal Behavior \textbf{16}, pp. 321-338, 1977.
+
+\bibitem[(1997)]{heart}I. Kononenko, E. Šimec, M. Robnik-Šikonja,
+Overcoming the Myopia of Inductive Learning Algorithms with RELIEFF,
+Applied Intelligence \textbf{7}, pp. 39--55, 1997
+
+\bibitem[(2002)]{housevotes}R.M. French, N. Chater, Using noise to
+compute error surfaces in connectionist networks: a novel means of
+reducing catastrophic forgetting, Neural Comput. \textbf{14}, pp.
+1755-1769, 2002.
+
+\bibitem[(2004)]{ion1}J.G. Dy , C.E. Brodley, Feature Selection for
+Unsupervised Learning, The Journal of Machine Learning Research \textbf{5},
+pp 845--889, 2004.
+
+\bibitem{ion2}S. J. Perantonis, V. Virvilis, Input Feature Extraction
+for Multilayered Perceptrons Using Supervised Principal Component
+Analysis, Neural Processing Letters \textbf{10}, pp 243--252, 1999.
+
+\bibitem[(2002)]{liver} J. Garcke, M. Griebel, Classification with
+sparse grids using simplicial basis functions, Intell. Data Anal.
+\textbf{6}, pp. 483-502, 2002.
+
+\bibitem{liver1}J. Mcdermott, R.S. Forsyth, Diagnosing a disorder
+in a classification benchmark, Pattern Recognition Letters \textbf{73},
+pp. 41-43, 2016.
+
+\bibitem[(2002)]{lymography}G. Cestnik, I. Konenenko, I. Bratko,
+Assistant-86: A Knowledge-Elicitation Tool for Sophisticated Users.
+In: Bratko, I. and Lavrac, N., Eds., Progress in Machine Learning,
+Sigma Press, Wilmslow, pp. 31-45, 1987. 
+
+\bibitem[(2007)]{mammographic}M. Elter, R. Schulz-Wendtland, T. Wittenberg,
+The prediction of breast cancer biopsy outcomes using two CAD approaches
+that both emphasize an intelligible decision process, Med Phys. \textbf{34},
+pp. 4164-72, 2007.
+
+\bibitem[(2007)]{parkinsons1}M.A. Little, P.E. McSharry, S.J Roberts
+et al, Exploiting Nonlinear Recurrence and Fractal Scaling Properties
+for Voice Disorder Detection. BioMed Eng OnLine \textbf{6}, 23, 2007.
+
+\bibitem{parkinsons2}M.A. Little, P.E. McSharry, E.J. Hunter, J.
+Spielman, L.O. Ramig, Suitability of dysphonia measurements for telemonitoring
+of Parkinson's disease. IEEE Trans Biomed Eng. \textbf{56}, pp. 1015-1022,
+2009.
+
+\bibitem[(2007)]{pima}J.W. Smith, J.E. Everhart, W.C. Dickson, W.C.
+Knowler, R.S. Johannes, Using the ADAP learning algorithm to forecast
+the onset of diabetes mellitus, In: Proceedings of the Symposium on
+Computer Applications and Medical Care IEEE Computer Society Press,
+pp.261-265, 1988.
+
+\bibitem[(2007)]{popfailures}D.D. Lucas, R. Klein, J. Tannahill,
+D. Ivanova, S. Brandon, D. Domyancic, Y. Zhang, Failure analysis of
+parameter-induced simulation crashes in climate models, Geoscientific
+Model Development \textbf{6}, pp. 1157-1171, 2013.
+
+\bibitem[(2007)]{regions2}N. Giannakeas, M.G. Tsipouras, A.T. Tzallas,
+K. Kyriakidi, Z.E. Tsianou, P. Manousou, A. Hall, E.C. Karvounis,
+V. Tsianos, E. Tsianos, A clustering based method for collagen proportional
+area extraction in liver biopsy images (2015) Proceedings of the Annual
+International Conference of the IEEE Engineering in Medicine and Biology
+Society, EMBS, 2015-November, art. no. 7319047, pp. 3097-3100. 
+
+\bibitem[(2007)]{saheart}T. Hastie, R. Tibshirani, Non-parametric
+logistic and proportional odds regression, JRSS-C (Applied Statistics)
+\textbf{36}, pp. 260--276, 1987.
+
+\bibitem{segment}M. Dash, H. Liu, P. Scheuermann, K. L. Tan, Fast
+hierarchical clustering and its validation, Data \& Knowledge Engineering
+\textbf{44}, pp 109--138, 2003.
+
+\bibitem[(2007)]{student}P. Cortez, A. M. Gonçalves Silva, Using
+data mining to predict secondary school student performance, In Proceedings
+of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) (pp. 5--12).
+EUROSIS-ETI, 2008.
+
+\bibitem[(2007)]{transfusion}I-Cheng Yeh, King-Jang Yang, Tao-Ming
+Ting, Knowledge discovery on RFM model using Bernoulli sequence, Expert
+Systems with Applications \textbf{36}, pp. 5866-5871, 2009.
+
+\bibitem[(2007)]{wdbc1}Jeyasingh, S., \& Veluchamy, M. (2017). Modified
+bat algorithm for feature selection with the Wisconsin diagnosis breast
+cancer (WDBC) dataset. Asian Pacific journal of cancer prevention:
+APJCP, 18(5), 1257.
+
+\bibitem[(2007)]{wdbc2}Alshayeji, M. H., Ellethy, H., \& Gupta, R.
+(2022). Computer-aided detection of breast cancer on the Wisconsin
+dataset: An artificial neural networks approach. Biomedical signal
+processing and control, 71, 103141.
+
+\bibitem[(2007)]{wine1}M. Raymer, T.E. Doom, L.A. Kuhn, W.F. Punch,
+Knowledge discovery in medical and biological datasets using a hybrid
+Bayes classifier/evolutionary algorithm. IEEE transactions on systems,
+man, and cybernetics. Part B, Cybernetics : a publication of the IEEE
+Systems, Man, and Cybernetics Society, \textbf{33} , pp. 802-813,
+2003.
+
+\bibitem{wine2}P. Zhong, M. Fukushima, Regularized nonsmooth Newton
+method for multi-class support vector machines, Optimization Methods
+and Software \textbf{22}, pp. 225-236, 2007.
+
+\bibitem[(2007)]{eeg1}R. G. Andrzejak, K. Lehnertz, F.Mormann, C.
+Rieke, P. David, and C. E. Elger, “Indications of nonlinear deterministic
+and finite-dimensional structures in time series of brain electrical
+activity: dependence on recording region and brain state,” Physical
+Review E, vol. 64, no. 6, Article ID 061907, 8 pages, 2001. 
+
+\bibitem{eeg2}A. T. Tzallas, M. G. Tsipouras, and D. I. Fotiadis,
+“Automatic Seizure Detection Based on Time-Frequency Analysis and
+Artificial Neural Networks,” Computational Intelligence and Neuroscience,
+vol. 2007, Article ID 80510, 13 pages, 2007. doi:10.1155/2007/80510
+
+\bibitem[(2007)]{zoo}M. Koivisto, K. Sood, Exact Bayesian Structure
+Discovery in Bayesian Networks, The Journal of Machine Learning Research\textbf{
+5}, pp. 549--573, 2004.
+
+\bibitem[(2007)]{abalone}Nash, W.J.; Sellers, T.L.; Talbot, S.R.;
+Cawthor, A.J.; Ford, W.B. The Population Biology of Abalone (\_Haliotis\_
+species) in Tasmania. I. Blacklip Abalone (\_H. rubra\_) from the
+North Coast and Islands of Bass Strait, Sea Fisheries Division; Technical
+Report No. 48; Department of Primary Industry and Fisheries, Tasmania:
+Hobart, Australia, 1994; ISSN 1034-3288
+
+\bibitem[(2007)]{airfoil}Brooks, T.F.; Pope, D.S.; Marcolini, A.M.
+Airfoil Self-Noise and Prediction. Technical Report, NASA RP-1218.
+July 1989. Available online: https://ntrs.nasa.gov/citations/19890016302
+(accessed on 14 November 2024).
+
+\bibitem[(2007)]{concrete}I.Cheng Yeh, Modeling of strength of high
+performance concrete using artificial neural networks, Cement and
+Concrete Research. \textbf{28}, pp. 1797-1808, 1998. 
+
+\bibitem{friedman}Friedman, J. (1991): Multivariate Adaptative Regression
+Splines. Annals of Statistics, 19:1, 1-{}-141. 
+
+\bibitem[(2007)]{housing}D. Harrison and D.L. Rubinfeld, Hedonic
+prices and the demand for clean ai, J. Environ. Economics \& Management
+\textbf{5}, pp. 81-102, 1978.
+
+\bibitem[(2022)]{optimus}Tsoulos, I. G., Charilogis, V., Kyrou, G.,
+Stavrou, V. N., \& Tzallas, A. (2025). OPTIMUS: A Multidimensional
+Global Optimization Package. Journal of Open Source Software, 10(108),
+7584.
+
+\bibitem[(1991)]{rbf1}J. Park and I. W. Sandberg, Universal Approximation
+Using Radial-Basis-Function Networks, Neural Computation \textbf{3},
+pp. 246-257, 1991.
+
+\bibitem{rbf2}G.A. Montazer, D. Giveki, M. Karami, H. Rastegar, Radial
+basis function neural networks: A review. Comput. Rev. J \textbf{1},
+pp. 52-74, 2018.
+
+\bibitem[(2002)]{neat}K. O. Stanley, R. Miikkulainen, Evolving Neural
+Networks through Augmenting Topologies, Evolutionary Computation \textbf{10},
+pp. 99-127, 2002.
+
+\bibitem[(2002)]{prune}Zhu, V., Lu, Y., \& Li, Q. (2006). MW-OBS:
+An improved pruning method for topology design of neural networks.
+Tsinghua Science and Technology, 11(4), 307-312.
+
+\end{thebibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% for journal Sci
+%\reviewreports{\\
+%Reviewer 1 comments and authors' response\\
+%Reviewer 2 comments and authors' response\\
+%Reviewer 3 comments and authors' response
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\PublishersNote{}
+
+\end{adjustwidth}{}
+\end{document}

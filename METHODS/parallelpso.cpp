@@ -63,7 +63,7 @@ int ParallelPso::subClusterEndPos(int subClusterIndex)
     return (subClusterIndex + 1) * particles.size() / subCluster - 1;
 }
 
-bool sortByFirstDesc(const pair<double, int> &a, const pair<double, int> &b)
+static bool sortByFirstDesc(const pair<double, int> &a, const pair<double, int> &b)
 {
     return a.first < b.first;
 }

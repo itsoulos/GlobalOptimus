@@ -23,7 +23,11 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+    METHODS/pdoublegenetic.cpp \
 	METHODS/trio.cpp \
+    OPTIMUS/cluster.cpp \
+    OPTIMUS/kmeans.cpp \
+    OPTIMUS/point.cpp \
     SAMPLER/distributedsampler.cpp \
 	SAMPLER/usersampler.cpp \
 	METHODS/eo.cpp \
@@ -112,7 +116,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    METHODS/pdoublegenetic.h \
     METHODS/trio.h \
+    OPTIMUS/cluster.h \
+    OPTIMUS/kmeans.h \
+    OPTIMUS/point.h \
     SAMPLER/distributedsampler.h \
     SAMPLER/usersampler.h\
     METHODS/eo.h \

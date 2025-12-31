@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=iPso
+METHOD=PdoubleGenetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -99,6 +99,19 @@ elif [ $METHOD = "GradientDescent" ]; then
   #gd_rate: the line search rate
 
   METHODPARAMS="--gd_maxiters=200 --gd_linesearch=armijo --gd_epsilon=0.000001 --gd_rate=0.001"
+elif [ $METHOD = "PdoubleGenetic" ]; then
+#pgen_chromosomes: 	Number of chromosomes
+#pgen_generations: 	Maximum number of allowed generations
+#pgen_selectionrate: 	Selection rate of the genetic algorithm
+#pgen_mutationrate:  	Mutation rate of the genetic algorithm
+#pgen_subClusterEnable: The number of islands that participate in the termination rule [1,islands]
+#pgen_subCluster:	Number of islands
+#pgen_centers:		Number of centers for k-means
+#pgen_pNumber:		Numbers of samples in propagate
+#pgen_parallelPropagateMethod: Propagation method (1to1,1toN,Nto1,NtoN)
+#pgen_propagateRate:    Number of generations before propagation.
+#pgen_sampler:		Sampling method (uniform, kmeans, teams)
+ METHODPARAMS="--pgen_chromosomes=100 --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=5 --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=1to1 --pgen_sampler=uniform"
 elif [ $METHOD = "Genetic" ]; then
 
   #gen_lrate:		local search rate
