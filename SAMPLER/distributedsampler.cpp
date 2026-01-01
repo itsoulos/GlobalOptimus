@@ -35,6 +35,46 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
     Data left  = myProblem->getLeftMargin();
     Data right = myProblem->getRightMargin();
     int total_count =0;
+    int M = left.size();
+    for (int i = 0; i < partitions; ++i) {
+
+        leftBound.resize(left.size());
+        rightBound.resize(right.size());
+        for (int j = 0; j < M; ++j) {
+            double segment = (right[j] - left[j]) / partitions;
+            leftBound[j] = left[j] + i * segment;
+            rightBound[j] = (i == partitions - 1) ? right[j] : leftBound[j] + segment;
+            /*printf("partitions:%d Bounds[%d]=(%lf,%lf) Margins[%d]=(%lf,%lf)\n",
+                   partitions,
+                   j,leftBound[j],rightBound[j],j,left[j],right[j]);*/
+        }
+
+        for(int k=i*N/partitions;k<(i+1)*N/partitions;k++)
+        {
+            xsample[k]=getSampleInPartition(i);
+            ysample[k]=myProblem->statFunmin(xsample[k]);
+            total_count++;
+        }
+
+
+    }
+    if(total_count<N)
+    {
+        for(int i=total_count;i<N;i++)
+        {
+            xsample[i].resize(myProblem->getDimension());
+            for(int j=0;j<myProblem->getDimension();j++)
+            {
+                double a = left[j];
+                double b = right[j];
+                xsample[i][j]=a+(b-a)*myProblem->randomDouble();
+            }
+            ysample[i]=myProblem->statFunmin(xsample[i]);
+        }
+    }
+
+   /*
+    *  int total_count =0;
     for(int i=0;i<partitions;i++)
     {
         leftBound.resize(left.size());
@@ -49,6 +89,7 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
             double b = mid+delta * rand()*1.0/RAND_MAX* width/2;
             if(a<left[i]) a = left[j];
             if(b>right[j]) b = right[j];
+
             leftBound[j]=a;
             rightBound[j]=b;
         }
@@ -72,7 +113,7 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
             }
             ysample[i]=myProblem->statFunmin(xsample[i]);
         }
-    }
+    }*/
 }
 DistributedSampler::~DistributedSampler()
 {

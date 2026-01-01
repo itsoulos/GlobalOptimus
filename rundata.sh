@@ -3,9 +3,9 @@ METHOD=PdoubleGenetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
-SAMPLER=uniform
+SAMPLER=dist
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+TERMINATION=doublebox
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -15,7 +15,7 @@ DATAFILE=$1
 GLOBALPARAMS="--opt_localsearch=$LOCALSEARCH --opt_sampler=$SAMPLER --opt_termination=$TERMINATION --opt_debug=yes"
 
 if [ $MODEL = "mlp" ]; then
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=uniform --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
@@ -111,10 +111,10 @@ elif [ $METHOD = "PdoubleGenetic" ]; then
 #pgen_parallelPropagateMethod: Propagation method (1to1,1toN,Nto1,NtoN)
 #pgen_propagateRate:    Number of generations before propagation.
 #pgen_sampler:		Sampling method (uniform, kmeans, teams)
-THREADS=1
+THREADS=10
 TOTAL_AGENTS=500
 PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
- METHODPARAMS="--pgen_chromosomes=$PAGENTS --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=5 --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=1to1 --pgen_sampler=uniform"
+ METHODPARAMS="--pgen_chromosomes=$PAGENTS --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=$THREADS --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=1to1 --opt_distpartitions=$THREADS"
 elif [ $METHOD = "Genetic" ]; then
 
   #gen_lrate:		local search rate

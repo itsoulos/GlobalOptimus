@@ -24,9 +24,7 @@ pDoubleGenetic::pDoubleGenetic()
     pmethod<<"1to1"<<"1toN"<<"Nto1"<<"NtoN";
     addParam(Parameter("pgen_parallelPropagateMethod", pmethod[0],pmethod,"The propagation method used. Available values: 1to1,1toN,Nto1,NtoN"));
     addParam(Parameter("pgen_propagateRate", "1", "The number of generations before the propagation takes place"));
-    QStringList sample;
-    sample<<"uniform"<<"kmeans"<<"teams";
-    addParam(Parameter("pgen_sampler",sample[0],sample,"The sampling method"));
+
 
 }
 bool sortByFirstDesc(const pair<double, int> &a, const pair<double, int> &b)
@@ -327,7 +325,7 @@ bool pDoubleGenetic::checkSubCluster(int subClusterName)
            doublebox_stopat.at(subClusterName)=doublebox_variance.at(subClusterName)/2.0;
        }
 
-
+       if(generation%50==0)
     printf("%4d] doublebox_variance.at(%d) : %f doublebox_stopat.at(%d) : %f different  : %lf\n", generation, subClusterName, doublebox_variance.at(subClusterName), subClusterName, doublebox_stopat.at(subClusterName), subClusterName, fabs(doublebox_variance.at(subClusterName) - doublebox_stopat.at(subClusterName)));
     return generation >= double_generations || (doublebox_variance.at(subClusterName) <= doublebox_stopat.at(subClusterName) && generation>=20);
     return false;
@@ -600,9 +598,13 @@ void pDoubleGenetic::init()
         subClusterEnable = subCluster;
     kmeans = NULL;
 
-    if (sample_method == "teams")
+    population = double_chromosomes * subCluster;
+    sampleFromProblem(population,chromosome,fitnessArray);
+
+    /*if (sample_method == "teams")
     {
         population = double_chromosomes * subCluster;
+
         kmeans = new KMeans(subCluster, 30, centers);
         allSamples.clear();
         for (int i = 0; i < population; i++)
@@ -613,12 +615,11 @@ void pDoubleGenetic::init()
 
         kmeans->run(allSamples);
 
-        allmeans.clear();
-        chromosome.clear();
-        fitnessArray.clear();
-
+        population = kmeans->pointsOfMeans().size();
+        fitnessArray.resize(population);
+        chromosome.resize(population);
         std::vector<std::vector<Point>> ppoint = kmeans->pointsOfMeans();
-
+        int icount=0;
         for (int i = 0; i < kmeans->pointsOfMeans().size(); i++)
         {
             for (int j = 0; j < kmeans->pointsOfMeans()[i].size(); j++)
@@ -628,49 +629,36 @@ void pDoubleGenetic::init()
                 {
                     s.push_back(ppoint[i][j].getVal(e));
                 }
-                chromosome.push_back(s);
-                fitnessArray.push_back(myProblem->funmin(s));
+                chromosome[icount]=s;
+                fitnessArray[icount++]=myProblem->funmin(s);
             }
         }
+
+        printf("csize : %d \n",chromosome.size());
         // printf("teams: population = %d chrom= %d fitt %d centers= %d \n", population, chromosome.size(), fitnessArray.size(), centers);
     }
 
     else if (sample_method == "kmeans")
     {
 
+        printf("passs 1\n");
         vector<Data> centerValues = runKmeans(double_chromosomes * subCluster,
                                               centers * subCluster);
-	int currentCenters = 0;
-	vector<Data> finalCenterValues;
-	for(int i=0;i<centers;i++)
-	{
-		double dmin = 1e+100;
-		int imin = -1;
-		for(int j=0;j<i;j++)
-		{
-			if(i==j) continue;
-			if(getDistance(centerValues[i],centerValues[j])<dmin)
-			{
-				dmin = getDistance(centerValues[i],centerValues[j]);
-				imin = j;
-			}
-		}
-		if(dmin>1e-8){
-			finalCenterValues.push_back(centerValues[i]);
-			currentCenters++;
-		}
-	}
 
-	centers  = finalCenterValues.size();
+  centers  = centerValues.size();
+  printf("now centers %d \n",centers);
         double_chromosomes = centers;
-        population = double_chromosomes * subCluster;
+        population = double_chromosomes ;
         fitnessArray.resize(population);
         chromosome.resize(population);
         for(int i=0;i<population;i++)
         {
-             chromosome[i]=finalCenterValues[i];
+            chromosome[i].resize(centerValues[i].size());
+            for(int j=0;j<centerValues[i].size();j++)
+             chromosome[i][j]=centerValues[i][j];
              fitnessArray[i]=myProblem->funmin(chromosome[i]);
         }
+          printf("passs 3\n");
     }
     else if(sample_method=="uniform")
     {
@@ -692,7 +680,7 @@ void pDoubleGenetic::init()
         population = centers;
         double_chromosomes = centers;
 
-    }
+    }*/
     for (int i = 0; i < subCluster; i++)
     {
 
