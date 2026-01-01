@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=maxiters
+TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -111,7 +111,10 @@ elif [ $METHOD = "PdoubleGenetic" ]; then
 #pgen_parallelPropagateMethod: Propagation method (1to1,1toN,Nto1,NtoN)
 #pgen_propagateRate:    Number of generations before propagation.
 #pgen_sampler:		Sampling method (uniform, kmeans, teams)
- METHODPARAMS="--pgen_chromosomes=100 --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=5 --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=1to1 --pgen_sampler=uniform"
+THREADS=1
+TOTAL_AGENTS=500
+PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
+ METHODPARAMS="--pgen_chromosomes=$PAGENTS --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=5 --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=1to1 --pgen_sampler=uniform"
 elif [ $METHOD = "Genetic" ]; then
 
   #gen_lrate:		local search rate
