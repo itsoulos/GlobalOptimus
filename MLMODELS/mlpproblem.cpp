@@ -9,7 +9,7 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_leftmargin",-10.0,-10000.0,10000.0,"Initial left margin"));
       addParam(Parameter("mlp_rightmargin",10.0,-10000.0,10000.0,"Initial right margin"));
       QStringList methods;
-      methods<<"smallvalues"<<"xavier"<<"random";
+      methods<<"uniform"<<"smallvalues"<<"xavier"<<"random";
       addParam(Parameter("mlp_initmethod",methods[0],methods,"Possible values: smallvalues,xavier"));
       QStringList boolValues;
       boolValues<<"no"<<"yes";
