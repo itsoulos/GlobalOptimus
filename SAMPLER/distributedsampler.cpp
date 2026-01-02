@@ -34,6 +34,7 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
     ysample.resize(N);
     Data left  = myProblem->getLeftMargin();
     Data right = myProblem->getRightMargin();
+    /*
     int total_count =0;
     int M = left.size();
     for (int i = 0; i < partitions; ++i) {
@@ -44,9 +45,6 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
             double segment = (right[j] - left[j]) / partitions;
             leftBound[j] = left[j] + i * segment;
             rightBound[j] = (i == partitions - 1) ? right[j] : leftBound[j] + segment;
-            /*printf("partitions:%d Bounds[%d]=(%lf,%lf) Margins[%d]=(%lf,%lf)\n",
-                   partitions,
-                   j,leftBound[j],rightBound[j],j,left[j],right[j]);*/
         }
 
         for(int k=i*N/partitions;k<(i+1)*N/partitions;k++)
@@ -72,9 +70,9 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
             ysample[i]=myProblem->statFunmin(xsample[i]);
         }
     }
-
-   /*
-    *  int total_count =0;
+	*/
+   
+      int total_count =0;
     for(int i=0;i<partitions;i++)
     {
         leftBound.resize(left.size());
@@ -113,7 +111,7 @@ void            DistributedSampler::sampleFromProblem(int N,Matrix &xsample,Data
             }
             ysample[i]=myProblem->statFunmin(xsample[i]);
         }
-    }*/
+    }
 }
 DistributedSampler::~DistributedSampler()
 {
