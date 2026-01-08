@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=PdoubleGenetic
+METHOD=ParallelPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -111,10 +111,10 @@ elif [ $METHOD = "PdoubleGenetic" ]; then
 #pgen_parallelPropagateMethod: Propagation method (1to1,1toN,Nto1,NtoN)
 #pgen_propagateRate:    Number of generations before propagation.
 #pgen_sampler:		Sampling method (uniform, kmeans, teams)
-THREADS=10
+THREADS=5
 TOTAL_AGENTS=500
 PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
- METHODPARAMS="--pgen_chromosomes=$PAGENTS --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=$THREADS --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=1to1 --opt_distpartitions=$THREADS"
+ METHODPARAMS="--pgen_chromosomes=$PAGENTS --pgen_generations=500 --pgen_selectionrate=0.1 --pgen_mutationrate=0.05 --pgen_localsearchrate=0.00 --pgen_subCluster=$THREADS --pgen_subClusterEnable=1 --pgen_centers=20 --pgen_pNumber=5 --pgen_parallelPropagateMethod=NtoN --opt_distpartitions=$THREADS"
 elif [ $METHOD = "Genetic" ]; then
 
   #gen_lrate:		local search rate
@@ -179,7 +179,10 @@ elif [ $METHOD = "ParallelDe" ]; then
   METHODPARAMS="--parde_termination=$TERMINATION --parde_agents=$PAGENTS --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=10 --parde_selection_method=random --parde_propagate_method=1to1 --parde_islands=$THREADS --parde_islands_enable=$THREADS --opt_distpartitions=$THREADS --opt_localsearch=$LOCALSEARCH"
 
 elif [ $METHOD = "ParallelPso" ]; then
-  METHODPARAMS="--parallelPso_particles=20 --parallelPso_generations=500 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=5 --parallelPso_propagateMethod=1to1 --parallelPso_subCluster=10 --parallelPso_subClusterEnable=10 --parallelPso_pnumber=3 --opt_localsearch=$LOCALSEARCH"
+  THREADS=10
+  TOTAL_AGENTS=500
+  PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
+  METHODPARAMS="--parallelPso_particles=$PAGENTS --parallelPso_generations=500 --parallelPso_c1=0.5 --parallelPso_c2=0.5 --parallelPso_propagateRate=5 --parallelPso_propagateMethod=NtoN --parallelPso_subCluster=$THREADS --parallelPso_subClusterEnable=$THREADS --parallelPso_pnumber=3 --opt_localsearch=$LOCALSEARCH --opt_distpartitions=$THREADS" 
 fi
 
 PROBLEM=$1
