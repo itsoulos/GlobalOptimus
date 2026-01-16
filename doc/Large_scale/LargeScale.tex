@@ -445,7 +445,7 @@ agents$\,a,b,c$$\,\in$ \{1..$NP$\}}{\scriptsize\par}
 $R$$\,\in$ \{1..$n$\}}{\scriptsize\par}
 
 {\scriptsize 06 \hspace{0.5cm}\hspace{0.5cm}f}{\scriptsize\textbf{or
-}}{\scriptsize each dimension $j=1$ to n }{\scriptsize\textbf{do}}{\scriptsize\par}
+}}{\scriptsize each dimension $j=1$ to $n$ }{\scriptsize\textbf{do}}{\scriptsize\par}
 
 {\scriptsize 07 \hspace{0.5cm}\hspace{0.5cm}\hspace{0.5cm} Generate
 a random number $r_{i}\in[0,1]$}{\scriptsize\par}
@@ -521,23 +521,23 @@ the termination criteria $N_{I}$, and the iteration counter $k$.
 During the evolutionary process, different strategies for computing
 the differential weight $F$ can be employed. These include a constant
 value, a random mechanism defined as $F=-0.5+2r$, where $r\in[0,1]$,
-as well as a migrant-based strategy. For each agent, candidate solutions
-are generated through mutation and crossover operations, followed
-by a selection step based on objective function comparisons. In addition
-to the evolutionary operators, a deterministic local search procedure
-based on the BFGS method \citep{powell} may be periodically applied
-to refine promising solutions. The optimization process proceeds iteratively
-until a termination condition is satisfied, which may be defined either
-by a maximum number of generations or by a population-based convergence
-criterion. By jointly integrating stochastic variation, adaptive differential
-weight mechanisms, and deterministic local refinement within a unified
-framework, the proposed method aims to improve search efficiency and
-to achieve a more effective balance between exploration and exploitation.
-Moreover, the modular structure of the algorithm allows the systematic
-evaluation of the effect of individual algorithmic components, as
-demonstrated in the sensitivity analysis presented in Section 3. For
-clarity, the complete steps of the proposed DE algorithm are summarized
-in Algorithm 2.
+as well as a migrant-based strategy \citep{de_char}. For each agent,
+candidate solutions are generated through mutation and crossover operations,
+followed by a selection step based on objective function comparisons.
+In addition to the evolutionary operators, a deterministic local search
+procedure based on the BFGS method \citep{powell} may be periodically
+applied to refine promising solutions. The optimization process proceeds
+iteratively until a termination condition is satisfied, which may
+be defined either by a maximum number of generations or by a population-based
+convergence criterion. By jointly integrating stochastic variation,
+adaptive differential weight mechanisms, and deterministic local refinement
+within a unified framework, the proposed method aims to improve search
+efficiency and to achieve a more effective balance between exploration
+and exploitation. Moreover, the modular structure of the algorithm
+allows the systematic evaluation of the effect of individual algorithmic
+components, as demonstrated in the sensitivity analysis presented
+in Section 3. For clarity, the complete steps of the proposed DE algorithm
+are summarized in Algorithm 2.
 
 \begin{algorithm}
 {\scriptsize\textbf{INPUT}}{\scriptsize\par}
@@ -589,10 +589,9 @@ agent}{\scriptsize\par}
 
 {\scriptsize (a) Number : $F$ is constant value.}{\scriptsize\par}
 
-{\scriptsize (b) Random :$F=-0.5+2r,$ $r\in[0,1]$ poposed by Charilogis
-et al.\citep{de_char}.}{\scriptsize\par}
+{\scriptsize (b) Random :$F=-0.5+2r,$ $r\in[0,1]$.}{\scriptsize\par}
 
-{\scriptsize (c) Migrant : migrant-based michanism\citep{de_migrant}.}{\scriptsize\par}
+{\scriptsize (c) Migrant : migrant-based mechanism \citep{de_migrant}.}{\scriptsize\par}
 
 {\scriptsize\textbf{main pseudocode}}{\scriptsize\par}
 
@@ -632,7 +631,7 @@ $x_{t,j}=x_{ij}$}{\scriptsize\par}
 
 {\scriptsize 13 \hspace{0.5cm}\hspace{0.5cm}\hspace{0.5cm}}{\scriptsize\textbf{endif}}{\scriptsize\par}
 
-{\scriptsize 14 \hspace{0.5cm}}{\scriptsize\textbf{endfor}}{\scriptsize\par}
+{\scriptsize 14 \hspace{0.5cm}\hspace{0.5cm}}{\scriptsize\textbf{endfor}}{\scriptsize\par}
 
 {\scriptsize 15 \hspace{0.5cm}Set $y_{t}=f(x_{t})$}{\scriptsize\par}
 
@@ -648,15 +647,14 @@ $x_{t,j}=x_{ij}$}{\scriptsize\par}
 {\scriptsize 20 \hspace{0.5cm}}{\scriptsize\textbf{if}}{\scriptsize{}
 $r\leq p_{l}$}{\scriptsize\textbf{then}}{\scriptsize\par}
 
-{\scriptsize 21 \hspace{0.5cm}\hspace{0.5cm}Apply local search $x_{i}=LS(x_{i})$\citep{powell}}{\scriptsize\par}
+{\scriptsize 21 \hspace{0.5cm}\hspace{0.5cm}Apply local search $x_{i}=LS(x_{i})$
+\citep{powell}}{\scriptsize\par}
 
 {\scriptsize 22 \hspace{0.5cm}}{\scriptsize\textbf{endif}}{\scriptsize\par}
 
-{\scriptsize 23 \hspace{0.5cm}\hspace{0.5cm}}{\scriptsize\textbf{endfor}}{\scriptsize\par}
+{\scriptsize 23 \hspace{0.5cm}}{\scriptsize\textbf{endfor}}{\scriptsize\par}
 
-{\scriptsize 24 \hspace{0.5cm}\hspace{0.5cm}$Set\,\,k\leftarrow k+1$}{\scriptsize\par}
-
-{\scriptsize\textbf{TERMINATION CHECK}}{\scriptsize\par}
+{\scriptsize 24 \hspace{0.5cm}$Set\,\,k\leftarrow k+1$}{\scriptsize\par}
 
 {\scriptsize 25\hspace{0.5cm}}{\scriptsize\textbf{if}}{\scriptsize{}
 $k\geq N_{g}$ }{\scriptsize\textbf{then}}{\scriptsize{} terminate}{\scriptsize\par}
@@ -678,7 +676,7 @@ The main steps of the proposed DE algorithm are illustrated in the
 flowchart presented in \ref{fig:The-steps-of}.
 
 \begin{figure}
-\centering{}\includegraphics{diagramma}\caption{The steps of the proposed DE algorithm.\label{fig:The-steps-of}}
+\centering{}\includegraphics[scale=0.5]{diagramma}\caption{The steps of the proposed DE algorithm.\label{fig:The-steps-of}}
 \end{figure}
 
 
@@ -715,38 +713,38 @@ formulation, dimensionality, and global optimum values.
 {\tiny SECTOR}
 \end{cellvarwidth} & {\tiny$f(x)=\left(\sum_{i=1}^{n}(s_{i}x_{i})^{2}\right)^{0.9}$} & {\tiny 2} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny BUCHE RASTRIGIN} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}\left[z_{i}\cdot\left(1+0.1\cdot\sin(10\pi z_{i})\right)\right]$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny BUCHE RASTRIGIN} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}\left[z_{i}\cdot\left(1+0.1\cdot\sin(10\pi z_{i})\right)\right]$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny DIFFERENT POWERS} & {\tiny$f(\mathbf{x})=\sqrt{\sum_{i=1}^{n}|x_{i}|^{2+4\frac{i-1}{n-1}}}$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny DIFFERENT POWERS} & {\tiny$f(\mathbf{x})=\sqrt{\sum_{i=1}^{n}|x_{i}|^{2+4\frac{i-1}{n-1}}}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny DISCUS} & {\tiny$f(x)=10^{6}x_{1}^{2}+\sum_{i=2}^{n}x_{i}^{2}$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny DISCUS} & {\tiny$f(x)=10^{6}x_{1}^{2}+\sum_{i=2}^{n}x_{i}^{2}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny ELLIPSOIDAL} & {\tiny$f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny ELLIPSOIDAL} & {\tiny$f(x)=\sum_{i=1}^{n}\left(10^{6}\right)^{\frac{i-1}{n-1}}x_{i}^{2}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny LLAGHER101} & {\tiny$f(\mathbf{x})=\max_{i=1}^{101}\left[h_{i}-w_{i}\sqrt{\sum_{j=1}^{n}(x_{j}-c_{ij})^{2}}\right]$$\ min:100+1$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny LLAGHER101} & {\tiny$f(\mathbf{x})=\max_{i=1}^{101}\left[h_{i}-w_{i}\sqrt{\sum_{j=1}^{n}(x_{j}-c_{ij})^{2}}\right]$$\ min:100+1$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny LLAGHER21} & {\tiny$f(\mathbf{x})=\max_{i=1}^{21}\left[h_{i}-w_{i}\sqrt{\sum_{j=1}^{n}(x_{j}-c_{ij})^{2}}\right]$$\ min:10+10+1$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny LLAGHER21} & {\tiny$f(\mathbf{x})=\max_{i=1}^{21}\left[h_{i}-w_{i}\sqrt{\sum_{j=1}^{n}(x_{j}-c_{ij})^{2}}\right]$$\ min:10+10+1$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
 \begin{cellvarwidth}[t]
 \centering
 {\tiny GRIEWANK}{\tiny\par}
 
 {\tiny ROSENBROCK}
-\end{cellvarwidth} & {\tiny$f(\mathbf{x})=\underbrace{\left(\frac{\|\mathbf{x}\|^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1\right)}_{\text{Griewank}}\cdot\underbrace{\left(\frac{1}{10}\sum_{i=1}^{n-1}\left[100(x_{i+1}-x_{i}^{2})^{2}+(1-x_{i})^{2}\right]\right)}_{\text{Rosenbrock}}$} & {\tiny n} & {\tiny 0}\tabularnewline
+\end{cellvarwidth} & {\tiny$f(\mathbf{x})=\underbrace{\left(\frac{\|\mathbf{x}\|^{2}}{4000}-\prod_{i=1}^{n}\cos\left(\frac{x_{i}}{\sqrt{i}}\right)+1\right)}_{\text{Griewank}}\cdot\underbrace{\left(\frac{1}{10}\sum_{i=1}^{n-1}\left[100(x_{i+1}-x_{i}^{2})^{2}+(1-x_{i})^{2}\right]\right)}_{\text{Rosenbrock}}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny GRIEWANK} & {\tiny$f(x)=1+\frac{1}{200}\sum_{i=1}^{n}x_{i}^{2}-\prod_{i=1}^{n}\frac{\cos(x_{i})}{\sqrt{(i)}}$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny GRIEWANK} & {\tiny$f(x)=1+\frac{1}{200}\sum_{i=1}^{n}x_{i}^{2}-\prod_{i=1}^{n}\frac{\cos(x_{i})}{\sqrt{(i)}}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny RARSTIGIN} & {\tiny$f(\mathbf{x})=An+\sum_{i=1}^{n}\left[x_{i}^{2}-A\cos(2\pi x_{i})\right]$$\ A=10$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny RARSTIGIN} & {\tiny$f(\mathbf{x})=An+\sum_{i=1}^{n}\left[x_{i}^{2}-A\cos(2\pi x_{i})\right]$$\ A=10$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny ROSENBROCK} & {\tiny$f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny ROSENBROCK} & {\tiny$f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny SHARP RIDGE} & {\tiny$f(\mathbf{x})=x_{1}^{2}+\alpha\sum_{i=2}^{n}x_{i}^{2},\ a>1$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny SHARP RIDGE} & {\tiny$f(\mathbf{x})=x_{1}^{2}+\alpha\sum_{i=2}^{n}x_{i}^{2},\ a>1$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny SPHERE} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}x_{i}^{2}$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny SPHERE} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}x_{i}^{2}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny STEP ELLIPSOIDAL} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}\left\lfloor x_{i}+0.5\right\rfloor ^{2}+\alpha\sum_{i=1}^{n}\left(10^{6}\cdot\frac{i-1}{n-1}\right)x_{i}^{2},\ a=1$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny STEP ELLIPSOIDAL} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}\left\lfloor x_{i}+0.5\right\rfloor ^{2}+\alpha\sum_{i=1}^{n}\left(10^{6}\cdot\frac{i-1}{n-1}\right)x_{i}^{2},\ a=1$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
-{\tiny ZAKHAROV} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}x_{i}^{2}+\left(\sum_{i=1}^{n}\frac{i}{2}x_{i}\right)^{2}+\left(\sum_{i=1}^{n}\frac{i}{2}x_{i}\right)^{4}$} & {\tiny n} & {\tiny 0}\tabularnewline
+{\tiny ZAKHAROV} & {\tiny$f(\mathbf{x})=\sum_{i=1}^{n}x_{i}^{2}+\left(\sum_{i=1}^{n}\frac{i}{2}x_{i}\right)^{2}+\left(\sum_{i=1}^{n}\frac{i}{2}x_{i}\right)^{4}$} & {\tiny$n$} & {\tiny 0}\tabularnewline
 \hline 
 \end{tabular}}
 \end{table}
@@ -1276,10 +1274,10 @@ In Table \ref{tab:Experiments-on-the} tournament selection is used
 to choose the samples that participate in the core operator of DE.
 Four strategies for computing the differential weight are evaluated:
 random weight with uniform sampling (Random(U)), random weight with
-k-means sampling\citep{kmeans1,kmeans2} (Random(K)), MIGRANT weight
+k-means sampling \citep{kmeans1,kmeans2} (Random(K)), MIGRANT weight
 with uniform sampling (Migrant(U)), and MIGRANT weight with k-means
 sampling (Migrant(K)). The k-means method, originally proposed by
-MacQueen\citep{MacQueen} and used extensively in later work {[}65,
+MacQueen \citep{MacQueen} and used extensively in later work {[}65,
 66{]}, is employed not only to determine cluster centers but also
 as a structured sampling mechanism. Across all test functions, MIGRANT(K)
 consistently achieves the lowest total number of function calls (387,335)
@@ -1769,7 +1767,7 @@ function calls was recorded.
 \includegraphics[scale=0.15]{lrate.jpeg}\caption{Sensitivity of function calls to the Local Search\label{fig:Sensitivity-of-function}}
 \end{figure}
 
-Table \ref{fig:Sensitivity-of-function} illustrates the sensitivity
+Figure \ref{fig:Sensitivity-of-function} illustrates the sensitivity
 of the number of function calls with respect to the local search rate$p_{l}$.
 The results indicate a gradual increase in computational cost as $p_{l}$increases,
 which can be attributed to the more frequent activation of the local
@@ -1781,7 +1779,7 @@ in the local search rate.
 \includegraphics[scale=0.15]{population.jpeg}\caption{Sensitivity of function calls to the Population Size\label{fig:Sensitivity-of-function-1}}
 \end{figure}
 
-Table \ref{fig:Sensitivity-of-function-1} presents the effect of
+Figure \ref{fig:Sensitivity-of-function-1} presents the effect of
 the population size $NP$ on the number of function calls. As expected,
 increasing the population size leads to a higher computational cost
 due to the larger number of individuals evaluated at each iteration.
@@ -1814,11 +1812,11 @@ and all reference functions.
 \subsection*{3.8 The proposed method in comparison with others}
 
 Table \ref{tab:Experimental-results-using} presents the results of
-a comparative analysis of various optimization methods (BICCA\citep{key-32},
-MLSHADESPA\citep{key-30}, SHADE\_ILS\citep{key-31}, Differential
-Evolution (DE)\citep{diffe1}, Genetic Algorithm (GA)\citep{genetic3},
-Whale Optimization Algorithm (WOA)\citep{WOA,WOA1}, Particle Swarm
-Optimization (IPSO)\citep{pso_major}, PROPOSED) across a wide range
+a comparative analysis of various optimization methods (BICCA \citep{key-32},
+MLSHADESPA \citep{key-30}, SHADE\_ILS \citep{key-31}, Differential
+Evolution (DE) \citep{diffe1}, Genetic Algorithm (GA) \citep{genetic3},
+Whale Optimization Algorithm (WOA) \citep{WOA,WOA1}, Particle Swarm
+Optimization (IPSO) \citep{pso_major}, PROPOSED) across a wide range
 of test functions with dimensions of 25, 50, 100, and 150. Each row
 corresponds to a test function, while the columns represent the methods.
 The numerical values in each cell indicate the number of objective
