@@ -315,12 +315,1546 @@ Neural networks;
 Introduction
 \end_layout
 
+\begin_layout Standard
+Artificial neural networks (ANNs) are parametric machine learning models 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn1,nn2"
+literal "false"
+
+\end_inset
+
+ that have been extensively employed over the past decades in a wide range of real-world applications.
+ These applications span multiple scientific domains,
+ including physics-related problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnphysics1,nnphysics2,nnphysics3"
+literal "false"
+
+\end_inset
+
+,
+ chemistry 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnchem1,nnchem2,nnchem3"
+literal "false"
+
+\end_inset
+
+,
+ medicine 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnmed1,nnmed2"
+literal "false"
+
+\end_inset
+
+,
+ and economics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnecon1,nnecon2,nnecon3"
+literal "false"
+
+\end_inset
+
+,
+ among others.
+ Moreover,
+ in the recent years there have been appeared applications of the neural networks to problems such as solutions of differential equations 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnde1,nnde2"
+literal "false"
+
+\end_inset
+
+,
+ problems appeared in agricultural 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnagr1,nnagr2"
+literal "false"
+
+\end_inset
+
+,
+ image processing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnfacial"
+literal "false"
+
+\end_inset
+
+,
+ wind speed prediction 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnwind"
+literal "false"
+
+\end_inset
+
+,
+ consumption issues 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nngas"
+literal "false"
+
+\end_inset
+
+,
+ network security 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnintrusion"
+literal "false"
+
+\end_inset
+
+ etc.
+ Typically,
+ a neural network is defined as a function 
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{w})$
+\end_inset
+
+,
+ where the vector 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+ denotes the input pattern and the vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ represents the weight vector,
+ that should be estimated by some optimization procedure.
+ The estimation of this vector is commonly achieved by minimizing the so-called training error,
+ defined mathematically as :
+\begin_inset Formula 
+\begin{equation}
+E(\overrightarrow{w})=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\end{equation}
+
+\end_inset
+
+The set 
+\begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
+\end_inset
+
+ represents the associated training set of the current problem.
+ The values 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ denote the desired output for each pattern 
+\begin_inset Formula $\overrightarrow{x_{i}}$
+\end_inset
+
+.
+ As proposed in 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnc"
+literal "false"
+
+\end_inset
+
+,
+ a neural network can be formulated as the following function:
+\begin_inset Formula 
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+
+\end_inset
+
+In this equation,
+ the constant number 
+\begin_inset Formula $H$
+\end_inset
+
+ denotes the number of used processing units.
+ Moreover,
+ the function 
+\begin_inset Formula $\sigma(x)$
+\end_inset
+
+ is the sigmoid function,
+ expressed as:
+\begin_inset Formula 
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
+\end{equation}
+
+\end_inset
+
+From equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:nn"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ is deduced that
+\series bold
+ 
+\series default
+the total number of parameters for neural network is 
+\begin_inset Formula $n=(d+2)H$
+\end_inset
+
+.
+
+\series bold
+ 
+\series default
+Also,
+ a a series of alternative activation functions has been proposed,
+ such as the 
+\begin_inset Formula $\tanh$
+\end_inset
+
+ function,
+ which is formulated as:
+\begin_inset Formula 
+\begin{equation}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\end{equation}
+
+\end_inset
+
+Also,
+ Guarnieri et al introduced a new activation function under the name adaptive spline function in a recent publication 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "activation_spline"
+literal "false"
+
+\end_inset
+
+.
+ Similarly,
+ Ertuğrul introduced a new trained activation function 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "activation_trained"
+literal "false"
+
+\end_inset
+
+ to be used in neural networks.
+ A recent review on activation functions for neural networks is proposed in the work of
+\series bold
+ 
+\series default
+Rasamoelina et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "activation_review"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The minimization of equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:eq1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ has been tackled in the past by various techniques,
+ such as the Back Propagation method 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bpnn,bpnn2"
+literal "false"
+
+\end_inset
+
+,
+ the RPROP optimization method 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rpropnn,rpropnn3,rpropnn2"
+literal "false"
+
+\end_inset
+
+,
+ Quasi Newton methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "quasinn,quasinn2"
+literal "false"
+
+\end_inset
+
+,
+ the Simulated Annealing approach 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nn_ann1,nn_ann2"
+literal "false"
+
+\end_inset
+
+,
+ Genetic Algorithms 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "geneticnn,geneticnn2"
+literal "false"
+
+\end_inset
+
+,
+ Particle Swarm Optimization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psonn,psonn2"
+literal "false"
+
+\end_inset
+
+,
+ Differential Optimization methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nndem"
+literal "false"
+
+\end_inset
+
+,
+ Evolutionary Computation 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnevo"
+literal "false"
+
+\end_inset
+
+,
+ the Whale optimization algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnwhale"
+literal "false"
+
+\end_inset
+
+,
+ the Butterfly optimization algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nnbutterfly"
+literal "false"
+
+\end_inset
+
+,
+ etc.
+ In a similar vein,
+ Sexton et al.
+ introduced the application of the tabu search algorithm to the training of neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "tabunn"
+literal "false"
+
+\end_inset
+
+.
+ Furthermore,
+ Zhang et al.
+ proposed a hybrid approach that combines the Particle Swarm Optimization (PSO) method with the Backpropagation algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_hybrid"
+literal "false"
+
+\end_inset
+
+.
+ Zhao et al.
+ presented a Cascaded Forward Algorithm aimed at the optimal training of artificial neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_cascade"
+literal "false"
+
+\end_inset
+
+.
+ In addition,
+ the widespread use of parallel computing techniques in recent years has motivated numerous studies investigating the training of artificial neural networks through such approaches 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_gpu1,nn_gpu2"
+literal "false"
+
+\end_inset
+
+.
+ Likewise,
+ a substantial body of research has focused on the development of effective strategies for initializing the parameters of artificial neural networks.
+ Representative methods include initialization schemes based on decision trees 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninit1"
+literal "false"
+
+\end_inset
+
+,
+ approaches derived from Cauchy’s inequality 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninit2"
+literal "false"
+
+\end_inset
+
+,
+ the use of genetic algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninit3"
+literal "false"
+
+\end_inset
+
+,
+ and techniques founded on discriminant learning principles 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nninit4"
+literal "false"
+
+\end_inset
+
+,
+ among others.
+\end_layout
+
+\begin_layout Standard
+A major problem encountered in artificial neural network training techniques is the increased completion time of these methods,
+ which directly depends on the number of available patterns in the training set and the number of features in each data set.
+ A series of publications have appeared in the recent literature that propose parallel techniques for optimizing the parameters of the artificial neural network.
+ For example,
+ Lotrič et al proposed a parallel implementation of neural networks using the MPI library 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MPI"
+literal "false"
+
+\end_inset
+
+ in their work 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lotric"
+literal "false"
+
+\end_inset
+
+.
+ Likewise,
+ Gonzalez et al proposed a parallel implementation of an evolutionary approach that utilizes the MPI method,
+ for the evolution of artificial neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "eann_parallell"
+literal "false"
+
+\end_inset
+
+.
+ Additionally,
+ Gu et all introduced the cNeural 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "cneural"
+literal "false"
+
+\end_inset
+
+,
+ a parallel computing platform to train neural networks using the Back Propagation method.
+ A survey on the parallelization of neural network using various parallel techniques can be found in the recent work of Chanthini et al 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_parallel_review"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+In this paper,
+ the use of a parallel optimization technique for the parameters of the artificial neural network is proposed,
+ which is based on the widely used Particle Swarm Optimization method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pso_major"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The rest of this manuscript is organized as follows:
+ the used dataset and the incorporated methods used in the conducted experiments are outlined in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Materials-and-Methods"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ the experimental results are shown and discussed in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and finally a detailed discussion is provided in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Section
 Materials and Methods
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Materials-and-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The PSO method
+\end_layout
+
+\begin_layout Standard
+The PSO method is inspired by the observations of Eberhart and Kennedy in the 1990s.
+ The two observed in detail the behavior of birds as they move through space looking for food and then formulated a technique that falls under the domain of global optimization,
+ using the experience they gained from their observations.
+ In the new technique they formulated,
+ the atoms or particles move in the research space of the problem in search of the minimum of the objective function.
+ These particles are directly related to two basic characteristics:
+ the current position of each particle and the velocity at which it moves in search of the global minimum.
+ The current position is denoted as 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+ and the velocity is referred to as 
+\begin_inset Formula $\overrightarrow{u}$
+\end_inset
+
+.
+ In addition,
+ for each particle,
+ the best position in which it has been found in the past (the one with the smallest value for the objective function) is kept in memory,
+ but also,
+ for the total population,
+ its best position is kept.
+ The method moves the particles to search for the global minimum through an iterative process,
+ in which the positions of the particles at each iteration are derived from each particle's current position,
+ the best position it has found in previous iterations,
+ and the overall best position of the population.
+ 
+\end_layout
+
+\begin_layout Standard
+Due to the simplicity of the method and the small number of parameters that should be set,
+ this method has been applied to many difficult problems from all areas of the sciences,
+ such as problems that arise in physics
+\series bold
+ 
+\series default
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psophysics1,psophysics2"
+literal "true"
+
+\end_inset
+
+,
+ chemistry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psochem1,psochem2"
+literal "false"
+
+\end_inset
+
+,
+ medicine 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psomed1,psomed2"
+literal "true"
+
+\end_inset
+
+,
+ economics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psoecon"
+literal "true"
+
+\end_inset
+
+ etc.
+ Also,
+ the PSO method was successfully applied recently in many practical problems such as flow shop scheduling 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoApp1"
+literal "false"
+
+\end_inset
+
+,
+ successful development of electric vehicle charging strategies 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoApp2"
+literal "false"
+
+\end_inset
+
+,
+ emotion recognition 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoApp3"
+literal "false"
+
+\end_inset
+
+,
+ robotics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoApp4"
+literal "false"
+
+\end_inset
+
+ etc.
+ A extensive tutorial on PSO methods can be found in the work of Marini and Walczak 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoReview"
+literal "false"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+This section will begin with a detailed description of the serial method to be performed on each parallel processing unit as well as the overall parallel method proposed in this work.
+ Subsequently,
+ the basic components of the proposed process,
+ such as the calculation of the velocity,
+ the proposed termination rule and the method of propagating points between the parallel computing units will be thoroughly analyzed.
+\end_layout
+
+\begin_layout Standard
+In every parallel processing unit a PSO algorithm is executed to locate the global minimum of the objective function.
+ The mains steps for this algorithm are outlined in detail in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:psoSerial"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The base PSO algorithm executed in one processing unit.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:psoSerial"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization Step
+\series default
+ .
+ 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $\text{\mbox{iter}}=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $m$
+\end_inset
+
+ as the total number of particles.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\series default
+
+\begin_inset Formula $\mbox{iter}_{\mbox{max}}$
+\end_inset
+
+ as the maximum number of iterations allowed for the serial algorithm.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ randomly,
+ the positions 
+\begin_inset Formula $x_{1},x_{2},...,x_{m}$
+\end_inset
+
+ for the particles.
+ The initial positions must be within the domain of the objective function.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ randomly the velocities 
+\begin_inset Formula $u_{1},u_{2},...,u_{m}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1..m$
+\end_inset
+
+ do 
+\begin_inset Formula $p_{i}=x_{i}$
+\end_inset
+
+.
+ The vector 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ represents the best located position of particle 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $p_{\mbox{best}}=\arg\min_{i\in1..m}f\left(x_{i}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination Check Step
+\series default
+ .
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:Check-Termination."
+
+\end_inset
+
+ The termination criterion for the serial algorithm is checked.
+ If the termination criterion is true,
+ then the method terminates.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1..m$
+\end_inset
+
+ 
+\series bold
+Do
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:For"
+
+\end_inset
+
+
+\series default
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Compute 
+\series default
+the velocity 
+\begin_inset Formula $u_{i}$
+\end_inset
+
+ as a combination of the vectors 
+\begin_inset Formula $u_{i},\ p_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{\mbox{best}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ the new position for the particle as:
+ 
+\begin_inset Formula $x_{i}=x_{i}+u_{i}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:Update-the-position"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ the 
+\begin_inset Formula $f\left(x_{i}\right)$
+\end_inset
+
+ for particle 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ using the objective function 
+\begin_inset Formula $f(x)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $f\left(x_{i}\right)\le f\left(p_{i}\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $p_{i}=x_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End
+\series default
+ 
+\series bold
+For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $p_{\mbox{best}}=\arg\min_{i\in1..m}f\left(x_{i}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $\mbox{iter}=\mbox{iter}+1$
+\end_inset
+
+.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:update_k"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Goto
+\series default
+ Step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:Check-Termination."
+nolink "false"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+The base PSO algorithm as described in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:psoSerial"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ computes at every iteration the new position of the particle 
+\begin_inset Formula $i$
+\end_inset
+
+ using the following operation:
+\begin_inset Formula 
+\begin{equation}
+x_{i}=x_{i}+u_{i+1}\label{eq:eq3}
+\end{equation}
+
+\end_inset
+
+In most cases the new velocity could be a linear combination of the previously computed velocity and the best values 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{\mbox{best}}$
+\end_inset
+
+.
+ A typical computation of the new velocity is defined as:
+\begin_inset Formula 
+\begin{equation}
+u_{i}=\omega u_{i}+r_{1}c_{1}\left(p_{i}-x_{i}\right)+r_{2}c_{2}\left(p_{\mbox{best}}-x_{i}\right)\label{eq:eq4-1}
+\end{equation}
+
+\end_inset
+
+where 
+\end_layout
+
+\begin_layout Enumerate
+The variables 
+\begin_inset Formula $r_{1},\ r_{2}$
+\end_inset
+
+ are random numbers defined in 
+\begin_inset Formula $[0,1].$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The constants 
+\begin_inset Formula $c_{1},\ c_{2}$
+\end_inset
+
+ are defined in 
+\begin_inset Formula $[1,2]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+The variable 
+\begin_inset Formula $\omega$
+\end_inset
+
+ is called inertia and it was suggested by Shi and Eberhart 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pso_major"
+literal "false"
+
+\end_inset
+
+.
+ In the current article a simple inertia calculation is used and calculated using:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\omega_{\mbox{iter}}=0.5+\frac{r}{2}
+\end{equation}
+
+\end_inset
+
+The variable 
+\begin_inset Formula $r$
+\end_inset
+
+ is a a random number with 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+The parallel algorithm
+\end_layout
+
+\begin_layout Standard
+The overall parallel algorithm,
+ which runs on 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ independent computing units,
+ is shown in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:parallelPso"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The implemented parallel algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:parallelPso"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{I}$
+\end_inset
+
+ the total number of parallel processing units.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ as 
+\begin_inset Formula $N_{R}$
+\end_inset
+
+ as the number of iterations,
+ after which each processing unit will send its best particles to the remaining processing units.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ the number of migrated particles between the parallel processing units.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $K=0$
+\end_inset
+
+ the iteration number.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $j=1,..,N$
+\end_inset
+
+ do in parallel
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:For--do"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Execute
+\series default
+ an iteration of the PSO algorithm described in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:psoSerial"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ on processing unit 
+\begin_inset Formula $j$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If 
+\begin_inset Formula $K\ \mbox{mod}\ N_{R}=0,$
+\end_inset
+
+then
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Get
+\series default
+ the best 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ particles from algorithm 
+\begin_inset Formula $j$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Propagate
+\series default
+ these 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ particles to the rest of processing units using some propagation scheme that will be described subsequently.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+EndIf
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Update
+\series default
+ 
+\begin_inset Formula $K=K+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Check
+\series default
+ the proposed termination rule.
+ If the termination rule is valid,
+ then goto step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:Terminate-and-report"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ else goto step 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:For--do"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Terminate
+\series default
+ and report the best value from all processing units.
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:Terminate-and-report"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_deeper
+\end_inset
+
+ The two main components of the proposed parallel implementation are the particle propagation mechanism between the parallel computing units and the proposed termination rule.
+ In the first case,
+ it must be decided which units will send the best particles to other parallel units.
+ Units receiving particles replace their worst members with the ones they receive.
+ In the second case,
+ a termination rule based on asymptotic observations is proposed for early termination of the parallel technique.
+ In the proposed termination technique,
+ the overall algorithm is terminated if it holds with some certainty if some asymptotic termination criterion holds for at least one parallel computing unit.
+ These components will be discussed in the following subsections.
+\end_layout
+
+\begin_layout Subsection
+Propagation mechanism 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Propagation-mechanism"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+During the execution of the parallel algorithm and periodically,
+ the processing units propagate their best particles (those with the lowest function value) to the remaining processing units.
+ This propagation can be achieved in the following possible ways:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+1 to 1
+\series default
+.
+ In this propagation scheme,
+ a randomly selected processing unit will send to some other randomly selected unit its 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ best particles.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+1 to N
+\series default
+.
+ During this scheme,
+ a randomly selected unit will send its best 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ particles to the remaining units.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+N to 1
+\series default
+.
+ In this scheme,
+ all processing units will send the corresponding 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ best particles of each unit to a randomly selected unit.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+N to N
+\series default
+.
+ For this scheme,
+ all processing units will send the corresponding 
+\begin_inset Formula $N_{P}$
+\end_inset
+
+ best particles to all.
+\end_layout
+
+\begin_layout Subsection
+Stopping rule
+\end_layout
+
+\begin_layout Standard
+In the proposed technique,
+ a distinct termination rule is checked on each parallel processing unit.
+ This rule is formulated as follows:
+\begin_inset Formula 
+\begin{equation}
+\delta_{i}^{(k)}=\left|f_{i,\mbox{min}}^{(k)}-f_{i,\mbox{min}}^{(k-1)}\right|\label{eq:term}
+\end{equation}
+
+\end_inset
+
+This quantity is calculated on every iteration 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ The value 
+\begin_inset Formula $f_{i,\mbox{min}}^{(k)}$
+\end_inset
+
+ is the best function value for unit 
+\begin_inset Formula $i$
+\end_inset
+
+ at iteration 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ If the above quantity is less than a predetermined limit 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ for 
+\begin_inset Formula $N_{M}$
+\end_inset
+
+ continuous repetitions,
+ then the algorithm executed on this unit is terminated.
+ In present work,
+ if a parallel processing unit is terminated,
+ then the overall process is also terminated.
 \end_layout
 
 \begin_layout Section
 Results
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Results"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1024,18 +2558,6 @@ The row AVERAGE depicts the average classification or regression error for all d
 \end_layout
 
 \begin_layout Standard
-The experimental results from the application of the previously mentioned methods on the series of used datasets are presented in Table 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "tab:expers"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
-.
 \begin_inset Float table
 placement H
 alignment document
@@ -1273,6 +2795,328 @@ Number of weights
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expers"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ reports classification error rates (%) per dataset and per method.
+ Each cell represents the empirical frequency of misclassification for a given dataset under the adopted experimental protocol;
+ within each row,
+ lower values indicate better generalization.
+ The AVERAGE row provides an aggregate view across heterogeneous datasets,
+ effectively summarizing the expected error when selecting a dataset from this benchmark set and applying the corresponding method.
+\end_layout
+
+\begin_layout Standard
+A clear global trend is that PPSO improves as the number of threads increases:
+ 27.45% (
+\begin_inset Formula $T=1$
+\end_inset
+
+) → 24.30% (
+\begin_inset Formula $T=2$
+\end_inset
+
+) → 23.10% (
+\begin_inset Formula $T=4$
+\end_inset
+
+) → 22.19% (
+\begin_inset Formula $T=10$
+\end_inset
+
+).
+ This is consistent with the behavior of parallel stochastic optimization,
+ where additional threads typically enhance exploration diversity (e.g.,
+ multiple initializations and search trajectories) and reduce the probability of converging to poor local minima.
+ The gains also exhibit diminishing returns:
+ the step from 
+\begin_inset Formula $T=1$
+\end_inset
+
+ to 
+\begin_inset Formula $T=2$
+\end_inset
+
+ yields the largest improvement,
+ whereas the additional benefit from 
+\begin_inset Formula $T=4$
+\end_inset
+
+ to 
+\begin_inset Formula $T=10$
+\end_inset
+
+ is smaller,
+ suggesting that beyond a point the search either saturates the solution space adequately or becomes limited by practical factors such as noise,
+ synchronization/communication,
+ and the effective allocation of the evaluation budget.
+\end_layout
+
+\begin_layout Standard
+Relative to the baselines,
+ PPSO at 
+\begin_inset Formula $T=10$
+\end_inset
+
+ achieves a substantially lower average error:
+ 22.19% versus 28.65% for GEN (a reduction of 6.46 percentage points,
+ approximately a 22.5% relative decrease),
+ 37.38% for BFGS (approximately a 40.7% relative decrease),
+ and 32.49% for RBF (approximately a 31.7% relative decrease).
+ Interpreted scientifically,
+ this indicates that the proposed approach more consistently identifies higher-quality parameterizations (e.g.,
+ network weights) that translate into improved predictive performance across a broad and diverse benchmark suite.
+ The especially large gap versus BFGS is aligned with the non-convex,
+ multi-modal nature of neural training objectives,
+ where gradient-based local methods can become trapped,
+ while population-based stochastic strategies retain greater capacity to escape suboptimal basins.
+\end_layout
+
+\begin_layout Standard
+At the dataset level,
+ two main patterns emerge.
+ First,
+ there are datasets where PPSO delivers very large improvements (e.g.,
+ DERMATOLOGY,
+ WDBC,
+ WINE,
+ ALCOHOL,
+ SEGMENT,
+ OPTDIGITS),
+ suggesting that optimization difficulty is a primary bottleneck and that enhanced distributed exploration yields markedly better solutions.
+ Second,
+ there are datasets where differences are small or not strictly monotone with thread count,
+ and in a few cases a baseline is marginally competitive (e.g.,
+ SATIMAGE for RBF,
+ or datasets where GEN/RBF already achieve very low error).
+ Such cases typically reflect performance saturation on easier tasks,
+ stronger inductive bias of a particular model family,
+ or stochastic variability and hyperparameter interactions that can produce minor reversals (e.g.,
+ T=4 slightly better than T=10 on some rows) without contradicting the overall downward trend.
+\end_layout
+
+\begin_layout Standard
+A key interpretive point is that the Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expers"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ captures not only “optimization strength” but also the interaction between the optimizer,
+ the underlying modeling assumptions,
+ and the way computational budget is distributed.
+ If the total number of evaluations (or total time) is held constant across thread counts,
+ the improvement with larger 
+\begin_inset Formula $T$
+\end_inset
+
+ indicates a genuine efficiency gain from distributed exploration.
+ If the total budget increases with 
+\begin_inset Formula $T$
+\end_inset
+
+,
+ then the observed gains also reflect increased computational effort.
+ In either case,
+ the results demonstrate that PPSO is competitive across a wide range of datasets and that increased parallelism shifts the error profile toward consistently lower values,
+ which is the intended outcome of a parallel stochastic training procedure.
+\end_layout
+
+\begin_layout Standard
+Based on Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expers"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ statistical processing was carried out via R scripts in order to quantify the significance of performance differences between the proposed PPSO method and the baseline approaches (BFGS,
+ GEN,
+ RBF) across different thread counts.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statExpers"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ summarizes the resulting significance levels using the critical p-value criterion,
+ following the standard categories ns (
+\begin_inset Formula $p>0.05$
+\end_inset
+
+),
+ significant (
+\begin_inset Formula $p<0.05$
+\end_inset
+
+),
+ highly significant (
+\begin_inset Formula $p<0.01$
+\end_inset
+
+),
+ extremely significant (
+\begin_inset Formula $p<0.001$
+\end_inset
+
+),
+ and very extremely significant (
+\begin_inset Formula $p<0.0001$
+\end_inset
+
+).
+ The global comparison across all methods is overwhelmingly significant:
+ the overall Friedman test yields 
+\begin_inset Formula $p=2.2\times10^{-16}$
+\end_inset
+
+,
+ which strongly rejects the null hypothesis of equivalent performance and confirms that genuine differences exist among the evaluated methods over the full dataset collection.
+\end_layout
+
+\begin_layout Standard
+At the level of pairwise comparisons by thread count,
+ a clear strengthening of statistical evidence is observed as 
+\begin_inset Formula $T$
+\end_inset
+
+ increases.
+ For 
+\begin_inset Formula $T=1$
+\end_inset
+
+,
+ PPSO does not differ significantly from BFGS (
+\begin_inset Formula $p=0.6371$
+\end_inset
+
+),
+ GEN (
+\begin_inset Formula $p=1$
+\end_inset
+
+),
+ or RBF (
+\begin_inset Formula $p=1$
+\end_inset
+
+),
+ indicating that with a single thread the observed performance differences cannot be distinguished from dataset-to-dataset variability under the adopted experimental conditions.
+ For 
+\begin_inset Formula $T=2$
+\end_inset
+
+,
+ the situation changes:
+ PPSO shows a highly robust advantage over BFGS (
+\begin_inset Formula $p=1.01\times10^{-6}$
+\end_inset
+
+),
+ whereas comparisons against GEN (
+\begin_inset Formula $p=0.2124$
+\end_inset
+
+) and RBF (
+\begin_inset Formula $p=0.1312$
+\end_inset
+
+) remain non-significant.
+ For 
+\begin_inset Formula $T=4$
+\end_inset
+
+,
+ the evidence further intensifies:
+ against BFGS the p-value is 
+\begin_inset Formula $1.37\times10^{-10}$
+\end_inset
+
+ (very extremely significant),
+ while PPSO also becomes statistically superior to GEN (
+\begin_inset Formula $p=0.0035$
+\end_inset
+
+,
+ highly/extremely significant) and to RBF (
+\begin_inset Formula $p=9.57\times10^{-4}$
+\end_inset
+
+,
+ extremely significant).
+ Finally,
+ for 
+\begin_inset Formula $T=10$
+\end_inset
+
+,
+ PPSO exhibits very strong statistical superiority against all three baselines,
+ with 
+\begin_inset Formula $p=2.46\times10^{-13}$
+\end_inset
+
+ versus BFGS,
+ 
+\begin_inset Formula $p=1.33\times10^{-5}$
+\end_inset
+
+ versus GEN,
+ and 
+\begin_inset Formula $p=1.97\times10^{-6}$
+\end_inset
+
+ versus RBF,
+ corresponding to extremely to very extremely significant differences.
+\end_layout
+
+\begin_layout Standard
+Overall,
+ these findings indicate that increasing the number of threads not only improves PPSO’s average accuracy but also turns this improvement into a consistent and statistically defensible advantage over established baselines across a broad suite of classification datasets.
+ The lack of significance at 
+\begin_inset Formula $T=1$
+\end_inset
+
+ suggests that,
+ under limited parallelism,
+ the stochastic gains are not sufficiently strong to dominate inter-dataset variability.
+ In contrast,
+ for 
+\begin_inset Formula $T\ge2$
+\end_inset
+
+ PPSO first establishes a clear advantage over BFGS,
+ and as 
+\begin_inset Formula $T$
+\end_inset
+
+ increases to 4 and 10 this advantage extends to GEN and RBF as well,
+ supporting the conclusion that distributed search substantially enhances PPSO’s ability to locate higher-quality training solutions and achieve better generalization.
 \end_layout
 
 \begin_layout Standard
@@ -4259,6 +6103,46 @@ AVERAGE
 \end_inset
 
 
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat_tbl2.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the obtained experimental results using the series of the machine learning methods.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statExpers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -4303,6 +6187,347 @@ nolink "false"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+The Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expersProp"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ reports classification error rates (%) for the proposed model trained/optimized with PPSO under four configurations that combine two factors:
+ the level of parallelism (
+\begin_inset Formula $T=4$
+\end_inset
+
+ vs 
+\begin_inset Formula $T=10$
+\end_inset
+
+ threads) and the information-propagation scheme among parallel workers (1to1 vs NtoN).
+ Each cell is an empirical estimate of generalization for a given dataset:
+ lower percentages indicate fewer misclassifications and therefore better predictive performance.
+ Consequently,
+ each row can be interpreted as a localized study of how parallel search capacity and communication intensity influence the quality of the final trained solution on that specific classification task.
+\end_layout
+
+\begin_layout Standard
+The AVERAGE row provides an aggregated view over a heterogeneous benchmark suite.
+ In this Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expersProp"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ 
+\begin_inset Formula $T=10$
+\end_inset
+
+ with 1to1 propagation yields the best mean error (22.11%),
+ followed by 
+\begin_inset Formula $T=4$
+\end_inset
+
+ with 1to1 (22.96%),
+ while the NtoN variants exhibit higher average error (24.30% for 
+\begin_inset Formula $T=4$
+\end_inset
+
+,
+ NtoN and 23.10% for 
+\begin_inset Formula $T=10$
+\end_inset
+
+,
+ NtoN).
+ This ordering does not imply that 1to1 is universally superior to NtoN,
+ but rather that,
+ across this collection of datasets,
+ the more restrained propagation scheme more frequently leads to better end solutions.
+ From a distributed optimization perspective,
+ this is consistent with a well-known trade-off:
+ stronger propagation (NtoN) can accelerate convergence by rapidly homogenizing information across workers,
+ but it can also reduce search diversity and increase the risk of premature convergence to suboptimal regions.
+ In contrast,
+ more selective propagation (1to1) preserves greater independence across threads,
+ maintains alternative promising trajectories for longer,
+ and often improves the final generalization outcome.
+\end_layout
+
+\begin_layout Standard
+The effect of increasing the number of threads is not uniform across datasets,
+ which is expected.
+ Moving from 
+\begin_inset Formula $T=4$
+\end_inset
+
+ to 
+\begin_inset Formula $T=10$
+\end_inset
+
+ typically increases coverage of the solution space by enabling more independent search trajectories and a richer set of initializations.
+ This tends to be particularly beneficial when the optimization landscape is highly multi-modal or when training is sensitive to initialization.
+ In the Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expersProp"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ there are clear cases where 
+\begin_inset Formula $T=10$
+\end_inset
+
+ substantially improves performance,
+ such as OPTDIGITS (38.30% vs 48.13% for 1to1),
+ WINE (13.00% vs 16.53% for 1to1),
+ ZO_NF_S (7.52% vs 11.44% for 1to1),
+ and STATHEART (20.87% vs 22.22% for 1to1).
+ These patterns indicate that additional parallel exploration more reliably discovers parameterizations that generalize better.
+ At the same time,
+ there are datasets where the difference between 
+\begin_inset Formula $T=10$
+\end_inset
+
+ and 
+\begin_inset Formula $T=4$
+\end_inset
+
+ is small or slightly reversed (e.g.,
+ ALCOHOL,
+ BEED,
+ SONAR).
+ Such behavior typically reflects either performance saturation (
+\begin_inset Formula $T=4$
+\end_inset
+
+ already explores sufficiently),
+ or stochastic variability and configuration-dependent synchronization/communication effects that produce different but not consistently better solutions on that dataset.
+\end_layout
+
+\begin_layout Standard
+The comparison between 1to1 and NtoN is also dataset-dependent.
+ In many rows,
+ 1to1 has a clear advantage,
+ for example HEART (20.37% vs 22.11% at 
+\begin_inset Formula $T=10$
+\end_inset
+
+),
+ OPTDIGITS (38.30% vs 46.41% at 
+\begin_inset Formula $T=10$
+\end_inset
+
+),
+ and WDBC (5.55% vs 6.11% at 
+\begin_inset Formula $T=10$
+\end_inset
+
+).
+ These cases are consistent with the interpretation that NtoN can drive all threads too quickly toward a shared basin of attraction that is not optimal for generalization,
+ especially when multiple competing parameter regions yield similar training quality but different test behavior.
+ However,
+ there are also datasets where NtoN appears beneficial,
+ such as SEGMENT at 
+\begin_inset Formula $T=10$
+\end_inset
+
+ (21.49% vs 23.85% for 1to1) and PIRVISION (6.26% at 
+\begin_inset Formula $T=10$
+\end_inset
+
+,
+ NtoN vs 7.72% at 
+\begin_inset Formula $T=10$
+\end_inset
+
+,
+ 1to1),
+ suggesting that,
+ for certain tasks,
+ faster collective exploitation of a strong solution region can be advantageous when the landscape is less deceptive or when the best region is strongly attracting.
+\end_layout
+
+\begin_layout Standard
+Importantly,
+ the fact that no single configuration dominates every dataset is scientifically meaningful and expected.
+ Datasets differ in noise level,
+ dimensionality and feature correlations,
+ nonlinearity,
+ and class separability,
+ all of which shape the error landscape being optimized.
+ As a result,
+ parallelism and propagation act as regulators of the exploration–exploitation balance and can steer PPSO toward solutions with better average generalization,
+ while individual datasets may favor different balances.
+ Overall,
+ the Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expersProp"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ demonstrates that thread count and propagation strategy are not merely implementation details but materially affect the generalization quality of the proposed model.
+ The best mean performance of 
+\begin_inset Formula $T=10$
+\end_inset
+
+ with 1to1 propagation suggests that,
+ for this benchmark suite,
+ higher parallelism is most effective when coupled with controlled information exchange that preserves diversity and mitigates premature convergence,
+ whereas NtoN can still be competitive on specific datasets where rapid collective exploitation is advantageous.
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statPropagation"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ reports the significance levels of performance differences among PPSO variants with respect to the propagation mechanism (1to1 versus NtoN) under two parallelism settings (
+\begin_inset Formula $T=4$
+\end_inset
+
+ and 
+\begin_inset Formula $T=10$
+\end_inset
+
+).
+ The interpretation relies on the critical p-value and the standard significance categories ns (
+\begin_inset Formula $p>0.05$
+\end_inset
+
+),
+ significant (
+\begin_inset Formula $p<0.05$
+\end_inset
+
+),
+ highly significant (
+\begin_inset Formula $p<0.01$
+\end_inset
+
+),
+ extremely significant (
+\begin_inset Formula $p<0.001$
+\end_inset
+
+),
+ and very extremely significant (
+\begin_inset Formula $p<0.0001$
+\end_inset
+
+).
+ The overall multi-method comparison indicates that meaningful differences exist across the evaluated PPSO configurations,
+ as the global Friedman test yields 
+\begin_inset Formula $4.28\times10^{-6}$
+\end_inset
+
+,
+ thereby rejecting the null hypothesis of equal performance among variants over the full suite of classification datasets.
+\end_layout
+
+\begin_layout Standard
+At the pairwise level,
+ the comparison between PPSO (
+\begin_inset Formula $T=4$
+\end_inset
+
+,
+ 1to1) and PPSO (
+\begin_inset Formula $T=4$
+\end_inset
+
+,
+ NtoN) produces 
+\begin_inset Formula $p=0.0236$
+\end_inset
+
+,
+ which is statistically significant under the conventional 
+\begin_inset Formula $p<0.05$
+\end_inset
+
+ criterion.
+ This result implies that,
+ at a moderate parallelism level (4 threads),
+ the choice of propagation scheme systematically affects the performance of the proposed model across datasets,
+ and the observed differences are unlikely to be explained solely by random dataset-to-dataset variability.
+ In contrast,
+ for 
+\begin_inset Formula $T=10$
+\end_inset
+
+ the comparison between PPSO (
+\begin_inset Formula $T=10$
+\end_inset
+
+,
+ 1to1) and PPSO (
+\begin_inset Formula $T=10$
+\end_inset
+
+,
+ NtoN) yields 
+\begin_inset Formula $p=0.0567$
+\end_inset
+
+,
+ which lies slightly above the 0.05 threshold and is therefore classified as non-significant (ns) under that cutoff.
+ This near-threshold value suggests a tendency for differentiation between the two propagation schemes at 10 threads,
+ but the available empirical evidence is not strong enough to support the same level of statistical confidence as in the 
+\begin_inset Formula $T=4$
+\end_inset
+
+ case.
+\end_layout
+
+\begin_layout Standard
+Overall,
+ these findings support the conclusion that the propagation mechanism can materially influence the performance of the proposed PPSO training scheme,
+ particularly at moderate parallelism (
+\begin_inset Formula $T=4$
+\end_inset
+
+),
+ whereas at higher parallelism (
+\begin_inset Formula $T=10$
+\end_inset
+
+) the differences appear weaker or less stable across the heterogeneous dataset collection.
+ From an interpretive standpoint,
+ this is consistent with the notion that increasing the number of threads already enhances search diversity and may partially absorb the effect of propagation,
+ reducing the net separability between 1to1 and NtoN when performance is aggregated across many diverse classification problems.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 alignment document
@@ -6277,6 +8502,50 @@ AVERAGE
 \end_inset
 
 
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat_tbl3.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the results by the application of the proposed method and the propagation techniques.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statPropagation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -6326,12 +8595,232 @@ ALL.
 \end_layout
 
 \begin_layout Standard
+The Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:termination"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ compares three termination policies applied to the same proposed PPSO-based training/optimization procedure across a suite of classification datasets,
+ using classification error (%) as the evaluation criterion.
+ The columns ANY,
+ MAJORITY,
+ and ALL do not correspond to different models;
+ instead,
+ they implement different rules for deciding when the parallel procedure is considered “finished” and which outcome is accepted as final.
+ Therefore,
+ each cell reflects the generalization performance of the same underlying model when only the termination/synchronization logic is changed.
+ This is important because it highlights that,
+ even with a fixed optimizer,
+ the decision policy can materially influence which solution is ultimately selected,
+ effectively controlling how conservatively or aggressively the algorithm commits to a final set of parameters.
+\end_layout
+
+\begin_layout Standard
+The AVERAGE row indicates that the ALL policy achieves the lowest mean error (22.19%),
+ followed by MAJORITY (22.74%) and ANY (22.99%).
+ Although the differences are moderate,
+ the ordering is consistent with a clear interpretation:
+ ALL is the strictest rule,
+ requiring completion (or convergence) of all parallel workers before finalizing the result.
+ This tends to favor higher-quality solutions because it reduces the chance of stopping due to a single “lucky” or prematurely stabilized worker and allows slower but potentially more informative search trajectories to contribute.
+ In contrast,
+ ANY is the most aggressive rule,
+ since the procedure can terminate as soon as one worker finishes,
+ which can more often lead to premature commitment to solutions that are not optimal in terms of generalization.
+ MAJORITY lies between these extremes by requiring agreement or completion from most workers,
+ partially balancing decision speed with outcome stability.
+\end_layout
+
+\begin_layout Standard
+At the dataset level,
+ there is no universal dominance of a single policy in every row,
+ yet ALL shows clear advantages on several challenging or highly variable tasks.
+ For example,
+ ALL produces noticeably lower errors on OPTDIGITS (41.97% versus 42.96% and 46.06%),
+ SATIMAGE (40.84% versus 45.78% and 43.34%),
+ SEGMENT (24.34% versus 25.68% and 25.94%),
+ SONAR (20.85% versus 22.45% and 22.30%),
+ and WDBC (5.36% versus 5.79% and 6.55%).
+ This pattern aligns with the idea that,
+ on difficult optimization landscapes where different workers may converge to substantially different solutions,
+ waiting for all workers reduces the probability of selecting an inferior solution that simply appeared earlier.
+ On the other hand,
+ there are datasets where MAJORITY or ANY is marginally better (e.g.,
+ BEED and LYMOGRAPHY for MAJORITY,
+ or ALCOHOL where MAJORITY slightly outperforms ALL).
+ These cases suggest that the added strictness of ALL does not always translate into improved generalization,
+ particularly when the incremental benefit from the “late” workers is small or when extended search increases the risk of overfitting on certain datasets.
+\end_layout
+
+\begin_layout Standard
+Conceptually,
+ the three policies can be viewed as mechanisms that regulate the exploration–commitment trade-off in parallel stochastic search.
+ ANY emphasizes fast commitment:
+ if one worker quickly reaches a good region,
+ the process stops early,
+ which can be computationally efficient but more sensitive to random favorable or unfavorable outcomes.
+ MAJORITY provides greater robustness by requiring collective confirmation from more workers,
+ acting as a filter against isolated extreme behaviors.
+ ALL is the most conservative and,
+ according to the mean performance in the Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:termination"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ tends to yield a more reliable selection of high-quality solutions because it fully exploits parallelism until completion.
+ The observed improvement in the overall average suggests that,
+ for this benchmark suite,
+ the additional “patience” imposed by ALL more frequently translates into better generalization,
+ especially on problems where ignoring slower workers means losing valuable alternative solutions.
+\end_layout
+
+\begin_layout Standard
+Overall,
+ the Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:termination"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ demonstrates that the termination policy is not a minor implementation detail but a mechanism that directly affects which solution is chosen by a parallel stochastic training procedure.
+ Based on both the average values and the behavior on several difficult datasets,
+ ALL appears to provide the most consistently high-quality outcomes,
+ while ANY and MAJORITY can be viewed as alternatives that prioritize faster decisions or an intermediate balance,
+ respectively,
+ at the cost of slightly higher mean classification error.
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statTermination"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ presents the significance levels of performance differences obtained by comparing three alternative termination policies of the same proposed PPSO procedure (ANY,
+ MAJORITY,
+ ALL) over a suite of classification datasets.
+ Significance is interpreted via the p-value using the standard categories ns for 
+\begin_inset Formula $p>0.05$
+\end_inset
+
+,
+ significant for 
+\begin_inset Formula $p<0.05$
+\end_inset
+
+,
+ highly significant for 
+\begin_inset Formula $p<0.01$
+\end_inset
+
+,
+ extremely significant for 
+\begin_inset Formula $p<0.001$
+\end_inset
+
+,
+ and very extremely significant for 
+\begin_inset Formula $p<0.0001$
+\end_inset
+
+.
+ The three policies differ in when the parallel training process is considered complete and the final solution is accepted:
+ ANY terminates when a single thread finishes,
+ MAJORITY terminates when a predefined number or fraction of threads finish,
+ and ALL terminates only when all threads finish.
+ The analysis therefore tests whether the strictness of the termination rule systematically alters the final performance of the same model across different datasets.
+\end_layout
+
+\begin_layout Standard
+The overall Friedman test yields 
+\begin_inset Formula $p=0.0031$
+\end_inset
+
+,
+ which is highly significant (
+\begin_inset Formula $p<0.01$
+\end_inset
+
+).
+ This indicates that,
+ when all three termination policies are considered jointly,
+ the observed performance differences across the dataset suite are sufficiently consistent to reject the null hypothesis of equal performance.
+ In other words,
+ the termination policy is not a negligible implementation detail but a factor that can meaningfully influence the final classification error achieved by the proposed procedure.
+\end_layout
+
+\begin_layout Standard
+At the same time,
+ the reported pairwise comparisons do not reach statistical significance under the conventional 0.05 threshold.
+ Specifically,
+ PPSO (ANY) versus PPSO (MAJORITY) yields 
+\begin_inset Formula $p=0.1211$
+\end_inset
+
+ (non-significant),
+ and PPSO (MAJORITY) versus PPSO (ALL) yields 
+\begin_inset Formula $p=0.5477$
+\end_inset
+
+ (also non-significant).
+ This apparent discrepancy between a significant global test and non-significant pairwise contrasts is common in multi-method,
+ heterogeneous dataset evaluations:
+ a global test can detect that systematic differences exist somewhere among the methods,
+ while individual pairwise tests may lack sufficient power to cross the same significance threshold,
+ especially when differences are modest,
+ unevenly distributed across datasets,
+ and/or when multiple-comparison adjustments are applied.
+\end_layout
+
+\begin_layout Standard
+Interpretively,
+ these findings suggest that the termination rule affects PPSO’s overall behavior as a family of configurations,
+ yet the specific pairwise contrasts reported here do not provide strong evidence of a uniform advantage of one policy over another across the full dataset suite.
+ This aligns with the conceptual role of termination policies as regulators of the “fast commitment” versus “full parallel exploitation” trade-off:
+ ANY emphasizes rapid completion with a higher risk of premature solution selection,
+ ALL is more conservative and may stabilize the final choice by fully utilizing parallel search,
+ and MAJORITY lies between these extremes.
+ The significant overall Friedman result supports that this regulation matters at the aggregate level,
+ even if the presented pairwise p-values are not sufficient,
+ on their own,
+ to establish a definitive ordering between those particular policy pairs under 
+\begin_inset Formula $p<0.05$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -7866,10 +10355,61 @@ AVERAGE
 \end_inset
 
 
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat_tbl4.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the results produced by the usage of different termination strategies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statTermination"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Conclusions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -7964,6 +10504,1713 @@ Keep empty!
 
 \begin_layout References Title
 References
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "nn1"
+literal "false"
+
+\end_inset
+
+C.
+ Bishop,
+ Neural Networks for Pattern Recognition,
+ Oxford University Press,
+ 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn2"
+literal "true"
+
+\end_inset
+
+G.
+ Cybenko,
+ Approximation by superpositions of a sigmoidal function,
+ Mathematics of Control Signals and Systems 
+\series bold
+2
+\series default
+,
+ pp.
+ 303-314,
+ 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics1"
+literal "false"
+
+\end_inset
+
+P.
+ Baldi,
+ K.
+ Cranmer,
+ T.
+ Faucett et al,
+ Parameterized neural networks for high-energy physics,
+ Eur.
+ Phys.
+ J.
+ C 
+\series bold
+76
+\series default
+,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics2"
+literal "true"
+
+\end_inset
+
+J.
+ J.
+ Valdas and G.
+ Bonham-Carter,
+ Time dependent neural network models for detecting changes of state in complex processes:
+ Applications in earth sciences and astronomy,
+ Neural Networks 
+\series bold
+19
+\series default
+,
+ pp.
+ 196-207,
+ 2006
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnphysics3"
+literal "false"
+
+\end_inset
+
+G.
+ Carleo,M.
+ Troyer,
+ Solving the quantum many-body problem with artificial neural networks,
+ Science 
+\series bold
+355
+\series default
+,
+ pp.
+ 602-606,
+ 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem1"
+literal "false"
+
+\end_inset
+
+Lin Shen,
+ Jingheng Wu,
+ and Weitao Yang,
+ Multiscale Quantum Mechanics/Molecular Mechanics Simulations with Neural Networks,
+ Journal of Chemical Theory and Computation 
+\series bold
+12
+\series default
+,
+ pp.
+ 4934-4946,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem2"
+literal "false"
+
+\end_inset
+
+Sergei Manzhos,
+ Richard Dawes,
+ Tucker Carrington,
+ Neural network‐based approaches for building high dimensional and quantum dynamics‐friendly potential energy surfaces,
+ Int.
+ J.
+ Quantum Chem.
+ 
+\series bold
+115
+\series default
+,
+ pp.
+ 1012-1020,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnchem3"
+literal "false"
+
+\end_inset
+
+Jennifer N.
+ Wei,
+ David Duvenaud,
+ and Alán Aspuru-Guzik,
+ Neural Networks for the Prediction of Organic Chemistry Reactions,
+ ACS Central Science 
+\series bold
+2
+\series default
+,
+ pp.
+ 725-732,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnmed1"
+literal "false"
+
+\end_inset
+
+Igor I.
+ Baskin,
+ David Winkler and Igor V.
+ Tetko,
+ A renaissance of neural networks in drug discovery,
+ Expert Opinion on Drug Discovery 
+\series bold
+11
+\series default
+,
+ pp.
+ 785-795,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnmed2"
+literal "false"
+
+\end_inset
+
+Ronadl Bartzatt,
+ Prediction of Novel Anti-Ebola Virus Compounds Utilizing Artificial Neural Network (ANN),
+ Chemistry Faculty Publications 
+\series bold
+49
+\series default
+,
+ pp.
+ 16-34,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon1"
+literal "false"
+
+\end_inset
+
+Lukas Falat and Lucia Pancikova,
+ Quantitative Modelling in Economics with Advanced Artificial Neural Networks,
+ Procedia Economics and Finance 
+\series bold
+34
+\series default
+,
+ pp.
+ 194-201,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon2"
+literal "false"
+
+\end_inset
+
+Mohammad Namazi,
+ Ahmad Shokrolahi,
+ Mohammad Sadeghzadeh Maharluie,
+ Detecting and ranking cash flow risk factors via artificial neural networks technique,
+ Journal of Business Research 
+\series bold
+69
+\series default
+,
+ pp.
+ 1801-1806,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnecon3"
+literal "false"
+
+\end_inset
+
+G.
+ Tkacz,
+ Neural network forecasting of Canadian GDP growth,
+ International Journal of Forecasting 
+\series bold
+17
+\series default
+,
+ pp.
+ 57-69,
+ 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnde1"
+literal "false"
+
+\end_inset
+
+Y.
+ Shirvany,
+ M.
+ Hayati,
+ R.
+ Moradian,
+ Multilayer perceptron neural networks with novel unsupervised training method for numerical solution of the partial differential equations,
+ Applied Soft Computing 
+\series bold
+9
+\series default
+,
+ pp.
+ 20-29,
+ 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnde2"
+literal "false"
+
+\end_inset
+
+A.
+ Malek,
+ R.
+ Shekari Beidokhti,
+ Numerical solution for high order differential equations using a hybrid neural network—
+Optimization method,
+ Applied Mathematics and Computation 
+\series bold
+183
+\series default
+,
+ pp.
+ 260-271,
+ 2006.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnagr1"
+literal "false"
+
+\end_inset
+
+A.
+ Topuz,
+ Predicting moisture content of agricultural products using artificial neural networks,
+ Advances in Engineering Software 
+\series bold
+41
+\series default
+,
+ pp.
+ 464-470,
+ 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnagr2"
+literal "false"
+
+\end_inset
+
+A.
+ Escamilla-García,
+ G.M.
+ Soto-Zarazúa,
+ M.
+ Toledano-Ayala,
+ E.
+ Rivas-Araiza,
+ A.
+ Gastélum-Barrios,
+ Abraham,Applications of Artificial Neural Networks in Greenhouse Technology and Overview for Smart Agriculture Development,
+ Applied Sciences 
+\series bold
+10
+\series default
+,
+ Article number 3835,
+ 2020.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnfacial"
+literal "false"
+
+\end_inset
+
+H.
+ Boughrara,
+ M.
+ Chtourou,
+ C.
+ Ben Amar et al,
+ Facial expression recognition based on a mlp neural network using constructive training algorithm.
+ Multimed Tools Appl 
+\series bold
+75
+\series default
+,
+ pp.
+ 709–731,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnwind"
+literal "false"
+
+\end_inset
+
+H.
+ Liu,
+ H.Q Tian,
+ Y.F.
+ Li,
+ L.
+ Zhang,
+ Comparison of four Adaboost algorithm based artificial neural networks in wind speed predictions,
+ Energy Conversion and Management 
+\series bold
+92
+\series default
+,
+ pp.
+ 67-81,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nngas"
+literal "false"
+
+\end_inset
+
+J.
+ Szoplik,
+ Forecasting of natural gas consumption with artificial neural networks,
+ Energy 
+\series bold
+85
+\series default
+,
+ pp.
+ 208-220,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnintrusion"
+literal "false"
+
+\end_inset
+
+H.
+ Bahram,
+ N.J.
+ Navimipour,
+ Intrusion detection for cloud computing using neural networks and artificial bee colony optimization algorithm,
+ ICT Express 5,
+ pp.
+ 56-59,
+ 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "nnc"
+literal "false"
+
+\end_inset
+
+I.G.
+ Tsoulos,
+ D.
+ Gavrilis,
+ E.
+ Glavas,
+ Neural network construction and training using grammatical evolution,
+ Neurocomputing 72,
+ pp.
+ 269-277,
+ 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "activation_spline"
+literal "false"
+
+\end_inset
+
+S.
+ Guarnieri,
+ F.
+ Piazza,
+ A.
+ Uncini,
+ Multilayer feedforward networks with adaptive spline activation function,
+ IEEE Transactions on Neural Networks 
+\series bold
+10
+\series default
+,
+ pp.
+ 672-683,
+ 1999.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "activation_trained"
+literal "false"
+
+\end_inset
+
+Ö.F.
+ Ertuğrul,
+ A novel type of activation function in artificial neural networks:
+ Trained activation function,
+ Neural Networks 
+\series bold
+99
+\series default
+,
+ pp.
+ 148-157,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "activation_review"
+literal "false"
+
+\end_inset
+
+A.
+ D.
+ Rasamoelina,
+ F.
+ Adjailia,
+ P.
+ Sinčák,
+ A Review of Activation Function for Artificial Neural Network,
+ In:
+ 2020 IEEE 18th World Symposium on Applied Machine Intelligence and Informatics (SAMI),
+ Herlany,
+ Slovakia,
+ pp.
+ 281-286,
+ 2020.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bpnn"
+literal "false"
+
+\end_inset
+
+D.E.
+ Rumelhart,
+ G.E.
+ Hinton and R.J.
+ Williams,
+ Learning representations by back-propagating errors,
+ Nature 
+\series bold
+323
+\series default
+,
+ pp.
+ 533 - 536 ,
+ 1986.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "bpnn2"
+literal "false"
+
+\end_inset
+
+T.
+ Chen and S.
+ Zhong,
+ Privacy-Preserving Backpropagation Neural Network Learning,
+ IEEE Transactions on Neural Networks 
+\series bold
+20
+\series default
+,
+ ,
+ pp.
+ 1554-1564,
+ 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rpropnn"
+literal "false"
+
+\end_inset
+
+M.
+ Riedmiller and H.
+ Braun,
+ A Direct Adaptive Method for Faster Backpropagation Learning:
+ The RPROP algorithm,
+ Proc.
+ of the IEEE Intl.
+ Conf.
+ on Neural Networks,
+ San Francisco,
+ CA,
+ pp.
+ 586–591,
+ 1993.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rpropnn3"
+literal "false"
+
+\end_inset
+
+T.
+ Pajchrowski,
+ K.
+ Zawirski and K.
+ Nowopolski,
+ Neural Speed Controller Trained Online by Means of Modified RPROP Algorithm,
+ IEEE Transactions on Industrial Informatics 
+\series bold
+11
+\series default
+,
+ pp.
+ 560-568,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rpropnn2"
+literal "false"
+
+\end_inset
+
+Rinda Parama Satya Hermanto,
+ Suharjito,
+ Diana,
+ Ariadi Nugroho,
+ Waiting-Time Estimation in Bank Customer Queues using RPROP Neural Networks,
+ Procedia Computer Science 
+\series bold
+ 135
+\series default
+,
+ pp.
+ 35-42,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-23"
+
+\end_inset
+
+Neural Networks,
+ Procedia Computer Science 
+\series bold
+ 135
+\series default
+,
+ pp.
+ 35-42,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "quasinn"
+literal "false"
+
+\end_inset
+
+B.
+ Robitaille and B.
+ Marcos and M.
+ Veillette and G.
+ Payre,
+ Modified quasi-Newton methods for training neural networks,
+ Computers & Chemical Engineering 
+\series bold
+20
+\series default
+,
+ pp.
+ 1133-1140,
+ 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "quasinn2"
+literal "false"
+
+\end_inset
+
+Q.
+ Liu,
+ J.
+ Liu,
+ R.
+ Sang,
+ J.
+ Li,
+ T.
+ Zhang and Q.
+ Zhang,
+ Fast Neural Network Training on FPGA Using Quasi-Newton Optimization Method,IEEE Transactions on Very Large Scale Integration (VLSI) Systems 
+\series bold
+26
+\series default
+,
+ pp.
+ 1575-1579,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_ann1"
+literal "false"
+
+\end_inset
+
+A.
+ Yamazaki,
+ M.
+ C.
+ P.
+ de Souto,T.
+ B.
+ Ludermir,
+ Optimization of neural network weights and architectures for odor recognition using simulated annealing,
+ In:
+ Proceedings of the 2002 International Joint Conference on Neural Networks.
+ IJCNN'02 
+\series bold
+1
+\series default
+,
+ pp.
+ 547-552 ,
+ 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_ann2"
+literal "false"
+
+\end_inset
+
+Y.
+ Da,
+ G.
+ Xiurun,
+ An improved PSO-based ANN with simulated annealing technique,
+ Neurocomputing 
+\series bold
+63
+\series default
+,
+ pp.
+ 527-533,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "geneticnn"
+literal "false"
+
+\end_inset
+
+F.
+ H.
+ F.
+ Leung,
+ H.
+ K.
+ Lam,
+ S.
+ H.
+ Ling and P.
+ K.
+ S.
+ Tam,
+ Tuning of the structure and parameters of a neural network using an improved genetic algorithm,
+ IEEE Transactions on Neural Networks 
+\series bold
+14
+\series default
+,
+ pp.
+ 79-88,
+ 2003
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "geneticnn2"
+literal "false"
+
+\end_inset
+
+X.
+ Yao,
+ Evolving artificial neural networks,
+ Proceedings of the IEEE,
+ 87(9),
+ pp.
+ 1423-1447,
+ 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psonn"
+literal "false"
+
+\end_inset
+
+C.
+ Zhang,
+ H.
+ Shao and Y.
+ Li,
+ Particle swarm optimisation for evolving artificial neural network,
+ IEEE International Conference on Systems,
+ Man,
+ and Cybernetics,
+ ,
+ pp.
+ 2487-2490,
+ 2000.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psonn2"
+literal "false"
+
+\end_inset
+
+Jianbo Yu,
+ Shijin Wang,
+ Lifeng Xi,
+ Evolving artificial neural networks using an improved PSO and DPSO 
+\series bold
+71
+\series default
+,
+ pp.
+ 1054-1060,
+ 2008.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nndem"
+literal "false"
+
+\end_inset
+
+J.
+ Ilonen,
+ J.K.
+ Kamarainen,
+ J.
+ Lampinen,
+ Differential Evolution Training Algorithm for Feed-Forward Neural Networks,
+ Neural Processing Letters 
+\series bold
+17
+\series default
+,
+ pp.
+ 93–105,
+ 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnevo"
+literal "false"
+
+\end_inset
+
+M.
+ Rocha,
+ P.
+ Cortez,
+ J.
+ Neves,
+ Evolution of neural networks for classification and regression,
+ Neurocomputing 
+\series bold
+70
+\series default
+,
+ pp.
+ 2809-2816,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnwhale"
+literal "false"
+
+\end_inset
+
+I.
+ Aljarah,
+ H.
+ Faris,
+ S.
+ Mirjalili,
+ Optimizing connection weights in neural networks using the whale optimization algorithm,
+ Soft Comput 
+\series bold
+22
+\series default
+,
+ pp.
+ 1–15,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nnbutterfly"
+literal "false"
+
+\end_inset
+
+S.M.J.
+ Jalali,
+ S.
+ Ahmadian,
+ P.M.
+ Kebria,
+ A.
+ Khosravi,
+ C.P.
+ Lim,
+ S.
+ Nahavandi,
+ Evolving Artificial Neural Networks Using Butterfly Optimization Algorithm for Data Classification.
+ In:
+ Gedeon,
+ T.,
+ Wong,
+ K.,
+ Lee,
+ M.
+ (eds) Neural Information Processing.
+ ICONIP 2019.
+ Lecture Notes in Computer Science(),
+ vol 11953.
+ Springer,
+ Cham,
+ 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "tabunn"
+literal "false"
+
+\end_inset
+
+R.S.
+ Sexton,
+ B.
+ Alidaee,
+ R.E.
+ Dorsey,
+ J.D.
+ Johnson,
+ Global optimization for artificial neural networks:
+ A tabu search application.
+ European Journal of Operational Research 
+\series bold
+106
+\series default
+,
+ pp.
+ 570-584,
+ 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_hybrid"
+literal "false"
+
+\end_inset
+
+J.-R.
+ Zhang,
+ J.
+ Zhang,
+ T.-M.
+ Lok,
+ M.R.
+ Lyu,
+ A hybrid particle swarm optimization–back-propagation algorithm for feedforward neural network training,
+ Applied Mathematics and Computation 
+\series bold
+185
+\series default
+,
+ pp.
+ 1026-1037,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_cascade"
+literal "false"
+
+\end_inset
+
+G.
+ Zhao,
+ T.
+ Wang,
+ Y.
+ Jin,
+ C.
+ Lang,
+ Y.
+ Li,
+ H.
+ Ling,
+ The Cascaded Forward algorithm for neural network training,
+ Pattern Recognition 
+\series bold
+161
+\series default
+,
+ 111292,
+ 2025.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_gpu1"
+literal "false"
+
+\end_inset
+
+K-Su Oh,
+ K.
+ Jung,
+ GPU implementation of neural networks,
+ Pattern Recognition 
+\series bold
+37
+\series default
+,
+ pp.
+ 1311-1314,
+ 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_gpu2"
+literal "false"
+
+\end_inset
+
+M.
+ Zhang,
+ K.
+ Hibi,
+ J.
+ Inoue,
+ GPU-accelerated artificial neural network potential for molecular dynamics simulation,
+ Computer Physics Communications 
+\series bold
+285
+\series default
+,
+ 108655,
+ 2023.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninit1"
+literal "false"
+
+\end_inset
+
+I.
+ Ivanova,
+ M.
+ Kubat,
+ Initialization of neural networks by means of decision trees,
+ Knowledge-Based Systems 
+\series bold
+8
+\series default
+,
+ pp.
+ 333-344,
+ 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninit2"
+literal "false"
+
+\end_inset
+
+J.Y.F Yam,
+ T.W.S.
+ Chow,
+ A weight initialization method for improving training speed in feedforward neural network,
+ Neurocomputing 
+\series bold
+30
+\series default
+,
+ pp.
+ 219-232,
+ 2000.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninit3"
+literal "false"
+
+\end_inset
+
+F.
+ Itano,
+ M.
+ A.
+ de Abreu de Sousa,
+ E.
+ Del-Moral-Hernandez,
+ Extending MLP ANN hyper-parameters Optimization by using Genetic Algorithm,
+ In:
+ 2018 International Joint Conference on Neural Networks (IJCNN),
+ Rio de Janeiro,
+ Brazil,
+ 2018,
+ pp.
+ 1-8,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nninit4"
+literal "false"
+
+\end_inset
+
+K.
+ Chumachenko,
+ A.
+ Iosifidis,
+ M.
+ Gabbouj,
+ Feedforward neural networks initialization based on discriminant learning,
+ Neural Networks 
+\series bold
+146
+\series default
+,
+ pp.
+ 220-229,
+ 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "MPI"
+literal "false"
+
+\end_inset
+
+Gropp,
+ W.,
+ Lusk,
+ E.,
+ Skjellum,
+ A.
+ (1999) Using MPI:
+ portable parallel programming with the message-passing interface,
+ MIT,
+ Cambridge.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "lotric"
+literal "false"
+
+\end_inset
+
+Lotrič,
+ U.,
+ Dobnikar,
+ A.
+ (2005).
+ Parallel implementations of feed-forward neural network using MPI and C# on .NET platform.
+ In:
+ Ribeiro,
+ B.,
+ Albrecht,
+ R.F.,
+ Dobnikar,
+ A.,
+ Pearson,
+ D.W.,
+ Steele,
+ N.C.
+ (eds) Adaptive and Natural Computing Algorithms.
+ Springer,
+ Vienna.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "eann_parallell"
+literal "false"
+
+\end_inset
+
+B.
+ P.
+ Gonzalez,
+ G.
+ G.
+ Sánchez,
+ J.
+ P.
+ Donate,
+ P.
+ Cortez and A.
+ S.
+ de Miguel,
+ "Parallelization of an evolving Artificial Neural Networks system to Forecast Time Series using OPENMP and MPI," 2012 IEEE Conference on Evolving and Adaptive Intelligent Systems,
+ Madrid,
+ Spain,
+ 2012,
+ pp.
+ 186-191.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "cneural"
+literal "false"
+
+\end_inset
+
+R.
+ Gu,
+ F.
+ Shen and Y.
+ Huang,
+ "A parallel computing platform for training large scale neural networks," 2013 IEEE International Conference on Big Data,
+ Silicon Valley,
+ CA,
+ USA,
+ 2013,
+ pp.
+ 376-384.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "nn_parallel_review"
+literal "false"
+
+\end_inset
+
+Chanthini,
+ P.,
+ & Shyamala,
+ K.
+ (2016).
+ A survey on parallelization of neural network using MPI and Open MP.
+ Indian Journal of Science and Technology,
+ 9(19).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso_major"
+literal "false"
+
+\end_inset
+
+J.
+ Kennedy and R.
+ Eberhart,
+ "Particle swarm optimization," Proceedings of ICNN'95 - International Conference on Neural Networks,
+ 1995,
+ pp.
+ 1942-1948 vol.4,
+ doi:
+ 10.1109/ICNN.1995.488968.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "psophysics1"
+literal "false"
+
+\end_inset
+
+Anderson Alvarenga de Moura Meneses,
+ Marcelo Dornellas,
+ Machado Roberto Schirru,
+ Particle Swarm Optimization applied to the nuclear reload problem of a Pressurized Water Reactor,
+ Progress in Nuclear Energy 
+\series bold
+51
+\series default
+,
+ pp.
+ 319-326,
+ 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psophysics2"
+literal "true"
+
+\end_inset
+
+Ranjit Shaw,
+ Shalivahan Srivastava,
+ Particle swarm optimization:
+ A new tool to invert geophysical data,
+ Geophysics 
+\series bold
+72
+\series default
+,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psochem1"
+literal "false"
+
+\end_inset
+
+C.
+ O.
+ Ourique,
+ E.C.
+ Biscaia,
+ J.C.
+ Pinto,
+ The use of particle swarm optimization for dynamical analysis in chemical processes,
+ Computers & Chemical Engineering 
+\series bold
+26
+\series default
+,
+ pp.
+ 1783-1793,
+ 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psochem2"
+literal "false"
+
+\end_inset
+
+H.
+ Fang,
+ J.
+ Zhou,
+ Z.
+ Wang et al,
+ Hybrid method integrating machine learning and particle swarm optimization for smart chemical process operations,
+ Front.
+ Chem.
+ Sci.
+ Eng.
+ 
+\series bold
+16
+\series default
+,
+ pp.
+ 274–287,
+ 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psomed1"
+literal "true"
+
+\end_inset
+
+M.P.
+ Wachowiak,
+ R.
+ Smolikova,
+ Yufeng Zheng,
+ J.M.
+ Zurada,
+ A.S.
+ Elmaghraby,
+ An approach to multimodal biomedical image registration utilizing particle swarm optimization,
+ IEEE Transactions on Evolutionary Computation 
+\series bold
+8
+\series default
+,
+ pp.
+ 289-301,
+ 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psomed2"
+literal "true"
+
+\end_inset
+
+Yannis Marinakis.
+ Magdalene Marinaki,
+ Georgios Dounias,
+ Particle swarm optimization for pap-smear diagnosis,
+ Expert Systems with Applications 
+\series bold
+35
+\series default
+,
+ pp.
+ 1645-1656,
+ 2008.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psoecon"
+literal "true"
+
+\end_inset
+
+Jong-Bae Park,
+ Yun-Won Jeong,
+ Joong-Rin Shin,
+ Kwang Y.
+ Lee,
+ An Improved Particle Swarm Optimization for Nonconvex Economic Dispatch Problems,
+ IEEE Transactions on Power Systems 
+\series bold
+25
+\series default
+,
+ pp.
+ 156-16
+\series bold
+216
+\series default
+6,
+ 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psoApp1"
+literal "false"
+
+\end_inset
+
+B.
+ Liu,
+ L.
+ Wang,
+ Y.H.
+ Jin,
+ An Effective PSO-Based Memetic Algorithm for Flow Shop Scheduling,
+ IEEE Transactions on Systems,
+ Man,
+ and Cybernetics,
+ Part B (Cybernetics) 
+\series bold
+37
+\series default
+,
+ pp.
+ 18-27,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psoApp2"
+literal "false"
+
+\end_inset
+
+J.
+ Yang,
+ L.
+ He,
+ S.
+ Fu,
+ An improved PSO-based charging strategy of electric vehicles in electrical distribution grid,
+ Applied Energy 
+\series bold
+128
+\series default
+,
+ pp.
+ 82-92,
+ 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psoApp3"
+literal "false"
+
+\end_inset
+
+K.
+ Mistry,
+ L.
+ Zhang,
+ S.
+ C.
+ Neoh,
+ C.
+ P.
+ Lim,
+ B.
+ Fielding,
+ A Micro-GA Embedded PSO Feature Selection Approach to Intelligent Facial Emotion Recognition,
+ IEEE Transactions on Cybernetics.
+ 
+\series bold
+47
+\series default
+,
+ pp.
+ 1496-1509,
+ 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psoApp4"
+literal "false"
+
+\end_inset
+
+S.
+ Han,
+ X.
+ Shan,
+ J.
+ Fu,
+ W.
+ Xu,
+ H.
+ Mi,
+ Industrial robot trajectory planning based on improved pso algorithm,
+ J.
+ Phys.:
+ Conf.
+ Ser.
+ 
+\series bold
+1820
+\series default
+,
+ 012185,
+ 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psoReview"
+literal "false"
+
+\end_inset
+
+F.
+ Marini,
+ B.
+ Walczak,
+ Particle swarm optimization (PSO).
+ A tutorial,
+ Chemometrics and Intelligent Laboratory Systems 
+\series bold
+149
+\series default
+,
+ pp.
+ 153-165,
+ 2015.
 \end_layout
 
 \begin_layout Bibliography
