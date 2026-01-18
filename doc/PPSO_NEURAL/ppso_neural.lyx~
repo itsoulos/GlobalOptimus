@@ -811,8 +811,6 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 In this paper,
  the use of a parallel optimization technique for the parameters of the artificial neural network is proposed,
  which is based on the widely used Particle Swarm Optimization method 
@@ -824,6 +822,18 @@ literal "false"
 \end_inset
 
 .
+ In the proposed optimization method,
+ the initial population of particles is divided into small populations and in each subpopulation a modified version of the PSO technique is executed.
+ Each population is evolved on a separate processing thread.
+ In this modified version,
+ a stochastic technique for calculating the inertia coefficient 
+\begin_inset Formula $\omega$
+\end_inset
+
+ is used,
+ as well as a termination technique based on stochastic observations.
+ The individual populations exchange the best individuals with each other after a predetermined number of iterations to accelerate the evolutionary process.
+ The Particle Swarm Optimization method was chosen in this work due to the small number of parameters required but also for its efficiency and speed in finding the global minimum of functions.
 \end_layout
 
 \begin_layout Standard
@@ -876,48 +886,47 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
+\begin_layout Standard
+This section provides a detailed description of the Particle Swarm Optimization method and the proposed modifications.
+ The overall parallel algorithm is also presented.
+\end_layout
+
 \begin_layout Subsection
 The PSO method
 \end_layout
 
 \begin_layout Standard
-The PSO method is inspired by the observations of Eberhart and Kennedy in the 1990s.
- The two observed in detail the behavior of birds as they move through space looking for food and then formulated a technique that falls under the domain of global optimization,
- using the experience they gained from their observations.
- In the new technique they formulated,
- the atoms or particles move in the research space of the problem in search of the minimum of the objective function.
- These particles are directly related to two basic characteristics:
- the current position of each particle and the velocity at which it moves in search of the global minimum.
- The current position is denoted as 
+The Particle Swarm Optimization (PSO) method originates from the observations made by Eberhart and Kennedy during the 1990s.
+ By closely examining the collective behavior of birds searching for food,
+ they developed a global optimization technique that draws on insights gained from these natural phenomena.
+ In the proposed framework,
+ particles move within the search space of the problem with the objective of locating the minimum of a given objective function.
+ Each particle is characterized by two fundamental attributes:
+ its current position and its velocity of movement.
+ The current position is denoted by 
 \begin_inset Formula $\overrightarrow{x}$
 \end_inset
 
- and the velocity is referred to as 
+,
+ while the velocity is represented by 
 \begin_inset Formula $\overrightarrow{u}$
 \end_inset
 
 .
- In addition,
- for each particle,
- the best position in which it has been found in the past (the one with the smallest value for the objective function) is kept in memory,
- but also,
- for the total population,
- its best position is kept.
- The method moves the particles to search for the global minimum through an iterative process,
- in which the positions of the particles at each iteration are derived from each particle's current position,
- the best position it has found in previous iterations,
- and the overall best position of the population.
- 
+ Moreover,
+ each particle retains in memory the best position it has previously encountered—
+corresponding to the lowest value of the objective function—
+as well as the best position identified by the entire swarm.
+ The optimization process proceeds iteratively,
+ with particle positions at each iteration being updated based on their current positions,
+ their personal best positions,
+ and the global best position of the population.
 \end_layout
 
 \begin_layout Standard
-Due to the simplicity of the method and the small number of parameters that should be set,
- this method has been applied to many difficult problems from all areas of the sciences,
- such as problems that arise in physics
-\series bold
- 
-\series default
-
+Owing to its conceptual simplicity and the limited number of parameters that need to be tuned,
+ this method has been successfully applied to a wide range of challenging problems across various scientific disciplines.
+ Such problems encompass applications arising in physics 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "psophysics1,psophysics2"
@@ -944,7 +953,7 @@ literal "true"
 \end_inset
 
 ,
- economics 
+ and economics 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "psoecon"
@@ -952,9 +961,11 @@ literal "true"
 
 \end_inset
 
- etc.
- Also,
- the PSO method was successfully applied recently in many practical problems such as flow shop scheduling 
+,
+ among others.
+ In addition,
+ the PSO method has recently been successfully employed in a variety of practical applications,
+ including flow shop scheduling 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "psoApp1"
@@ -963,7 +974,7 @@ literal "false"
 \end_inset
 
 ,
- successful development of electric vehicle charging strategies 
+ the development of effective electric vehicle charging strategies 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "psoApp2"
@@ -981,7 +992,7 @@ literal "false"
 \end_inset
 
 ,
- robotics 
+ and robotics 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "psoApp4"
@@ -989,8 +1000,8 @@ literal "false"
 
 \end_inset
 
- etc.
- A extensive tutorial on PSO methods can be found in the work of Marini and Walczak 
+.
+ A comprehensive tutorial on PSO methodologies is provided by Marini and Walczak 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "psoReview"
@@ -1003,16 +1014,67 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-This section will begin with a detailed description of the serial method to be performed on each parallel processing unit as well as the overall parallel method proposed in this work.
- Subsequently,
- the basic components of the proposed process,
- such as the calculation of the velocity,
- the proposed termination rule and the method of propagating points between the parallel computing units will be thoroughly analyzed.
+Furthermore,
+ the above global optimization technique has been applied with various modifications to the training of artificial neural networks,
+ such as for example the work of Zhou et al,
+ who applied the PSO method to train neural networks in boring machining 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoBor"
+literal "false"
+
+\end_inset
+
+.
+ Meissner et al proposed the Optimized Particle Swarm Optimization (OPSO) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "oopso"
+literal "false"
+
+\end_inset
+
+method for the training of artificial neural networks.
+ The PSO method was also applied to train neural networks to predict the outcome of construction analysis 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoCon"
+literal "false"
+
+\end_inset
+
+.
+ The PSO was also used to model the global solar radiation by training artificial neural networks in the work of Mohandes 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoSolar"
+literal "false"
+
+\end_inset
+
+.
+ Moreover,
+ Chen at al suggested a hybrid approach that combines the PSO method the Cuckoo Search technique 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "csMethod"
+literal "false"
+
+\end_inset
+
+ for the optimal training of neural networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psoCS"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-In every parallel processing unit a PSO algorithm is executed to locate the global minimum of the objective function.
- The mains steps for this algorithm are outlined in detail in Algorithm 
+The PSO method that is executed in every processing thread is outlined as a series of steps in Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:psoSerial"
@@ -1032,13 +1094,13 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The base PSO algorithm executed in one processing unit.
+The base PSO algorithm which is implemented in every processing unit.
 \begin_inset CommandInset label
 LatexCommand label
 name "alg:psoSerial"
@@ -1053,6 +1115,31 @@ name "alg:psoSerial"
 
 \end_layout
 
+\begin_layout Enumerate
+
+\series bold
+Input:
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $N_{m}$
+\end_inset
+
+,
+ the number of used particles.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $N_{g}$
+\end_inset
+
+,
+ the number of maximum allowed iterations.
+\end_layout
+
+\end_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -1073,7 +1160,7 @@ Initialization Step
 Set
 \series default
  
-\begin_inset Formula $\text{\mbox{iter}}=0$
+\begin_inset Formula $k=0$
 \end_inset
 
 .
@@ -1082,39 +1169,21 @@ Set
 \begin_layout Enumerate
 
 \series bold
-Set
-\series default
- 
-\begin_inset Formula $m$
-\end_inset
-
- as the total number of particles.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-Set 
-\series default
-
-\begin_inset Formula $\mbox{iter}_{\mbox{max}}$
-\end_inset
-
- as the maximum number of iterations allowed for the serial algorithm.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
 Initialize
 \series default
- randomly,
+ as sets of random double numbers,
  the positions 
-\begin_inset Formula $x_{1},x_{2},...,x_{m}$
+\begin_inset Formula $p_{1},p_{2},...,p_{N_{m}}$
 \end_inset
 
- for the particles.
- The initial positions must be within the domain of the objective function.
+ for each particle.
+ Each particle has dimension 
+\begin_inset Formula $n$
+\end_inset
+
+,
+ which is the number of parameters of the artificial neural network,
+ and constitutes a possible combination of values for the parameters of the artificial neural network.
 \end_layout
 
 \begin_layout Enumerate
@@ -1122,8 +1191,8 @@ Initialize
 \series bold
 Initialize
 \series default
- randomly the velocities 
-\begin_inset Formula $u_{1},u_{2},...,u_{m}$
+ randomly the corresponding velocities 
+\begin_inset Formula $u_{1},u_{2},...,u_{N_{m}}$
 \end_inset
 
 .
@@ -1135,19 +1204,19 @@ Initialize
 For
 \series default
  
-\begin_inset Formula $i=1..m$
+\begin_inset Formula $i=1..N_{m}$
 \end_inset
 
  do 
-\begin_inset Formula $p_{i}=x_{i}$
+\begin_inset Formula $b_{i}=x_{i}$
 \end_inset
 
-.
- The vector 
-\begin_inset Formula $p_{i}$
+,
+ where each vector 
+\begin_inset Formula $b_{i}$
 \end_inset
 
- represents the best located position of particle 
+ denotes the best located position for particle 
 \begin_inset Formula $i$
 \end_inset
 
@@ -1160,10 +1229,20 @@ For
 Set
 \series default
  
-\begin_inset Formula $p_{\mbox{best}}=\arg\min_{i\in1..m}f\left(x_{i}\right)$
+\begin_inset Formula $p_{\mbox{best}}=\arg\min_{i\in1..N_{m}}f\left(p_{i}\right)$
 \end_inset
 
+,
+ which represents the best particle of the population.
+ The function 
+\begin_inset Formula $f(p)$
+\end_inset
 
+ is the training error of the corresponding neural network 
+\begin_inset Formula $N(\overrightarrow{x},\overrightarrow{p})$
+\end_inset
+
+.
 \end_layout
 
 \end_deeper
@@ -1179,9 +1258,9 @@ name "enu:Check-Termination."
 
 \end_inset
 
- The termination criterion for the serial algorithm is checked.
- If the termination criterion is true,
- then the method terminates.
+ The termination condition of the serial algorithm is evaluated,
+ and if it is satisfied,
+ the algorithm concludes.
 \end_layout
 
 \begin_layout Enumerate
@@ -1190,7 +1269,7 @@ name "enu:Check-Termination."
 For
 \series default
  
-\begin_inset Formula $i=1..m$
+\begin_inset Formula $i=1\ldots N_{m}$
 \end_inset
 
  
@@ -1217,29 +1296,73 @@ name "enu:For"
 \series bold
 Compute 
 \series default
-the velocity 
+the corresponding velocity 
 \begin_inset Formula $u_{i}$
 \end_inset
 
- as a combination of the vectors 
-\begin_inset Formula $u_{i},\ p_{i}$
+ as 
+\begin_inset Formula 
+\begin{equation}
+u_{i}=\omega u_{i}+r_{1}c_{1}\left(b_{i}-p_{i}\right)+r_{2}c_{2}\left(p_{\mbox{best}}-p_{i}\right)\label{eq:eq4-1-1}
+\end{equation}
+
 \end_inset
 
- and 
-\begin_inset Formula $p_{\mbox{best}}$
+where 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The values 
+\begin_inset Formula $r_{1},\ r_{2}$
+\end_inset
+
+ represent random numbers in 
+\begin_inset Formula $[0,1].$
 \end_inset
 
 
 \end_layout
 
 \begin_layout Enumerate
+The constants 
+\begin_inset Formula $c_{1},\ c_{2}$
+\end_inset
+
+ are usually defined in 
+\begin_inset Formula $[1,2]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+The variable 
+\begin_inset Formula $\omega$
+\end_inset
+
+ represents the so - called inertia and it was initially proposed by Shi and Eberhart 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pso_major"
+literal "false"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
 
 \series bold
-Set
+Update
 \series default
- the new position for the particle as:
+ the current position of each particle as:
  
-\begin_inset Formula $x_{i}=x_{i}+u_{i}$
+\begin_inset Formula $p_{i}=p_{i}+u_{i}$
 \end_inset
 
 
@@ -1257,19 +1380,23 @@ name "enu:Update-the-position"
 \series bold
 Calculate
 \series default
- the 
-\begin_inset Formula $f\left(x_{i}\right)$
+ the fitness 
+\begin_inset Formula $f\left(p_{i}\right)$
 \end_inset
 
  for particle 
-\begin_inset Formula $x_{i}$
+\begin_inset Formula $p_{i}$
 \end_inset
 
- using the objective function 
-\begin_inset Formula $f(x)$
+ using the formula of the corresponding training error:
+\begin_inset Formula 
+\begin{equation}
+f\left(p_{i}\right)=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x}_{j},\overrightarrow{p_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
+\end{equation}
+
 \end_inset
 
-.
+
 \end_layout
 
 \begin_layout Enumerate
@@ -1278,11 +1405,11 @@ Calculate
 If
 \series default
  
-\begin_inset Formula $f\left(x_{i}\right)\le f\left(p_{i}\right)$
+\begin_inset Formula $f\left(p_{i}\right)\le f\left(b_{i}\right)$
 \end_inset
 
  then 
-\begin_inset Formula $p_{i}=x_{i}$
+\begin_inset Formula $b_{i}=x_{i}$
 \end_inset
 
 
@@ -1305,7 +1432,7 @@ For
 Set
 \series default
  
-\begin_inset Formula $p_{\mbox{best}}=\arg\min_{i\in1..m}f\left(x_{i}\right)$
+\begin_inset Formula $p_{\mbox{best}}=\arg\min_{i\in1..N_{m}}f\left(p_{i}\right)$
 \end_inset
 
 
@@ -1317,7 +1444,7 @@ Set
 Set
 \series default
  
-\begin_inset Formula $\mbox{iter}=\mbox{iter}+1$
+\begin_inset Formula $k=k+1$
 \end_inset
 
 .
@@ -1349,110 +1476,79 @@ nolink "false"
 
 \end_inset
 
-The base PSO algorithm as described in Algorithm 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "alg:psoSerial"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
-,
- computes at every iteration the new position of the particle 
-\begin_inset Formula $i$
-\end_inset
-
- using the following operation:
-\begin_inset Formula 
-\begin{equation}
-x_{i}=x_{i}+u_{i+1}\label{eq:eq3}
-\end{equation}
-
-\end_inset
-
-In most cases the new velocity could be a linear combination of the previously computed velocity and the best values 
-\begin_inset Formula $p_{i}$
-\end_inset
-
- and 
-\begin_inset Formula $p_{\mbox{best}}$
-\end_inset
-
-.
- A typical computation of the new velocity is defined as:
-\begin_inset Formula 
-\begin{equation}
-u_{i}=\omega u_{i}+r_{1}c_{1}\left(p_{i}-x_{i}\right)+r_{2}c_{2}\left(p_{\mbox{best}}-x_{i}\right)\label{eq:eq4-1}
-\end{equation}
-
-\end_inset
-
-where 
-\end_layout
-
-\begin_layout Enumerate
-The variables 
-\begin_inset Formula $r_{1},\ r_{2}$
-\end_inset
-
- are random numbers defined in 
-\begin_inset Formula $[0,1].$
-\end_inset
-
 
 \end_layout
 
-\begin_layout Enumerate
-The constants 
-\begin_inset Formula $c_{1},\ c_{2}$
-\end_inset
-
- are defined in 
-\begin_inset Formula $[1,2]$
-\end_inset
-
-.
- 
+\begin_layout Subsection
+Proposed modifications
 \end_layout
 
-\begin_layout Enumerate
-The variable 
-\begin_inset Formula $\omega$
-\end_inset
-
- is called inertia and it was suggested by Shi and Eberhart 
+\begin_layout Standard
+The original Particle Swarm Optimization technique was extended using two modifications recently proposed by Charilogis et al 
 \begin_inset CommandInset citation
-LatexCommand cite
-key "pso_major"
+LatexCommand citep
+key "ipso"
 literal "false"
 
 \end_inset
 
-.
- In the current article a simple inertia calculation is used and calculated using:
+ and aimed at more efficiently finding the global minimum of a function and at early termination of the technique.
+ The first modification proposes a stochastic calculation for the inertia using the following formula:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\omega_{\mbox{iter}}=0.5+\frac{r}{2}
+\omega_{\mbox{k}}=0.5+\frac{r}{2}
 \end{equation}
 
 \end_inset
 
-The variable 
+In this equation the variable 
+\begin_inset Formula $k$
+\end_inset
+
+ denotes the iteration number of the PSO method and the value 
 \begin_inset Formula $r$
 \end_inset
 
- is a a random number with 
+ represents a random number in 
 \begin_inset Formula $r\in[0,1]$
 \end_inset
 
 .
- 
+ Additionally,
+ a termination rule is proposed where the algorithm computes at every iteration 
+\begin_inset Formula $k$
+\end_inset
+
+ the quantity:
+\begin_inset Formula 
+\begin{equation}
+\delta^{(k)}=\left|f_{\mbox{min}}^{(k)}-f_{\mbox{min}}^{(k-1)}\right|\label{eq:term}
+\end{equation}
+
+\end_inset
+
+The value 
+\begin_inset Formula $f_{\mbox{min}}^{(k)}$
+\end_inset
+
+ represents the best function value obtained by the algorithm at at iteration 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ If the aforementioned quantity remains below a predefined threshold 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ for 
+\begin_inset Formula $N_{E}$
+\end_inset
+
+ consecutive iterations,
+ the execution of the algorithm is terminated.
 \end_layout
 
 \begin_layout Subsection
@@ -1461,12 +1557,12 @@ The parallel algorithm
 
 \begin_layout Standard
 The overall parallel algorithm,
- which runs on 
-\begin_inset Formula $N_{I}$
+ which is executed on 
+\begin_inset Formula $T$
 \end_inset
 
- independent computing units,
- is shown in algorithm 
+ independent processing units,
+ is outlined in algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:parallelPso"
@@ -1478,6 +1574,12 @@ nolink "false"
 \end_inset
 
 .
+ The proposed parallel algorithm divides the problem into a series of algorithms that are executed on different computing units.
+ At regular intervals,
+ these individual algorithms share the particles with the best values \SpecialChar allowbreak
+\SpecialChar allowbreak
+found with the rest,
+ in order to accelerate the evolutionary process but also to keep the individual algorithms informed about the best solutions found by others.
 \end_layout
 
 \begin_layout Standard
@@ -1486,13 +1588,13 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The implemented parallel algorithm.
+The used parallel algorithm.
 \begin_inset CommandInset label
 LatexCommand label
 name "alg:parallelPso"
@@ -1510,50 +1612,42 @@ name "alg:parallelPso"
 \begin_layout Enumerate
 
 \series bold
-Set
-\series default
- as 
-\begin_inset Formula $N_{I}$
+Input:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $T$
 \end_inset
 
- the total number of parallel processing units.
+ as the number of parallel processing units.
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
-Set
-\series default
- as 
 \begin_inset Formula $N_{R}$
 \end_inset
 
- as the number of iterations,
- after which each processing unit will send its best particles to the remaining processing units.
+ denotes the number of iterations after which each processing unit transmits its best particles to the other processing units.
 \end_layout
 
 \begin_layout Enumerate
-
-\series bold
-Set
-\series default
- 
 \begin_inset Formula $N_{P}$
 \end_inset
 
- the number of migrated particles between the parallel processing units.
+ specifies the number of particles that are migrated among the parallel processing units.
 \end_layout
 
+\end_deeper
 \begin_layout Enumerate
 
 \series bold
 Set
 \series default
  
-\begin_inset Formula $K=0$
+\begin_inset Formula $k=0$
 \end_inset
 
- the iteration number.
+ .
 \end_layout
 
 \begin_layout Enumerate
@@ -1562,7 +1656,7 @@ Set
 For
 \series default
  
-\begin_inset Formula $j=1,..,N$
+\begin_inset Formula $j=1,..,T$
 \end_inset
 
  do in parallel
@@ -1581,7 +1675,8 @@ name "enu:For--do"
 \series bold
 Execute
 \series default
- an iteration of the PSO algorithm described in algorithm 
+ an iteration of serial PSO algorithm,
+ that was described previously in algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:psoSerial"
@@ -1592,7 +1687,7 @@ nolink "false"
 
 \end_inset
 
- on processing unit 
+ on the processing unit 
 \begin_inset Formula $j$
 \end_inset
 
@@ -1603,7 +1698,7 @@ nolink "false"
 
 \series bold
 If 
-\begin_inset Formula $K\ \mbox{mod}\ N_{R}=0,$
+\begin_inset Formula $k\ \mbox{mod}\ N_{R}=0,$
 \end_inset
 
 then
@@ -1613,13 +1708,13 @@ then
 \begin_layout Enumerate
 
 \series bold
-Get
+Obtain
 \series default
  the best 
 \begin_inset Formula $N_{P}$
 \end_inset
 
- particles from algorithm 
+ particles from processing unit 
 \begin_inset Formula $j$
 \end_inset
 
@@ -1635,11 +1730,13 @@ Propagate
 \begin_inset Formula $N_{P}$
 \end_inset
 
- particles to the rest of processing units using some propagation scheme that will be described subsequently.
+ particles to the remaining processing units.
 \end_layout
 
 \end_deeper
 \begin_layout Enumerate
+
+\series bold
 EndIf
 \end_layout
 
@@ -1653,10 +1750,10 @@ End For
 \begin_layout Enumerate
 
 \series bold
-Update
+Set
 \series default
  
-\begin_inset Formula $K=K+1$
+\begin_inset Formula $k=k+1$
 \end_inset
 
 
@@ -1667,9 +1764,9 @@ Update
 \series bold
 Check
 \series default
- the proposed termination rule.
- If the termination rule is valid,
- then goto step 
+ the proposed termination rule on the processing units.
+ If the termination rule holds on each processing unit,
+ the goto step 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "enu:Terminate-and-report"
@@ -1694,13 +1791,12 @@ nolink "false"
 .
 \end_layout
 
-\begin_deeper
 \begin_layout Enumerate
 
 \series bold
-Terminate
+Local search step
 \series default
- and report the best value from all processing units.
+.
 \begin_inset CommandInset label
 LatexCommand label
 name "enu:Terminate-and-report"
@@ -1711,139 +1807,43 @@ name "enu:Terminate-and-report"
  
 \end_layout
 
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Obtain
+\series default
+ the best particle from all processing units and denote it as 
+\begin_inset Formula $p_{\mbox{a}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Optimize
+\series default
+ the corresponding neural network 
+\begin_inset Formula $N\left(\overrightarrow{x},\overrightarrow{p_{\mbox{a}}}\right)$
+\end_inset
+
+ using some local optimization method.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ the final neural network to the test set of the objective problem and report the associated test error.
+\end_layout
+
 \end_deeper
 \end_inset
 
- The two main components of the proposed parallel implementation are the particle propagation mechanism between the parallel computing units and the proposed termination rule.
- In the first case,
- it must be decided which units will send the best particles to other parallel units.
- Units receiving particles replace their worst members with the ones they receive.
- In the second case,
- a termination rule based on asymptotic observations is proposed for early termination of the parallel technique.
- In the proposed termination technique,
- the overall algorithm is terminated if it holds with some certainty if some asymptotic termination criterion holds for at least one parallel computing unit.
- These components will be discussed in the following subsections.
-\end_layout
-
-\begin_layout Subsection
-Propagation mechanism 
-\begin_inset CommandInset label
-LatexCommand label
-name "subsec:Propagation-mechanism"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-During the execution of the parallel algorithm and periodically,
- the processing units propagate their best particles (those with the lowest function value) to the remaining processing units.
- This propagation can be achieved in the following possible ways:
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-1 to 1
-\series default
-.
- In this propagation scheme,
- a randomly selected processing unit will send to some other randomly selected unit its 
-\begin_inset Formula $N_{P}$
-\end_inset
-
- best particles.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-1 to N
-\series default
-.
- During this scheme,
- a randomly selected unit will send its best 
-\begin_inset Formula $N_{P}$
-\end_inset
-
- particles to the remaining units.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-N to 1
-\series default
-.
- In this scheme,
- all processing units will send the corresponding 
-\begin_inset Formula $N_{P}$
-\end_inset
-
- best particles of each unit to a randomly selected unit.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-N to N
-\series default
-.
- For this scheme,
- all processing units will send the corresponding 
-\begin_inset Formula $N_{P}$
-\end_inset
-
- best particles to all.
-\end_layout
-
-\begin_layout Subsection
-Stopping rule
-\end_layout
-
-\begin_layout Standard
-In the proposed technique,
- a distinct termination rule is checked on each parallel processing unit.
- This rule is formulated as follows:
-\begin_inset Formula 
-\begin{equation}
-\delta_{i}^{(k)}=\left|f_{i,\mbox{min}}^{(k)}-f_{i,\mbox{min}}^{(k-1)}\right|\label{eq:term}
-\end{equation}
-
-\end_inset
-
-This quantity is calculated on every iteration 
-\begin_inset Formula $k$
-\end_inset
-
-.
- The value 
-\begin_inset Formula $f_{i,\mbox{min}}^{(k)}$
-\end_inset
-
- is the best function value for unit 
-\begin_inset Formula $i$
-\end_inset
-
- at iteration 
-\begin_inset Formula $k$
-\end_inset
-
-.
- If the above quantity is less than a predetermined limit 
-\begin_inset Formula $\epsilon$
-\end_inset
-
- for 
-\begin_inset Formula $N_{M}$
-\end_inset
-
- continuous repetitions,
- then the algorithm executed on this unit is terminated.
- In present work,
- if a parallel processing unit is terminated,
- then the overall process is also terminated.
+ 
 \end_layout
 
 \begin_layout Section
@@ -1858,9 +1858,9 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Standard
-The proposed work was tested on a series of well - known classification and regression datasets from the recent bibliography and it was compared other optimization methods,
- used to train neural networks.
- The used datasets can be obtained freely from the following websites:
+The proposed approach was evaluated on a collection of well-known datasets drawn from recent literature,
+ and its performance was compared with that of other optimization methods used for training neural networks.
+ The datasets employed in this study are publicly available and can be accessed through the following websites:
 \end_layout
 
 \begin_layout Enumerate
@@ -1876,7 +1876,7 @@ https://archive.ics.uci.edu/ml/index.php
 
 \end_inset
 
-(accessed on 18 June 2024)
+(accessed on 18 January 2026) 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "UCL"
@@ -1884,7 +1884,7 @@ literal "false"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -1900,7 +1900,7 @@ https://sci2s.ugr.es/keel/datasets.php
 
 \end_inset
 
-(accessed on 18 June 2024)
+(accessed on 18 January 2026) 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Keel"
@@ -1916,8 +1916,7 @@ Used datasets
 \end_layout
 
 \begin_layout Standard
-A series of classification datasets were used in the conducted experiments.
- Their description has as follows:
+The following datasets were used in the conducted experiments:
 \end_layout
 
 \begin_layout Enumerate
@@ -1926,7 +1925,7 @@ A series of classification datasets were used in the conducted experiments.
 Alcohol
 \series default
  dataset,
- which is a dataset regarding experiments on alcohol consumption 
+ which consists of experimental data related to alcohol consumption 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "alcohol"
@@ -2563,7 +2562,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -2587,7 +2586,7 @@ name "tab:expValues"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="6" columns="3">
+<lyxtabular version="3" rows="9" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -2694,7 +2693,7 @@ allowed generations
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $p_{s}$
+\begin_inset Formula $N_{E}$
 \end_inset
 
 
@@ -2706,7 +2705,11 @@ allowed generations
 \begin_inset Text
 
 \begin_layout Plain Layout
-Selection rate
+Value used in the 
+\begin_inset Newline newline
+\end_inset
+
+termination rule
 \end_layout
 
 \end_inset
@@ -2715,7 +2718,7 @@ Selection rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1
+15
 \end_layout
 
 \end_inset
@@ -2726,7 +2729,7 @@ Selection rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $p_{m}$
+\begin_inset Formula $N_{R}$
 \end_inset
 
 
@@ -2738,7 +2741,7 @@ Selection rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-Mutation rate
+Propagation iterations
 \end_layout
 
 \end_inset
@@ -2747,7 +2750,103 @@ Mutation rate
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.05
+5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{P}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Propagated particles
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $c_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameter for PSO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $c_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameter for PSO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.0
 \end_layout
 
 \end_inset
@@ -11898,7 +11997,9 @@ J.
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "key-14"
+label "(2000)"
+key "psophysics1"
+literal "false"
 
 \end_inset
 
@@ -12209,6 +12310,160 @@ F.
  pp.
  153-165,
  2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "psoBor"
+literal "false"
+
+\end_inset
+
+Zhou,
+ J.,
+ Duan,
+ Z.,
+ Li,
+ Y.,
+ Deng,
+ J.,
+ & Yu,
+ D.
+ (2006).
+ PSO-based neural network optimization and its utilization in a boring machine.
+ Journal of Materials Processing Technology,
+ 178(1-3),
+ 19-23.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "oopso"
+literal "false"
+
+\end_inset
+
+Meissner,
+ M.,
+ Schmuker,
+ M.
+ & Schneider,
+ G.
+ Optimized Particle Swarm Optimization (OPSO) and its application to artificial neural network training.
+ BMC Bioinformatics 7,
+ 125 (2006).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "psoCon"
+literal "false"
+
+\end_inset
+
+Chau,
+ K.
+ W.
+ (2007).
+ Application of a PSO-based neural network in analysis of outcomes of construction claims.
+ Automation in construction,
+ 16(5),
+ 642-646.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "psoSolar"
+literal "false"
+
+\end_inset
+
+Mohandes,
+ M.
+ A.
+ (2012).
+ Modeling global solar radiation using Particle Swarm Optimization (PSO).
+ Solar Energy,
+ 86(11),
+ 3137-3145.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "csMethod"
+literal "false"
+
+\end_inset
+
+Yang,
+ X.S.;
+ Deb,
+ S.
+ Cuckoo search via Lévy flights.
+ In Proceedings of the IEEE World Congress on Nature and Biologically Inspired Computing (NaBIC 2009),
+ Coimbatore,
+ India,
+ 9–11 December 2009;
+ pp.
+ 210–214.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "psoCS"
+literal "false"
+
+\end_inset
+
+Chen,
+ J.
+ F.,
+ Do,
+ Q.
+ H.,
+ & Hsieh,
+ H.
+ N.
+ (2015).
+ Training artificial neural networks by a hybrid PSO-CS algorithm.
+ Algorithms,
+ 8(2),
+ 292-308.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "ipso"
+literal "false"
+
+\end_inset
+
+V.
+ Charilogis,
+ I.G.
+ Tsoulos,
+ Toward an Ideal Particle Swarm Optimizer for Multidimensional Functions,
+ Information 
+\series bold
+13
+\series default
+,
+ 217,
+ 2022.
 \end_layout
 
 \begin_layout Bibliography
