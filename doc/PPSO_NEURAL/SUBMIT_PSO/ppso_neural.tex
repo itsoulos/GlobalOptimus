@@ -1,0 +1,1966 @@
+%% LyX 2.4.3 created this file.  For more info, see https://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\synctex=-1
+\usepackage{float}
+\usepackage{url}
+\usepackage{varwidth}
+\usepackage{graphicx}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+
+\Title{Introducing a parallel Particle Swarm Method for neural network training}
+
+\Author{Ioannis G. Tsoulos$^{1,*}$, Vasileios Charilogis$^{2}$ }
+
+
+\address{$^{1}$\quad{}Department of Informatics and Telecommunications,
+University of Ioannina, Greece;itsoulos@uoi.gr\\
+$^{2}$\quad{}Department of Informatics and Telecommunications, University
+of Ioannina, Greece; v.charilog@uoi.gr}
+
+
+\corres{Correspondence: itsoulos@uoi.gr}
+
+
+\abstract{Artificial neural networks constitute a machine learning tool that
+has been used across a wide range of scientific as well as commercial
+applications over the past decades, delivering excellent results in
+most cases. For the effective training of the parameters of these
+machine learning models, optimization techniques are employed; however,
+in most cases these techniques tend to require significant computational
+time, which is also determined by the complexity and the size of the
+data to which the artificial neural network is applied. In the present
+work, a computational method is presented that exploits modern parallel
+computing architectures and is based on a distributed variant of the
+Particle Swarm Optimization technique. This method also employs distributed
+initialization of the artificial neural network parameters to enable
+more effective exploration of the parameter value space of the machine
+learning model. Furthermore, experimental results indicate that the
+proposed method becomes more effective as the number of parallel computational
+units increases, thereby enhancing the overall efficiency of the technique.In
+this study, the technique was applied to a large dataset originating
+from various scientific domains, and the experimental results were
+more than promising.}
+
+
+\keyword{Neural networks; machine learning; particle swarm optimization; parallel
+programming}
+
+\newcommand*\LyXZeroWidthSpace{\hspace{0pt}}
+\DeclareTextSymbolDefault{\textquotedbl}{T1}
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+%% Variable width box for table cells
+\newenvironment{cellvarwidth}[1][t]
+    {\begin{varwidth}[#1]{\linewidth}}
+    {\@finalstrut\@arstrutbox\end{varwidth}}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%  LaTeX support: latex@mdpi.com 
+%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+
+%=================================================================
+%\documentclass[preprints,article,submit,pdftex,moreauthors]{Definitions/mdpi} 
+% For posting an early version of this manuscript as a preprint, you may use "preprints" as the journal. Changing "submit" to "accept" before posting will remove line numbers.
+
+% Below journals will use APA reference format:
+% admsci, aieduc, behavsci, businesses, econometrics, economies, education, ejihpe, famsci, games, humans, ijcs, ijfs, jintelligence, journalmedia, jrfm, jsam, languages, peacestud, psycholint, publications, tourismhosp, youth
+
+% Below journals will use Chicago reference format:
+% arts, genealogy, histories, humanities, laws, literature, religions, risks, socsci
+
+%--------------------
+% Class Options:
+%--------------------
+%----------
+% journal
+%----------
+% Choose between the following MDPI journals:
+% accountaudit, acoustics, actuators, addictions, adhesives, admsci, adolescents, aerobiology, aerospace, agriculture, agriengineering, agrochemicals, agronomy, ai, aichem, aieduc, aieng, aimater, aimed, aipa, air, aisens, algorithms, allergies, alloys, amh, analog, analytica, analytics, anatomia, anesthres, animals, antibiotics, antibodies, antioxidants, applbiosci, appliedchem, appliedmath, appliedphys, applmech, applmicrobiol, applnano, applsci, aquacj, architecture, arm, arthropoda, arts, asc, asi, astronautics, astronomy, atmosphere, atoms, audiolres, automation, axioms, bacteria, batteries, bdcc, behavsci, beverages, biochem, bioengineering, biologics, biology, biomass, biomechanics, biomed, biomedicines, biomedinformatics, biomimetics, biomolecules, biophysica, bioresourbioprod, biosensors, biosphere, biotech, birds, blockchains, bloods, blsf, brainsci, breath, buildings, businesses, cancers, carbon, cardio, cardiogenetics, cardiovascmed, catalysts, cells, ceramics, challenges, chemengineering, chemistry, chemosensors, chemproc, children, chips, cimb, civileng, cleantechnol, climate, clinbioenerg, clinpract, clockssleep, cmd, cmtr, coasts, coatings, colloids, colorants, commodities, complexities, complications, compounds, computation, computers, condensedmatter, conservation, constrmater, cosmetics, covid, crops, cryo, cryptography, crystals, csmf, ctn, culture, curroncol, cyber, dairy, data, ddc, dentistry, dermato, dermatopathology, designs, devices, dhi, diabetology, diagnostics, dietetics, digital, disabilities, diseases, diversity, dna, drones, dynamics, earth, ebj, ecm, ecologies, econometrics, economies, edm, education, eesp, ejihpe, electricity, electrochem, electronicmat, electronics, encyclopedia, endocrines, energies, eng, engproc, entomology, entropy, environments, environremediat, epidemiologia, epigenomes, esa, est, famsci, fermentation, fibers, fintech, fire, fishes, fluids, foods, forecasting, forensicsci, forests, fossstud, foundations, fractalfract, fuels, future, futureinternet, futurepharmacol, futurephys, futuretransp, galaxies, games, gases, gastroent, gastrointestdisord, gastronomy, gels, genealogy, genes, geographies, geohazards, geomatics, geometry, geosciences, geotechnics, geriatrics, germs, glacies, grasses, green, greenhealth, gucdd, hardware, hazardousmatters, healthcare, hearts, hemato, hematolrep, hep, heritage, higheredu, highthroughput, histories, horticulturae, hospitals, humanities, humans, hydrobiology, hydrogen, hydrology, hydropower, hygiene, idr, iic, ijcs, ijem, ijerph, ijfs, ijgi, ijmd, ijms, ijns, ijom, ijpb, ijt, ijtm, ijtpp, ime, immuno, informatics, information, infrastructures, inorganics, insects, instruments, inventions, iot, j, jaestheticmed, jal, jcdd, jcm, jcp, jcrm, jcs, jcto, jdad, jdb, jdream, jemr, jeta, jfb, jfmk, jgbg, jgg, jimaging, jintelligence, jlpea, jmahp, jmmp, jmms, jmp, jmse, jne, jnt, jof, joi, joitmc, joma, jop, joptm, jor, journalmedia, jox, jpbi, jphytomed, jpm, jrfm, jsam, jsan, jtaer, jvd, jzbg, kidneydial, kinasesphosphatases, knowledge, labmed, laboratories, lae, land, languages, laws, life, lights, limnolrev, lipidology, liquids, literature, livers, logics, logistics, lubricants, lymphatics, machines, macromol, magnetism, magnetochemistry, make, marinedrugs, materials, materproc, mathematics, mca, measurements, medicina, medicines, medsci, membranes, merits, metabolites, metals, meteorology, methane, metrics, metrology, micro, microarrays, microbiolres, microelectronics, micromachines, microorganisms, microplastics, microwave, minerals, mining, mmphys, modelling, molbank, molecules, mps, msf, mti, multimedia, muscles, nanoenergyadv, nanomanufacturing, nanomaterials, ncrna, ndt, network, neuroglia, neuroimaging, neurolint, neurosci, nitrogen, notspecified, nursrep, nutraceuticals, nutrients, obesities, occuphealth, oceans, ohbm, onco, optics, oral, organics, organoids, osteology, oxygen, pandemics, parasites, parasitologia, particles, pathogens, pathophysiology, peacestud, pediatrrep, pets, pharmaceuticals, pharmaceutics, pharmacoepidemiology, pharmacy, philosophies, photochem, photonics, phycology, physchem, physics, physiologia, plants, plasma, platforms, pollutants, polymers, polysaccharides, populations, poultry, powders, precipitation, precisoncol, preprints, proceedings, processes, prosthesis, proteomes, psf, psychiatryint, psychoactives, psycholint, publications, purification, quantumrep, quaternary, qubs, radiation, rdt, reactions, realestate, receptors, recycling, regeneration, religions, remotesensing, reports, reprodmed, resources, rheumato, risks, rjpm, robotics, rsee, ruminants, safety, sci, scipharm, sclerosis, seeds, sensors, separations, sexes, shi, signals, sinusitis, siuj, skins, smartcities, sna, societies, socsci, software, soilsystems, solar, solids, spectroscj, sports, standards, stats, std, stratsediment, stresses, surfaces, surgeries, suschem, sustainability, symmetry, synbio, systems, tae, targets, taxonomy, technologies, telecom, test, textiles, thalassrep, therapeutics, thermo, timespace, tomography, tourismhosp, toxics, toxins, tph, transplantology, transportation, traumacare, traumas, tri, tropicalmed, universe, urbansci, uro, vaccines, vehicles, venereology, vetsci, vibration, virtualworlds, viruses, vision, waste, water, welding, wem, wevj, wild, wind, women, world, youth, zoonoticdis
+
+%---------
+% article
+%---------
+% The default type of manuscript is "article", but can be replaced by: 
+% abstract, addendum, article, book, bookreview, briefreport, casereport, comment, commentary, communication, conferenceproceedings, correction, conferencereport, entry, expressionofconcern, extendedabstract, datadescriptor, editorial, essay, erratum, hypothesis, interestingimage, obituary, opinion, projectreport, reply, retraction, review, perspective, protocol, shortnote, studyprotocol, systematicreview, supfile, technicalnote, viewpoint, guidelines, registeredreport, tutorial
+% supfile = supplementary materials
+
+%----------
+% submit
+%----------
+% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g., the logo of the journal will get visible), the headings, and the copyright information. Also, line numbering will be removed. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
+
+%------------------
+% moreauthors
+%------------------
+% If there is only one author the class option oneauthor should be used. Otherwise use the class option moreauthors.
+
+%---------
+% pdftex
+%---------
+% The option pdftex is for use with pdfLaTeX. If eps figures are used, remove the option pdftex and use LaTeX and dvi2pdf.
+
+%=================================================================
+% MDPI internal commands - do not modify
+\firstpage{1} 
+\setcounter{page}{\@firstpage}
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2026}
+\copyrightyear{2026}
+%\externaleditor{Firstname Lastname} % More than 1 editor, please add `` and '' before the last editor name
+\datereceived{}
+\daterevised{ } % Comment out if no revised date
+\dateaccepted{}
+\datepublished{}
+%\datecorrected{} % For corrected papers include a "Corrected: XXX" date in the original paper.
+%\dateretracted{} % For retracted papers include a "RETRACTED: XXX" date in the original paper.
+%\doinum{} % Used for some special journals, like molbank
+%\pdfoutput=1 % Uncommented for upload to arXiv.org
+%\CorrStatement{yes}  % For updates
+%\longauthorlist{yes} % For many authors that exceed the left citation part
+%\IsAssociation{yes} % For association journals
+
+%=================================================================
+% Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, lineno, float, amsmath, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, cleveref, amsthm, hyphenat, natbib, hyperref, footmisc, url, geometry, newfloat, caption
+
+%=================================================================
+%% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
+%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
+
+%=================================================================
+% The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
+%\PACS{J0101}
+%\MSC{}
+%\JEL{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Diversity
+%\LSID{\url{http://}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Applied Sciences:
+%\featuredapplication{Authors are encouraged to provide a concise description of the specific application or a potential application of the work. This section is not mandatory.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Data:
+%\dataset{DOI number or link to the deposited data set in cases where the data set is published or set to be published separately. If the data set is submitted and will be published as a supplement to this paper in the journal Data, this field will be filled by the editors of the journal. In this case, please make sure to submit the data set as a supplement when entering your manuscript into our manuscript editorial system.}
+
+%\datasetlicense{license under which the data set is made available (CC0, CC-BY, CC-BY-SA, CC-BY-NC, etc.)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal BioTech, Fishes, Neuroimaging and Toxins
+%\keycontribution{The breakthroughs or highlights of the manuscript. Authors can write one or two sentences to describe the most important part of the paper.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Encyclopedia
+%\encyclopediadef{Instead of the abstract}
+%\entrylink{The Link to this entry published on the encyclopedia platform.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Different journals have different requirements. Please check the specific journal guidelines in the "Instructions for Authors" on the journal's official website.
+ 
+%\addhighlights{yes}
+%\renewcommand{\addhighlights}{%
+%
+%\noindent The goal is to increase the discoverability and readability of the article via search engines and other scholars. Highlights should not be a copy of the abstract, but a simple text allowing the reader to quickly and simplified find out what the article is about and what can be cited from it. Each of these parts should be devoted up to 2 bullet points.\vspace{3pt}\\
+%\textbf{What are the main findings?}
+% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+% \item First bullet.
+% \item Second bullet.
+% \end{itemize}\vspace{3pt}
+%\textbf{What are the implications of the main findings?}
+% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+% \item First bullet.
+% \item Second bullet.
+% \end{itemize}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatother
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Artificial neural networks (ANNs) are parametric machine learning
+models \citep{nn1,nn2} that have been extensively employed over the
+past decades in a wide range of real-world applications. These applications
+span multiple scientific domains, including physics-related problems
+\citep{nnphysics1,nnphysics2,nnphysics3}, chemistry \citep{nnchem1,nnchem2,nnchem3},
+medicine \citep{nnmed1,nnmed2}, and economics \citep{nnecon1,nnecon2,nnecon3},
+among others. Moreover, in the recent years there have been appeared
+applications of the neural networks to problems such as solutions
+of differential equations \citep{nnde1,nnde2}, problems appeared
+in agricultural \citep{nnagr1,nnagr2}, image processing \citep{nnfacial},
+wind speed prediction \citep{nnwind}, consumption issues \citep{nngas},
+network security \citep{nnintrusion} etc. Typically, a neural network
+is defined as a function $N(\overrightarrow{x},\overrightarrow{w})$,
+where the vector $\overrightarrow{x}$ denotes the input pattern and
+the vector $\overrightarrow{w}$ represents the weight vector, that
+should be estimated by some optimization procedure. The estimation
+of this vector is commonly achieved by minimizing the so-called training
+error, defined mathematically as :
+\begin{equation}
+E(\overrightarrow{w})=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\end{equation}
+The set $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$ represents
+the associated training set of the current problem. The values $y_{i}$
+denote the desired output for each pattern $\overrightarrow{x_{i}}$.
+As proposed in \citep{nnc}, a neural network can be formulated as
+the following function:
+\begin{equation}
+N\left(\overrightarrow{x},\overrightarrow{w}\right)=\sum_{i=1}^{H}w_{(d+2)i-(d+1)}\sigma\left(\sum_{j=1}^{d}x_{j}w_{(d+2)i-(d+1)+j}+w_{(d+2)i}\right)\label{eq:nn}
+\end{equation}
+In this equation, the constant number $H$ denotes the number of used
+processing units. Moreover, the function $\sigma(x)$ is the sigmoid
+function, expressed as:
+\begin{equation}
+\sigma(x)=\frac{1}{1+\exp(-x)}\label{eq:sig}
+\end{equation}
+From equation \ref{eq:nn} is deduced that\textbf{ }the total number
+of parameters for neural network is $n=(d+2)H$.\textbf{ }Also, a
+a series of alternative activation functions has been proposed, such
+as the $\tanh$ function, which is formulated as:
+\begin{equation}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\end{equation}
+Also, Guarnieri et al introduced a new activation function under the
+name adaptive spline function in a recent publication \citep{activation_spline}.
+Similarly, Ertuğrul introduced a new trained activation function \citep{activation_trained}
+to be used in neural networks. A recent review on activation functions
+for neural networks is proposed in the work of\textbf{ }Rasamoelina
+et al \citep{activation_review}.
+
+The minimization of equation \ref{eq:eq1} has been tackled in the
+past by various techniques, such as the Back Propagation method \citep{bpnn,bpnn2},
+the RPROP optimization method \citep{rpropnn,rpropnn3,rpropnn2},
+Quasi Newton methods \citep{quasinn,quasinn2}, the Simulated Annealing
+approach \citep{nn_ann1,nn_ann2}, Genetic Algorithms \citep{geneticnn,geneticnn2},
+Particle Swarm Optimization \citep{psonn,psonn2}, Differential Optimization
+methods \citep{nndem}, Evolutionary Computation \citep{nnevo}, the
+Whale optimization algorithm \citep{nnwhale}, the Butterfly optimization
+algorithm \citep{nnbutterfly}, etc. In a similar vein, Sexton et
+al. introduced the application of the tabu search algorithm to the
+training of neural networks \citep{tabunn}. Furthermore, Zhang et
+al. proposed a hybrid approach that combines the Particle Swarm Optimization
+(PSO) method with the Backpropagation algorithm \citep{nn_hybrid}.
+Zhao et al. presented a Cascaded Forward Algorithm aimed at the optimal
+training of artificial neural networks \citep{nn_cascade}. In addition,
+the widespread use of parallel computing techniques in recent years
+has motivated numerous studies investigating the training of artificial
+neural networks through such approaches \citep{nn_gpu1,nn_gpu2}.
+Likewise, a substantial body of research has focused on the development
+of effective strategies for initializing the parameters of artificial
+neural networks. Representative methods include initialization schemes
+based on decision trees \citep{nninit1}, approaches derived from
+Cauchy’s inequality \citep{nninit2}, the use of genetic algorithms
+\citep{nninit3}, and techniques founded on discriminant learning
+principles \citep{nninit4}, among others.
+
+A major problem encountered in artificial neural network training
+techniques is the increased completion time of these methods, which
+directly depends on the number of available patterns in the training
+set and the number of features in each data set. A series of publications
+have appeared in the recent literature that propose parallel techniques
+for optimizing the parameters of the artificial neural network. For
+example, Lotrič et al proposed a parallel implementation of neural
+networks using the MPI library \citep{MPI} in their work \citep{lotric}.
+Likewise, Gonzalez et al proposed a parallel implementation of an
+evolutionary approach that utilizes the MPI method, for the evolution
+of artificial neural networks \citep{eann_parallell}. Additionally,
+Gu et all introduced the cNeural \citep{cneural}, a parallel computing
+platform to train neural networks using the Back Propagation method.
+A survey on the parallelization of neural network using various parallel
+techniques can be found in the recent work of Chanthini et al \citep{nn_parallel_review}.
+
+In this paper, the use of a parallel optimization technique for the
+parameters of the artificial neural network is proposed, which is
+based on the widely used Particle Swarm Optimization method \citep{pso_major}.
+In the proposed optimization method, the initial population of particles
+is divided into small populations and in each subpopulation a modified
+version of the PSO technique is executed. Each population is evolved
+on a separate processing thread. In this modified version, a stochastic
+technique for calculating the inertia coefficient $\omega$ is used,
+as well as a termination technique based on stochastic observations.
+The individual populations exchange the best individuals with each
+other after a predetermined number of iterations to accelerate the
+evolutionary process. The Particle Swarm Optimization method was chosen
+in this work due to the small number of parameters required but also
+for its efficiency and speed in finding the global minimum of functions.
+
+The rest of this manuscript is organized as follows: the used dataset
+and the incorporated methods used in the conducted experiments are
+outlined in section \ref{sec:Materials-and-Methods}, the experimental
+results are shown and discussed in section \ref{sec:Results} and
+finally a detailed discussion is provided in section \ref{sec:Conclusions}.
+
+\section{Materials and Methods\label{sec:Materials-and-Methods}}
+
+This section provides a detailed description of the Particle Swarm
+Optimization method and the proposed modifications. The overall parallel
+algorithm is also presented.
+
+\subsection{The PSO method}
+
+The Particle Swarm Optimization (PSO) method originates from the observations
+made by Eberhart and Kennedy during the 1990s. By closely examining
+the collective behavior of birds searching for food, they developed
+a global optimization technique that draws on insights gained from
+these natural phenomena. In the proposed framework, particles move
+within the search space of the problem with the objective of locating
+the minimum of a given objective function. Each particle is characterized
+by two fundamental attributes: its current position and its velocity
+of movement. The current position is denoted by $\overrightarrow{x}$,
+while the velocity is represented by $\overrightarrow{u}$. Moreover,
+each particle retains in memory the best position it has previously
+encountered---corresponding to the lowest value of the objective
+function---as well as the best position identified by the entire
+swarm. The optimization process proceeds iteratively, with particle
+positions at each iteration being updated based on their current positions,
+their personal best positions, and the global best position of the
+population.
+
+Owing to its conceptual simplicity and the limited number of parameters
+that need to be tuned, this method has been successfully applied to
+a wide range of challenging problems across various scientific disciplines.
+Such problems encompass applications arising in physics \citep{psophysics1,psophysics2},
+chemistry \citep{psochem1,psochem2}, medicine \citep{psomed1,psomed2},
+and economics \citep{psoecon}, among others. In addition, the PSO
+method has recently been successfully employed in a variety of practical
+applications, including flow shop scheduling \citep{psoApp1}, the
+development of effective electric vehicle charging strategies \citep{psoApp2},
+emotion recognition \citep{psoApp3}, and robotics \citep{psoApp4}.
+A comprehensive tutorial on PSO methodologies is provided by Marini
+and Walczak \citep{psoReview}. 
+
+Furthermore, the above global optimization technique has been applied
+with various modifications to the training of artificial neural networks,
+such as for example the work of Zhou et al, who applied the PSO method
+to train neural networks in boring machining \citep{psoBor}. Meissner
+et al proposed the Optimized Particle Swarm Optimization (OPSO) \citep{oopso}method
+for the training of artificial neural networks. The PSO method was
+also applied to train neural networks to predict the outcome of construction
+analysis \citep{psoCon}. The PSO was also used to model the global
+solar radiation by training artificial neural networks in the work
+of Mohandes \citep{psoSolar}. Moreover, Chen at al suggested a hybrid
+approach that combines the PSO method the Cuckoo Search technique
+\citep{csMethod} for the optimal training of neural networks \citep{psoCS}.
+
+The PSO method that is executed in every processing thread is outlined
+as a series of steps in Algorithm \ref{alg:psoSerial}.
+
+\begin{algorithm}[H]
+\caption{The base PSO algorithm which is implemented in every processing unit.\label{alg:psoSerial}}
+
+\begin{enumerate}
+\item \textbf{Input: }
+\begin{enumerate}
+\item $N_{m}$, the number of used particles.
+\item $N_{g}$, the number of maximum allowed iterations.
+\end{enumerate}
+\item \textbf{Initialization Step} . 
+
+\begin{enumerate}
+\item \textbf{Set} $k=0$.
+\item \textbf{Initialize} as sets of random double numbers, the positions
+$p_{1},p_{2},...,p_{N_{m}}$ for each particle. Each particle has
+dimension $n$, which is the number of parameters of the artificial
+neural network, and constitutes a possible combination of values for
+the parameters of the artificial neural network.
+\item \textbf{Initialize} randomly the corresponding velocities $u_{1},u_{2},...,u_{N_{m}}$.
+\item \textbf{For} $i=1..N_{m}$ do $b_{i}=x_{i}$, where each vector $b_{i}$
+denotes the best located position for particle $i$.
+\item \textbf{Set} $p_{\mbox{best}}=\arg\min_{i\in1..N_{m}}f\left(p_{i}\right)$,
+which represents the best particle of the population. The function
+$f(p)$ is the training error of the corresponding neural network
+$N(\overrightarrow{x},\overrightarrow{p})$.
+\end{enumerate}
+\item \textbf{Termination Check Step} .\label{enu:Check-Termination.} The
+termination condition of the serial algorithm is evaluated, and if
+it is satisfied, the algorithm concludes.
+\item \textbf{For} $i=1\ldots N_{m}$ \textbf{Do\label{enu:For}}
+
+\begin{enumerate}
+\item \textbf{Compute }the corresponding velocity $u_{i}$ as 
+\begin{equation}
+u_{i}=\omega u_{i}+r_{1}c_{1}\left(b_{i}-p_{i}\right)+r_{2}c_{2}\left(p_{\mbox{best}}-p_{i}\right)\label{eq:eq4-1-1}
+\end{equation}
+where 
+\begin{enumerate}
+\item The values $r_{1},\ r_{2}$ represent random numbers in $[0,1].$
+\item The constants $c_{1},\ c_{2}$ are usually defined in $[1,2]$. 
+\item The variable $\omega$ represents the so - called inertia and it was
+initially proposed by Shi and Eberhart \citep{pso_major}. 
+\end{enumerate}
+\item \textbf{Update} the current position of each particle as: $p_{i}=p_{i}+u_{i}$\label{enu:Update-the-position}
+\item \textbf{Calculate} the fitness $f\left(p_{i}\right)$ for particle
+$p_{i}$ using the formula of the corresponding training error:
+\begin{equation}
+f\left(p_{i}\right)=\sum_{j=1}^{M}\left(N\left(\overrightarrow{x}_{j},\overrightarrow{p_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
+\end{equation}
+\item \textbf{If} $f\left(p_{i}\right)\le f\left(b_{i}\right)$ then $b_{i}=x_{i}$
+\end{enumerate}
+\item \textbf{End} \textbf{For}
+\item \textbf{Set} $p_{\mbox{best}}=\arg\min_{i\in1..N_{m}}f\left(p_{i}\right)$
+\item \textbf{Set} $k=k+1$. \label{enu:update_k}
+\item \textbf{Goto} Step \ref{enu:Check-Termination.}
+\end{enumerate}
+\end{algorithm}
+ Also, the flowchart for this algorithm is outlined graphically in
+Figure \ref{fig:flowPSO}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.65]{alg1}
+\par\end{centering}
+\caption{The flowchart of the proposed PSO variant.\label{fig:flowPSO}}
+
+\end{figure}
+
+
+\subsection{Proposed modifications}
+
+The original Particle Swarm Optimization technique was extended using
+two modifications recently proposed by Charilogis et al \citep{ipso}
+and aimed at more efficiently finding the global minimum of a function
+and at early termination of the technique. The first modification
+proposes a stochastic calculation for the inertia using the following
+formula:
+
+\begin{equation}
+\omega_{\mbox{k}}=0.5+\frac{r}{2}
+\end{equation}
+In this equation the variable $k$ denotes the iteration number of
+the PSO method and the value $r$ represents a random number in $r\in[0,1]$.
+Additionally, a termination rule is proposed where the algorithm computes
+at every iteration $k$ the quantity:
+\begin{equation}
+\delta^{(k)}=\left|f_{\mbox{min}}^{(k)}-f_{\mbox{min}}^{(k-1)}\right|\label{eq:term}
+\end{equation}
+The value $f_{\mbox{min}}^{(k)}$ represents the best function value
+obtained by the algorithm at at iteration $k$. If the aforementioned
+quantity remains below a predefined threshold $\epsilon$ for $N_{E}$
+consecutive iterations, the execution of the algorithm is terminated.
+
+\subsection{The parallel algorithm}
+
+The overall parallel algorithm, which is executed on $T$ independent
+processing units, is outlined in algorithm \ref{alg:parallelPso}.
+The proposed parallel algorithm divides the problem into a series
+of algorithms that are executed on different computing units. At regular
+intervals, these individual algorithms share the particles with the
+best value \LyXZeroWidthSpace found with the rest, in order to accelerate
+the evolutionary process but also to keep the individual algorithms
+informed about the best solutions found by others.
+
+\begin{algorithm}[H]
+\caption{The used parallel algorithm.\label{alg:parallelPso}}
+
+\begin{enumerate}
+\item \textbf{Input:}
+\begin{enumerate}
+\item $T$ as the number of parallel processing units.
+\item $N_{R}$ denotes the number of iterations after which each processing
+unit transmits its best particles to the other processing units.
+\item $N_{P}$ specifies the number of particles that are migrated among
+the parallel processing units.
+\end{enumerate}
+\item \textbf{Set} $k=0$ .
+\item \textbf{For} $j=1,..,T$ do in parallel\label{enu:For--do}
+\begin{enumerate}
+\item \textbf{Execute} an iteration of serial PSO algorithm, that was described
+previously in algorithm \ref{alg:psoSerial} on the processing unit
+$j$.
+\item \textbf{If $k\ \mbox{mod}\ N_{R}=0,$then}
+\begin{enumerate}
+\item \textbf{Obtain} the best $N_{P}$ particles from processing unit $j$.
+\item \textbf{Propagate} these $N_{P}$ particles to the remaining processing
+units.
+\end{enumerate}
+\item \textbf{EndIf}
+\end{enumerate}
+\item \textbf{End For}
+\item \textbf{Set} $k=k+1$
+\item \textbf{Check} the proposed termination rule on the processing units.
+If the termination rule holds on each processing unit, the goto step
+\ref{enu:Terminate-and-report} else goto step \ref{enu:For--do}.
+\item \textbf{Local search step}.\label{enu:Terminate-and-report}. 
+\begin{enumerate}
+\item \textbf{Obtain} the best particle from all processing units and denote
+it as $p_{\mbox{a}}$
+\item \textbf{Optimize} the corresponding neural network $N\left(\overrightarrow{x},\overrightarrow{p_{\mbox{a}}}\right)$
+using some local optimization method.
+\item \textbf{Apply} the final neural network to the test set of the objective
+problem and report the associated test error.
+\end{enumerate}
+\end{enumerate}
+\end{algorithm}
+ The flowchart for the proposed parallel algorithm is shown in Figure
+\ref{fig:flowParallel}.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.65]{alg2}
+\par\end{centering}
+\caption{The flowchart of the proposed parallel algorithm.\label{fig:flowParallel}}
+
+\end{figure}
+
+
+\section{Results\label{sec:Results}}
+
+The proposed approach was evaluated on a collection of well-known
+datasets drawn from recent literature, and its performance was compared
+with that of other optimization methods used for training neural networks.
+The datasets employed in this study are publicly available and can
+be accessed through the following websites:
+\begin{enumerate}
+\item The UCI dataset repository, \url{https://archive.ics.uci.edu/ml/index.php}(accessed
+on 18 January 2026) \citep{UCL}.
+\item The Keel repository, \url{https://sci2s.ugr.es/keel/datasets.php}(accessed
+on 18 January 2026) \citep{Keel}.
+\end{enumerate}
+
+\subsection{Used datasets }
+
+The following datasets were used in the conducted experiments:
+\begin{enumerate}
+\item \textbf{Alcohol} dataset, which consists of experimental data related
+to alcohol consumption \citep{alcohol}. 
+\item \textbf{Australian} dataset \citep{australian}, which is related
+to credit card transactions.
+\item \textbf{Balance} dataset \citep{balance}, used in a series of psychological
+experiments.
+\item \textbf{Beed} dataset, that was initially presented in the work of
+Banu \citep{beed} and contains various EEG measurements. 
+\item \textbf{Cleveland} dataset, which is considered as a medical dataset
+\citep{cleveland1,cleveland2}.
+\item \textbf{Dermatology} dataset \citep{dermatology}, which is also medical
+dataset regarding dermatological deceases. 
+\item \textbf{Ecoli} dataset, which is related to proteins\citep{ecoli}.
+\item \textbf{Heart} dataset \citep{heart}, which is a medical dataset
+used in the detection of heart diseases.
+\item \textbf{HeartAttack} dataset, a medical dataset related to the prediction
+of heart attacks. 
+\item \textbf{HouseVotes} dataset \citep{housevotes}, that contains data
+from various votes in the U.S. House of Representatives. 
+\item \textbf{Liverdisorder} dataset \citep{liver}, which is a medical
+dataset related to liver issues. 
+\item \textbf{Lymography} dataset \citep{lymography}
+\item \textbf{Magic} dataset, related to various physics experiments \citep{magic}. 
+\item \textbf{OptDigits }dataset, which is related to bitmaps of handwritten
+digits \citep{optdigits}. 
+\item \textbf{Parkinsons} dataset, which is related to the detection of
+Parkinson's disease (PD)\citep{parkinsons}.
+\item \textbf{Pima} dataset \citep{pima}, which is medical dataset used
+to detect the presence of diabetes.
+\item \textbf{PirVision} dataset, which is a dataset that contains occupancy
+detection data \citep{pirvision}.
+\item \textbf{Popfailures} dataset \citep{popfailures}, which contains
+data from climate measurements.
+\item \textbf{Regions2} dataset, which is a medical dataset related to the
+presence of hepatitis C \citep{regions}. 
+\item \textbf{Saheart} dataset \citep{saheart}, which is a medical dataset
+related to heart diseases.
+\item \textbf{Satimage} dataset, that contains multi-spectral values of
+pixels in 3x3 neighbourhoods in a satellite image.
+\item \textbf{Segment} dataset \citep{segment}, which is a dataset used
+in images processing tasks.
+\item \textbf{Sonar} dataset \citep{sonar}, used in sonar signals.
+\item \textbf{Spambase }dataset, used to detect spam emails \citep{spambase}. 
+\item \textbf{Spiral} dataset, which is an artificial dataset with two distinct
+classes.
+\item \textbf{Statheart }dataset, which is another medical dataset related
+to heart diseases. 
+\item \textbf{Wdbc} dataset \citep{wdbc}, which is a medical dataset related
+to cancer..
+\item \textbf{Wine} dataset, which was used to determine the quality of
+wines. \citep{wine1,wine2}.
+\item \textbf{Eeg} datasets, that contains various EEG measurements \citep{eeg}
+and the following cases were utilized from this dataset: Z\_F\_S,
+ZO\_NF\_S and ZONF\_S.
+\item \textbf{Zoo} dataset \citep{zoo}, which was used to classify animals.
+\end{enumerate}
+
+\subsection{Experimental results}
+
+The code for the present study was implemented in C++, utilizing the
+freely available Optimus environment \citep{optimus}. All experiments
+were conducted 30 times, each with a different random seed. To validate
+the experimental results, the standard ten-fold cross-validation procedure
+was employed. The experimental parameter values are presented in Table
+\ref{tab:expValues}. These values were chosen to achieve a balance
+between the efficiency and computational speed of the methods employed
+during the experiments. The following notation is used in the experimental
+tables:
+\begin{enumerate}
+\item The column DATASET denotes the name of the objective problem.
+\item The column BFGS is used to depict the results obtained by the application
+of the BFGS variant of Powell \citep{powell} to train the neural
+network.
+\item The column GENETIC is used to represent the obtained results by the
+application of a Genetic Algorithm with the same parameter set as
+provided in Table \ref{tab:expValues} to train a neural network with
+$H=10$ processing nodes.
+\item The column RBF denotes the results obtained by the the incorporation
+of a Radial Basis Function (RBF) network \citep{rbf1,rbf2} with $H=10$
+hidden nodes.
+\item The column PPSO $T=1$ presents the results from the application of
+the proposed method with one processing thread.
+\item The column PPSO $T=2$ shows the results from the application of the
+proposed method with two processing threads.
+\item The column PPSO $T=4$ outlines the results for the proposed method
+and 4 processing threads.
+\item The column PPSO $T=10$ shows the results from the usage of the proposed
+method with 10 processing threads.
+\item The last row AVERAGE denotes the average classification error for
+all datasets in the corresponding table.
+\end{enumerate}
+\begin{table}[H]
+\caption{The values for the used parameters.\label{tab:expValues}}
+
+\centering{}%
+\begin{tabular}{|c|c|c|}
+\hline 
+PARAMETER & MEANING & VALUE\tabularnewline
+\hline 
+\hline 
+$N_{c}$ & Chromosomes/Particles & 500\tabularnewline
+\hline 
+$N_{g}$ & \begin{cellvarwidth}[t]
+\centering
+Maximum number of \\
+allowed generations
+\end{cellvarwidth} & 500\tabularnewline
+\hline 
+$N_{E}$ & \begin{cellvarwidth}[t]
+\centering
+Value used in the \\
+termination rule
+\end{cellvarwidth} & 15\tabularnewline
+\hline 
+$N_{R}$ & Propagation iterations & 5\tabularnewline
+\hline 
+$N_{P}$ & Propagated particles & 3\tabularnewline
+\hline 
+$c_{1}$ & Parameter for PSO & 1.0\tabularnewline
+\hline 
+$c_{2}$ & Parameter for PSO & 1.0\tabularnewline
+\hline 
+$H$  & Number of weights & 10\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+The Table \ref{tab:expers} reports classification error rates (\%)
+per dataset and per method. Each cell represents the empirical frequency
+of misclassification for a given dataset under the adopted experimental
+protocol; within each row, lower values indicate better generalization.
+The AVERAGE row provides an aggregate view across heterogeneous datasets,
+effectively summarizing the expected error when selecting a dataset
+from this benchmark set and applying the corresponding method.
+
+A clear global trend is that PPSO improves as the number of threads
+increases: 27.45\% ($T=1$) → 24.30\% ($T=2$) → 23.10\% ($T=4$)
+→ 22.19\% ($T=10$). This is consistent with the behavior of parallel
+stochastic optimization, where additional threads typically enhance
+exploration diversity (e.g., multiple initializations and search trajectories)
+and reduce the probability of converging to poor local minima. The
+gains also exhibit diminishing returns: the step from $T=1$ to $T=2$
+yields the largest improvement, whereas the additional benefit from
+$T=4$ to $T=10$ is smaller, suggesting that beyond a point the search
+either saturates the solution space adequately or becomes limited
+by practical factors such as noise, synchronization/communication,
+and the effective allocation of the evaluation budget.
+
+Relative to the baselines, PPSO at $T=10$ achieves a substantially
+lower average error: 22.19\% versus 28.65\% for GEN (a reduction of
+6.46 percentage points, approximately a 22.5\% relative decrease),
+37.38\% for BFGS (approximately a 40.7\% relative decrease), and 32.49\%
+for RBF (approximately a 31.7\% relative decrease). Interpreted scientifically,
+this indicates that the proposed approach more consistently identifies
+higher-quality parameterizations (e.g., network weights) that translate
+into improved predictive performance across a broad and diverse benchmark
+suite. The especially large gap versus BFGS is aligned with the non-convex,
+multi-modal nature of neural training objectives, where gradient-based
+local methods can become trapped, while population-based stochastic
+strategies retain greater capacity to escape suboptimal basins.
+
+At the dataset level, two main patterns emerge. First, there are datasets
+where PPSO delivers very large improvements (e.g., DERMATOLOGY, WDBC,
+WINE, ALCOHOL, SEGMENT, OPTDIGITS), suggesting that optimization difficulty
+is a primary bottleneck and that enhanced distributed exploration
+yields markedly better solutions. Second, there are datasets where
+differences are small or not strictly monotone with thread count,
+and in a few cases a baseline is marginally competitive (e.g., SATIMAGE
+for RBF, or datasets where GEN/RBF already achieve very low error).
+Such cases typically reflect performance saturation on easier tasks,
+stronger inductive bias of a particular model family, or stochastic
+variability and hyperparameter interactions that can produce minor
+reversals (e.g., T=4 slightly better than T=10 on some rows) without
+contradicting the overall downward trend.
+
+A key interpretive point is that the Table \ref{tab:expers} captures
+not only “optimization strength” but also the interaction between
+the optimizer, the underlying modeling assumptions, and the way computational
+budget is distributed. If the total number of evaluations (or total
+time) is held constant across thread counts, the improvement with
+larger $T$ indicates a genuine efficiency gain from distributed exploration.
+If the total budget increases with $T$, then the observed gains also
+reflect increased computational effort. In either case, the results
+demonstrate that PPSO is competitive across a wide range of datasets
+and that increased parallelism shifts the error profile toward consistently
+lower values, which is the intended outcome of a parallel stochastic
+training procedure.
+
+Based on Table \ref{tab:expers}, statistical processing was carried
+out via R scripts in order to quantify the significance of performance
+differences between the proposed PPSO method and the baseline approaches
+(BFGS, GEN, RBF) across different thread counts. Figure \ref{fig:statExpers}
+summarizes the resulting significance levels using the critical p-value
+criterion, following the standard categories ns ($p>0.05$), significant
+($p<0.05$), highly significant ($p<0.01$), extremely significant
+($p<0.001$), and very extremely significant ($p<0.0001$). The global
+comparison across all methods is overwhelmingly significant: the overall
+Friedman test yields $p=2.2\times10^{-16}$, which strongly rejects
+the null hypothesis of equivalent performance and confirms that genuine
+differences exist among the evaluated methods over the full dataset
+collection.
+
+At the level of pairwise comparisons by thread count, a clear strengthening
+of statistical evidence is observed as $T$ increases. For $T=1$,
+PPSO does not differ significantly from BFGS ($p=0.6371$), GEN ($p=1$),
+or RBF ($p=1$), indicating that with a single thread the observed
+performance differences cannot be distinguished from dataset-to-dataset
+variability under the adopted experimental conditions. For $T=2$,
+the situation changes: PPSO shows a highly robust advantage over BFGS
+($p=1.01\times10^{-6}$), whereas comparisons against GEN ($p=0.2124$)
+and RBF ($p=0.1312$) remain non-significant. For $T=4$, the evidence
+further intensifies: against BFGS the p-value is $1.37\times10^{-10}$
+(very extremely significant), while PPSO also becomes statistically
+superior to GEN ($p=0.0035$, highly/extremely significant) and to
+RBF ($p=9.57\times10^{-4}$, extremely significant). Finally, for
+$T=10$, PPSO exhibits very strong statistical superiority against
+all three baselines, with $p=2.46\times10^{-13}$ versus BFGS, $p=1.33\times10^{-5}$
+versus GEN, and $p=1.97\times10^{-6}$ versus RBF, corresponding to
+extremely to very extremely significant differences.
+
+Overall, these findings indicate that increasing the number of threads
+not only improves PPSO’s average accuracy but also turns this improvement
+into a consistent and statistically defensible advantage over established
+baselines across a broad suite of classification datasets. The lack
+of significance at $T=1$ suggests that, under limited parallelism,
+the stochastic gains are not sufficiently strong to dominate inter-dataset
+variability. In contrast, for $T\ge2$ PPSO first establishes a clear
+advantage over BFGS, and as $T$ increases to 4 and 10 this advantage
+extends to GEN and RBF as well, supporting the conclusion that distributed
+search substantially enhances PPSO’s ability to locate higher-quality
+training solutions and achieve better generalization.
+
+\begin{table}[H]
+\caption{Experiments with a variety of machine learning methods on the used
+datasets.\label{tab:expers}}
+
+\centering{}%
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline 
+DATASET & BFGS & GEN & RBF & \begin{cellvarwidth}[t]
+\centering
+PPSO\\
+$T=1$
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+PPSO\\
+$T=2$
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+PPSO\\
+$T=4$
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+PPSO\\
+$T=10$
+\end{cellvarwidth}\tabularnewline
+\hline 
+\hline 
+ALCOHOL & 41.50\% & 39.57\% & 49.38\% & 20.73\% & 18.25\% & 16.53\% & 16.99\%\tabularnewline
+\hline 
+AUSTRALIAN & 38.13\% & 32.21\% & 34.89\% & 32.62\% & 30.76\% & 29.61\% & 26.13\%\tabularnewline
+\hline 
+BALANCE & 8.64\% & 8.97\% & 33.53\% & 8.32\% & 7.53\% & 7.97\% & 8.13\%\tabularnewline
+\hline 
+BEED & 60.73\% & 58.94\% & 65.12\% & 42.63\% & 41.10\% & 41.73\% & 40.44\%\tabularnewline
+\hline 
+CLEVELAND & 77.55\% & 51.60\% & 67.10\% & 58.14\% & 48.66\% & 47.41\% & 47.07\%\tabularnewline
+\hline 
+DERMATOLOGY & 52.92\% & 30.58\% & 62.34\% & 11.66\% & 9.91\% & 9.52\% & 9.49\%\tabularnewline
+\hline 
+ECOLI & 69.52\% & 54.67\% & 59.48\% & 56.76\% & 53.76\% & 50.61\% & 47.24\%\tabularnewline
+\hline 
+GLASS & 60.48\% & 55.00\% & 50.05\% & 56.52\% & 54.48\% & 51.53\% & 51.53\%\tabularnewline
+\hline 
+HABERMAN & 29.34\% & 28.66\% & 25.10\% & 28.60\% & 29.90\% & 30.67\% & 30.27\%\tabularnewline
+\hline 
+HEART & 39.44\% & 28.34\% & 31.20\% & 33.30\% & 27.07\% & 22.11\% & 20.37\%\tabularnewline
+\hline 
+HEARTATTACK & 46.67\% & 29.03\% & 29.00\% & 30.57\% & 24.93\% & 21.60\% & 21.04\%\tabularnewline
+\hline 
+HOUSEVOTES & 7.13\% & 6.62\% & 6.13\% & 7.22\% & 7.35\% & 6.52\% & 7.31\%\tabularnewline
+\hline 
+IONOSPHERE & 15.29\% & 15.14\% & 16.22\% & 15.54\% & 15.34\% & 14.49\% & 14.34\%\tabularnewline
+\hline 
+LIVERDISORDER & 42.59\% & 31.11\% & 30.84\% & 39.18\% & 35.12\% & 33.03\% & 33.47\%\tabularnewline
+\hline 
+LYMOGRAPHY & 35.43\% & 28.42\% & 25.50\% & 26.93\% & 26.72\% & 28.36\% & 27.50\%\tabularnewline
+\hline 
+MAGIC & 17.30\% & 21.75\% & 21.28\% & 15.58\% & 13.98\% & 14.15\% & 13.87\%\tabularnewline
+\hline 
+MAMMOGRAPHIC & 17.24\% & 19.88\% & 21.38\% & 18.75\% & 16.88\% & 17.17\% & 16.89\%\tabularnewline
+\hline 
+OPTDIGITS & 67.63\% & 64.96\% & 81.65\% & 51.02\% & 48.17\% & 46.41\% & 41.97\%\tabularnewline
+\hline 
+PARKINSONS & 27.58\% & 18.05\% & 17.41\% & 19.89\% & 17.68\% & 17.00\% & 15.32\%\tabularnewline
+\hline 
+PIMA & 35.59\% & 32.19\% & 25.78\% & 33.54\% & 32.14\% & 30.49\% & 29.47\%\tabularnewline
+\hline 
+PIRVISION & 16.94\% & 9.50\% & 24.58\% & 9.64\% & 7.49\% & 6.26\% & 7.72\%\tabularnewline
+\hline 
+POPFAILURES & 5.24\% & 5.94\% & 7.04\% & 7.65\% & 7.72\% & 7.09\% & 7.08\%\tabularnewline
+\hline 
+REGIONS2 & 36.28\% & 29.39\% & 38.29\% & 29.92\% & 28.47\% & 27.70\% & 27.65\%\tabularnewline
+\hline 
+SAHEART & 37.48\% & 34.86\% & 32.19\% & 35.09\% & 34.61\% & 34.11\% & 34.41\%\tabularnewline
+\hline 
+SATIMAGE & 71.73\% & 63.50\% & 40.19\% & 55.21\% & 45.60\% & 48.06\% & 40.84\%\tabularnewline
+\hline 
+SEGMENT & 68.97\% & 57.72\% & 59.68\% & 32.83\% & 27.70\% & 21.49\% & 24.34\%\tabularnewline
+\hline 
+SONAR & 25.85\% & 22.40\% & 27.90\% & 22.90\% & 21.30\% & 21.40\% & 20.85\%\tabularnewline
+\hline 
+SPAMBASE & 18.16\% & 6.37\% & 29.35\% & 7.67\% & 6.52\% & 6.34\% & 6.39\%\tabularnewline
+\hline 
+SPIRAL & 47.99\% & 48.66\% & 44.87\% & 46.18\% & 44.48\% & 42.65\% & 42.81\%\tabularnewline
+\hline 
+STATHEART & 39.65\% & 27.25\% & 31.36\% & 32.48\% & 26.56\% & 22.22\% & 21.15\%\tabularnewline
+\hline 
+TRANSFUSION & 25.84\% & 24.87\% & 26.41\% & 25.11\% & 24.37\% & 25.23\% & 24.12\%\tabularnewline
+\hline 
+WDBC & 29.91\% & 8.56\% & 7.27\% & 7.96\% & 7.16\% & 6.11\% & 5.36\%\tabularnewline
+\hline 
+WINE & 59.71\% & 19.20\% & 31.41\% & 27.94\% & 21.00\% & 16.53\% & 13.00\%\tabularnewline
+\hline 
+Z\_F\_S & 39.37\% & 10.73\% & 13.16\% & 26.73\% & 15.33\% & 11.90\% & 10.47\%\tabularnewline
+\hline 
+ZO\_NF\_S & 43.04\% & 21.54\% & 9.02\% & 29.38\% & 12.38\% & 11.44\% & 7.52\%\tabularnewline
+\hline 
+ZONF\_S & 15.62\% & 4.36\% & 4.03\% & 3.80\% & 2.46\% & 2.94\% & 2.60\%\tabularnewline
+\hline 
+ZOO & 10.70\% & 9.50\% & 21.93\% & 7.60\% & 6.20\% & 6.30\% & 5.70\%\tabularnewline
+\hline 
+\textbf{AVERAGE} & \textbf{37.38\%} & \textbf{28.65\%} & \textbf{32.49\%} & \textbf{27.45\%} & \textbf{24.30\%} & \textbf{23.10\%} & \textbf{22.19\%}\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl2}
+\par\end{centering}
+\caption{Statistical comparison for the obtained experimental results using
+the series of the machine learning methods.\label{fig:statExpers}}
+\end{figure}
+
+
+\subsection{Experiments with the propagation method}
+
+Additionally, another experiment was conducted where two different
+techniques for propagating the best particles between processing threads
+were used. On the one hand, the present technique, which is referred
+to in the experiment as $NxN$, and on the other hand, another propagation
+technique, entitled $1x1$, where a random processing thread is selected
+after a predetermined number of iterations to send its best particles
+to another randomly selected processing thread. The experimental results
+for the cases of four processing threads ($T=4)$ and ten processing
+threads ($T=10)$ are presented in Table \ref{tab:expersProp}.
+
+The Table \ref{tab:expersProp} reports classification error rates
+(\%) for the proposed model trained/optimized with PPSO under four
+configurations that combine two factors: the level of parallelism
+($T=4$ vs $T=10$ threads) and the information-propagation scheme
+among parallel workers (1to1 vs NtoN). Each cell is an empirical estimate
+of generalization for a given dataset: lower percentages indicate
+fewer misclassifications and therefore better predictive performance.
+Consequently, each row can be interpreted as a localized study of
+how parallel search capacity and communication intensity influence
+the quality of the final trained solution on that specific classification
+task.
+
+The AVERAGE row provides an aggregated view over a heterogeneous benchmark
+suite. In this Table \ref{tab:expersProp}, $T=10$ with 1to1 propagation
+yields the best mean error (22.11\%), followed by $T=4$ with 1to1
+(22.96\%), while the NtoN variants exhibit higher average error (24.30\%
+for $T=4$, NtoN and 23.10\% for $T=10$, NtoN). This ordering does
+not imply that 1to1 is universally superior to NtoN, but rather that,
+across this collection of datasets, the more restrained propagation
+scheme more frequently leads to better end solutions. From a distributed
+optimization perspective, this is consistent with a well-known trade-off:
+stronger propagation (NtoN) can accelerate convergence by rapidly
+homogenizing information across workers, but it can also reduce search
+diversity and increase the risk of premature convergence to suboptimal
+regions. In contrast, more selective propagation (1to1) preserves
+greater independence across threads, maintains alternative promising
+trajectories for longer, and often improves the final generalization
+outcome.
+
+The effect of increasing the number of threads is not uniform across
+datasets, which is expected. Moving from $T=4$ to $T=10$ typically
+increases coverage of the solution space by enabling more independent
+search trajectories and a richer set of initializations. This tends
+to be particularly beneficial when the optimization landscape is highly
+multi-modal or when training is sensitive to initialization. In the
+Table \ref{tab:expersProp}, there are clear cases where $T=10$ substantially
+improves performance, such as OPTDIGITS (38.30\% vs 48.13\% for 1to1),
+WINE (13.00\% vs 16.53\% for 1to1), ZO\_NF\_S (7.52\% vs 11.44\% for
+1to1), and STATHEART (20.87\% vs 22.22\% for 1to1). These patterns
+indicate that additional parallel exploration more reliably discovers
+parameterizations that generalize better. At the same time, there
+are datasets where the difference between $T=10$ and $T=4$ is small
+or slightly reversed (e.g., ALCOHOL, BEED, SONAR). Such behavior typically
+reflects either performance saturation ($T=4$ already explores sufficiently),
+or stochastic variability and configuration-dependent synchronization/communication
+effects that produce different but not consistently better solutions
+on that dataset.
+
+The comparison between 1to1 and NtoN is also dataset-dependent. In
+many rows, 1to1 has a clear advantage, for example HEART (20.37\%
+vs 22.11\% at $T=10$), OPTDIGITS (38.30\% vs 46.41\% at $T=10$),
+and WDBC (5.55\% vs 6.11\% at $T=10$). These cases are consistent
+with the interpretation that NtoN can drive all threads too quickly
+toward a shared basin of attraction that is not optimal for generalization,
+especially when multiple competing parameter regions yield similar
+training quality but different test behavior. However, there are also
+datasets where NtoN appears beneficial, such as SEGMENT at $T=10$
+(21.49\% vs 23.85\% for 1to1) and PIRVISION (6.26\% at $T=10$, NtoN
+vs 7.72\% at $T=10$, 1to1), suggesting that, for certain tasks, faster
+collective exploitation of a strong solution region can be advantageous
+when the landscape is less deceptive or when the best region is strongly
+attracting.
+
+Importantly, the fact that no single configuration dominates every
+dataset is scientifically meaningful and expected. Datasets differ
+in noise level, dimensionality and feature correlations, nonlinearity,
+and class separability, all of which shape the error landscape being
+optimized. As a result, parallelism and propagation act as regulators
+of the exploration--exploitation balance and can steer PPSO toward
+solutions with better average generalization, while individual datasets
+may favor different balances. Overall, the Table \ref{tab:expersProp}
+demonstrates that thread count and propagation strategy are not merely
+implementation details but materially affect the generalization quality
+of the proposed model. The best mean performance of $T=10$ with 1to1
+propagation suggests that, for this benchmark suite, higher parallelism
+is most effective when coupled with controlled information exchange
+that preserves diversity and mitigates premature convergence, whereas
+NtoN can still be competitive on specific datasets where rapid collective
+exploitation is advantageous.
+
+Figure \ref{fig:statPropagation} reports the significance levels
+of performance differences among PPSO variants with respect to the
+propagation mechanism (1to1 versus NtoN) under two parallelism settings
+($T=4$ and $T=10$). The interpretation relies on the critical p-value
+and the standard significance categories ns ($p>0.05$), significant
+($p<0.05$), highly significant ($p<0.01$), extremely significant
+($p<0.001$), and very extremely significant ($p<0.0001$). The overall
+multi-method comparison indicates that meaningful differences exist
+across the evaluated PPSO configurations, as the global Friedman test
+yields $4.28\times10^{-6}$, thereby rejecting the null hypothesis
+of equal performance among variants over the full suite of classification
+datasets.
+
+At the pairwise level, the comparison between PPSO ($T=4$, 1to1)
+and PPSO ($T=4$, NtoN) produces $p=0.0236$, which is statistically
+significant under the conventional $p<0.05$ criterion. This result
+implies that, at a moderate parallelism level (4 threads), the choice
+of propagation scheme systematically affects the performance of the
+proposed model across datasets, and the observed differences are unlikely
+to be explained solely by random dataset-to-dataset variability. In
+contrast, for $T=10$ the comparison between PPSO ($T=10$, 1to1)
+and PPSO ($T=10$, NtoN) yields $p=0.0567$, which lies slightly above
+the 0.05 threshold and is therefore classified as non-significant
+(ns) under that cutoff. This near-threshold value suggests a tendency
+for differentiation between the two propagation schemes at 10 threads,
+but the available empirical evidence is not strong enough to support
+the same level of statistical confidence as in the $T=4$ case.
+
+Overall, these findings support the conclusion that the propagation
+mechanism can materially influence the performance of the proposed
+PPSO training scheme, particularly at moderate parallelism ($T=4$),
+whereas at higher parallelism ($T=10$) the differences appear weaker
+or less stable across the heterogeneous dataset collection. From an
+interpretive standpoint, this is consistent with the notion that increasing
+the number of threads already enhances search diversity and may partially
+absorb the effect of propagation, reducing the net separability between
+1to1 and NtoN when performance is aggregated across many diverse classification
+problems.
+
+\begin{table}[H]
+\caption{Experiments using the proposed method and different propagation techniques.\label{tab:expersProp}}
+
+\centering{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+ & \multicolumn{2}{c|}{$1to1$} & \multicolumn{2}{c|}{$NtoN$}\tabularnewline
+\hline 
+\hline 
+DATASET & \begin{cellvarwidth}[t]
+\centering
+PPSO \\
+$T=4$
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+PPSO \\
+$T=10$
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+PPSO \\
+$T=4$
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+PPSO \\
+$T=10$
+\end{cellvarwidth}\tabularnewline
+\hline 
+ALCOHOL & 16.34\% & 17.36\% & 18.25\% & 16.53\%\tabularnewline
+\hline 
+AUSTRALIAN & 29.61\% & 26.13\% & 30.76\% & 29.61\%\tabularnewline
+\hline 
+BALANCE & 7.97\% & 8.13\% & 7.53\% & 7.97\%\tabularnewline
+\hline 
+BEED & 39.07\% & 40.59\% & 41.10\% & 41.73\%\tabularnewline
+\hline 
+CLEVELAND & 47.42\% & 47.07\% & 48.66\% & 47.41\%\tabularnewline
+\hline 
+DERMATOLOGY & 9.52\% & 9.49\% & 9.91\% & 9.52\%\tabularnewline
+\hline 
+ECOLI & 50.61\% & 47.24\% & 53.76\% & 50.61\%\tabularnewline
+\hline 
+GLASS & 51.53\% & 51.49\% & 54.48\% & 51.53\%\tabularnewline
+\hline 
+HABERMAN & 30.67\% & 30.27\% & 29.90\% & 30.67\%\tabularnewline
+\hline 
+HEART & 22.11\% & 20.37\% & 27.07\% & 22.11\%\tabularnewline
+\hline 
+HEARTATTACK & 21.60\% & 22.04\% & 24.93\% & 21.60\%\tabularnewline
+\hline 
+HOUSEVOTES & 6.52\% & 7.31\% & 7.35\% & 6.52\%\tabularnewline
+\hline 
+IONOSPHERE & 14.49\% & 14.34\% & 15.34\% & 14.49\%\tabularnewline
+\hline 
+LIVERDISORDER & 33.03\% & 33.47\% & 35.12\% & 33.03\%\tabularnewline
+\hline 
+LYMOGRAPHY & 28.36\% & 27.50\% & 26.72\% & 28.36\%\tabularnewline
+\hline 
+MAGIC & 14.06\% & 13.72\% & 13.98\% & 14.15\%\tabularnewline
+\hline 
+MAMMOGRAPHIC & 17.17\% & 16.89\% & 16.88\% & 17.17\%\tabularnewline
+\hline 
+OPTDIGITS & 48.13\% & 38.30\% & 48.17\% & 46.41\%\tabularnewline
+\hline 
+PARKINSONS & 17.00\% & 15.32\% & 17.68\% & 17.00\%\tabularnewline
+\hline 
+PIMA & 30.59\% & 29.47\% & 32.14\% & 30.49\%\tabularnewline
+\hline 
+PIRVISION & 6.56\% & 7.72\% & 7.49\% & 6.26\%\tabularnewline
+\hline 
+POPFAILURES & 7.09\% & 7.12\% & 7.72\% & 7.09\%\tabularnewline
+\hline 
+REGIONS2 & 27.70\% & 27.65\% & 28.47\% & 27.70\%\tabularnewline
+\hline 
+SAHEART & 34.11\% & 34.41\% & 34.61\% & 34.11\%\tabularnewline
+\hline 
+SATIMAGE & 44.17\% & 40.10\% & 45.60\% & 48.06\%\tabularnewline
+\hline 
+SEGMENT & 21.70\% & 23.85\% & 27.70\% & 21.49\%\tabularnewline
+\hline 
+SONAR & 21.40\% & 20.85\% & 21.30\% & 21.40\%\tabularnewline
+\hline 
+SPAMBASE & 6.15\% & 6.28\% & 6.52\% & 6.34\%\tabularnewline
+\hline 
+SPIRAL & 42.68\% & 42.81\% & 44.48\% & 42.65\%\tabularnewline
+\hline 
+STATHEART & 22.22\% & 20.87\% & 26.56\% & 22.22\%\tabularnewline
+\hline 
+TRANSFUSION & 25.23\% & 24.12\% & 24.37\% & 25.23\%\tabularnewline
+\hline 
+WDBC & 5.95\% & 5.55\% & 7.16\% & 6.11\%\tabularnewline
+\hline 
+WINE & 16.53\% & 13.00\% & 21.00\% & 16.53\%\tabularnewline
+\hline 
+Z\_F\_S & 11.90\% & 10.47\% & 15.33\% & 11.90\%\tabularnewline
+\hline 
+ZO\_NF\_S & 11.44\% & 7.52\% & 12.38\% & 11.44\%\tabularnewline
+\hline 
+ZONF\_S & 2.94\% & 2.62\% & 2.46\% & 2.94\%\tabularnewline
+\hline 
+ZOO & 5.80\% & 6.50\% & 6.20\% & 6.30\%\tabularnewline
+\hline 
+\textbf{AVERAGE} & \textbf{22.96\%} & \textbf{22.11\%} & \textbf{24.30\%} & \textbf{23.10\%}\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl3}
+\par\end{centering}
+\caption{Statistical comparison for the results by the application of the proposed
+method and the propagation techniques.\label{fig:statPropagation}}
+
+\end{figure}
+
+
+\subsection{Experiments with the termination strategy}
+
+Furthermore, to determine the effectiveness of the proposed technique
+in relation to the termination strategy, another experiment was conducted
+in which the number of processing threads was set to $T=10$. In this
+experiment, the following termination strategies were used, as reflected
+in the relevant table with the results (Table \ref{tab:termination}):
+\begin{enumerate}
+\item ANY. In this case, the method terminates when the termination rule
+is applied to one of the processing threads.
+\item MAJORITY. In this case, the optimization method terminates when the
+predefined termination rule applies to the majority of processing
+threads.
+\item ALL. In this case, termination is successful when the termination
+rule applies to all processing threads.
+\end{enumerate}
+The Table \ref{tab:termination} compares three termination policies
+applied to the same proposed PPSO-based training/optimization procedure
+across a suite of classification datasets, using classification error
+(\%) as the evaluation criterion. The columns ANY, MAJORITY, and ALL
+do not correspond to different models; instead, they implement different
+rules for deciding when the parallel procedure is considered “finished”
+and which outcome is accepted as final. Therefore, each cell reflects
+the generalization performance of the same underlying model when only
+the termination/synchronization logic is changed. This is important
+because it highlights that, even with a fixed optimizer, the decision
+policy can materially influence which solution is ultimately selected,
+effectively controlling how conservatively or aggressively the algorithm
+commits to a final set of parameters.
+
+The AVERAGE row indicates that the ALL policy achieves the lowest
+mean error (22.19\%), followed by MAJORITY (22.74\%) and ANY (22.99\%).
+Although the differences are moderate, the ordering is consistent
+with a clear interpretation: ALL is the strictest rule, requiring
+completion (or convergence) of all parallel workers before finalizing
+the result. This tends to favor higher-quality solutions because it
+reduces the chance of stopping due to a single “lucky” or prematurely
+stabilized worker and allows slower but potentially more informative
+search trajectories to contribute. In contrast, ANY is the most aggressive
+rule, since the procedure can terminate as soon as one worker finishes,
+which can more often lead to premature commitment to solutions that
+are not optimal in terms of generalization. MAJORITY lies between
+these extremes by requiring agreement or completion from most workers,
+partially balancing decision speed with outcome stability.
+
+At the dataset level, there is no universal dominance of a single
+policy in every row, yet ALL shows clear advantages on several challenging
+or highly variable tasks. For example, ALL produces noticeably lower
+errors on OPTDIGITS (41.97\% versus 42.96\% and 46.06\%), SATIMAGE
+(40.84\% versus 45.78\% and 43.34\%), SEGMENT (24.34\% versus 25.68\%
+and 25.94\%), SONAR (20.85\% versus 22.45\% and 22.30\%), and WDBC
+(5.36\% versus 5.79\% and 6.55\%). This pattern aligns with the idea
+that, on difficult optimization landscapes where different workers
+may converge to substantially different solutions, waiting for all
+workers reduces the probability of selecting an inferior solution
+that simply appeared earlier. On the other hand, there are datasets
+where MAJORITY or ANY is marginally better (e.g., BEED and LYMOGRAPHY
+for MAJORITY, or ALCOHOL where MAJORITY slightly outperforms ALL).
+These cases suggest that the added strictness of ALL does not always
+translate into improved generalization, particularly when the incremental
+benefit from the “late” workers is small or when extended search increases
+the risk of overfitting on certain datasets.
+
+Conceptually, the three policies can be viewed as mechanisms that
+regulate the exploration--commitment trade-off in parallel stochastic
+search. ANY emphasizes fast commitment: if one worker quickly reaches
+a good region, the process stops early, which can be computationally
+efficient but more sensitive to random favorable or unfavorable outcomes.
+MAJORITY provides greater robustness by requiring collective confirmation
+from more workers, acting as a filter against isolated extreme behaviors.
+ALL is the most conservative and, according to the mean performance
+in the Table \ref{tab:termination}, tends to yield a more reliable
+selection of high-quality solutions because it fully exploits parallelism
+until completion. The observed improvement in the overall average
+suggests that, for this benchmark suite, the additional “patience”
+imposed by ALL more frequently translates into better generalization,
+especially on problems where ignoring slower workers means losing
+valuable alternative solutions.
+
+Overall, the Table \ref{tab:termination} demonstrates that the termination
+policy is not a minor implementation detail but a mechanism that directly
+affects which solution is chosen by a parallel stochastic training
+procedure. Based on both the average values and the behavior on several
+difficult datasets, ALL appears to provide the most consistently high-quality
+outcomes, while ANY and MAJORITY can be viewed as alternatives that
+prioritize faster decisions or an intermediate balance, respectively,
+at the cost of slightly higher mean classification error.
+
+Figure \ref{fig:statTermination} presents the significance levels
+of performance differences obtained by comparing three alternative
+termination policies of the same proposed PPSO procedure (ANY, MAJORITY,
+ALL) over a suite of classification datasets. Significance is interpreted
+via the p-value using the standard categories ns for $p>0.05$, significant
+for $p<0.05$, highly significant for $p<0.01$, extremely significant
+for $p<0.001$, and very extremely significant for $p<0.0001$. The
+three policies differ in when the parallel training process is considered
+complete and the final solution is accepted: ANY terminates when a
+single thread finishes, MAJORITY terminates when a predefined number
+or fraction of threads finish, and ALL terminates only when all threads
+finish. The analysis therefore tests whether the strictness of the
+termination rule systematically alters the final performance of the
+same model across different datasets.
+
+The overall Friedman test yields $p=0.0031$, which is highly significant
+($p<0.01$). This indicates that, when all three termination policies
+are considered jointly, the observed performance differences across
+the dataset suite are sufficiently consistent to reject the null hypothesis
+of equal performance. In other words, the termination policy is not
+a negligible implementation detail but a factor that can meaningfully
+influence the final classification error achieved by the proposed
+procedure.
+
+At the same time, the reported pairwise comparisons do not reach statistical
+significance under the conventional 0.05 threshold. Specifically,
+PPSO (ANY) versus PPSO (MAJORITY) yields $p=0.1211$ (non-significant),
+and PPSO (MAJORITY) versus PPSO (ALL) yields $p=0.5477$ (also non-significant).
+This apparent discrepancy between a significant global test and non-significant
+pairwise contrasts is common in multi-method, heterogeneous dataset
+evaluations: a global test can detect that systematic differences
+exist somewhere among the methods, while individual pairwise tests
+may lack sufficient power to cross the same significance threshold,
+especially when differences are modest, unevenly distributed across
+datasets, and/or when multiple-comparison adjustments are applied.
+
+Interpretively, these findings suggest that the termination rule affects
+PPSO’s overall behavior as a family of configurations, yet the specific
+pairwise contrasts reported here do not provide strong evidence of
+a uniform advantage of one policy over another across the full dataset
+suite. This aligns with the conceptual role of termination policies
+as regulators of the “fast commitment” versus “full parallel exploitation”
+trade-off: ANY emphasizes rapid completion with a higher risk of premature
+solution selection, ALL is more conservative and may stabilize the
+final choice by fully utilizing parallel search, and MAJORITY lies
+between these extremes. The significant overall Friedman result supports
+that this regulation matters at the aggregate level, even if the presented
+pairwise p-values are not sufficient, on their own, to establish a
+definitive ordering between those particular policy pairs under $p<0.05$.
+
+\begin{table}[H]
+\caption{Experiments with different termination strategy and the proposed method.
+The number of threads was set to $T=10$\label{tab:termination}}
+
+\centering{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+DATASET & ANY & MAJORITY & ALL\tabularnewline
+\hline 
+\hline 
+ALCOHOL & 19.40\% & 16.97\% & 16.99\%\tabularnewline
+\hline 
+AUSTRALIAN & 25.28\% & 26.26\% & 26.13\%\tabularnewline
+\hline 
+BALANCE & 7.55\% & 8.02\% & 8.13\%\tabularnewline
+\hline 
+BEED & 41.28\% & 39.87\% & 40.44\%\tabularnewline
+\hline 
+CLEVELAND & 49.03\% & 48.66\% & 47.07\%\tabularnewline
+\hline 
+DERMATOLOGY & 10.31\% & 10.03\% & 9.49\%\tabularnewline
+\hline 
+ECOLI & 48.60\% & 48.52\% & 47.24\%\tabularnewline
+\hline 
+GLASS & 54.24\% & 54.05\% & 51.53\%\tabularnewline
+\hline 
+HABERMAN & 29.57\% & 29.97\% & 30.27\%\tabularnewline
+\hline 
+HEART & 21.74\% & 21.56\% & 20.37\%\tabularnewline
+\hline 
+HEARTATTACK & 21.94\% & 22.17\% & 21.04\%\tabularnewline
+\hline 
+HOUSEVOTES & 7.04\% & 6.91\% & 7.31\%\tabularnewline
+\hline 
+IONOSPHERE & 15.14\% & 14.86\% & 14.34\%\tabularnewline
+\hline 
+LIVERDISORDER & 31.38\% & 32.00\% & 33.47\%\tabularnewline
+\hline 
+LYMOGRAPHY & 28.79\% & 26.50\% & 27.50\%\tabularnewline
+\hline 
+MAGIC & 13.62\% & 13.56\% & 13.87\%\tabularnewline
+\hline 
+MAMMOGRAPHIC & 17.24\% & 16.89\% & 16.89\%\tabularnewline
+\hline 
+OPTDIGITS & 46.06\% & 42.96\% & 41.97\%\tabularnewline
+\hline 
+PARKINSONS & 15.63\% & 15.26\% & 15.32\%\tabularnewline
+\hline 
+PIMA & 29.66\% & 29.40\% & 29.47\%\tabularnewline
+\hline 
+PIRVISION & 9.46\% & 8.20\% & 7.72\%\tabularnewline
+\hline 
+POPFAILURES & 7.13\% & 6.70\% & 7.08\%\tabularnewline
+\hline 
+REGIONS2 & 27.63\% & 27.61\% & 27.65\%\tabularnewline
+\hline 
+SAHEART & 33.83\% & 34.72\% & 34.41\%\tabularnewline
+\hline 
+SATIMAGE & 43.34\% & 45.78\% & 40.84\%\tabularnewline
+\hline 
+SEGMENT & 25.94\% & 25.68\% & 24.34\%\tabularnewline
+\hline 
+SONAR & 22.30\% & 22.45\% & 20.85\%\tabularnewline
+\hline 
+SPAMBASE & 6.40\% & 6.09\% & 6.39\%\tabularnewline
+\hline 
+SPIRAL & 42.33\% & 42.50\% & 42.81\%\tabularnewline
+\hline 
+STATHEART & 22.04\% & 22.00\% & 21.15\%\tabularnewline
+\hline 
+TRANSFUSION & 24.49\% & 24.26\% & 24.12\%\tabularnewline
+\hline 
+WDBC & 6.55\% & 5.79\% & 5.36\%\tabularnewline
+\hline 
+WINE & 17.71\% & 17.82\% & 13.00\%\tabularnewline
+\hline 
+Z\_F\_S & 10.70\% & 10.67\% & 10.47\%\tabularnewline
+\hline 
+ZO\_NF\_S & 8.02\% & 7.06\% & 7.52\%\tabularnewline
+\hline 
+ZONF\_S & 2.84\% & 2.88\% & 2.60\%\tabularnewline
+\hline 
+ZOO & 6.30\% & 6.90\% & 5.70\%\tabularnewline
+\hline 
+\textbf{AVERAGE} & \textbf{22.99\%} & \textbf{22.74\%} & \textbf{22.19\%}\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl4}
+\par\end{centering}
+\caption{Statistical comparison for the results produced by the usage of different
+termination strategies.\label{fig:statTermination}}
+
+\end{figure}
+
+
+\section{Conclusions\label{sec:Conclusions}}
+
+This work showed that training the proposed machine learning model
+can be substantially improved when formulated as a stochastic optimization
+task and implemented through a parallel swarm execution. The classical
+PSO core is used with two explicit modifications, inertia computed
+according to Equation \ref{enu:update_k} and termination controlled
+by Equation \ref{eq:term}, so that the search dynamics become more
+controlled and less prone to premature stagnation. The parallel formulation
+then orchestrates multiple independent search trajectories and empirically
+demonstrates that increasing the number of threads acts as a reliability
+mechanism, because it increases the probability of locating better
+minima on the error landscape.
+
+Across a broad collection of classification datasets, the results
+indicate a consistent reduction in classification error as parallelism
+increases. The average error decreases from 27.45\% with one thread
+to 22.19\% with ten threads, reflecting a clear generalization gain
+and a diminishing returns pattern, since most benefits are already
+captured up to four threads and additional improvements become smaller
+thereafter. Relative to the reference methods, the best PPSO configuration
+achieves markedly lower mean error, corresponding to an approximately
+40.6\% reduction versus BFGS, approximately 22.5\% versus GEN, and
+approximately 31.7\% versus RBF, indicating that the advantage is
+not confined to isolated datasets but also holds at the aggregate
+level.
+
+The statistical evaluation further supports that these differences
+are not random. The overall Friedman test yields $p=2.2\times10^{-16}$,
+strongly rejecting performance equivalence. Moreover, the pairwise
+comparisons show that increasing thread count strengthens the consistency
+of the PPSO advantage against the baselines, with extremely small
+p values at higher parallelism levels. The propagation analysis suggests
+that the information exchange scheme can materially influence performance
+at moderate parallelism, where the difference between one to one and
+N to N is significant for four threads, while for ten threads it becomes
+borderline and less stable. Similarly, the termination policy analysis
+indicates that termination affects the overall behavior with a significant
+global effect, yet without a universal dominance in every pairwise
+contrast, which is consistent with termination acting mainly as a
+regulator of when and how the procedure commits to a final solution.
+
+A direct next step is to more strictly disentangle the effect of parallelism
+from the total computational budget, clarifying how much of the gain
+stems from improved exploration and how much from increased computational
+effort. In this context, systematic reporting of runtime, energy cost,
+and scalability is essential, together with the study of asynchronous
+communication protocols that reduce synchronization overhead and enable
+smoother exploitation of parallel resources.
+
+In addition, propagation and termination can be upgraded to adaptive
+strategies that dynamically select one to one or N to N propagation
+and ANY, MAJORITY, or ALL termination based on stagnation indicators,
+solution diversity, and improvement rate. There is also clear potential
+for hybrid schemes that combine PPSO with local optimization, as well
+as for multiobjective training where, beyond error, complexity, stability,
+and interpretability are optimized. Finally, evaluation should be
+expanded to larger and more imbalanced datasets, online learning settings,
+and distribution shift scenarios, in order to substantiate robustness
+under real conditions and nonstationary data streams.
+
+\vspace{6pt}
+
+
+\authorcontributions{V.C. and I.G.T. conducted the experiments, employing several datasets
+and provided the comparative experiments. V.C. performed the statistical
+analysis and prepared the manuscript. All authors have read and agreed
+to the published version of the manuscript.}
+
+\funding{This research has been financed by the European Union : Next Generation
+EU through the Program Greece 2.0 National Recovery and Resilience
+Plan , under the call RESEARCH -- CREATE -- INNOVATE, project name
+“iCREW: Intelligent small craft simulator for advanced crew training
+using Virtual Reality techniques\textquotedbl{} (project code:TAEDK-06195).}
+
+\institutionalreview{Not applicable.}
+
+\informedconsent{Not applicable.}
+
+\dataavailability{The original contributions presented in this study are included in
+the article. Further inquiries can be directed to the corresponding
+author.}
+
+\conflictsofinterest{The authors declare no conflicts of interest.}
+
+\begin{adjustwidth}{-\extralength}{0cm}{}
+
+
+\reftitle{References}
+\begin{thebibliography}{999}
+\bibitem[(2000)]{nn1}C. Bishop, Neural Networks for Pattern Recognition,
+Oxford University Press, 1995.
+
+\bibitem{nn2}G. Cybenko, Approximation by superpositions of a sigmoidal
+function, Mathematics of Control Signals and Systems \textbf{2}, pp.
+303-314, 1989.
+
+\bibitem{nnphysics1}P. Baldi, K. Cranmer, T. Faucett et al, Parameterized
+neural networks for high-energy physics, Eur. Phys. J. C \textbf{76},
+2016.
+
+\bibitem{nnphysics2}J. J. Valdas and G. Bonham-Carter, Time dependent
+neural network models for detecting changes of state in complex processes:
+Applications in earth sciences and astronomy, Neural Networks \textbf{19},
+pp. 196-207, 2006
+
+\bibitem{nnphysics3}G. Carleo,M. Troyer, Solving the quantum many-body
+problem with artificial neural networks, Science \textbf{355}, pp.
+602-606, 2017.
+
+\bibitem{nnchem1}Lin Shen, Jingheng Wu, and Weitao Yang, Multiscale
+Quantum Mechanics/Molecular Mechanics Simulations with Neural Networks,
+Journal of Chemical Theory and Computation \textbf{12}, pp. 4934-4946,
+2016.
+
+\bibitem{nnchem2}Sergei Manzhos, Richard Dawes, Tucker Carrington,
+Neural network‐based approaches for building high dimensional and
+quantum dynamics‐friendly potential energy surfaces, Int. J. Quantum
+Chem. \textbf{115}, pp. 1012-1020, 2015.
+
+\bibitem{nnchem3}Jennifer N. Wei, David Duvenaud, and Alán Aspuru-Guzik,
+Neural Networks for the Prediction of Organic Chemistry Reactions,
+ACS Central Science \textbf{2}, pp. 725-732, 2016.
+
+\bibitem{nnmed1}Igor I. Baskin, David Winkler and Igor V. Tetko,
+A renaissance of neural networks in drug discovery, Expert Opinion
+on Drug Discovery \textbf{11}, pp. 785-795, 2016.
+
+\bibitem{nnmed2}Ronadl Bartzatt, Prediction of Novel Anti-Ebola Virus
+Compounds Utilizing Artificial Neural Network (ANN), Chemistry Faculty
+Publications \textbf{49}, pp. 16-34, 2018.
+
+\bibitem{nnecon1}Lukas Falat and Lucia Pancikova, Quantitative Modelling
+in Economics with Advanced Artificial Neural Networks, Procedia Economics
+and Finance \textbf{34}, pp. 194-201, 2015.
+
+\bibitem{nnecon2}Mohammad Namazi, Ahmad Shokrolahi, Mohammad Sadeghzadeh
+Maharluie, Detecting and ranking cash flow risk factors via artificial
+neural networks technique, Journal of Business Research \textbf{69},
+pp. 1801-1806, 2016.
+
+\bibitem{nnecon3}G. Tkacz, Neural network forecasting of Canadian
+GDP growth, International Journal of Forecasting \textbf{17}, pp.
+57-69, 2001.
+
+\bibitem{nnde1}Y. Shirvany, M. Hayati, R. Moradian, Multilayer perceptron
+neural networks with novel unsupervised training method for numerical
+solution of the partial differential equations, Applied Soft Computing
+\textbf{9}, pp. 20-29, 2009.
+
+\bibitem{nnde2}A. Malek, R. Shekari Beidokhti, Numerical solution
+for high order differential equations using a hybrid neural network---Optimization
+method, Applied Mathematics and Computation \textbf{183}, pp. 260-271,
+2006.
+
+\bibitem{nnagr1}A. Topuz, Predicting moisture content of agricultural
+products using artificial neural networks, Advances in Engineering
+Software \textbf{41}, pp. 464-470, 2010.
+
+\bibitem{nnagr2}A. Escamilla-García, G.M. Soto-Zarazúa, M. Toledano-Ayala,
+E. Rivas-Araiza, A. Gastélum-Barrios, Abraham,Applications of Artificial
+Neural Networks in Greenhouse Technology and Overview for Smart Agriculture
+Development, Applied Sciences \textbf{10}, Article number 3835, 2020.
+
+\bibitem{nnfacial}H. Boughrara, M. Chtourou, C. Ben Amar et al, Facial
+expression recognition based on a mlp neural network using constructive
+training algorithm. Multimed Tools Appl \textbf{75}, pp. 709--731,
+2016.
+
+\bibitem{nnwind}H. Liu, H.Q Tian, Y.F. Li, L. Zhang, Comparison of
+four Adaboost algorithm based artificial neural networks in wind speed
+predictions, Energy Conversion and Management \textbf{92}, pp. 67-81,
+2015.
+
+\bibitem{nngas}J. Szoplik, Forecasting of natural gas consumption
+with artificial neural networks, Energy \textbf{85}, pp. 208-220,
+2015.
+
+\bibitem{nnintrusion}H. Bahram, N.J. Navimipour, Intrusion detection
+for cloud computing using neural networks and artificial bee colony
+optimization algorithm, ICT Express 5, pp. 56-59, 2019.
+
+\bibitem[(2000)]{nnc}I.G. Tsoulos, D. Gavrilis, E. Glavas, Neural
+network construction and training using grammatical evolution, Neurocomputing
+72, pp. 269-277, 2008.
+
+\bibitem{activation_spline}S. Guarnieri, F. Piazza, A. Uncini, Multilayer
+feedforward networks with adaptive spline activation function, IEEE
+Transactions on Neural Networks \textbf{10}, pp. 672-683, 1999. 
+
+\bibitem{activation_trained}Ö.F. Ertuğrul, A novel type of activation
+function in artificial neural networks: Trained activation function,
+Neural Networks \textbf{99}, pp. 148-157, 2018.
+
+\bibitem{activation_review}A. D. Rasamoelina, F. Adjailia, P. Sinčák,
+A Review of Activation Function for Artificial Neural Network, In:
+2020 IEEE 18th World Symposium on Applied Machine Intelligence and
+Informatics (SAMI), Herlany, Slovakia, pp. 281-286, 2020.
+
+\bibitem{bpnn}D.E. Rumelhart, G.E. Hinton and R.J. Williams, Learning
+representations by back-propagating errors, Nature \textbf{323}, pp.
+533 - 536 , 1986.
+
+\bibitem{bpnn2}T. Chen and S. Zhong, Privacy-Preserving Backpropagation
+Neural Network Learning, IEEE Transactions on Neural Networks \textbf{20},
+, pp. 1554-1564, 2009.
+
+\bibitem{rpropnn}M. Riedmiller and H. Braun, A Direct Adaptive Method
+for Faster Backpropagation Learning: The RPROP algorithm, Proc. of
+the IEEE Intl. Conf. on Neural Networks, San Francisco, CA, pp. 586--591,
+1993.
+
+\bibitem{rpropnn3}T. Pajchrowski, K. Zawirski and K. Nowopolski,
+Neural Speed Controller Trained Online by Means of Modified RPROP
+Algorithm, IEEE Transactions on Industrial Informatics \textbf{11},
+pp. 560-568, 2015.
+
+\bibitem{rpropnn2}Rinda Parama Satya Hermanto, Suharjito, Diana,
+Ariadi Nugroho, Waiting-Time Estimation in Bank Customer Queues using
+RPROP Neural Networks, Procedia Computer Science \textbf{ 135}, pp.
+35-42, 2018.
+
+\bibitem{key-23}Neural Networks, Procedia Computer Science \textbf{ 135},
+pp. 35-42, 2018.
+
+\bibitem{quasinn}B. Robitaille and B. Marcos and M. Veillette and
+G. Payre, Modified quasi-Newton methods for training neural networks,
+Computers \& Chemical Engineering \textbf{20}, pp. 1133-1140, 1996.
+
+\bibitem{quasinn2}Q. Liu, J. Liu, R. Sang, J. Li, T. Zhang and Q.
+Zhang, Fast Neural Network Training on FPGA Using Quasi-Newton Optimization
+Method,IEEE Transactions on Very Large Scale Integration (VLSI) Systems
+\textbf{26}, pp. 1575-1579, 2018.
+
+\bibitem{nn_ann1}A. Yamazaki, M. C. P. de Souto,T. B. Ludermir, Optimization
+of neural network weights and architectures for odor recognition using
+simulated annealing, In: Proceedings of the 2002 International Joint
+Conference on Neural Networks. IJCNN'02 \textbf{1}, pp. 547-552 ,
+2002.
+
+\bibitem{nn_ann2}Y. Da, G. Xiurun, An improved PSO-based ANN with
+simulated annealing technique, Neurocomputing \textbf{63}, pp. 527-533,
+2005.
+
+\bibitem{geneticnn}F. H. F. Leung, H. K. Lam, S. H. Ling and P. K.
+S. Tam, Tuning of the structure and parameters of a neural network
+using an improved genetic algorithm, IEEE Transactions on Neural Networks
+\textbf{14}, pp. 79-88, 2003
+
+\bibitem{geneticnn2}X. Yao, Evolving artificial neural networks,
+Proceedings of the IEEE, 87(9), pp. 1423-1447, 1999.
+
+\bibitem{psonn}C. Zhang, H. Shao and Y. Li, Particle swarm optimisation
+for evolving artificial neural network, IEEE International Conference
+on Systems, Man, and Cybernetics, , pp. 2487-2490, 2000.
+
+\bibitem{psonn2}Jianbo Yu, Shijin Wang, Lifeng Xi, Evolving artificial
+neural networks using an improved PSO and DPSO \textbf{71}, pp. 1054-1060,
+2008.
+
+\bibitem{nndem}J. Ilonen, J.K. Kamarainen, J. Lampinen, Differential
+Evolution Training Algorithm for Feed-Forward Neural Networks, Neural
+Processing Letters \textbf{17}, pp. 93--105, 2003.
+
+\bibitem{nnevo}M. Rocha, P. Cortez, J. Neves, Evolution of neural
+networks for classification and regression, Neurocomputing \textbf{70},
+pp. 2809-2816, 2007.
+
+\bibitem{nnwhale}I. Aljarah, H. Faris, S. Mirjalili, Optimizing connection
+weights in neural networks using the whale optimization algorithm,
+Soft Comput \textbf{22}, pp. 1--15, 2018.
+
+\bibitem{nnbutterfly}S.M.J. Jalali, S. Ahmadian, P.M. Kebria, A.
+Khosravi, C.P. Lim, S. Nahavandi, Evolving Artificial Neural Networks
+Using Butterfly Optimization Algorithm for Data Classification. In:
+Gedeon, T., Wong, K., Lee, M. (eds) Neural Information Processing.
+ICONIP 2019. Lecture Notes in Computer Science(), vol 11953. Springer,
+Cham, 2019.
+
+\bibitem[(2000)]{tabunn}R.S. Sexton, B. Alidaee, R.E. Dorsey, J.D.
+Johnson, Global optimization for artificial neural networks: A tabu
+search application. European Journal of Operational Research \textbf{106},
+pp. 570-584, 1998.
+
+\bibitem{nn_hybrid}J.-R. Zhang, J. Zhang, T.-M. Lok, M.R. Lyu, A
+hybrid particle swarm optimization--back-propagation algorithm for
+feedforward neural network training, Applied Mathematics and Computation
+\textbf{185}, pp. 1026-1037, 2007.
+
+\bibitem{nn_cascade}G. Zhao, T. Wang, Y. Jin, C. Lang, Y. Li, H.
+Ling, The Cascaded Forward algorithm for neural network training,
+Pattern Recognition \textbf{161}, 111292, 2025.
+
+\bibitem{nn_gpu1}K-Su Oh, K. Jung, GPU implementation of neural networks,
+Pattern Recognition \textbf{37}, pp. 1311-1314, 2004.
+
+\bibitem{nn_gpu2}M. Zhang, K. Hibi, J. Inoue, GPU-accelerated artificial
+neural network potential for molecular dynamics simulation, Computer
+Physics Communications \textbf{285}, 108655, 2023. 
+
+\bibitem{nninit1}I. Ivanova, M. Kubat, Initialization of neural networks
+by means of decision trees, Knowledge-Based Systems \textbf{8}, pp.
+333-344, 1995.
+
+\bibitem{nninit2}J.Y.F Yam, T.W.S. Chow, A weight initialization
+method for improving training speed in feedforward neural network,
+Neurocomputing \textbf{30}, pp. 219-232, 2000.
+
+\bibitem{nninit3}F. Itano, M. A. de Abreu de Sousa, E. Del-Moral-Hernandez,
+Extending MLP ANN hyper-parameters Optimization by using Genetic Algorithm,
+In: 2018 International Joint Conference on Neural Networks (IJCNN),
+Rio de Janeiro, Brazil, 2018, pp. 1-8, 2018.
+
+\bibitem{nninit4}K. Chumachenko, A. Iosifidis, M. Gabbouj, Feedforward
+neural networks initialization based on discriminant learning, Neural
+Networks \textbf{146}, pp. 220-229, 2022.
+
+\bibitem[(2000)]{MPI}Gropp, W., Lusk, E., Skjellum, A. (1999) Using
+MPI: portable parallel programming with the message-passing interface,
+MIT, Cambridge.
+
+\bibitem[(2000)]{lotric}Lotrič, U., Dobnikar, A. (2005). Parallel
+implementations of feed-forward neural network using MPI and C\# on
+.NET platform. In: Ribeiro, B., Albrecht, R.F., Dobnikar, A., Pearson,
+D.W., Steele, N.C. (eds) Adaptive and Natural Computing Algorithms.
+Springer, Vienna.
+
+\bibitem[(2000)]{eann_parallell}B. P. Gonzalez, G. G. Sánchez, J.
+P. Donate, P. Cortez and A. S. de Miguel, \textquotedbl Parallelization
+of an evolving Artificial Neural Networks system to Forecast Time
+Series using OPENMP and MPI,\textquotedbl{} 2012 IEEE Conference on
+Evolving and Adaptive Intelligent Systems, Madrid, Spain, 2012, pp.
+186-191.
+
+\bibitem[(2000)]{cneural}R. Gu, F. Shen and Y. Huang, \textquotedbl A
+parallel computing platform for training large scale neural networks,\textquotedbl{}
+2013 IEEE International Conference on Big Data, Silicon Valley, CA,
+USA, 2013, pp. 376-384.
+
+\bibitem[(2000)]{nn_parallel_review}Chanthini, P., \& Shyamala, K.
+(2016). A survey on parallelization of neural network using MPI and
+Open MP. Indian Journal of Science and Technology, 9(19).
+
+\bibitem{pso_major}J. Kennedy and R. Eberhart, \textquotedbl Particle
+swarm optimization,\textquotedbl{} Proceedings of ICNN'95 - International
+Conference on Neural Networks, 1995, pp. 1942-1948 vol.4, doi: 10.1109/ICNN.1995.488968.
+
+\bibitem[(2000)]{psophysics1}Anderson Alvarenga de Moura Meneses,
+Marcelo Dornellas, Machado Roberto Schirru, Particle Swarm Optimization
+applied to the nuclear reload problem of a Pressurized Water Reactor,
+Progress in Nuclear Energy \textbf{51}, pp. 319-326, 2009.
+
+\bibitem{psophysics2}Ranjit Shaw, Shalivahan Srivastava, Particle
+swarm optimization: A new tool to invert geophysical data, Geophysics
+\textbf{72}, 2007.
+
+\bibitem{psochem1}C. O. Ourique, E.C. Biscaia, J.C. Pinto, The use
+of particle swarm optimization for dynamical analysis in chemical
+processes, Computers \& Chemical Engineering \textbf{26}, pp. 1783-1793,
+2002.
+
+\bibitem{psochem2}H. Fang, J. Zhou, Z. Wang et al, Hybrid method
+integrating machine learning and particle swarm optimization for smart
+chemical process operations, Front. Chem. Sci. Eng. \textbf{16}, pp.
+274--287, 2022.
+
+\bibitem{psomed1}M.P. Wachowiak, R. Smolikova, Yufeng Zheng, J.M.
+Zurada, A.S. Elmaghraby, An approach to multimodal biomedical image
+registration utilizing particle swarm optimization, IEEE Transactions
+on Evolutionary Computation \textbf{8}, pp. 289-301, 2004.
+
+\bibitem{psomed2}Yannis Marinakis. Magdalene Marinaki, Georgios Dounias,
+Particle swarm optimization for pap-smear diagnosis, Expert Systems
+with Applications \textbf{35}, pp. 1645-1656, 2008. 
+
+\bibitem{psoecon}Jong-Bae Park, Yun-Won Jeong, Joong-Rin Shin, Kwang
+Y. Lee, An Improved Particle Swarm Optimization for Nonconvex Economic
+Dispatch Problems, IEEE Transactions on Power Systems \textbf{25},
+pp. 156-16\textbf{216}6, 2010.
+
+\bibitem{psoApp1}B. Liu, L. Wang, Y.H. Jin, An Effective PSO-Based
+Memetic Algorithm for Flow Shop Scheduling, IEEE Transactions on Systems,
+Man, and Cybernetics, Part B (Cybernetics) \textbf{37}, pp. 18-27,
+2007.
+
+\bibitem{psoApp2}J. Yang, L. He, S. Fu, An improved PSO-based charging
+strategy of electric vehicles in electrical distribution grid, Applied
+Energy \textbf{128}, pp. 82-92, 2014.
+
+\bibitem{psoApp3}K. Mistry, L. Zhang, S. C. Neoh, C. P. Lim, B. Fielding,
+A Micro-GA Embedded PSO Feature Selection Approach to Intelligent
+Facial Emotion Recognition, IEEE Transactions on Cybernetics. \textbf{47},
+pp. 1496-1509, 2017.
+
+\bibitem{psoApp4}S. Han, X. Shan, J. Fu, W. Xu, H. Mi, Industrial
+robot trajectory planning based on improved pso algorithm, J. Phys.:
+Conf. Ser. \textbf{1820}, 012185, 2021.
+
+\bibitem{psoReview}F. Marini, B. Walczak, Particle swarm optimization
+(PSO). A tutorial, Chemometrics and Intelligent Laboratory Systems
+\textbf{149}, pp. 153-165, 2015.
+
+\bibitem[(2006)]{psoBor}Zhou, J., Duan, Z., Li, Y., Deng, J., \&
+Yu, D. (2006). PSO-based neural network optimization and its utilization
+in a boring machine. Journal of Materials Processing Technology, 178(1-3),
+19-23.
+
+\bibitem[(2006)]{oopso}Meissner, M., Schmuker, M. \& Schneider, G.
+Optimized Particle Swarm Optimization (OPSO) and its application to
+artificial neural network training. BMC Bioinformatics 7, 125 (2006).
+
+\bibitem[(2006)]{psoCon}Chau, K. W. (2007). Application of a PSO-based
+neural network in analysis of outcomes of construction claims. Automation
+in construction, 16(5), 642-646.
+
+\bibitem[(2006)]{psoSolar}Mohandes, M. A. (2012). Modeling global
+solar radiation using Particle Swarm Optimization (PSO). Solar Energy,
+86(11), 3137-3145.
+
+\bibitem[(2006)]{csMethod}Yang, X.S.; Deb, S. Cuckoo search via Lévy
+flights. In Proceedings of the IEEE World Congress on Nature and Biologically
+Inspired Computing (NaBIC 2009), Coimbatore, India, 9--11 December
+2009; pp. 210--214.
+
+\bibitem[(2006)]{psoCS}Chen, J. F., Do, Q. H., \& Hsieh, H. N. (2015).
+Training artificial neural networks by a hybrid PSO-CS algorithm.
+Algorithms, 8(2), 292-308.
+
+\bibitem[(2006)]{ipso}V. Charilogis, I.G. Tsoulos, Toward an Ideal
+Particle Swarm Optimizer for Multidimensional Functions, Information
+\textbf{13}, 217, 2022.
+
+\bibitem{UCL}M. Kelly, R. Longjohn, K. Nottingham, The UCI Machine
+Learning Repository. 2023. Available online: https://archive.ics.uci.edu
+(accessed on 18 February 2024).
+
+\bibitem{Keel}J. Alcalá-Fdez, A. Fernandez, J. Luengo, J. Derrac,
+S. García, L. Sánchez, F. Herrera. KEEL Data-Mining Software Tool:
+Data Set Repository, Integration of Algorithms and Experimental Analysis
+Framework. Journal of Multiple-Valued Logic and Soft Computing 17,
+pp. 255-287, 2011.
+
+\bibitem[(2000)]{alcohol}Tzimourta, K.D.; Tsoulos, I.; Bilero, I.T.;
+Tzallas, A.T.; Tsipouras, M.G.; Giannakeas, N. Direct Assessment of
+Alcohol Consumption in Mental State Using Brain Computer Interfaces
+and Grammatical Evolution. Inventions 2018, 3, 51.
+
+\bibitem{australian}J.R. Quinlan, Simplifying Decision Trees. International
+Journal of Man-Machine Studies \textbf{27}, pp. 221-234, 1987. 
+
+\bibitem{balance}T. Shultz, D. Mareschal, W. Schmidt, Modeling Cognitive
+Development on Balance Scale Phenomena, Machine Learning \textbf{16},
+pp. 59-88, 1994.
+
+\bibitem[(2024)]{beed}Banu PK, N. (2024). Feature Engineering for
+Epileptic Seizure Classification Using SeqBoostNet. International
+Journal of Computing and Digital Systems, 16(1), 1-14.
+
+\bibitem{cleveland1}Z.H. Zhou,Y. Jiang, NeC4.5: neural ensemble based
+C4.5,\textquotedbl{} in IEEE Transactions on Knowledge and Data Engineering
+\textbf{16}, pp. 770-773, 2004.
+
+\bibitem{cleveland2}R. Setiono , W.K. Leow, FERNN: An Algorithm for
+Fast Extraction of Rules from Neural Networks, Applied Intelligence
+\textbf{12}, pp. 15-25, 2000.
+
+\bibitem{dermatology}G. Demiroz, H.A. Govenir, N. Ilter, Learning
+Differential Diagnosis of Eryhemato-Squamous Diseases using Voting
+Feature Intervals, Artificial Intelligence in Medicine. \textbf{13},
+pp. 147--165, 1998.
+
+\bibitem{ecoli}P. Horton, K.Nakai, A Probabilistic Classification
+System for Predicting the Cellular Localization Sites of Proteins,
+In: Proceedings of International Conference on Intelligent Systems
+for Molecular Biology \textbf{4}, pp. 109-15, 1996.
+
+\bibitem{heart}I. Kononenko, E. Šimec, M. Robnik-Šikonja, Overcoming
+the Myopia of Inductive Learning Algorithms with RELIEFF, Applied
+Intelligence \textbf{7}, pp. 39--55, 1997
+
+\bibitem{housevotes}R.M. French, N. Chater, Using noise to compute
+error surfaces in connectionist networks: a novel means of reducing
+catastrophic forgetting, Neural Comput. \textbf{14}, pp. 1755-1769,
+2002.
+
+\bibitem{liver} J. Garcke, M. Griebel, Classification with sparse
+grids using simplicial basis functions, Intell. Data Anal. \textbf{6},
+pp. 483-502, 2002.
+
+\bibitem[(2000)]{lymography}G. Cestnik, I. Konenenko, I. Bratko,
+Assistant-86: A Knowledge-Elicitation Tool for Sophisticated Users.
+In: Bratko, I. and Lavrac, N., Eds., Progress in Machine Learning,
+Sigma Press, Wilmslow, pp. 31-45, 1987. 
+
+\bibitem[(2000)]{magic}Heck, D., Knapp, J., Capdevielle, J. N., Schatz,
+G., \& Thouw, T. (1998). CORSIKA: A Monte Carlo code to simulate extensive
+air showers. Report fzka, 6019(11).
+
+\bibitem[(2000)]{optdigits}Kaynak, C. (1995). Methods of combining
+multiple classifiers and their applications to handwritten digit recognition.
+Unpublished master’s thesis, Bogazici University.
+
+\bibitem{parkinsons}M.A. Little, P.E. McSharry, E.J. Hunter, J. Spielman,
+L.O. Ramig, Suitability of dysphonia measurements for telemonitoring
+of Parkinson's disease. IEEE Trans Biomed Eng. \textbf{56}, pp. 1015-1022,
+2009.
+
+\bibitem{pima}J.W. Smith, J.E. Everhart, W.C. Dickson, W.C. Knowler,
+R.S. Johannes, Using the ADAP learning algorithm to forecast the onset
+of diabetes mellitus, In: Proceedings of the Symposium on Computer
+Applications and Medical Care IEEE Computer Society Press, pp.261-265,
+1988.
+
+\bibitem[(2023)]{pirvision}Emad-Ud-Din, M., \& Wang, Y. (2023). Promoting
+occupancy detection accuracy using on-device lifelong learning. IEEE
+Sensors Journal, 23(9), 9595-9606.
+
+\bibitem{popfailures}D.D. Lucas, R. Klein, J. Tannahill, D. Ivanova,
+S. Brandon, D. Domyancic, Y. Zhang, Failure analysis of parameter-induced
+simulation crashes in climate models, Geoscientific Model Development
+\textbf{6}, pp. 1157-1171, 2013.
+
+\bibitem{regions}N. Giannakeas, M.G. Tsipouras, A.T. Tzallas, K.
+Kyriakidi, Z.E. Tsianou, P. Manousou, A. Hall, E.C. Karvounis, V.
+Tsianos, E. Tsianos, A clustering based method for collagen proportional
+area extraction in liver biopsy images (2015) Proceedings of the Annual
+International Conference of the IEEE Engineering in Medicine and Biology
+Society, EMBS, 2015-November, art. no. 7319047, pp. 3097-3100. 
+
+\bibitem[(2000)]{saheart}T. Hastie, R. Tibshirani, Non-parametric
+logistic and proportional odds regression, JRSS-C (Applied Statistics)
+\textbf{36}, pp. 260--276, 1987.
+
+\bibitem{segment}M. Dash, H. Liu, P. Scheuermann, K. L. Tan, Fast
+hierarchical clustering and its validation, Data \& Knowledge Engineering
+\textbf{44}, pp 109--138, 2003.
+
+\bibitem{sonar}R.P. Gorman, T.J. Sejnowski, Analysis of Hidden Units
+in a Layered Network Trained to Classify Sonar Targets, Neural Networks
+\textbf{1}, pp. 75-89, 1988.
+
+\bibitem[(2000)]{spambase}Cranor, Lorrie F., LaMacchia, Brian A.
+Spam!, Communications of the ACM, 41(8):74-83, 1998.
+
+\bibitem{wdbc}W.H. Wolberg, O.L. Mangasarian, Multisurface method
+of pattern separation for medical diagnosis applied to breast cytology,
+Proc Natl Acad Sci U S A. \textbf{87}, pp. 9193--9196, 1990.
+
+\bibitem{wine1}M. Raymer, T.E. Doom, L.A. Kuhn, W.F. Punch, Knowledge
+discovery in medical and biological datasets using a hybrid Bayes
+classifier/evolutionary algorithm. IEEE transactions on systems, man,
+and cybernetics. Part B, Cybernetics : a publication of the IEEE Systems,
+Man, and Cybernetics Society, \textbf{33} , pp. 802-813, 2003.
+
+\bibitem{wine2}P. Zhong, M. Fukushima, Regularized nonsmooth Newton
+method for multi-class support vector machines, Optimization Methods
+and Software \textbf{22}, pp. 225-236, 2007.
+
+\bibitem{eeg}R.G. Andrzejak, K. Lehnertz, F. Mormann, C. Rieke, P.
+David, and C. E. Elger, Indications of nonlinear deterministic and
+finite-dimensional structures in time series of brain electrical activity:
+Dependence on recording region and brain state, Phys. Rev. E \textbf{64},
+pp. 1-8, 2001.
+
+\bibitem{zoo}M. Koivisto, K. Sood, Exact Bayesian Structure Discovery
+in Bayesian Networks, The Journal of Machine Learning Research\textbf{
+5}, pp. 549--573, 2004.
+
+\bibitem[(2000)]{optimus}Tsoulos, I.G.; Charilogis, V.; Kyrou, G.;
+Stavrou, V.N.; Tzallas, A. OPTIMUS: A Multidimensional Global Optimization
+Package. J. Open Source Softw. 2025, 10, 7584.
+
+\bibitem{powell}M.J.D Powell, A Tolerant Algorithm for Linearly Constrained
+Optimization Calculations, Mathematical Programming \textbf{45}, pp.
+547-566, 1989. 
+
+\bibitem[(1991)]{rbf1}J. Park and I. W. Sandberg, Universal Approximation
+Using Radial-Basis-Function Networks, Neural Computation \textbf{3},
+pp. 246-257, 1991.
+
+\bibitem{rbf2}G.A. Montazer, D. Giveki, M. Karami, H. Rastegar, Radial
+basis function neural networks: A review. Comput. Rev. J \textbf{1},
+pp. 52-74, 2018.
+
+\end{thebibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% for journal Sci
+%\reviewreports{\\
+%Reviewer 1 comments and authors' response\\
+%Reviewer 2 comments and authors' response\\
+%Reviewer 3 comments and authors' response
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\PublishersNote{}
+
+\end{adjustwidth}{}
+\end{document}

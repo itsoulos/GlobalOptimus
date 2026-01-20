@@ -1,9 +1,9 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=ParallelPso
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
-SAMPLER=dist
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=doublebox
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
@@ -192,4 +192,4 @@ if [ -z "$PROBLEM" ]; then
   exit
 fi
 
-./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes
+./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=30 --opt_debug=yes

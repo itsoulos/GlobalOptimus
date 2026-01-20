@@ -451,10 +451,21 @@ nolink "false"
 \series default
 Moreover,
  a series of alternative activation functions has been proposed in the related literature,
- such as the tanh expressed as:
+ such as the tanh expressed with equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:tanh"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
 \begin_inset Formula 
 \begin{equation}
-\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}\label{eq:tanh}
 \end{equation}
 
 \end_inset
@@ -16344,7 +16355,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -16394,6 +16405,104 @@ name "sec:Conclusions"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The proposed training procedure improves generalization by introducing,
+ prior to the main optimization,
+ an additional stage that identifies an appropriate range of values for the network weights.
+ This stage is based on a Simulated Annealing variant that adjusts the admissible weight bounds in order to reduce the likelihood of getting trapped in local minima and to limit overfitting.
+ The final training is then performed inside these bounds using a genetic optimization stage followed by a local BFGS refinement.
+\end_layout
+
+\begin_layout Standard
+In the classification experiments,
+ the proposed machine-learning model achieves the best mean performance,
+ with an average classification error of 20.57,
+ and with clear separation from all competing approaches.
+ The advantage is not confined to isolated datasets,
+ but emerges as a consistent pattern across a large portion of the benchmark suite,
+ while also being accompanied by reduced dispersion of errors,
+ which is compatible with more stable behavior on heterogeneous classification tasks.
+\end_layout
+
+\begin_layout Standard
+The statistical analysis supports these observations.
+ For classification,
+ the overall Friedman test reports p=
+\begin_inset Formula $2.89×10^{-11}$
+\end_inset
+
+,
+ thus very strongly rejecting the hypothesis of equivalent performance across methods.
+ The post-hoc comparisons indicate statistically significant differences in favor of the proposed machine-learning model against all main baselines,
+ with particularly strong evidence against ADAM,
+ BFGS,
+ and PRUNE,
+ and highly significant differences against GENETIC and RBF.
+\end_layout
+
+\begin_layout Standard
+In the regression experiments,
+ the proposed machine-learning model attains the lowest mean absolute error,
+ equal to 5.33,
+ and the overall Friedman test remains significant with p=
+\begin_inset Formula $1.55×10^{-4}$
+\end_inset
+
+,
+ indicating that genuine performance differences exist.
+ However,
+ the pairwise picture is more nuanced.
+ The strongest statistical separation is observed primarily against BFGS with p=
+\begin_inset Formula $3.35×10^{-4}$
+\end_inset
+
+,
+ and a weaker but still significant difference is observed against GENETIC with p=0.0113,
+ whereas differences against ADAM,
+ RBF,
+ and PRUNE are not supported at the 0.05 level.
+\end_layout
+
+\begin_layout Standard
+The sensitivity studies suggest that variations of the 
+\begin_inset Formula $p_{c}$
+\end_inset
+
+ parameter do not yield measurable statistical differences,
+ both for classification and regression,
+ indicating that this setting is not critical within the tested range.
+ In contrast,
+ the 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+ parameter in classification exhibits a marginal overall effect,
+ with an overall p=0.0423,
+ but without clear confirmation through simple pairwise comparisons.
+ For regression,
+ 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+ shows no statistically detectable impact,
+ with an overall p=0.3050 and non-significant pairwise tests.
+\end_layout
+
+\begin_layout Standard
+Several directions follow naturally for future work.
+ First,
+ the generality of adaptive weight bounds should be assessed under alternative final optimizers and across a broader set of architectures,
+ including deeper networks and different activation functions.
+ Second,
+ the fitness definition used during the Simulated Annealing phase should be redesigned to incorporate explicit generalization criteria,
+ such as validation error or robustness to noise,
+ so that the bound-selection stage more directly targets out-of-sample performance.
+ Third,
+ the cost-benefit trade-off should be quantified systematically,
+ and CPU or GPU parallelization should be explored,
+ since the Simulated Annealing phase requires repeated evaluations and may dominate the overall runtime.
 \end_layout
 
 \begin_layout Standard
