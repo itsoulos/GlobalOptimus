@@ -2,6 +2,9 @@
 # include <QDebug>
 using Interval = vector<double>; // size = 2*dim
 using Point = vector<double>;
+
+std::random_device rd;
+std::mt19937 gen(rd());
 MlpProblem::MlpProblem()
     :Problem(1)
 {
@@ -9,7 +12,10 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_leftmargin",-10.0,-10000.0,10000.0,"Initial left margin"));
       addParam(Parameter("mlp_rightmargin",10.0,-10000.0,10000.0,"Initial right margin"));
       QStringList methods;
-      methods<<"uniform"<<"smallvalues"<<"xavier"<<"random";
+      methods<<"uniform"<<"smallvalues"<<"xavier"
+              <<"lecun"<<"he"<<"xavier_uniform"
+              <<"xavier_normal"
+              <<"random";
       addParam(Parameter("mlp_initmethod",methods[0],methods,"Possible values: smallvalues,xavier"));
       QStringList boolValues;
       boolValues<<"no"<<"yes";
@@ -18,6 +24,47 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_balanceclass",boolValues[1],boolValues,"Enable or disabled balanced classes during train (yes|no)"));
       addParam(Parameter("mlp_outputfile","","The output file for mlp"));
       addParam(Parameter("mlp_usesimanbound",boolValues[0],boolValues,"Discover bounds using siman"));
+
+}
+
+void    MlpProblem::lecun_normal_init(Data & weights, int fan_in)
+{
+    double stddev = std::sqrt(1.0 / fan_in);
+    std::normal_distribution<double> dist(0.0, stddev);
+
+    for (auto& w : weights) {
+        w = dist(gen);
+    }
+}
+
+void    MlpProblem::he_normal_init(Data & weights, int fan_in)
+{
+    double stddev = std::sqrt(2.0 / fan_in);
+    std::normal_distribution<double> dist(0.0, stddev);
+
+    for (auto& w : weights) {
+        w = dist(gen);
+    }
+}
+
+void    MlpProblem::xavier_uniform_init(Data& weights, int fan_in, int fan_out)
+{
+    double limit = std::sqrt(6.0 / (fan_in + fan_out));
+    std::uniform_real_distribution<double> dist(-limit, limit);
+
+    for (auto& w : weights) {
+        w = dist(gen);
+    }
+}
+
+void    MlpProblem::xavier_normal_init(Data& weights, int fan_in, int fan_out)
+{
+    double stddev = std::sqrt(2.0 / (fan_in + fan_out));
+    std::normal_distribution<double> dist(0.0, stddev);
+
+    for (auto& w : weights) {
+        w = dist(gen);
+    }
 }
 
 Data    MlpProblem::getSample()
@@ -28,7 +75,7 @@ Data    MlpProblem::getSample()
       Data xx;
       xx.resize(dimension);
 
-
+ int nodes = getParam("mlp_nodes").getValue().toInt();
       double leftMargin = getParam("mlp_leftmargin").getValue().toDouble();
       double rightMargin = getParam("mlp_rightmargin").getValue().toDouble();
       QString initmethod = getParam("mlp_initmethod").getValue();
@@ -55,6 +102,26 @@ Data    MlpProblem::getSample()
               {
                   xx[i]=a+(b-a)*randomDouble();
               }
+          }
+      else
+          if(initmethod=="lecun")
+      {
+          lecun_normal_init(xx,trainDataset->dimension());
+      }
+      else
+              if(initmethod=="he")
+          {
+              he_normal_init(xx,trainDataset->dimension());
+          }
+      else
+          if(initmethod=="xavier_uniform")
+      {
+          xavier_uniform_init(xx,trainDataset->dimension(),1);
+      }
+          else
+              if(initmethod=="xavier_normal")
+          {
+              xavier_normal_init(xx,trainDataset->dimension(),1);
           }
           else
           {

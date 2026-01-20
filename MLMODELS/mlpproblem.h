@@ -4,7 +4,9 @@
 # include <MLMODELS/dataset.h>
 # include <MLMODELS/model.h>
 # include <OPTIMUS/problem.h>
-
+#include <vector>
+#include <random>
+#include <cmath>
 /**
  * @brief The MlpProblem class implements the neural network (MLP) model.
  */
@@ -136,6 +138,11 @@ public:
      */
     double      getClassTestError(Data &x,Dataset *test) ;
     double      getClassErrorPerClass(Data &x,Dataset *t);
+    void        lecun_normal_init(Data & weights, int fan_in) ;
+    void        he_normal_init(Data & weights, int fan_in);
+    void        xavier_uniform_init(Data& weights, int fan_in, int fan_out);
+    void        xavier_normal_init(Data& weights, int fan_in, int fan_out);
+
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H
