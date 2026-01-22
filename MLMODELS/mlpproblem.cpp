@@ -24,7 +24,9 @@ MlpProblem::MlpProblem()
       addParam(Parameter("mlp_balanceclass",boolValues[1],boolValues,"Enable or disabled balanced classes during train (yes|no)"));
       addParam(Parameter("mlp_outputfile","","The output file for mlp"));
       addParam(Parameter("mlp_usesimanbound",boolValues[0],boolValues,"Discover bounds using siman"));
-
+      QStringList simanMethod;
+      simanMethod<<"exp"<<"log"<<"linear"<<"quad";
+      addParam(Parameter("mlp_simanmethod",simanMethod[0],simanMethod,"Simulated annealing cooling method. Values: exp, log, linear,quad"));
 }
 
 void    MlpProblem::lecun_normal_init(Data & weights, int fan_in)
@@ -453,7 +455,7 @@ private:
     double T0;
     int neps;
     int seed;
-
+    QString simanMethod="exp";
     double rand01(mt19937 &r);
     double evaluate_interval(const Interval &I, int dim, int samples, mt19937 &rng);
     Interval neighbor(const Interval &I,
@@ -465,6 +467,7 @@ private:
 
 public:
     SimanBounds(MlpProblem *p,Data &xl,Data &xr,int s=123);
+    void setSimanMethod(QString method);
     void    Solve();
     void    getBounds(Data &xl,Data &xr);
     ~SimanBounds();
@@ -490,6 +493,10 @@ SimanBounds::SimanBounds(MlpProblem *p,Data &xl,Data &xr,int s)
     T0=3.0;
 }
 
+void    SimanBounds::setSimanMethod(QString method)
+{
+    simanMethod = method;
+}
 // υπολογισμός “ποιότητας” διαστήματος
 double SimanBounds::evaluate_interval(const Interval &I, int dim, int samples, mt19937 &rng)
 {
@@ -574,6 +581,7 @@ void    SimanBounds::Solve()
     double score = evaluate_interval(I,dim,25,rng);
     Interval bestI=I;
     double bestScore=score;
+    int k=1;
     while(T>T_end){
         for(int it=0;it<neps;it++){
             Interval J = neighbor(I, 0.01, GLOBAL_L, GLOBAL_U, rng);
@@ -590,8 +598,25 @@ void    SimanBounds::Solve()
                 }
             }
         }
-        T*=alpha;
+        if(simanMethod=="exp")
+            T*=alpha;
+        else
+        if(simanMethod=="log")
+        {
+            T = T0/(1.0+log(1.0+k));
+        }
+        else
+        if(simanMethod=="linear")
+        {
+            T = T0/(1+k);
+        }
+        else
+        if(simanMethod=="quad")
+        {
+            T=T0/(1+k*k);
+        }
         printf("SIMAN. T=%lf BEST=%lf \n",T,bestScore);
+       k++;
     }
     cout<<"Best interval found: \n";
     for(int i=0;i<dim;i++){
@@ -600,6 +625,7 @@ void    SimanBounds::Solve()
         cout<<"param "<<i<<" in ["<<bestI[2*i]<<","<<bestI[2*i+1]<<"]\n";
     }
     cout<<"score="<<bestScore<<"\n";
+
 }
 
 void    SimanBounds::getBounds(Data &xl,Data &xr)
@@ -619,7 +645,7 @@ void    MlpProblem::findBoundsWithSiman(Data &xl,Data &xr)
     Data xl_old = xl;
     Data xr_old = xr;
     SimanBounds b(this,xl,xr,123+run++);
-
+    b.setSimanMethod(getParam("mlp_simanmethod").getValue());
     b.Solve();
     b.getBounds(xl,xr);
     for(int i=0;i<xl.size();i++)

@@ -3390,7 +3390,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3414,7 +3414,7 @@ name "tab:settings"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="13" columns="3">
+<lyxtabular version="3" rows="14" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -3809,7 +3809,7 @@ Selection rate
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3821,7 +3821,7 @@ Selection rate
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3830,11 +3830,43 @@ Mutation rate
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 0.05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $z$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mutation parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.0
 \end_layout
 
 \end_inset
@@ -9737,6 +9769,78 @@ name "fig:stat_regre_methods"
 
 \end_inset
 
+
+\end_layout
+
+\end_inset
+
+The Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:time"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ reports mean runtime as a function of the neural network’s number of nodes,
+ comparing the Genetic Algorithm against the proposed method.
+ Both runtimes increase with network size,
+ but the proposed method consistently exhibits a much higher computational cost.
+ Specifically,
+ for 2 nodes the Genetic Algorithm requires 11.34 on average versus 213.21 for the proposed method;
+ for 5 nodes the corresponding values are 29.18 versus 420.43,
+ and for 10 nodes they are 57.95 versus 790.35.
+ The gap remains large in all cases,
+ and the relative overhead decreases only slightly as network size grows,
+ without changing the overall conclusion.
+ Overall,
+ the results document a clear trade-off:
+ the proposed method is substantially more time- consuming,
+ and its use is therefore justified when improvements in accuracy or generalization outweigh the additional computational burden.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename times.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average execution time comparison between the genetic algorithm and the proposed method for different number of weights for the neural network.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:time"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -16317,11 +16421,23 @@ nolink "false"
 
 \end_inset
 
- indicates that varying the Iw parameter does not produce statistically significant differences on the regression datasets.
- The overall Friedman test reports p=0.3050,
+ indicates that varying the 
+\begin_inset Formula $I_{w}$
+\end_inset
+
+parameter does not produce statistically significant differences on the regression datasets.
+ The overall Friedman test reports 
+\begin_inset Formula $p=0.3050$
+\end_inset
+
+,
  therefore the null hypothesis of equivalent settings is not rejected under the standard 0.05 threshold.
  The pairwise comparisons are clearly non-significant as well,
- with p=0.9856 for 
+ with 
+\begin_inset Formula $p=0.9856$
+\end_inset
+
+ for 
 \begin_inset Formula $I_{w}$
 \end_inset
 
@@ -16329,7 +16445,11 @@ nolink "false"
 \begin_inset Formula $I_{w}$
 \end_inset
 
-=20 and p=0.7928 for 
+=20 and 
+\begin_inset Formula $p=0.7928$
+\end_inset
+
+ for 
 \begin_inset Formula $I_{w}$
 \end_inset
 
@@ -16398,6 +16518,76 @@ name "fig:stat_regre_iw"
 
 \begin_layout Subsection
 Experiments with initialization methods
+\end_layout
+
+\begin_layout Standard
+Additionally,
+ three method from the related literature were used as the initialization methods for the weights of the neural network:
+\end_layout
+
+\begin_layout Enumerate
+The Xavier method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "initXavier"
+literal "false"
+
+\end_inset
+
+,
+ which sets the variance of the weights based on both the number of input and output connections in the hidden layer.
+\end_layout
+
+\begin_layout Enumerate
+The HE method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "initXE"
+literal "false"
+
+\end_inset
+
+,
+ which scales the weight variance according to the number of input connections
+\end_layout
+
+\begin_layout Enumerate
+The LeCun method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "initLECUN"
+literal "false"
+
+\end_inset
+
+,
+ that sets the weight variance inversely proportional to the number of input connections.
+\end_layout
+
+\begin_layout Standard
+These weight initialization techniques were used by a genetic algorithm to train the artificial neural network and the results for the classification datasets are outlined in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expClassInit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and for the regression datasets in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expRegressionInit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -18925,7 +19115,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -20653,9 +20843,20 @@ The sensitivity studies suggest that variations of the
 
 \begin_layout Standard
 Several directions follow naturally for future work.
- First,
- the generality of adaptive weight bounds should be assessed under alternative final optimizers and across a broader set of architectures,
- including deeper networks and different activation functions.
+ Firstly,
+ the proposed technique could be applied to other cases of artificial neural networks such as,
+ for example,
+ deep neural networks,
+ although the required execution time would be quite long due to the complexity and number of parameters in these machine learning models.
+ One possible solution to this problem could be the incorporation of parallel versions of the Simulated Annealing algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "psa1,psa2"
+literal "false"
+
+\end_inset
+
+ that can take advantage of the modern computational environments.
  Second,
  the fitness definition used during the Simulated Annealing phase should be redesigned to incorporate explicit generalization criteria,
  such as validation error or robustness to noise,
@@ -23320,6 +23521,122 @@ Zhu,
  Tsinghua Science and Technology,
  11(4),
  307-312.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "initXavier"
+literal "false"
+
+\end_inset
+
+Glorot,
+ X.,
+ & Bengio,
+ Y.
+ (2010).
+ Understanding the difficulty of training deep feedforward neural networks.
+ In Proceedings of the Thirteenth International Conference on Artificial Intelligence and Statistics (AISTATS),
+  Vol.
+ 9,
+ pp.
+ 249–256.
+ PMLR.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "initXE"
+literal "false"
+
+\end_inset
+
+He,
+ K.,
+ Zhang,
+ X.,
+ Ren,
+ S.,
+ & Sun,
+ J.
+ (2015).
+ Delving deep into rectifiers:
+ Surpassing human-level performance on ImageNet classification.
+ In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR),
+ pp.
+ 1026–1034.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "initLECUN"
+literal "false"
+
+\end_inset
+
+LeCun,
+ Y.,
+ Bottou,
+ L.,
+ Bengio,
+ Y.,
+ & Haffner,
+ P.
+ (1998).
+ Gradient-based learning applied to document recognition.
+ Proceedings of the IEEE,
+ 86(11),
+ 2278–2324.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2015)"
+key "psa1"
+literal "false"
+
+\end_inset
+
+Lou,
+ Z.,
+ & Reinitz,
+ J.
+ (2016).
+ Parallel simulated annealing using an adaptive resampling interval.
+ Parallel computing,
+ 53,
+ 23-31.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2015)"
+key "psa2"
+literal "false"
+
+\end_inset
+
+Ye,
+ Z.,
+ Xiao,
+ K.,
+ Ge,
+ Y.,
+ & Deng,
+ Y.
+ (2018).
+ Applying simulated annealing and parallel computing to the mobile sequential recommendation.
+ IEEE Transactions on Knowledge and Data Engineering,
+ 31(2),
+ 243-256.
 \end_layout
 
 \begin_layout Standard
