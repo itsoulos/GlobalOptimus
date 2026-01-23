@@ -28,7 +28,7 @@ if [ $MODEL = "mlp" ]; then
 #mlp_balanceclass:	Enable or disable the usage of classification error as the training error.
 #mlp_usesimanbound:	Enable or disable the incorporation of siman for bound the weights of the mlp.
 #mlp_simanmethod:       The cooling method for siman. Values: exp, log, linear, quad.
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=yes --mlp_simanmethod=log"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=yes --mlp_simanmethod=linear"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp

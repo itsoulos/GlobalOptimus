@@ -582,6 +582,7 @@ void    SimanBounds::Solve()
     Interval bestI=I;
     double bestScore=score;
     int k=1;
+    if(simanMethod=="linear") T_end=0.02;
     while(T>T_end){
         for(int it=0;it<neps;it++){
             Interval J = neighbor(I, 0.01, GLOBAL_L, GLOBAL_U, rng);
