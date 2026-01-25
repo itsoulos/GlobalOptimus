@@ -7557,6 +7557,149 @@ name "fig:stat_class_methods"
 \end_layout
 
 \begin_layout Standard
+Also,
+ a comparison between the genetic algorithm and the proposed one for different number of processing nodes is outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:networkSize"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ that clearly demonstrates the potential of the current work.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename best.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Genetic algorithm versus the proposed method across network size.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:networkSize"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-estimated-intervals"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ the computed parameter intervals of the neural network are reported as left and right bounds (L and R) obtained by the Simulated Annealing bound-optimization stage,
+ for three datasets with different dimensionality (WINE:
+ 150 parameters,
+ WDBC:
+ 320,
+ DERMATOLOGY:
+ 360).
+ The visualization highlights that the bounds do not change uniformly;
+ instead,
+ they vary substantially across parameters and across datasets,
+ indicating that the proposed stage does not enforce a fixed range but identifies problem-dependent search regions.
+ Most intervals cross zero and remain centered close to 0,
+ while their widths can become very large and exhibit occasional extreme expansions,
+ particularly for DERMATOLOGY where a subset of parameters attains markedly wider intervals.
+ As shown in Figure [bounds_sa.png],
+ this variability supports the claim that the resulting bounds adapt to each dataset’s structure and scale,
+ thereby providing a tailored search space for the subsequent training phase.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename bounds_sa.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The estimated intervals for the neural network parameters from the proposed Simulated Annealing for three datasets.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-estimated-intervals"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In the regression part of Table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -9778,13 +9921,21 @@ nolink "false"
 \begin_layout Standard
 The pairwise outcomes reveal a more mixed pattern than in the classification case,
  which is expected in regression settings where absolute-error scales can vary substantially across datasets.
- The strongest evidence of a difference in favor of the proposed approach is observed against BFGS (p=
-\begin_inset Formula $3.35×10^{-4}$
+ The strongest evidence of a difference in favor of the proposed approach is observed against BFGS (
+\begin_inset Formula $p=3.35×10^{-4}$
 \end_inset
 
 ),
- which falls in the extremely significant range (p<0.001).
- The comparison with GENETIC yields p=0.0113,
+ which falls in the extremely significant range (
+\begin_inset Formula $p<0.001$
+\end_inset
+
+).
+ The comparison with GENETIC yields 
+\begin_inset Formula $p=0.0113$
+\end_inset
+
+,
  i.e.,
  significant at the 0.05 level but not highly significant,
  implying a reliable yet weaker separation.
@@ -10075,10 +10226,10 @@ nolink "false"
 
 =0.01.
  The absolute gain relative to 
-\begin_inset Formula $p_{c}$
+\begin_inset Formula $p_{c}=0.01$
 \end_inset
 
-=0.01 is only 0.24 percentage points (approximately a 1.2% relative reduction),
+ is only 0.24 percentage points (approximately a 1.2% relative reduction),
  which suggests that the method’s performance is not highly sensitive to moderate changes in 
 \begin_inset Formula $p_{c}$
 \end_inset
@@ -21327,6 +21478,45 @@ nolink "false"
 \end_layout
 
 \begin_layout Standard
+In 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expClassCool"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ the classification error rate (%) is reported for 34 datasets under four cooling schedules (EXP,
+ LOG,
+ LINEAR,
+ QUAD) within the proposed model,
+ where lower values indicate better performance.
+ In terms of average error,
+ EXP provides the best overall result (20.57%),
+ while LOG (20.88%) and LINEAR (20.87%) are essentially tied and very close,
+ and QUAD yields the highest average (21.01%).
+ Although the average differences are small,
+ the best schedule can be dataset-dependent,
+ and some datasets exhibit higher sensitivity to the cooling choice (e.g.,
+ SEGMENT and WINE).
+ As shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statClassCooling"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ there is no statistical significance according to the p-values.
+ 
 \begin_inset Float table
 placement H
 alignment document
@@ -23433,6 +23623,102 @@ AVERAGE
 \end_inset
 
 
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat_tbl10.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the obtained results on the classification datasets using the proposed method and a series of cooling strategies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statClassCooling"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:expRegressionCool"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ the reported values are the errors (lower is better) on 21 regression datasets,
+ obtained by using four cooling schedules (EXP,
+ LOG,
+ LINEAR,
+ QUAD) within the proposed model.
+ If we focus on the overall picture,
+ LOG has the lowest average error (5.16),
+ EXP and LINEAR are essentially the same (5.33),
+ and QUAD is slightly higher (5.42).
+ In other words,
+ the average differences are modest and do not suggest a single schedule that clearly dominates everywhere.
+\end_layout
+
+\begin_layout Standard
+At the dataset level,
+ however,
+ the picture is less uniform.
+ There are datasets where the cooling choice seems to matter more such as BL,
+ HOUSING,
+ FRIEDMAN,
+ and STOCK because the gaps between schedules become noticeably larger.
+ In contrast,
+ datasets like CONCRETE,
+ HO,
+ and LASER remain almost unchanged across schedules,
+ indicating that performance there is largely insensitive to how temperature is decreased.
+ If a single,
+ simple default must be used without per-dataset tuning,
+ LOG is the most reasonable choice because it yields the best average.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:statRegressionCooling"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ indicates that the p-values do not support statistically significant differences among the four cooling schedules.
 \begin_inset Float table
 placement H
 alignment document
@@ -24791,6 +25077,50 @@ AVERAGE
 
 \end_inset
 
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename stat_tbl11.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the obtained results on the regression datasets using the proposed method and a series of cooling strategies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:statRegressionCooling"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
