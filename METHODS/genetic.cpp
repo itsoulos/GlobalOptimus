@@ -97,6 +97,9 @@ bool    Genetic::terminated()
 {
     double besty;
     besty = fitnessArray[0];
+    //FILE *fp =fopen("genetic.txt","a");
+    //fprintf(fp,"%d %lf \n",generation,besty);
+    //fclose(fp);
     if(generation>=maxGenerations) return true;
     if(terminationMethod=="doublebox")
         return doubleBox.terminate(besty);

@@ -649,10 +649,13 @@ void    MlpProblem::findBoundsWithSiman(Data &xl,Data &xr)
     b.setSimanMethod(getParam("mlp_simanmethod").getValue());
     b.Solve();
     b.getBounds(xl,xr);
+    //FILE *fp=fopen("bounds.txt","w");
     for(int i=0;i<xl.size();i++)
     {
         printf("Bounds[%d]=[%lf=>%lf,%lf=>%lf]\n",i,xl_old[i],xl[i],xr_old[i],xr[i]);
+      //  fprintf(fp,"%lf,%lf\n",xl[i],xr[i]);
     }
+    //fclose(fp);
 }
 
 double  MlpProblem::getViolationPercentInBounds(double limit,Data &lb,Data &rb)

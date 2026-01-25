@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -28,7 +28,7 @@ if [ $MODEL = "mlp" ]; then
 #mlp_balanceclass:	Enable or disable the usage of classification error as the training error.
 #mlp_usesimanbound:	Enable or disable the incorporation of siman for bound the weights of the mlp.
 #mlp_simanmethod:       The cooling method for siman. Values: exp, log, linear, quad.
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=yes --mlp_simanmethod=linear"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=uniform --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=yes --mlp_simanmethod=exp"
 elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
@@ -141,7 +141,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
+  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=500 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples
@@ -205,4 +205,4 @@ if [ -z "$PROBLEM" ]; then
   exit
 fi
 
-./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes
+./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=1 --opt_debug=yes

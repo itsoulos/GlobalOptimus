@@ -1068,7 +1068,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1161,7 +1161,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -1331,6 +1331,44 @@ End Function
 \end_layout
 
 \begin_layout Standard
+As can be observed from both the equation of the sigmoid equation and the corresponding figure,
+ when the parameter 
+\begin_inset Formula $x$
+\end_inset
+
+ increases,
+ the function rapidly approaches the value 1.
+ Conversely,
+ as 
+\begin_inset Formula $x$
+\end_inset
+
+ decreases,
+ the function takes values that are very close to 0.
+ This behavior indicates that the function quickly loses its generalization capability,
+ since significant variations in the parameter 
+\begin_inset Formula $x$
+\end_inset
+
+ no longer lead to proportional changes in the output of the sigmoid function.
+ For this reason,
+ the quantity 
+\begin_inset Formula $\mbox{calculateB}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+\end_inset
+
+ was used to quantify this effect.
+ It can be employed to prevent overfitting by constraining the neural network parameters within intervals that depend on the specific problem at hand.
+ The user-defined parameter 
+\begin_inset Formula $a$
+\end_inset
+
+serves as an upper bound for the input of the sigmoid unit.
+ When this bound is exceeded,
+ the neural network is likely to exhibit reduced generalization ability,
+ as the sigmoid output remains nearly constant regardless of further changes in the input.
+\end_layout
+
+\begin_layout Standard
 The proposed Simulated Annealing variant produces randomly intervals for the parameters of the neural network.
  Each interval is evaluated for its efficiency using the procedure presented in Algorithm 
 \begin_inset CommandInset ref
@@ -1369,7 +1407,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -2095,7 +2133,20 @@ for the parameters of the artificial neural network,
  This optimization minimizes the error function and any optimization method could be used.
  In this work,
  the Genetic Algorithm method was chosen to be used.
- The main steps of this genetic algorithm are provided subsequently:
+ The Genetic Algorithm method was preferred over other local optimization techniques,
+ such as the Adam method,
+ because it is a global optimization method and aims to find the global minimum of an objective function with a greater guarantee for finding the optimal set of values \SpecialChar allowbreak
+\SpecialChar allowbreak
+for the weights of the artificial neural network.
+ Furthermore,
+ it has been used effectively in the past for training artificial neural networks.
+ Of course,
+ any other global optimization method could be used in place of Genetic Algorithms.
+
+\series bold
+ 
+\series default
+The main steps of this genetic algorithm are provided subsequently:
  
 \end_layout
 
@@ -2992,7 +3043,7 @@ Spiral
 \begin_layout Enumerate
 
 \series bold
-(OK)Student
+Student
 \series default
 ,
  which is a dataset regarding experiments in schools 
@@ -3390,7 +3441,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3414,7 +3465,7 @@ name "tab:settings"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="14" columns="3">
+<lyxtabular version="3" rows="15" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -3475,6 +3526,38 @@ Number of weights
 
 \begin_layout Plain Layout
 10
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Scale parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10.0
 \end_layout
 
 \end_inset
@@ -9774,6 +9857,70 @@ name "fig:stat_regre_methods"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Standard
+Also,
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:An-indicative-comparison"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ an indicative plot is presented for the comparison of the training process between the genetic algorithm and the proposed method for the regression dataset MORTGAGE.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename comparison.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+An indicative comparison of the training process between the genetic algorithm and the proposed method for the MORTGAGE dataset.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:An-indicative-comparison"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -21185,7 +21332,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -23291,7 +23438,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -24877,27 +25024,17 @@ literal "false"
 
 \end_inset
 
-Abiodun,
- O.
- I.,
- Jantan,
- A.,
- Omolara,
- A.
- E.,
- Dada,
- K.
- V.,
- Mohamed,
- N.
- A.,
- & Arshad,
- H.
- (2018).
- State-of-the-art in artificial neural network applications:
- A survey.
- Heliyon,
- 4(11).
+Müller,
+ B.,
+ Reinhardt,
+ J.,
+ & Strickland,
+ M.
+ T.
+ (2012).
+ Neural networks:
+ an introduction.
+ Springer Science & Business Media.
 \end_layout
 
 \begin_layout Bibliography
@@ -24908,20 +25045,11 @@ literal "true"
 
 \end_inset
 
-Suryadevara,
- S.,
- & Yanamala,
- A.
+Gurney,
  K.
- Y.
- (2021).
- A Comprehensive Overview of Artificial Neural Networks:
- Evolution,
- Architectures,
- and Applications.
- Revista de Inteligencia Artificial en Medicina,
- 12(1),
- 51-76.
+ (2018).
+ An introduction to neural networks.
+ CRC press.
 \end_layout
 
 \begin_layout Bibliography
@@ -25031,22 +25159,20 @@ literal "false"
 
 \end_inset
 
-M.
- Egmont-Petersen,
- D.
- de Ridder,
- H.
- Handels,
- Image processing with neural networks—
-a review,
- Pattern Recognition 
-\series bold
-35
-\series default
-,
- pp.
- 2279-2301,
- 2002.
+Pandelea,
+ A.
+ E.,
+ Budescu,
+ M.,
+ & Covatariu,
+ G.
+ (2015).
+ Image processing using artificial neural networks.
+ Buletinul Institutului Politehnic din lasi.
+ Sectia Constructii,
+ Arhitectura,
+ 61(4),
+ 9.
 \end_layout
 
 \begin_layout Bibliography
@@ -25057,16 +25183,14 @@ literal "false"
 
 \end_inset
 
-G.Peter Zhang,
- Time series forecasting using a hybrid ARIMA and neural network model,
- Neurocomputing 
-\series bold
-50
-\series default
-,
- pp.
- 159-175,
- 2003.
+Tealab,
+ A.
+ (2018).
+ Time series forecasting using artificial neural networks methodologies:
+ A systematic review.
+ Future Computing and Informatics Journal,
+ 3(2),
+ 334-340.
 \end_layout
 
 \begin_layout Bibliography
@@ -25666,18 +25790,28 @@ literal "false"
 
 \end_inset
 
-K-Su Oh,
- K.
- Jung,
- GPU implementation of neural networks,
- Pattern Recognition 
-\series bold
-37
-\series default
-,
- pp.
- 1311-1314,
- 2004.
+Wang,
+ L.,
+ Ye,
+ J.,
+ Zhao,
+ Y.,
+ Wu,
+ W.,
+ Li,
+ A.,
+ Song,
+ S.
+ L.,
+ ...
+ & Kraska,
+ T.
+ (2018,
+ February).
+ Superneurons:
+ Dynamic GPU memory management for training deep neural networks.
+ In Proceedings of the 23rd ACM SIGPLAN symposium on principles and practice of parallel programming (pp.
+ 41-53).
 \end_layout
 
 \begin_layout Bibliography
@@ -25714,14 +25848,27 @@ literal "false"
 
 \end_inset
 
-S.J.
- Nowlan and G.E.
- Hinton,
- Simplifying neural networks by soft weight sharing,
- Neural Computation 4,
- pp.
- 473-493,
- 1992.
+Kim,
+ J.
+ K.,
+ Lee,
+ M.
+ Y.,
+ Kim,
+ J.
+ Y.,
+ Kim,
+ B.
+ J.,
+ & Lee,
+ J.
+ H.
+ (2016,
+ October).
+ An efficient pruning and weight sharing method for neural network.
+ In 2016 IEEE International Conference on Consumer Electronics-Asia (ICCE-Asia) (pp.
+ 1-2).
+ IEEE.
 \end_layout
 
 \begin_layout Bibliography
@@ -25835,20 +25982,23 @@ literal "false"
 
 \end_inset
 
-N.
- K.
- Treadgold and T.
+Tessier,
+ H.,
+ Gripon,
+ V.,
+ Léonardon,
+ M.,
+ Arzel,
+ M.,
+ Hannagan,
+ T.,
+ & Bertrand,
  D.
- Gedeon,
- Simulated annealing and weight decay in adaptive learning:
- the SARPROP algorithm,IEEE Transactions on Neural Networks 
-\series bold
-9
-\series default
-,
- pp.
- 662-668,
- 1998.
+ (2022).
+ Rethinking weight decay for efficient neural network pruning.
+ Journal of Imaging,
+ 8(3),
+ 64.
 \end_layout
 
 \begin_layout Bibliography
