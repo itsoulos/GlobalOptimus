@@ -327,10 +327,11 @@ Artificial neural networks are reliable machine learning models that have been a
  in the phenomenon of overfitting,
  where although the training error achieves low values,
  the artificial neural network exhibits low performance in the corresponding test set.
- The present work proposes the introduction of an additional stage in the training of artificial neural networks before the application of the optimization method,
- in which stage a method based on simulated annealing is used to effectively identify the optimal value interval for the parameters of the artificial neural network.
- Subsequently,
- the optimization method will adjust the parameters of the artificial neural network within the optimal value interval of the first stage.
+ To address this limitation,
+ this work proposes a novel two-stage training approach in which a simulated annealing (SA)–based preprocessing stage is employed to automatically identify optimal parameter value intervals before the application of any optimization method to train the neural network.
+ Unlike similar approaches that rely on fixed or heuristically selected parameter bounds,
+ the proposed pre-processing technique explores the parameter space probabilistically,
+ guided by a temperature-controlled acceptance mechanism that balances global exploration and local refinement.
  The proposed method has been successfully applied to a wide range of classification and regression problems and comparative results are presented in detail in the present work.
 \end_layout
 
@@ -856,6 +857,64 @@ which can be expanded or contracted in an attempt to avoid the phenomenon of ove
 \end_layout
 
 \begin_layout Standard
+Determining appropriate initial parameter constraints is a major issue in neural network training because the choice of initial values strongly influences optimization dynamics,
+ convergence speed,
+ and final model performance.
+ Poor initialization—
+such as weights that are too large or too small—
+can lead to numerical and optimization issues like vanishing or exploding gradients,
+ which hinder effective gradient-based learning,
+ especially in deep architectures.
+ As a result,
+ training may become unstable,
+ excessively slow,
+ or fail altogether.
+ There is no method that adaptively optimizes weight constraints based on specific data characteristics before the main training.
+\end_layout
+
+\begin_layout Standard
+There are several initialization methods from the related literature,
+ such as sampling weights from a standard normal or uniform distribution without accounting the size of the neural networks,
+ can lead to vanishing or exploding gradients,
+ particularly in deep architectures,
+ severely impairing convergence 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "naiveInit"
+literal "false"
+
+\end_inset
+
+.
+ Similarly,
+ the Xavier initialization method defines the variance of the initial weights based on the number of input and output units 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "glorotInit"
+literal "false"
+
+\end_inset
+
+.
+ While effective for sigmoid and tanh activations,
+ this approach has been shown to perform poorly with rectified linear units.
+ In the same direction of research,
+ He initialization extends the previous method by adapting the variance scaling,
+ improving training stability under specific assumptions regarding activation sparsity 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "heInit"
+literal "false"
+
+\end_inset
+
+.
+ However,
+ its effectiveness remains dependent on the network architecture and activation behavior,
+ and inappropriate parameter constraints can still degrade optimization.
+\end_layout
+
+\begin_layout Standard
 The rest of this manuscript is organized as follows:
  the used dataset and the incorporated methods used in the conducted experiments are outlined in section 
 \begin_inset CommandInset ref
@@ -1073,7 +1132,7 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename sig.eps
+	filename sigmoid.png
 	scale 75
 
 \end_inset
@@ -25142,86 +25201,110 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
-The proposed training procedure improves generalization by introducing,
- prior to the main optimization,
- an additional stage that identifies an appropriate range of values for the network weights.
- This stage is based on a Simulated Annealing variant that adjusts the admissible weight bounds in order to reduce the likelihood of getting trapped in local minima and to limit overfitting.
- The final training is then performed inside these bounds using a genetic optimization stage followed by a local BFGS refinement.
+The experimental evidence indicates that the proposed method should be interpreted as a training pipeline rather than as a minor optimizer tweak.
+ Its key design choice is a preliminary bound-selection stage that constrains the admissible weight ranges before the main optimization.
+ This stage is implemented via a Simulated Annealing variant and is motivated by limiting regimes in which sigmoid units saturate,
+ since large-magnitude inputs can yield near-constant outputs and degrade effective learning dynamics and generalization.
+ Final training is then carried out inside the selected bounds through a Genetic optimization stage followed by local refinement with BFGS,
+ so the intended benefit arises from combining a restricted search domain with a global stochastic search and a local convergence phase.
+ 
 \end_layout
 
 \begin_layout Standard
-In the classification experiments,
- the proposed machine-learning model achieves the best mean performance,
- with an average classification error of 20.57,
- and with clear separation from all competing approaches.
- The advantage is not confined to isolated datasets,
- but emerges as a consistent pattern across a large portion of the benchmark suite,
- while also being accompanied by reduced dispersion of errors,
- which is compatible with more stable behavior on heterogeneous classification tasks.
+On classification benchmarks,
+ the reported results are consistent with a systematic advantage.
+ The proposed model achieves the best aggregate performance with an average classification error of 20.57%,
+ while the closest competing average is GENETIC at 26.55%,
+ corresponding to a 5.97 percentage-point absolute gain (approximately 22.5% relative error reduction).
+ The advantage is also reported to remain sizable against the remaining baselines and is accompanied by the lowest dispersion of errors (standard deviation ≈ 14.31),
+ which is compatible with more stable behavior across heterogeneous classification tasks.
+ At the dataset level,
+ PROPOSED attains the best result on 23 of 34 datasets and ranks within the top two on 31/34 datasets,
+ supporting that the superiority is not driven by a small subset of cases.
+ 
 \end_layout
 
 \begin_layout Standard
-The statistical analysis supports these observations.
- For classification,
- the overall Friedman test reports p=
-\begin_inset Formula $2.89×10^{-11}$
+The statistical analysis for classification further supports that these differences are unlikely to be attributable to random variation.
+ The overall Friedman test yields 
+\begin_inset Formula $p=2.89\times10^{-11}$
 \end_inset
 
 ,
- thus very strongly rejecting the hypothesis of equivalent performance across methods.
- The post-hoc comparisons indicate statistically significant differences in favor of the proposed machine-learning model against all main baselines,
- with particularly strong evidence against ADAM,
- BFGS,
- and PRUNE,
- and highly significant differences against GENETIC and RBF.
+ strongly rejecting the hypothesis of equivalent performance across methods.
+ Post-hoc comparisons against PROPOSED are significant for all main baselines,
+ with extremely small p-values against ADAM and BFGS,
+ a highly decisive result against PRUNE,
+ and still highly significant differences against GENETIC and RBF (p-values below 
+\begin_inset Formula $0.01$
+\end_inset
+
+).
+ 
 \end_layout
 
 \begin_layout Standard
-In the regression experiments,
- the proposed machine-learning model attains the lowest mean absolute error,
- equal to 5.33,
- and the overall Friedman test remains significant with p=
-\begin_inset Formula $1.55×10^{-4}$
+For regression,
+ the overall picture is positive but requires more conservative phrasing.
+ PROPOSED attains the lowest mean absolute error (MAE = 5.33) and the overall Friedman test remains significant 
+\begin_inset Formula $\left(p=1.55\times10^{-4}\right)$
 \end_inset
 
 ,
- indicating that genuine performance differences exist.
+ indicating that genuine performance differences exist across the regression suite.
  However,
- the pairwise picture is more nuanced.
- The strongest statistical separation is observed primarily against BFGS with p=
-\begin_inset Formula $3.35×10^{-4}$
+ pairwise evidence is more nuanced:
+ the strongest statistically supported advantage is observed primarily against BFGS 
+\begin_inset Formula $\left(p=3.35\times10^{-4}\right)$
 \end_inset
 
-,
- and a weaker but still significant difference is observed against GENETIC with p=0.0113,
- whereas differences against ADAM,
+ and more weakly (but still significantly) against GENETIC (
+\begin_inset Formula $p=0.0113$
+\end_inset
+
+),
+ whereas differences relative to ADAM,
  RBF,
  and PRUNE are not supported at the 0.05 level.
+ In addition,
+ regression errors span a wide dynamic range and can be heavy-tailed,
+ so robustness and variability across datasets materially affect the interpretation of mean outcomes.
 \end_layout
 
 \begin_layout Standard
-The sensitivity studies suggest that variations of the 
-\begin_inset Formula $p_{c}$
-\end_inset
-
- parameter do not yield measurable statistical differences,
- both for classification and regression,
- indicating that this setting is not critical within the tested range.
+Sensitivity experiments help identify which settings appear critical under the tested conditions.
+ Variations of pc are reported not to yield measurable statistical differences (for both classification and regression),
+ suggesting that pc is not a critical parameter within the explored range.
  In contrast,
- the 
-\begin_inset Formula $I_{w}$
+ Iw shows a marginal overall effect in classification (overall 
+\begin_inset Formula $p=0.0423$
 \end_inset
 
- parameter in classification exhibits a marginal overall effect,
- with an overall p=0.0423,
- but without clear confirmation through simple pairwise comparisons.
- For regression,
+),
+ but without strong pairwise confirmation,
+ implying modest and distributed differences rather than a clear,
+ sharply separated setting.
+ This supports the interpretation that the dominant performance driver is the bound-selection mechanism and the overall pipeline structure,
+ rather than fine tuning of auxiliary parameters.
+\end_layout
+
+\begin_layout Standard
+A central and practically relevant trade-off is computational cost.
+ The Simulated Annealing bound-selection phase requires repeated evaluations and may dominate runtime.
+ This is directly reflected in the reported runtime comparison as a function of network size:
+ for 2 nodes,
+ GA averages 11.34 versus 213.21 for PROPOSED,
+ for 5 nodes,
+ 29.18 versus 420.43,
+ and for 10 nodes,
+ 57.95 versus 790.35.
+ Consequently,
+ the method is best positioned for settings where accuracy and robustness gains justify higher offline computation,
+ rather than as a default choice under strict training-time constraints.
+ Finally,
+ the current validation targets sigmoid feed-forward networks and a saturation-driven rationale,
+ it has not yet been demonstrated that the same gains transfer to deep networks or truly high-dimensional parameterizations without additional evaluation and potentially redesigning the underlying bound-selection criterion.
  
-\begin_inset Formula $I_{w}$
-\end_inset
-
- shows no statistically detectable impact,
- with an overall p=0.3050 and non-significant pairwise tests.
 \end_layout
 
 \begin_layout Standard
@@ -26438,6 +26521,66 @@ Siebel,
  International Journal of Hybrid Intelligent Systems,
  4(3),
  171-183.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "naiveInit"
+literal "false"
+
+\end_inset
+
+Bengio,
+ Y.,
+ Simard,
+ P.,
+ & Frasconi,
+ P.
+ (1994).
+ Learning long-term dependencies with gradient descent is difficult.
+ IEEE Transactions on Neural Networks,
+ 5(2),
+ 157–166.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "glorotInit"
+literal "false"
+
+\end_inset
+
+Glorot,
+ X.,
+ & Bengio,
+ Y.
+ (2010).
+ Understanding the difficulty of training deep feedforward neural networks.
+ Proceedings of the 13th International Conference on Artificial Intelligence and Statistics (AISTATS).
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "heInit"
+literal "false"
+
+\end_inset
+
+He,
+ K.,
+ Zhang,
+ X.,
+ Ren,
+ S.,
+ & Sun,
+ J.
+ (2015).
+ Delving deep into rectifiers:
+ Surpassing human-level performance on ImageNet classification.
+ ICCV.
 \end_layout
 
 \begin_layout Bibliography
