@@ -48,16 +48,18 @@ upon to solve. This situation usually results in artificial neural
 networks becoming trapped in local minima of the error function or,
 even worse, in the phenomenon of overfitting, where although the training
 error achieves low values, the artificial neural network exhibits
-low performance in the corresponding test set. The present work proposes
-the introduction of an additional stage in the training of artificial
-neural networks before the application of the optimization method,
-in which stage a method based on simulated annealing is used to effectively
-identify the optimal value interval for the parameters of the artificial
-neural network. Subsequently, the optimization method will adjust
-the parameters of the artificial neural network within the optimal
-value interval of the first stage. The proposed method has been successfully
-applied to a wide range of classification and regression problems
-and comparative results are presented in detail in the present work.}
+low performance in the corresponding test set. To address this limitation,
+this work proposes a novel two-stage training approach in which a
+simulated annealing (SA)--based preprocessing stage is employed to
+automatically identify optimal parameter value intervals before the
+application of any optimization method to train the neural network.
+Unlike similar approaches that rely on fixed or heuristically selected
+parameter bounds, the proposed pre-processing technique explores the
+parameter space probabilistically, guided by a temperature-controlled
+acceptance mechanism that balances global exploration and local refinement.
+The proposed method has been successfully applied to a wide range
+of classification and regression problems and comparative results
+are presented in detail in the present work.}
 
 
 \keyword{Neural networks; Simulated Annealing; Optimization methods}
@@ -235,9 +237,9 @@ sigmoid function, expressed as:
 The total number of parameters for neural network can be calculated
 as $n=(d+2)H$, using the equation \ref{eq:nn}.\textbf{ }Moreover,
 a series of alternative activation functions has been proposed in
-the related literature, such as the tanh expressed as:
+the related literature, such as the tanh expressed with equation \ref{eq:tanh}.
 \begin{equation}
-\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}
+\mbox{tanh}\left(x\right)=\frac{e^{2x}+1}{e^{2x}-1}\label{eq:tanh}
 \end{equation}
 Additionally, Guarnieri et al proposed the incorporation of an adaptive
 spline function as the activation function\citep{activation_spline}.
@@ -277,6 +279,13 @@ parallel computing approaches in recent years has led to numerous
 studies focusing on the training of artificial neural networks using
 these methods \citep{nn_gpu1,nn_gpu2}.
 
+Furthermore, Artificial Intelligence (AI) has been incorporated successfully
+in metahumanistics, a transdisciplinary field that examines the co-evolution
+of human cognition, culture, and technology beyond traditional human-centered
+frameworks. Machine learning models capable of language generation,
+image synthesis, and pattern discovery challenge classical distinctions
+between human and machine authorship, interpretation, and agency \citep{aimeta1,aimeta2}.
+
 Although, the previously mentioned method face a series of numeric
 problems, such as trapping in local minima of the error function provided
 in equation \ref{eq:eq1} or sometimes are prone to the issue of overifitting.
@@ -307,6 +316,32 @@ can be expanded or contracted in an attempt to avoid the phenomenon
 of overfitting. After the end of the first phase, the artificial neural
 network is trained within the optimal value interval identified in
 the first phase using any optimization technique.
+
+Determining appropriate initial parameter constraints is a major issue
+in neural network training because the choice of initial values strongly
+influences optimization dynamics, convergence speed, and final model
+performance. Poor initialization---such as weights that are too large
+or too small---can lead to numerical and optimization issues like
+vanishing or exploding gradients, which hinder effective gradient-based
+learning, especially in deep architectures. As a result, training
+may become unstable, excessively slow, or fail altogether. There is
+no method that adaptively optimizes weight constraints based on specific
+data characteristics before the main training.
+
+There are several initialization methods from the related literature,
+such as sampling weights from a standard normal or uniform distribution
+without accounting the size of the neural networks, can lead to vanishing
+or exploding gradients, particularly in deep architectures, severely
+impairing convergence \citep{naiveInit}. Similarly, the Xavier initialization
+method defines the variance of the initial weights based on the number
+of input and output units \citep{glorotInit}. While effective for
+sigmoid and tanh activations, this approach has been shown to perform
+poorly with rectified linear units. In the same direction of research,
+He initialization extends the previous method by adapting the variance
+scaling, improving training stability under specific assumptions regarding
+activation sparsity \citep{heInit}. However, its effectiveness remains
+dependent on the network architecture and activation behavior, and
+inappropriate parameter constraints can still degrade optimization.
 
 The rest of this manuscript is organized as follows: the used dataset
 and the incorporated methods used in the conducted experiments are
@@ -360,7 +395,7 @@ outlined in Figure \ref{fig:plotsigma}.
 
 \begin{figure}[H]
 \begin{centering}
-\includegraphics[scale=0.75]{sig}
+\includegraphics[scale=0.75]{sigmoid}
 \par\end{centering}
 \caption{Plot of the sigmoid function $\sigma(x)$ in the range $[-5,5]$.\label{fig:plotsigma}}
 \end{figure}
@@ -406,6 +441,22 @@ and the bound parameter $a,\ a>1$.
 \end{enumerate}
 \textbf{End Function}
 \end{algorithm}
+
+As can be observed from both the equation of the sigmoid equation
+and the corresponding figure, when the parameter $x$ increases, the
+function rapidly approaches the value 1. Conversely, as $x$ decreases,
+the function takes values that are very close to 0. This behavior
+indicates that the function quickly loses its generalization capability,
+since significant variations in the parameter $x$ no longer lead
+to proportional changes in the output of the sigmoid function. For
+this reason, the quantity $\mbox{calculateB}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right),a\right)$
+was used to quantify this effect. It can be employed to prevent overfitting
+by constraining the neural network parameters within intervals that
+depend on the specific problem at hand. The user-defined parameter
+$a$serves as an upper bound for the input of the sigmoid unit. When
+this bound is exceeded, the neural network is likely to exhibit reduced
+generalization ability, as the sigmoid output remains nearly constant
+regardless of further changes in the input.
 
 The proposed Simulated Annealing variant produces randomly intervals
 for the parameters of the neural network. Each interval is evaluated
@@ -522,7 +573,16 @@ the parameters of the artificial neural network, the optimization
 of these parameters within this range is performed. This optimization
 minimizes the error function and any optimization method could be
 used. In this work, the Genetic Algorithm method was chosen to be
-used. The main steps of this genetic algorithm are provided subsequently: 
+used. The Genetic Algorithm method was preferred over other local
+optimization techniques, such as the Adam method, because it is a
+global optimization method and aims to find the global minimum of
+an objective function with a greater guarantee for finding the optimal
+set of values \LyXZeroWidthSpace\LyXZeroWidthSpace for the weights
+of the artificial neural network. Furthermore, it has been used effectively
+in the past for training artificial neural networks. Of course, any
+other global optimization method could be used in place of Genetic
+Algorithms.\textbf{ }The main steps of this genetic algorithm are
+provided subsequently: 
 \begin{enumerate}
 \item \textbf{Initialization step}.
 \begin{enumerate}
@@ -662,8 +722,8 @@ disease \citep{parkinsons1,parkinsons2}.
 \item \textbf{Segment} dataset \citep{segment}.
 \item \textbf{Statheart}, a dataset related to the detection of heart diseases.
 \item \textbf{Spiral}, an artificial dataset with two classes.
-\item \textbf{(OK)Student}, which is a dataset regarding experiments in
-schools \citep{student}.
+\item \textbf{Student}, which is a dataset regarding experiments in schools
+\citep{student}.
 \item \textbf{Transfusion} dataset \citep{transfusion}.
 \item \textbf{Wdbc}, used to detect the breast cancer \citep{wdbc1,wdbc2}.
 \item \textbf{Wine}, a dataset used to detect the quality of wines \citep{wine1,wine2}.
@@ -737,6 +797,8 @@ PARAMETER & MEANING & VALUE\tabularnewline
 \hline 
 $H$ & Number of weights & 10\tabularnewline
 \hline 
+$\lambda$ & Scale parameter & 10.0\tabularnewline
+\hline 
 $I_{w}$ & Weight parameter & 10.0\tabularnewline
 \hline 
 $T_{0}$ & Initial temperature & 3.0\tabularnewline
@@ -766,6 +828,8 @@ $N_{g}$ & Number of allowed generations & 500\tabularnewline
 $p_{s}$ & Selection rate & 0.90\tabularnewline
 \hline 
 $p_{m}$ & Mutation rate & 0.05\tabularnewline
+\hline 
+$z$ & Mutation parameter & 1.0\tabularnewline
 \hline 
 \end{tabular}
 \par\end{centering}
@@ -949,6 +1013,45 @@ against all competing baselines.
 experiments across learning models\label{fig:stat_class_methods}}
 \end{figure}
 
+Also, a comparison between the genetic algorithm and the proposed
+one for different number of processing nodes is outlined in Figure
+\ref{fig:networkSize}, that clearly demonstrates the potential of
+the current work. The numbers in graph indicate average classification
+error for all classification datasets that participate in the experiments.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{best}
+\par\end{centering}
+\caption{Genetic algorithm versus the proposed method across network size.\label{fig:networkSize}}
+
+\end{figure}
+
+In Figure \ref{fig:The-estimated-intervals}, the computed parameter
+intervals of the neural network are reported as left and right bounds
+(L and R) obtained by the Simulated Annealing bound-optimization stage,
+for three datasets with different dimensionality (WINE: 150 parameters,
+WDBC: 320, DERMATOLOGY: 360). The visualization highlights that the
+bounds do not change uniformly; instead, they vary substantially across
+parameters and across datasets, indicating that the proposed stage
+does not enforce a fixed range but identifies problem-dependent search
+regions. Most intervals cross zero and remain centered close to 0,
+while their widths can become very large and exhibit occasional extreme
+expansions, particularly for DERMATOLOGY where a subset of parameters
+attains markedly wider intervals. As shown in Figure {[}bounds\_sa.png{]},
+this variability supports the claim that the resulting bounds adapt
+to each dataset’s structure and scale, thereby providing a tailored
+search space for the subsequent training phase.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{bounds_sa}
+\par\end{centering}
+\caption{The estimated intervals for the neural network parameters from the
+proposed Simulated Annealing for three datasets.\label{fig:The-estimated-intervals}}
+
+\end{figure}
+
 In the regression part of Table \ref{tab:expRegression}, errors are
 reported in absolute units and span a very wide dynamic range (from
 approximately $10^{-3}$ up to hundreds), meaning that a few large-error
@@ -1055,8 +1158,8 @@ The pairwise outcomes reveal a more mixed pattern than in the classification
 case, which is expected in regression settings where absolute-error
 scales can vary substantially across datasets. The strongest evidence
 of a difference in favor of the proposed approach is observed against
-BFGS (p=$3.35\times10^{-4}$), which falls in the extremely significant
-range (p\textless 0.001). The comparison with GENETIC yields p=0.0113,
+BFGS ($p=3.35\times10^{-4}$), which falls in the extremely significant
+range ($p<0.001$). The comparison with GENETIC yields $p=0.0113$,
 i.e., significant at the 0.05 level but not highly significant, implying
 a reliable yet weaker separation. In contrast, ADAM, RBF, and PRUNE
 produce p-values of 0.0585, 0.1462, and 0.0898, respectively, all
@@ -1076,6 +1179,43 @@ out random experimental variability.
 experiments across learning models\label{fig:stat_regre_methods}}
 \end{figure}
 
+Also, in Figure \ref{fig:An-indicative-comparison} an indicative
+plot is presented for the comparison of the training process between
+the genetic algorithm and the proposed method for the regression dataset
+MORTGAGE. 
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{comparison}
+\par\end{centering}
+\caption{An indicative comparison of the training process between the genetic
+algorithm and the proposed method for the MORTGAGE dataset.\label{fig:An-indicative-comparison}}
+\end{figure}
+
+The Figure \ref{fig:time} reports mean runtime as a function of the
+neural network’s number of nodes, comparing the Genetic Algorithm
+against the proposed method. Both runtimes increase with network size,
+but the proposed method consistently exhibits a much higher computational
+cost. Specifically, for 2 nodes the Genetic Algorithm requires 11.34
+on average versus 213.21 for the proposed method; for 5 nodes the
+corresponding values are 29.18 versus 420.43, and for 10 nodes they
+are 57.95 versus 790.35. The gap remains large in all cases, and the
+relative overhead decreases only slightly as network size grows, without
+changing the overall conclusion. Overall, the results document a clear
+trade-off: the proposed method is substantially more time- consuming,
+and its use is therefore justified when improvements in accuracy or
+generalization outweigh the additional computational burden.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{times}
+\par\end{centering}
+\caption{Average execution time comparison between the genetic algorithm and
+the proposed method for different number of weights for the neural
+network.\label{fig:time}}
+
+\end{figure}
+
 
 \subsection{Experiments with the perturbation parameter $p_{c}$ }
 
@@ -1091,7 +1231,7 @@ $p_{c}$, reporting error rates (lower is better) on 34 classification
 datasets for three settings ($p_{c}$=0.01, 0.02, 0.05). The averages
 at the bottom of the table are extremely close, yet they consistently
 favor $p_{c}$=0.05: 20.33\% versus 20.54\% for $p_{c}$=0.02 and
-20.57\% for$p_{c}$=0.01. The absolute gain relative to $p_{c}$=0.01
+20.57\% for$p_{c}$=0.01. The absolute gain relative to $p_{c}=0.01$
 is only 0.24 percentage points (approximately a 1.2\% relative reduction),
 which suggests that the method’s performance is not highly sensitive
 to moderate changes in $p_{c}$. This limited sensitivity is also
@@ -1559,12 +1699,12 @@ parameter $I_{w}$ .\label{tab:expRegressionIw}}
 \end{tabular}}{\footnotesize\par}
 \end{table}
 
-Figure \ref{fig:stat_regre_iw} indicates that varying the Iw parameter
+Figure \ref{fig:stat_regre_iw} indicates that varying the $I_{w}$parameter
 does not produce statistically significant differences on the regression
-datasets. The overall Friedman test reports p=0.3050, therefore the
-null hypothesis of equivalent settings is not rejected under the standard
-0.05 threshold. The pairwise comparisons are clearly non-significant
-as well, with p=0.9856 for $I_{w}$=10 vs $I_{w}$=20 and p=0.7928
+datasets. The overall Friedman test reports $p=0.3050$, therefore
+the null hypothesis of equivalent settings is not rejected under the
+standard 0.05 threshold. The pairwise comparisons are clearly non-significant
+as well, with $p=0.9856$ for $I_{w}$=10 vs $I_{w}$=20 and $p=0.7928$
 for $I_{w}$=1 vs $I_{w}$=20. Such large p-values imply practically
 indistinguishable behavior among the examined settings, with no evidence
 of a consistent winner. Hence, for regression, $I_{w}$ can be selected
@@ -1580,63 +1720,628 @@ on regression datasets\label{fig:stat_regre_iw}}
 \end{figure}
 
 
+\subsection{Experiments with initialization methods}
+
+Additionally, three method from the related literature were used as
+the initialization methods for the weights of the neural network:
+\begin{enumerate}
+\item The Xavier method \citep{initXavier}, which sets the variance of
+the weights based on both the number of input and output connections
+in the hidden layer.
+\item The HE method \citep{initXE}, which scales the weight variance according
+to the number of input connections
+\item The LeCun method \citep{initLECUN}, that sets the weight variance
+inversely proportional to the number of input connections.
+\end{enumerate}
+These weight initialization techniques were used by a genetic algorithm
+to train the artificial neural network and the results for the classification
+datasets are outlined in Table \ref{tab:expClassInit} and for the
+regression datasets in Table \ref{tab:expRegressionInit}.
+
+Table \ref{tab:expClassInit}isolates the role of the initialization
+distribution within a genetic-training setting and compares it directly
+against the proposed machine-learning model on the same set of classification
+datasets, using error rate as the performance measure. In terms of
+averages, the four genetic variants differ in a noticeable yet bounded
+manner, ranging from 26.55\% for the uniform initialization down to
+24.69\% for the LeCun initialization, a spread of about 1.86 percentage
+points. This indicates that initialization matters, but it does not,
+by itself, reshape the overall performance profile. The proposed machine-learning
+model attains a substantially lower mean error of 20.57\%, which is
+about 4.12 percentage points below even the strongest genetic initialization
+(LeCun), corresponding to roughly a 16.7\% relative reduction in mean
+error.
+
+The dataset-level pattern confirms that this advantage is not merely
+an artifact of aggregation. The proposed machine-learning model achieves
+the lowest error on 26 out of 34 datasets, showing consistent superiority
+over all genetic initialization choices across most of the benchmark
+suite. The limited cases where a genetic initialization is better
+occur on BALANCE, CIRCULAR, DERMATOLOGY, GLASS, HABERMAN, LIVERDISORDER,
+MAMMOGRAPHIC, and REGIONS2. Even among these, some gaps are marginal,
+while others are more pronounced, suggesting that dataset structure
+can selectively favor specific initialization schemes. At the same
+time, on several challenging datasets the proposed machine-learning
+model yields clear reductions relative to every genetic variant, including
+APPENDICITIS, ALCOHOL, HEART, HEARTATTACK, SEGMENT, WDBC, WINE, and
+ZO\_NF\_S. Overall, Table 8 supports that initialization choice within
+the genetic framework has a measurable but secondary effect, whereas
+the proposed machine-learning model delivers a consistently stronger
+outcome both in average error and in the frequency of best per-dataset
+results.
+\begin{table}[H]
+\caption{Experimental results on the classification datasets using the genetic
+algorithm as the training method and series of initialization methods.\label{tab:expClassInit}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC}\\
+{\footnotesize UNIFORM}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC }\\
+{\footnotesize XAVIER}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC }\\
+{\footnotesize XE}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC }\\
+{\footnotesize LECUN}
+\end{cellvarwidth} & {\footnotesize PROPOSED}\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 24.40\%} & {\footnotesize 23.00\%} & {\footnotesize 23.10\%} & {\footnotesize 23.30\%} & {\footnotesize 15.50\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 39.57\%} & {\footnotesize 24.04\%} & {\footnotesize 26.94\%} & {\footnotesize 23.81\%} & {\footnotesize 15.99\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 32.21\%} & {\footnotesize 33.91\%} & {\footnotesize 34.39\%} & {\footnotesize 34.06\%} & {\footnotesize 27.22\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 8.97\%} & {\footnotesize 8.53\%} & {\footnotesize 8.76\%} & {\footnotesize 8.56\%} & {\footnotesize 8.60\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 51.60\%} & {\footnotesize 58.18\%} & {\footnotesize 60.42\%} & {\footnotesize 57.76\%} & {\footnotesize 44.48\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 5.99\%} & {\footnotesize 4.76\%} & {\footnotesize 6.00\%} & {\footnotesize 5.13\%} & {\footnotesize 5.88\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 30.58\%} & {\footnotesize 16.00\%} & {\footnotesize 16.43\%} & {\footnotesize 13.80\%} & {\footnotesize 14.83\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 54.67\%} & {\footnotesize 54.33\%} & {\footnotesize 54.30\%} & {\footnotesize 51.39\%} & {\footnotesize 49.67\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 52.86\%} & {\footnotesize 52.67\%} & {\footnotesize 54.90\%} & {\footnotesize 51.86\%} & {\footnotesize 52.57\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 28.66\%} & {\footnotesize 27.80\%} & {\footnotesize 27.10\%} & {\footnotesize 26.27\%} & {\footnotesize 26.87\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 56.18\%} & {\footnotesize 37.31\%} & {\footnotesize 47.23\%} & {\footnotesize 38.00\%} & {\footnotesize 34.23\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 28.34\%} & {\footnotesize 29.52\%} & {\footnotesize 31.74\%} & {\footnotesize 30.22\%} & {\footnotesize 18.37\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 29.03\%} & {\footnotesize 32.37\%} & {\footnotesize 32.67\%} & {\footnotesize 31.50\%} & {\footnotesize 18.97\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 6.62\%} & {\footnotesize 8.56\%} & {\footnotesize 9.26\%} & {\footnotesize 8.39\%} & {\footnotesize 4.96\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 15.14\%} & {\footnotesize 14.49\%} & {\footnotesize 14.69\%} & {\footnotesize 15.97\%} & {\footnotesize 10.17\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 31.11\%} & {\footnotesize 33.18\%} & {\footnotesize 34.59\%} & {\footnotesize 33.24\%} & {\footnotesize 33.71\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 28.42\%} & {\footnotesize 28.36\%} & {\footnotesize 26.07\%} & {\footnotesize 25.14\%} & {\footnotesize 19.93\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 19.88\%} & {\footnotesize 16.82\%} & {\footnotesize 18.43\%} & {\footnotesize 17.24\%} & {\footnotesize 17.13\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 18.05\%} & {\footnotesize 18.37\%} & {\footnotesize 18.26\%} & {\footnotesize 17.32\%} & {\footnotesize 14.58\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 32.19\%} & {\footnotesize 33.83\%} & {\footnotesize 34.80\%} & {\footnotesize 34.26\%} & {\footnotesize 27.90\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 5.94\%} & {\footnotesize 8.04\%} & {\footnotesize 7.69\%} & {\footnotesize 7.56\%} & {\footnotesize 5.06\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 29.39\%} & {\footnotesize 31.73\%} & {\footnotesize 30.16\%} & {\footnotesize 30.53\%} & {\footnotesize 31.48\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 34.86\%} & {\footnotesize 34.24\%} & {\footnotesize 34.02\%} & {\footnotesize 33.91\%} & {\footnotesize 32.15\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 57.72\%} & {\footnotesize 49.84\%} & {\footnotesize 47.11\%} & {\footnotesize 45.55\%} & {\footnotesize 38.85\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 48.66\%} & {\footnotesize 47.43\%} & {\footnotesize 49.18\%} & {\footnotesize 48.49\%} & {\footnotesize 44.90\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 27.25\%} & {\footnotesize 29.96\%} & {\footnotesize 27.78\%} & {\footnotesize 27.04\%} & {\footnotesize 21.07\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 5.61\%} & {\footnotesize 6.60\%} & {\footnotesize 6.05\%} & {\footnotesize 6.50\%} & {\footnotesize 4.50\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 24.87\%} & {\footnotesize 24.96\%} & {\footnotesize 24.81\%} & {\footnotesize 24.62\%} & {\footnotesize 23.59\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 8.56\%} & {\footnotesize 8.97\%} & {\footnotesize 9.11\%} & {\footnotesize 7.61\%} & {\footnotesize 4.21\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 19.20\%} & {\footnotesize 22.12\%} & {\footnotesize 19.18\%} & {\footnotesize 17.35\%} & {\footnotesize 8.12\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 10.73\%} & {\footnotesize 17.33\%} & {\footnotesize 15.37\%} & {\footnotesize 15.63\%} & {\footnotesize 7.70\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 21.54\%} & {\footnotesize 14.50\%} & {\footnotesize 13.38\%} & {\footnotesize 13.88\%} & {\footnotesize 6.66\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 4.36\%} & {\footnotesize 3.70\%} & {\footnotesize 3.96\%} & {\footnotesize 3.90\%} & {\footnotesize 2.78\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 9.50\%} & {\footnotesize 11.30\%} & {\footnotesize 10.70\%} & {\footnotesize 9.70\%} & {\footnotesize 6.90\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{26.55\%}} & {\footnotesize\textbf{25.49\%}} & {\footnotesize\textbf{25.84\%}} & {\footnotesize\textbf{24.69\%}} & {\footnotesize\textbf{20.57\%}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Table \ref{tab:expRegressionInit} reports regression results in absolute
+error units and compares four genetic-training variants that differ
+only in the initialization distribution against the proposed machine-learning
+model. The data indicate that initialization within the genetic framework
+has a tangible impact on aggregate performance, as the genetic mean
+error changes from 9.31 with UNIFORM to 7.24 with XAVIER and 7.32
+with LECUN. Nevertheless, the proposed machine-learning model achieves
+the lowest mean error, 5.33, which is 1.91 units below the best genetic
+mean, corresponding to an approximately 26\% relative reduction. This
+suggests that the observed gains cannot be explained merely by a more
+favorable random initialization, but reflect a more effective overall
+training mechanism.
+
+At the dataset level, the proposed machine-learning model is dominant:
+it delivers the lowest error on 17 out of 21 datasets and ties for
+best on one additional dataset, while being outperformed on only three
+datasets. The advantage is particularly pronounced on problems where
+the genetic variants exhibit large errors or strong sensitivity to
+initialization, such as BL, HO, LW, SN, MORTGAGE, and HOUSING, where
+the proposed approach yields substantially smaller values than all
+genetic initializations. The few exceptions occur on AIRFOIL and STOCK,
+and also on FRIEDMAN where the genetic variants attain lower error.
+Overall, Table 9 supports that while initialization choice improves
+genetic training to some extent, it does not match the consistently
+stronger regression performance of the proposed machine-learning model
+across the benchmark suite.
+
+\begin{table}[H]
+\caption{Experimental results on the regression datasets using the genetic
+algorithm as the training method of the neural network and a series
+of initialization techniques.\label{tab:expRegressionInit}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC}\\
+{\footnotesize UNIFORM}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC }\\
+{\footnotesize XAVIER}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC }\\
+{\footnotesize XE}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize GENETIC }\\
+{\footnotesize LECUN}
+\end{cellvarwidth} & {\footnotesize PROPOSED}\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 7.17} & {\footnotesize 4.47} & {\footnotesize 4.59} & {\footnotesize 4.43} & {\footnotesize 4.31}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.003} & {\footnotesize 0.001} & {\footnotesize 0.001} & {\footnotesize 0.001} & {\footnotesize 0.002}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 12.18} & {\footnotesize 13.46} & {\footnotesize 14.63} & {\footnotesize 12.99} & {\footnotesize 12.07}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.027} & {\footnotesize 0.16} & {\footnotesize 0.05} & {\footnotesize 0.06} & {\footnotesize 0.025}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 5.74} & {\footnotesize 2.13} & {\footnotesize 1.82} & {\footnotesize 2.75} & {\footnotesize 0.032}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 103.60} & {\footnotesize 79.39} & {\footnotesize 82.76} & {\footnotesize 79.29} & {\footnotesize 58.86}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.0099} & {\footnotesize 0.026} & {\footnotesize 0.015} & {\footnotesize 0.015} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 1.013} & {\footnotesize 0.59} & {\footnotesize 0.74} & {\footnotesize 0.84} & {\footnotesize 0.23}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 1.249} & {\footnotesize 1.23} & {\footnotesize 1.29} & {\footnotesize 1.23} & {\footnotesize 2.58}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.65} & {\footnotesize 0.29} & {\footnotesize 0.92} & {\footnotesize 0.52} & {\footnotesize 0.057}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 2.78} & {\footnotesize 0.69} & {\footnotesize 0.89} & {\footnotesize 0.52} & {\footnotesize 0.01}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 43.26} & {\footnotesize 41.76} & {\footnotesize 46.21} & {\footnotesize 42.81} & {\footnotesize 26.76}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.59} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.003}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 1.90} & {\footnotesize 0.63} & {\footnotesize 0.37} & {\footnotesize 0.43} & {\footnotesize 0.016}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 2.41} & {\footnotesize 0.97} & {\footnotesize 1.18} & {\footnotesize 0.83} & {\footnotesize 0.12}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.29} & {\footnotesize 0.034} & {\footnotesize 0.39} & {\footnotesize 0.09} & {\footnotesize 0.022}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 2.791} & {\footnotesize 2.90} & {\footnotesize 3.36} & {\footnotesize 3.22} & {\footnotesize 2.21}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.04} & {\footnotesize 0.09} & {\footnotesize 0.24} & {\footnotesize 0.38} & {\footnotesize 0.04}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 2.95} & {\footnotesize 0.49} & {\footnotesize 1.43} & {\footnotesize 0.62} & {\footnotesize 0.026}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 3.88} & {\footnotesize 1.85} & {\footnotesize 2.04} & {\footnotesize 1.87} & {\footnotesize 4.30}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 2.93} & {\footnotesize 0.92} & {\footnotesize 1.15} & {\footnotesize 0.88} & {\footnotesize 0.20}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{9.31}} & {\footnotesize\textbf{7.24}} & {\footnotesize\textbf{7.81}} & {\footnotesize\textbf{7.32}} & {\footnotesize\textbf{5.33}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Figure \ref{fig:statClassInit} reports statistical significance levels
+for the classification experiments comparing the proposed machine-learning
+model against four genetic-training variants that differ by their
+initialization distribution. The overall Friedman test yields $p=2.48\times10^{-9}$,
+an extremely small value indicating that performance differences among
+the methods are real and cannot be attributed to random variability.
+In other words, across the dataset suite, the alternative genetic
+initializations and the proposed approach lead to measurably different
+performance behavior.
+
+The pairwise comparisons against the proposed model show statistically
+supported differences in all cases. Specifically, GENETIC (UNIFORM)
+vs the proposed model and GENETIC (XAVIER) vs the proposed model both
+yield $p=1.25\times10^{-5}$, providing very strong evidence of a
+difference well below the $p<0.0001$ threshold. The GENETIC (XE)
+comparison is even more decisive with $p=6.79\times10^{-8}$, also
+far below $0.0001$. The GENETIC (LECUN) comparison yields $p=0.0149$,
+which remains significant at the 0.05 level but is clearly weaker,
+consistent with this variant being the most competitive among the
+genetic baselines. Overall, Figure \ref{fig:statClassInit} confirms
+that the proposed method’s advantage over the genetic variants is
+not only reflected in mean error rates, but is also statistically
+substantiated across the full set of classification experiments.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl8}
+\par\end{centering}
+\caption{Statistical comparison on the results performed on the classification
+datasets using different initialization methods.\label{fig:statClassInit}}
+
+\end{figure}
+
+Figure \ref{fig:statRegressionInit} reports R-based statistical significance
+levels for comparisons between the proposed machine-learning model
+and four genetic variants that differ by their initialization distribution,
+using the regression experiment results. The overall Friedman test
+yields $p=1.06\times10^{-5}$, which strongly rejects the hypothesis
+that all methods behave equivalently across the regression datasets.
+Therefore, at the suite level, the genetic-initialization choices
+and the proposed approach lead to performance differences that are
+unlikely to be explained by random variation.
+
+The pairwise comparisons show that the strength of separation depends
+on the specific genetic variant. GENETIC(UNIFORM) vs the proposed
+model and GENETIC(XE) vs the proposed model yield $p=1.03\times10^{-4}$
+and $p=4.98\times10^{-4}$, respectively, both below $0.001$ and
+thus extremely significant, providing strong evidence that the proposed
+method differs from these two initializations. In contrast, the comparisons
+against GENETIC(XAVIER) and GENETIC(LECUN) give $p=0.0941$, which
+is above $0.05$, so a statistically significant difference is not
+supported under the standard threshold. Overall, Figure \ref{fig:statRegressionInit}
+suggests that the proposed approach is statistically superior relative
+to the weaker genetic initializations, while against the more competitive
+genetic choices the observed differences are not large enough to rule
+out random experimental variability.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl9}
+\par\end{centering}
+\caption{Statistical comparison for the experiments performed on the regression
+datasets using different initialization methods.\label{fig:statRegressionInit}}
+
+\end{figure}
+
+
+\subsection{Experiments with the cooling strategy}
+
+An additional experiment was executed where the cooling strategy was
+altered, in order to verify the robustness of the proposed method.
+In this experiment the following strategies were used:
+\begin{enumerate}
+\item Exponential decreasing (EXP), the temperature is decreased using the
+following equation:
+\[
+T=T_{0}a^{k},
+\]
+where $k$ defines the current iteration. 
+\item Logarithmical multiplicative cooling (LOG), where the following formula
+is used: 
+\[
+T_{k}=\frac{T_{0}}{1+a\log\left(1+k\right)}
+\]
+\item Linear multiplicative cooling (LINEAR), using the following formula:
+\[
+T_{k}=\frac{T_{0}}{1+ak}
+\]
+\item Quadratic multiplicative cooling (QUAD), with the following formula:
+\[
+T_{k}=\frac{T_{0}}{1+ak^{2}}
+\]
+\end{enumerate}
+The experimental results for the classification datasets are reported
+in Table \ref{tab:expClassCool}and for regression datasets in Table
+\ref{tab:expRegressionCool}.
+
+In \ref{tab:expClassCool}, the classification error rate (\%) is
+reported for 34 datasets under four cooling schedules (EXP, LOG, LINEAR,
+QUAD) within the proposed model, where lower values indicate better
+performance. In terms of average error, EXP provides the best overall
+result (20.57\%), while LOG (20.88\%) and LINEAR (20.87\%) are essentially
+tied and very close, and QUAD yields the highest average (21.01\%).
+Although the average differences are small, the best schedule can
+be dataset-dependent, and some datasets exhibit higher sensitivity
+to the cooling choice (e.g., SEGMENT and WINE). As shown in Figure
+\ref{fig:statClassCooling}, there is no statistical significance
+according to the p-values. 
+\begin{table}[H]
+\caption{Experimental results on the classification datasets using the proposed
+method and a series of cooling strategies. \label{tab:expClassCool}}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize EXP} & {\footnotesize LOG} & {\footnotesize LINEAR} & {\footnotesize QUAD}\tabularnewline
+\hline 
+\hline 
+{\footnotesize APPENDICITIS} & {\footnotesize 15.50\%} & {\footnotesize 14.50\%} & {\footnotesize 14.60\%} & {\footnotesize 15.60\%}\tabularnewline
+\hline 
+{\footnotesize ALCOHOL} & {\footnotesize 15.99\%} & {\footnotesize 13.25\%} & {\footnotesize 14.16\%} & {\footnotesize 15.01\%}\tabularnewline
+\hline 
+{\footnotesize AUSTRALIAN} & {\footnotesize 27.22\%} & {\footnotesize 27.55\%} & {\footnotesize 28.51\%} & {\footnotesize 29.60\%}\tabularnewline
+\hline 
+{\footnotesize BALANCE} & {\footnotesize 8.60\%} & {\footnotesize 8.15\%} & {\footnotesize 8.56\%} & {\footnotesize 8.50\%}\tabularnewline
+\hline 
+{\footnotesize CLEVELAND} & {\footnotesize 44.48\%} & {\footnotesize 46.07\%} & {\footnotesize 46.45\%} & {\footnotesize 44.45\%}\tabularnewline
+\hline 
+{\footnotesize CIRCULAR} & {\footnotesize 5.88\%} & {\footnotesize 6.64\%} & {\footnotesize 5.88\%} & {\footnotesize 4.06\%}\tabularnewline
+\hline 
+{\footnotesize DERMATOLOGY} & {\footnotesize 14.83\%} & {\footnotesize 13.69\%} & {\footnotesize 16.20\%} & {\footnotesize 16.89\%}\tabularnewline
+\hline 
+{\footnotesize ECOLI} & {\footnotesize 49.67\%} & {\footnotesize 49.61\%} & {\footnotesize 50.61\%} & {\footnotesize 50.39\%}\tabularnewline
+\hline 
+{\footnotesize GLASS} & {\footnotesize 52.57\%} & {\footnotesize 50.38\%} & {\footnotesize 51.05\%} & {\footnotesize 51.38\%}\tabularnewline
+\hline 
+{\footnotesize HABERMAN} & {\footnotesize 26.87\%} & {\footnotesize 27.23\%} & {\footnotesize 27.27\%} & {\footnotesize 27.10\%}\tabularnewline
+\hline 
+{\footnotesize HAYES-ROTH} & {\footnotesize 34.23\%} & {\footnotesize 37.85\%} & {\footnotesize 37.16\%} & {\footnotesize 38.00\%}\tabularnewline
+\hline 
+{\footnotesize HEART} & {\footnotesize 18.37\%} & {\footnotesize 18.78\%} & {\footnotesize 17.74\%} & {\footnotesize 18.37\%}\tabularnewline
+\hline 
+{\footnotesize HEARTATTACK} & {\footnotesize 18.97\%} & {\footnotesize 20.60\%} & {\footnotesize 20.30\%} & {\footnotesize 20.73\%}\tabularnewline
+\hline 
+{\footnotesize HOUSEVOTES} & {\footnotesize 4.96\%} & {\footnotesize 5.87\%} & {\footnotesize 5.35\%} & {\footnotesize 6.18\%}\tabularnewline
+\hline 
+{\footnotesize IONOSPHERE} & {\footnotesize 10.17\%} & {\footnotesize 9.77\%} & {\footnotesize 9.09\%} & {\footnotesize 11.66\%}\tabularnewline
+\hline 
+{\footnotesize LIVERDISORDER} & {\footnotesize 33.71\%} & {\footnotesize 32.38\%} & {\footnotesize 32.15\%} & {\footnotesize 33.03\%}\tabularnewline
+\hline 
+{\footnotesize LYMOGRAPHY} & {\footnotesize 19.93\%} & {\footnotesize 22.57\%} & {\footnotesize 21.71\%} & {\footnotesize 22.79\%}\tabularnewline
+\hline 
+{\footnotesize MAMMOGRAPHIC} & {\footnotesize 17.13\%} & {\footnotesize 17.62\%} & {\footnotesize 17.20\%} & {\footnotesize 17.17\%}\tabularnewline
+\hline 
+{\footnotesize PARKINSONS} & {\footnotesize 14.58\%} & {\footnotesize 14.32\%} & {\footnotesize 14.53\%} & {\footnotesize 14.74\%}\tabularnewline
+\hline 
+{\footnotesize PIMA} & {\footnotesize 27.90\%} & {\footnotesize 27.95\%} & {\footnotesize 27.49\%} & {\footnotesize 27.84\%}\tabularnewline
+\hline 
+{\footnotesize POPFAILURES} & {\footnotesize 5.06\%} & {\footnotesize 5.41\%} & {\footnotesize 5.04\%} & {\footnotesize 5.31\%}\tabularnewline
+\hline 
+{\footnotesize REGIONS2} & {\footnotesize 31.48\%} & {\footnotesize 30.89\%} & {\footnotesize 30.63\%} & {\footnotesize 30.42\%}\tabularnewline
+\hline 
+{\footnotesize SAHEART} & {\footnotesize 32.15\%} & {\footnotesize 32.37\%} & {\footnotesize 32.59\%} & {\footnotesize 32.59\%}\tabularnewline
+\hline 
+{\footnotesize SEGMENT} & {\footnotesize 38.85\%} & {\footnotesize 45.28\%} & {\footnotesize 42.98\%} & {\footnotesize 39.51\%}\tabularnewline
+\hline 
+{\footnotesize SPIRAL} & {\footnotesize 44.90\%} & {\footnotesize 45.37\%} & {\footnotesize 44.73\%} & {\footnotesize 43.92\%}\tabularnewline
+\hline 
+{\footnotesize STATHEART} & {\footnotesize 21.07\%} & {\footnotesize 18.67\%} & {\footnotesize 19.41\%} & {\footnotesize 19.93\%}\tabularnewline
+\hline 
+{\footnotesize STUDENT} & {\footnotesize 4.50\%} & {\footnotesize 4.35\%} & {\footnotesize 4.38\%} & {\footnotesize 4.53\%}\tabularnewline
+\hline 
+{\footnotesize TRANSFUSION} & {\footnotesize 23.59\%} & {\footnotesize 24.03\%} & {\footnotesize 23.24\%} & {\footnotesize 23.26\%}\tabularnewline
+\hline 
+{\footnotesize WDBC} & {\footnotesize 4.21\%} & {\footnotesize 4.20\%} & {\footnotesize 4.77\%} & {\footnotesize 4.41\%}\tabularnewline
+\hline 
+{\footnotesize WINE} & {\footnotesize 8.12\%} & {\footnotesize 10.18\%} & {\footnotesize 11.71\%} & {\footnotesize 11.73\%}\tabularnewline
+\hline 
+{\footnotesize Z\_F\_S} & {\footnotesize 7.70\%} & {\footnotesize 7.80\%} & {\footnotesize 8.30\%} & {\footnotesize 8.03\%}\tabularnewline
+\hline 
+{\footnotesize ZO\_NF\_S} & {\footnotesize 6.66\%} & {\footnotesize 7.46\%} & {\footnotesize 6.50\%} & {\footnotesize 6.98\%}\tabularnewline
+\hline 
+{\footnotesize ZONF\_S} & {\footnotesize 2.78\%} & {\footnotesize 2.68\%} & {\footnotesize 2.64\%} & {\footnotesize 2.80\%}\tabularnewline
+\hline 
+{\footnotesize ZOO} & {\footnotesize 6.90\%} & {\footnotesize 6.30\%} & {\footnotesize 6.80\%} & {\footnotesize 7.20\%}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{20.57\%}} & {\footnotesize\textbf{20.88\%}} & {\footnotesize\textbf{20.87\%}} & {\footnotesize\textbf{21.01\%}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl10}
+\par\end{centering}
+\caption{Statistical comparison for the obtained results on the classification
+datasets using the proposed method and a series of cooling strategies.\label{fig:statClassCooling}}
+\end{figure}
+
+In Table \ref{tab:expRegressionCool}, the reported values are the
+errors (lower is better) on 21 regression datasets, obtained by using
+four cooling schedules (EXP, LOG, LINEAR, QUAD) within the proposed
+model. If we focus on the overall picture, LOG has the lowest average
+error (5.16), EXP and LINEAR are essentially the same (5.33), and
+QUAD is slightly higher (5.42). In other words, the average differences
+are modest and do not suggest a single schedule that clearly dominates
+everywhere.
+
+At the dataset level, however, the picture is less uniform. There
+are datasets where the cooling choice seems to matter more such as
+BL, HOUSING, FRIEDMAN, and STOCK because the gaps between schedules
+become noticeably larger. In contrast, datasets like CONCRETE, HO,
+and LASER remain almost unchanged across schedules, indicating that
+performance there is largely insensitive to how temperature is decreased.
+If a single, simple default must be used without per-dataset tuning,
+LOG is the most reasonable choice because it yields the best average.
+Figure \ref{fig:statRegressionCooling} indicates that the p-values
+do not support statistically significant differences among the four
+cooling schedules.
+\begin{table}[H]
+\caption{Experimental results on the regression datasets using the proposed
+method and a series of cooling strategies \label{tab:expRegressionCool}.}
+
+\centering{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+{\footnotesize DATASET} & {\footnotesize EXP} & {\footnotesize LOG} & {\footnotesize LINEAR} & {\footnotesize QUAD}\tabularnewline
+\hline 
+\hline 
+{\footnotesize ABALONE} & {\footnotesize 4.31} & {\footnotesize 4.30} & {\footnotesize 4.27} & {\footnotesize 4.35}\tabularnewline
+\hline 
+{\footnotesize AIRFOIL} & {\footnotesize 0.002} & {\footnotesize 0.002} & {\footnotesize 0.002} & {\footnotesize 0.001}\tabularnewline
+\hline 
+{\footnotesize AUTO} & {\footnotesize 12.07} & {\footnotesize 11.79} & {\footnotesize 11.43} & {\footnotesize 12.33}\tabularnewline
+\hline 
+{\footnotesize BK} & {\footnotesize 0.025} & {\footnotesize 0.027} & {\footnotesize 0.022} & {\footnotesize 0.028}\tabularnewline
+\hline 
+{\footnotesize BL} & {\footnotesize 0.032} & {\footnotesize 0.015} & {\footnotesize 0.008} & {\footnotesize 0.03}\tabularnewline
+\hline 
+{\footnotesize BASEBALL} & {\footnotesize 58.86} & {\footnotesize 57.43} & {\footnotesize 57.98} & {\footnotesize 58.70}\tabularnewline
+\hline 
+{\footnotesize CONCRETE} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.004} & {\footnotesize 0.004}\tabularnewline
+\hline 
+{\footnotesize DEE} & {\footnotesize 0.23} & {\footnotesize 0.22} & {\footnotesize 0.23} & {\footnotesize 0.22}\tabularnewline
+\hline 
+{\footnotesize FRIEDMAN} & {\footnotesize 2.58} & {\footnotesize 2.47} & {\footnotesize 2.39} & {\footnotesize 2.01}\tabularnewline
+\hline 
+{\footnotesize FY} & {\footnotesize 0.057} & {\footnotesize 0.049} & {\footnotesize 0.058} & {\footnotesize 0.15}\tabularnewline
+\hline 
+{\footnotesize HO} & {\footnotesize 0.01} & {\footnotesize 0.01} & {\footnotesize 0.01} & {\footnotesize 0.01}\tabularnewline
+\hline 
+{\footnotesize HOUSING} & {\footnotesize 26.76} & {\footnotesize 24.87} & {\footnotesize 28.17} & {\footnotesize 28.08}\tabularnewline
+\hline 
+{\footnotesize LASER} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.003} & {\footnotesize 0.003}\tabularnewline
+\hline 
+{\footnotesize LW} & {\footnotesize 0.016} & {\footnotesize 0.015} & {\footnotesize 0.015} & {\footnotesize 0.03}\tabularnewline
+\hline 
+{\footnotesize MORTGAGE} & {\footnotesize 0.12} & {\footnotesize 0.09} & {\footnotesize 0.09} & {\footnotesize 0.04}\tabularnewline
+\hline 
+{\footnotesize PL} & {\footnotesize 0.022} & {\footnotesize 0.021} & {\footnotesize 0.022} & {\footnotesize 0.022}\tabularnewline
+\hline 
+{\footnotesize PLASTIC} & {\footnotesize 2.21} & {\footnotesize 2.35} & {\footnotesize 2.29} & {\footnotesize 2.26}\tabularnewline
+\hline 
+{\footnotesize QUAKE} & {\footnotesize 0.04} & {\footnotesize 0.04} & {\footnotesize 0.05} & {\footnotesize 0.04}\tabularnewline
+\hline 
+{\footnotesize SN} & {\footnotesize 0.026} & {\footnotesize 0.026} & {\footnotesize 0.025} & {\footnotesize 0.025}\tabularnewline
+\hline 
+{\footnotesize STOCK} & {\footnotesize 4.30} & {\footnotesize 4.45} & {\footnotesize 4.57} & {\footnotesize 5.29}\tabularnewline
+\hline 
+{\footnotesize TREASURY} & {\footnotesize 0.20} & {\footnotesize 0.26} & {\footnotesize 0.20} & {\footnotesize 0.24}\tabularnewline
+\hline 
+{\footnotesize\textbf{AVERAGE}} & {\footnotesize\textbf{5.33}} & {\footnotesize\textbf{5.16}} & {\footnotesize\textbf{5.33}} & {\footnotesize\textbf{5.42}}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{stat_tbl11}
+\par\end{centering}
+\caption{Statistical comparison for the obtained results on the regression
+datasets using the proposed method and a series of cooling strategies.\label{fig:statRegressionCooling}}
+
+\end{figure}
+
+
 \section{Conclusions\label{sec:Conclusions}}
 
-The proposed training procedure improves generalization by introducing,
-prior to the main optimization, an additional stage that identifies
-an appropriate range of values for the network weights. This stage
-is based on a Simulated Annealing variant that adjusts the admissible
-weight bounds in order to reduce the likelihood of getting trapped
-in local minima and to limit overfitting. The final training is then
-performed inside these bounds using a genetic optimization stage followed
-by a local BFGS refinement.
+The experimental evidence indicates that the proposed method should
+be interpreted as a training pipeline rather than as a minor optimizer
+tweak. Its key design choice is a preliminary bound-selection stage
+that constrains the admissible weight ranges before the main optimization.
+This stage is implemented via a Simulated Annealing variant and is
+motivated by limiting regimes in which sigmoid units saturate, since
+large-magnitude inputs can yield near-constant outputs and degrade
+effective learning dynamics and generalization. Final training is
+then carried out inside the selected bounds through a Genetic optimization
+stage followed by local refinement with BFGS, so the intended benefit
+arises from combining a restricted search domain with a global stochastic
+search and a local convergence phase. 
 
-In the classification experiments, the proposed machine-learning model
-achieves the best mean performance, with an average classification
-error of 20.57, and with clear separation from all competing approaches.
-The advantage is not confined to isolated datasets, but emerges as
-a consistent pattern across a large portion of the benchmark suite,
-while also being accompanied by reduced dispersion of errors, which
-is compatible with more stable behavior on heterogeneous classification
-tasks.
+On classification benchmarks, the reported results are consistent
+with a systematic advantage. The proposed model achieves the best
+aggregate performance with an average classification error of 20.57\%,
+while the closest competing average is GENETIC at 26.55\%, corresponding
+to a 5.97 percentage-point absolute gain (approximately 22.5\% relative
+error reduction). The advantage is also reported to remain sizable
+against the remaining baselines and is accompanied by the lowest dispersion
+of errors (standard deviation \ensuremath{\approx} 14.31), which is
+compatible with more stable behavior across heterogeneous classification
+tasks. At the dataset level, PROPOSED attains the best result on 23
+of 34 datasets and ranks within the top two on 31/34 datasets, supporting
+that the superiority is not driven by a small subset of cases. 
 
-The statistical analysis supports these observations. For classification,
-the overall Friedman test reports p=$2.89\times10^{-11}$, thus very
-strongly rejecting the hypothesis of equivalent performance across
-methods. The post-hoc comparisons indicate statistically significant
-differences in favor of the proposed machine-learning model against
-all main baselines, with particularly strong evidence against ADAM,
-BFGS, and PRUNE, and highly significant differences against GENETIC
-and RBF.
+The statistical analysis for classification further supports that
+these differences are unlikely to be attributable to random variation.
+The overall Friedman test yields $p=2.89\times10^{-11}$, strongly
+rejecting the hypothesis of equivalent performance across methods.
+Post-hoc comparisons against PROPOSED are significant for all main
+baselines, with extremely small p-values against ADAM and BFGS, a
+highly decisive result against PRUNE, and still highly significant
+differences against GENETIC and RBF (p-values below $0.01$). 
 
-In the regression experiments, the proposed machine-learning model
-attains the lowest mean absolute error, equal to 5.33, and the overall
-Friedman test remains significant with p=$1.55\times10^{-4}$, indicating
-that genuine performance differences exist. However, the pairwise
-picture is more nuanced. The strongest statistical separation is observed
-primarily against BFGS with p=$3.35\times10^{-4}$, and a weaker but
-still significant difference is observed against GENETIC with p=0.0113,
-whereas differences against ADAM, RBF, and PRUNE are not supported
-at the 0.05 level.
+For regression, the overall picture is positive but requires more
+conservative phrasing. PROPOSED attains the lowest mean absolute error
+(MAE = 5.33) and the overall Friedman test remains significant $\left(p=1.55\times10^{-4}\right)$,
+indicating that genuine performance differences exist across the regression
+suite. However, pairwise evidence is more nuanced: the strongest statistically
+supported advantage is observed primarily against BFGS $\left(p=3.35\times10^{-4}\right)$
+and more weakly (but still significantly) against GENETIC ($p=0.0113$),
+whereas differences relative to ADAM, RBF, and PRUNE are not supported
+at the 0.05 level. In addition, regression errors span a wide dynamic
+range and can be heavy-tailed, so robustness and variability across
+datasets materially affect the interpretation of mean outcomes.
 
-The sensitivity studies suggest that variations of the $p_{c}$ parameter
-do not yield measurable statistical differences, both for classification
-and regression, indicating that this setting is not critical within
-the tested range. In contrast, the $I_{w}$ parameter in classification
-exhibits a marginal overall effect, with an overall p=0.0423, but
-without clear confirmation through simple pairwise comparisons. For
-regression, $I_{w}$ shows no statistically detectable impact, with
-an overall p=0.3050 and non-significant pairwise tests.
+Sensitivity experiments help identify which settings appear critical
+under the tested conditions. Variations of pc are reported not to
+yield measurable statistical differences (for both classification
+and regression), suggesting that pc is not a critical parameter within
+the explored range. In contrast, Iw shows a marginal overall effect
+in classification (overall $p=0.0423$), but without strong pairwise
+confirmation, implying modest and distributed differences rather than
+a clear, sharply separated setting. This supports the interpretation
+that the dominant performance driver is the bound-selection mechanism
+and the overall pipeline structure, rather than fine tuning of auxiliary
+parameters.
 
-Several directions follow naturally for future work. First, the generality
-of adaptive weight bounds should be assessed under alternative final
-optimizers and across a broader set of architectures, including deeper
-networks and different activation functions. Second, the fitness definition
-used during the Simulated Annealing phase should be redesigned to
-incorporate explicit generalization criteria, such as validation error
-or robustness to noise, so that the bound-selection stage more directly
-targets out-of-sample performance. Third, the cost-benefit trade-off
-should be quantified systematically, and CPU or GPU parallelization
+A central and practically relevant trade-off is computational cost.
+The Simulated Annealing bound-selection phase requires repeated evaluations
+and may dominate runtime. This is directly reflected in the reported
+runtime comparison as a function of network size: for 2 nodes, GA
+averages 11.34 versus 213.21 for PROPOSED, for 5 nodes, 29.18 versus
+420.43, and for 10 nodes, 57.95 versus 790.35. Consequently, the method
+is best positioned for settings where accuracy and robustness gains
+justify higher offline computation, rather than as a default choice
+under strict training-time constraints. Finally, the current validation
+targets sigmoid feed-forward networks and a saturation-driven rationale,
+it has not yet been demonstrated that the same gains transfer to deep
+networks or truly high-dimensional parameterizations without additional
+evaluation and potentially redesigning the underlying bound-selection
+criterion. 
+
+Several directions follow naturally for future work. Firstly, the
+proposed technique could be applied to other cases of artificial neural
+networks such as, for example, deep neural networks, although the
+required execution time would be quite long due to the complexity
+and number of parameters in these machine learning models. One possible
+solution to this problem could be the incorporation of parallel versions
+of the Simulated Annealing algorithm \citep{psa1,psa2} that can take
+advantage of the modern computational environments. Second, the fitness
+definition used during the Simulated Annealing phase should be redesigned
+to incorporate explicit generalization criteria, such as validation
+error or robustness to noise, so that the bound-selection stage more
+directly targets out-of-sample performance. Third, the cost-benefit
+trade-off should be quantified systematically, and CPU or GPU parallelization
 should be explored, since the Simulated Annealing phase requires repeated
 evaluations and may dominate the overall runtime.
 
@@ -1669,14 +2374,12 @@ author.}
 
 \reftitle{References}
 \begin{thebibliography}{999}
-\bibitem[(year)]{nn1}Abiodun, O. I., Jantan, A., Omolara, A. E.,
-Dada, K. V., Mohamed, N. A., \& Arshad, H. (2018). State-of-the-art
-in artificial neural network applications: A survey. Heliyon, 4(11).
+\bibitem[(year)]{nn1}Müller, B., Reinhardt, J., \& Strickland, M.
+T. (2012). Neural networks: an introduction. Springer Science \& Business
+Media.
 
-\bibitem{nn2}Suryadevara, S., \& Yanamala, A. K. Y. (2021). A Comprehensive
-Overview of Artificial Neural Networks: Evolution, Architectures,
-and Applications. Revista de Inteligencia Artificial en Medicina,
-12(1), 51-76.
+\bibitem{nn2}Gurney, K. (2018). An introduction to neural networks.
+CRC press.
 
 \bibitem{nnc}I.G. Tsoulos, D. Gavrilis, E. Glavas, Neural network
 construction and training using grammatical evolution, Neurocomputing
@@ -1695,13 +2398,14 @@ A Review of Activation Function for Artificial Neural Network, In:
 2020 IEEE 18th World Symposium on Applied Machine Intelligence and
 Informatics (SAMI), Herlany, Slovakia, pp. 281-286, 2020.
 
-\bibitem[(year)]{nn_image}M. Egmont-Petersen, D. de Ridder, H. Handels,
-Image processing with neural networks---a review, Pattern Recognition
-\textbf{35}, pp. 2279-2301, 2002.
+\bibitem[(year)]{nn_image}Pandelea, A. E., Budescu, M., \& Covatariu,
+G. (2015). Image processing using artificial neural networks. Buletinul
+Institutului Politehnic din lasi. Sectia Constructii, Arhitectura,
+61(4), 9.
 
-\bibitem{nn_timeseries}G.Peter Zhang, Time series forecasting using
-a hybrid ARIMA and neural network model, Neurocomputing \textbf{50},
-pp. 159-175, 2003.
+\bibitem{nn_timeseries}Tealab, A. (2018). Time series forecasting
+using artificial neural networks methodologies: A systematic review.
+Future Computing and Informatics Journal, 3(2), 334-340.
 
 \bibitem{nn_credit}Z. Huang, H. Chen, C.-Jung Hsu, W.-Hwa Chen, S.
 Wu, Credit rating analysis with support vector machines and neural
@@ -1814,16 +2518,32 @@ feedforward neural network training, Applied Mathematics and Computation
 Ling, The Cascaded Forward algorithm for neural network training,
 Pattern Recognition \textbf{161}, 111292, 2025.
 
-\bibitem{nn_gpu1}K-Su Oh, K. Jung, GPU implementation of neural networks,
-Pattern Recognition \textbf{37}, pp. 1311-1314, 2004.
+\bibitem{nn_gpu1}Wang, L., Ye, J., Zhao, Y., Wu, W., Li, A., Song,
+S. L., ... \& Kraska, T. (2018, February). Superneurons: Dynamic GPU
+memory management for training deep neural networks. In Proceedings
+of the 23rd ACM SIGPLAN symposium on principles and practice of parallel
+programming (pp. 41-53).
 
 \bibitem{nn_gpu2}M. Zhang, K. Hibi, J. Inoue, GPU-accelerated artificial
 neural network potential for molecular dynamics simulation, Computer
 Physics Communications \textbf{285}, 108655, 2023. 
 
-\bibitem[(year)]{nnsharing1}S.J. Nowlan and G.E. Hinton, Simplifying
-neural networks by soft weight sharing, Neural Computation 4, pp.
-473-493, 1992.
+\bibitem[(2025)]{aimeta1}Aribowo, W., Abdullayev, V. H., Oliva, D.,
+Mahardhika, V., \& Mzili, T. (2025). Metaheuristic Algorithm for Smart
+Grids Problems: A Brief Review. International Journal of Robotics
+and Control Systems, 5(6), 3085-3102.
+
+\bibitem[(2025)]{aimeta2}Sabo, A., Bawa, M., Yakubu, Y., Ngyarmunta,
+A. A., Aliyu, Y., Musa, A., \& Katun, M. (2025). PID controller tuning
+for an AVR system using Particle Swarm Optimisation Techniques and
+Genetic Algorithm Techniques; A comparison based approach. Vokasi
+Unesa Bulletin of Engineering, Technology and Applied Science, 2(2),
+270-280.
+
+\bibitem[(year)]{nnsharing1}Kim, J. K., Lee, M. Y., Kim, J. Y., Kim,
+B. J., \& Lee, J. H. (2016, October). An efficient pruning and weight
+sharing method for neural network. In 2016 IEEE International Conference
+on Consumer Electronics-Asia (ICCE-Asia) (pp. 1-2). IEEE.
 
 \bibitem{nnsharing2}Nowlan, S. J., \& Hinton, G. E. (2018). Simplifying
 neural networks by soft weight sharing. In The mathematics of generalization
@@ -1847,9 +2567,9 @@ for Improving Neural Network Generalization, 2009 Second International
 Conference on Intelligent Computation Technology and Automation, Changsha,
 Hunan, 2009, pp. 15-18.
 
-\bibitem{nndecay1}N. K. Treadgold and T. D. Gedeon, Simulated annealing
-and weight decay in adaptive learning: the SARPROP algorithm,IEEE
-Transactions on Neural Networks \textbf{9}, pp. 662-668, 1998.
+\bibitem{nndecay1}Tessier, H., Gripon, V., Léonardon, M., Arzel,
+M., Hannagan, T., \& Bertrand, D. (2022). Rethinking weight decay
+for efficient neural network pruning. Journal of Imaging, 8(3), 64.
 
 \bibitem{nndecay2}M. Carvalho and T. B. Ludermir, Particle Swarm
 Optimization of Feed-Forward Neural Networks with Weight Decay, 2006
@@ -1873,9 +2593,18 @@ Intelligence and Neuroscience, 369298, 2015.
 reinforcement learning of artificial neural networks. International
 Journal of Hybrid Intelligent Systems, 4(3), 171-183.
 
-\bibitem[(2013)]{weight_gpu2}A.A. Huqqani, E. Schikuta, S. Ye Peng
-Chen, Multicore and GPU Parallelization of Neural Networks for Face
-Recognition, Procedia Computer Science \textbf{18}, pp. 349-358, 2013.
+\bibitem{naiveInit}Bengio, Y., Simard, P., \& Frasconi, P. (1994).
+Learning long-term dependencies with gradient descent is difficult.
+IEEE Transactions on Neural Networks, 5(2), 157--166.
+
+\bibitem{glorotInit}Glorot, X., \& Bengio, Y. (2010). Understanding
+the difficulty of training deep feedforward neural networks. Proceedings
+of the 13th International Conference on Artificial Intelligence and
+Statistics (AISTATS).
+
+\bibitem{heInit}He, K., Zhang, X., Ren, S., \& Sun, J. (2015). Delving
+deep into rectifiers: Surpassing human-level performance on ImageNet
+classification. ICCV.
 
 \bibitem[(2006)]{siman1}L. Ingber, Very fast simulated re-annealing,
 Mathematical and Computer Modelling \textbf{12}, pp. 967-973, 1989.
@@ -2137,6 +2866,29 @@ pp. 99-127, 2002.
 \bibitem[(2002)]{prune}Zhu, V., Lu, Y., \& Li, Q. (2006). MW-OBS:
 An improved pruning method for topology design of neural networks.
 Tsinghua Science and Technology, 11(4), 307-312.
+
+\bibitem[(2000)]{initXavier}Glorot, X., \& Bengio, Y. (2010). Understanding
+the difficulty of training deep feedforward neural networks. In Proceedings
+of the Thirteenth International Conference on Artificial Intelligence
+and Statistics (AISTATS),  Vol. 9, pp. 249--256. PMLR.
+
+\bibitem[(2000)]{initXE}He, K., Zhang, X., Ren, S., \& Sun, J. (2015).
+Delving deep into rectifiers: Surpassing human-level performance on
+ImageNet classification. In Proceedings of the IEEE Conference on
+Computer Vision and Pattern Recognition (CVPR), pp. 1026--1034.
+
+\bibitem[(2000)]{initLECUN}LeCun, Y., Bottou, L., Bengio, Y., \&
+Haffner, P. (1998). Gradient-based learning applied to document recognition.
+Proceedings of the IEEE, 86(11), 2278--2324.
+
+\bibitem[(2015)]{psa1}Lou, Z., \& Reinitz, J. (2016). Parallel simulated
+annealing using an adaptive resampling interval. Parallel computing,
+53, 23-31.
+
+\bibitem[(2015)]{psa2}Ye, Z., Xiao, K., Ge, Y., \& Deng, Y. (2018).
+Applying simulated annealing and parallel computing to the mobile
+sequential recommendation. IEEE Transactions on Knowledge and Data
+Engineering, 31(2), 243-256.
 
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
