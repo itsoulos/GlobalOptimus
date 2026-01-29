@@ -20,6 +20,7 @@ QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
 	METHODS/trio.cpp \
+    PROBLEMS/problem1d.cpp \
     SAMPLER/distributedsampler.cpp \
 	SAMPLER/usersampler.cpp \
 	PROBLEMS/zakharov.cpp \
@@ -180,6 +181,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     GE/cprogram.h \
     METHODS/trio.h \
+    PROBLEMS/problem1d.h \
     SAMPLER/distributedsampler.h \
     SAMPLER/usersampler.h\
     PROBLEMS/zakharov.h \

@@ -11,6 +11,7 @@ ProblemLoader::ProblemLoader()
                 << "goldstein" << "griewank2" << "griewank10"
                 << "griewankrosenbrock"<<"griewank"
                 << "hansen" << "hartman3" << "hartman6"
+        <<"problem1d"
                 << "himmelblau"<<"katsuura"<<"lunacekbirastrigin"<<"levy"<<
                     "michalewicz"<<"potential";
 
@@ -207,6 +208,8 @@ Problem *ProblemLoader::getProblemFromName(QString name)
         myProblem = new Zakharov();
     else if (name == "levy")
         myProblem = new Levy();
+    else if (name == "problem1d")
+        myProblem = new problem1d();
     else if (name == "userproblem")
         myProblem = new UserProblem();
     return myProblem;

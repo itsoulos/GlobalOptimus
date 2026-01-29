@@ -70,6 +70,7 @@
 #include <PROBLEMS/griewank.h>
 #include <PROBLEMS/michalewicz.h>
 #include <PROBLEMS/zakharov.h>
+#include <PROBLEMS/problem1d.h>
 
 /**
  * @brief The ProblemLoader class
