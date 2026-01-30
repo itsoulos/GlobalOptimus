@@ -19,7 +19,12 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+    GE/nncprogram.cpp \
 	METHODS/trio.cpp \
+	METHODS/BGWO.cpp \
+    MLMODELS/converter.cc \
+    MLMODELS/neuralparser.cc \
+    MLMODELS/nncmodel.cpp \
     PROBLEMS/problem1d.cpp \
     SAMPLER/distributedsampler.cpp \
 	SAMPLER/usersampler.cpp \
@@ -180,7 +185,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    GE/nncprogram.h \
     METHODS/trio.h \
+    METHODS/BGWO.h \
+    MLMODELS/converter.h \
+    MLMODELS/neuralparser.h \
+    MLMODELS/nncmodel.h \
     PROBLEMS/problem1d.h \
     SAMPLER/distributedsampler.h \
     SAMPLER/usersampler.h\

@@ -22,12 +22,16 @@ private:
     bool            use_balancedclass=false;
 public:
     NNCModel();
-    double            preTrain(vector<int> &result);
-    virtual         double  getOutput(Data &x);
-    virtual         double  getOutput(double *x);
-    void            localSearchItem(int pos);
+    void    makeProgram(int dimension);
+    int     setChromosomeInParser(vector<int> &genome);
+    double  preTrain(vector<int> &result);
+    virtual double  getOutput(Data &x);
+    double  getDerivative(Data &x,int pos);
+    double  getDerivative2(Data &,int pos);
+    virtual double  getOutput(double *x);
+    void    localSearchItem(int pos);
     virtual void    trainModel();
-    virtual          ~NNCModel();
+    virtual ~NNCModel();
     virtual double      getTrainError();
 };
 

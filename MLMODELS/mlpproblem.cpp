@@ -49,6 +49,11 @@ void    MlpProblem::he_normal_init(Data & weights, int fan_in)
     }
 }
 
+void    MlpProblem::setPatternDimension(int d)
+{
+    patternDimension =d;
+}
+
 void    MlpProblem::xavier_uniform_init(Data& weights, int fan_in, int fan_out)
 {
     double limit = std::sqrt(6.0 / (fan_in + fan_out));
@@ -303,7 +308,7 @@ double  MlpProblem::getOutput(Data &w,double *x)
 
     double arg=0.0;
     double per=0.0;
-    int d = trainDataset->dimension();
+    int d = trainDataset==NULL?patternDimension:trainDataset->dimension();
     int nodes = w.size()/(d+2);
     for(int i=1;i<=nodes;i++)
     {

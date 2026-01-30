@@ -4,10 +4,22 @@ static double sig(const double *X)
 
     return 1.0/(1.0+exp(-X[0]));
 }
+
+static double sigder(const double *X)
+{
+    double s = sig(X);
+    return s*(1-s);
+}
+
+static double sigder2(const double *X)
+{
+    double s = sig(X);
+    return s*(1-2.0*s);
+}
 NncProgram::NncProgram(int dim,Model *m)
     :Cprogram(dim,m)
 {
-    parser.AddFunction("sig",sig,1);
+    parser.AddFunction("sig",sig,sigder,sigder2,1);
 }
 
 void    NncProgram::makeRules()

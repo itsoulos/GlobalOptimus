@@ -49,6 +49,12 @@ public:
 
     bool AddFunction(const std::string& name,
                      FunctionPtr, unsigned paramsAmount);
+
+    /** Add from Giannis Tsoulos for first and second derivative **/
+    bool AddFunction(const std::string& name,
+                     FunctionPtr f,FunctionPtr f1,FunctionPtr f2,
+                     unsigned paramsAmount);
+
     bool AddFunction(const std::string& name, FunctionParser&);
 
     void Optimize();
@@ -101,6 +107,8 @@ private:
             FuncPtrData(FunctionPtr p, unsigned par): ptr(p), params(par) {}
         };
         std::vector<FuncPtrData> FuncPtrs;
+        std::vector<FuncPtrData> derivFuncPtrs;
+        std::vector<FuncPtrData> deriv2FuncPtrs;
 
         VarMap_t FuncParserNames;
         std::vector<FunctionParser*> FuncParsers;

@@ -39,6 +39,7 @@ CONFIG += c++17
 SOURCES += \
     GE/cprogram.cc \
     METHODS/trio.cpp \
+    METHODS/BGWO.cpp \
     PROBLEMS/zakharov.cpp \
     PROBLEMS/michalewicz.cpp \
     PROBLEMS/gallagher21.cpp \
@@ -204,6 +205,7 @@ SOURCES += \
 HEADERS += \
     GE/cprogram.h \
     METHODS/trio.h \
+    METHODS/BGWO.h \
     PROBLEMS/zakharov.h \
     PROBLEMS/katsuura.h \
     PROBLEMS/griewank_rosenbrock.h \

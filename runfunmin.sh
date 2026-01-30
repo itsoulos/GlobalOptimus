@@ -1,5 +1,5 @@
-#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE,UserMethod
-METHOD=Simman
+#Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE,UserMethod, BGWO
+METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -20,6 +20,9 @@ then
 elif [ $METHOD = "MFO" ]
 then
 	 METHODPARAMS="--mfo_count=200 --mfo_maxiters=200 --mfo_lrate=0.05 --mfo_strategy_mode=aggressive --stoppingRule=similarity"
+elif [ $METHOD = "BGWO" ]
+then
+  METHODPARAMS="--bgwo_agents=100 --bgwo_maxiters=100 --lrate=0.05"
 elif [ $METHOD = "DifferentialEvolution" ]
 then
 ##de_np:          The population size. 
@@ -87,7 +90,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.01 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.00 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
 #ms_samples: number of multistart samples
@@ -153,7 +156,7 @@ fi
 
 if [ -z "$DIMENSION" ] 
 then
-	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=30 --opt_debug=no
+       ./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD  $GLOBALPARAMS $METHODPARAMS --opt_iters=30 --opt_debug=yes
 else
 	./GlobalOptimus --opt_problem=$PROBLEM  --opt_method=$METHOD --opt_dimension=$DIMENSION $GLOBALPARAMS  $METHODPARAMS --opt_iters=30 --opt_debug=no
 fi

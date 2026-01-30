@@ -374,7 +374,34 @@ bool FunctionParser::AddFunction(const std::string& name,
     }
     return false;
 }
+bool FunctionParser::AddFunction(const std::string& name,
+                                 FunctionPtr func,
+                                 FunctionPtr func1,
+                                 FunctionPtr func2,
+                                 unsigned paramsAmount)
+{
+    if(paramsAmount == 0) return false; // Currently must be at least one
 
+    if(isValidName(name))
+    {
+        const char* n = name.c_str();
+        if(FindVariable(n, data->FuncParserNames) !=
+                data->FuncParserNames.end() ||
+            FindConstant(n) != data->Constants.end())
+            return false;
+
+        copyOnWrite();
+
+        data->FuncPtrNames[name] = data->FuncPtrs.size();
+        data->FuncPtrs.push_back(Data::FuncPtrData(func, paramsAmount));
+
+        data->derivFuncPtrs.push_back(Data::FuncPtrData(func1, paramsAmount));
+        data->deriv2FuncPtrs.push_back(Data::FuncPtrData(func2, paramsAmount));
+
+        return true;
+    }
+    return false;
+}
 bool FunctionParser::checkRecursiveLinking(const FunctionParser* fp) const
 {
     if(fp == this) return true;
@@ -1348,6 +1375,11 @@ double FunctionParser::EvalDeriv(const double *Vars,int pos)
                       data->FuncPtrs[index].ptr(&Stack[SP-params+1]);
                   SP -= params-1;
                   Stack[SP] = retVal;
+
+
+                  d1=derivStack.pop();
+                  d2 =d1 * data->derivFuncPtrs[index].ptr(&Stack[SP-params+1]);
+                  derivStack.push(d2);
                   break;
               }
 
@@ -1715,10 +1747,24 @@ const unsigned* const ByteCode = data->ByteCode;
               {
                   unsigned index = ByteCode[++IP];
                   unsigned params = data->FuncPtrs[index].params;
+
+
+                  double val = evalStack.pop();
+                  double xx[params];
+                  xx[0]=val;
                   double retVal =
-                      data->FuncPtrs[index].ptr(&Stack[SP-params+1]);
-                  SP -= params-1;
-                  Stack[SP] = retVal;
+                      data->FuncPtrs[index].ptr(xx);
+                  evalStack.push(retVal);
+                  //SP -= params-1;
+                  //Stack[SP] = retVal;
+
+                  d1=derivStack.pop();
+                  d2 =d1 * data->derivFuncPtrs[index].ptr(xx);
+                  derivStack.push(d2);
+
+                  dd1=derivStack2.pop();
+                  dd2 = dd1+d1 * data->deriv2FuncPtrs[index].ptr(xx);
+                  derivStack2.push(dd2);
                   break;
               }
 

@@ -23,6 +23,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	METHODS/BGWO.cpp \
     METHODS/pdoublegenetic.cpp \
 	METHODS/trio.cpp \
     OPTIMUS/cluster.cpp \
@@ -117,6 +118,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     GE/cprogram.h \
     METHODS/pdoublegenetic.h \
+    METHODS/BGWO.h \
     METHODS/trio.h \
     OPTIMUS/cluster.h \
     OPTIMUS/kmeans.h \

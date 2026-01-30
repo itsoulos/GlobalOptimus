@@ -246,9 +246,21 @@ double	Cprogram::fitness(vector<int> &genome)
     return currrentModel->getTrainError();
 }
 
+
+
 int		Cprogram::Parse(string expr)
 {
 	return (parser.Parse(expr,vars)==-1);
+}
+
+
+int    Cprogram::setChromosomeInParser(vector<int> &genome)
+{
+    int redo = 0;
+    string st = printRandomProgram(genome,redo);
+    if(redo>=REDO_MAX) return 0;
+    if(!Parse(st)) {return 0;}
+    return 1;
 }
 
 int		Cprogram::EvalError()

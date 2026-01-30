@@ -36,6 +36,16 @@ double  NNCModel::getTrainError()
     if(use_balancedclass==false) return Model::getTrainError();
     else return getClassErrorPerClass(trainDataset);
 }
+
+double  NNCModel::getDerivative(Data &x,int pos)
+{
+    return program->EvalDeriv(x.data(),pos);
+}
+double  NNCModel::getDerivative2(Data &x,int pos)
+{
+    return program->EvalDeriv2(x.data(),pos);
+}
+
 double  NNCModel::getOutput(Data &x)
 {
 
@@ -114,6 +124,20 @@ double  NNCModel::preTrain(vector<int> &result)
     return yy;
 }
 
+
+void    NNCModel::makeProgram(int dimension)
+{
+    if(program!=NULL) delete program;
+    program = new NncProgram(dimension,this);
+    program->makeGrammar();
+}
+
+
+int    NNCModel::setChromosomeInParser(vector<int> &genome)
+{
+    return program->setChromosomeInParser(genome);
+}
+
 void  NNCModel::trainModel()
 {
         loadTrainSet();
@@ -121,10 +145,7 @@ void  NNCModel::trainModel()
         use_balancedclass=getParam( "nnc_balanceclass").getValue()=="yes";
         if(trainDataset == NULL) return;
         if(pop!=NULL) delete pop;
-        if(program!=NULL) delete program;
-        program = new NncProgram(trainDataset->dimension(),this);
-        program->makeGrammar();
-
+        makeProgram(trainDataset->dimension());
 
         vector<int> ruleResult;
         bool preTrainFlag = getParam("nnc_pretrain").getValue()=="yes";

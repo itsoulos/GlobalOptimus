@@ -18,7 +18,7 @@ private:
     bool usebound_flag=false;
     bool useFitnessPerClass=false;
     bool hasDebug = false;
-
+    int patternDimension=1;
 public:
     /**
      * @brief MlpProblem The main constructor of MLP.
@@ -142,7 +142,7 @@ public:
     void        he_normal_init(Data & weights, int fan_in);
     void        xavier_uniform_init(Data& weights, int fan_in, int fan_out);
     void        xavier_normal_init(Data& weights, int fan_in, int fan_out);
-
+    void        setPatternDimension(int d);
     virtual ~MlpProblem();
 };
 #endif // MLPPROBLEM_H

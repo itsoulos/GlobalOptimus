@@ -83,6 +83,8 @@ class Cprogram : public Program
          * @return the fitness value for chromosome genome.
          */
         virtual double	fitness(vector<int> &genome);
+
+        int    setChromosomeInParser(vector<int> &genome);
         virtual ~Cprogram();
 };
 # define __CPROGRAM__H
