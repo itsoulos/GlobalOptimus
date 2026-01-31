@@ -1,8 +1,8 @@
 #include "BGWO.h"
 BGWO::BGWO()
 {
-    addParam(Parameter("bgwo_agents", 100,10,1000, "Number of gwo agents"));
-    addParam(Parameter("bgwo_maxiters", 100,10,1000, "Number of gwo max iters"));
+    addParam(Parameter("bgwo_agents", 120,10,1000, "Number of gwo agents"));
+    addParam(Parameter("bgwo_maxiters", 200,10,1000, "Number of gwo max iters"));
     addParam(Parameter("lrate",0.0,0.0,1.0,"The local search rate"));
     addParam(Parameter("bgwo_k", 2.2,2.0,3.0, " k"));
 
@@ -64,6 +64,7 @@ void    BGWO::init()
 
 void BGWO::step()
 {
+
     const int dim = myProblem->getDimension();
 
     // (A) Αξιολόγηση πληθυσμού + ενημέρωση Alpha/Beta/Delta
@@ -96,6 +97,7 @@ void BGWO::step()
     // (B) BGWO: Μη-γραμμικός convergence factor a(t)
     //     Paper Eq. (8):
     //       a = 2 * e^( k / ln( (t-1)/T ) )
+    //     όπου t: current iteration, T: max iterations, k: coefficient
 
     const double T = static_cast<double>(Max_iter);
     const double t = static_cast<double>(iter) + 2.0;
@@ -163,6 +165,9 @@ void BGWO::step()
     }
 
     iter += 1;
+    if (terminated()) {
+        done();
+    }
 }
 
 
