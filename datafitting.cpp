@@ -28,7 +28,7 @@
 # include <METHODS/gwooptimizer.h>
 # include <METHODS/trio.h>
 # include <METHODS/pdoublegenetic.h>
-
+# include <METHODS/BGWO.h>
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
     # include <MLMODELS/functionalrbf.h>
@@ -103,6 +103,9 @@ void loadMethods()
     methodName<<"Trident";
     method<<new pDoubleGenetic;
     methodName<<"PdoubleGenetic";
+
+    method<<new BGWO;
+    methodName<<"BGWO";
 
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();
