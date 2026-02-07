@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=mlp
+MODEL=nnc
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -48,7 +48,7 @@ elif [ $MODEL = "frbf" ]; then
 elif [ $MODEL = "gdf" ]; then
   MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
 elif [ $MODEL = "rule" ]; then
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=500 --rule_popsize=200 --rule_popgens=1000 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_poplrate=0.01  --rule_lsearchmethod=mutate"
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rule_popcount=500 --rule_popsize=200 --rule_popgens=1000 --rule_popsrate=0.1 --rule_popmrate=0.05 --rule_poplrate=0.01  --rule_lsearchmethod=de"
 elif [ $MODEL = "nnc" ]; then
 ### PARAMS FOR model  nnc
 ### nnc_popcount: Number of chromosomes in the genetic population.
@@ -64,7 +64,7 @@ elif [ $MODEL = "nnc" ]; then
 ### nnc_weightfactor: The weight factor used in the local search procedure.
 ### nnc_enablebound: Enable or disable the usage of bounding techniques during the local search procedure.
 ### nnc_balanceclass: Enable or disable the imbalanced classes feature
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=none --nnc_crossitems=20 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=yes --nnc_pretrain=no --nnc_balanceclass=yes"
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=none --nnc_crossitems=20 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=no --nnc_pretrain=no --nnc_balanceclass=no"
 fi
 
 if [ $METHOD = "Bfgs" ]; then

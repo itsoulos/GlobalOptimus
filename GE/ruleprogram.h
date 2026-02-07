@@ -17,7 +17,7 @@ private:
 public:
     RuleProgram(int dim,Model *m);
     virtual double	fitness(vector<int> &genome);
-    double  getOutput(const double *x);
+    virtual double  getOutput(const double *x);
     virtual ~RuleProgram();
 };
 

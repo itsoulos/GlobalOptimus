@@ -71,12 +71,14 @@ double  RuleProgram::getOutput(const double *x)
     {
 
         double vv = mparser[j].Eval(x);
-        if(vv>-1e+10)
+//        printf("vv[%d]=%lf \n",j,vv);
+        if(fabs(vv)<1e+10)
         {
             finalValue = vv;
             break;
         }
     }
+  //  printf("FINAL VALUE = %lf \n",finalValue);
     double ff = finalValue;
     return ff;
 }

@@ -10,7 +10,7 @@ RuleModel::RuleModel()
     addParam(Parameter("rule_popsrate","0.10","RULER selection rate"));
     addParam(Parameter("rule_popmrate","0.05","RULER mutation rate"));
     addParam(Parameter("rule_poplrate","0.00","RULER local search rate"));
-    addParam(Parameter("rule_lsearchmethod","bfgs","Available methods: bfgs,lbfgs,adam,genetic"));
+    addParam(Parameter("rule_lsearchmethod","bfgs","Available methods: bfgs,lbfgs,adam,genetic,de"));
 }
 
 double  RuleModel::getOutput(Data &x)
@@ -57,6 +57,9 @@ void        RuleModel::trainModel()
  else
  if(method=="siman")
      pop->setLocalMethod(GELOCAL_SIMAN);
+ else
+     if(method=="de")
+     pop->setLocalMethod(GELOCAL_DE);
 
 
  int gens = getParam("rule_popgens").getValue().toInt();

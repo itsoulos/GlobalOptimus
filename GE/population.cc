@@ -268,15 +268,13 @@ void	Population::calcFitnessArray()
 	{
 		for(int j=0;j<genome_size;j++) g[j]=genome[i][j];	
 		fitness_array[i]=fitness(g);
-		//else 
-		//localSearch(i);
         if(lrate>0.0)
         {
             double  r =  rand() *1.0 /RAND_MAX;
             if(r<=lrate)
-	    {
+            {
                 localSearch(i);
-	    }
+            }
         }
 		if(fabs(fitness_array[i])<dmin)
 		{
@@ -287,8 +285,8 @@ void	Population::calcFitnessArray()
             fitness_array[i]=1e+100;
         if((i+1)%50==0)
 		{
-	//		printf(" %d:%.5lg ",i+1,dmin);
-	//		fflush(stdout);
+       //     printf(" %d:%.5lg ",i+1,dmin);
+       //     fflush(stdout);
         }
 		
 	}
@@ -517,6 +515,32 @@ void	Population::localSearch(int pos)
     else
     if(localMethod==GELOCAL_MUTATE)
     {
+        int ipos =rand() % genome_size;
+        int new_value;
+        for(int k=0;k<20;k++)
+        {
+            int old_value,range,direction;
+        again:
+
+            old_value = genome[pos][ipos];
+            range = 10;
+            direction = rand() % 2==1?1:-1;
+            new_value =  old_value + direction * (rand() % range);
+            if(new_value<0) goto again;
+            genome[pos][ipos]=new_value;
+            for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
+            double trial_fitness=fitness(g);
+            if(fabs(trial_fitness)<fabs(fitness_array[pos]))
+            {
+                printf("MUTATE %lf => %lf \n",fitness_array[pos],trial_fitness);
+                fitness_array[pos]=trial_fitness;
+            }
+            else	genome[pos][ipos]=old_value;
+        }
+    }
+    else
+    if(localMethod==GELOCAL_DE)
+    {
 		
         int randomA,randomB,randomC;
         do
@@ -533,7 +557,6 @@ void	Population::localSearch(int pos)
         if(i==randomIndex || rand()*1.0/RAND_MAX <=CR)
         {
             int old_value = genome[pos][i];
-again:
             F = -0.5 + 2.0 * rand()*1.0/RAND_MAX;
             genome[pos][i]=((int)(genome[randomA][i]+abs(F*(genome[randomB][i]-genome[randomC][i]))))%maxrule[i];
             if(genome[pos][i]<0)
@@ -546,32 +569,12 @@ again:
             double trial_fitness=fitness(g);
             if(fabs(trial_fitness)<fabs(fitness_array[pos]))
             {
-            //    printf("NEW DE VALUE[%d] = %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
+           //   printf("NEW DE VALUE[%d] = %lf=>%lf\n",pos,fitness_array[pos],trial_fitness);
                 fitness_array[pos]=trial_fitness;
             }
             else	genome[pos][i]=old_value;
         }
-/*        int ipos =rand() % genome_size;
-                int new_value;
-                for(int k=0;k<20;k++)
-                {
-			int old_value,range,direction;
-again:
-		
-                old_value = genome[pos][ipos];
-                range = 10;
-                direction = rand() % 2==1?1:-1;
-                new_value =  old_value + direction * (rand() % range);
-                if(new_value<0) goto again; 
-                genome[pos][ipos]=new_value;
-                for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
-                double trial_fitness=fitness(g);
-                if(fabs(trial_fitness)<fabs(fitness_array[pos]))
-                {
-                    fitness_array[pos]=trial_fitness;
-                }
-                else	genome[pos][ipos]=old_value;
-                }*/
+
 	}
     }
     else
@@ -584,7 +587,7 @@ again:
         lt.getPoint(g,fitness_array[pos]);
         for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
 
-      //  printf("SIMAN[%d] %lf=>%lf\n",pos,f,fitness_array[pos]);
+     printf("SIMAN[%d] %lf=>%lf\n",pos,f,fitness_array[pos]);
     }
     else
     if(localMethod == GELOCAL_BFGS)
@@ -611,7 +614,7 @@ again:
     if(fabs(y)<=fabs(ff))
     {
         fitness_array[pos]=y;
-      //  printf("New value [%lg]->[%lg]\n",ff,y);
+       printf("New value [%lg]->[%lg]\n",ff,y);
         for(int i=0;i<genome_size;i++)
         {
         genome[pos][i]=(int)fabs(x[i]);

@@ -142,6 +142,7 @@ double  Model::getTrainError()
         if(isnan(per)) return 1e+100;
         if(isinf(per)) return 1e+100;
         error+= (per-yy)*(per-yy);
+
     }
     return error;
 }

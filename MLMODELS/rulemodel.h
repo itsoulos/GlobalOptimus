@@ -21,6 +21,7 @@ private:
 public:
     RuleModel();
     virtual     double  getOutput(Data &x);
+
     void        localSearchItem(int pos);
     virtual void        trainModel();
     virtual     ~RuleModel();
