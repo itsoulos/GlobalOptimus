@@ -71,13 +71,14 @@ bool    Mapper::mapAndReplaceDataset(Dataset *original,Dataset *mappedDataset)
     int count= original->count();
     Data newPoint;newPoint.resize(parser.size());
     Matrix xall  = original->getAllXpoint();
+    mappedDataset->clearPoints();
     for(int i=0;i<count;i++)
     {
         Data xpoint = xall[i];
         double ypoint = original->getYPoint(i);
         if(!map(xpoint,newPoint)) return false;
-        mappedDataset->setPoint(i,newPoint,ypoint);
-       // mappedDataset->addPoint(newPoint,ypoint);
+       // mappedDataset->setPoint(i,newPoint,ypoint);
+        mappedDataset->addPoint(newPoint,ypoint);
     }
 
     return true;

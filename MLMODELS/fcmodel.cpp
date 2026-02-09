@@ -19,13 +19,6 @@ FcModel::FcModel()
     addParam(Parameter("fc_features",1,1,100,"Number of constructed features"));
     addParam(Parameter("fc_createparams","","Parameters for construction model"));
     addParam(Parameter("fc_evaluateparams","","Parameters for evaluation model"));
-    //addParam(Parameter("nnc_lsearchiters","10","Number of iters before local search"));
-    //addParam(Parameter("nnc_lsearchitems","1","Number of items in local search"));
-    //addParam(Parameter("nnc_lsearchrate",0.0,0.0,1.0,"Local search rate for nnc"));
-    //addParam(Parameter("nnc_crossitems",100,10,10000,"Crossover items"));
-    //QStringList methods;
-    //methods<<"crossover"<<"mutate"<<"bfgs"<<"none";
-    //addParam(Parameter("nnc_lsearchmethod",methods[0],methods,"Available methods: crossover,mutate,siman,bfgs,none"));
 
     pop = NULL;
     createLoader=NULL;
