@@ -14,11 +14,17 @@ private:
     Optimizer       *createMethod,*evaluateMethod;
     Population      *pop;
     FcProgram       *program;
+    double   avgPrec,avgRec,avgF1;
+    bool isTestRunning=false;
 public:
     FcModel();
     virtual     void        trainModel();
     virtual     double  getOutput(Data &x);
-    virtual     void  testModel(double &trainError,double &testError,double &classError);
+    virtual     void  testModel(double &trainError,double &testError,
+                           double &classError,double &classErrorPerClass);
+    virtual void    getPrecisionRecall(double &precision,
+                        double &recall,double &fscore);
+
     virtual ~FcModel();
 };
 

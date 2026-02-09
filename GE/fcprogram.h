@@ -13,10 +13,12 @@ private:
     Mapper  *mapper;
     Dataset *originalDataset;
     Dataset *mappedDataset;
+    bool    useErrorPerClass = false;
 public:
     FcProgram(int dim,Model *m,Dataset *orig,int nf);
     virtual double	fitness(vector<int> &genome);
-    int getPatternDimension() const;
+    int     getPatternDimension() const;
+    void    setUseErrorPerClass(bool value);
     Mapper  *getMapper();
     ~FcProgram();
 };

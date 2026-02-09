@@ -8,7 +8,7 @@ RbfProblem::RbfProblem()
     addParam(Parameter("rbf_nodes",1,1,100,"Number of rbf nodes"));
     addParam(Parameter("rbf_factor",3.0,1.0,100.0,"Rbf Scale factor"));
     QStringList yesno;
-    yesno<<"false"<<"true";
+    yesno<<"no"<<"yes";
     addParam(Parameter("rbf_originaltrain",yesno[0],yesno,"Enable or disable the original RBF Training"));
     addParam(Parameter("rbf_weightbound",10.0,1.0,100000.0,"The margins for weights"));
     trainA.resize(0);
@@ -559,7 +559,7 @@ QJsonObject RbfProblem::done(Data &x)
 void    RbfProblem::trainModel()
 {
     QString origtrain = getParam("rbf_originaltrain").getValue();
-    if(origtrain=="true")
+    if(origtrain=="yes")
     {
         originalTrain();
         return;
@@ -759,6 +759,7 @@ void    RbfProblem::originalTrain()
     matrix_mult(matrixC,RealOutput,pw);
     for(i=0;i<pw.size();i++)
         weight[i]=pw[i][0];
+
 }
 
 RbfProblem::~RbfProblem()

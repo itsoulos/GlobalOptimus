@@ -285,11 +285,12 @@ void	Population::calcFitnessArray()
             fitness_array[i]=1e+100;
         if((i+1)%50==0)
 		{
-       //     printf(" %d:%.5lg ",i+1,dmin);
-       //     fflush(stdout);
+      //     printf(" %d:%.5lg ",i+1,dmin);
+      //      fflush(stdout);
         }
 		
 	}
+    //printf("\n");
 	return;
 	for(int i=0;i<genome_count;i++)
 	{

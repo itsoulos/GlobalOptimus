@@ -199,6 +199,12 @@ void    MlpProblem::init(QJsonObject &pt)
 }
 
 
+double MlpProblem::getOutput(Data &x)
+{
+    double dv= getOutput(lastWeight,x.data());
+    return dv;
+}
+
 /** edo ypologizoume to train error pou einai
  *  kai i timi pou elaxistopoioume **/
 double MlpProblem::funmin(Data &x)
@@ -208,7 +214,7 @@ double MlpProblem::funmin(Data &x)
 
     double error = 0.0;
     int xallsize  = xall.size();
-
+  lastWeight=x;
     if(useFitnessPerClass)// && method!=NULL && !method->isLocalOptimizerRunning())
     {
         return getClassErrorPerClass(x,trainDataset);
@@ -241,6 +247,7 @@ double MlpProblem::funmin(Data &x)
         double lambda = 1;
         return error*(1.0+lambda * tt*tt);
     }
+
 
     return error;
 

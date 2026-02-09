@@ -30,12 +30,20 @@ if [ $MODEL = "mlp" ]; then
 #mlp_simanmethod:       The cooling method for siman. Values: exp, log, linear, quad.
   MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=uniform --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no --mlp_simanmethod=exp"
 elif [ $MODEL = "fc" ]; then
+##model_trainfile:	The used train file.
+##model_testfile:   The used test file.
+##fc_createmodel: 	The used model to create features.
+##fc_evaluatemodel: The used model to evaluate the created features.
+##fc_features:      The number of used features.
+##fc_popcount:      Number of chromosomes in genetic population.
+##fc_popsize:       The size of each chromosome.
+##fc_popgens:		The number of allowed generations in the genetic population.
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
   FEATURES=2
-  CREATEPARAMS='\"--bfgs_iters=5\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"'
+  CREATEPARAMS='\"--bfgs_iters=5\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"\"--rbf_originaltrain=yes\"'
   EVALPARAMS='\"--opt_method=Bfgs\"\"--mlp_nodes=10\"\"--rbf_nodes=10\"\"--opt_debug=no\"\"--rbf_factor=5\"\"--opt_termination=maxiters\"'
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS"
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS --fc_balanceclass=yes"
 elif [ $MODEL = "rbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "airbf" ]; then

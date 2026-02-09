@@ -10,6 +10,11 @@ FcProgram::FcProgram(int dim,Model *m,Dataset *orig,int nf)
     mappedDataset=NULL;
 }
 
+void    FcProgram::setUseErrorPerClass(bool value)
+{
+    useErrorPerClass = value;
+}
+
 double  FcProgram::fitness(vector<int> &genome)
 {
     vector<int> pgenome;
@@ -60,7 +65,9 @@ double  FcProgram::fitness(vector<int> &genome)
     currrentModel->setModelSeed(1);
     currrentModel->initModel();
     currrentModel->trainModel();
-    double value = currrentModel->getTrainError();
+    double value = (useErrorPerClass)?
+            currrentModel->getClassErrorPerClass(mappedDataset):
+            currrentModel->getTrainError();
     return value;
 }
 

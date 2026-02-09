@@ -19,6 +19,7 @@ private:
     bool useFitnessPerClass=false;
     bool hasDebug = false;
     int patternDimension=1;
+    Data lastWeight;
 public:
     /**
      * @brief MlpProblem The main constructor of MLP.
@@ -49,7 +50,7 @@ public:
      * @return the derivative of sigmoid function.
      */
     double  sigder(double x);
-    virtual double getOutput(Data &x) {return 0.0;};
+    virtual double getOutput(Data &x);
     double  getOutput(Data &w,double *x);
     Data    getDerivative(Data &w,double *x);
 

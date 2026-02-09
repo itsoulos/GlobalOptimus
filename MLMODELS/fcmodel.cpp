@@ -19,7 +19,9 @@ FcModel::FcModel()
     addParam(Parameter("fc_features",1,1,100,"Number of constructed features"));
     addParam(Parameter("fc_createparams","","Parameters for construction model"));
     addParam(Parameter("fc_evaluateparams","","Parameters for evaluation model"));
-
+    QStringList yesNo;
+    yesNo<<"no"<<"yes";
+    addParam(Parameter("fc_balanceclass",yesNo[0],yesNo,"Enable or disable the error per class feature"));
     pop = NULL;
     createLoader=NULL;
     createModel=NULL;
@@ -148,6 +150,9 @@ void        FcModel::trainModel()
                             trainDataset,
                             nfeatures);
     program->makeGrammar();
+    program->setUseErrorPerClass(
+        (getParam("fc_balanceclass").getValue()=="yes")?true:false
+        );
     pop = new Population(getParam("fc_popcount").getValue().toInt(),
                      getParam("fc_popsize").getValue().toInt(),
                      program,getModelSeed());
@@ -169,7 +174,8 @@ void        FcModel::trainModel()
 
 void  FcModel::testModel(double &avg_trainError,
                          double &avg_testError,
-                         double &avg_classError)
+                         double &avg_classError,
+                        double &classErrorPerClass)
 {
 	vector<int> g = pop->getBestGenome();
 	pop->fitness(g);
@@ -178,30 +184,107 @@ void  FcModel::testModel(double &avg_trainError,
 	avg_testError = 0.0;
 	avg_classError = 0.0;
     const int iters=30;
+    Dataset *mappedDataset =new Dataset();
+    mapper->mapDataset(trainDataset,mappedDataset);
+    evaluateModel->setTrainSet(mappedDataset);
+    Dataset *mappedTestSet = new Dataset();
+    mapper->mapDataset(testDataset,mappedTestSet);
+    avgPrec=0.0,avgRec=0.0,avgF1=0.0;
+    isTestRunning=true;
 	for(int i=1;i<=iters;i++)
 	{
-    	Dataset *mappedDataset =new Dataset();
-    	mapper->mapDataset(trainDataset,mappedDataset);
-    	evaluateModel->setTrainSet(mappedDataset);
+
     	evaluateModel->initModel();
     	evaluateModel->trainModel();
 
-    	Dataset *mappedTestSet = new Dataset();
-    	mapper->mapDataset(testDataset,mappedTestSet);
     	evaluateModel->setTestSet(mappedTestSet);
-    double trainError  =0.0,testError=0.0,classError=0.0,classErrorPerClass=0.0;
-        evaluateModel->testModel(trainError,testError,classError,classErrorPerClass);
+        double trainError  =0.0,testError=0.0,classError=0.0,classErrorPerClass=0.0;
+        evaluateModel->testModel(trainError,testError,
+                                 classError,classErrorPerClass);
 
-    	evaluateModel->disableRemoveData();
-	avg_trainError+=trainError; 
-	avg_testError+=testError;
-	avg_classError+=classError;
-    	delete mappedDataset;
-    	delete mappedTestSet;
+        double x,y,z;
+        getPrecisionRecall(x,y,z);
+        avgPrec+=x;
+        avgRec+=y;
+        avgF1+=z;
+
+        evaluateModel->disableRemoveData();
+        avg_trainError+=trainError;
+        avg_testError+=testError;
+        avg_classError+=classError;
+
 	}
+    avgPrec/=iters;
+    avgRec/=iters;
+    avgF1/=iters;
+
+
+    delete mappedTestSet;
+    delete mappedDataset;
+
+
 	avg_trainError/=iters;
 	avg_testError/=iters;
 	avg_classError/=iters;
+    isTestRunning=false;
+}
+
+
+void    FcModel::getPrecisionRecall(double &avg_precision,
+                                 double &avg_recall,double &avg_fscore)
+{
+
+    if(!isTestRunning)
+    {
+        avg_precision=avgPrec;
+        avg_recall=avgRec;
+        avg_fscore=avgF1;
+        return;
+    }
+    Mapper *mapper = program->getMapper();
+    Dataset *mappedTestSet = new Dataset();
+    mapper->mapDataset(testDataset,mappedTestSet);
+    int count = testDataset->count();
+    Data dclass = testDataset->getPatternClass();
+
+    vector<double> T;
+    vector<double> O;
+    T.resize(count);
+    O.resize(count);
+
+    for(unsigned int i=0;i<count;i++)
+    {
+        Data pattern = mappedTestSet->getXPoint(i);
+        double testy = testDataset->getYPoint(i);
+        double tempOut = evaluateModel->getOutput(pattern);
+        T[i]=testDataset->nearestClassIndex(testy);
+        O[i]=testDataset->nearestClassIndex(tempOut);
+    }
+    vector<double> precision;
+    vector<double> recall;
+    vector<double> fscore;
+    fscore.resize(dclass.size());
+    avg_precision = 0.0, avg_recall = 0.0,avg_fscore=0.0;
+    printConfusionMatrix(T,O,precision,recall);
+    int icount1=dclass.size();
+    int icount2=dclass.size();
+    for(int i=0;i<dclass.size();i++)
+    {
+        if(precision[i]>=0)
+            avg_precision+=precision[i];
+        else icount1--;
+        if(recall[i]>=0)
+            avg_recall+=recall[i];
+        else icount2--;
+        fscore[i]=2.0*precision[i]*recall[i]/(precision[i]+recall[i]);
+        avg_fscore+=fscore[i];
+    }
+    avg_precision/=icount1;
+    avg_recall/=icount2;
+
+    double test=2.0 * avg_precision * avg_recall/(avg_precision+avg_recall);
+    avg_fscore=test;
+    delete mappedTestSet;
 }
 
 FcModel::~FcModel()
