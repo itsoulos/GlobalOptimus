@@ -122,6 +122,16 @@ Data FunctionalRbf::getSample()
           }
 	  return xx;
 }
+
+void FunctionalRbf::initModel()
+{
+    QJsonObject xx;
+    xx["model_trainfile"]=getParam("model_trainfile").getValue();
+    xx["model_testfile"]=getParam("model_testfile").getValue();
+    xx["rbf_nodes"]=getParam("rbf_nodes").getValue();
+    init(xx);
+}
+
 void FunctionalRbf::Kmeans(double * data_vectors,
             vector<double> &centers,
             vector<double> &variances,
@@ -519,7 +529,8 @@ Data    FunctionalRbf::gradient(Data &x)
 FunctionalRbf::FunctionalRbf()
     :Problem(1)
 {
-
+    addParam(Parameter("rbf_nodes",1,1,100,"Number of rbf nodes"));
+    addParam(Parameter("rbf_factor",3.0,1.0,100.0,"Rbf Scale factor"));
 }
 
 

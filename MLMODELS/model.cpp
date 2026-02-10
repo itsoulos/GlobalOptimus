@@ -26,7 +26,7 @@ void    Model::trainModel()
         method->solve();
     }
     else
-        printf("METHOD IS NULL!!!\n");
+                printf("METHOD IS NULL!!!\n");
 }
 
 

@@ -39,15 +39,18 @@ private:
     adept::adouble afunmin( vector<adept::adouble> &x, vector<double> &x1 );
 public:
     FunctionalRbf();
-    virtual void init(QJsonObject &params);
+    virtual void        init(QJsonObject &params);
+    virtual void        initModel();
     virtual QJsonObject done(Data &x);
     virtual     double  getOutput(Data &x);
-    virtual double  funmin(Data &x);
-    virtual Data    gradient(Data &x);
-    double neuronOutput( vector<double> &x, vector<double> &patt, unsigned pattDim, unsigned offset );
-    virtual Data getSample();
-    arma::vec train( vector<double> &x,bool &ok );
-    double nearestClass(double y);
+    virtual double      funmin(Data &x);
+    virtual Data        gradient(Data &x);
+    double              neuronOutput( vector<double> &x,
+                            vector<double> &patt, unsigned pattDim,
+                            unsigned offset );
+    virtual Data        getSample();
+    arma::vec           train( vector<double> &x,bool &ok );
+    double              nearestClass(double y);
     ~FunctionalRbf();
 };
 

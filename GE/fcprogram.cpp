@@ -17,6 +17,7 @@ void    FcProgram::setUseErrorPerClass(bool value)
 
 double  FcProgram::fitness(vector<int> &genome)
 {
+    printf("pass 1\n");
     vector<int> pgenome;
     int psize = genome.size()/nfeatures;
     pgenome.resize(psize);
@@ -31,6 +32,7 @@ double  FcProgram::fitness(vector<int> &genome)
         slist.push_back(st);
     }
 
+    printf("pass 2\n");
     if(!mapper->setExpr(slist)) return 1e+100;
     bool createFlag = false;
     if(mappedDataset==NULL)
@@ -60,11 +62,14 @@ double  FcProgram::fitness(vector<int> &genome)
         }
     }
 
+    printf("pass 3\n");
+
     currrentModel->setTrainSet(mappedDataset);
     srand(currrentModel->getModelSeed());
     currrentModel->setModelSeed(1);
     currrentModel->initModel();
     currrentModel->trainModel();
+    printf("pass 4\n");
     double value = (useErrorPerClass)?
             currrentModel->getClassErrorPerClass(mappedDataset):
             currrentModel->getTrainError();

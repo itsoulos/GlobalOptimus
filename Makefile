@@ -1392,7 +1392,8 @@ fcmodel.o: MLMODELS/fcmodel.cpp MLMODELS/fcmodel.h \
 		MLMODELS/converter.h \
 		MLMODELS/gdfmodel.h \
 		MLMODELS/rulemodel.h \
-		GE/ruleprogram.h
+		GE/ruleprogram.h \
+		MLMODELS/functionalrbf.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fcmodel.o MLMODELS/fcmodel.cpp
 
 editlogger.o: OPTIMUS/editlogger.cpp OPTIMUS/editlogger.h \

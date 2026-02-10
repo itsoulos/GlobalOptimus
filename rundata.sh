@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=fc
+MODEL=mlp
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -41,9 +41,11 @@ elif [ $MODEL = "fc" ]; then
   CREATEMODEL=rbf
   EVALUATEMODEL=mlp
   FEATURES=2
-  CREATEPARAMS='\"--bfgs_iters=5\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"\"--rbf_originaltrain=yes\"'
+  CREATEPARAMS='"\--opt_method=Bfgs\"\"--bfgs_iters=5\"\"--gen_maxiters=5\"\"--rbf_nodes=10\"\"--rbf_factor=2\"\"--opt_debug=no\"\"--rbf_originaltrain=yes\"'
   EVALPARAMS='\"--opt_method=Bfgs\"\"--mlp_nodes=10\"\"--rbf_nodes=10\"\"--opt_debug=no\"\"--rbf_factor=5\"\"--opt_termination=maxiters\"'
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS --fc_balanceclass=yes"
+  
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS --fc_balanceclass=no"
+  
 elif [ $MODEL = "rbf" ]; then
   MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "airbf" ]; then
@@ -213,4 +215,4 @@ if [ -z "$PROBLEM" ]; then
   exit
 fi
 
-./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes
+ ./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes

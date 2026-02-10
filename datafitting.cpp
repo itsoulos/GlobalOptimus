@@ -163,7 +163,8 @@ void loadProblem()
             }
         }
     }
-    if(modelName=="mlp" || modelName=="rbf" ||modelName == "frbf" || modelName == "airbf")
+    if(modelName=="mlp" || modelName=="rbf" ||modelName == "frbf"
+        || modelName == "airbf")
     {
        if(modelName == "mlp")
        {
@@ -176,6 +177,7 @@ void loadProblem()
 
 #ifdef OPTIMUS_ARMADILLO
     FunctionalRbf *p=(FunctionalRbf *)mainModel;
+
      p->init(problemParams);
 #endif
 

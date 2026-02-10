@@ -467,6 +467,11 @@ void    RbfProblem::initModel()
 {
     int nodes        = getParam("rbf_nodes").getValue().toInt();
 
+    QJsonObject xx;
+    xx["model_trainfile"]=getParam("model_trainfile").getValue();
+    xx["model_testfile"]=getParam("model_testfile").getValue();
+    xx["rbf_nodes"]=getParam("rbf_nodes").getValue();
+    init(xx);
     weight.resize(nodes);
     int d = trainDataset->dimension();
     int k = (d*nodes)+

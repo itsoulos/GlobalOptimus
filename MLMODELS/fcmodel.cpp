@@ -5,10 +5,13 @@
 # include <MLMODELS/gdfmodel.h>
 # include <MLMODELS/rulemodel.h>
 # include <QDebug>
+#ifdef OPTIMUS_ARMADILLO
+# include <MLMODELS/functionalrbf.h>
+#endif
 FcModel::FcModel()
 {
     QStringList cmodel;
-    cmodel<<"mlp"<<"rbf"<<"nnc"<<"rule"<<"gdf";
+    cmodel<<"mlp"<<"rbf"<<"nnc"<<"rule"<<"gdf"<<"frbf";
     addParam(Parameter("fc_createmodel",cmodel[0],cmodel,"Feature construction model"));
     addParam(Parameter("fc_evaluatemodel",cmodel[0],cmodel,"Feature evaluate model"));
     addParam(Parameter("fc_popcount",200,50,10000,"Population count"));
@@ -64,6 +67,13 @@ Model *getModelByName(QString model1)
     {
         ret = new GdfModel();
     }
+#ifdef OPTIMUS_ARMADILLO
+    else
+    if(model1=="frbf")
+    {
+        ret = new FunctionalRbf();
+    }
+#endif
     return ret;
 }
 
@@ -88,7 +98,7 @@ void        FcModel::trainModel()
     params2.replace("\"","");
     params2.replace("\\"," ");
     QVector<QStringList> listArray2=evaluateModel->parseString(params2);
-    if(model1=="mlp" || model1=="rbf")
+    if(model1=="mlp" || model1=="rbf" || model1=="frbf")
     {
         QStringList paramNames=listArray1[0];
         QStringList paramValues=listArray1[1];
@@ -102,7 +112,9 @@ void        FcModel::trainModel()
         }
         else createMethod = NULL;
         //else createMethod=createLoader->getSelectedMethod("Bfgs");
-        if((model1=="mlp" || model1=="rbf") && createLoader!=NULL)
+
+        if((model1=="mlp" || model1=="rbf" || model1=="frbf")
+            && createLoader!=NULL)
         {
             createModel->setOptimizer(createMethod);
         }
@@ -110,9 +122,13 @@ void        FcModel::trainModel()
         for(int i=0;i<paramNames.size();i++)
         {
             if(createMethod!=NULL)  createMethod->setParam(paramNames[i],paramValues[i]);
+            createModel->setParam(paramNames[i],paramValues[i]);
         }
+        createModel->setParam("model_trainfile",getParam("model_trainfile").getValue());
+        createModel->setParam("model_testfile",getParam("model_testfile").getValue());
+        createModel->initModel();
     }
-    if(model2=="mlp" || model2=="rbf")
+    if(model2=="mlp" || model2=="rbf" || model2=="frbf")
     {
 	    if(evaluateLoader==NULL)
         	evaluateLoader =new MethodLoader();
@@ -124,7 +140,7 @@ void        FcModel::trainModel()
             if(evaluateMethod==NULL)
                 evaluateMethod=evaluateLoader->getSelectedMethod(paramValues[i1]);
         }
-        if(model2=="mlp" || model2=="rbf")
+        if(model2=="mlp" || model2=="rbf" || model2=="frbf")
         {
                evaluateModel->setOptimizer(evaluateMethod);
         }
@@ -163,11 +179,12 @@ void        FcModel::trainModel()
     int gens = getParam("fc_popgens").getValue().toInt();
  //   pop->setLocalSearchRate(0.001);
  //   pop->setLocalMethod(GELOCAL_MUTATE);
+
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
-    if(g%50==0)
-	printf("\nFC Gen=%4d ERROR=%20.10lg\n",g,pop->getBestFitness());
+        if(g%10==0)
+            printf("FC Gen=%4d ERROR=%20.10lg\n",g,pop->getBestFitness());
     }
     pop->evaluateBestFitness();
 }
