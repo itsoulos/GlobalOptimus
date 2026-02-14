@@ -1857,6 +1857,7 @@ double Bfgs(Data &x, Problem *p,int iters)
     return fmin;
 }
 */
+double oldval = 1e+100;
 int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
 {
     totcal_1.itnocs++;
@@ -1867,6 +1868,12 @@ int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
     for(int i=0;i<*n;i++)
         tempx[i]=x[i];
     *f=myProblem->statFunmin(tempx);
+
+    if(*f<oldval)
+    {
+        printf("BFGS. ITER=%4d VALUE=%lg\n",totcal_1.itnocs,*f);
+        oldval = *f;
+    }
     /*
     if(getParam("opt_debug").getValue()=="yes")
         methodLogger->printMessage(

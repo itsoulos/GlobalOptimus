@@ -7,6 +7,106 @@ problem1d::problem1d()
     setModelSize(k);
 }
 
+double problem1d::sigmoid(double x) {
+    return 1.0 / (1.0 + exp(-x));
+}
+
+double problem1d::sigmoid_d(double s) {
+    return s * (1.0 - s);
+}
+
+double problem1d::sigmoid_dd(double s) {
+    return sigmoid_d(s) * (1.0 - 2.0 * s);
+}
+
+Eval problem1d::forward(NeuralNet& net, double z, double t)
+{
+    Eval e;
+    e.a1.resize(NeuralNet::H);
+    e.a2.resize(NeuralNet::H);
+    e.dz1.resize(NeuralNet::H);
+    e.dt1.resize(NeuralNet::H);
+    e.dz2.resize(NeuralNet::H);
+    e.dt2.resize(NeuralNet::H);
+    e.dzz2.resize(NeuralNet::H);
+
+    /* Layer 1 */
+    for (int i=0;i<NeuralNet::H;i++) {
+        double s = net.b1[i] + net.W1[i][0]*z + net.W1[i][1]*t;
+        e.a1[i] = sigmoid(s);
+        e.dz1[i] = net.W1[i][0];
+        e.dt1[i] = net.W1[i][1];
+    }
+
+    /* Layer 2 */
+    for (int i=0;i<NeuralNet::H;i++) {
+        double s = net.b2[i];
+        e.dz2[i]=e.dt2[i]=e.dzz2[i]=0.0;
+
+        for (int j=0;j<NeuralNet::H;j++) {
+            s += net.W2[i][j]*e.a1[j];
+            double da = sigmoid_d(e.a1[j]);
+            double dda = sigmoid_dd(e.a1[j]);
+            e.dz2[i] += net.W2[i][j]*da*e.dz1[j];
+            e.dt2[i] += net.W2[i][j]*da*e.dt1[j];
+            e.dzz2[i]+= net.W2[i][j]*dda*e.dz1[j]*e.dz1[j];
+        }
+        e.a2[i] = sigmoid(s);
+    }
+
+    /* Output */
+    e.u=e.v=e.ut=e.vt=e.uzz=e.vzz=0.0;
+    for (int i=0;i<NeuralNet::H;i++) {
+        double da = sigmoid_d(e.a2[i]);
+        double dda = sigmoid_dd(e.a2[i]);
+
+        e.u   += net.W3[0][i]*e.a2[i];
+        e.v   += net.W3[1][i]*e.a2[i];
+
+        e.ut  += net.W3[0][i]*da*e.dt2[i];
+        e.vt  += net.W3[1][i]*da*e.dt2[i];
+
+        e.uzz += net.W3[0][i]*(dda*e.dz2[i]*e.dz2[i] + da*e.dzz2[i]);
+        e.vzz += net.W3[1][i]*(dda*e.dz2[i]*e.dz2[i] + da*e.dzz2[i]);
+    }
+    return e;
+}
+
+
+/* PDE (14.1) */
+double problem1d::loss_pde(NeuralNet& net,double z,double t)
+{
+    auto e = forward(net,z,t);
+    double r2 = e.u*e.u + e.v*e.v;
+
+    double R1 = e.ut + Dp*e.vzz + my_beta*e.v + my_gamma*r2*e.v;
+    double R2 = e.vt - Dp*e.uzz - my_beta*e.u - my_gamma*r2*e.u;
+
+    return R1*R1 + R2*R2;
+}
+
+/* Initial condition (14.2) */
+double problem1d::loss_ic(NeuralNet& net,double z)
+{
+    auto e = forward(net,z,0.0);
+    double u0 = exp(-(z-Lz/2)*(z-Lz/2));
+    double v0 = 0.0;
+    return (e.u-u0)*(e.u-u0) + e.v*e.v;
+}
+
+/* Boundary condition (14.3) */
+double problem1d::loss_bc(NeuralNet& net,double z,double t,int side)
+{
+    auto e = forward(net,z,t);
+    double s = (side==0 ? -1.0 : 1.0);
+
+    double R1 = e.ut + s*Omega*e.uzz + my_beta*e.v + my_gamma*(e.u*e.u+e.v*e.v)*e.v;
+    double R2 = e.vt - s*Omega*e.uzz - my_beta*e.u - my_gamma*(e.u*e.u+e.v*e.v)*e.u;
+
+    return R1*R1 + R2*R2;
+}
+
+
 void    problem1d::setModelSize(int n)
 {
     if(model!=NULL) delete model;
@@ -206,6 +306,37 @@ double problem1d::imagePartFunmin()
 
 double  problem1d::funmin(Data &x)
 {
+    net.setParams(x);
+    double ic_loss  = 0.0;
+    double loss_bc1 = 0.0;
+    double loss_bc2 = 0.0;
+    double loss = 0.0;
+    for(int k=0;k<npoints;k++)
+    {
+        double z = zpoint[k];
+        ic_loss += loss_ic(net,z);
+    }
+    for(int l=0;l<npoints;l++)
+    {
+        double t = tpoint[l];
+        loss_bc1 += loss_bc(net,0.0,t,0);
+        loss_bc2 += loss_bc(net,Lz,t,1);
+    }
+    for (int k=0;k<npoints;k++) {
+        double z = zpoint[k];
+        for(int l=0;l<npoints;l++)
+        {
+
+            double t = tpoint[l];
+            loss += loss_pde(net,z,t);
+        }
+    }
+    loss+=ic_loss;
+    loss+=loss_bc1;
+    loss+=loss_bc2;
+    return loss;
+
+    /*
 #ifdef USE_MLP
     params = x;
 #else
@@ -257,9 +388,10 @@ double  problem1d::funmin(Data &x)
     }
     printf("penalties: %lf %lf %lf\n",sum1,sum2,sum3);
     double penalty = lambda * (sum1+sum2+sum3);
-    return realPartFunmin()+imagePartFunmin()+penalty;
+    return realPartFunmin()+imagePartFunmin()+penalty;*/
 }
 
+/** finite difference gradient **/
 Data    problem1d::gradient(Data &x)
 {
     Data g;
@@ -284,27 +416,24 @@ void    problem1d::init(QJsonObject &params)
         int n = params["modelSize"].toString().toInt();
         setModelSize(n);
     }
-    if(params.contains("Lz"))
+    zpoint.resize(npoints);
+    tpoint.resize(npoints);
+    for(int i=0;i<npoints;i++)
     {
-        Lz = params["Lz"].toString().toDouble();
+        zpoint[i]=Lz* i*1.0/(npoints-1.0);
+        tpoint[i]=T * i*1.0/(npoints-1.0);
     }
-    if(params.contains("npoints"))
+    setDimension(net.netSize);
+    Data xl,xr;
+    xl.resize(net.netSize);
+    xr.resize(net.netSize);
+    for(int i=0;i<=net.netSize;i++)
     {
-        npoints=params["npoints"].toString().toDouble();
+        xl[i]=-20.0;
+        xr[i]= 20.0;
     }
-    if(params.contains("beta"))
-    {
-        beta = params["npoints"].toString().toDouble();
-    }
-    if(params.contains("gamma"))
-    {
-        gamma = params["gamma"].toString().toDouble();
-    }
-    if(params.contains("Lt"))
-    {
-        Lt = params["Lt"].toString().toDouble();
-    }
-
+    setLeftMargin(xl);
+    setRightMargin(xr);
 }
 
 QJsonObject problem1d::done(Data &x)

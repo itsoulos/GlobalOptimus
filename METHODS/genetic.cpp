@@ -246,6 +246,7 @@ void    Genetic::makeChildrenDouble(Data &parent1,Data &parent2,
 
 void    Genetic::CalcFitnessArray()
 {
+    double dmin =1e+100;
     for(int i=0;i<chromosomeCount;i++)
     {
 
@@ -258,6 +259,12 @@ void    Genetic::CalcFitnessArray()
             {
                 fitnessArray[i]=localSearch(population[i]);
             }
+        }
+        if(fitnessArray[i]<dmin) dmin=fitnessArray[i];
+        if(i%20==0)
+        {
+            printf("%d:%lg ",i,dmin);
+            fflush(stdout);
         }
     }
 }

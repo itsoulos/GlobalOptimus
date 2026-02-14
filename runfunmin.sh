@@ -90,7 +90,7 @@ then
 #gen_count:		number of chromosomes
 #gen_maxiters:		maximum number of generations
 
-	METHODPARAMS="--gen_lrate=0.00 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=200 --gen_maxiters=200"
+	METHODPARAMS="--gen_lrate=0.00 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=200"
 elif [ $METHOD = "Multistart" ]
 then
 #ms_samples: number of multistart samples
