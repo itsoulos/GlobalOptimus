@@ -40,6 +40,7 @@ SOURCES += \
     GE/cprogram.cc \
     METHODS/trio.cpp \
     METHODS/BGWO.cpp \
+    METHODS/ParallelBGwo.cpp \
     PROBLEMS/problem1d.cpp \
     PROBLEMS/zakharov.cpp \
     PROBLEMS/michalewicz.cpp \
@@ -207,6 +208,7 @@ HEADERS += \
     GE/cprogram.h \
     METHODS/trio.h \
     METHODS/BGWO.h \
+    METHODS/ParallelBGwo.h \
     PROBLEMS/problem1d.h \
     PROBLEMS/zakharov.h \
     PROBLEMS/katsuura.h \

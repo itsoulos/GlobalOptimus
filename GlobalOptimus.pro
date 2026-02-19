@@ -22,6 +22,7 @@ SOURCES += \
     GE/nncprogram.cpp \
 	METHODS/trio.cpp \
 	METHODS/BGWO.cpp \
+	METHODS/ParallelBGwo.cpp \
     MLMODELS/converter.cc \
     MLMODELS/neuralparser.cc \
     MLMODELS/nncmodel.cpp \
@@ -188,6 +189,7 @@ HEADERS += \
     GE/nncprogram.h \
     METHODS/trio.h \
     METHODS/BGWO.h \
+    METHODS/ParallelBGwo.h \
     MLMODELS/converter.h \
     MLMODELS/neuralparser.h \
     MLMODELS/nncmodel.h \

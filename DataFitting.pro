@@ -24,6 +24,7 @@ QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
 	METHODS/BGWO.cpp \
+	METHODS/ParallelBGwo.cpp \
     METHODS/pdoublegenetic.cpp \
 	METHODS/trio.cpp \
     OPTIMUS/cluster.cpp \
@@ -119,6 +120,7 @@ HEADERS += \
     GE/cprogram.h \
     METHODS/pdoublegenetic.h \
     METHODS/BGWO.h \
+    METHODS/ParallelBGwo.h \
     METHODS/trio.h \
     OPTIMUS/cluster.h \
     OPTIMUS/kmeans.h \
