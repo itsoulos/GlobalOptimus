@@ -7,13 +7,18 @@
 class ParallelBGwo : public Optimizer
 {
 private:
-    int dimension, population, maxIterations, iteration, subPopulation, subPopEnable, sub_size, prop, propagationNumber, propagationRate;
+    int dimension, population, similarityMaxCount, maxIterations, iteration, subPopulation, subPopEnable, sub_size, prop, propagationNumber, propagationRate;
     double localSearchRate, bF2x;
     int similaritySize;
     QString subPopEnableStr;
+     QString termination;
     double similarityValue;
+    vector<int> similarityCurrentCount;
     int similarityCount;
-     QString terminationMethod;
+    vector<double>  similarityBestValue;
+    bool    checkSubCluster(int subCluster);
+    vector<Similarity> threadSimilarity;
+    vector<DoubleBox> threadDoublebox;
     vector<double> fitnessArray, bestF2x, bSamply, bestF2xOld;
     vector<vector<double>> samples, bestSamply;
     vector<double> bestF2x2, bestF2x3;
@@ -24,7 +29,6 @@ private:
     double a1, a2, a3;
     double convergenceFactorA() const;
     void updateLeadersForSubpop(int k);
-    bool checkCluster(int subCluster);
     vector<int> similarityCurrentCountBest;
     QString propagationMethod;
     void propagate();

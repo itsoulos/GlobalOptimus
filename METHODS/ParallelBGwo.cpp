@@ -22,6 +22,7 @@ ParallelBGwo::ParallelBGwo()
 
 void ParallelBGwo::init()
 {
+    termination =terminationMethod;
     prop = getParam("prop").getValue().toInt();
     subPopulation = getParam("subPopulation").getValue().toInt();
     dimension = myProblem->getDimension();
@@ -38,7 +39,6 @@ void ParallelBGwo::init()
     printf("prop=%d\tpropagationNumber=%d\tpropagationRate=%d\tpropagationMethod=%s\n",
            prop, propagationNumber, propagationRate,
            propagationMethod.toStdString().c_str());
-    terminationMethod = getParam("terminationVote").getValue();
     iteration = 0;
     bestF2x.resize(subPopulation);
     bestF2xOld.resize(subPopulation);
@@ -72,6 +72,8 @@ void ParallelBGwo::init()
     bF2x = 1e+100;
     bestF2x2.resize(subPopulation);
     bestF2x3.resize(subPopulation);
+    threadDoublebox.resize(subPopulation);
+    threadSimilarity.resize(subPopulation);
     bestSamply.resize(subPopulation, vector<double>(dimension));
     bestSamply2.resize(subPopulation, vector<double>(dimension));
     bestSamply3.resize(subPopulation, vector<double>(dimension));
@@ -270,18 +272,37 @@ void ParallelBGwo::step()
 }
 
 
-bool ParallelBGwo::checkCluster(int subCluster)
+bool ParallelBGwo::terminated()
+  {
+                    int c = 0;
+                    for (int k = 0; k < subPopulation; k++)
+                        if (this->checkSubCluster(k))
+                            c++;
+                    return iteration >= maxIterations || c >= subPopEnable;
+
+ }
+bool ParallelBGwo::checkSubCluster(int subCluster)
+
 {
-    double difference = fabs((bestF2xOld.at(subCluster)) - bestF2x.at(subCluster));
-    bestF2xOld.at(subCluster) = bestF2x.at(subCluster);
+    termination =terminationMethod;
+    if(termination == "doublebox" && threadDoublebox[subCluster].terminate(fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster)))) return true;
+    if(termination == "similarity" && threadSimilarity[subCluster].terminate(fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster)))) return true; //similarity
+    if(iteration>=maxIterations) return true;
+
+    return false;
+
+    double difference = fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster));
     if (difference < 1e-6)
-        similarityCurrentCountBest.at(subCluster)++;
+        similarityCurrentCount.at(subCluster)++;
     else
-        similarityCurrentCountBest.at(subCluster) = 0;
-    if (similarityCurrentCountBest.at(subCluster) > 5)
+        similarityCurrentCount.at(subCluster) = 0;
+    if (similarityCurrentCount.at(subCluster) >= similarityMaxCount)
         return true;
+
     return false;
 }
+
+
 
 
 void ParallelBGwo::propagate()
@@ -360,22 +381,6 @@ void ParallelBGwo::propagateBetween(int sender, int receiver)
         samples[worstIndex] = samples[bestIndex];
         fitnessArray[worstIndex] = fitnessArray[bestIndex];
     }
-}
-bool ParallelBGwo::terminated()
-{
-    int terminatedCount = 0;
-    const double bestValue=bF2x;
-    if(terminationMethod=="doublebox")
-            return doubleBox.terminate(bestValue);
-
-        else if(terminationMethod=="similarity")
-                return similarity.terminate(bestValue);
-        else  {
-        for (int k = 0; k < subPopulation; k++)
-            if (checkCluster(k))
-                terminatedCount++;
-           return (terminatedCount >= subPopEnable);
-              }
 }
 
 
