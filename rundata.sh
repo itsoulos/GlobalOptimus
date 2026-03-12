@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=PBGWO
+METHOD=iPso
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -28,7 +28,7 @@ if [ $MODEL = "mlp" ]; then
 #mlp_balanceclass:	Enable or disable the usage of classification error as the training error.
 #mlp_usesimanbound:	Enable or disable the incorporation of siman for bound the weights of the mlp.
 #mlp_simanmethod:       The cooling method for siman. Values: exp, log, linear, quad.
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=uniform --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no --mlp_simanmethod=exp"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=lecun --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no --mlp_simanmethod=exp"
 elif [ $MODEL = "fc" ]; then
 ##model_trainfile:	The used train file.
 ##model_testfile:   The used test file.
@@ -74,7 +74,7 @@ elif [ $MODEL = "nnc" ]; then
 ### nnc_weightfactor: The weight factor used in the local search procedure.
 ### nnc_enablebound: Enable or disable the usage of bounding techniques during the local search procedure.
 ### nnc_balanceclass: Enable or disable the imbalanced classes feature
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=none --nnc_crossitems=20 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=no --nnc_pretrain=no --nnc_balanceclass=no"
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=siman --nnc_crossitems=20 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=no --nnc_pretrain=no --nnc_balanceclass=yes"
 fi
 
 if [ $METHOD = "Bfgs" ]; then
@@ -171,7 +171,7 @@ elif [ $METHOD = "iPso" ]; then
   #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
   #ipso_gradientcheck: usage of gradient rejection rule (true|false)
   #ipso_inertiatype: selection of inertia calcuation mechanism
-METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=similarity --ipso_gradientcheck=false --ipso_inertiatype=20 --ipso_movemechanism=turbulence --ipso_restart=yes --ipso_restart_stall=3 --ipso_restart_max=10" 
+METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=500 --ipso_localsearch_rate=0.00 --ipso_stoppingrule=best_fitness --ipso_gradientcheck=true --ipso_c1=0.5 --ipso_c2=0.5 --ipso_inertia_start=0.4 --ipso_inertia_end=0.9 --ipso_inertiatype=3 --ipso_isneural=yes" 
 
 elif [ $METHOD = "NeuralMinimizer" ]; then
 

@@ -42,7 +42,7 @@ iPso::iPso()
 
     // Stopping rule
     QStringList ipso_stoppingrule;
-    ipso_stoppingrule << "doublebox" << "similarity";
+    ipso_stoppingrule << "doublebox" << "similarity"<<"mean_fitness"<<"best_fitness"<<"ali";
     addParam(Parameter("ipso_stoppingrule", ipso_stoppingrule[0],
                        ipso_stoppingrule,
                        "Select stopping rule. values: doublebox, similarity"));
@@ -618,7 +618,6 @@ bool iPso::terminated()
 {
 
 
-
     // Neural termination
     if (ipso_isneural && std::fabs(besty) < 1e-6)
         return true;
@@ -637,7 +636,6 @@ bool iPso::terminated()
         if (charilogis)
         {
             double dd = fabs(newSum - sum);
-            //printf("%4d] Generation  change: %10.6lf \n", generation, dd);
             sum = newSum;
 
             if (dd < 1e-8)
