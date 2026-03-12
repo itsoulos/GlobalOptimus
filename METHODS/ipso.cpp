@@ -148,7 +148,7 @@ void iPso::init()
         {
             for (int i = 0; i < ipso_particles; i++)
             {
-                Data x = neural->getSampleNoViolate();
+                Data x = neural->getSample();
                 double y = neural->funmin(x);
                 particle[i]      = x;
                 fitness_array[i] = y;
@@ -385,12 +385,12 @@ void iPso::calcFitnessArray()
             double part2 = c1 * r1 * (bestParticle[i][j] - particle[i][j]);
             double part3 = c2 * r2 * (bestx[j] - particle[i][j]);
 
-            double vnew = part1 + part2 + part3;
+            //double vnew = part1 + part2 + part3;
 
-            if (vnew >  vmax[j]) vnew =  vmax[j];
-            if (vnew < -vmax[j]) vnew = -vmax[j];
+            //if (vnew >  vmax[j]) vnew =  vmax[j];
+            //if (vnew < -vmax[j]) vnew = -vmax[j];
 
-            velocity[i][j] = vnew;
+            velocity[i][j] = part1+part2+part3;
 
             double trialf = particle[i][j] + velocity[i][j];
 
@@ -411,7 +411,7 @@ void iPso::calcFitnessArray()
         double moveDist = getDistance(particle[i], oldg);
         distances.push_back(moveDist);
 
-        if (mean_range > 0.0)
+        /*if (mean_range > 0.0)
         {
             if (moveMode == 1)
             {
@@ -455,9 +455,9 @@ void iPso::calcFitnessArray()
                     particle[i][j] = xnew;
                 }
             }
-        }
+        }*/
 
-        for (int j = 0; j < genome_size; ++j)
+        /*for (int j = 0; j < genome_size; ++j)
         {
             if (isBad(particle[i][j]))
             {
@@ -465,7 +465,7 @@ void iPso::calcFitnessArray()
                                  myProblem->randomDouble() * (rmargin[j] - lmargin[j]);
                 velocity[i][j] = 0.0;
             }
-        }
+        }*/
     }
 
     double localsearch_rate = getParam("ipso_localsearch_rate").getValue().toDouble();
@@ -510,9 +510,7 @@ void iPso::calcFitnessArray()
                             xl[k] = -2.0 * std::fabs(particle[i][k]);
                             xr[k] =  2.0 * std::fabs(particle[i][k]);
                         }
-                       MlpProblem *neural = dynamic_cast<MlpProblem*>(myProblem);
-                    //   if (neural)
-                    //       neural->findBoundsWithSiman(xl, xr, particle[i]);
+
                         for (int k = 0; k <  myProblem->getDimension(); k++)
                         {
                             if (particle[i][k] < xl[k])
@@ -563,7 +561,8 @@ void iPso::calcFitnessArray()
             if (!found)
                 minimax.push_back(particle[i]);
         }
-
+        else fitness_array[i]=fitness(particle[i]);
+        /*
         if (fitness_array[i] >= 1e+99 || !std::isfinite(fitness_array[i]))
             fitness_array[i] = fitness(particle[i]);
 
@@ -572,6 +571,7 @@ void iPso::calcFitnessArray()
 
         if (fitness_array[i] < oldMinValue)
             oldMinValue = fitness_array[i];
+    */
     }
 }
 
@@ -584,7 +584,7 @@ void iPso::step()
         updateCenter();
     updateBest();
 
-            if (restart_enabled && generation - lastImprovementGen > stall_generations &&
+    /*        if (restart_enabled && generation - lastImprovementGen > stall_generations &&
                 restartCount < max_grestarts)
     {
         Data   best_keep    = bestx;
@@ -611,7 +611,7 @@ void iPso::step()
             bestParticle[i]      = particle[i];
             bestFitness_array[i] = fitness_array[i];
         }
-    }
+    }*/
 }
 
 bool iPso::terminated()

@@ -1871,7 +1871,7 @@ int Bfgs::fgcalc_(long *n,double *x,double *f,double *g)
 
     if(*f<oldval)
     {
-        printf("BFGS. ITER=%4d VALUE=%lg\n",totcal_1.itnocs,*f);
+      //  printf("BFGS. ITER=%4d VALUE=%lg\n",totcal_1.itnocs,*f);
         oldval = *f;
     }
     /*

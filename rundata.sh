@@ -171,7 +171,7 @@ elif [ $METHOD = "iPso" ]; then
   #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
   #ipso_gradientcheck: usage of gradient rejection rule (true|false)
   #ipso_inertiatype: selection of inertia calcuation mechanism
-METHODPARAMS="--ipso_particles=200 --ipso_maxgenerations=500 --ipso_localsearch_rate=0.00 --ipso_stoppingrule=best_fitness --ipso_gradientcheck=true --ipso_c1=0.5 --ipso_c2=0.5 --ipso_inertia_start=0.4 --ipso_inertia_end=0.9 --ipso_inertiatype=3 --ipso_isneural=yes" 
+METHODPARAMS="--ipso_particles=200 --ipso_generations=200 --ipso_localsearch_rate=0.00 --ipso_stoppingrule=best_fitness --ipso_gradientcheck=false --ipso_c1=0.5 --ipso_c2=0.5 --ipso_inertia_start=0.4 --ipso_inertia_end=0.9 --ipso_inertiatype=3 --ipso_isneural=yes" 
 
 elif [ $METHOD = "NeuralMinimizer" ]; then
 
@@ -215,4 +215,4 @@ if [ -z "$PROBLEM" ]; then
   exit
 fi
 
- ./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=10 --opt_debug=yes
+ ./DataFitting --opt_model=$MODEL $GLOBALPARAMS $METHODPARAMS $MODELPARAMS --opt_iters=30 --opt_debug=yes
