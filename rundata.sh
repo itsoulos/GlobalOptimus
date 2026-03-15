@@ -1,11 +1,11 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=iPso
+METHOD=PBGWO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=maxiters
+TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -28,7 +28,7 @@ if [ $MODEL = "mlp" ]; then
 #mlp_balanceclass:	Enable or disable the usage of classification error as the training error.
 #mlp_usesimanbound:	Enable or disable the incorporation of siman for bound the weights of the mlp.
 #mlp_simanmethod:       The cooling method for siman. Values: exp, log, linear, quad.
-  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=lecun --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no --mlp_simanmethod=exp"
+  MODELPARAMS="--opt_method=$METHOD --mlp_nodes=10 --mlp_leftmargin=-10 --mlp_rightmargin=10 --mlp_initmethod=smallvalues --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --mlp_usebound=no --mlpboundlimit=10.0 --mlp_balanceclass=no --mlp_usesimanbound=no --mlp_simanmethod=exp"
 elif [ $MODEL = "fc" ]; then
 ##model_trainfile:	The used train file.
 ##model_testfile:   The used test file.
@@ -82,6 +82,12 @@ if [ $METHOD = "Bfgs" ]; then
   #bfgs_iters: the maximum number of allowed iterations
 
   METHODPARAMS="--bfgs_iters=200"
+  elif [ $METHOD = "PBGWO" ]
+then
+THREADS=5
+TOTAL_AGENTS=500
+PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
+	METHODPARAMS="--population=$PAGENTS --maxiters=200 --localsearchRate=0.00 --subPopulation=$THREADS --subPopEnable=ALL --prop=1 --propagationNumber=1 --propagationMethod=NtoN --propagationRate=10 --opt_distpartitions=$THREADS"
 elif [ $METHOD = "EO" ]; then
 METHODPARAMS="--population=100 --maxiters=200 --localsearchRate=0.00 --technique=0"
 elif [ $METHOD = "NelderMead" ]; then
@@ -171,7 +177,7 @@ elif [ $METHOD = "iPso" ]; then
   #ipso_stoppingrule: the stopping rule used (mean_fitness,best_fitness,doublebox,ali)
   #ipso_gradientcheck: usage of gradient rejection rule (true|false)
   #ipso_inertiatype: selection of inertia calcuation mechanism
-METHODPARAMS="--ipso_particles=200 --ipso_generations=200 --ipso_localsearch_rate=0.00 --ipso_stoppingrule=best_fitness --ipso_gradientcheck=false --ipso_c1=0.5 --ipso_c2=0.5 --ipso_inertia_start=0.4 --ipso_inertia_end=0.9 --ipso_inertiatype=3 --ipso_isneural=yes" 
+METHODPARAMS="--ipso_particles=200 --ipso_generations=200 --ipso_localsearch_rate=0.05 --ipso_stoppingrule=best_fitness --ipso_gradientcheck=true --ipso_c1=0.5 --ipso_c2=0.5 --ipso_inertia_start=0.4 --ipso_inertia_end=0.9 --ipso_inertiatype=13 --ipso_isneural=yes --ipso_neuralsampling=yes --ipso_neuralw=-1" 
 
 elif [ $METHOD = "NeuralMinimizer" ]; then
 

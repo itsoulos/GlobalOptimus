@@ -22,7 +22,7 @@ ParallelBGwo::ParallelBGwo()
 
 void ParallelBGwo::init()
 {
-    termination =terminationMethod;
+    termination = terminationMethod;
     prop = getParam("prop").getValue().toInt();
     subPopulation = getParam("subPopulation").getValue().toInt();
     dimension = myProblem->getDimension();
@@ -36,34 +36,38 @@ void ParallelBGwo::init()
     subPopEnableStr = getParam("subPopEnable").getValue().trimmed();
     k_coeff = getParam("k").getValue().toDouble();
 
+    printf("RAW subPopEnable='%s'\n",
+           subPopEnableStr.toStdString().c_str());
+
     printf("prop=%d\tpropagationNumber=%d\tpropagationRate=%d\tpropagationMethod=%s\n",
            prop, propagationNumber, propagationRate,
            propagationMethod.toStdString().c_str());
+
     iteration = 0;
     bestF2x.resize(subPopulation);
     bestF2xOld.resize(subPopulation);
     bSamply.resize(dimension);
     similarityCurrentCountBest.resize(subPopulation);
-    if (subPopEnableStr.compare("ANY", Qt::CaseInsensitive) == 0) {
-           subPopEnable = 1;
-       }
-       else if (subPopEnableStr.compare("MAJORITY", Qt::CaseInsensitive) == 0) {
-           subPopEnable = subPopulation / 2;
-       }
-       else if (subPopEnableStr.compare("ALL", Qt::CaseInsensitive) == 0) {
-           subPopEnable = subPopulation;
-       }
-       else {
-           bool ok = false;
-           int value = subPopEnableStr.toInt(&ok);
 
-           if (ok)
-               subPopEnable = value;
-           else
-               subPopEnable = 1;
-       }
-    for (int k = 0; k < subPopulation; k++)
-    {
+    if (subPopEnableStr.compare("ANY", Qt::CaseInsensitive) == 0) {
+        subPopEnable = 1;
+    } else if (subPopEnableStr.compare("MAJORITY", Qt::CaseInsensitive) == 0) {
+        subPopEnable = subPopulation / 2;
+    } else if (subPopEnableStr.compare("ALL", Qt::CaseInsensitive) == 0) {
+        subPopEnable = subPopulation;
+    } else {
+        bool ok = false;
+        int value = subPopEnableStr.toInt(&ok);
+        if (ok) subPopEnable = value;
+        else subPopEnable = 1;
+    }
+
+    printf("PARSED subPopEnableStr='%s'  subPopEnable=%d  subPopulation=%d\n",
+           subPopEnableStr.toStdString().c_str(),
+           subPopEnable,
+           subPopulation);
+
+    for (int k = 0; k < subPopulation; k++) {
         bestF2x.at(k) = 1e+100;
         bestF2xOld.at(k) = 1e+100;
         similarityCurrentCountBest.at(k) = 0;
@@ -180,6 +184,8 @@ void ParallelBGwo::updateLeadersForSubpop(int k)
 void ParallelBGwo::step()
 {
     iteration++;
+    for (int k = 0; k < subPopulation; k++)
+        bestF2xOld [k] = bestF2x[k];
     const double a = convergenceFactorA();
     double minValue;
     int pos = 0;
@@ -273,37 +279,52 @@ void ParallelBGwo::step()
 
 
 bool ParallelBGwo::terminated()
-  {
-                    int c = 0;
-                    for (int k = 0; k < subPopulation; k++)
-                        if (this->checkSubCluster(k))
-                            c++;
-                    return iteration >= maxIterations || c >= subPopEnable;
+{
+    int c = 0;
+    for(int i = 0; i < subPopulation; i++)
+    {
+        if(checkSubCluster(i))
+            c++;
+    }
 
- }
+    printf("terminated check: iter=%d finished_subpops=%d required=%d\n",
+          iteration, c, subPopEnable);
+    return  c >= subPopEnable;
+}
 bool ParallelBGwo::checkSubCluster(int subCluster)
 
 {
-    termination =terminationMethod;
-    if(termination == "doublebox" && threadDoublebox[subCluster].terminate(fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster)))) return true;
-    if(termination == "similarity" && threadSimilarity[subCluster].terminate(fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster)))) return true; //similarity
-    if(iteration>=maxIterations) return true;
+    const int miniters=20;
+    if(iteration<miniters) return false;
+    termination = terminationMethod;
 
-    return false;
+    double diff = fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster));
 
-    double difference = fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster));
-    if (difference < 1e-6)
-        similarityCurrentCount.at(subCluster)++;
-    else
-        similarityCurrentCount.at(subCluster) = 0;
-    if (similarityCurrentCount.at(subCluster) >= similarityMaxCount)
+    if (termination == "doublebox" &&
+        threadDoublebox[subCluster].terminate(diff))
+    {
+        printf("subCluster %d terminated by doublebox at iter=%d diff=%g\n",
+              subCluster, iteration, diff);
         return true;
+    }
+
+    if (termination == "similarity" &&
+        threadSimilarity[subCluster].terminate(diff))
+    {
+        printf("subCluster %d terminated by similarity at iter=%d diff=%g\n",
+              subCluster, iteration, diff);
+        return true;
+    }
+
+    if (iteration >= maxIterations)
+    {
+        printf("subCluster %d terminated by maxIterations at iter=%d\n",
+               subCluster, iteration);
+        return true;
+    }
 
     return false;
 }
-
-
-
 
 void ParallelBGwo::propagate()
 {
