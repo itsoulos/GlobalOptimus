@@ -337,6 +337,217 @@ void    Population::setLocalSearchItems(int i)
     localsearch_items = i;
 }
 
+static mt19937 gen(random_device{}());
+
+double randDouble(double a, double b) {
+    uniform_real_distribution<> dist(a, b);
+    return dist(gen);
+}
+
+int randInt(int a, int b) {
+    uniform_int_distribution<> dist(a, b);
+    return dist(gen);
+}
+
+vector<int> Population::neighbor(const vector<int>& x, int stepSize ) {
+    vector<int> y = x;
+
+    int i = randInt(0, x.size() - 1);
+
+    // αλλαγή σε μία διάσταση
+    y[i] += randInt(-stepSize, stepSize);
+    if(y[i]<0) y[i]=0;
+
+    return y;
+}
+
+vector<int> Population::simulatedAnnealing(
+    vector<int> &x,
+    double T0,
+    double Tmin,
+    double alpha,
+    int iterPerTemp
+    ) {
+    double T = T0;
+
+    vector<int> best = x;
+    double bestVal = fitness(x);
+
+    while (T > Tmin) {
+
+        for (int k = 0; k < iterPerTemp; k++) {
+
+            vector<int> y = neighbor(x);
+
+            double fx = (fitness(x));
+            double fy = (fitness(y));
+
+            double delta = fabs(fy) - fabs(fx);
+
+            if (delta < 0) {
+                // καλύτερη λύση
+                x = y;
+            } else {
+                // πιθανότητα αποδοχής
+                double p = exp(-delta / T);
+
+                if (randDouble(0,1) < p)
+                    x = y;
+            }
+
+            // update best
+            double val = fitness(x);
+            if (fabs(val) < fabs(bestVal)) {
+                best = x;
+                bestVal = val;
+            }
+        }
+        //printf("T=%20.10lf BEST=%20.10lf\n",T,bestVal);
+        // cooling
+        T *= alpha;
+    }
+
+    return best;
+}
+
+
+vector<int> Population::discreteGradient(vector<int>& x)
+{
+    int n = x.size();
+    vector<int> grad(n);
+
+    double fx = fitness(x);
+
+    for (int i = 0; i < n; i++) {
+
+        vector<int> x_plus = x;
+        vector<int> x_minus = x;
+
+        x_plus[i] += 1;
+        x_minus[i] -= 1;
+        if(x_minus[i]<0) x_minus[i]=0;
+
+        double f_plus = fitness(x_plus);
+        double f_minus = fitness(x_minus);
+
+        if (f_plus < fx)
+            grad[i] = +1;
+        else if (f_minus < fx)
+            grad[i] = -1;
+        else
+            grad[i] = 0;
+    }
+    return grad;
+}
+
+vector<int> Population::discreteStep(vector<int>& x,vector<int>& grad)
+{
+    vector<int> res = x;
+
+    for (int i = 0; i < (int)x.size(); i++)
+    {
+        res[i] += grad[i];
+    }
+
+    return res;
+}
+
+void Population::integerLocalSearch(vector<int> &x,int maxSteps)
+{
+    double bestVal = fitness(x);
+    int stepSize = 100;
+    for (int step = 0; step < maxSteps; step++) {
+
+        vector<int> grad = discreteGradient(x);
+
+        vector<int> candidate = x;
+
+        for (int i = 0; i < x.size(); i++)
+        {
+            candidate[i] += grad[i] * stepSize;
+            if(candidate[i]<0) candidate[i]=0;
+        }
+
+        double val = fitness(candidate);
+
+        if (val < bestVal) {
+            x = candidate;
+            bestVal = val;
+        } else {
+            stepSize = max(1, stepSize / 2); // learning rate decay
+        }
+        printf("GD[%4d]=%20.10lg\n",step,bestVal);
+    }
+
+
+}
+
+
+vector<int> Population::integerAdam(
+    vector<int> x,
+    int steps,
+    double alpha,
+    double beta1,
+    double beta2,
+    double eps
+    ) {
+    int n = x.size();
+
+    vector<double> m(n, 0.0);
+    vector<double> v(n, 0.0);
+
+    double bestVal = fitness(x);
+
+    for (int t = 1; t <= steps; t++) {
+
+        vector<int> g_int = discreteGradient(x);
+
+        // convert gradient to double
+        vector<double> g(n);
+        for (int i = 0; i < n; i++)
+            g[i] = (double)g_int[i];
+
+        // update moments
+        for (int i = 0; i < n; i++) {
+            m[i] = beta1 * m[i] + (1 - beta1) * g[i];
+            v[i] = beta2 * v[i] + (1 - beta2) * g[i] * g[i];
+        }
+
+        // bias correction
+        vector<double> m_hat(n), v_hat(n);
+        for (int i = 0; i < n; i++) {
+            m_hat[i] = m[i] / (1 - pow(beta1, t));
+            v_hat[i] = v[i] / (1 - pow(beta2, t));
+        }
+
+        // candidate update
+        vector<int> candidate = x;
+
+        for (int i = 0; i < n; i++) {
+
+            double step = alpha * m_hat[i] / (sqrt(v_hat[i]) + eps);
+            double p = fabs(step);
+
+            if (rand()*1.0/RAND_MAX < p) {
+                candidate[i] += (step > 0 ? 1 : -1);
+            }
+
+            if(candidate[i]<0) candidate[i]=0;
+        }
+
+        double val = fitness(candidate);
+
+        if (val < bestVal) {
+            x = candidate;
+            bestVal = val;
+        }
+        else {
+            alpha *= 0.7; // decay learning rate
+        }
+    }
+
+    return x;
+}
 /* Evolve the next generation */
 void	Population::nextGeneration()
 {
@@ -346,10 +557,10 @@ void	Population::nextGeneration()
 	
     const int mod=localsearch_generations;
     const int count=localsearch_items;
-    if(mod && (generation+1) % mod==0)
+    if((generation+1) % mod==0)
 	{
 		for(int i=0;i<count;i++)
-			localSearch(rand()%genome_count);
+            localSearch(i==0?0:rand()%genome_count);
     }
 	select();
 	crossover();
@@ -447,36 +658,47 @@ public:
     {
         for(int i=0;i<(int)x.size();i++) {
         currentGenome[i]=(int)fabs(x[i]);
-      if(isnan(x[i]) || isinf(x[i])) return 1e+100;
-        //printf("xsize =%d c = %d x= %lf\n",x.size(),currentGenome[i],x[i]);
-    //   if(currentGenome[i]<0) currentGenome[i]=0;
+        if(isnan(x[i]) || isinf(x[i])) return 1e+100;
         }
         double f= pop->fitness(currentGenome);
         return f;
 
     }
-    virtual Data	gradient(Data &x)
+    virtual Data	 gradient(Data &x)
     {
 
-        Data g;
-        g.resize(x.size());
-        for(int i=0;i<(int)x.size();i++)
-        {
-        double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
-        x[i]+=eps;
-        double v1=funmin(x);
-        x[i]-=2.0 *eps;
-        double v2=funmin(x);
-        g[i]=(v1-v2)/(2.0 * eps);
+        int n = x.size();
+        vector<double> grad(n);
+        for(int i=0;i<(int)x.size();i++) {
+            currentGenome[i]=(int)fabs(x[i]);
+        double fx = pop->fitness(currentGenome);
 
-        x[i]+=eps;
+        for (int i = 0; i < n; i++) {
+
+            vector<int> x_plus = currentGenome;
+            vector<int> x_minus = currentGenome;
+
+            x_plus[i] += 1;
+            x_minus[i] -= 1;
+            if(x_minus[i]<0) x_minus[i]=0;
+
+            double f_plus = pop->fitness(x_plus);
+            double f_minus = pop->fitness(x_minus);
+
+            if (f_plus < fx)
+                grad[i] = +1;
+            else if (f_minus < fx)
+                grad[i] = -1;
+            else
+                grad[i] = 0;
         }
-        return g;
+        return grad;
     }
-
+    }
 };
 
-void	Population::localSearch(int pos)
+
+void 	Population::localSearch(int pos)
 {
 
     if(localMethod == GELOCAL_NONE) return;
@@ -582,10 +804,13 @@ void	Population::localSearch(int pos)
     if(localMethod == GELOCAL_SIMAN)
     {
         double f = fitness_array[pos];
-        IntegerAnneal lt(program);
+        /*IntegerAnneal lt(program);
         lt.setPoint(g,fitness_array[pos]);
         lt.Solve();
-        lt.getPoint(g,fitness_array[pos]);
+        lt.getPoint(g,fitness_array[pos]);*/
+        g=simulatedAnnealing(g);
+          g=integerAdam(g);
+        fitness_array[pos]=fitness(g);
         for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
 
      printf("SIMAN[%d] %lf=>%lf\n",pos,f,fitness_array[pos]);
@@ -593,6 +818,7 @@ void	Population::localSearch(int pos)
     else
     if(localMethod == GELOCAL_BFGS)
     {
+        g=integerAdam(g);/*
     PopulationProblem *pr=new PopulationProblem(this,g);
     double y;
     Data x;
@@ -610,20 +836,23 @@ void	Population::localSearch(int pos)
      method->solve();
     x = pr->getBestx();
     y = pr->funmin(x);
-    delete method;
+    delete method;*/
+        double y = fitness(g);
     double ff = fitness_array[pos];
+
     if(fabs(y)<=fabs(ff))
     {
         fitness_array[pos]=y;
        printf("New value [%lg]->[%lg]\n",ff,y);
         for(int i=0;i<genome_size;i++)
         {
-        genome[pos][i]=(int)fabs(x[i]);
+            //genome[pos][i]=(int)fabs(x[i]);
+            genome[pos][i]=g[i];
             if(genome[pos][i]<0) genome[pos][i]=0;
         }
     }
     //else printf("FAILED VALUES[%lg]=>[%lg]\n",ff,y);
-    delete pr;
+    //delete pr;
     printf("BFGS[%d] %lf=>%lf\n",pos,ff,fitness_array[pos]);
 
     }

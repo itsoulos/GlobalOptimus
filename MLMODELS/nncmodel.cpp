@@ -211,10 +211,9 @@ void  NNCModel::trainModel()
     for(int g=1;g<=gens;g++)
     {
         pop->nextGeneration();
-        if(g%50==0)
         printf(" generation = %d best value= %20.10lg\n",g,pop->getBestFitness());
 	
-        if(g%LI==0)
+        /*if(g%LI==0)
             {
                 for(int i=1;i<=LC;i++)
                 {
@@ -222,7 +221,7 @@ void  NNCModel::trainModel()
 
                     localSearchItem(pos);
                 }
-        }
+        }*/
 
        }
     setParam("nnc_lsearchmethod","bfgs");

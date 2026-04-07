@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Trident
-METHOD=PBGWO
+METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
@@ -7,7 +7,7 @@ SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
 TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
-MODEL=mlp
+MODEL=nnc
 
 BASEPATH=~/Desktop/ERGASIES/FeatureConstruction2/
 DATAPATH=$BASEPATH/datasets/tenfolding/
@@ -74,7 +74,7 @@ elif [ $MODEL = "nnc" ]; then
 ### nnc_weightfactor: The weight factor used in the local search procedure.
 ### nnc_enablebound: Enable or disable the usage of bounding techniques during the local search procedure.
 ### nnc_balanceclass: Enable or disable the imbalanced classes feature
-  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=siman --nnc_crossitems=20 --nnc_lsearchiters=20 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=no --nnc_pretrain=no --nnc_balanceclass=yes"
+  MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --nnc_popcount=500 --nnc_popsize=500 --nnc_popgens=500 --nnc_popsrate=0.1 --nnc_popmrate=0.05 --nnc_lsearchrate=0.00 --nnc_lsearchmethod=siman --nnc_crossitems=20 --nnc_lsearchiters=50 --nnc_lsearchitems=20 --nnc_steadystate=no --nnc_weightfactor=2.0  --nnc_enablebound=no --nnc_pretrain=no --nnc_balanceclass=no"
 fi
 
 if [ $METHOD = "Bfgs" ]; then
