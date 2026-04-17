@@ -755,6 +755,10 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
+\begin_layout Subsection
+Problem description
+\end_layout
+
 \begin_layout Standard
 In the current section,
  the theoretical framework used to solve the nonlinear Schrödinger equation for nonlinear dispersive media is presented.
@@ -1018,6 +1022,197 @@ These aforementioned conditions express that the field tends to zero in time reg
  Hence,
  the solution describes a temporally localized pulse,
  whose energy remains finite and is concentrated in a limited time interval.
+\end_layout
+
+\begin_layout Subsection
+Proposed solution
+\end_layout
+
+\begin_layout Standard
+Physics-Informed Neural Networks (PINNs) are a class of deep learning methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "deepl"
+literal "false"
+
+\end_inset
+
+ designed to solve differential equations by embedding physical laws directly into the training process.
+ Instead of relying solely on data,
+ PINNs incorporate the governing equations of the system into the loss function,
+ enabling the model to learn solutions that are consistent with the underlying physics.
+ Let us consider a general partial differential equation (PDE) of the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathcal{N}[u(z,t)]=0,\quad(z,t)\in\Omega\label{eq:de}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathcal{N}[\cdot]$
+\end_inset
+
+ is a nonlinear differential operator and 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ denotes the spatio-temporal domain.
+ In the PINN framework,
+ the unknown solution 
+\begin_inset Formula $u(z,t)$
+\end_inset
+
+ is approximated by a neural network:
+\begin_inset Formula 
+\begin{equation}
+u(z,t)\approx u_{\theta}(z,t)\label{eq:approx}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta$
+\end_inset
+
+ represents the trainable parameters (weights and biases).
+ The key idea of PINNs is to enforce the PDE through a residual term:
+\begin_inset Formula 
+\begin{equation}
+R(z,t)=\mathcal{N}[u_{\theta}(z,t)]\label{eq:res}
+\end{equation}
+
+\end_inset
+
+The loss function is constructed as a combination of different contributions:
+\begin_inset Formula 
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{PDE}+\mathcal{L}_{IC}+\mathcal{L}_{BC}\label{eq:loss}
+\end{equation}
+
+\end_inset
+
+where
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{align}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mathcal{L}_{PDE} &= 
+\backslash
+frac{1}{N_f} 
+\backslash
+sum_{i=1}^{N_f} |R(z_i,t_i)|^2,
+ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mathcal{L}_{IC} &= 
+\backslash
+frac{1}{N_{ic}} 
+\backslash
+sum_{i=1}^{N_{ic}} |u_{
+\backslash
+theta}(z_i,0) - u_0(z_i)|^2,
+ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mathcal{L}_{BC} &= 
+\backslash
+frac{1}{N_{bc}} 
+\backslash
+sum_{i=1}^{N_{bc}} |u_{
+\backslash
+theta}(z_i,t_i) - g(z_i,t_i)|^2.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{align}
+\end_layout
+
+\end_inset
+
+Here,
+ 
+\begin_inset Formula $N_{f}$
+\end_inset
+
+,
+ 
+\begin_inset Formula $N_{ic}$
+\end_inset
+
+,
+ and 
+\begin_inset Formula $N_{bc}$
+\end_inset
+
+ denote the number of collocation,
+ initial,
+ and boundary points,
+ respectively.
+ A crucial component of PINNs is the use of automatic differentiation to compute the derivatives required in the residual 
+\begin_inset Formula $R(z,t)$
+\end_inset
+
+.
+ This allows accurate and efficient evaluation of spatial and temporal derivatives without numerical discretization errors.
+ The neural network parameters 
+\begin_inset Formula $\theta$
+\end_inset
+
+ are optimized by minimizing the total loss function using gradient-based optimization methods such as Adam 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "adamNN"
+literal "false"
+
+\end_inset
+
+ or L-BFGS 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lbfgsNN"
+literal "false"
+
+\end_inset
+
+.
+ Training is performed on randomly sampled collocation points in the domain,
+ as well as points on the boundaries and initial condition.
 \end_layout
 
 \begin_layout Section
@@ -2301,6 +2496,80 @@ Khan,
  IEEE Transactions on Magnetics,
  58(9),
  1-4.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "deepl"
+literal "false"
+
+\end_inset
+
+Deng,
+ L.,
+ & Yu,
+ D.
+ (2014).
+ Deep learning:
+ methods and applications.
+ Foundations and Trends& in Signal Processing,
+ 7(3-4),
+ 197-387.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "adamNN"
+literal "false"
+
+\end_inset
+
+Reyad,
+ M.,
+ Sarhan,
+ A.
+ M.,
+ & Arafa,
+ M.
+ (2023).
+ A modified Adam algorithm for deep neural network optimization.
+ Neural Computing and Applications,
+ 35(23),
+ 17095-17112.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "lbfgsNN"
+literal "false"
+
+\end_inset
+
+Bollapragada,
+ R.,
+ Nocedal,
+ J.,
+ Mudigere,
+ D.,
+ Shi,
+ H.
+ J.,
+ & Tang,
+ P.
+ T.
+ P.
+ (2018,
+ July).
+ A progressive batching L-BFGS method for machine learning.
+ In International Conference on Machine Learning (pp.
+ 620-629).
+ PMLR.
 \end_layout
 
 \begin_layout Standard
