@@ -231,8 +231,13 @@ V.N.
 \begin_inset Formula $^{2,*}$
 \end_inset
 
- and Vasileios Charilogis
+,
+ Vasileios Charilogis
 \begin_inset Formula $^{3}$
+\end_inset
+
+ and Dimitrios Tsalikakis
+\begin_inset Formula $^{4}$
 \end_inset
 
 
@@ -280,6 +285,18 @@ Department of Informatics and Telecommunications,
  451 10 Ioannina,
  Greece;
  v.charilog@uoi.gr
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $^{4}\quad$
+\end_inset
+
+Department of Engineering Informatics and Telecommunications,
+ University of Western Macedonia,
+ 50100 Kozani,
+ Greece,
+ dtsalikakis@uowm.gr
 \end_layout
 
 \begin_layout Corresponding Author
@@ -288,6 +305,8 @@ Correspondence:
 \end_layout
 
 \begin_layout Abstract
+
+\series bold
 The 1D Nonlinear Schrödinger Equation (NLSE) has been employed to model the femtosecond laser pulse propagation in photonic crystals.
  A numerical scheme has been used to solve NLSE.
  Using the machine learning tool of artificial neural networks and applying the proper artificial boundary conditions,
@@ -309,8 +328,6 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 The propagation of ultrashort laser pulses in nonlinear optical media is a central topic in modern photonics and nonlinear optics.
  In particular,
  femtosecond laser pulses exhibit complex dynamics due to the interaction between dispersion and nonlinear optical effects.
@@ -319,14 +336,43 @@ The propagation of ultrashort laser pulses in nonlinear optical media is a centr
  Accurate modeling of their propagation is therefore essential for understanding and optimizing such systems.
  A fundamental mathematical model that describes the evolution of ultrashort optical pulses in nonlinear dispersive media is the one-dimensional Nonlinear Schrödinger Equation (NLSE).
  This equation captures the balance between group velocity dispersion (GVD) and Kerr nonlinearity,
- which are the dominant physical mechanisms governing femtosecond pulse propagation in photonics media.
+ which are the dominant physical mechanisms governing femtosecond pulse propagation in photonics media 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key1,key2,key3"
+literal "false"
+
+\end_inset
+
+.
  
+\end_layout
+
+\begin_layout Standard
+The evolution of ultrashort pulses is adequately described by the one-dimensional NLSE,
+ which arises under the assumption of a slowly varying envelope and incorporates the dominant propagation mechanisms.
+ In particular,
+ the interplay between second-order dispersion and the Kerr nonlinearity gives rise to phenomena such as self-phase modulation and the formation of optical solitons.
+ Despite its relative simplicity,
+ the NLSE reproduces a wide range of nonlinear phenomena with high fidelity.
+ Consequently,
+ it has attracted significant research interest,
+ and has been extensively investigated using a wide range of analytical and numerical methods,
+ under appropriate boundary conditions 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key4,key5,key6"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
 
 \series bold
-Nowadays,
+In recent years,
  computational intelligence approaches have introduced several methods for solving the NLSE,
  such as artificial neural networks.In the context of nonlinear optical pulse propagation,
  several machine learning techniques can be used to approximate solutions of the NLSE,
@@ -334,6 +380,7 @@ Nowadays,
  or optimize parameters governing femtosecond pulse evolution.
  By combining the physical modeling provided by the NLSE with the adaptive search capabilities these methods,
  it becomes possible to develop flexible computational frameworks for studying complex nonlinear phenomena.
+ (ANAFORES EDO!!)
 \end_layout
 
 \begin_layout Standard
@@ -612,9 +659,50 @@ literal "false"
 .
  Instead of applying classical numerical schemes (e.g.,
  finite differences or split-step methods),
- the solution A(z,t) A(z,t) was approximated by a neural network that directly satisfies the governing equation and associated conditions.The problem was solved by approximating the solution with a neural network trained to satisfy the governing PDE,
+ the solution A(z,t) A(z,t) was approximated by a neural network that directly satisfies the governing equation and associated conditions.
+ The problem was solved by approximating the solution with a neural network trained to satisfy the governing PDE,
  initial condition,
  and absorbing boundary conditions through a physics-informed loss function.
+\end_layout
+
+\begin_layout Standard
+Physics - informed neural networks have been incorporated in various cases,
+ such as heat transfer problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-heat,pinn-heat2"
+literal "false"
+
+\end_inset
+
+,
+ power systems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-power"
+literal "false"
+
+\end_inset
+
+,
+ PDE problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-pde"
+literal "false"
+
+\end_inset
+
+,
+ electromagnetic analysis 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-electro"
+literal "false"
+
+\end_inset
+
+etc.
 \end_layout
 
 \begin_layout Standard
@@ -670,78 +758,41 @@ name "sec:Materials-and-Methods"
 \begin_layout Standard
 In the current section,
  the theoretical framework used to solve the nonlinear Schrödinger equation for nonlinear dispersive media is presented.
- This equation provides a fundamental model for describing the propagation of ultrashort optical pulses in optical fibers and similar photonic structures (
-\backslash
-Eq.~(
-\backslash
-ref{NLSE})).
+ This equation provides a fundamental model for describing the propagation of ultrashort optical pulses in optical fibers and similar photonic structures (Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:NLSE"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
  Within this framework,
  the evolution of femtosecond pulses is governed by the combined effects of chromatic dispersion and the Kerr nonlinearity of the medium.
  Due to the extremely short temporal duration of femtosecond pulses,
  their propagation dynamics are strongly influenced by the interplay between these two mechanisms,
- which affects both the temporal shape and the spectral characteristics of the optical field during propagation
+ which affects both the temporal shape and the spectral characteristics of the optical field during propagation.
+ For the purposes of the present analysis,
+ the equation is considered in its normalized form.
+ This formulation allows the principal physical effects to be expressed through dimensionless parameters and facilitates the numerical treatment of the problem.
+ 
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{equation}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-label{NLSE}
-\end_layout
-
-\begin_layout Plain Layout
-
-i 
-\backslash
-frac{
-\backslash
-partial u}{
-\backslash
-partial 
-\backslash
-xi}
-\end_layout
-
-\begin_layout Plain Layout
-
-+ 
-\backslash
-frac{1}{2}
-\backslash
-frac{
-\backslash
-partial^2 u}{
-\backslash
-partial 
-\backslash
-tau^2}
-\end_layout
-
-\begin_layout Plain Layout
-
-+ s |u|^2 u = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{equation}
-\end_layout
+\begin_inset Formula 
+\begin{equation}
+i\frac{\partial u}{\partial\xi}+\frac{1}{2}\frac{\partial^{2}u}{\partial\tau^{2}}+s|u|^{2}u=0\label{eq:NLSE}
+\end{equation}
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Standard
 where
 \end_layout
 
@@ -844,16 +895,21 @@ end{itemize}
 \end_layout
 
 \begin_layout Standard
-For the purposes of the present analysis,
- the equation is considered in its normalized form.
- This formulation allows the principal physical effects to be expressed through dimensionless parameters and facilitates the numerical treatment of the problem.
- In this representation,
+In this representation,
  the temporal coordinate is scaled with respect to the initial pulse width,
  while the propagation distance is normalized using a characteristic dispersion length of the system.
-\end_layout
+ For the 1-D Nonlinear Schrödinger Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:NLSE"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
-\begin_layout Standard
-For the 1-D Nonlinear Schrödinger Equation (NLSE),
+\end_inset
+
+,
  temporal boundary conditions specify how the wave function behaves at the edges of the time domain.
  These are necessary for both analytical solutions and numerical simulations.
 \end_layout
@@ -1055,7 +1111,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1198,7 +1254,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1284,164 +1340,28 @@ Overall,
 \end_layout
 
 \begin_layout Author Contributions
-For 
+V.S.
+ and I.G.T.
+ conducted the experiments,
+ employing several datasets and provided the comparative experiments.
+ D.T.
+ and V.C.
+ performed the statistical analysis and prepared the manuscript.
+ All authors have read and agreed to the published version of the manuscript.
+ 
 \end_layout
 
 \begin_layout Funding
-Please add:
- 
-\begin_inset Quotes eld
-\end_inset
-
-This research received no external funding
-\begin_inset Quotes erd
-\end_inset
-
- 
+This research has been financed by the European Union :
+ Next Generation EU through the Program Greece 2.0 National Recovery and Resilience Plan ,
+ under the call RESEARCH – CREATE – INNOVATE,
+ project name “iCREW:
+ Intelligent small craft simulator for advanced crew training using Virtual Reality techniques" (project code:TAEDK-06195).
 \end_layout
 
 \begin_layout Data Availability
-We encourage all authors of articles published in MDPI journals to share their research data.
- In this section,
- please provide details regarding where data supporting reported results can be found,
- including links to publicly archived datasets analyzed or generated during the study.
- Where no new data were created,
- or where data is unavailable due to privacy or ethical re-strictions,
- a statement is still required.
- Suggested Data Availability Statements are available in section “MDPI Research Data Policies” at 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-https://www.mdpi.com/ethics
-\end_layout
-
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-
-\series bold
-DURC Statement:
-
-\series default
- Current research is limited to the [please insert a specific academic field,
- e.g.,
- XXX],
- which is beneficial [share benefits and/or primary use] and does not pose a threat to public health or national security.
- Authors acknowledge the dual-use potential of the research involving xxx and confirm that all necessary precautions have been taken to prevent potential misuse.
- As an ethical responsibility,
- authors strictly adhere to relevant national and international laws about DURC.
- Authors advocate for responsible deployment,
- ethical considerations,
- regulatory compliance,
- and transparent reporting to mitigate misuse risks and foster beneficial outcomes.
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Only for journal Nursing Reports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Public Involvement Statement:
-
-\series default
- Please describe how the public (patients,
- consumers,
- carers) were involved in the research.
- Consider reporting against the GRIPP2 (Guidance for Reporting Involvement of Patients and the Public) checklist.
- If the public were not involved in any aspect of the research add:
- ``No public involvement in any aspect of this research''.
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Only for journal Nursing Reports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Guideline and Standards Statement:
-
-\series default
- Please add a statement indicating which reporting guideline was used when drafting the report.
- For example,
- ``This manuscript was drafted against the XXX (the full name of reporting guidelines and citation) for XXX (type of research) research''.
- A complete list of reporting guidelines can be accessed via the equator network:
- 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-https://www.equator-network.org/
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Only for journal Nursing Reports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Use of Artificial Intelligence:
-
-\series default
- Please describe in detail any and all uses of artificial intelligence (AI) or AI-assisted tools used in the preparation of the manuscript.
- This may include,
- but is not limited to,
- language translation,
- language editing and grammar,
- or generating text.
- Alternatively,
- please state that “AI or AI-assisted tools were not used in drafting any aspect of this manuscript”.
-\end_layout
-
-\end_inset
-
-
+WThe original contributions presented in this study are included in the article.
+ Further inquiries can be directed to the corresponding author.
 \end_layout
 
 \begin_layout Conflicts of Interest
@@ -1498,6 +1418,134 @@ Keep empty!
 
 \begin_layout References Title
 References
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Author1(year)"
+key "key1"
+literal "false"
+
+\end_inset
+
+ Zakharov,
+ V.
+ E.,
+ & Shabat,
+ A.
+ B.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Exact Theory of Two-Dimensional Self-Focusing and One-Dimensional Self-Modulation of Waves in Nonlinear Media
+\begin_inset Quotes erd
+\end_inset
+
+,
+ Soviet Physics JETP,
+ Vol.
+ 34,
+ pp.
+ 62–69 (1972).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key2"
+literal "false"
+
+\end_inset
+
+Hasegawa,
+ Akira,
+ and Frederick Tappert,
+ "Transmission of stationary nonlinear optical pulses in dispersive dielectric fibers.
+ I.
+ Anomalous dispersion
+\begin_inset Quotes erd
+\end_inset
+
+ Appl.
+ Phys.
+ Lett.
+ 23,
+ 142–144 (1973).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key3"
+literal "false"
+
+\end_inset
+
+Catherine Sulem and Pierre-Louis Sulem,"The Nonlinear Schrödinger Equation:
+ Self-Focusing and Wave Collapse" ,Springer (1999).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key4"
+literal "false"
+
+\end_inset
+
+Govind P.
+ Agrawal "Nonlinear Fiber Optics" 5th Edition,
+ Academic Press (2012).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key5"
+literal "false"
+
+\end_inset
+
+J.
+ Satsuma,
+ N.
+ Yajima,
+ "Initial Value Problems of One-Dimensional Self-Modulation of Nonlinear Waves in Dispersive Media",
+ Progress of Theoretical Physics,
+ No.
+ 55,
+ 1974.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key6"
+literal "false"
+
+\end_inset
+
+Mirón,
+ M.,
+ Sadurní,
+ E.
+ Stationary scattering for the nonlinear Schrödinger equation with point-like obstacles:
+ exact solutions.
+ Nonlinear Dyn 113,
+ 5627–5641 (2025).
 \end_layout
 
 \begin_layout Bibliography
@@ -2134,121 +2182,125 @@ Raissi,
 \end_layout
 
 \begin_layout Bibliography
-\labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-label "Author1(year)"
-key "ref-journal"
+label "(year)"
+key "pinn-heat"
 literal "false"
 
 \end_inset
 
- Zakharov,
- V.
- E.,
- & Shabat,
- A.
- B.
- 
-\begin_inset Quotes eld
-\end_inset
-
-Exact Theory of Two-Dimensional Self-Focusing and One-Dimensional Self-Modulation of Waves in Nonlinear Media
-\begin_inset Quotes erd
-\end_inset
-
-,
- Soviet Physics JETP,
- Vol.
- 34,
- pp.
- 62–69 (1972).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-6"
-
-\end_inset
-
-Hasegawa,
- Akira,
- and Frederick Tappert,
- "Transmission of stationary nonlinear optical pulses in dispersive dielectric fibers.
- I.
- Anomalous dispersion
-\begin_inset Quotes erd
-\end_inset
-
- Appl.
- Phys.
- Lett.
- 23,
- 142–144 (1973).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-11"
-
-\end_inset
-
-Catherine Sulem and Pierre-Louis Sulem,"The Nonlinear Schrödinger Equation:
- Self-Focusing and Wave Collapse" ,Springer (1999).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-4"
-
-\end_inset
-
-Govind P.
- Agrawal "Nonlinear Fiber Optics" 5th Edition,
- Academic Press (2012).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-5"
-
-\end_inset
-
-J.
- Satsuma,
- N.
- Yajima,
- "Initial Value Problems of One-Dimensional Self-Modulation of Nonlinear Waves in Dispersive Media",
- Progress of Theoretical Physics,
- No.
- 55,
- 1974.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-13"
-
-\end_inset
-
-Mirón,
- M.,
- Sadurní,
+Cai,
+ S.,
+ Wang,
+ Z.,
+ Wang,
+ S.,
+ Perdikaris,
+ P.,
+ & Karniadakis,
+ G.
  E.
- Stationary scattering for the nonlinear Schrödinger equation with point-like obstacles:
- exact solutions.
- Nonlinear Dyn 113,
- 5627–5641 (2025).
+ (2021).
+ Physics-informed neural networks for heat transfer problems.
+ Journal of Heat Transfer,
+ 143(6),
+ 060801.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-heat2"
+literal "false"
+
+\end_inset
+
+Xu,
+ J.,
+ Wei,
+ H.,
+ & Bao,
+ H.
+ (2023).
+ Physics-informed neural networks for studying heat transfer in porous media.
+ International Journal of Heat and Mass Transfer,
+ 217,
+ 124671.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-power"
+literal "false"
+
+\end_inset
+
+Huang,
+ B.,
+ & Wang,
+ J.
+ (2022).
+ Applications of physics-informed neural networks in power systems-a review.
+ IEEE Transactions on Power Systems,
+ 38(1),
+ 572-588.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-pde"
+literal "false"
+
+\end_inset
+
+Luo,
+ K.,
+ Zhao,
+ J.,
+ Wang,
+ Y.,
+ Li,
+ J.,
+ Wen,
+ J.,
+ Liang,
+ J.,
+ ...
+ & Liao,
+ S.
+ (2025).
+ Physics-informed neural networks for PDE problems:
+ A comprehensive review.
+ Artificial Intelligence Review,
+ 58(10),
+ 323.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-electro"
+literal "false"
+
+\end_inset
+
+Khan,
+ A.,
+ & Lowther,
+ D.
+ A.
+ (2022).
+ Physics informed neural networks for electromagnetic analysis.
+ IEEE Transactions on Magnetics,
+ 58(9),
+ 1-4.
 \end_layout
 
 \begin_layout Standard

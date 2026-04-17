@@ -154,7 +154,7 @@ End
 \use_dash_ligatures true
 \graphics default
 \default_output_format default
-\output_sync 1
+\output_sync 0
 \bibtex_command default
 \index_command default
 \float_placement class
@@ -309,6 +309,8 @@ Introduction
 \end_layout
 
 \begin_layout Standard
+
+\series bold
 The propagation of ultrashort laser pulses in nonlinear optical media is a central topic in modern photonics and nonlinear optics.
  In particular,
  femtosecond laser pulses exhibit complex dynamics due to the interaction between dispersion and nonlinear optical effects.
@@ -317,36 +319,42 @@ The propagation of ultrashort laser pulses in nonlinear optical media is a centr
  Accurate modeling of their propagation is therefore essential for understanding and optimizing such systems.
  A fundamental mathematical model that describes the evolution of ultrashort optical pulses in nonlinear dispersive media is the one-dimensional Nonlinear Schrödinger Equation (NLSE).
  This equation captures the balance between group velocity dispersion (GVD) and Kerr nonlinearity,
- which are the dominant physical mechanisms governing femtosecond pulse propagation in photonics media.
+ which are the dominant physical mechanisms governing femtosecond pulse propagation in photonics media
+\series default
+ 
+\series bold
+[27-32].
  
 \end_layout
 
 \begin_layout Standard
-Nowadays,
- computational intelligence approaches have introduced several methods for solving the NLSE.
- Among these approaches,
- Genetic Algorithms (GAs) and Grammatical Evolution (GE) have gained significant attention.
- Genetic Algorithms are population-based optimization methods inspired by natural selection,
- capable of exploring large and complex solution spaces.
- Grammatical Evolution extends this concept by evolving computer programs or mathematical expressions using a formal grammar,
- allowing the automatic generation of candidate models or solution forms.
+The evolution of ultrashort pulses is adequately described by the one-dimensional NLSE,
+ which arises under the assumption of a slowly varying envelope and incorporates the dominant propagation mechanisms.
+ In particular,
+ the interplay between second-order dispersion and the Kerr nonlinearity gives rise to phenomena such as self-phase modulation and the formation of optical solitons.
+ Despite its relative simplicity,
+ the NLSE reproduces a wide range of nonlinear phenomena with high fidelity.
+ Consequently,
+ it has attracted significant research interest,
+ and has been extensively investigated using a wide range of analytical and numerical methods,
+ under appropriate boundary conditions 
+\series bold
+[30-32]
+\series default
+.
 \end_layout
 
 \begin_layout Standard
-In the context of nonlinear optical pulse propagation,
- these evolutionary computation techniques can be used to approximate solutions of the NLSE,
+In recent years
+\series bold
+,
+ computational intelligence approaches have introduced several methods for solving the NLSE,
+ such as artificial neural networks.In the context of nonlinear optical pulse propagation,
+ several machine learning techniques can be used to approximate solutions of the NLSE,
  discover symbolic representations of pulse dynamics,
  or optimize parameters governing femtosecond pulse evolution.
- By combining the physical modeling provided by the NLSE with the adaptive search capabilities of Genetic Algorithms and Grammatical Evolution,
+ By combining the physical modeling provided by the NLSE with the adaptive search capabilities these methods,
  it becomes possible to develop flexible computational frameworks for studying complex nonlinear phenomena.
-\end_layout
-
-\begin_layout Standard
-In this work,
- we have investigated the analysis of laser pulse propagation using the one-dimensional Nonlinear Schrödinger Equation,
- together with computation techniques such as Genetic Algorithms and Grammatical Evolution.
- The contribution of these optimization methods to the numerical solution and analysis of nonlinear optical pulses dynamics is investigated.
- 
 \end_layout
 
 \begin_layout Standard
@@ -957,68 +965,346 @@ These aforementioned conditions express that the field tends to zero in time reg
 
 \begin_layout Section
 Results
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Results"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-The Fig.
- 1 depicts the intensity profiles (
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-intensity-profiles"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ depicts the intensity profiles (
 \begin_inset Formula $|u|^{2}$
 \end_inset
 
-) as a function of the spatial variable (z),
+) as a function of the spatial variable (
+\begin_inset Formula $z$
+\end_inset
+
+),
  for three different times (
+\begin_inset Formula $\tau=0$
+\end_inset
+
+,
+ 
+\begin_inset Formula $\tau=T/4$
+\end_inset
+
+,
+ 
+\begin_inset Formula $\tau=T/2$
+\end_inset
+
+,
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+$
 \backslash
-tau=0,
- tau=T/4,
- tau=T/2).
+tau=T
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+$).
  The intensity expresses the square of the magnitude of the field and is a measure of the distribution of the wave energy along the propagation axis.
- At time (tau=0),
- the intensity profile exhibits a maximum value near (z=0) and exhibits a monotonic,
+ At time (
+\begin_inset Formula $\tau=0$
+\end_inset
+
+),
+ the intensity profile exhibits a maximum value near (
+\begin_inset Formula $z=0$
+\end_inset
+
+) and exhibits a monotonic,
  rapid decrease as the distance increases.
  This behavior indicates a strong initial localization of the energy,
  which is progressively weakened due to propagation and/or damping mechanisms.
- For later times (tau=T/4 and tau=T/2),
+ For later times (
+\begin_inset Formula $\tau=T/4$
+\end_inset
+
+,
+ 
+\begin_inset Formula $\tau=T/2$
+\end_inset
+
+ and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\backslash
+tau=T
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+),
  a significant decrease in the maximum intensity is observed,
  as well as a change in the shape of the profile.
  Specifically,
- the intensity takes on lower values \SpecialChar allowbreak
-\SpecialChar allowbreak
-throughout the field and exhibits weak oscillations,
- which suggests dispersion or wave interaction phenomena.The evolution of the curves demonstrates that over time the initial concentrated energy distribution becomes disordered and diffuses in space,
+ the intensity takes on lower values throughout the field and exhibits weak oscillations,
+ which suggests dispersion or wave interaction phenomena.
+ The evolution of the curves demonstrates that over time the initial concentrated energy distribution becomes disordered and diffuses in space,
  leading to intensity attenuation and profile smoothing.
  This behavior is characteristic of systems where propagation,
  damping,
  and possibly nonlinear interactions coexist.
- 
-\backslash
-Overall,
+ Overall,
  the diagram highlights the temporal evolution of the intensity of a wave field,
  with emphasis on the reduction of energy and the transformation of the initial distribution into a weakly oscillating field of low intensity.
 \end_layout
 
 \begin_layout Standard
-Figure 2 shows the evolution of the solution u(z,tau) of the normalized NLSE along the propagation.
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename FIGURE1.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The intensity profiles as a function of 
+\begin_inset Formula $z$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-intensity-profiles"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-evolution-of"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ depicts the evolution of the solution 
+\begin_inset Formula $u(z,\tau)$
+\end_inset
+
+ of the normalized NLSE along the propagation.
  More specifically,
- the surface shows how the amplitude of the field u(z,tau) varies as a function of the spatial variable z and the temporal variable tau.
- For small values of z,
+ the surface shows how the amplitude of the field 
+\begin_inset Formula $u(z,\tau)$
+\end_inset
+
+ varies as a function of the spatial variable 
+\begin_inset Formula $z$
+\end_inset
+
+ and the temporal variable 
+\begin_inset Formula $\tau$
+\end_inset
+
+.
+ For small values of 
+\begin_inset Formula $z$
+\end_inset
+
+,
  the solution exhibits strong spatio-temporal fluctuations,
- with obvious local extrema with respect to tau,
+ with obvious local extrema with respect to 
+\begin_inset Formula $\tau$
+\end_inset
+
+,
  which indicates the presence of dispersion and nonlinear interaction.
- As z increases,
+ As 
+\begin_inset Formula $z$
+\end_inset
+
+ increases,
  a gradual attenuation of the oscillations is observed.
  The amplitude decreases and the shape of the solution becomes smooth,
  which indicates that the dispersion and nonlinear effects lead to a damping of the initial disturbance.
  For large values \SpecialChar allowbreak
-of the variable tau,
- the solution converges to zero for every z while at the same time its time variation also vanishes.
- This means that the solution is spatially localized with respect to tau (localized pulse),
- a characteristic found in pulsed solutions of NLSE.Overall,
- the Fig.2 captures an evolving waveform that propagates along z while simultaneously diffusing in time and tends to a state of rest at the ends of tau,
+of the variable 
+\begin_inset Formula $\tau$
+\end_inset
+
+,
+ the solution converges to zero for every 
+\begin_inset Formula $z$
+\end_inset
+
+ while at the same time its time variation also vanishes.
+ This means that the solution is spatially localized with respect to 
+\begin_inset Formula $\tau$
+\end_inset
+
+ (localized pulse),
+ a characteristic found in pulsed solutions of NLSE.
+ Overall,
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-evolution-of"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ captures an evolving waveform that propagates along 
+\begin_inset Formula $z$
+\end_inset
+
+ while simultaneously diffusing in time and tends to a state of rest at the ends of 
+\begin_inset Formula $\tau$
+\end_inset
+
+,
  confirming the natural behavior of NLSE solutions under damping or diffusion conditions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename FIGURE2.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The evolution of solution 
+\begin_inset Formula $u\left(z,\tau\right)$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-evolution-of"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Conclusions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
