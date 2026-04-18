@@ -645,10 +645,7 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-The problem defined by Eq.
- (14.1) was solved using a Physics-Informed Neural Network (PINN) framework 
+The proposed problem was tackled in the current work with the incorporation of a Physics-Informed Neural Network (PINN) framework 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "pinn"
@@ -658,11 +655,24 @@ literal "false"
 
 .
  Instead of applying classical numerical schemes (e.g.,
- finite differences or split-step methods),
- the solution A(z,t) A(z,t) was approximated by a neural network that directly satisfies the governing equation and associated conditions.
- The problem was solved by approximating the solution with a neural network trained to satisfy the governing PDE,
- initial condition,
- and absorbing boundary conditions through a physics-informed loss function.
+ finite differences 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "finite"
+literal "false"
+
+\end_inset
+
+ or split-step methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "splitStep"
+literal "false"
+
+\end_inset
+
+),
+ the solution of the problem was approximated by a neural network that directly satisfies the governing equation and associated conditions.
 \end_layout
 
 \begin_layout Standard
@@ -702,7 +712,7 @@ literal "false"
 
 \end_inset
 
-etc.
+ etc.
 \end_layout
 
 \begin_layout Standard
@@ -782,13 +792,24 @@ nolink "false"
  For the purposes of the present analysis,
  the equation is considered in its normalized form.
  This formulation allows the principal physical effects to be expressed through dimensionless parameters and facilitates the numerical treatment of the problem.
- 
+ The equation that should be solved is defined as:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-i\frac{\partial u}{\partial\xi}+\frac{1}{2}\frac{\partial^{2}u}{\partial\tau^{2}}+s|u|^{2}u=0\label{eq:NLSE}
+\frac{\partial A}{\partial t}+iD\frac{\partial^{2}A}{\partial z^{2}}+i\beta A+i\gamma A|A|^{2}=0,\quad0<z<L_{z},\;0<t<L_{t}\label{eq:NLSE}
+\end{equation}
+
+\end_inset
+
+with initial condition
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A\big|_{t=0}=e^{-(z-L_{c})^{2}+i\,2\pi\chi(z-L_{c})}\label{eq:initial}
 \end{equation}
 
 \end_inset
@@ -797,101 +818,12 @@ i\frac{\partial u}{\partial\xi}+\frac{1}{2}\frac{\partial^{2}u}{\partial\tau^{2}
 \end_layout
 
 \begin_layout Standard
-where
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $u(
-\backslash
-xi,
-\backslash
-tau)$:
- normalized field envelope
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $
-\backslash
-xi = 
-\backslash
-frac{z}{L_D}$:
- normalized propagation distance
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $
-\backslash
-tau = 
-\backslash
-frac{t - z/v_g}{T_0}$:
- normalized time
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $s = 
-\backslash
-pm 1$:
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $+1$:
- self-focusing Kerr
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $-1$:
- self-defocusing Kerr
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
-\end_layout
+and boundary conditions defined as:
+\begin_inset Formula 
+\begin{eqnarray}
+\left(\frac{\partial A}{\partial t}-2D\Omega\frac{\partial A}{\partial z}+2i\beta A+i\gamma A|A|^{2}\right)\Bigg|_{z=0} & = & 0\label{eq:boundaryConditions}\\
+\left(\frac{\partial A}{\partial t}+2D\Omega\frac{\partial A}{\partial z}+2i\beta A+i\gamma A|A|^{2}\right)\Bigg|_{z=L_{z}} & = & 0\nonumber 
+\end{eqnarray}
 
 \end_inset
 
@@ -899,10 +831,7 @@ end{itemize}
 \end_layout
 
 \begin_layout Standard
-In this representation,
- the temporal coordinate is scaled with respect to the initial pulse width,
- while the propagation distance is normalized using a characteristic dispersion length of the system.
- For the 1-D Nonlinear Schrödinger Equation 
+In equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:NLSE"
@@ -913,109 +842,53 @@ nolink "false"
 
 \end_inset
 
-,
- temporal boundary conditions specify how the wave function behaves at the edges of the time domain.
- These are necessary for both analytical solutions and numerical simulations.
+ a function 
+\begin_inset Formula $A=A(t,z)$
+\end_inset
+
+ is the complex amplitude;
+ 
+\begin_inset Formula $t$
+\end_inset
+
+ is a time;
+ 
+\begin_inset Formula $z$
+\end_inset
+
+ denotes a spatial coordinate;
+ 
+\begin_inset Formula $L_{t},L_{z}$
+\end_inset
+
+ are maximal values of time and space coordinates,
+ 
+\begin_inset Formula $L_{c}$
+\end_inset
+
+ is a coordinate of the laser beam center at initial time.
+ 
+\begin_inset Formula $D,\beta,\gamma,\chi,\Omega$
+\end_inset
+
+ are real coefficients,
+ which satisfy the conditions
 \end_layout
 
 \begin_layout Standard
-For a localized femtosecond pulse:
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-[
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-lim_{
-\backslash
-tau 
-\backslash
-to 
-\backslash
-pm 
-\backslash
-infty} u(
-\backslash
-xi,
-\backslash
-tau) = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-]
-\end_layout
+\begin_inset Formula 
+\begin{equation}
+D=\frac{1}{4\pi\gamma},\quad\beta=\pi\chi,\quad\Omega=2\pi\chi\label{eq:deq}
+\end{equation}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-and also
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-[
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-lim_{
-\backslash
-tau 
-\backslash
-to 
-\backslash
-pm 
-\backslash
-infty} 
-\backslash
-frac{
-\backslash
-partial u}{
-\backslash
-partial 
-\backslash
-tau} = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-]
-\end_layout
-
+In the current work the value 
+\begin_inset Formula $\chi=1$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-These aforementioned conditions express that the field tends to zero in time regions far from the pulse,
+ was used.
+ These aforementioned conditions express that the field tends to zero in time regions far from the pulse,
  while at the same time its time variations are completely attenuated at the edges.
  As a result,
  no fluctuations are observed outside the region where the pulse is localized.
@@ -1078,16 +951,16 @@ where
 \begin_inset Formula $\theta$
 \end_inset
 
- represents the trainable parameters (weights and biases).
- The key idea of PINNs is to enforce the PDE through a residual term:
+ represents the parameters of the current neural network.
+ The major contribution of PINNs is to solve the PDE using the following residual term:
 \begin_inset Formula 
 \begin{equation}
-R(z,t)=\mathcal{N}[u_{\theta}(z,t)]\label{eq:res}
+R(z,t)=\mathcal{N}\left[u_{\theta}(z,t)\right]\label{eq:res}
 \end{equation}
 
 \end_inset
 
-The loss function is constructed as a combination of different contributions:
+The loss function for the neural network is composed using the following way:
 \begin_inset Formula 
 \begin{equation}
 \mathcal{L}=\mathcal{L}_{PDE}+\mathcal{L}_{IC}+\mathcal{L}_{BC}\label{eq:loss}
@@ -1165,8 +1038,7 @@ end{align}
 
 \end_inset
 
-Here,
- 
+The values 
 \begin_inset Formula $N_{f}$
 \end_inset
 
@@ -1180,21 +1052,20 @@ Here,
 \begin_inset Formula $N_{bc}$
 \end_inset
 
- denote the number of collocation,
+ represent the number of collocation,
  initial,
  and boundary points,
- respectively.
- A crucial component of PINNs is the use of automatic differentiation to compute the derivatives required in the residual 
+ correspondingly.
+ A major procedure used in PINNs is the incorporation of automatic differentiation to compute the derivatives required in the residual 
 \begin_inset Formula $R(z,t)$
 \end_inset
 
 .
- This allows accurate and efficient evaluation of spatial and temporal derivatives without numerical discretization errors.
- The neural network parameters 
+ The parameters of neural network 
 \begin_inset Formula $\theta$
 \end_inset
 
- are optimized by minimizing the total loss function using gradient-based optimization methods such as Adam 
+ are estimated with the minimization of the total loss function using some optimization methods such as Adam 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "adamNN"
@@ -1211,38 +1082,12 @@ literal "false"
 \end_inset
 
 .
- Training is performed on randomly sampled collocation points in the domain,
+ 
+\end_layout
+
+\begin_layout Standard
+The training procedure is executed using randomly sampled collocation points in the domain,
  as well as points on the boundaries and initial condition.
-\end_layout
-
-\begin_layout Standard
-In this work,
- the nonlinear evolution equation given by Equation 
-\series bold
-14.1
-\series default
- is solved using the framework of Physics-Informed Neural Networks (PINNs).
- The key idea is to replace traditional numerical discretization schemes with a neural network approximation that directly incorporates the governing physical laws.
- The unknown complex field 
-\begin_inset Formula $A(z,t)$
-\end_inset
-
- is approximated by a neural network:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-A(z,t)\approx A_{\theta}(z,t)\label{eq:eqapprox}
-\end{equation}
-
-\end_inset
-
-where 
-\begin_inset Formula $\theta$
-\end_inset
-
- denotes the trainable parameters.
  The complex-valued function is decomposed into real and imaginary parts:
 \end_layout
 
@@ -1315,12 +1160,20 @@ end{align}
 
 These residuals are minimized during training using the ADAM optimizer,
  ensuring that the neural network solution satisfies the PDE throughout the domain.
-\end_layout
+ The initial condition given by 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:initial"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
-\begin_layout Standard
-The initial condition given by 
+\end_inset
+
+
 \series bold
-Eq.~(14.2) 
+ 
 \series default
 is enforced by penalizing deviations at 
 \begin_inset Formula $t=0$
@@ -1338,11 +1191,18 @@ A_{\theta}(z,0)\approx A_{0}(z)\label{eq:approx0}
 \end_inset
 
 Similarly,
- the absorbing boundary conditions 
-\series bold
-(Eq.~14.3)
-\series default
- are incorporated into the loss function by evaluating the corresponding residuals at the spatial boundaries:
+ the boundary conditions of equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:boundaryConditions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ are added into the loss function by evaluating the corresponding residuals at the spatial boundaries:
 \end_layout
 
 \begin_layout Standard
@@ -1360,30 +1220,6 @@ where
  determines the propagation direction at each boundary.
 \end_layout
 
-\begin_layout Standard
-In contrast to classical numerical methods that discretize the domain into a mesh,
- PINNs operate on randomly sampled collocation points.
- The solution is therefore learned as a continuous function over the entire domain 
-\begin_inset Formula $(z,t)$
-\end_inset
-
-.
- The training process minimizes a composite loss function:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\mathcal{L}=\mathcal{L}_{PDE}+\mathcal{L}_{IC}+\mathcal{L}_{BC}\label{eq:MinL}
-\end{equation}
-
-\end_inset
-
-ensuring consistency with the governing equation,
- initial condition,
- and boundary conditions.
-\end_layout
-
 \begin_layout Section
 Results
 \begin_inset CommandInset label
@@ -1396,17 +1232,34 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+(OK)
+\series default
 In this section,
- we present the results obtained using the Physics-Informed Neural Network (PINN) for solving 
-\series bold
-Eq.~(14.1)
-\series default
-,
- and we discuss their physical interpretation in relation to the reference solution (
-\series bold
-Fig.~14.2
-\series default
-).
+ we present the results obtained using the Physics-Informed Neural Network (PINN) for solving equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:NLSE"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ under the initial condition of equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:initial"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
  The trained neural network provides a continuous approximation of the complex field 
 \begin_inset Formula $A(z,t)$
 \end_inset
@@ -1430,66 +1283,539 @@ which describes the energy distribution of the wave packet.
 
  reveals the full spatio-temporal evolution of the pulse.
  The solution exhibits a localized structure that propagates along the spatial domain while undergoing nonlinear deformation due to the interplay between dispersion and nonlinearity.
- To facilitate comparison with 
-\series bold
-Fig.~14.2
-\series default
-,
- intensity profiles are extracted at characteristic times:
+ 
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\tau=0,\quad\tau=T/4,\quad\tau=T/2,\quad\tau=T\label{eq:eqt}
-\end{equation}
+\begin_inset ERT
+status open
 
-\end_inset
+\begin_layout Plain Layout
 
-At 
-\begin_inset Formula $\tau=0$
-\end_inset
-
-,
- the solution coincides with the prescribed initial condition,
- typically a localized pulse.
- As time progresses,
- the following behavior is observed:
+The parameters used in the present study are summarized in Table~
+\backslash
+ref{tab:parameters}.
 \end_layout
 
-\begin_layout Enumerate
-\begin_inset Formula $\tau=T/4$
-\end_inset
+\begin_layout Plain Layout
 
-:
- The pulse begins to broaden due to dispersive effects,
- while nonlinear interactions modify its amplitude.
 \end_layout
 
-\begin_layout Enumerate
-\begin_inset Formula $\tau=T/2$
-\end_inset
+\begin_layout Plain Layout
 
-:
- The wave packet exhibits significant deformation.
- Depending on the relative strength of dispersion and nonlinearity,
- partial focusing or defocusing may occur.
+
+\backslash
+begin{table}[H]
 \end_layout
 
-\begin_layout Enumerate
-\begin_inset Formula $\tau=T$
-\end_inset
+\begin_layout Plain Layout
 
-:
- The pulse evolves into a structure that reflects the cumulative nonlinear dynamics.
- In many cases,
- this includes spreading,
- amplitude redistribution,
- and possible formation of oscillatory tails.
+
+\backslash
+centering
 \end_layout
 
-\begin_layout Standard
-This qualitative behavior is consistent with the reference solution presented in Fig.~14.2.
+\begin_layout Plain Layout
+
+
+\backslash
+caption{Summary of physical,
+ computational,
+ and training parameters used in the PINN model.}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+label{tab:parameters}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tabular}{lll}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textbf{Category} & 
+\backslash
+textbf{Parameter} & 
+\backslash
+textbf{Value} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+multicolumn{3}{c}{
+\backslash
+textit{Physical Parameters}} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+Dispersion coefficient & $D$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Linear coefficient & $
+\backslash
+beta$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Nonlinearity coefficient & $
+\backslash
+gamma$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Boundary direction parameter & $s$ & $
+\backslash
+pm 1$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Characteristic frequency & $
+\backslash
+Omega$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+multicolumn{3}{c}{
+\backslash
+textit{Computational Domain}} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+Spatial domain & $z 
+\backslash
+in [0,
+ L_z]$ & $L_z = 10$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Temporal domain & $t 
+\backslash
+in [0,
+ T]$ & $T = 20$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Spatial grid points & $N_z$ & $200$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Temporal grid points & $N_t$ & $200$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+multicolumn{3}{c}{
+\backslash
+textit{Neural Network Architecture}} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+Input dimension & $(z,t)$ & $2$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Output dimension & $(u,v)$ & $2$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Hidden layers & $L$ & $4$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Neurons per layer & $N_h$ & $50$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Activation function &  & Sigmoid 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+multicolumn{3}{c}{
+\backslash
+textit{Training Parameters}} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+Optimizer &  & Adam 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Learning rate & $
+\backslash
+eta$ & $10^{-3}$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Epochs & $N_{
+\backslash
+text{epochs}}$ & $5000$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Batch size & $N_{
+\backslash
+text{batch}}$ & $64$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+multicolumn{3}{c}{
+\backslash
+textit{Training Data}} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+Collocation points & $N_f$ & $10^4$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Initial condition points & $N_{ic}$ & $10^3$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Boundary condition points & $N_{bc}$ & $10^3$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+multicolumn{3}{c}{
+\backslash
+textit{Loss Weights}} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+PDE loss weight & $
+\backslash
+lambda_{PDE}$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+IC loss weight & $
+\backslash
+lambda_{IC}$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+BC loss weight & $
+\backslash
+lambda_{BC}$ & $1.0$ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tabular}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{table}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1821,7 +2147,7 @@ This research has been financed by the European Union :
 \end_layout
 
 \begin_layout Data Availability
-WThe original contributions presented in this study are included in the article.
+The original contributions presented in this study are included in the article.
  Further inquiries can be directed to the corresponding author.
 \end_layout
 
@@ -2640,6 +2966,51 @@ Raissi,
  Journal of Computational physics,
  378,
  686-707.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2004)"
+key "finite"
+literal "false"
+
+\end_inset
+
+Moczo,
+ P.,
+ Kristek,
+ J.,
+ & Halada,
+ L.
+ (2004).
+ The finite-difference method for seismologists.
+ An introduction,
+ 161,
+ 3-12.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2004)"
+key "splitStep"
+literal "false"
+
+\end_inset
+
+Weideman,
+ J.
+ A.
+ C.,
+ & Herbst,
+ B.
+ M.
+ (1986).
+ Split-step methods for the solution of the nonlinear Schrödinger equation.
+ SIAM Journal on Numerical Analysis,
+ 23(3),
+ 485-507.
 \end_layout
 
 \begin_layout Bibliography
