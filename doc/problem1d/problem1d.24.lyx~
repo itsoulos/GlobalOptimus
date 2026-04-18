@@ -788,7 +788,7 @@ nolink "false"
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-i\frac{\partial u}{\partial\xi}+\frac{1}{2}\frac{\partial^{2}u}{\partial\tau^{2}}+s|u|^{2}u=0\label{eq:NLSE}
+\frac{\partial A}{\partial t}+iD\frac{\partial^{2}A}{\partial z^{2}}+i\beta A+i\gamma A|A|^{2}=0,\quad0<z<L_{z},\;0<t<L_{t}\label{eq:NLSE}
 \end{equation}
 
 \end_inset
@@ -797,101 +797,15 @@ i\frac{\partial u}{\partial\xi}+\frac{1}{2}\frac{\partial^{2}u}{\partial\tau^{2}
 \end_layout
 
 \begin_layout Standard
-where
+—
+-
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $u(
-\backslash
-xi,
-\backslash
-tau)$:
- normalized field envelope
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $
-\backslash
-xi = 
-\backslash
-frac{z}{L_D}$:
- normalized propagation distance
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $
-\backslash
-tau = 
-\backslash
-frac{t - z/v_g}{T_0}$:
- normalized time
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $s = 
-\backslash
-pm 1$:
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $+1$:
- self-focusing Kerr
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-item $-1$:
- self-defocusing Kerr
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
-\end_layout
+\begin_inset Formula 
+\[
+A\big|_{t=0}=e^{-(z-L_{c})^{2}+i\,2\pi\chi(z-L_{c})}
+\]
 
 \end_inset
 
@@ -899,65 +813,21 @@ end{itemize}
 \end_layout
 
 \begin_layout Standard
-In this representation,
- the temporal coordinate is scaled with respect to the initial pulse width,
- while the propagation distance is normalized using a characteristic dispersion length of the system.
- For the 1-D Nonlinear Schrödinger Equation 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:NLSE"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
+—
 
-\end_inset
-
-,
- temporal boundary conditions specify how the wave function behaves at the edges of the time domain.
- These are necessary for both analytical solutions and numerical simulations.
 \end_layout
 
 \begin_layout Standard
-For a localized femtosecond pulse:
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
 
 \backslash
 [
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-lim_{
-\backslash
-tau 
-\backslash
-to 
-\backslash
-pm 
-\backslash
-infty} u(
-\backslash
-xi,
-\backslash
-tau) = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-]
-\end_layout
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{\partial A}{\partial t}-2D\Omega\frac{\partial A}{\partial z}+2i\beta A+i\gamma A|A|^{2}\right)\Bigg|_{z=0}=0,
+\]
 
 \end_inset
 
@@ -965,53 +835,71 @@ tau) = 0
 \end_layout
 
 \begin_layout Standard
-and also
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-[
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-lim_{
-\backslash
-tau 
-\backslash
-to 
-\backslash
-pm 
-\backslash
-infty} 
-\backslash
-frac{
-\backslash
-partial u}{
-\backslash
-partial 
-\backslash
-tau} = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-]
-\end_layout
+\begin_inset Formula 
+\[
+\left(\frac{\partial A}{\partial t}+2D\Omega\frac{\partial A}{\partial z}+2i\beta A+i\gamma A|A|^{2}\right)\Bigg|_{z=L_{z}}=0.
+\]
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+In Eq.~1 a function 
+\begin_inset Formula $A=A(t,z)$
+\end_inset
+
+ is the complex amplitude;
+ 
+\begin_inset Formula $t$
+\end_inset
+
+ is a time;
+ 
+\begin_inset Formula $z$
+\end_inset
+
+ denotes a spatial coordinate;
+ 
+\begin_inset Formula $L_{t},L_{z}$
+\end_inset
+
+ are maximal values of time and space coordinates,
+ 
+\begin_inset Formula $L_{c}$
+\end_inset
+
+ is a coordinate of the laser beam center at initial time.
+ 
+\begin_inset Formula $D,\beta,\gamma,\chi,\Omega$
+\end_inset
+
+ are real coefficients,
+ which satisfy the conditions
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D=\frac{1}{4\pi\gamma},\quad\beta=\pi\chi,\quad\Omega=2\pi\chi.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For definite we choose $
+\begin_inset Formula $\chi=1$
+\end_inset
+
+$.
+\end_layout
+
+\begin_layout Standard
+****
 \end_layout
 
 \begin_layout Standard

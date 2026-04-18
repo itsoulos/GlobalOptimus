@@ -1202,9 +1202,186 @@ literal "false"
 
 \end_inset
 
- or L-BFGS.
+ or L-BFGS 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lbfgsNN"
+literal "false"
+
+\end_inset
+
+.
  Training is performed on randomly sampled collocation points in the domain,
  as well as points on the boundaries and initial condition.
+\end_layout
+
+\begin_layout Standard
+In this work,
+ the nonlinear evolution equation given by Equation 
+\series bold
+14.1
+\series default
+ is solved using the framework of Physics-Informed Neural Networks (PINNs).
+ The key idea is to replace traditional numerical discretization schemes with a neural network approximation that directly incorporates the governing physical laws.
+ The unknown complex field 
+\begin_inset Formula $A(z,t)$
+\end_inset
+
+ is approximated by a neural network:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A(z,t)\approx A_{\theta}(z,t)\label{eq:eqapprox}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta$
+\end_inset
+
+ denotes the trainable parameters.
+ The complex-valued function is decomposed into real and imaginary parts:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A_{\theta}(z,t)=u_{\theta}(z,t)+i\,v_{\theta}(z,t)\label{eq:eqrealandimage}
+\end{equation}
+
+\end_inset
+
+By expressing the equation in terms of 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+,
+ two coupled residuals are obtained:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{align}
+\end_layout
+
+\begin_layout Plain Layout
+
+R_1 &= u_t + D
+\backslash
+,v_{zz} + 
+\backslash
+beta v + 
+\backslash
+gamma (u^2 + v^2)v,
+ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+R_2 &= v_t - D
+\backslash
+,u_{zz} - 
+\backslash
+beta u - 
+\backslash
+gamma (u^2 + v^2)u.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{align}
+\end_layout
+
+\end_inset
+
+These residuals are minimized during training using the ADAM optimizer,
+ ensuring that the neural network solution satisfies the PDE throughout the domain.
+\end_layout
+
+\begin_layout Standard
+The initial condition given by 
+\series bold
+Eq.~(14.2) 
+\series default
+is enforced by penalizing deviations at 
+\begin_inset Formula $t=0$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A_{\theta}(z,0)\approx A_{0}(z)\label{eq:approx0}
+\end{equation}
+
+\end_inset
+
+Similarly,
+ the absorbing boundary conditions 
+\series bold
+(Eq.~14.3)
+\series default
+ are incorporated into the loss function by evaluating the corresponding residuals at the spatial boundaries:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A_{t}+s\,\Omega A_{z}+i\beta A+i\gamma|A|^{2}A=0\label{eq:boundary}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $s=\pm1$
+\end_inset
+
+ determines the propagation direction at each boundary.
+\end_layout
+
+\begin_layout Standard
+In contrast to classical numerical methods that discretize the domain into a mesh,
+ PINNs operate on randomly sampled collocation points.
+ The solution is therefore learned as a continuous function over the entire domain 
+\begin_inset Formula $(z,t)$
+\end_inset
+
+.
+ The training process minimizes a composite loss function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{PDE}+\mathcal{L}_{IC}+\mathcal{L}_{BC}\label{eq:MinL}
+\end{equation}
+
+\end_inset
+
+ensuring consistency with the governing equation,
+ initial condition,
+ and boundary conditions.
 \end_layout
 
 \begin_layout Section
@@ -1216,6 +1393,103 @@ name "sec:Results"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+In this section,
+ we present the results obtained using the Physics-Informed Neural Network (PINN) for solving 
+\series bold
+Eq.~(14.1)
+\series default
+,
+ and we discuss their physical interpretation in relation to the reference solution (
+\series bold
+Fig.~14.2
+\series default
+).
+ The trained neural network provides a continuous approximation of the complex field 
+\begin_inset Formula $A(z,t)$
+\end_inset
+
+ over the computational domain.
+ The quantity of interest is the intensity:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+|A(z,t)|^{2}=u^{2}(z,t)+v^{2}(z,t)\label{eq:model}
+\end{equation}
+
+\end_inset
+
+which describes the energy distribution of the wave packet.
+ A three-dimensional representation of 
+\begin_inset Formula $|A(z,t)|^{2}$
+\end_inset
+
+ reveals the full spatio-temporal evolution of the pulse.
+ The solution exhibits a localized structure that propagates along the spatial domain while undergoing nonlinear deformation due to the interplay between dispersion and nonlinearity.
+ To facilitate comparison with 
+\series bold
+Fig.~14.2
+\series default
+,
+ intensity profiles are extracted at characteristic times:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\tau=0,\quad\tau=T/4,\quad\tau=T/2,\quad\tau=T\label{eq:eqt}
+\end{equation}
+
+\end_inset
+
+At 
+\begin_inset Formula $\tau=0$
+\end_inset
+
+,
+ the solution coincides with the prescribed initial condition,
+ typically a localized pulse.
+ As time progresses,
+ the following behavior is observed:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\tau=T/4$
+\end_inset
+
+:
+ The pulse begins to broaden due to dispersive effects,
+ while nonlinear interactions modify its amplitude.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\tau=T/2$
+\end_inset
+
+:
+ The wave packet exhibits significant deformation.
+ Depending on the relative strength of dispersion and nonlinearity,
+ partial focusing or defocusing may occur.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\tau=T$
+\end_inset
+
+:
+ The pulse evolves into a structure that reflects the cumulative nonlinear dynamics.
+ In many cases,
+ this includes spreading,
+ amplitude redistribution,
+ and possible formation of oscillatory tails.
+\end_layout
+
+\begin_layout Standard
+This qualitative behavior is consistent with the reference solution presented in Fig.~14.2.
 \end_layout
 
 \begin_layout Standard
@@ -2532,6 +2806,36 @@ Reyad,
  Neural Computing and Applications,
  35(23),
  17095-17112.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "lbfgsNN"
+literal "false"
+
+\end_inset
+
+Bollapragada,
+ R.,
+ Nocedal,
+ J.,
+ Mudigere,
+ D.,
+ Shi,
+ H.
+ J.,
+ & Tang,
+ P.
+ T.
+ P.
+ (2018,
+ July).
+ A progressive batching L-BFGS method for machine learning.
+ In International Conference on Machine Learning (pp.
+ 620-629).
+ PMLR.
 \end_layout
 
 \begin_layout Standard

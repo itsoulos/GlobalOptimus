@@ -1,4 +1,4 @@
-#LyX 2.5 created this file. For more info see https://www.lyx.org/
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
 \lyxformat 620
 \begin_document
 \begin_header
@@ -231,8 +231,13 @@ V.N.
 \begin_inset Formula $^{2,*}$
 \end_inset
 
- and Vasileios Charilogis
+,
+ Vasileios Charilogis
 \begin_inset Formula $^{3}$
+\end_inset
+
+ and Dimitrios Tsalikakis
+\begin_inset Formula $^{4}$
 \end_inset
 
 
@@ -280,6 +285,18 @@ Department of Informatics and Telecommunications,
  451 10 Ioannina,
  Greece;
  v.charilog@uoi.gr
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $^{4}\quad$
+\end_inset
+
+Department of Engineering Informatics and Telecommunications,
+ University of Western Macedonia,
+ 50100 Kozani,
+ Greece,
+ dtsalikakis@uowm.gr
 \end_layout
 
 \begin_layout Corresponding Author
@@ -288,6 +305,8 @@ Correspondence:
 \end_layout
 
 \begin_layout Abstract
+
+\series bold
 The 1D Nonlinear Schrödinger Equation (NLSE) has been employed to model the femtosecond laser pulse propagation in photonic crystals.
  A numerical scheme has been used to solve NLSE.
  Using the machine learning tool of artificial neural networks and applying the proper artificial boundary conditions,
@@ -309,8 +328,6 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 The propagation of ultrashort laser pulses in nonlinear optical media is a central topic in modern photonics and nonlinear optics.
  In particular,
  femtosecond laser pulses exhibit complex dynamics due to the interaction between dispersion and nonlinear optical effects.
@@ -319,11 +336,15 @@ The propagation of ultrashort laser pulses in nonlinear optical media is a centr
  Accurate modeling of their propagation is therefore essential for understanding and optimizing such systems.
  A fundamental mathematical model that describes the evolution of ultrashort optical pulses in nonlinear dispersive media is the one-dimensional Nonlinear Schrödinger Equation (NLSE).
  This equation captures the balance between group velocity dispersion (GVD) and Kerr nonlinearity,
- which are the dominant physical mechanisms governing femtosecond pulse propagation in photonics media
-\series default
- 
-\series bold
-[27-32].
+ which are the dominant physical mechanisms governing femtosecond pulse propagation in photonics media 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key1,key2,key3"
+literal "false"
+
+\end_inset
+
+.
  
 \end_layout
 
@@ -338,16 +359,20 @@ The evolution of ultrashort pulses is adequately described by the one-dimensiona
  it has attracted significant research interest,
  and has been extensively investigated using a wide range of analytical and numerical methods,
  under appropriate boundary conditions 
-\series bold
-[30-32]
-\series default
+\begin_inset CommandInset citation
+LatexCommand citep
+key "key4,key5,key6"
+literal "false"
+
+\end_inset
+
 .
 \end_layout
 
 \begin_layout Standard
-In recent years
+
 \series bold
-,
+In recent years,
  computational intelligence approaches have introduced several methods for solving the NLSE,
  such as artificial neural networks.In the context of nonlinear optical pulse propagation,
  several machine learning techniques can be used to approximate solutions of the NLSE,
@@ -355,6 +380,7 @@ In recent years
  or optimize parameters governing femtosecond pulse evolution.
  By combining the physical modeling provided by the NLSE with the adaptive search capabilities these methods,
  it becomes possible to develop flexible computational frameworks for studying complex nonlinear phenomena.
+ (ANAFORES EDO!!)
 \end_layout
 
 \begin_layout Standard
@@ -385,7 +411,7 @@ literal "false"
  which is defined as follows:
 \begin_inset Formula 
 \begin{equation}
-\mbox{E}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum^{M}_{i=1}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\mbox{E}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
 \end{equation}
 
 \end_inset
@@ -633,9 +659,50 @@ literal "false"
 .
  Instead of applying classical numerical schemes (e.g.,
  finite differences or split-step methods),
- the solution A(z,t) A(z,t) was approximated by a neural network that directly satisfies the governing equation and associated conditions.The problem was solved by approximating the solution with a neural network trained to satisfy the governing PDE,
+ the solution A(z,t) A(z,t) was approximated by a neural network that directly satisfies the governing equation and associated conditions.
+ The problem was solved by approximating the solution with a neural network trained to satisfy the governing PDE,
  initial condition,
  and absorbing boundary conditions through a physics-informed loss function.
+\end_layout
+
+\begin_layout Standard
+Physics - informed neural networks have been incorporated in various cases,
+ such as heat transfer problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-heat,pinn-heat2"
+literal "false"
+
+\end_inset
+
+,
+ power systems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-power"
+literal "false"
+
+\end_inset
+
+,
+ PDE problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-pde"
+literal "false"
+
+\end_inset
+
+,
+ electromagnetic analysis 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pinn-electro"
+literal "false"
+
+\end_inset
+
+etc.
 \end_layout
 
 \begin_layout Standard
@@ -688,218 +755,41 @@ name "sec:Materials-and-Methods"
 
 \end_layout
 
+\begin_layout Subsection
+Problem description
+\end_layout
+
 \begin_layout Standard
 In the current section,
  the theoretical framework used to solve the nonlinear Schrödinger equation for nonlinear dispersive media is presented.
- This equation provides a fundamental model for describing the propagation of ultrashort optical pulses in optical fibers and similar photonic structures (
-\backslash
-Eq.~(
-\backslash
-ref{NLSE})).
+ This equation provides a fundamental model for describing the propagation of ultrashort optical pulses in optical fibers and similar photonic structures (Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:NLSE"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
  Within this framework,
  the evolution of femtosecond pulses is governed by the combined effects of chromatic dispersion and the Kerr nonlinearity of the medium.
  Due to the extremely short temporal duration of femtosecond pulses,
  their propagation dynamics are strongly influenced by the interplay between these two mechanisms,
- which affects both the temporal shape and the spectral characteristics of the optical field during propagation
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-\backslash
-begin{equation}
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-label{NLSE}
-\end_layout
-
-\begin_layout Plain Layout
-i 
-\backslash
-frac{
-\backslash
-partial u}{
-\backslash
-partial 
-\backslash
-xi}
-\end_layout
-
-\begin_layout Plain Layout
-+ 
-\backslash
-frac{1}{2}
-\backslash
-frac{
-\backslash
-partial^2 u}{
-\backslash
-partial 
-\backslash
-tau^2}
-\end_layout
-
-\begin_layout Plain Layout
-+ s |u|^2 u = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-end{equation}
-\end_layout
-
-\end_inset
-
-where
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-item $u(
-\backslash
-xi,
-\backslash
-tau)$:
- normalized field envelope
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-item $
-\backslash
-xi = 
-\backslash
-frac{z}{L_D}$:
- normalized propagation distance
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-item $
-\backslash
-tau = 
-\backslash
-frac{t - z/v_g}{T_0}$:
- normalized time
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-item $s = 
-\backslash
-pm 1$:
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-item $+1$:
- self-focusing Kerr
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-item $-1$:
- self-defocusing Kerr
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-end{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-end{itemize}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-For the purposes of the present analysis,
+ which affects both the temporal shape and the spectral characteristics of the optical field during propagation.
+ For the purposes of the present analysis,
  the equation is considered in its normalized form.
  This formulation allows the principal physical effects to be expressed through dimensionless parameters and facilitates the numerical treatment of the problem.
- In this representation,
- the temporal coordinate is scaled with respect to the initial pulse width,
- while the propagation distance is normalized using a characteristic dispersion length of the system.
+ 
 \end_layout
 
 \begin_layout Standard
-For the 1-D Nonlinear Schrödinger Equation (NLSE),
- temporal boundary conditions specify how the wave function behaves at the edges of the time domain.
- These are necessary for both analytical solutions and numerical simulations.
-\end_layout
-
-\begin_layout Standard
-For a localized femtosecond pulse:
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-\backslash
-[
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-lim_{
-\backslash
-tau 
-\backslash
-to 
-\backslash
-pm 
-\backslash
-infty} u(
-\backslash
-xi,
-\backslash
-tau) = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-]
-\end_layout
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial A}{\partial t}+iD\frac{\partial^{2}A}{\partial z^{2}}+i\beta A+i\gamma A|A|^{2}=0,\quad0<z<L_{z},\;0<t<L_{t}\label{eq:NLSE}
+\end{equation}
 
 \end_inset
 
@@ -907,50 +797,109 @@ tau) = 0
 \end_layout
 
 \begin_layout Standard
-and also
+—
+-
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
+\begin_inset Formula 
+\[
+A\big|_{t=0}=e^{-(z-L_{c})^{2}+i\,2\pi\chi(z-L_{c})}
+\]
 
-\begin_layout Plain Layout
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+—
+
+\end_layout
+
+\begin_layout Standard
 
 \backslash
 [
 \end_layout
 
-\begin_layout Plain Layout
-
-\backslash
-lim_{
-\backslash
-tau 
-\backslash
-to 
-\backslash
-pm 
-\backslash
-infty} 
-\backslash
-frac{
-\backslash
-partial u}{
-\backslash
-partial 
-\backslash
-tau} = 0
-\end_layout
-
-\begin_layout Plain Layout
-
-\backslash
-]
-\end_layout
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{\partial A}{\partial t}-2D\Omega\frac{\partial A}{\partial z}+2i\beta A+i\gamma A|A|^{2}\right)\Bigg|_{z=0}=0,
+\]
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{\partial A}{\partial t}+2D\Omega\frac{\partial A}{\partial z}+2i\beta A+i\gamma A|A|^{2}\right)\Bigg|_{z=L_{z}}=0.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In Eq.~1 a function 
+\begin_inset Formula $A=A(t,z)$
+\end_inset
+
+ is the complex amplitude;
+ 
+\begin_inset Formula $t$
+\end_inset
+
+ is a time;
+ 
+\begin_inset Formula $z$
+\end_inset
+
+ denotes a spatial coordinate;
+ 
+\begin_inset Formula $L_{t},L_{z}$
+\end_inset
+
+ are maximal values of time and space coordinates,
+ 
+\begin_inset Formula $L_{c}$
+\end_inset
+
+ is a coordinate of the laser beam center at initial time.
+ 
+\begin_inset Formula $D,\beta,\gamma,\chi,\Omega$
+\end_inset
+
+ are real coefficients,
+ which satisfy the conditions
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D=\frac{1}{4\pi\gamma},\quad\beta=\pi\chi,\quad\Omega=2\pi\chi.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For definite we choose 
+\begin_inset Formula $\chi=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+****
 \end_layout
 
 \begin_layout Standard
@@ -963,11 +912,425 @@ These aforementioned conditions express that the field tends to zero in time reg
  whose energy remains finite and is concentrated in a limited time interval.
 \end_layout
 
+\begin_layout Subsection
+Proposed solution
+\end_layout
+
+\begin_layout Standard
+Physics-Informed Neural Networks (PINNs) are a class of deep learning methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "deepl"
+literal "false"
+
+\end_inset
+
+ designed to solve differential equations by embedding physical laws directly into the training process.
+ Instead of relying solely on data,
+ PINNs incorporate the governing equations of the system into the loss function,
+ enabling the model to learn solutions that are consistent with the underlying physics.
+ Let us consider a general partial differential equation (PDE) of the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathcal{N}[u(z,t)]=0,\quad(z,t)\in\Omega\label{eq:de}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathcal{N}[\cdot]$
+\end_inset
+
+ is a nonlinear differential operator and 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ denotes the spatio-temporal domain.
+ In the PINN framework,
+ the unknown solution 
+\begin_inset Formula $u(z,t)$
+\end_inset
+
+ is approximated by a neural network:
+\begin_inset Formula 
+\begin{equation}
+u(z,t)\approx u_{\theta}(z,t)\label{eq:approx}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta$
+\end_inset
+
+ represents the trainable parameters (weights and biases).
+ The key idea of PINNs is to enforce the PDE through a residual term:
+\begin_inset Formula 
+\begin{equation}
+R(z,t)=\mathcal{N}[u_{\theta}(z,t)]\label{eq:res}
+\end{equation}
+
+\end_inset
+
+The loss function is constructed as a combination of different contributions:
+\begin_inset Formula 
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{PDE}+\mathcal{L}_{IC}+\mathcal{L}_{BC}\label{eq:loss}
+\end{equation}
+
+\end_inset
+
+where
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{align}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mathcal{L}_{PDE} &= 
+\backslash
+frac{1}{N_f} 
+\backslash
+sum_{i=1}^{N_f} |R(z_i,t_i)|^2,
+ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mathcal{L}_{IC} &= 
+\backslash
+frac{1}{N_{ic}} 
+\backslash
+sum_{i=1}^{N_{ic}} |u_{
+\backslash
+theta}(z_i,0) - u_0(z_i)|^2,
+ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mathcal{L}_{BC} &= 
+\backslash
+frac{1}{N_{bc}} 
+\backslash
+sum_{i=1}^{N_{bc}} |u_{
+\backslash
+theta}(z_i,t_i) - g(z_i,t_i)|^2.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{align}
+\end_layout
+
+\end_inset
+
+Here,
+ 
+\begin_inset Formula $N_{f}$
+\end_inset
+
+,
+ 
+\begin_inset Formula $N_{ic}$
+\end_inset
+
+,
+ and 
+\begin_inset Formula $N_{bc}$
+\end_inset
+
+ denote the number of collocation,
+ initial,
+ and boundary points,
+ respectively.
+ A crucial component of PINNs is the use of automatic differentiation to compute the derivatives required in the residual 
+\begin_inset Formula $R(z,t)$
+\end_inset
+
+.
+ This allows accurate and efficient evaluation of spatial and temporal derivatives without numerical discretization errors.
+ The neural network parameters 
+\begin_inset Formula $\theta$
+\end_inset
+
+ are optimized by minimizing the total loss function using gradient-based optimization methods such as Adam 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "adamNN"
+literal "false"
+
+\end_inset
+
+ or L-BFGS 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lbfgsNN"
+literal "false"
+
+\end_inset
+
+.
+ Training is performed on randomly sampled collocation points in the domain,
+ as well as points on the boundaries and initial condition.
+\end_layout
+
+\begin_layout Standard
+In this work,
+ the nonlinear evolution equation given by Equation 
+\series bold
+14.1
+\series default
+ is solved using the framework of Physics-Informed Neural Networks (PINNs).
+ The key idea is to replace traditional numerical discretization schemes with a neural network approximation that directly incorporates the governing physical laws.
+ The unknown complex field 
+\begin_inset Formula $A(z,t)$
+\end_inset
+
+ is approximated by a neural network:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A(z,t)\approx A_{\theta}(z,t)\label{eq:eqapprox}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta$
+\end_inset
+
+ denotes the trainable parameters.
+ The complex-valued function is decomposed into real and imaginary parts:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A_{\theta}(z,t)=u_{\theta}(z,t)+i\,v_{\theta}(z,t)\label{eq:eqrealandimage}
+\end{equation}
+
+\end_inset
+
+By expressing the equation in terms of 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+,
+ two coupled residuals are obtained:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{align}
+\end_layout
+
+\begin_layout Plain Layout
+
+R_1 &= u_t + D
+\backslash
+,v_{zz} + 
+\backslash
+beta v + 
+\backslash
+gamma (u^2 + v^2)v,
+ 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+R_2 &= v_t - D
+\backslash
+,u_{zz} - 
+\backslash
+beta u - 
+\backslash
+gamma (u^2 + v^2)u.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{align}
+\end_layout
+
+\end_inset
+
+These residuals are minimized during training using the ADAM optimizer,
+ ensuring that the neural network solution satisfies the PDE throughout the domain.
+\end_layout
+
+\begin_layout Standard
+The initial condition given by 
+\series bold
+Eq.~(14.2) 
+\series default
+is enforced by penalizing deviations at 
+\begin_inset Formula $t=0$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A_{\theta}(z,0)\approx A_{0}(z)\label{eq:approx0}
+\end{equation}
+
+\end_inset
+
+Similarly,
+ the absorbing boundary conditions 
+\series bold
+(Eq.~14.3)
+\series default
+ are incorporated into the loss function by evaluating the corresponding residuals at the spatial boundaries:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+A_{t}+s\,\Omega A_{z}+i\beta A+i\gamma|A|^{2}A=0\label{eq:boundary}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $s=\pm1$
+\end_inset
+
+ determines the propagation direction at each boundary.
+\end_layout
+
+\begin_layout Standard
+In contrast to classical numerical methods that discretize the domain into a mesh,
+ PINNs operate on randomly sampled collocation points.
+ The solution is therefore learned as a continuous function over the entire domain 
+\begin_inset Formula $(z,t)$
+\end_inset
+
+.
+ The training process minimizes a composite loss function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{PDE}+\mathcal{L}_{IC}+\mathcal{L}_{BC}\label{eq:MinL}
+\end{equation}
+
+\end_inset
+
+ensuring consistency with the governing equation,
+ initial condition,
+ and boundary conditions.
+\end_layout
+
 \begin_layout Section
 Results
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Results"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this section,
+ we present the results obtained using the Physics-Informed Neural Network (PINN) for solving 
+\series bold
+Eq.~(14.1)
+\series default
+,
+ and we discuss their physical interpretation in relation to the reference solution (
+\series bold
+Fig.~14.2
+\series default
+).
+ The trained neural network provides a continuous approximation of the complex field 
+\begin_inset Formula $A(z,t)$
+\end_inset
+
+ over the computational domain.
+ The quantity of interest is the intensity:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+|A(z,t)|^{2}=u^{2}(z,t)+v^{2}(z,t)\label{eq:model}
+\end{equation}
+
+\end_inset
+
+which describes the energy distribution of the wave packet.
+ A three-dimensional representation of 
+\begin_inset Formula $|A(z,t)|^{2}$
+\end_inset
+
+ reveals the full spatio-temporal evolution of the pulse.
+ The solution exhibits a localized structure that propagates along the spatial domain while undergoing nonlinear deformation due to the interplay between dispersion and nonlinearity.
+ To facilitate comparison with 
+\series bold
+Fig.~14.2
+\series default
+,
+ intensity profiles are extracted at characteristic times:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\tau=0,\quad\tau=T/4,\quad\tau=T/2,\quad\tau=T\label{eq:eqt}
+\end{equation}
 
 \end_inset
 
@@ -1009,38 +1372,7 @@ nolink "false"
 \begin_inset Formula $\tau=T/2$
 \end_inset
 
-,
- 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-$
-\backslash
-tau=T
-\family default
-\series default
-\shape default
-\size default
-\emph default
-\nospellcheck default
-\bar default
-\strikeout default
-\xout default
-\uuline default
-\uwave default
-\noun default
-\color inherit
-$).
+).
  The intensity expresses the square of the magnitude of the field and is a measure of the distribution of the wave energy along the propagation axis.
  At time (
 \begin_inset Formula $\tau=0$
@@ -1059,41 +1391,10 @@ $).
 \begin_inset Formula $\tau=T/4$
 \end_inset
 
-,
- 
+ and 
 \begin_inset Formula $\tau=T/2$
 \end_inset
 
- and 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-
-\backslash
-tau=T
-\family default
-\series default
-\shape default
-\size default
-\emph default
-\nospellcheck default
-\bar default
-\strikeout default
-\xout default
-\uuline default
-\uwave default
-\noun default
-\color inherit
 ),
  a significant decrease in the maximum intensity is observed,
  as well as a change in the shape of the profile.
@@ -1116,7 +1417,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1149,6 +1450,10 @@ name "fig:The-intensity-profiles"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -1255,7 +1560,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1288,6 +1593,10 @@ name "fig:The-evolution-of"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -1337,162 +1646,28 @@ Overall,
 \end_layout
 
 \begin_layout Author Contributions
-For 
+V.S.
+ and I.G.T.
+ conducted the experiments,
+ employing several datasets and provided the comparative experiments.
+ D.T.
+ and V.C.
+ performed the statistical analysis and prepared the manuscript.
+ All authors have read and agreed to the published version of the manuscript.
+ 
 \end_layout
 
 \begin_layout Funding
-Please add:
- 
-\begin_inset Quotes eld
-\end_inset
-
-This research received no external funding
-\begin_inset Quotes erd
-\end_inset
-
- 
+This research has been financed by the European Union :
+ Next Generation EU through the Program Greece 2.0 National Recovery and Resilience Plan ,
+ under the call RESEARCH – CREATE – INNOVATE,
+ project name “iCREW:
+ Intelligent small craft simulator for advanced crew training using Virtual Reality techniques" (project code:TAEDK-06195).
 \end_layout
 
 \begin_layout Data Availability
-We encourage all authors of articles published in MDPI journals to share their research data.
- In this section,
- please provide details regarding where data supporting reported results can be found,
- including links to publicly archived datasets analyzed or generated during the study.
- Where no new data were created,
- or where data is unavailable due to privacy or ethical re-strictions,
- a statement is still required.
- Suggested Data Availability Statements are available in section “MDPI Research Data Policies” at 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-https://www.mdpi.com/ethics
-\end_layout
-
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-
-\series bold
-DURC Statement:
-
-\series default
- Current research is limited to the [please insert a specific academic field,
- e.g.,
- XXX],
- which is beneficial [share benefits and/or primary use] and does not pose a threat to public health or national security.
- Authors acknowledge the dual-use potential of the research involving xxx and confirm that all necessary precautions have been taken to prevent potential misuse.
- As an ethical responsibility,
- authors strictly adhere to relevant national and international laws about DURC.
- Authors advocate for responsible deployment,
- ethical considerations,
- regulatory compliance,
- and transparent reporting to mitigate misuse risks and foster beneficial outcomes.
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Only for journal Nursing Reports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Public Involvement Statement:
-
-\series default
- Please describe how the public (patients,
- consumers,
- carers) were involved in the research.
- Consider reporting against the GRIPP2 (Guidance for Reporting Involvement of Patients and the Public) checklist.
- If the public were not involved in any aspect of the research add:
- ``No public involvement in any aspect of this research''.
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Only for journal Nursing Reports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Guideline and Standards Statement:
-
-\series default
- Please add a statement indicating which reporting guideline was used when drafting the report.
- For example,
- ``This manuscript was drafted against the XXX (the full name of reporting guidelines and citation) for XXX (type of research) research''.
- A complete list of reporting guidelines can be accessed via the equator network:
- 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-https://www.equator-network.org/
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Only for journal Nursing Reports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Use of Artificial Intelligence:
-
-\series default
- Please describe in detail any and all uses of artificial intelligence (AI) or AI-assisted tools used in the preparation of the manuscript.
- This may include,
- but is not limited to,
- language translation,
- language editing and grammar,
- or generating text.
- Alternatively,
- please state that “AI or AI-assisted tools were not used in drafting any aspect of this manuscript”.
-\end_layout
-
-\end_inset
-
-
+WThe original contributions presented in this study are included in the article.
+ Further inquiries can be directed to the corresponding author.
 \end_layout
 
 \begin_layout Conflicts of Interest
@@ -1549,6 +1724,134 @@ Keep empty!
 
 \begin_layout References Title
 References
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Author1(year)"
+key "key1"
+literal "false"
+
+\end_inset
+
+ Zakharov,
+ V.
+ E.,
+ & Shabat,
+ A.
+ B.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Exact Theory of Two-Dimensional Self-Focusing and One-Dimensional Self-Modulation of Waves in Nonlinear Media
+\begin_inset Quotes erd
+\end_inset
+
+,
+ Soviet Physics JETP,
+ Vol.
+ 34,
+ pp.
+ 62–69 (1972).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key2"
+literal "false"
+
+\end_inset
+
+Hasegawa,
+ Akira,
+ and Frederick Tappert,
+ "Transmission of stationary nonlinear optical pulses in dispersive dielectric fibers.
+ I.
+ Anomalous dispersion
+\begin_inset Quotes erd
+\end_inset
+
+ Appl.
+ Phys.
+ Lett.
+ 23,
+ 142–144 (1973).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key3"
+literal "false"
+
+\end_inset
+
+Catherine Sulem and Pierre-Louis Sulem,"The Nonlinear Schrödinger Equation:
+ Self-Focusing and Wave Collapse" ,Springer (1999).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key4"
+literal "false"
+
+\end_inset
+
+Govind P.
+ Agrawal "Nonlinear Fiber Optics" 5th Edition,
+ Academic Press (2012).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key5"
+literal "false"
+
+\end_inset
+
+J.
+ Satsuma,
+ N.
+ Yajima,
+ "Initial Value Problems of One-Dimensional Self-Modulation of Nonlinear Waves in Dispersive Media",
+ Progress of Theoretical Physics,
+ No.
+ 55,
+ 1974.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "key6"
+literal "false"
+
+\end_inset
+
+Mirón,
+ M.,
+ Sadurní,
+ E.
+ Stationary scattering for the nonlinear Schrödinger equation with point-like obstacles:
+ exact solutions.
+ Nonlinear Dyn 113,
+ 5627–5641 (2025).
 \end_layout
 
 \begin_layout Bibliography
@@ -2185,121 +2488,199 @@ Raissi,
 \end_layout
 
 \begin_layout Bibliography
-\labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-label "Author1(year)"
-key "ref-journal"
+label "(year)"
+key "pinn-heat"
 literal "false"
 
 \end_inset
 
- Zakharov,
- V.
- E.,
- & Shabat,
- A.
- B.
- 
-\begin_inset Quotes eld
-\end_inset
-
-Exact Theory of Two-Dimensional Self-Focusing and One-Dimensional Self-Modulation of Waves in Nonlinear Media
-\begin_inset Quotes erd
-\end_inset
-
-,
- Soviet Physics JETP,
- Vol.
- 34,
- pp.
- 62–69 (1972).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-6"
-
-\end_inset
-
-Hasegawa,
- Akira,
- and Frederick Tappert,
- "Transmission of stationary nonlinear optical pulses in dispersive dielectric fibers.
- I.
- Anomalous dispersion
-\begin_inset Quotes erd
-\end_inset
-
- Appl.
- Phys.
- Lett.
- 23,
- 142–144 (1973).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-11"
-
-\end_inset
-
-Catherine Sulem and Pierre-Louis Sulem,"The Nonlinear Schrödinger Equation:
- Self-Focusing and Wave Collapse" ,Springer (1999).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-4"
-
-\end_inset
-
-Govind P.
- Agrawal "Nonlinear Fiber Optics" 5th Edition,
- Academic Press (2012).
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-5"
-
-\end_inset
-
-J.
- Satsuma,
- N.
- Yajima,
- "Initial Value Problems of One-Dimensional Self-Modulation of Nonlinear Waves in Dispersive Media",
- Progress of Theoretical Physics,
- No.
- 55,
- 1974.
-\end_layout
-
-\begin_layout Bibliography
-\labelwidthstring 999
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-13"
-
-\end_inset
-
-Mirón,
- M.,
- Sadurní,
+Cai,
+ S.,
+ Wang,
+ Z.,
+ Wang,
+ S.,
+ Perdikaris,
+ P.,
+ & Karniadakis,
+ G.
  E.
- Stationary scattering for the nonlinear Schrödinger equation with point-like obstacles:
- exact solutions.
- Nonlinear Dyn 113,
- 5627–5641 (2025).
+ (2021).
+ Physics-informed neural networks for heat transfer problems.
+ Journal of Heat Transfer,
+ 143(6),
+ 060801.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-heat2"
+literal "false"
+
+\end_inset
+
+Xu,
+ J.,
+ Wei,
+ H.,
+ & Bao,
+ H.
+ (2023).
+ Physics-informed neural networks for studying heat transfer in porous media.
+ International Journal of Heat and Mass Transfer,
+ 217,
+ 124671.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-power"
+literal "false"
+
+\end_inset
+
+Huang,
+ B.,
+ & Wang,
+ J.
+ (2022).
+ Applications of physics-informed neural networks in power systems-a review.
+ IEEE Transactions on Power Systems,
+ 38(1),
+ 572-588.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-pde"
+literal "false"
+
+\end_inset
+
+Luo,
+ K.,
+ Zhao,
+ J.,
+ Wang,
+ Y.,
+ Li,
+ J.,
+ Wen,
+ J.,
+ Liang,
+ J.,
+ ...
+ & Liao,
+ S.
+ (2025).
+ Physics-informed neural networks for PDE problems:
+ A comprehensive review.
+ Artificial Intelligence Review,
+ 58(10),
+ 323.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(year)"
+key "pinn-electro"
+literal "false"
+
+\end_inset
+
+Khan,
+ A.,
+ & Lowther,
+ D.
+ A.
+ (2022).
+ Physics informed neural networks for electromagnetic analysis.
+ IEEE Transactions on Magnetics,
+ 58(9),
+ 1-4.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "deepl"
+literal "false"
+
+\end_inset
+
+Deng,
+ L.,
+ & Yu,
+ D.
+ (2014).
+ Deep learning:
+ methods and applications.
+ Foundations and Trends& in Signal Processing,
+ 7(3-4),
+ 197-387.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "adamNN"
+literal "false"
+
+\end_inset
+
+Reyad,
+ M.,
+ Sarhan,
+ A.
+ M.,
+ & Arafa,
+ M.
+ (2023).
+ A modified Adam algorithm for deep neural network optimization.
+ Neural Computing and Applications,
+ 35(23),
+ 17095-17112.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2014)"
+key "lbfgsNN"
+literal "false"
+
+\end_inset
+
+Bollapragada,
+ R.,
+ Nocedal,
+ J.,
+ Mudigere,
+ D.,
+ Shi,
+ H.
+ J.,
+ & Tang,
+ P.
+ T.
+ P.
+ (2018,
+ July).
+ A progressive batching L-BFGS method for machine learning.
+ In International Conference on Machine Learning (pp.
+ 620-629).
+ PMLR.
 \end_layout
 
 \begin_layout Standard
@@ -2307,14 +2688,17 @@ Mirón,
 status open
 
 \begin_layout Plain Layout
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
 \begin_layout Plain Layout
+
 %% for journal Sci
 \end_layout
 
 \begin_layout Plain Layout
+
 %
 \backslash
 reviewreports{
@@ -2325,6 +2709,7 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
+
 %Reviewer 1 comments and authors' response
 \backslash
 
@@ -2333,6 +2718,7 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
+
 %Reviewer 2 comments and authors' response
 \backslash
 
@@ -2341,14 +2727,17 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
+
 %Reviewer 3 comments and authors' response
 \end_layout
 
 \begin_layout Plain Layout
+
 %}
 \end_layout
 
 \begin_layout Plain Layout
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
@@ -2362,6 +2751,7 @@ reviewreports{
 status open
 
 \begin_layout Plain Layout
+
 
 \backslash
 PublishersNote{}
