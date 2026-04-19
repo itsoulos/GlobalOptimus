@@ -30,6 +30,7 @@
 # include <METHODS/pdoublegenetic.h>
 # include <METHODS/BGWO.h>
 # include <METHODS/ParallelBGwo.h>
+# include <METHODS/opso.h>
 # include <OPTIMUS/statistics.h>
 #ifdef OPTIMUS_ARMADILLO
     # include <MLMODELS/functionalrbf.h>
@@ -111,6 +112,9 @@ void loadMethods()
 
     method<<new ParallelBGwo;
     methodName<<"PBGWO";
+
+    method<<new OPSO;
+    methodName<<"Opso";
 
     for(int i=0;i<method.size();i++)
     methodParams<<method[i]->getParameterNames();

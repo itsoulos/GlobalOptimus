@@ -56,6 +56,7 @@ SOURCES       = GE/cprogram.cc \
 		METHODS/BGWO.cpp \
 		METHODS/ParallelBGwo.cpp \
 		METHODS/pdoublegenetic.cpp \
+		METHODS/opso.cpp \
 		METHODS/trio.cpp \
 		OPTIMUS/cluster.cpp \
 		OPTIMUS/kmeans.cpp \
@@ -141,6 +142,7 @@ OBJECTS       = cprogram.o \
 		BGWO.o \
 		ParallelBGwo.o \
 		pdoublegenetic.o \
+		opso.o \
 		trio.o \
 		cluster.o \
 		kmeans.o \
@@ -258,6 +260,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
@@ -310,6 +313,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		DataFitting.pro GE/cprogram.h \
 		METHODS/pdoublegenetic.h \
 		METHODS/BGWO.h \
+		METHODS/opso.h \
 		METHODS/ParallelBGwo.h \
 		METHODS/trio.h \
 		OPTIMUS/cluster.h \
@@ -397,6 +401,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		METHODS/BGWO.cpp \
 		METHODS/ParallelBGwo.cpp \
 		METHODS/pdoublegenetic.cpp \
+		METHODS/opso.cpp \
 		METHODS/trio.cpp \
 		OPTIMUS/cluster.cpp \
 		OPTIMUS/kmeans.cpp \
@@ -525,6 +530,7 @@ Makefile: DataFitting.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
@@ -612,6 +618,7 @@ Makefile: DataFitting.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_nfc.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri:
@@ -677,8 +684,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.h METHODS/pdoublegenetic.h METHODS/BGWO.h METHODS/ParallelBGwo.h METHODS/trio.h OPTIMUS/cluster.h OPTIMUS/kmeans.h OPTIMUS/point.h SAMPLER/distributedsampler.h SAMPLER/usersampler.h METHODS/eo.h METHODS/MFO.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mbfgs.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h MLMODELS/airbf.h MLMODELS/fcmodel.h MLMODELS/rbf_lbfgs.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
-	$(COPY_FILE) --parents GE/cprogram.cc METHODS/BGWO.cpp METHODS/ParallelBGwo.cpp METHODS/pdoublegenetic.cpp METHODS/trio.cpp OPTIMUS/cluster.cpp OPTIMUS/kmeans.cpp OPTIMUS/point.cpp SAMPLER/distributedsampler.cpp SAMPLER/usersampler.cpp METHODS/eo.cpp METHODS/MFO.cpp GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mbfgs.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp MLMODELS/airbf.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.h METHODS/pdoublegenetic.h METHODS/BGWO.h METHODS/opso.h METHODS/ParallelBGwo.h METHODS/trio.h OPTIMUS/cluster.h OPTIMUS/kmeans.h OPTIMUS/point.h SAMPLER/distributedsampler.h SAMPLER/usersampler.h METHODS/eo.h METHODS/MFO.h GE/doublestack.h GE/fcprogram.h GE/fparser.hh GE/fpconfig.hh GE/fptypes.hh GE/mapper.h GE/population.h GE/program.h GE/rule.h GE/symbol.h METHODS/eo.h METHODS/acop.h METHODS/ego.h METHODS/hybridmethod.h METHODS/jDElsgo.h METHODS/mbfgs.h METHODS/mewoa.h METHODS/saop.h METHODS/woa.h MLMODELS/airbf.h MLMODELS/fcmodel.h MLMODELS/rbf_lbfgs.h OPTIMUS/editlogger.h OPTIMUS/filelogger.h OPTIMUS/logger.h OPTIMUS/mean.h OPTIMUS/methodloader.h GE/integeranneal.h GE/nncprogram.h GE/ruleprogram.h METHODS/adam.h METHODS/gwooptimizer.h METHODS/ipso.h METHODS/lbfgs.h METHODS/neldermead.h METHODS/neuralminimizer.h METHODS/parallelde.h METHODS/parallelpso.h METHODS/simanmethod.h METHODS/ofalgorithm.h METHODS/usermethod.h METHODS/armadillo1.h MLMODELS/gdfmodel.h MLMODELS/rulemodel.h MLMODELS/nncmodel.h MLMODELS/mlpproblem.h MLMODELS/model.h LINESEARCH/armijosearch.h LINESEARCH/fibonaccisearch.h LINESEARCH/goldensearch.h LINESEARCH/linesearch.h METHODS/bfgs.h METHODS/differentialevolution.h METHODS/genetic.h METHODS/gradientdescent.h METHODS/multistart.h MLMODELS/rbfproblem.h OPTIMUS/parameterlist.h OPTIMUS/statistics.h OPTIMUS/collection.h OPTIMUS/doublebox.h OPTIMUS/optimizer.h OPTIMUS/parameter.h OPTIMUS/problem.h OPTIMUS/similarity.h MLMODELS/dataset.h SAMPLER/kmeanssampler.h SAMPLER/maxwellsampler.h SAMPLER/neuralsampler.h SAMPLER/problemsampler.h SAMPLER/rbfsampler.h SAMPLER/triangularsampler.h MLMODELS/converter.h MLMODELS/neuralparser.h SAMPLER/uniformsampler.h $(DISTDIR)/
+	$(COPY_FILE) --parents GE/cprogram.cc METHODS/BGWO.cpp METHODS/ParallelBGwo.cpp METHODS/pdoublegenetic.cpp METHODS/opso.cpp METHODS/trio.cpp OPTIMUS/cluster.cpp OPTIMUS/kmeans.cpp OPTIMUS/point.cpp SAMPLER/distributedsampler.cpp SAMPLER/usersampler.cpp METHODS/eo.cpp METHODS/MFO.cpp GE/doublestack.cc GE/fcprogram.cpp GE/fparser.cc GE/fpoptimizer.cc GE/mapper.cc GE/population.cc GE/program.cc GE/rule.cc GE/symbol.cc GE/integeranneal.cpp GE/nncprogram.cpp GE/ruleprogram.cpp METHODS/acop.cpp METHODS/ego.cpp METHODS/hybridmethod.cpp METHODS/jDElsgo.cpp METHODS/mbfgs.cpp METHODS/mewoa.cpp METHODS/saop.cpp METHODS/woa.cpp MLMODELS/airbf.cpp MLMODELS/fcmodel.cpp OPTIMUS/editlogger.cpp OPTIMUS/filelogger.cpp OPTIMUS/logger.cpp OPTIMUS/mean.cpp METHODS/gwooptimizer.cpp METHODS/ofalgorithm.cpp METHODS/adam.cpp METHODS/armadillo1.cpp METHODS/ipso.cpp METHODS/lbfgs.cpp METHODS/neldermead.cpp METHODS/neuralminimizer.cpp METHODS/parallelde.cpp METHODS/parallelpso.cpp METHODS/simanmethod.cpp METHODS/usermethod.cpp MLMODELS/gdfmodel.cpp MLMODELS/nncmodel.cpp MLMODELS/rulemodel.cpp MLMODELS/mlpproblem.cpp MLMODELS/model.cpp LINESEARCH/armijosearch.cpp LINESEARCH/fibonaccisearch.cpp LINESEARCH/goldensearch.cpp METHODS/bfgs.cpp METHODS/differentialevolution.cpp METHODS/genetic.cpp METHODS/gradientdescent.cpp LINESEARCH/linesearch.cpp METHODS/multistart.cpp MLMODELS/rbfproblem.cpp OPTIMUS/methodloader.cpp OPTIMUS/parameterlist.cpp OPTIMUS/statistics.cpp OPTIMUS/collection.cpp OPTIMUS/doublebox.cpp OPTIMUS/similarity.cpp MLMODELS/dataset.cpp SAMPLER/kmeanssampler.cpp SAMPLER/maxwellsampler.cpp SAMPLER/neuralsampler.cpp SAMPLER/rbfsampler.cpp SAMPLER/triangularsampler.cpp SAMPLER/uniformsampler.cpp datafitting.cpp OPTIMUS/optimizer.cpp OPTIMUS/parameter.cpp OPTIMUS/problem.cpp MLMODELS/converter.cc MLMODELS/neuralparser.cc SAMPLER/problemsampler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -829,6 +836,9 @@ pdoublegenetic.o: METHODS/pdoublegenetic.cpp METHODS/pdoublegenetic.h \
 		OPTIMUS/kmeans.h \
 		OPTIMUS/cluster.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pdoublegenetic.o METHODS/pdoublegenetic.cpp
+
+opso.o: METHODS/opso.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o opso.o METHODS/opso.cpp
 
 trio.o: METHODS/trio.cpp METHODS/trio.h \
 		OPTIMUS/optimizer.h \
@@ -2278,6 +2288,7 @@ datafitting.o: datafitting.cpp MLMODELS/mlpproblem.h \
 		OPTIMUS/point.h \
 		OPTIMUS/kmeans.h \
 		OPTIMUS/cluster.h \
+		METHODS/opso.h \
 		OPTIMUS/statistics.h \
 		MLMODELS/functionalrbf.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datafitting.o datafitting.cpp

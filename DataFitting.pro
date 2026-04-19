@@ -26,6 +26,7 @@ SOURCES += \
 	METHODS/BGWO.cpp \
 	METHODS/ParallelBGwo.cpp \
     METHODS/pdoublegenetic.cpp \
+    METHODS/opso.cpp \
 	METHODS/trio.cpp \
     OPTIMUS/cluster.cpp \
     OPTIMUS/kmeans.cpp \
@@ -120,6 +121,7 @@ HEADERS += \
     GE/cprogram.h \
     METHODS/pdoublegenetic.h \
     METHODS/BGWO.h \
+    METHODS/opso.h \
     METHODS/ParallelBGwo.h \
     METHODS/trio.h \
     OPTIMUS/cluster.h \
