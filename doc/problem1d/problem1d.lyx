@@ -1,4 +1,4 @@
-#LyX 2.4 created this file. For more info see https://www.lyx.org/
+#LyX 2.5 created this file. For more info see https://www.lyx.org/
 \lyxformat 620
 \begin_document
 \begin_header
@@ -305,21 +305,30 @@ Correspondence:
 \end_layout
 
 \begin_layout Abstract
-
-\series bold
-The 1D Nonlinear Schrödinger Equation (NLSE) has been employed to model the femtosecond laser pulse propagation in photonic crystals.
- A numerical scheme has been used to solve NLSE.
- Using the machine learning tool of artificial neural networks and applying the proper artificial boundary conditions,
- we have concluded that our results are close to other numerical schemes.
- The employed machine learning model can be applied to solve the aforementioned NLSE more efficient than other algorithms.
- Lastly,
- several numerical tests are performed to analyze the capacity of the proposed numerical scheme.
- 
+The one-dimensional Nonlinear Schrödinger Equation (NLSE) has been widely used to model femtosecond laser pulse propagation in photonic crystals.
+ In this work,
+ the NLSE is solved using a Physics-Informed Neural Network (PINN),
+ which incorporates the governing differential equation,
+ as well as the associated initial and artificial boundary conditions,
+ directly into the training process.
+ The complex-valued solution is represented through a neural network approximation,
+ and the resulting model is trained using an optimization algorithm based on the minimization of a composite physics-informed loss function.
+ The proposed approach eliminates the need for explicit spatial and temporal discretization,
+ providing a continuous representation of the solution over the computational domain.
+ The obtained results demonstrate good agreement with reference numerical solutions,
+ accurately capturing the key physical features of pulse propagation,
+ including dispersion and nonlinear effects.
+ In addition,
+ the implementation of absorbing boundary conditions effectively suppresses non-physical reflections at the domain boundaries.
+ The comparison with traditional numerical schemes indicates that the proposed PINN-based method can achieve competitive accuracy while offering increased flexibility and potential computational efficiency.
+ These findings highlight the capability of physics-informed machine learning techniques as an alternative framework for solving nonlinear wave propagation problems.
 \end_layout
 
 \begin_layout Keywords
 Schrödinger Equation;
  Neural networks;
+ Physics-Informed Neural Network;
+ Non linear methods;
  Machine learning
 \end_layout
 
@@ -459,7 +468,7 @@ literal "false"
  which is defined as follows:
 \begin_inset Formula 
 \begin{equation}
-\mbox{E}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum_{i=1}^{M}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
+\mbox{E}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\sum^{M}_{i=1}\left(N\left(\overrightarrow{x}_{i},\overrightarrow{w}\right)-y_{i}\right)^{2}\label{eq:eq1}
 \end{equation}
 
 \end_inset
@@ -1025,13 +1034,11 @@ status open
 
 \begin_layout Plain Layout
 
-
 \backslash
 begin{align}
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 mathcal{L}_{PDE} &= 
@@ -1047,7 +1054,6 @@ sum_{i=1}^{N_f} |R(z_i,t_i)|^2,
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 mathcal{L}_{IC} &= 
@@ -1066,7 +1072,6 @@ theta}(z_i,0) - u_0(z_i)|^2,
 
 \begin_layout Plain Layout
 
-
 \backslash
 mathcal{L}_{BC} &= 
 \backslash
@@ -1078,7 +1083,6 @@ theta}(z_i,t_i) - g(z_i,t_i)|^2.
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 end{align}
@@ -1165,13 +1169,11 @@ status collapsed
 
 \begin_layout Plain Layout
 
-
 \backslash
 begin{align}
 \end_layout
 
 \begin_layout Plain Layout
-
 R_1 &= u_t + D
 \backslash
 ,v_{zz} + 
@@ -1187,7 +1189,6 @@ gamma (u^2 + v^2)v,
 \end_layout
 
 \begin_layout Plain Layout
-
 R_2 &= v_t - D
 \backslash
 ,u_{zz} - 
@@ -1198,7 +1199,6 @@ gamma (u^2 + v^2)u.
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 end{align}
@@ -1335,7 +1335,6 @@ which describes the energy distribution of the wave packet.
 status open
 
 \begin_layout Plain Layout
-
 The parameters used in the present study are summarized in Table~
 \backslash
 ref{tab:parameters}.
@@ -1347,20 +1346,17 @@ ref{tab:parameters}.
 
 \begin_layout Plain Layout
 
-
 \backslash
 begin{table}[H]
 \end_layout
 
 \begin_layout Plain Layout
 
-
 \backslash
 centering
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 caption{Summary of physical,
@@ -1370,13 +1366,11 @@ caption{Summary of physical,
 
 \begin_layout Plain Layout
 
-
 \backslash
 label{tab:parameters}
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 begin{tabular}{lll}
@@ -1384,13 +1378,11 @@ begin{tabular}{lll}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 textbf{Category} & 
@@ -1406,7 +1398,6 @@ textbf{Value}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
@@ -1416,7 +1407,6 @@ hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 multicolumn{3}{c}{
@@ -1430,13 +1420,11 @@ textit{Physical Parameters}}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 Dispersion coefficient & $D$ & $1.0$ 
 \backslash
 
@@ -1445,7 +1433,6 @@ Dispersion coefficient & $D$ & $1.0$
 \end_layout
 
 \begin_layout Plain Layout
-
 Linear coefficient & $
 \backslash
 beta$ & $1.0$ 
@@ -1456,7 +1443,6 @@ beta$ & $1.0$
 \end_layout
 
 \begin_layout Plain Layout
-
 Nonlinearity coefficient & $
 \backslash
 gamma$ & $1.0$ 
@@ -1467,7 +1453,6 @@ gamma$ & $1.0$
 \end_layout
 
 \begin_layout Plain Layout
-
 Boundary direction parameter & $s$ & $
 \backslash
 pm 1$ 
@@ -1478,7 +1463,6 @@ pm 1$
 \end_layout
 
 \begin_layout Plain Layout
-
 Characteristic frequency & $
 \backslash
 Omega$ & $1.0$ 
@@ -1494,13 +1478,11 @@ Omega$ & $1.0$
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 multicolumn{3}{c}{
@@ -1514,13 +1496,11 @@ textit{Computational Domain}}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 Spatial domain & $z 
 \backslash
 in [0,
@@ -1532,7 +1512,6 @@ in [0,
 \end_layout
 
 \begin_layout Plain Layout
-
 Temporal domain & $t 
 \backslash
 in [0,
@@ -1544,7 +1523,6 @@ in [0,
 \end_layout
 
 \begin_layout Plain Layout
-
 Spatial grid points & $N_z$ & $200$ 
 \backslash
 
@@ -1553,7 +1531,6 @@ Spatial grid points & $N_z$ & $200$
 \end_layout
 
 \begin_layout Plain Layout
-
 Temporal grid points & $N_t$ & $200$ 
 \backslash
 
@@ -1567,13 +1544,11 @@ Temporal grid points & $N_t$ & $200$
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 multicolumn{3}{c}{
@@ -1587,13 +1562,11 @@ textit{Neural Network Architecture}}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 Input dimension & $(z,t)$ & $2$ 
 \backslash
 
@@ -1602,7 +1575,6 @@ Input dimension & $(z,t)$ & $2$
 \end_layout
 
 \begin_layout Plain Layout
-
 Output dimension & $(u,v)$ & $2$ 
 \backslash
 
@@ -1611,7 +1583,6 @@ Output dimension & $(u,v)$ & $2$
 \end_layout
 
 \begin_layout Plain Layout
-
 Hidden layers & $L$ & $4$ 
 \backslash
 
@@ -1620,7 +1591,6 @@ Hidden layers & $L$ & $4$
 \end_layout
 
 \begin_layout Plain Layout
-
 Neurons per layer & $N_h$ & $50$ 
 \backslash
 
@@ -1629,7 +1599,6 @@ Neurons per layer & $N_h$ & $50$
 \end_layout
 
 \begin_layout Plain Layout
-
 Activation function &  & Sigmoid 
 \backslash
 
@@ -1643,13 +1612,11 @@ Activation function &  & Sigmoid
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 multicolumn{3}{c}{
@@ -1663,13 +1630,11 @@ textit{Training Parameters}}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 Optimizer &  & Adam 
 \backslash
 
@@ -1678,7 +1643,6 @@ Optimizer &  & Adam
 \end_layout
 
 \begin_layout Plain Layout
-
 Learning rate & $
 \backslash
 eta$ & $10^{-3}$ 
@@ -1689,7 +1653,6 @@ eta$ & $10^{-3}$
 \end_layout
 
 \begin_layout Plain Layout
-
 Epochs & $N_{
 \backslash
 text{epochs}}$ & $5000$ 
@@ -1700,7 +1663,6 @@ text{epochs}}$ & $5000$
 \end_layout
 
 \begin_layout Plain Layout
-
 Batch size & $N_{
 \backslash
 text{batch}}$ & $64$ 
@@ -1716,13 +1678,11 @@ text{batch}}$ & $64$
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 multicolumn{3}{c}{
@@ -1736,13 +1696,11 @@ textit{Training Data}}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 Collocation points & $N_f$ & $10^4$ 
 \backslash
 
@@ -1751,7 +1709,6 @@ Collocation points & $N_f$ & $10^4$
 \end_layout
 
 \begin_layout Plain Layout
-
 Initial condition points & $N_{ic}$ & $10^3$ 
 \backslash
 
@@ -1760,7 +1717,6 @@ Initial condition points & $N_{ic}$ & $10^3$
 \end_layout
 
 \begin_layout Plain Layout
-
 Boundary condition points & $N_{bc}$ & $10^3$ 
 \backslash
 
@@ -1774,13 +1730,11 @@ Boundary condition points & $N_{bc}$ & $10^3$
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 multicolumn{3}{c}{
@@ -1794,13 +1748,11 @@ textit{Loss Weights}}
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
-
 PDE loss weight & $
 \backslash
 lambda_{PDE}$ & $1.0$ 
@@ -1811,7 +1763,6 @@ lambda_{PDE}$ & $1.0$
 \end_layout
 
 \begin_layout Plain Layout
-
 IC loss weight & $
 \backslash
 lambda_{IC}$ & $1.0$ 
@@ -1822,7 +1773,6 @@ lambda_{IC}$ & $1.0$
 \end_layout
 
 \begin_layout Plain Layout
-
 BC loss weight & $
 \backslash
 lambda_{BC}$ & $1.0$ 
@@ -1838,20 +1788,17 @@ lambda_{BC}$ & $1.0$
 
 \begin_layout Plain Layout
 
-
 \backslash
 hline
 \end_layout
 
 \begin_layout Plain Layout
 
-
 \backslash
 end{tabular}
 \end_layout
 
 \begin_layout Plain Layout
-
 
 \backslash
 end{table}
@@ -1863,7 +1810,7 @@ end{table}
 \end_layout
 
 \begin_layout Standard
-Figure 
+In Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:The-intensity-profiles"
@@ -1874,16 +1821,60 @@ nolink "false"
 
 \end_inset
 
- depicts the intensity profiles (
-\begin_inset Formula $|u|^{2}$
+ is illustrated the profile 
+\begin_inset Formula $|A|^{2}$
 \end_inset
 
-) as a function of the spatial variable (
+ as a function of 
 \begin_inset Formula $z$
 \end_inset
 
-),
- for three different times (
+.
+ The numerical simulation are in agreement with the theoretically expected behavior of the nonlinear dispersion Schrödinger-type equation (NLSE).
+ The initial condition corresponds to a spatially localized Gaussian wave packet,
+ which at time 
+\begin_inset Formula $\tau=0$
+\end_inset
+
+ presents a strong local energy concentration and a well-defined phase structure.
+ During the evolution of time and in particular at time 
+\begin_inset Formula $\tau=T/4$
+\end_inset
+
+,
+ the onset of dispersion is observed,
+ resulting in the mild spatial spread of the wave packet.
+ This phenomenon is enhanced by the action of the dispersion mechanism of the system and is accompanied by a gradual decrease in the maximum value of the amplitude.
+ At time 
+\begin_inset Formula $\tau=T/2$
+\end_inset
+
+,
+ dispersion has now become dominant in the dynamics of the system,
+ leading to a significant broadening of the packet and a more uniform distribution of the energy in the spatial field.
+ At the same time,
+ the nonlinearity affects the phase evolution of the wave field,
+ causing mild energy redistributions and local phase changes,
+ but without changing the overall dispersion trend.
+\end_layout
+
+\begin_layout Standard
+Finally,
+ at time 
+\begin_inset Formula $\tau=T$
+\end_inset
+
+,
+ the solution has fully evolved within the computational domain and exhibits a strong spread,
+ with a further decrease in amplitude.
+ This behavior indicates effective energy removal towards the boundaries of the field,
+ which confirms the correct operation of the absorbing boundary conditions,
+ as no significant reflections are observed.
+\end_layout
+
+\begin_layout Standard
+Overall,
+ the time sequence 
 \begin_inset Formula $\tau=0$
 \end_inset
 
@@ -1895,45 +1886,14 @@ nolink "false"
 ,
  
 \begin_inset Formula $\tau=T/2$
-\end_inset
-
-).
- The intensity expresses the square of the magnitude of the field and is a measure of the distribution of the wave energy along the propagation axis.
- At time (
-\begin_inset Formula $\tau=0$
-\end_inset
-
-),
- the intensity profile exhibits a maximum value near (
-\begin_inset Formula $z=0$
-\end_inset
-
-) and exhibits a monotonic,
- rapid decrease as the distance increases.
- This behavior indicates a strong initial localization of the energy,
- which is progressively weakened due to propagation and/or damping mechanisms.
- For later times (
-\begin_inset Formula $\tau=T/4$
 \end_inset
 
  and 
-\begin_inset Formula $\tau=T/2$
+\begin_inset Formula $\tau=T$
 \end_inset
 
-),
- a significant decrease in the maximum intensity is observed,
- as well as a change in the shape of the profile.
- Specifically,
- the intensity takes on lower values throughout the field and exhibits weak oscillations,
- which suggests dispersion or wave interaction phenomena.
- The evolution of the curves demonstrates that over time the initial concentrated energy distribution becomes disordered and diffuses in space,
- leading to intensity attenuation and profile smoothing.
- This behavior is characteristic of systems where propagation,
- damping,
- and possibly nonlinear interactions coexist.
- Overall,
- the diagram highlights the temporal evolution of the intensity of a wave field,
- with emphasis on the reduction of energy and the transformation of the initial distribution into a weakly oscillating field of low intensity.
+ clearly captures the transition from an initially localized wave state to a gradually dispersed and energy-weakened structure,
+ according to the theoretical description of Schrödinger nonlinear dispersive systems.
 \end_layout
 
 \begin_layout Standard
@@ -2005,58 +1965,28 @@ nolink "false"
 
  of the normalized NLSE along the propagation.
  More specifically,
- the surface shows how the amplitude of the field 
-\begin_inset Formula $u(z,\tau)$
-\end_inset
+ this figure depicts the spatiotemporal evolution of the solution of the nonlinear dispersion equation of Schrödinger type (NLSE) under the given initial and boundary conditions and is generally compatible with the theoretically expected behavior of the system.Initially,
+ the wave packet appears spatially localized and with a clear peak,
+ which corresponds to the initial Gaussian-type condition.
+ As time progresses,
+ a gradual spread of the structure along the spatial z axis is observed,
+ which is mainly attributed to the action of the dispersion term of the equation.
+ The dispersion causes desynchronization of the phase components of the packet,
+ leading to smoothing and a reduction in the local energy concentration.
+ At the same time,
+ the nonlinearity of the equation introduces intensity-dependent corrections to the phase of the solution,
+ resulting in the evolution deviating from a purely linear dispersion.
+ This is manifested in the graph through mild distortions of the wave packet and local changes in its shape,
+ especially in the regions where the amplitude remains relatively large.
+ The boundary conditions seem to function effectively as absorbers,
+ as no strong reflections are observed at the edges of the region.
+ The wave energy seems to gradually move away towards the boundaries without returning to the interior of the field,
+ which suggests that the numerical implementation of the radiation conditions is satisfactory.
+\end_layout
 
- varies as a function of the spatial variable 
-\begin_inset Formula $z$
-\end_inset
-
- and the temporal variable 
-\begin_inset Formula $\tau$
-\end_inset
-
-.
- For small values of 
-\begin_inset Formula $z$
-\end_inset
-
-,
- the solution exhibits strong spatio-temporal fluctuations,
- with obvious local extrema with respect to 
-\begin_inset Formula $\tau$
-\end_inset
-
-,
- which indicates the presence of dispersion and nonlinear interaction.
- As 
-\begin_inset Formula $z$
-\end_inset
-
- increases,
- a gradual attenuation of the oscillations is observed.
- The amplitude decreases and the shape of the solution becomes smooth,
- which indicates that the dispersion and nonlinear effects lead to a damping of the initial disturbance.
- For large values \SpecialChar allowbreak
-of the variable 
-\begin_inset Formula $\tau$
-\end_inset
-
-,
- the solution converges to zero for every 
-\begin_inset Formula $z$
-\end_inset
-
- while at the same time its time variation also vanishes.
- This means that the solution is spatially localized with respect to 
-\begin_inset Formula $\tau$
-\end_inset
-
- (localized pulse),
- a characteristic found in pulsed solutions of NLSE.
- Overall,
- Figure 
+\begin_layout Standard
+Overall,
+ the picture emerging from the 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:The-evolution-of"
@@ -2067,16 +1997,10 @@ nolink "false"
 
 \end_inset
 
- captures an evolving waveform that propagates along 
-\begin_inset Formula $z$
-\end_inset
-
- while simultaneously diffusing in time and tends to a state of rest at the ends of 
-\begin_inset Formula $\tau$
-\end_inset
-
-,
- confirming the natural behavior of NLSE solutions under damping or diffusion conditions.
+ shows a typical evolution of the NLSE solution:
+ initial localized state,
+ gradual dispersion with simultaneous nonlinearity effect and smooth energy removal due to the boundary conditions.
+ The dynamic behavior is consistent with the expected physics of nonlinear dispersive waves.
 \end_layout
 
 \begin_layout Standard
@@ -2142,15 +2066,113 @@ name "sec:Conclusions"
 \end_layout
 
 \begin_layout Standard
+In this work,
+ a Physics-Informed Neural Network (PINN) was incorporated to solve the nonlinear evolution equation presented in Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:NLSE"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ with respect to the initial and boundary conditions provided by equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:initial"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:boundaryConditions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ respectively.
+ The proposed method utilizes a neural network that directly incorporates the governing physical laws into the training process.
+\end_layout
+
+\begin_layout Standard
+The experimental results indicate that the PINN networks can approximate the complex-valued solution $
+\begin_inset Formula $A(z,t)$
+\end_inset
+
+$ over the entire spatio-temporal domain.
+
+\series bold
+ 
+\series default
+The use of absorbing boundary conditions was shown to be effective,
+ preventing artificial reflections and ensuring physically consistent behavior near the domain boundaries.
+ Furthermore,
+ the training process exhibited stable convergence,
+ as evidenced by the monotonic decay of the loss function.
+\end_layout
+
+\begin_layout Standard
+Nevertheless,
+ there are a series of limitations.
+ For example,
+ the accuracy of the PINN may degrade at larger times due to accumulated approximation errors or the model may require an excessive processing time for the training process.
+
+\series bold
+ 
+\series default
+As a conclusion,
+ the experimental results proved the efficiency of the proposed model to solve the underlying differential equation.
+\end_layout
+
+\begin_layout Standard
+Future work may focus on improving training efficiency,
+ incorporating adaptive sampling strategies,
+ and extending the approach to higher-dimensional or more complex physical systems.
+\end_layout
+
+\begin_layout Standard
 The numerical investigation of the normalized Nonlinear Schrödinger Equation provides valuable insight into the dynamics of nonlinear wave propagation in dispersive media.
  The analysis of the numerical results shows that the evolution of the wave field is characterized by a gradual attenuation and diffusion of energy both in space and time.
  In particular,
- in Figure 1 it is observed that the initially strongly localized energy distribution decreases significantly over time,
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-intensity-profiles"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ it is observed that the initially strongly localized energy distribution decreases significantly over time,
  while the intensity profile transforms into a smoother and weakly oscillating form.
  This indicates the influence of phenomena such as dispersion and damping,
  which lead to a loss of the initial energy concentration.
  At the same time,
- Figure 2 confirms that the solution of the normalized NLSE evolves in a way that combines spatial propagation and temporal decay.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-evolution-of"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ confirms that the solution of the normalized NLSE evolves in a way that combines spatial propagation and temporal decay.
  The strong initial fluctuations weaken as the propagation distance increases,
  while the solution tends to zero for large time values,
  maintaining the character of a locally localized pulse.
@@ -3353,17 +3375,14 @@ Bollapragada,
 status open
 
 \begin_layout Plain Layout
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
 \begin_layout Plain Layout
-
 %% for journal Sci
 \end_layout
 
 \begin_layout Plain Layout
-
 %
 \backslash
 reviewreports{
@@ -3374,7 +3393,6 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
-
 %Reviewer 1 comments and authors' response
 \backslash
 
@@ -3383,7 +3401,6 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
-
 %Reviewer 2 comments and authors' response
 \backslash
 
@@ -3392,17 +3409,14 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
-
 %Reviewer 3 comments and authors' response
 \end_layout
 
 \begin_layout Plain Layout
-
 %}
 \end_layout
 
 \begin_layout Plain Layout
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
@@ -3416,7 +3430,6 @@ reviewreports{
 status open
 
 \begin_layout Plain Layout
-
 
 \backslash
 PublishersNote{}
