@@ -1,4 +1,3 @@
-
 #include "opso.h"
 
 /* * Constructor: Ορίζουμε τις παραμέτρους που θα εμφανίζονται στο GUI
@@ -7,13 +6,15 @@
 OPSO::OPSO()
 {
     // Προσθήκη παραμέτρου για το πλήθος των σωματιδίων με εύρος 10 έως 2000
-    addParam(Parameter("opso_particles", 100, 10, 2000, "Number of particles"));
+    addParam(Parameter("opso_particles", 200, 10, 2000, "Number of particles"));
+    // Προσθήκη παραμέτρου για το πλήθος των επαναλήψεων
+    addParam(Parameter("opso_maxiters",1000,10,2000,"Maximum number of iterations"));
     // Προσθήκη παραμέτρου για το βάρος αδράνειας (Inertia Weight)
-    addParam(Parameter("opso_w", 0.5, 0.1, 1.0, "Inertia weight (w)"));
+    addParam(Parameter("opso_w", 0.8, 0.1, 1.0, "Inertia weight (w)"));
     // Προσθήκη παραμέτρου c1 για την έλξη προς την προσωπική καλύτερη θέση
-    addParam(Parameter("opso_c1", 2.0, 0.0, 4.0, "Cognitive constant (c1)"));
+    addParam(Parameter("opso_c1", 1.2, 0.0, 4.0, "Cognitive constant (c1)"));
     // Προσθήκη παραμέτρου c2 για την έλξη προς την ομαδική καλύτερη θέση
-    addParam(Parameter("opso_c2", 2.0, 0.0, 4.0, "Social constant (c2)"));
+    addParam(Parameter("opso_c2", 1.8, 0.0, 4.0, "Social constant (c2)"));
 }
 
 /*
@@ -22,8 +23,13 @@ OPSO::OPSO()
  */
 void OPSO::init()
 {
+
+     max_iterations = getParam("opso_maxiters").getValue().toInt();
+    // printf("DEBUG: Max Iterations is %d\n", max_iterations);
+
     //  Ανάκτηση της επιλεγμένης τιμής για τον αριθμό των σωματιδίων
     nParticles = getParam("opso_particles").getValue().toInt();
+
     // Ανάκτηση της τιμής της αδράνειας w
     w = getParam("opso_w").getValue().toDouble();
     // Ανάκτηση της σταθεράς c1
@@ -31,11 +37,21 @@ void OPSO::init()
     // Ανάκτηση της κοινωνικής σταθεράς c2
     c2 = getParam("opso_c2").getValue().toDouble();
 
+
+    //2.
+    int dimension = myProblem->getDimension();
+
+
+    // Τραβάμε το αριστερό και δεξί όριο για να γίνει αρχικοποίηση
+    lb = myProblem->getLeftMargin();
+    ub = myProblem->getRightMargin();
+
     // Αρχικοποίηση της γεννήτριας τυχαίων αριθμών με hardware seed
     gen.seed(std::random_device()());
     // Ορισμός αρχικού παγκόσμιου βέλτιστου fitness σε μια πολύ μεγάλη τιμή
     besty = 1e30;
     // Προσαρμογή μεγέθους του vector της καλύτερης θέσης στις διαστάσεις του προβλήματος
+
     bestx.resize(dimension);
 
     // Δέσμευση μνήμης για τις τρέχουσες θέσεις όλων των σωματιδίων
@@ -64,67 +80,75 @@ void OPSO::init()
             v[i][d] = 0.0;
             // Η αρχική θέση ορίζεται και ως η πρώτη προσωπική καλύτερη θέση
             pbest[i][d] = x[i][d];
+
+
+
         }
     }
+
+
 }
 
-/*
- * step: Εκτέλεση μιας επανάληψης του αλγορίθμου.
- */
-void OPSO::step(std::vector<double> &current_fitnesses)
+
+void OPSO::step()
 {
-    // Δημιουργία κατανομής για τους τυχαίους συντελεστές r1, r2
-    std::uniform_real_distribution<double> rDist(0.0, 1.0);
 
-    // Φάση 1: Ενημέρωση μνήμης (pBest και gBest)
+    // 1. Λήψη της διάστασης απευθείας από το πρόβλημα
+    int dim = myProblem->getDimension();
+
+    // 2. Αξιολόγηση Fitness & Ενημέρωση pBest/gBest
     for (int i = 0; i < nParticles; ++i)
     {
-        // Αποθήκευση του fitness που υπολογίστηκε από το framework
-        fitness[i] = current_fitnesses[i];
+        // Χρήση της statFunmin 
+        double fit = myProblem->statFunmin(x[i]);
+        fitness[i] = fit;
 
-        // Έλεγχος αν η τρέχουσα θέση είναι καλύτερη από την προσωπική καλύτερη
-        if (fitness[i] < pbest_fitness[i])
+        if (fit < pbest_fitness[i])
         {
-            // Ενημέρωση του προσωπικού ρεκόρ fitness
-            pbest_fitness[i] = fitness[i];
-            // Αποθήκευση της τρέχουσας θέσης ως νέα pbest
+            pbest_fitness[i] = fit;
             pbest[i] = x[i];
-
-            // Έλεγχος αν η νέα pbest είναι καλύτερη από την παγκόσμια καλύτερη (gBest)
-            if (pbest_fitness[i] < besty)
-            {
-                // Ενημέρωση του παγκόσμιου ρεκόρ fitness
-                besty = pbest_fitness[i];
-                // Αποθήκευση της θέσης ως νέα παγκόσμια βέλτιστη
-                bestx = pbest[i];
-            }
         }
+
+        if (fit < besty)
+        {
+               besty = fit;
+               bestx = x[i];
+        }
+
     }
 
-    // Φάση 2: Κίνηση σωματιδίων βάσει των εξισώσεων του Paper (Table 9)
+    // 3. Ενημέρωση Ταχύτητας και Θέσης
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
     for (int i = 0; i < nParticles; ++i)
     {
-        for (int d = 0; d < dimension; ++d)
+        for (int j = 0; j < dim; ++j)
         {
-            // Παραγωγή τυχαίων αριθμών r1 και r2 για τη στοχαστικότητα της κίνησης
-            double r1 = rDist(gen);
-            double r2 = rDist(gen);
+            double r1 = dist(gen);
+            double r2 = dist(gen);
 
-            // Εφαρμογή της εξίσωσης ταχύτητας: v = w*v + c1*r1*(pbest-x) + c2*r2*(gbest-x)
-            v[i][d] = w * v[i][d] +
-                      c1 * r1 * (pbest[i][d] - x[i][d]) +
-                      c2 * r2 * (bestx[d] - x[i][d]);
+            // Εξίσωση PSO
+            v[i][j] = w* v[i][j] +
+                      c1 * r1 * (pbest[i][j] - x[i][j]) +
+                      c2 * r2 * (bestx[j] - x[i][j]);
 
-            // Ενημέρωση της θέσης του σωματιδίου προσθέτοντας τη νέα ταχύτητα
-            x[i][d] += v[i][d];
+            x[i][j] += v[i][j];
 
-            // Περιορισμός της θέσης αν ξεπερνά το κάτω όριο
-            if (x[i][d] < lb[d]) x[i][d] = lb[d];
-            // Περιορισμός της θέσης αν ξεπερνά το πάνω όριο (Boundary Control)
-            if (x[i][d] > ub[d]) x[i][d] = ub[d];
+            // Περιορισμός στα όρια lb και ub 
+            if (x[i][j] <  lb[j]) x[i][j] =  lb[j];
+            if (x[i][j] >  ub[j]) x[i][j] =  ub[j];
+
+
         }
+
     }
+ iter++; // Αυξάνουμε την επανάληψη σε κάθε κύκλο του αλγορίθμου
+ if (terminated())
+      {
+          done();
+      }
 }
+
+
 // Ενημέρωση του fitness ενός συγκεκριμένου σωματιδίου (index)
 void OPSO::setFitness(int index, double f)
 {
@@ -155,6 +179,49 @@ std::vector<double> OPSO::getBestPosition() const
     return bestx;
 }
 
+
+bool OPSO::terminated()
+{
+
+
+
+// 1. Τοπική δήλωση besty
+      double local_besty;
+      local_besty = besty; // Παίρνουμε την τρέχουσα καλύτερη τιμή που βρήκε το PSO
+
+        // Έλεγχος αν η τρέχουσα επανάληψη (iter) έφτασε ή ξεπέρασε το όριο
+        if (iter >= max_iterations)
+        {
+            return true; // Σταμάτησε τον αλγόριθμο
+        }
+
+        // Εδώ χρησιμοποιούμε ακριβώς τις έτοιμες μεθόδους του optimus
+           if (terminationMethod == "doublebox")
+            {
+                return doubleBox.terminate(besty);
+            }
+            else if (terminationMethod == "similarity")
+            {
+                return similarity.terminate(besty);
+            }
+
+        return false; // Συνέχισε στην επόμενη επανάληψη
+
+}
+
+void OPSO::done()
+{
+    // Η τοπική αναζήτηση παίρνει την καλύτερη θέση (bestx)
+    // και την "φιλτράρει" για να βρει ακόμα καλύτερο score.
+    besty = localSearch(bestx);
+}
+
+void OPSO::showDebug()
+{
+    // Εκτυπώνει στο log την τρέχουσα επανάληψη και το καλύτερο fitness
+    methodLogger->printMessage(
+        QString::asprintf("Iter=%4d BEST VALUE=%10.4lf", iter, besty));
+}
 
 // Destructor: Αποδέσμευση μνήμης και καθαρισμός όλων των vectors
 OPSO::~OPSO()

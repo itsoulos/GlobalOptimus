@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -82,6 +82,14 @@ if [ $METHOD = "Bfgs" ]; then
   #bfgs_iters: the maximum number of allowed iterations
 
   METHODPARAMS="--bfgs_iters=200"
+  elif [ $METHOD = "Opso" ]
+  then
+     # opso_particles: number of pso particles
+     # opso_w: inertia weight
+     # opso_c1: cognitive constant
+     # opso_c2: social constant
+     # opso_maxiters: maximum iterations of the algorithm
+     METHODPARAMS="--opso_particles=2000 --opso_maxiters=5000  --opso_w=0.4 --opso_c1=2.0 --opso_c2=1.0"
   elif [ $METHOD = "PBGWO" ]
 then
 THREADS=5
