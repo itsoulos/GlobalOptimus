@@ -1,3 +1,7 @@
+/*Konstantinos Barkas
+Informatics & Telecommunications - UOI
+*/
+
 #include "opso.h"
 
 /* * Constructor: Ορίζουμε τις παραμέτρους που θα εμφανίζονται στο GUI
@@ -23,6 +27,15 @@ OPSO::OPSO()
  */
 void OPSO::init()
 {
+
+
+
+         //  Αρχικοποίηση του αντικειμένου
+         similarity.init();
+
+        // (Αντί για 5 που υπάρχει ως default)
+        similarity.setSimilarityIterations(12);
+
 
      max_iterations = getParam("opso_maxiters").getValue().toInt();
     // printf("DEBUG: Max Iterations is %d\n", max_iterations);
@@ -96,10 +109,18 @@ void OPSO::step()
     // 1. Λήψη της διάστασης απευθείας από το πρόβλημα
     int dim = myProblem->getDimension();
 
+   /* --- ΜΕΤΑΒΛΗΤΟ W  ---
+        double w_start = 0.9;
+        double w_end = 0.4;
+        double current_w = w_start - ((w_start - w_end) * (double)iter / 1500.0);
+        if (current_w < w_end) current_w = w_end; // Για σιγουριά να μην πέσει κάτω από το 0.4
+    */
+
+
     // 2. Αξιολόγηση Fitness & Ενημέρωση pBest/gBest
     for (int i = 0; i < nParticles; ++i)
     {
-        // Χρήση της statFunmin 
+        // Χρήση της statFunmin, της αντικειμενικής συνάρτησης
         double fit = myProblem->statFunmin(x[i]);
         fitness[i] = fit;
 
@@ -133,7 +154,7 @@ void OPSO::step()
 
             x[i][j] += v[i][j];
 
-            // Περιορισμός στα όρια lb και ub 
+            // Περιορισμός στα όρια lb και ub του Optimizer
             if (x[i][j] <  lb[j]) x[i][j] =  lb[j];
             if (x[i][j] >  ub[j]) x[i][j] =  ub[j];
 
@@ -195,7 +216,9 @@ bool OPSO::terminated()
             return true; // Σταμάτησε τον αλγόριθμο
         }
 
-        // Εδώ χρησιμοποιούμε ακριβώς τις έτοιμες μεθόδους του optimus
+
+        /*
+        // Εδώ χρησιμοποιούμε ακριβώς τις έτοιμες μεθόδους του framework
            if (terminationMethod == "doublebox")
             {
                 return doubleBox.terminate(besty);
@@ -204,6 +227,23 @@ bool OPSO::terminated()
             {
                 return similarity.terminate(besty);
             }
+         */
+         bool t1=false,t2=false;
+             if(terminationMethod=="similarity" || terminationMethod=="all")
+             {
+
+                 t1=similarity.terminate(besty);
+             if(t1) return true;
+             }
+
+             if(terminationMethod=="doublebox" || terminationMethod=="all")
+             {
+                 t2=doubleBox.terminate(besty);
+             if(t2) return true;
+             }
+             if(terminationMethod=="all") return (t1 || t2);
+             return false;
+
 
         return false; // Συνέχισε στην επόμενη επανάληψη
 
