@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=maxiters
+TERMINATION=doublebox
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 

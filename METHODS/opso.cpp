@@ -13,12 +13,10 @@ OPSO::OPSO()
     addParam(Parameter("opso_particles", 200, 10, 2000, "Number of particles"));
     // Προσθήκη παραμέτρου για το πλήθος των επαναλήψεων
     addParam(Parameter("opso_maxiters",1000,10,2000,"Maximum number of iterations"));
-    // Προσθήκη παραμέτρου για το βάρος αδράνειας (Inertia Weight)
-    addParam(Parameter("opso_w", 0.8, 0.1, 1.0, "Inertia weight (w)"));
-    // Προσθήκη παραμέτρου c1 για την έλξη προς την προσωπική καλύτερη θέση
-    addParam(Parameter("opso_c1", 1.2, 0.0, 4.0, "Cognitive constant (c1)"));
-    // Προσθήκη παραμέτρου c2 για την έλξη προς την ομαδική καλύτερη θέση
-    addParam(Parameter("opso_c2", 1.8, 0.0, 4.0, "Social constant (c2)"));
+    // Προσθήκη παραμέτρων w,c1, c2 με βάση το Paper (Πίνακας 8)
+    addParam(Parameter("opso_w", 2.95, -2.0, 5.0, "Inertia weight start (w)"));
+    addParam(Parameter("opso_c1", 2.82, 0.0, 20.0, "Cognitive constant (c1)"));
+    addParam(Parameter("opso_c2", 12.5, 0.0, 20.0, "Social constant (c2)"));
 }
 
 /*
@@ -28,13 +26,15 @@ OPSO::OPSO()
 void OPSO::init()
 {
 
+     // Μηδενισμός του μετρητή επαναλήψεων για να ξεκινάει σωστά κάθε τρέξιμο
+    iter = 0;
 
 
          //  Αρχικοποίηση του αντικειμένου
          similarity.init();
 
         // (Αντί για 5 που υπάρχει ως default)
-        similarity.setSimilarityIterations(12);
+        similarity.setSimilarityIterations(20);
 
 
      max_iterations = getParam("opso_maxiters").getValue().toInt();
@@ -51,7 +51,7 @@ void OPSO::init()
     c2 = getParam("opso_c2").getValue().toDouble();
 
 
-    //2.
+    //2. Παίρνουμε την διάσταση του προβλήματος
     int dimension = myProblem->getDimension();
 
 
@@ -105,16 +105,17 @@ void OPSO::init()
 
 void OPSO::step()
 {
-
-    // 1. Λήψη της διάστασης απευθείας από το πρόβλημα
+    // Αρχικοποίηση των διαστάσεων του προβλήματος
     int dim = myProblem->getDimension();
 
-   /* --- ΜΕΤΑΒΛΗΤΟ W  ---
-        double w_start = 0.9;
-        double w_end = 0.4;
-        double current_w = w_start - ((w_start - w_end) * (double)iter / 1500.0);
-        if (current_w < w_end) current_w = w_end; // Για σιγουριά να μην πέσει κάτω από το 0.4
-    */
+  // =========================================================================
+    //  ΥΠΟΛΟΓΙΣΜΟΣ ΤΟΥ ΓΡΑΜΜΙΚΑ ΜΕΤΑΒΑΛΛΟΜΕΝΟΥ W (Εξίσωση 2 & Πίνακας 8)
+    // =========================================================================
+    double w_start = w; // Βέλτιστο w_start (2.95) από πίνακα 8 του paper
+    double w_end   = -0.1; // Βέλτιστο w_end (-0.1) από πίνακα 8 του paper
+    
+    // Τύπος: w = w_start - ((w_start - w_end) / MaxIterations) * CurrentIteration
+    double current_w = w_start - (((w_start - w_end) * (double)iter) / (double)max_iterations);
 
 
     // 2. Αξιολόγηση Fitness & Ενημέρωση pBest/gBest
@@ -132,10 +133,9 @@ void OPSO::step()
 
         if (fit < besty)
         {
-               besty = fit;
-               bestx = x[i];
+            besty = fit;
+            bestx = x[i];
         }
-
     }
 
     // 3. Ενημέρωση Ταχύτητας και Θέσης
@@ -147,21 +147,46 @@ void OPSO::step()
             double r1 = dist(gen);
             double r2 = dist(gen);
 
-            // Εξίσωση PSO
-            v[i][j] = w* v[i][j] +
+            // =========================================================================
+            // ΧΡΗΣΗ ΤΟΥ CURRENT_W ΚΑΙ ΤΩΝ ΣΤΑΘΕΡΩΝ C1/C2 ΤΟΥ PAPER (Πίνακας 8)
+            // =========================================================================
+            // Αντικαθιστούμε το 'w' με το 'current_w' και τα c1, c2 με τα 2.82 και 12.5
+            v[i][j] = current_w * v[i][j] +
                       c1 * r1 * (pbest[i][j] - x[i][j]) +
                       c2 * r2 * (bestx[j] - x[i][j]);
+
+         
+            // ==========================================================================
+            // ΣΤΑΘΕΡΟ V_MAX ΓΙΑ ΟΛΕΣ ΤΙΣ ΔΙΑΣΤΑΣΕΙΣ (Πίνακας 8) - ΦΡΑΞΙΜΟ ΤΑΧΥΤΗΤΑΣ 
+            // ==========================================================================
+            double v_max = 13.2; 
+            
+            if (v[i][j] > v_max)  v[i][j] = v_max;
+            if (v[i][j] < -v_max) v[i][j] = -v_max;          
 
             x[i][j] += v[i][j];
 
             // Περιορισμός στα όρια lb και ub του Optimizer
             if (x[i][j] <  lb[j]) x[i][j] =  lb[j];
             if (x[i][j] >  ub[j]) x[i][j] =  ub[j];
-
-
         }
-
     }
+
+    // =========================================================================
+    //  ΔΥΝΑΜΙΚΗ ΑΛΛΑΓΗ ορίων νευρωνικού
+    // =========================================================================
+    /*if (iter > 0 && iter % 50 == 0) // με αυτή την εντολή κάθε 50 επαναλήψεις μειώνει το εύρος
+    {
+        for (int j = 0; j < dim; ++j)
+        {
+            double current_range = ub[j] - lb[j];
+            double new_range = current_range * 0.95; // Μείωση εύρους κατά 5%
+            
+            lb[j] = bestx[j] - (new_range / 2.0);
+            ub[j] = bestx[j] + (new_range / 2.0);
+        }
+    }*/
+    // =========================================================================
  iter++; // Αυξάνουμε την επανάληψη σε κάθε κύκλο του αλγορίθμου
  if (terminated())
       {
