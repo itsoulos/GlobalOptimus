@@ -442,7 +442,7 @@ void    Genetic::LocalSearch(int pos)
     {
         Bfgs *local = new Bfgs();
         local->setProblem(myProblem);
-        local->setParam("bfgs_iters","10");
+        local->setParam("bfgs_iters","5");
         ((Bfgs *)local)->setPoint(population[pos],fitnessArray[pos]);
         local->solve();
         ((Bfgs *)local)->getPoint(population[pos],fitnessArray[pos]);

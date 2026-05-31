@@ -19,8 +19,8 @@ void    FunctionalRbf::init(QJsonObject &params)
     testy  = testDataset->getAllYpoint();
 
     //setdimension?
-    setDimension(  (d+1) * nodes);
-    dimension = (d+1)*nodes;
+    setDimension(d  * nodes + nodes);
+    dimension = d*nodes+nodes;
     left.resize(dimension);
     right.resize(dimension);
     initialLeft = -1e+2;
@@ -87,11 +87,10 @@ void    FunctionalRbf::init(QJsonObject &params)
             }
 
             left[icount]=0.01;
-            if(maxvx<1.0) maxvx=1.0;
+            if(maxvx<0.1) maxvx=0.1;
             if(maxvx>100.0) maxvx=100.0;
             right[icount++]=f * maxvx;
-            printf("Margins[%d]=%lf %lf \n",icount,left[icount-1],
-                   right[icount-1]);
+
         }
 
     }
@@ -114,8 +113,8 @@ Data FunctionalRbf::getSample()
          b  = right[i];
          double d = (b-a);
          double mid = a+d/2;
-         a = mid -0.5*d;
-         b = mid +0.5*d;
+         a = mid -0.01*d;
+         b = mid +0.01*d;
          if(a<left[i]) a = left[i];
          if(b>right[i]) b = right[i];
               xx[i]=  (a+(b-a)*randomDouble());
@@ -342,9 +341,12 @@ QJsonObject FunctionalRbf::done(Data &x)
 {
 
     Linear = arma::zeros(nodes);
+    bool ok;
+    Linear = train(x,ok);/*
     int icount=0;
     for(int i=x.size()-nodes;i<x.size();i++)
-        Linear(icount++)=x[i];
+        Linear(icount++)=x[i];*/
+    params = x;
 
     double per;
     double classError = 0.0;
@@ -420,9 +422,13 @@ adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double>
     adept::adouble errorSum=0.0;
 
     Linear = arma::zeros(nodes);
+    bool ok;
+    params.resize(x.size());
+
     int icount=0;
-    for(int i=x.size()-nodes;i<x.size();i++)
-        Linear(icount++)=x[i].value();
+    for(int i=0;i<x.size();i++)
+        params[icount++]=x[i].value();
+        Linear= train(params,ok);
 
     for(unsigned i = 0; i < trainx.size(); i++){
         Data pattern = trainx[i];
@@ -470,9 +476,11 @@ double  FunctionalRbf::funmin(Data &x)
 {
     double errorSum=0.0;
     Linear = arma::zeros(nodes);
+    bool ok;
+    Linear = train(x,ok);/*
     int icount=0;
     for(int i=x.size()-nodes;i<x.size();i++)
-        Linear(icount++)=x[i];
+        Linear(icount++)=x[i];*/
     params = x;
 
     for(unsigned i = 0; i < trainx.size(); i++){
@@ -498,8 +506,6 @@ Data    FunctionalRbf::gradient(Data &x)
 {
     Data g;
     g.resize(dimension);
-
-
     g = vector<double>(x.size(),0.0);
     adept::Stack s;
     std::vector<adept::adouble> ax(g.size());
