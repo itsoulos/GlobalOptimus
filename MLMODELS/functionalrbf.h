@@ -27,7 +27,7 @@ private:
     double *xinput=0;
     double *yinput=0;
     vector<int> num_of_cluster_members;
-
+    Data params;
     Data centers,variances;
     Data weight;
     void Kmeans(double * data_vectors,

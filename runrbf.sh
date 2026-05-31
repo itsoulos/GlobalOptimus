@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=maxiters
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=frbf
 
@@ -165,7 +165,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=500 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
+  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=500 --gen_lsearchmethod=bfgs --gen_lsearchgens=10 --gen_lsearchitems=10"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples

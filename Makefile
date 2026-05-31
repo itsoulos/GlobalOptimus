@@ -2013,7 +2013,8 @@ genetic.o: METHODS/genetic.cpp METHODS/genetic.h \
 		OPTIMUS/logger.h \
 		OPTIMUS/filelogger.h \
 		OPTIMUS/editlogger.h \
-		OPTIMUS/parameterlist.h
+		OPTIMUS/parameterlist.h \
+		METHODS/bfgs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o genetic.o METHODS/genetic.cpp
 
 gradientdescent.o: METHODS/gradientdescent.cpp METHODS/gradientdescent.h \

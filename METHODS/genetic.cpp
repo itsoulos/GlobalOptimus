@@ -1,4 +1,5 @@
 #include "genetic.h"
+# include <METHODS/bfgs.h>
 Genetic::Genetic()
 {
     hasInitialized =false;
@@ -24,7 +25,7 @@ Genetic::Genetic()
                        gen_mutation,
                        "Mutation method. Available values random, double"));
     QStringList gen_lsearchmethod;
-    gen_lsearchmethod<<"none"<<"crossover"<<"mutate"<<"siman"<<"de";
+    gen_lsearchmethod<<"none"<<"crossover"<<"mutate"<<"siman"<<"de"<<"bfgs";
     addParam(Parameter("gen_lsearchmethod",gen_lsearchmethod[0],
                        gen_lsearchmethod,
                        "Available methods: none,crossover,mutate,siman"));
@@ -263,8 +264,8 @@ void    Genetic::CalcFitnessArray()
         if(fitnessArray[i]<dmin) dmin=fitnessArray[i];
         if(i%20==0)
         {
-            printf("%d:%lg ",i,dmin);
-            fflush(stdout);
+        //    printf("%d:%lg ",i,dmin);
+         //   fflush(stdout);
         }
     }
 }
@@ -436,6 +437,16 @@ void    Genetic::LocalSearch(int pos)
 {
     if(localSearchMethod == LOCAL_CROSS)
         localCrossover(pos);
+    else
+        if(localSearchMethod == "bfgs")
+    {
+        Bfgs *local = new Bfgs();
+        local->setProblem(myProblem);
+        local->setParam("bfgs_iters","10");
+        ((Bfgs *)local)->setPoint(population[pos],fitnessArray[pos]);
+        local->solve();
+        ((Bfgs *)local)->getPoint(population[pos],fitnessArray[pos]);
+    }
     else
     if(localSearchMethod == LOCAL_MUTATE)
         localMutate(pos);

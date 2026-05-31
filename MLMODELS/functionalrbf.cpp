@@ -23,8 +23,8 @@ void    FunctionalRbf::init(QJsonObject &params)
     dimension = (d+1)*nodes;
     left.resize(dimension);
     right.resize(dimension);
-    initialLeft = -1e+8;
-    initialRight = 1e+8;
+    initialLeft = -1e+2;
+    initialRight = 1e+2;
     for(int i=0;i<dimension;i++)
     {
 	    left[i]=initialLeft;
@@ -63,17 +63,14 @@ void    FunctionalRbf::init(QJsonObject &params)
     if(variances.size()!=0)
     {
         int icount=0;
-        double f=3.0;
+        double f=getParam("rbf_factor").getValue().toDouble();
         for(int i=0;i<nodes;i++)
         {
             for(int j=0;j<(int)trainx[0].size();j++)
             {
 
                 double cx=fabs(centers[i * trainx[0].size()+j]);
-                // if(fabs(cx)<5.0) cx=5.0;
-                //x[icount++]=Interval(-f * fabs(cx),f*fabs(cx));
-                //x[icount++]=Interval(-f * fabs(cx),f*fabs(cx));
-                //if(cx<1e+2) cx=1e+2;
+                //if(fabs(cx)<5.0) cx=5.0;
                 left[icount]=-f *cx;
                 right[icount++] = f*cx;
             }
@@ -85,15 +82,16 @@ void    FunctionalRbf::init(QJsonObject &params)
             for(int j=0;j<(int)trainx[0].size();j++)
             {
                 double vx=variances[i * trainx[0].size()+j];
-                maxvx+=vx;
+                //maxvx+=vx;
+                if(vx>maxvx) maxvx=vx;
             }
-            //   if(maxvx<0.1) maxvx=1.0;
-            //if(fabs(maxvx)>100) maxvx = 100;
-            //x[icount++]=Interval(-f * maxvx,f * maxvx);
-            left[icount]=0.01;
-            right[icount++]=f * maxvx;
-            //		    x[icount++]=Interval(-f * fabs(maxvx),f*fabs(maxvx));
 
+            left[icount]=0.01;
+            if(maxvx<1.0) maxvx=1.0;
+            if(maxvx>100.0) maxvx=100.0;
+            right[icount++]=f * maxvx;
+            printf("Margins[%d]=%lf %lf \n",icount,left[icount-1],
+                   right[icount-1]);
         }
 
     }
@@ -109,15 +107,17 @@ Data FunctionalRbf::getSample()
           for(int i=0;i<dimension;i++)
           {
 		
-		  double a=-1;
-		  double b=1;
+          double a=-1;
+          double b=1;
 
 		 a= left[i];
-		 b  = right[i];
-		 double d = (b-a);
-		 double mid = a+d/2;
-		 a = mid -0.1*d;
-		 b = mid +0.1*d;
+         b  = right[i];
+         double d = (b-a);
+         double mid = a+d/2;
+         a = mid -0.5*d;
+         b = mid +0.5*d;
+         if(a<left[i]) a = left[i];
+         if(b>right[i]) b = right[i];
               xx[i]=  (a+(b-a)*randomDouble());
           }
 	  return xx;
@@ -340,8 +340,12 @@ double FunctionalRbf::nearestClass(double y)
 
 QJsonObject FunctionalRbf::done(Data &x)
 {
-    bool ok;
-    Linear = train(x,ok);
+
+    Linear = arma::zeros(nodes);
+    int icount=0;
+    for(int i=x.size()-nodes;i<x.size();i++)
+        Linear(icount++)=x[i];
+
     double per;
     double classError = 0.0;
     double sum = 0.0;
@@ -365,6 +369,7 @@ QJsonObject FunctionalRbf::done(Data &x)
 	//if(tempOut<miny) tempOut =miny;
 	//if(tempOut>maxy) tempOut = maxy;
         per=tempOut-testy[i];
+
         classError+=fabs(testy[i]-nearestClass(tempOut))>1e-7;
         sum+=per * per;
     }
@@ -388,7 +393,7 @@ double  FunctionalRbf::getOutput(Data &x)
         Data pattern = x;
         arma::vec neuronOuts(nodes);
         for(unsigned j = 0; j < nodes;j++){
-            neuronOuts[j] = neuronOutput(x,pattern,pattern.size(),j);
+            neuronOuts[j] = neuronOutput(params,pattern,pattern.size(),j);
         }
         double tempOut = arma::dot(neuronOuts,Linear);
 	return tempOut;
@@ -414,10 +419,11 @@ adept::adouble FunctionalRbf::aneuronOutput( vector<adept::adouble> &x, vector<d
 adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double> &x1 ){
     adept::adouble errorSum=0.0;
 
-    bool ok;
-    Linear = train(x1,ok);
+    Linear = arma::zeros(nodes);
+    int icount=0;
+    for(int i=x.size()-nodes;i<x.size();i++)
+        Linear(icount++)=x[i].value();
 
-    int icount = 0;
     for(unsigned i = 0; i < trainx.size(); i++){
         Data pattern = trainx[i];
         vector<adept::adouble> neuronOuts(nodes);
@@ -434,6 +440,7 @@ adept::adouble FunctionalRbf::afunmin( vector<adept::adouble> &x, vector<double>
 
 arma::vec FunctionalRbf::train( vector<double> &x,bool &ok ){
     ok = true;
+      params = x;
     arma::mat A = arma::zeros(trainx.size(),nodes);
     arma::vec B(trainy.size());
     for(unsigned i = 0; i < trainy.size(); i++){
@@ -445,9 +452,9 @@ arma::vec FunctionalRbf::train( vector<double> &x,bool &ok ){
 
     arma::vec RetVal;
     try{
-        RetVal=arma::vec(arma::pinv(A)*B);
+    //    RetVal=arma::vec(arma::pinv(A)*B);
 
-        // RetVal=arma::vec(arma::pinv(A,1e-10,"dc")*B);
+     RetVal=arma::vec(arma::pinv(A,1e-10,"dc")*B);
     }
     catch(std::runtime_error & e)
     {
@@ -462,27 +469,23 @@ arma::vec FunctionalRbf::train( vector<double> &x,bool &ok ){
 double  FunctionalRbf::funmin(Data &x)
 {
     double errorSum=0.0;
-    bool ok;
-     Linear = train(x,ok);
-    double norm = 0.0;
-    for(int j=0;j<nodes;j++)
+    Linear = arma::zeros(nodes);
+    int icount=0;
+    for(int i=x.size()-nodes;i<x.size();i++)
+        Linear(icount++)=x[i];
+    params = x;
 
-        norm+=(Linear(j))*(Linear(j));
-    norm = sqrt(norm);
-
-    int icount = 0;
     for(unsigned i = 0; i < trainx.size(); i++){
         Data pattern = trainx[i];
         arma::vec neuronOuts(nodes);
-        for(unsigned j = 0; j < nodes;j++){
+        for(int j = 0; j < nodes;j++){
             neuronOuts[j] = neuronOutput(x,pattern,pattern.size(),j);
         }
         double tempOut = arma::dot(neuronOuts,Linear);
         errorSum += ( tempOut - trainy[i] ) * ( tempOut - trainy[i] );
     }
 
-    //return errorSum * (1.0 + 100.0 *icount);
-    //if(norm>1000) return errorSum*(1.0+norm);
+
     return errorSum;
 }
 
