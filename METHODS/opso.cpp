@@ -60,7 +60,14 @@ void OPSO::init()
     ub = myProblem->getRightMargin();
 
     // Αρχικοποίηση της γεννήτριας τυχαίων αριθμών με hardware seed
-    gen.seed(std::random_device()());
+    // gen.seed(std::random_device()());
+    // Αρχικοποίηση ανεξάρτητων γεννητριών για κάθε σωματίδιο (για ασφάλεια με τα νήματα)
+        cell_gen.resize(nParticles);
+        std::random_device rd;
+        for (int i = 0; i < nParticles; ++i)
+        {
+            cell_gen[i].seed(rd());
+        }
     // Ορισμός αρχικού παγκόσμιου βέλτιστου fitness σε μια πολύ μεγάλη τιμή
     besty = 1e30;
     // Προσαρμογή μεγέθους του vector της καλύτερης θέσης στις διαστάσεις του προβλήματος
@@ -88,13 +95,11 @@ void OPSO::init()
         for (int d = 0; d < dimension; ++d)
         {
             // Τοποθέτηση σωματιδίου σε τυχαία θέση εντός των ορίων [lbound, ubound]
-            x[i][d] = lb[d] + dist(gen) * (ub[d] - lb[d]);
+            x[i][d] = lb[d] + dist(cell_gen[i]) * (ub[d] - lb[d]);
             // Αρχικοποίηση ταχύτητας στο μηδέν (όπως ορίζει το paper)
             v[i][d] = 0.0;
             // Η αρχική θέση ορίζεται και ως η πρώτη προσωπική καλύτερη θέση
             pbest[i][d] = x[i][d];
-
-
 
         }
     }
@@ -109,20 +114,29 @@ void OPSO::step()
     int dim = myProblem->getDimension();
 
   // =========================================================================
-    //  ΥΠΟΛΟΓΙΣΜΟΣ ΤΟΥ ΓΡΑΜΜΙΚΑ ΜΕΤΑΒΑΛΛΟΜΕΝΟΥ W (Εξίσωση 2 & Πίνακας 8)
+    // ΑΛΛΑΓΗ 1: ΥΠΟΛΟΓΙΣΜΟΣ ΤΟΥ ΓΡΑΜΜΙΚΑ ΜΕΤΑΒΑΛΛΟΜΕΝΟΥ W (Εξίσωση 2 & Πίνακας 8)
     // =========================================================================
     double w_start = w; // Βέλτιστο w_start (2.95) από πίνακα 8 του paper
     double w_end   = -0.1; // Βέλτιστο w_end (-0.1) από πίνακα 8 του paper
-    
+
     // Τύπος: w = w_start - ((w_start - w_end) / MaxIterations) * CurrentIteration
     double current_w = w_start - (((w_start - w_end) * (double)iter) / (double)max_iterations);
 
 
-    // 2. Αξιολόγηση Fitness & Ενημέρωση pBest/gBest
+
+
+    // 2. Αξιολόγηση Fitness & Ενημέρωση pBest/gBest με OpenMP (πάραλληλη υλοποίηση του βρόχου)
+    #pragma omp parallel for // πάρε το for loop που ακολουθεί και μοίρασε τις επαναλήψεις σε όλους διαθέσιμους πυρήνες του επεξεργαστή (compiler directive της OpenMP)
     for (int i = 0; i < nParticles; ++i)
     {
+
+        double fit;
         // Χρήση της statFunmin, της αντικειμενικής συνάρτησης
-        double fit = myProblem->statFunmin(x[i]);
+        // Κλειδώνουμε την κληση της staFunmin για να ειναι thread-safe.
+        #pragma omp critical(statfunmin_eval) // κλειδώσε το παρακάτω κομμάτι κώδικα το οποίο επιτρέπεται να εκτελείται μόνο από ένα νήμα τη φορά
+        {                                     // στην παρένθεση το όνομα του συγκεκριμένου section
+            fit = myProblem->statFunmin(x[i]);
+        }
         fitness[i] = fit;
 
         if (fit < pbest_fitness[i])
@@ -131,12 +145,29 @@ void OPSO::step()
             pbest[i] = x[i];
         }
 
+
+       // Επειδή το besty και το bestx είναι κοινά για όλα τα threads,
+       // χρειαζόμαστε critical section για να μην γράφουν ταυτόχρονα πολλά threads
+      // κλείδωμα διπλού ελέγχου για ταχύτητα και ασφάλεια
         if (fit < besty)
-        {
-            besty = fit;
-            bestx = x[i];
-        }
+         {
+            #pragma omp critical(gbest_update) // αυτή είναι άλλη μια compiler directive της OpenMP και σημαίνει ότι όποιο νήμα φτάσει εδώ πρέπει να περιμένει στην ουρά. 
+            //Μόνο ένα νήμα τη φορά επιτρέπεται να μπει και να εκτελέσει τον κώδικα μέσα στις αγκύλες
+           // το critical αναγκάζει τα νήματα να γράφουν ένα-ένα με ακρίβεια
+                {
+                   if (fit < besty) // Double-check (κλειδώνουμε τη σωστή τιμή)
+                   {
+                            besty = fit;
+                            //  bestx = x[i];
+                            bestx.assign(x[i].begin(),x[i].end());
+                    }
+                 }
+          }
     }
+
+    // Διασφάλιση συγχρονισμού πριν προχωρήσουμε στις θέσεις
+    // Όλα τα νήματα σταματούν εδώ και περιμένουν μέχρι όλα τα νήματα της παράλληλης περιοχής να μαζευτούν εδώ
+        #pragma omp barrier
 
     // 3. Ενημέρωση Ταχύτητας και Θέσης
     std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -144,25 +175,25 @@ void OPSO::step()
     {
         for (int j = 0; j < dim; ++j)
         {
-            double r1 = dist(gen);
-            double r2 = dist(gen);
+            double r1 = dist(cell_gen[i]);
+            double r2 = dist(cell_gen[i]);
 
             // =========================================================================
-            // ΧΡΗΣΗ ΤΟΥ CURRENT_W ΚΑΙ ΤΩΝ ΣΤΑΘΕΡΩΝ C1/C2 ΤΟΥ PAPER (Πίνακας 8)
+            // ΑΛΛΑΓΗ 2: ΧΡΗΣΗ ΤΟΥ CURRENT_W ΚΑΙ ΤΩΝ ΣΤΑΘΕΡΩΝ C1/C2 ΤΟΥ PAPER (Πίνακας 8)
             // =========================================================================
             // Αντικαθιστούμε το 'w' με το 'current_w' και τα c1, c2 με τα 2.82 και 12.5
             v[i][j] = current_w * v[i][j] +
                       c1 * r1 * (pbest[i][j] - x[i][j]) +
                       c2 * r2 * (bestx[j] - x[i][j]);
 
-         
+
             // ==========================================================================
-            // ΣΤΑΘΕΡΟ V_MAX ΓΙΑ ΟΛΕΣ ΤΙΣ ΔΙΑΣΤΑΣΕΙΣ (Πίνακας 8) - ΦΡΑΞΙΜΟ ΤΑΧΥΤΗΤΑΣ 
+            // ΑΛΛΑΓΗ 3: ΣΤΑΘΕΡΟ V_MAX ΓΙΑ ΟΛΕΣ ΤΙΣ ΔΙΑΣΤΑΣΕΙΣ (Πίνακας 8)
             // ==========================================================================
-            double v_max = 13.2; 
-            
+            double v_max = 13.2;
+
             if (v[i][j] > v_max)  v[i][j] = v_max;
-            if (v[i][j] < -v_max) v[i][j] = -v_max;          
+            if (v[i][j] < -v_max) v[i][j] = -v_max;
 
             x[i][j] += v[i][j];
 
@@ -172,21 +203,7 @@ void OPSO::step()
         }
     }
 
-    // =========================================================================
-    //  ΔΥΝΑΜΙΚΗ ΑΛΛΑΓΗ ορίων νευρωνικού
-    // =========================================================================
-    /*if (iter > 0 && iter % 50 == 0) // με αυτή την εντολή κάθε 50 επαναλήψεις μειώνει το εύρος
-    {
-        for (int j = 0; j < dim; ++j)
-        {
-            double current_range = ub[j] - lb[j];
-            double new_range = current_range * 0.95; // Μείωση εύρους κατά 5%
-            
-            lb[j] = bestx[j] - (new_range / 2.0);
-            ub[j] = bestx[j] + (new_range / 2.0);
-        }
-    }*/
-    // =========================================================================
+
  iter++; // Αυξάνουμε την επανάληψη σε κάθε κύκλο του αλγορίθμου
  if (terminated())
       {
@@ -228,50 +245,36 @@ std::vector<double> OPSO::getBestPosition() const
 
 bool OPSO::terminated()
 {
+    // δηλώνουμε μια δεκαδική τιμή για να της κάνουμε ανάθεση την besty
+    double local_besty;
+    // Κλειδώνουμε και παίρνουμε την τιμή με ασφάλεια
+    #pragma omp critical(gbest_update)
+    {
+        local_besty = besty;
+    }
 
+    if (iter >= max_iterations)
+    {
+        return true;
+    }
+    // εδώ χρησιμοποιούμε τις έτοιμες μεθόδους του GlobalOptimus similarity και doublebox
+    bool t1 = false, t2 = false;
+    if(terminationMethod == "similarity" || terminationMethod == "all")
+    {
+        //Περνάμε το local_besty
+        t1 = similarity.terminate(local_besty);
+        if(t1) return true;
+    }
 
+    if(terminationMethod == "doublebox" || terminationMethod == "all")
+    {
+        //Περνάμε το local_besty
+        t2 = doubleBox.terminate(local_besty);
+        if(t2) return true;
+    }
 
-// 1. Τοπική δήλωση besty
-      double local_besty;
-      local_besty = besty; // Παίρνουμε την τρέχουσα καλύτερη τιμή που βρήκε το PSO
-
-        // Έλεγχος αν η τρέχουσα επανάληψη (iter) έφτασε ή ξεπέρασε το όριο
-        if (iter >= max_iterations)
-        {
-            return true; // Σταμάτησε τον αλγόριθμο
-        }
-
-
-        /*
-        // Εδώ χρησιμοποιούμε ακριβώς τις έτοιμες μεθόδους του framework
-           if (terminationMethod == "doublebox")
-            {
-                return doubleBox.terminate(besty);
-            }
-            else if (terminationMethod == "similarity")
-            {
-                return similarity.terminate(besty);
-            }
-         */
-         bool t1=false,t2=false;
-             if(terminationMethod=="similarity" || terminationMethod=="all")
-             {
-
-                 t1=similarity.terminate(besty);
-             if(t1) return true;
-             }
-
-             if(terminationMethod=="doublebox" || terminationMethod=="all")
-             {
-                 t2=doubleBox.terminate(besty);
-             if(t2) return true;
-             }
-             if(terminationMethod=="all") return (t1 || t2);
-             return false;
-
-
-        return false; // Συνέχισε στην επόμενη επανάληψη
-
+    if(terminationMethod == "all") return (t1 || t2);
+    return false;
 }
 
 void OPSO::done()
