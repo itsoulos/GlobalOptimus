@@ -1,3 +1,4 @@
+
 /*Konstantinos Barkas
   Informatics & Telecommunications - UOI
 */
@@ -32,11 +33,13 @@ class OPSO : public Optimizer
 {
 private:
 
-
+    QString velocity_mode; // η μεταβλητή τύπου QString για να επιλέγει ο χρήστης το μηχανισμό ταχύτητας
+    int inertia_type; // ο τύπος της αδράνειας
+    int threads; // o αριθμός των νημάτων
     std::vector<double> lb, ub; // τα όρια
-    double besty;
-    std::vector<double> bestx;
-    std::vector<double> fitness;
+    double besty; // το καλύτερο y
+    std::vector<double> bestx; // το καλύτερο x
+    std::vector<double> fitness; // το fitness (score)
 
 
     int nParticles; // Ο αριθμός των σωματιδίων (ο πληθυσμός)
@@ -55,8 +58,7 @@ private:
 
     std::vector<double> pbest_fitness;       // η καλύτερη τιμή fitness που πέτυχε το κάθε σωματίδιο.
 
-    std::vector<std::mt19937> cell_gen; // δημιουργεί μια δυναμική λίστα (ένα std::vector) από γεννήτριες τυχαίων αριθμών τύπου Mersenne Twister (std::mt19937)
-                                       //  όπου κάθε σωματίδιο (particle) του σμήνους θα έχει τη δική του, αποκλειστική γεννήτρια.
+    std::vector<std::mt19937> cell_gen; // η γεννήτρια που παράγει τους τυχαίους αριθμούς για τις παραμέτρους r1, r2 για της εξίσωσης κίνησης.
 
     // constructor
 
@@ -65,6 +67,7 @@ public:
 
     virtual void init(); // override; -  Εδώ δημιουργούνται οι αρχικές τυχαίες θέσεις και μηδενίζονται οι ταχύτητες
     virtual void step(); // override;- είναι η μηχανή του αλγορίθμου. Εκτελεί μια επανάληψη. Δέχεται ένα πίνακα με τα νέα fitness
+    virtual double calculateInertia(int type, int current_iter, int max_iter); // η συνάρτηση που υπολογίζει την αδράνεια με βάση το paper ipso
     virtual bool terminated (); // Η συνάρτηση τερματισμού του αλγορίθμου
     virtual void done();
     virtual void showDebug();

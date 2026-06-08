@@ -3,12 +3,29 @@ Informatics & Telecommunications - UOI
 */
 
 #include "opso.h"
+#include <omp.h>
 
 /* * Constructor: Ορίζουμε τις παραμέτρους που θα εμφανίζονται στο GUI
  * του Global Optimus.
  */
 OPSO::OPSO()
 {
+
+    QStringList velocity_methods;
+        // 1. Standard (όπως στο paper 13.2)
+        // 2. Dynamic Vmax (20% του εύρους)
+        // 3. ipso_vmax (ipso_paper)
+        velocity_methods << "standard_vmax" << "dynamic_vmax" << "ipso_vmax";
+
+    // Προσθήκη παραμέτρου για την επιλογή μηχανισμού ταχύτητας
+    addParam(Parameter("opso_velocity_mode", velocity_methods[0], velocity_methods,
+                               "Select velocity mechanism"));
+
+    // Προσθήκη παραμέτρου για τον αριθμό των νημάτων
+    addParam(Parameter("opso_threads", 5, 1, 10, "Number of OpenMP threads"));
+    // Προσθήκη επιλογής τύπου αδράνειας (default τιμή 0)
+        addParam(Parameter("opso_inertia_type", 0, 0, 13, "Inertia type (0-13)"));
+
     // Προσθήκη παραμέτρου για το πλήθος των σωματιδίων με εύρος 10 έως 2000
     addParam(Parameter("opso_particles", 200, 10, 2000, "Number of particles"));
     // Προσθήκη παραμέτρου για το πλήθος των επαναλήψεων
@@ -19,6 +36,7 @@ OPSO::OPSO()
     addParam(Parameter("opso_c2", 12.5, 0.0, 20.0, "Social constant (c2)"));
 }
 
+
 /*
  * init: Αρχικοποίηση πληθυσμού και μνήμης.
  * Τραβάει τις τιμές από το σύστημα παραμέτρων και χρησιμοποιεί τα όρια του προβλήματος.
@@ -26,20 +44,43 @@ OPSO::OPSO()
 void OPSO::init()
 {
 
+
+
      // Μηδενισμός του μετρητή επαναλήψεων για να ξεκινάει σωστά κάθε τρέξιμο
     iter = 0;
+
 
 
          //  Αρχικοποίηση του αντικειμένου
          similarity.init();
 
         // (Αντί για 5 που υπάρχει ως default)
-        similarity.setSimilarityIterations(20);
+        similarity.setSimilarityIterations(100);
 
 
      max_iterations = getParam("opso_maxiters").getValue().toInt();
     // printf("DEBUG: Max Iterations is %d\n", max_iterations);
 
+    // Ανάκτηση της επιλογής του χρήστη για το μηχανησμό ταχύτητας
+     velocity_mode = getParam("opso_velocity_mode").getValue();
+     // ΠΡΟΣΘΗΚΗ: Εκτύπωση για έλεγχο
+           methodLogger->printMessage(QString("Επιλέχθηκε ως μηχανισμός ταχύτητας: ") + velocity_mode);
+
+    // Ανάκτηση του αριθμού των νημάτων
+    threads = getParam("opso_threads").getValue().toInt();
+
+        // 2. Επιβολή στο OpenMP
+        omp_set_dynamic(0); // Απαγορεύει στο σύστημα να αγνοήσει την εντολή μας
+        omp_set_num_threads(threads);
+
+        // 3. Επιβεβαίωση στο log
+        methodLogger->printMessage(QString(" Ρυθμίστηκε για εκτέλεση με %1 νήματα").arg(threads));
+
+    // Ανάκτηση του inertia type από το GUI
+   int  inertia_type = getParam("opso_inertia_type").getValue().toInt();
+
+    // Εκτύπωση του τύπου inertia
+        methodLogger->printMessage(QString("Χρήση Inertia Type %1").arg(inertia_type));
     //  Ανάκτηση της επιλεγμένης τιμής για τον αριθμό των σωματιδίων
     nParticles = getParam("opso_particles").getValue().toInt();
 
@@ -101,6 +142,8 @@ void OPSO::init()
             // Η αρχική θέση ορίζεται και ως η πρώτη προσωπική καλύτερη θέση
             pbest[i][d] = x[i][d];
 
+
+
         }
     }
 
@@ -110,6 +153,9 @@ void OPSO::init()
 
 void OPSO::step()
 {
+
+
+
     // Αρχικοποίηση των διαστάσεων του προβλήματος
     int dim = myProblem->getDimension();
 
@@ -151,8 +197,8 @@ void OPSO::step()
       // κλείδωμα διπλού ελέγχου για ταχύτητα και ασφάλεια
         if (fit < besty)
          {
-            #pragma omp critical(gbest_update) // αυτή είναι άλλη μια compiler directive της OpenMP και σημαίνει ότι όποιο νήμα φτάσει εδώ πρέπει να περιμένει στην ουρά. 
-            //Μόνο ένα νήμα τη φορά επιτρέπεται να μπει και να εκτελέσει τον κώδικα μέσα στις αγκύλες
+            #pragma omp critical(gbest_update) // αυτή είναι άλλη μια compiler directive της OpenMP και σημαίνει ότι όποιο νήμα φτάσει εδώ πρέπει να περιμένει στην ουρά. Μόνο ένα
+            // νήμα τη φορά επιτρέπεται να μπει και να εκτελέσει τον κώδικα μέσα στις αγκύλες
            // το critical αναγκάζει τα νήματα να γράφουν ένα-ένα με ακρίβεια
                 {
                    if (fit < besty) // Double-check (κλειδώνουμε τη σωστή τιμή)
@@ -160,13 +206,15 @@ void OPSO::step()
                             besty = fit;
                             //  bestx = x[i];
                             bestx.assign(x[i].begin(),x[i].end());
+                            // ΠΡΟΣΘΗΚΗ: Εκτύπωση κάθε φορά που το besty βελτιώνεται
+                            // methodLogger->printMessage(QString("oPSO: Νέο Besty βρέθηκε: %1").arg(besty));
                     }
                  }
           }
     }
 
     // Διασφάλιση συγχρονισμού πριν προχωρήσουμε στις θέσεις
-    // Όλα τα νήματα σταματούν εδώ και περιμένουν μέχρι όλα τα νήματα της παράλληλης περιοχής να μαζευτούν εδώ
+    // Όλα τα νήματα σταματούν εδώ και περιμένουν μέχρι όλα τα νήματα της παράλληλης περιοχής να φτάσουν εδώ
         #pragma omp barrier
 
     // 3. Ενημέρωση Ταχύτητας και Θέσης
@@ -187,19 +235,57 @@ void OPSO::step()
                       c2 * r2 * (bestx[j] - x[i][j]);
 
 
-            // ==========================================================================
-            // ΑΛΛΑΓΗ 3: ΣΤΑΘΕΡΟ V_MAX ΓΙΑ ΟΛΕΣ ΤΙΣ ΔΙΑΣΤΑΣΕΙΣ (Πίνακας 8)
-            // ==========================================================================
-            double v_max = 13.2;
+          // ==========================================================================
+          // MΗΧΑΝΙΣΜΟΣ ΕΠΙΛΟΓΗΣ ΤΑΑΧΥΤΗΤΑΣ: Σταθερό Vmax 13,2 || Δυναμικό Vmax || IPSO
+          // ==========================================================================
 
-            if (v[i][j] > v_max)  v[i][j] = v_max;
-            if (v[i][j] < -v_max) v[i][j] = -v_max;
+
+                    // Επιλογή Μηχανισμού
+                    if (velocity_mode == "standard_vmax") {
+                        // Paper opso : Πίνακας 8 --- vmax = 13.2               
+
+                            double vmax = 13.2;
+                            if (v[i][j] >  vmax) v[i][j] =  vmax; // αν η ταχύτητα πάει να ξεφύγει βάλτο στο 13.2
+                            if (v[i][j] < -vmax) v[i][j] = -vmax; // βάλτο στο -13.2
+                    }
+                    else if (velocity_mode == "dynamic_vmax") {
+                        // Η δική μου μέθοδος 
+                        double range = ub[j] - lb[j]; // παίρνουμε το εύρος αφαιρώντας τα όρια
+                        double progress = (double)iter / (double)max_iterations; // η πρόοδος είναι ένας δεκαδικός τρέχουσα επανάληψη / μέγιστος αρ. επαναλήψεων 
+                        double dynamic_v_max = (0.2 * range) * (1.0 - 0.5 * progress); // η μέγιστη ταχύτητα είναι ίσο με 20 % του εύρους * 0,5 * την πρόοδο (ανεβαίνει σιγα σιγα)
+
+                        if (v[i][j] >  dynamic_v_max) v[i][j] =  dynamic_v_max; // 
+                        if (v[i][j] < -dynamic_v_max) v[i][j] = -dynamic_v_max;
+
+                    } else if (velocity_mode == "ipso_vmax") {
+                        double ipso_w = calculateInertia(this->inertia_type, iter, max_iterations);
+                        const double c1 = 2.0;
+                        const double c2 = 2.0;
+
+                        v[i][j] = ipso_w * v[i][j] +
+                                  r1 * c1 * (pbest[i][j] - x[i][j]) +
+                                  r2 * c2 * (bestx[j] - x[i][j]);
+                     }
+
+
+
+
 
             x[i][j] += v[i][j];
 
-            // Περιορισμός στα όρια lb και ub του Optimizer
-            if (x[i][j] <  lb[j]) x[i][j] =  lb[j];
-            if (x[i][j] >  ub[j]) x[i][j] =  ub[j];
+
+           // 3. ΠΕΡΙΟΡΙΣΜΟΣ ΟΡΙΩΝ 
+
+           // Σωστός χειρισμός ορίων
+               if (x[i][j] < lb[j]) {
+                   x[i][j] = lb[j];
+                   v[i][j] = 0.0; // Στο paper, συχνά πρέπει το σωματίδιο να "κολλάει" στο όριο
+               } else if (x[i][j] > ub[j]) {
+                   x[i][j] = ub[j];
+                   v[i][j] = 0.0;
+               }
+
+
         }
     }
 
@@ -209,8 +295,33 @@ void OPSO::step()
       {
           done();
       }
-}
 
+}
+// o τύπος υπολογισμού της inertia w, με βάση το paper ideal pso
+double OPSO::calculateInertia(int type, int current_iter, int max_iter) {
+    double g = (double)current_iter / (double)max_iter;
+    double w = 0.7;
+   double R = (double)std::rand() / (double)RAND_MAX; ; // Ορισμός του R εδώ!
+
+    switch (type) {
+        case 0:  w = 0.9 - g * (0.9 - 0.4); break;
+        case 1:  w = 0.4 + 0.5 * std::exp(-10.0 * g); break;
+        case 2:  w = 0.9 - (0.5 * g); break;
+        case 3:  w = 0.7; break;
+        case 4:  w = 0.5 + 0.4 * std::cos(M_PI * g); break;
+        case 5:  w = 0.4 + 0.5 / (1.0 + std::exp(10.0 * (g - 0.5))); break;
+        case 6:  w = 0.4 + 0.5 * R; break;
+        case 7:  w = 0.9 * std::pow(0.5, g); break;
+        case 8:  w = 0.9 - 0.5 * std::sin(g * 3.14159); break;
+        case 9:  w = 0.4 + 0.5 * (R > 0.5 ? 1.0 : 0.0); break;
+        case 10: w = 0.4 + 0.5 * std::fabs(std::sin(20.0 * g)); break;
+        case 11: w = 0.9 - g * (0.7) - 0.1 * std::sin(10.0 * g); break;
+        case 12: w = 0.1 + 0.5 * (R + 0.5) * std::exp(-2.0 * g); break;
+        case 13: w = 0.9 - 0.5 * std::pow(g, 2); break;
+        default: w = 0.7; break;
+    }
+    return w;
+}
 
 // Ενημέρωση του fitness ενός συγκεκριμένου σωματιδίου (index)
 void OPSO::setFitness(int index, double f)
@@ -245,9 +356,8 @@ std::vector<double> OPSO::getBestPosition() const
 
 bool OPSO::terminated()
 {
-    // δηλώνουμε μια δεκαδική τιμή για να της κάνουμε ανάθεση την besty
-    double local_besty;
     // Κλειδώνουμε και παίρνουμε την τιμή με ασφάλεια
+    double local_besty;
     #pragma omp critical(gbest_update)
     {
         local_besty = besty;
@@ -257,18 +367,18 @@ bool OPSO::terminated()
     {
         return true;
     }
-    // εδώ χρησιμοποιούμε τις έτοιμες μεθόδους του GlobalOptimus similarity και doublebox
+
     bool t1 = false, t2 = false;
     if(terminationMethod == "similarity" || terminationMethod == "all")
     {
-        //Περνάμε το local_besty
+        // Διορθώθηκε: Περνάμε το local_besty
         t1 = similarity.terminate(local_besty);
         if(t1) return true;
     }
 
     if(terminationMethod == "doublebox" || terminationMethod == "all")
     {
-        //Περνάμε το local_besty
+        // Διορθώθηκε: Περνάμε το local_besty
         t2 = doubleBox.terminate(local_besty);
         if(t2) return true;
     }

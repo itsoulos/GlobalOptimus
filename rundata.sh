@@ -89,7 +89,9 @@ if [ $METHOD = "Bfgs" ]; then
      # opso_c1: cognitive constant
      # opso_c2: social constant
      # opso_maxiters: maximum iterations of the algorithm
-     METHODPARAMS="--opso_particles=200 --opso_maxiters=200  --opso_w=0.4 --opso_c1=2.0 --opso_c2=1.0"
+     PAGENTS=200
+     THREADS=2
+    METHODPARAMS="--opso_particles=$PAGENTS --opso_maxiters=2000 --opso_velocity_mode=ipso_vmax --opso_threads=$THREADS --opso_inertia_type=11  --opso_w=0.7298 --opso_c1=1.49618 --opso_c2=1.49618"
   elif [ $METHOD = "PBGWO" ]
 then
 THREADS=5
