@@ -76,7 +76,7 @@
 %
 % This file was originally copied from newapa.bst at ymir.claremont.edu.
 %
-% Features of mdpi_chicago.bst, updated on December 17, 2024:
+% Features of chicago.bst:
 % =======================
 %
 % - full names used in citations, but abbreviated citations are available

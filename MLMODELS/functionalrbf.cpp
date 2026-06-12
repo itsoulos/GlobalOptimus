@@ -82,8 +82,8 @@ void    FunctionalRbf::init(QJsonObject &params)
             for(int j=0;j<(int)trainx[0].size();j++)
             {
                 double vx=variances[i * trainx[0].size()+j];
-                //maxvx+=vx;
-                if(vx>maxvx) maxvx=vx;
+                maxvx+=vx;
+                //if(vx>maxvx) maxvx=vx;
             }
 
             left[icount]=0.01;
