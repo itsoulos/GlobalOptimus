@@ -1,87 +1,95 @@
-
-/*Konstantinos Barkas
-  Informatics & Telecommunications - UOI
-*/
-
-/*
-Είναι Header Guards. Αποτρέπουν το "διπλό include".
-Αν το αρχείο κληθεί πολλές φορές σε διαφορετικά σημεία του κώδικα, ο compiler θα το διαβάσει μόνο μία φορά για να αποφύγει σφάλματα επανακαθορισμού.
-*/
-#ifndef OPSO_H
-#define OPSO_H
+/*Konstantinos Barkas -- Parallel and Optimized Particle Swarm Optimization --- Dept. Informatics and Telecommunications UOI*/
+# ifndef __OPSO__H
+# define __OPSO__H
+#include <chrono> // Απαραίτητο για το std::chrono::time_point
+#include <QString> // Απαραίτητο για τη χρήση τύπων QString
+# include <OPTIMUS/optimizer.h>
 
 /*
-Αυτά τα αρχεία είναι ο πυρήνας του Global Optimus. To collection.h περιέχει δομές δεδομένων και ο optimizer.h περιέχει την βασική κλάση από την οποία
-πρέπει να κληρονομήσουμε
+  Κλάση OPSO: Υλοποίηση ενός παράλληλου υβριδικού μετα-ευρετικού αλγορίθμου PSO (Parallel Optimized PSO).
+  Κληρονομεί από την κλάση Optimizer.
 */
-
-/*
-Το vector χρησιμοποιείται για την αποθήκευση των δεδομένων και το random για την γεννήτρια mt19937 η οποία είναι πολύ πιο ακριβής από την απλή rand ().
-*/
-#include <OPTIMUS/collection.h>
-#include <OPTIMUS/optimizer.h>
-#include <vector>
-#include <random>
-
-/*
-
-Εδώ δηλώνουμε ότι η κλάση OPSO είναι ένας optimizer. Αυτό επιτρέπει στο Global Optimus να την χρησιμοποιήσει πολυμορφικά (δηλαδή, να την καλέσει χωρίς να ξέρει από πριν ότι είναι η OPSO)
-
-*/
-
 class OPSO : public Optimizer
 {
 private:
+    // --- Χρονισμός ---
+    std::chrono::time_point<std::chrono::system_clock> before, after; // Χρονικά σημεία για μέτρηση απόδοσης, πριν + μετά για την μέτρηση της χρονικής διάρκειας του αλγορίθμου
 
-    QString velocity_mode; // η μεταβλητή τύπου QString για να επιλέγει ο χρήστης το μηχανισμό ταχύτητας
-    int inertia_type; // ο τύπος της αδράνειας
-    int threads; // o αριθμός των νημάτων
-    std::vector<double> lb, ub; // τα όρια
-    double besty; // το καλύτερο y
-    std::vector<double> bestx; // το καλύτερο x
-    std::vector<double> fitness; // το fitness (score)
+    // --- Παράμετροι Εκτέλεσης ---
+    QString velocity_mode; // Καθορίζει τον μηχανισμό υπολογισμού της ταχύτητας σωματιδίων
+    int inertia_type;      // Τύπος αδράνειας (0-14 με βάση των κώδικα switch case από αλγόριθμο ipso στο optimus)
+    int threads;           // Αριθμός νημάτων για παράλληλη επεξεργασία
+    std::vector<double> lb, ub; // Όρια αναζήτησης: Lower Bound  (lb) και Upper Bound (ub)
+     
+    // --- Κατάσταση Βέλτιστης Λύσης ---
+    double besty;                // Η καλύτερη τιμή που βρέθηκε παγκοσμίως, global best από αντικειμενική συνάρτηση
+    std::vector<double> bestx;   // Η θέση που αντιστοιχεί στην καλύτερη παγκόσμια τιμή besty
+    std::vector<double> fitness; // Τρέχουσες τιμές fitness για κάθε σωματίδιο
 
+    double prev_fitness_sum; // Κρατάει το άθροισμα fitness της προηγούμενης επανάληψης για έλεγχο σύγκλισης
+    int S_delta;             // Παγκόσμιος μετρητής στασιμότητας 
 
-    int nParticles; // Ο αριθμός των σωματιδίων (ο πληθυσμός)
-    //  int dimension; // Ο αριθμός των παραμέτρων προς βελτιστοποίηση - διαστάσεις
-    double w, c1, c2; // οι 3 σταθερές του PSO inertia, cognitive, social
-    int iter; // Μεταβλητή για την τρέχουσα επανάληψη
-    int max_iterations; // Το μέγιστο όριο των επαναλήψεων
+    // --- Παράμετροι Νησιών  ---
+    int subPopulation;      // Ενεργοποίηση/Αριθμός υποπληθυσμών
+    int sub_size;           // Μέγεθος κάθε υποπληθυσμού
+    int propagationRate;    // Συχνότητα ανταλλαγής πληροφορίας μεταξύ νησιών
+    int propagationNumber;  // Πλήθος ατόμων που μεταναστεύουν
+    QString propagationMethod; // Στρατηγική μετανάστευσης 
+    int prop;               // Μετρητής για τον κύκλο διάδοσης (propagation)
+    double localsearchRate; // Πιθανότητα εκτέλεσης τοπικής αναζήτησης
+    int subPopEnable;       // σημαία ενεργοποίησης δομής νησιών
+    QString subPopEnableStr; // Αναπαράσταση του subPopEnable σε κείμενο
+    QString termination;    // Κριτήριο τερματισμού (similarity, doublebox)
 
+    // --- Βοηθητικά δεδομένα υποπληθυσμών ---
+    std::vector<double> bestF2x;      // Καλύτερη θέση υποπληθυσμού 2
+    std::vector<double> bestF2xOld;   // Προηγούμενη καλύτερη θέση υποπληθυσμού 2
+    std::vector<std::vector<double>> bestSamply; // Αποθήκευση δειγμάτων για έλεγχο κατάστασης
 
+    // --- Μηχανισμοί τερματισμού ανά νήμα ---
+    std::vector<Similarity> threadSimilarity; // Έλεγχος similarity πληθυσμού
+    std::vector<DoubleBox> threadDoublebox;   // Έλεγχος double box πλυθυσμού
 
+    // --- ΒΟΗΘΗΤΙΚΕΣ ΜΕΘΟΔΟΙ ΝΗΣΙΩΝ ---
+    bool checkSubCluster(int subCluster);            // Ελέγχει την κατάσταση ενός υποπληθυσμού
+    void propagate();                                // Διαχειρίζεται τη μετακίνηση ατόμων μεταξύ νησιών
+    void propagateBetween(int sender, int receiver); // Μεταφέρει δεδομένα μεταξύ δύο συγκεκριμένων νησιών
+    void updateLeadersForSubpop(int k);              // Ενημερώνει τους "ηγέτες" ανά υποπληθυσμό
+    double randomDouble(double min, double max);     // Παραγωγή τυχαίου δεκαδικού σε εύρος [min, max]
 
-    // Δεδομένα Σμήνους -
-    std::vector<std::vector<double>> x;  // πίνακας με τις τρέχουσες θέσεις των σωματιδίων
-    std::vector<std::vector<double>> v;  // πίνακας με τις τρέχουσες ταχύτητες. 
-    std::vector<std::vector<double>> pbest;  // η καλύτερη θέση που έχει βρει το κάθε σωματίδιο από μόνο του
+    // --- Παράμετροι PSO ---
+    int nParticles;    // Συνολικός αριθμός σωματιδίων
+    int dimension;     // Διαστάσεις του προβλήματος βελτιστοποίησης
+    double w, c1, c2;  // Παράμετροι PSO: Αδράνεια (w), γνωστική (c1) και κοινωνική (c2) συνιστώσα
+    int iter;          // Τρέχουσα επανάληψη
+    int max_iterations;// Μέγιστος αριθμός επαναλήψεων
 
-    std::vector<double> pbest_fitness;       // η καλύτερη τιμή fitness που πέτυχε το κάθε σωματίδιο.
-
-    std::vector<std::mt19937> cell_gen; // η γεννήτρια που παράγει τους τυχαίους αριθμούς για τις παραμέτρους r1, r2 για της εξίσωσης κίνησης.
-
-    // constructor
+    // --- Δεδομένα Σμήνους  ---
+    std::vector<std::vector<double>> x;      // Θέσεις σωματιδίων
+    std::vector<std::vector<double>> v;      // Ταχύτητες σωματιδίων
+    std::vector<std::vector<double>> pbest;  // Προσωπική καλύτερη θέση κάθε σωματιδίου
+    std::vector<double> pbest_fitness;       // Fitness της προσωπικής καλύτερης θέσης
+    std::vector<std::mt19937> cell_gen;      // Γεννήτριες τυχαίων αριθμών ανά νήμα (Mersenne Twister)
 
 public:
-    OPSO();
+    OPSO(); // Κατασκευαστής της κλάσης
 
-    virtual void init(); // override; -  Εδώ δημιουργούνται οι αρχικές τυχαίες θέσεις και μηδενίζονται οι ταχύτητες
-    virtual void step(); // override;- είναι η μηχανή του αλγορίθμου. Εκτελεί μια επανάληψη. Δέχεται ένα πίνακα με τα νέα fitness
-    virtual double calculateInertia(int type, int current_iter, int max_iter); // η συνάρτηση που υπολογίζει την αδράνεια με βάση το paper ipso
-    virtual bool terminated (); // Η συνάρτηση τερματισμού του αλγορίθμου
-    virtual void done();
-    virtual void showDebug();
-    /*
-    Getters & Setters.
-    */
-    virtual void setFitness(int index, double f); // ενημερώνει την τιμή καταλληλότητας για ένα συγκεκριμένο σωματίδιο
-    virtual double getFitness(int index) const; // επιστρέφει την τρέχουσα τιμή fitness ενός σωματιδίου
-    virtual std::vector<double> getGenome(int index) const; // επιστρέφει τις συντεταγμένες ενός συγκεκριμένου σωματιδίου
+    // --- Virtual μέθοδοι (πολυμορφισμός) ---
+    virtual void init();                                         // Αρχικοποίηση πληθυσμού και μεταβλητών
+    virtual void step();                                         // Εκτέλεση μίας επανάληψης του αλγορίθμου
+    virtual double calculateInertia(int type, int current_iter, int max_iter); // Υπολογισμός δυναμικής αδράνειας
+    virtual bool terminated ();                                  // Έλεγχος συνθηκών τερματισμού
+    virtual void done();                                         // Ενέργειες μετά την ολοκλήρωση
+    virtual void showDebug();                                    // Εκτύπωση πληροφοριών αποσφαλμάτωσης
 
-    virtual double getBestFitness() const; // Επιστρέφει την καλύτερη τιμή (το παγκόσμιο ελάχιστο) που έχει βρει ο OPSO από την αρχή της εκτέλεσης μέχρι τώρα
-    virtual std::vector<double> getBestPosition() const; //Επιστρέφει το διάνυσμα των παραμέτρων (το gbest) που αντιστοιχεί στην καλύτερη λύση.
+    // --- Getters & Setters ---
+    virtual void setFitness(int index, double f);                // Θέτει το fitness ενός σωματιδίου
+    virtual double getFitness(int index) const;                  // Επιστρέφει το fitness ενός σωματιδίου
+    virtual std::vector<double> getGenome(int index) const;      // Επιστρέφει τη θέση ενός σωματιδίου
+    virtual double getBestFitness() const;                       // Επιστρέφει το καλύτερο παγκόσμιο fitness
+    virtual std::vector<double> getBestPosition() const;         // Επιστρέφει τη θέση της καλύτερης λύσης
 
-    virtual ~OPSO(); // καθαρίζει την μνήμη όταν ο αλγόριθμος τελειώσει τη δουλειά του.
+    virtual ~OPSO(); // Καταστροφέας της κλάσης
 };
 
 #endif

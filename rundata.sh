@@ -5,7 +5,7 @@ LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
 SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=doublebox
+TERMINATION=similarity
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=mlp
 
@@ -84,14 +84,17 @@ if [ $METHOD = "Bfgs" ]; then
   METHODPARAMS="--bfgs_iters=200"
   elif [ $METHOD = "Opso" ]
   then
-     # opso_particles: number of pso particles
-     # opso_w: inertia weight
-     # opso_c1: cognitive constant
-     # opso_c2: social constant
-     # opso_maxiters: maximum iterations of the algorithm
-     PAGENTS=200
-     THREADS=2
-    METHODPARAMS="--opso_particles=$PAGENTS --opso_maxiters=2000 --opso_velocity_mode=ipso_vmax --opso_threads=$THREADS --opso_inertia_type=11  --opso_w=0.7298 --opso_c1=1.49618 --opso_c2=1.49618"
+   THREADS=10
+   TOTAL_AGENTS=500
+   PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
+   # opso_particles: number of pso particles
+   # opso_w: inertia weight
+   # opso_c1: cognitive constant
+   # opso_c2: social constant
+   # opso_maxiters: maximum iterations of the algorithm
+   # opso_velocity_mode: the velocity mechanism
+   # opso_inertia_type : the type of inertia (0-14)
+METHODPARAMS="--opso_particles=$PAGENTS --opso_maxiters=500 --localsearchRate=0.05 --opso_velocity_mode=ipso_vmax --opso_inertia_type=14  --opso_w=0.7298 --opso_c1=1.49618 --opso_c2=1.49618 --subPopulation=$THREADS --subPopEnable=ANY --prop=1 --propagationNumber=1 --propagationMethod=Nto1 --propagationRate=10 --opt_distpartitions=$THREADS"
   elif [ $METHOD = "PBGWO" ]
 then
 THREADS=5
