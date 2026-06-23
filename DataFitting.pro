@@ -23,6 +23,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	METHODS/PEAO.cpp \
 	METHODS/BGWO.cpp \
 	METHODS/ParallelBGwo.cpp \
     METHODS/pdoublegenetic.cpp \
@@ -119,6 +120,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
+    METHOD/PEAO.h \
     METHODS/pdoublegenetic.h \
     METHODS/BGWO.h \
     METHODS/opso.h \

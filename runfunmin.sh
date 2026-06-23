@@ -1,5 +1,5 @@
 #Available optimization methods: GradientDescent,Adam,Bfgs,Lbfgs,Gwo, NelderMead,Genetic,Multistart,iPso,NeuralMinimizer,DifferentialEvolution, ParallelDe, Simman, Ego, HybridMethod,Woa,MeWoa,JDE,UserMethod, BGWO
-METHOD=PBGWO
+METHOD=PEAO
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans
@@ -139,6 +139,9 @@ then
 #parde_islands: The number of parallel islands for the method.
 
 	METHODPARAMS="--parde_agents=200 --parde_generations=1000 --parde_cr=0.9 --parde_f=0.8 --parde_weight_method=random --parde_propagate_rate=5 --parde_selection_method=tournament --parde_propagate_method=1to1 --parde_islands=1 --pade_islands_enable=1"
+elif [ $METHOD = "PEAO" ]
+then
+    METHODPARAMS="--population=200 --maxiters=200 --localsearchRate=0.05 --subPopulation=10  --prop=1 --propagationNumber=1 --propagationMethod=NtoN --propagationRate=1 --communicationThreshold=15 --enzymeConcentration=0.1 --levyBetaTimes10=10 --communicationStrategyMode=2 -subPopEnable=10"
 
 elif [ $METHOD = "ParallelPso" ]
 then

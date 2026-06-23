@@ -61,6 +61,9 @@ MethodLoader::MethodLoader()
     method<<new ParallelBGwo;
     methodName<<"PBGWO";
 
+    method<<new PEAO;
+    methodName<<"PEAO";
+
     method<<new UserMethod;
     methodName<<"UserMethod";
 }

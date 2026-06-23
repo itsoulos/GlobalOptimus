@@ -29,6 +29,7 @@
 # include <METHODS/MFO.h>
 # include <METHODS/BGWO.h>
 # include <METHODS/ParallelBGwo.h>
+# include <METHODS/PEAO.h>
 # include <QStringList>
 # include <QJsonObject>
 /**

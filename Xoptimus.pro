@@ -39,6 +39,7 @@ CONFIG += c++17
 SOURCES += \
     GE/cprogram.cc \
     METHODS/trio.cpp \
+    METHODS/PEAO.cpp \
     METHODS/BGWO.cpp \
     METHODS/ParallelBGwo.cpp \
     PROBLEMS/problem1d.cpp \
@@ -208,6 +209,7 @@ HEADERS += \
     GE/cprogram.h \
     METHODS/trio.h \
     METHODS/BGWO.h \
+    METHODS/PEAO.h \
     METHODS/ParallelBGwo.h \
     PROBLEMS/problem1d.h \
     PROBLEMS/zakharov.h \

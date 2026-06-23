@@ -19,6 +19,7 @@ QMAKE_CFLAGS += -O3 -fopenmp -unroll-loops -omit-frame-pointer -Winline -unsafe-
 QMAKE_LFLAGS += -O3
 SOURCES += \
         GE/cprogram.cc \
+	METHODS/PEAO.cpp \
     GE/nncprogram.cpp \
 	METHODS/trio.cpp \
 	METHODS/BGWO.cpp \
@@ -187,6 +188,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     GE/cprogram.h \
     GE/nncprogram.h \
+    METHODS/PEAO.h \
     METHODS/trio.h \
     METHODS/BGWO.h \
     METHODS/ParallelBGwo.h \
