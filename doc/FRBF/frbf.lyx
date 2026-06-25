@@ -340,11 +340,8 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-Many practical problems can be handled by machine learning tools.
- In these problems one can find problems from scientific fields,
- such as physics 
+The rapid development of machine learning has enabled its adoption in numerous practical applications.
+ Representative examples can be found in scientific and technological fields such as physics 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "physics_ml1,physics_ml2"
@@ -380,7 +377,7 @@ literal "false"
 \end_inset
 
 ,
- economics 
+ economics
 \begin_inset CommandInset citation
 LatexCommand citep
 key "econ_ml1,econ_ml2"
@@ -398,7 +395,7 @@ literal "false"
 \end_inset
 
 ,
- time series forecasting 
+ time-series prediction 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "nn_timeseries"
@@ -406,34 +403,44 @@ literal "false"
 
 \end_inset
 
- etc.
- Among the most widely used machine learning techniques,
- the Radial Basis Function (RBF) network stands out.
- 
-\end_layout
+,
+ financial and credit card analysis 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_credit"
+literal "false"
 
-\begin_layout Standard
-An RBF network can be defined as the following function:
-\series bold
+\end_inset
 
+,
+ and mechanical engineering 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn_mech1"
+literal "false"
+
+\end_inset
+
+.
+ Such problems are typically tackled through machine learning approaches,
+ with Radial Basis Function (RBF) networks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf1,rbf2"
+literal "false"
+
+\end_inset
+
+ representing one of the most widely adopted and effective model classes.
+ An RBF network is commonly defined as a function:
 \begin_inset Formula 
 \begin{equation}
-y\left(\overrightarrow{x}\right)=\sum_{i=1}^{k}w_{i}\phi\left(\left\Vert \overrightarrow{x}-\overrightarrow{c_{i}}\right\Vert \right)\label{eq:firstrbf}
+R\left(\overrightarrow{x}\right)=\sum_{i=1}^{k}w_{i}\phi\left(\left\Vert \overrightarrow{x}-\overrightarrow{c_{i}}\right\Vert \right)\label{eq:firstrbf}
 \end{equation}
 
 \end_inset
 
-
-\series default
-The following applies to the above equation
-\end_layout
-
-\begin_layout Enumerate
-The vector 
-\begin_inset Formula $\overrightarrow{x}$
-\end_inset
-
- stands for the input pattern to the equation 
+The following notation is used in Equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:firstrbf"
@@ -444,8 +451,15 @@ nolink "false"
 
 \end_inset
 
-.
- The number of elements in this vector is denoted as 
+:
+\end_layout
+
+\begin_layout Enumerate
+The vector 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+ denotes the input pattern and the number of elements in this vector is denoted as 
 \begin_inset Formula $d$
 \end_inset
 
@@ -453,11 +467,19 @@ nolink "false"
 \end_layout
 
 \begin_layout Enumerate
+The constant 
+\begin_inset Formula $k$
+\end_inset
+
+ denotes the number of weights for the RBF network.
+\end_layout
+
+\begin_layout Enumerate
 The vectors 
 \begin_inset Formula $\overrightarrow{c_{i}},\ i=1,..,k$
 \end_inset
 
- are denoted as the center vectors.
+ stand for the so - called center vectors.
 \end_layout
 
 \begin_layout Enumerate
@@ -465,30 +487,27 @@ The vector
 \begin_inset Formula $\overrightarrow{w}$
 \end_inset
 
- is considered as the output weight of the RBF network.
+ represents the weight vector of the RBF network.
 \end_layout
 
 \begin_layout Enumerate
 The value 
-\begin_inset Formula $y\left(\overrightarrow{x}\right)$
+\begin_inset Formula $R\left(\overrightarrow{x}\right)$
 \end_inset
 
- represents the predicted value of the network for the pattern 
+ denotes the predicted value of the network for the input pattern 
 \begin_inset Formula $\overrightarrow{x}$
 \end_inset
 
 .
 \end_layout
 
-\begin_layout Standard
-Typically,
- the Gaussian function can bed used as the function 
+\begin_layout Enumerate
+The function 
 \begin_inset Formula $\phi(x)$
 \end_inset
 
- and it defined as:
-\series bold
-
+ typically is defined as the following Gaussian function:
 \begin_inset Formula 
 \begin{equation}
 \phi(x)=\exp\left(-\frac{\left(x-c\right)^{2}}{\sigma^{2}}\right)
@@ -499,20 +518,1823 @@ Typically,
 
 \end_layout
 
+\begin_layout Standard
+Moreover,
+ the training error associated with any RBF network 
+\begin_inset Formula $R(x)$
+\end_inset
+
+ is defined as:
+\begin_inset Formula 
+\begin{equation}
+E\left(R\left(\overrightarrow{x}\right)\right)=\sum_{i=1}^{M}\left(R\left(\overrightarrow{x_{i}}\right)-y_{i}\right)^{2}\label{eq:RbfError}
+\end{equation}
+
+\end_inset
+
+In this equation,
+ the set 
+\begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
+\end_inset
+
+ represents the training set of the objective problem and the values 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ are the actual outputs for any given pattern 
+\begin_inset Formula $\overrightarrow{x_{i}}$
+\end_inset
+
+.
+ The effectiveness of RBF networks has been demonstrated across numerous application domains.
+ Representative examples include physics-related problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfphysics1,rbfphysics2,rbfphysics3,rbfphysics4"
+literal "false"
+
+\end_inset
+
+,
+ differential equation solving 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfde1,rbfde2,rbfde3"
+literal "false"
+
+\end_inset
+
+,
+ robotic systems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfrobotics1,rbfrobotics2"
+literal "false"
+
+\end_inset
+
+,
+ facial recognition 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfface1"
+literal "false"
+
+\end_inset
+
+,
+ digital communication systems 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbfnetwork1,rbfnetwork2"
+literal "false"
+
+\end_inset
+
+,
+ chemical applications 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbfchemistry1,rbfchemistry2"
+literal "false"
+
+\end_inset
+
+,
+ economic modeling 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbfecon0,rbfecon1,rbfecon2"
+literal "false"
+
+\end_inset
+
+,
+ cybersecurity and network security tasks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbf_dos1,rbf_dos2"
+literal "false"
+
+\end_inset
+
+,
+ time-series forecasting 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_time"
+literal "false"
+
+\end_inset
+
+,
+ and wind energy production prediction 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_wind"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In recent years,
+ numerous studies have introduced novel approaches for initializing the parameters of RBF networks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbfinit1,rbfinit2,rbfinit3"
+literal "false"
+
+\end_inset
+
+.
+ In addition,
+ the influence of kernel widths on the performance of RBF networks has been extensively investigated by Benoudjit et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfkernel"
+literal "false"
+
+\end_inset
+
+,
+ while Neruda et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbflearn"
+literal "false"
+
+\end_inset
+
+ provided a comparative evaluation of several learning algorithms designed for RBF training.
+ Furthermore,
+ a variety of pruning strategies have been proposed 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfprun1,rbfprun3,rbfprun2"
+literal "false"
+
+\end_inset
+
+ with the objective of reducing the number of network parameters and,
+ consequently,
+ the overall model complexity.
+ Given the widespread adoption of RBF networks and the substantial computational effort often required for their training,
+ several studies have recently focused on exploiting parallel computing architectures to accelerate neural network parameter optimization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rbfpar1,rbfpar2"
+literal "false"
+
+\end_inset
+
+.
+ Finally,
+ Park et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_universal"
+literal "false"
+
+\end_inset
+
+ demonstrated that an RBF network consisting of a single hidden processing layer possesses the universal approximation property,
+ being capable of approximating any continuous function with arbitrary accuracy.
+\end_layout
+
+\begin_layout Standard
+In conventional RBF network training,
+ the centers of the basis functions 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ are initially determined,
+ and the corresponding weight vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ is subsequently obtained by solving a linear system of equations.
+ The k-means clustering algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "kmeans"
+literal "false"
+
+\end_inset
+
+ is among the most frequently employed techniques for center selection.
+ Despite its simplicity and computational efficiency,
+ this approach often suffers from overfitting,
+ reducing the predictive performance of the model on unseen samples.
+ Moreover,
+ because the optimization process does not impose explicit constraints on the parameter values,
+ the resulting estimates may become excessively large or small,
+ adversely affecting both model stability and generalization capability.
+\end_layout
+
+\begin_layout Standard
+The present work introduces a novel training methodology for RBF networks consisting of two distinct phases.
+ During the first phase,
+ a promising range of values for the network centers and variances is estimated by exploiting the k-means clustering technique.
+ In the second phase,
+ a modified genetic algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ga1,ga2,ga3"
+literal "false"
+
+\end_inset
+
+ is employed to determine the optimal values of the centers and variances within the search intervals identified during the first phase.
+ The weights of the RBF network are computed through the solution of an appropriate linear system of equations.
+\end_layout
+
+\begin_layout Standard
+The remaining of this article is organized as follows:
+ in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Materials-and-Methods"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ the proposed method is fully described,
+ in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ the experimental results are outlined and finally in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ a discussion is provided on the experimental results.
+\end_layout
+
 \begin_layout Section
 Materials and Methods
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Materials-and-Methods"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
-The original method used to train RBF networks 
+The first phase of the proposed method
+\end_layout
+
+\begin_layout Standard
+A typical diagram of an RBF network is depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:rbfDiagram"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+
+\series bold
+ 
+\series default
+Every RBF network with 
+\begin_inset Formula $k$
+\end_inset
+
+ weights has the following sets of parameters:
+ 
+\end_layout
+
+\begin_layout Enumerate
+A series of vectors 
+\begin_inset Formula $\overrightarrow{c_{i}},\ i=1,..,k$
+\end_inset
+
+ that represent the centers of the network.
+ Each center has 
+\begin_inset Formula $d$
+\end_inset
+
+ values.
+\end_layout
+
+\begin_layout Enumerate
+Each Gaussian unit has an an additional parameter 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+,
+ that corresponds to the variance of this unit.
+\end_layout
+
+\begin_layout Enumerate
+The set of output weights 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ with 
+\begin_inset Formula $k$
+\end_inset
+
+ values.
+\end_layout
+
+\begin_layout Standard
+Provided that the input vector 
+\begin_inset Formula $\overrightarrow{x}$
+\end_inset
+
+ has 
+\begin_inset Formula $d$
+\end_inset
+
+ values,
+ the total number of parameters of an RBF network is calculated as:
+\begin_inset Formula 
+\begin{equation}
+n=(d+2)\times k
+\end{equation}
+
+\end_inset
+
+
+\series bold
+ 
+\series default
+For the determination of initial values for the centers and variances the K-means algorithm is utilized here and it is presented in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:KMEANS"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename rbf.png
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+A typical diagram of an RBF network.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:rbfDiagram"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Description of the K-means algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:KMEANS"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The input of the algorithm is the points 
+\begin_inset Formula $x_{i},\ i=1,\ldots,M$
+\end_inset
+
+ belonging to the train set of the objective problem,
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Define
+\series default
+ as 
+\begin_inset Formula $k$
+\end_inset
+
+ the number of centers.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $S_{j}=\{\ \}$
+\end_inset
+
+,
+ 
+\begin_inset Formula $j=1,\ldots,k$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Repeat
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ each point 
+\begin_inset Formula $x_{i},\ i=1,...,M$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $j^{*}=\mbox{argmin}_{m=1}^{k}\left\{ D\left(x_{i},c_{m}\right)\right\} $
+\end_inset
+
+.
+ The index 
+\begin_inset Formula $j^{*}$
+\end_inset
+
+ denotes the nearest center for point
+\begin_inset Formula $x_{i}$
+\end_inset
+
+.
+ The function 
+\begin_inset Formula $D(x,y)$
+\end_inset
+
+ represents the Euclidean distance.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $S_{j^{*}}=S_{j^{*}}\cup\left\{ x_{i}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ every center 
+\begin_inset Formula $c_{j},\ j=1..k$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $M_{j}$
+\end_inset
+
+ as the number of points in 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Update 
+\series default
+the center 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ with the following equation:
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End
+\series default
+ 
+\series bold
+For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The algorithm terminates when 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ no longer changes
+\end_layout
+
+\begin_layout Enumerate
+The output of the algorithm are the 
+\begin_inset Formula $\overrightarrow{c_{i}},\ i=1,..,k$
+\end_inset
+
+ centers and the corresponding variances 
+\begin_inset Formula $\sigma_{i},\ i=1,\ldots,k$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+When this process is finished,
+ the vector 
+\begin_inset Formula $\overrightarrow{z}$
+\end_inset
+
+ with the calculated parameters is formed using the function calculateZ() described in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:algorithmZ"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The used algorithm for the calculation of the initial set of parameters for the RBF network.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:algorithmZ"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+Function
+\series default
+ calculateZ(
+\begin_inset Formula $\overrightarrow{c},\overrightarrow{\sigma},w_{0})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+Inputs
+\series default
+:
+ The initial calculated values for centers 
+\begin_inset Formula $\overrightarrow{c},$
+\end_inset
+
+the initial values for variances 
+\begin_inset Formula $\overrightarrow{\sigma}$
+\end_inset
+
+ and a positive value 
+\begin_inset Formula $w_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $l=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,k$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $j=1,\ldots,d$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $z_{l}=c_{i,j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $l=l+1$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,k$
+\end_inset
+
+ do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $z_{l}=\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $l=l+1$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,k$
+\end_inset
+
+ do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $z_{l}=w_{0}$
+\end_inset
+
+,
+ where 
+\begin_inset Formula $w_{0}$
+\end_inset
+
+ a positive double precision number.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $l=l+1$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Return
+\series default
+ the vector 
+\begin_inset Formula $\overrightarrow{z}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+End function
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The layout of the vector 
+\begin_inset Formula $\overrightarrow{z}$
+\end_inset
+
+ is outlined in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-layout-of"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ In this layout,
+ the initial values of the centers are entered at the beginning of the vector,
+ then the initial values for the variances are entered,
+ and finally the initial values for the network weights.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The scheme of the particles in the proposed method.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-layout-of"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $ $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+
+\size scriptsize
+\begin_inset Tabular
+<lyxtabular version="3" rows="1" columns="21">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{11}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{12}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{1d}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{21}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{22}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{2d}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{k1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{k2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $c_{kd}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $\sigma_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $\ldots$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $\sigma_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $w_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $w_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $\ldots$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $w_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
-The proposed method
+The description of the second phase
 \end_layout
 
+\begin_layout Standard
+During the second phase,
+ an optimization procedure is utilized to minimize the equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:RbfError"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ considering the bound vectors 
+\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
+\end_inset
+
+ of the previous phase.
+ In the proposed implementation,
+ the Genetic Algorithm was incorporated during the second phase.
+ Genetic algorithms are evolutionary methods that are based on randomly produced solutions of the objective problem.
+
+\series bold
+ 
+\series default
+The candidate solutions in a genetic algorithm are typically referred to as chromosomes,
+ and they evolve through operations inspired by natural processes,
+ such as selection,
+ crossover,
+ and mutation.
+ They have been incorporated into a wide series of problems,
+ such as energy problems 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gen_app1"
+literal "true"
+
+\end_inset
+
+,
+ water distribution 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gen_app2"
+literal "true"
+
+\end_inset
+
+,
+ problems appearing in banking transactions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gen_app3"
+literal "true"
+
+\end_inset
+
+,
+ optimization of neural networks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gen_app4"
+literal "true"
+
+\end_inset
+
+ etc.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-layout-of-1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ illustrates the structure of the chromosomes involved in the genetic algorithm at this phase.
+ In this figure the following assumptions hold:
+\end_layout
+
+\begin_layout Enumerate
+The value 
+\begin_inset Formula $c_{i,j}$
+\end_inset
+
+ denotes the 
+\begin_inset Formula $j$
+\end_inset
+
+ element of the 
+\begin_inset Formula $i$
+\end_inset
+
+ center of the RBF network,
+ with 
+\begin_inset Formula $i\in[1,k]$
+\end_inset
+
+ and 
+\begin_inset Formula $j\in[1,d].$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The value 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ represents the 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ parameter for the corresponding radial function.
+\end_layout
+
+\begin_layout Enumerate
+The value 
+\begin_inset Formula $w_{i},\ i\in[1,k]$
+\end_inset
+
+ represents the weight for the corresponding radial function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align left
+\begin_inset Graphics
+	filename chrom_layout.png
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The figure illustrates the schematic arrangement of a chromosome in the proposed genetic algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:The-layout-of-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The following steps outline the proposed genetic algorithm:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialization step
+\series default
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The following set of parameter are
+\series bold
+ initialized:
+
+\series default
+ 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ for the number of chromosomes,
+ 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+ used to express the maximum number of allowed generations,
+ 
+\begin_inset Formula $p_{s}$
+\end_inset
+
+ that defines the selection rate and finally 
+\begin_inset Formula $p_{m}$
+\end_inset
+
+ which is used to represent the mutation rate.
+\end_layout
+
+\begin_layout Enumerate
+The chromosomes in the proposed genetic algorithm are 
+\series bold
+initialized
+\series default
+ as random decimal numbers that follow the configuration of Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:The-layout-of-1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and the initialization is performed within the value range of the first phase which is defined by the vectors
+\series bold
+ 
+\series default
+
+\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=0$
+\end_inset
+
+.
+ This variable denotes the number of generations.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Fitness calculation step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+For
+\series default
+ 
+\begin_inset Formula $i=1,\ldots,N_{c}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Produce 
+\series default
+an RBF network 
+\begin_inset Formula $R_{i}=R\left(\overrightarrow{x},\overrightarrow{g_{i}}\right).$
+\end_inset
+
+ The parameters of this network are stored in the chromosome 
+\begin_inset Formula $\overrightarrow{g_{i}}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Estimate
+\series default
+ the related fitness 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+ as
+\series bold
+
+\begin_inset Formula 
+\begin{equation}
+f_{i}=\sum_{j=1}^{M}\left(R\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+End For
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Genetic operations step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Selection procedure:
+ Initially,
+ all chromosomes are sorted based on their fitness values.
+ The top 
+\begin_inset Formula $p_{s}\times N_{c}$
+\end_inset
+
+ chromosomes are directly carried over to the next generation without any modification.
+ The remaining individuals are replaced by offspring generated through crossover and mutation operations.
+\end_layout
+
+\begin_layout Enumerate
+Crossover procedure:
+ During this procedure In this procedure 
+\begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
+\end_inset
+
+ new chromosomes will be constructed.
+ For each pair 
+\begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
+\end_inset
+
+ of new chromosomes,
+ two chromosomes 
+\begin_inset Formula $(z,w)$
+\end_inset
+
+ are chosen using tournament selection.
+ The new offsprings are produced following the scheme:
+\begin_inset Formula 
+\begin{eqnarray}
+\tilde{z_{i}} & = & a_{i}z_{i}+\left(1-a_{i}\right)w_{i}\nonumber \\
+\tilde{w_{i}} & = & a_{i}w_{i}+\left(1-a_{i}\right)z_{i}\label{eq:crossover_ali-1}
+\end{eqnarray}
+
+\end_inset
+
+The numbers 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ are considered random numbers in the range 
+\begin_inset Formula $[-0.5,1.5]$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kaelo"
+literal "true"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Mutation procedure:
+ A random number 
+\begin_inset Formula $r\in[0,1]$
+\end_inset
+
+ is picked for each element 
+\begin_inset Formula $t_{j},j=1,\ldots,n$
+\end_inset
+
+ and for every chromosome 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+ .
+ If 
+\begin_inset Formula $r\le p_{m}$
+\end_inset
+
+ ,
+ then this element is altered according to the following equation:
+\begin_inset Formula 
+\begin{equation}
+t'_{j}=\begin{cases}
+t_{j}+\Delta\left(k,R_{j}-t_{j}\right), & t=0\\
+t_{j}-\Delta\left(k,t_{j}-L_{j}\right), & t=1
+\end{cases}\label{eq:delta1}
+\end{equation}
+
+\end_inset
+
+The value 
+\begin_inset Formula $t$
+\end_inset
+
+ is a random number that can be either 0 or 1.
+ The function function 
+\begin_inset Formula $\Delta(k,y)$
+\end_inset
+
+ is provided by the following equation:
+\begin_inset Formula 
+\begin{equation}
+\Delta(k,y)=y\left(1-r^{\left(1-\frac{k}{N_{g}}\right)}\right)\label{eq:delta2}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Termination check step
+\series default
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $k=k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $k<N_{g}$
+\end_inset
+
+ then the procedure returns to the Fitness Calculation step.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Otherwise
+\series default
+,
+ the best chromosome 
+\begin_inset Formula $g^{*}$
+\end_inset
+
+ is returned as the result of the algorithm.
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Results
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Results"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -14830,6 +16652,13 @@ name "fig:regressionNc"
 
 \begin_layout Section
 Conclusions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -15225,6 +17054,1109 @@ Ahmed,
 \end_layout
 
 \begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "nn_credit"
+literal "false"
+
+\end_inset
+
+Z.
+ Huang,
+ H.
+ Chen,
+ C.-Jung Hsu,
+ W.-Hwa Chen,
+ S.
+ Wu,
+ Credit rating analysis with support vector machines and neural networks:
+ a market comparative study,
+ Decision Support Systems 
+\series bold
+37
+\series default
+,
+ pp.
+ 543-558,
+ 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_mech1"
+literal "false"
+
+\end_inset
+
+K.
+ Peta,
+ J.
+ Żurek,
+ Prediction of air leakage in heat exchangers for automotive applications using artificial neural networks,
+ In:
+ 2018 9th IEEE Annual Ubiquitous Computing,
+ Electronics & Mobile Communication Conference (UEMCON),
+ New York,
+ NY,
+ USA,
+ pp.
+ 721-725,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1991)"
+key "rbf1"
+literal "false"
+
+\end_inset
+
+J.
+ Park and I.
+ W.
+ Sandberg,
+ Universal Approximation Using Radial-Basis-Function Networks,
+ Neural Computation 
+\series bold
+3
+\series default
+,
+ pp.
+ 246-257,
+ 1991.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf2"
+literal "false"
+
+\end_inset
+
+G.A.
+ Montazer,
+ D.
+ Giveki,
+ M.
+ Karami,
+ H.
+ Rastegar,
+ Radial basis function neural networks:
+ A review.
+ Comput.
+ Rev.
+ J 
+\series bold
+1
+\series default
+,
+ pp.
+ 52-74,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "rbfphysics1"
+literal "false"
+
+\end_inset
+
+P.
+ Teng,
+ Machine-learning quantum mechanics:
+ Solving quantum mechanics problems using radial basis function networks,
+ Phys.
+ Rev.
+ E 
+\series bold
+98
+\series default
+,
+ 033305,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfphysics2"
+literal "false"
+
+\end_inset
+
+R.
+ Jovanović,
+ A.
+ Sretenovic,
+ Ensemble of radial basis neural networks with K-means clustering for heating energy consumption prediction,
+ FME Transactions 
+\series bold
+45
+\series default
+,
+ pp.
+ 51-57,
+ 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfphysics3"
+literal "false"
+
+\end_inset
+
+V.I.
+ Gorbachenko,
+ M.V.
+ Zhukov,
+ Solving boundary value problems of mathematical physics using radial basis function networks.
+ Comput.
+ Math.
+ and Math.
+ Phys.
+ 
+\series bold
+57
+\series default
+,
+ pp.
+ 145–155,
+ 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfphysics4"
+literal "false"
+
+\end_inset
+
+J.
+ Määttä,
+ V.
+ Bazaliy,
+ J.
+ Kimari,
+ F.
+ Djurabekova,
+ K.
+ Nordlund,
+ T.
+ Roos,
+ Gradient-based training and pruning of radial basis function networks with an application in materials physics,
+ Neural Networks 
+\series bold
+133
+\series default
+,
+ pp.
+ 123-131,
+ 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfde1"
+literal "false"
+
+\end_inset
+
+Nam Mai-Duy,
+ Thanh Tran-Cong,
+ Numerical solution of differential equations using multiquadric radial basis function networks,
+ Neural Networks 14,
+ pp.
+ 185-199,
+ 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfde2"
+literal "false"
+
+\end_inset
+
+N.
+ Mai‐Duy,
+ Solving high order ordinary differential equations with radial basis function networks.
+ Int.
+ J.
+ Numer.
+ Meth.
+ Engng.
+ 
+\series bold
+62
+\series default
+,
+ pp.
+ 824-852,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfde3"
+literal "false"
+
+\end_inset
+
+S.A.
+ Sarra,
+ Adaptive radial basis function methods for time dependent partial differential equations,
+ Applied Numerical Mathematics 
+\series bold
+54
+\series default
+,
+ pp.
+ 79-94,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfrobotics1"
+literal "false"
+
+\end_inset
+
+R.
+ -J.
+ Lian,
+ Adaptive Self-Organizing Fuzzy Sliding-Mode Radial Basis-Function Neural-Network Controller for Robotic Systems,
+ IEEE Transactions on Industrial Electronics 
+\series bold
+61
+\series default
+,
+ pp.
+ 1493-1503,
+ 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfrobotics2"
+literal "false"
+
+\end_inset
+
+M.
+ Vijay,
+ D.
+ Jena,
+ Backstepping terminal sliding mode control of robot manipulator using radial basis functional neural networks.
+ Computers & Electrical Engineering 
+\series bold
+67
+\series default
+,
+ pp.
+ 690-707,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfface1"
+literal "false"
+
+\end_inset
+
+M.J.
+ Er,
+ S.
+ Wu,
+ J.
+ Lu,
+ H.L.
+ Toh,
+ Face recognition with radial basis function (RBF) neural networks,
+ IEEE Transactions on Neural Networks 
+\series bold
+13
+\series default
+,
+ pp.
+ 697-710,
+ 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfnetwork1"
+literal "false"
+
+\end_inset
+
+C.
+ Laoudias,
+ P.
+ Kemppi and C.
+ G.
+ Panayiotou,
+ Localization Using Radial Basis Function Networks and Signal Strength Fingerprints in WLAN,
+ GLOBECOM 2009 - 2009 IEEE Global Telecommunications Conference,
+ Honolulu,
+ HI,
+ 2009,
+ pp.
+ 1-6,
+ 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfnetwork2"
+literal "false"
+
+\end_inset
+
+M.
+ Azarbad,
+ S.
+ Hakimi,
+ A.
+ Ebrahimzadeh,
+ Automatic recognition of digital communication signal,
+ International journal of energy,
+ information and communications 
+\series bold
+3
+\series default
+,
+ pp.
+ 21-33,
+ 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfchemistry1"
+literal "false"
+
+\end_inset
+
+D.L.
+ Yu,
+ J.B.
+ Gomm,
+ D.
+ Williams,
+ Sensor fault diagnosis in a chemical process via RBF neural networks,
+ Control Engineering Practice 
+\series bold
+7
+\series default
+,
+ pp.
+ 49-55,
+ 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfchemistry2"
+literal "false"
+
+\end_inset
+
+V.
+ Shankar,
+ G.B.
+ Wright,
+ A.L.
+ Fogelson,
+ R.M.
+ Kirby,
+ A radial basis function (RBF) finite difference method for the simulation of reaction–diffusion equations on stationary platelets within the augmented forcing method,
+ Int.
+ J.
+ Numer.
+ Meth.
+ Fluids 
+\series bold
+75
+\series default
+,
+ pp.
+ 1-22,
+ 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfecon0"
+literal "false"
+
+\end_inset
+
+W.
+ Shen,
+ X.
+ Guo,
+ C.
+ Wu,
+ D.
+ Wu,
+ Forecasting stock indices using radial basis function neural networks optimized by artificial fish swarm algorithm,
+ Knowledge-Based Systems 24,
+ pp.
+ 378-385,
+ 2011.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfecon1"
+literal "false"
+
+\end_inset
+
+J.
+ A.
+ Momoh,
+ S.
+ S.
+ Reddy,
+ Combined Economic and Emission Dispatch using Radial Basis Function,
+ 2014 IEEE PES General Meeting | Conference & Exposition,
+ National Harbor,
+ MD,
+ pp.
+ 1-5,
+ 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfecon2"
+literal "false"
+
+\end_inset
+
+P.
+ Sohrabi,
+ B.
+ Jodeiri Shokri,
+ H.
+ Dehghani,
+ Predicting coal price using time series methods and combination of radial basis function (RBF) neural network with time series.
+ Miner Econ 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_dos1"
+literal "false"
+
+\end_inset
+
+U.
+ Ravale,
+ N.
+ Marathe,
+ P.
+ Padiya,
+ Feature Selection Based Hybrid Anomaly Intrusion Detection System Using K Means and RBF Kernel Function,
+ Procedia Computer Science 
+\series bold
+45
+\series default
+,
+ pp.
+ 428-435,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_dos2"
+literal "false"
+
+\end_inset
+
+M.
+ Lopez-Martin,
+ A.
+ Sanchez-Esguevillas,
+ J.
+ I.
+ Arribas,
+ B.
+ Carro,
+ Network Intrusion Detection Based on Extended RBF Neural Network With Offline Reinforcement Learning,
+ IEEE Access 
+\series bold
+9
+\series default
+,
+ pp.
+ 153153-153170,
+ 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "rbf_time"
+literal "false"
+
+\end_inset
+
+Gan,
+ M.,
+ Peng,
+ H.,
+ & Dong,
+ X.
+ P.
+ (2012).
+ A hybrid algorithm to optimize RBF network architecture and parameters for nonlinear time series prediction.
+ Applied Mathematical Modelling,
+ 36(7),
+ 2911-2919.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "rbf_wind"
+literal "false"
+
+\end_inset
+
+G.
+ Sideratos and N.
+ Hatziargyriou,
+ "Using Radial Basis Neural Networks to Estimate Wind Power Production," 2007 IEEE Power Engineering Society General Meeting,
+ Tampa,
+ FL,
+ USA,
+ 2007,
+ pp.
+ 1-7,
+ doi:
+ 10.1109/PES.2007.385812.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfinit1"
+literal "false"
+
+\end_inset
+
+L.I.
+ Kuncheva,
+ Initializing of an RBF network by a genetic algorithm,
+ Neurocomputing 
+\series bold
+14
+\series default
+,
+ pp.
+ 273-288,
+ 1997.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfinit2"
+literal "false"
+
+\end_inset
+
+F.
+ Ros,
+ M.
+ Pintore,
+ A.
+ Deman,
+ J.R.
+ Chrétien,
+ Automatical initialization of RBF neural networks,
+ Chemometrics and Intelligent Laboratory Systems 
+\series bold
+87
+\series default
+,
+ pp.
+ 26-32,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfinit3"
+literal "false"
+
+\end_inset
+
+D.
+ Wang,
+ X.J.
+ Zeng,
+ J.A.
+ Keane,
+ A clustering algorithm for radial basis function neural network initialization,
+ Neurocomputing 
+\series bold
+77
+\series default
+,
+ pp.
+ 144-155,
+ 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfkernel"
+literal "false"
+
+\end_inset
+
+N.
+ Benoudjit,
+ M.
+ Verleysen,
+ On the Kernel Widths in Radial-Basis Function Networks,
+ Neural Processing Letters 
+\series bold
+18
+\series default
+,
+ pp.
+ 139–154,
+ 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbflearn"
+literal "false"
+
+\end_inset
+
+R.
+ Neruda,
+ P.
+ Kudova,
+ Learning methods for radial basis function networks,
+ Future Generation Computer Systems 
+\series bold
+21
+\series default
+,
+ pp.
+ 1131–1142,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfprun1"
+literal "false"
+
+\end_inset
+
+E.
+ Ricci,
+ R.
+ Perfetti,
+ Improved pruning strategy for radial basis function networks with dynamic decay adjustment,
+ Neurocomputing 
+\series bold
+69
+\series default
+,
+ pp.
+ 1728-1732,
+ 2006.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfprun3"
+literal "false"
+
+\end_inset
+
+Guang-Bin Huang,
+ P.
+ Saratchandran and N.
+ Sundararajan,
+ A generalized growing and pruning RBF (GGAP-RBF) neural network for function approximation,
+ IEEE Transactions on Neural Networks 
+\series bold
+16
+\series default
+,
+ pp.
+ 57-67,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfprun2"
+literal "false"
+
+\end_inset
+
+M.
+ Bortman and M.
+ Aladjem,
+ A Growing and Pruning Method for Radial Basis Function Networks,
+ IEEE Transactions on Neural Networks 
+\series bold
+20
+\series default
+,
+ pp.
+ 1039-1045,
+ 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfpar1"
+literal "false"
+
+\end_inset
+
+R.
+ Yokota,
+ L.A.
+ Barba,
+ M.
+ G.
+ Knepley,
+ PetRBF —
+ A parallel O(N) algorithm for radial basis function interpolation with Gaussians,
+ Computer Methods in Applied Mechanics and Engineering 
+\series bold
+199
+\series default
+,
+ pp.
+ 1793-1804,
+ 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfpar2"
+literal "false"
+
+\end_inset
+
+C.
+ Lu,
+ N.
+ Ma,
+ Z.
+ Wang,
+ Fault detection for hydraulic pump based on chaotic parallel RBF network,
+ EURASIP J.
+ Adv.
+ Signal Process.
+ 
+\series bold
+2011
+\series default
+,
+ 49,
+ 2011.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2006)"
+key "rbf_universal"
+literal "false"
+
+\end_inset
+
+J.
+ Park and I.
+ W.
+ Sandberg,
+ "Universal Approximation Using Radial-Basis-Function Networks," in Neural Computation,
+ vol.
+ 3,
+ no.
+ 2,
+ pp.
+ 246-257,
+ June 1991,
+ doi:
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+10.1162/neco.1991.3.2.246
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "kmeans"
+literal "false"
+
+\end_inset
+
+E.U.
+ Oti,
+ M.O.
+ Olusola,
+ F.C.
+ Eze,
+ S.U.
+ Enogwe,
+ Comprehensive review of K-Means clustering algorithms,
+ Criterion 
+\series bold
+12
+\series default
+,
+ pp.
+ 22-23,
+ 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga1"
+literal "true"
+
+\end_inset
+
+D.
+ Goldberg,
+ Genetic Algorithms in Search,
+ Optimization and Machine Learning,
+ Addison-Wesley Publishing Company,
+ Reading,
+ Massachussets,
+ 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga2"
+literal "true"
+
+\end_inset
+
+Z.
+ Michaelewicz,
+ Genetic Algorithms + Data Structures = Evolution Programs.
+ Springer - Verlag,
+ Berlin,
+ 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga3"
+literal "true"
+
+\end_inset
+
+S.A.
+ Grady,
+ M.Y.
+ Hussaini,
+ M.M.
+ Abdullah,
+ Placement of wind turbines using genetic algorithms,
+ Renewable Energy 
+\series bold
+30
+\series default
+,
+ pp.
+ 259-270,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gen_app1"
+literal "true"
+
+\end_inset
+
+S.A.
+ Grady,
+ M.Y.
+ Hussaini,
+ M.M.
+ Abdullah,
+ Placement of wind turbines using genetic algorithms,
+ Renewable Energy 
+\series bold
+30
+\series default
+,
+ pp.
+ 259-270,
+ 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gen_app2"
+literal "true"
+
+\end_inset
+
+Parvaze,
+ S.,
+ Kumar,
+ R.,
+ Khan,
+ J.
+ N.,
+ Al-Ansari,
+ N.,
+ Parvaze,
+ S.,
+ Vishwakarma,
+ D.
+ K.,
+ ...
+ & Kuriqi,
+ A.
+ (2023).
+ Optimization of water distribution systems using genetic algorithms:
+ A review.
+ Archives of Computational Methods in Engineering,
+ 30(7),
+ 4209-4244.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gen_app3"
+literal "true"
+
+\end_inset
+
+Gordini,
+ N.
+ (2014).
+ A genetic algorithm approach for SMEs bankruptcy prediction:
+ Empirical evidence from Italy.
+ Expert systems with applications,
+ 41(14),
+ 6433-6445.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gen_app4"
+literal "true"
+
+\end_inset
+
+Ding,
+ S.,
+ Su,
+ C.,
+ & Yu,
+ J.
+ (2011).
+ An optimizing BP neural network algorithm based on genetic algorithm.
+ Artificial intelligence review,
+ 36(2),
+ 153-162.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2000)"
+key "kaelo"
+literal "false"
+
+\end_inset
+
+P.
+ Kaelo,
+ M.M.
+ Ali,
+ Integrated crossover rules in real coded genetic algorithms,
+ European Journal of Operational Research 
+\series bold
+176
+\series default
+,
+ pp.
+ 60-76,
+ 2007.
+\end_layout
+
+\begin_layout Bibliography
 \labelwidthstring 999
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
@@ -15241,7 +18173,18 @@ literal "false"
  K.
  Nottingham,
  The UCI Machine Learning Repository,
- https://archive.ics.uci.edu.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://archive.ics.uci.edu
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
