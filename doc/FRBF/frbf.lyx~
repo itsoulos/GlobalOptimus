@@ -809,87 +809,13 @@ The first phase of the proposed method
 \end_layout
 
 \begin_layout Standard
-A typical diagram of an RBF network is depicted in Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:rbfDiagram"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
-.
-
-\series bold
- 
-\series default
-Every RBF network with 
-\begin_inset Formula $k$
-\end_inset
-
- weights has the following sets of parameters:
- 
-\end_layout
-
-\begin_layout Enumerate
-A series of vectors 
-\begin_inset Formula $\overrightarrow{c_{i}},\ i=1,..,k$
-\end_inset
-
- that represent the centers of the network.
- Each center has 
-\begin_inset Formula $d$
-\end_inset
-
- values.
-\end_layout
-
-\begin_layout Enumerate
-Each Gaussian unit has an an additional parameter 
-\begin_inset Formula $\sigma_{i}$
-\end_inset
-
-,
- that corresponds to the variance of this unit.
-\end_layout
-
-\begin_layout Enumerate
-The set of output weights 
-\begin_inset Formula $\overrightarrow{w}$
-\end_inset
-
- with 
-\begin_inset Formula $k$
-\end_inset
-
- values.
-\end_layout
-
-\begin_layout Standard
-Provided that the input vector 
-\begin_inset Formula $\overrightarrow{x}$
-\end_inset
-
- has 
-\begin_inset Formula $d$
-\end_inset
-
- values,
- the total number of parameters of an RBF network is calculated as:
-\begin_inset Formula 
-\begin{equation}
-n=(d+2)\times k
-\end{equation}
-
-\end_inset
-
-
-\series bold
- 
-\series default
-For the determination of initial values for the centers and variances the K-means algorithm is utilized here and it is presented in Algorithm 
+In the first phase,
+ the k-means clustering algorithm is employed to estimate promising search intervals for the centers and variances of the RBF network.
+ Specifically,
+ for each network parameter,
+ the corresponding search interval is defined as a multiple of the value produced by the k-means algorithm,
+ thereby providing a bounded region for the subsequent optimization process.
+ The k-means algorithm is presented in Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:KMEANS"
@@ -904,46 +830,6 @@ nolink "false"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-placement H
-alignment document
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename rbf.png
-	scale 20
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-A typical diagram of an RBF network.
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:rbfDiagram"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \begin_inset Float algorithm
 placement H
 alignment document
@@ -955,7 +841,7 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Description of the K-means algorithm.
+The k-means algorithm used to estimate centers and variances.
 \begin_inset CommandInset label
 LatexCommand label
 name "alg:KMEANS"
@@ -978,23 +864,16 @@ Initialization
 
 \begin_deeper
 \begin_layout Enumerate
-The input of the algorithm is the points 
-\begin_inset Formula $x_{i},\ i=1,\ldots,M$
-\end_inset
-
- belonging to the train set of the objective problem,
-\end_layout
-
-\begin_layout Enumerate
 
 \series bold
-Define
+Input
 \series default
- as 
-\begin_inset Formula $k$
+:
+ the train set 
+\begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
 \end_inset
 
- the number of centers.
+ of the objective problem.
 \end_layout
 
 \begin_layout Enumerate
@@ -1002,7 +881,19 @@ Define
 \series bold
 Set
 \series default
- 
+ as 
+\begin_inset Formula $k$
+\end_inset
+
+ the number of desired centers.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Initialize
+\series default
+ the set 
 \begin_inset Formula $S_{j}=\{\ \}$
 \end_inset
 
@@ -1016,6 +907,8 @@ Set
 
 \end_deeper
 \begin_layout Enumerate
+
+\series bold
 Repeat
 \end_layout
 
@@ -1025,8 +918,8 @@ Repeat
 \series bold
 For
 \series default
- each point 
-\begin_inset Formula $x_{i},\ i=1,...,M$
+ 
+\begin_inset Formula $i=1,\ldots,M$
 \end_inset
 
  
@@ -1045,20 +938,21 @@ Set
 \end_inset
 
 .
- The index 
+ In this formulation,
+ 
 \begin_inset Formula $j^{*}$
 \end_inset
 
- denotes the nearest center for point
-\begin_inset Formula $x_{i}$
+ denotes the index of the closest center to the input sample 
+\begin_inset Formula $\overrightarrow{x_{i}}$
 \end_inset
 
-.
- The function 
+,
+ whereas 
 \begin_inset Formula $D(x,y)$
 \end_inset
 
- represents the Euclidean distance.
+ corresponds to the Euclidean distance function.
 \end_layout
 
 \begin_layout Enumerate
@@ -1073,20 +967,20 @@ Set
 .
 \end_layout
 
+\end_deeper
 \begin_layout Enumerate
 
 \series bold
 End For
 \end_layout
 
-\end_deeper
 \begin_layout Enumerate
 
 \series bold
 For
 \series default
- every center 
-\begin_inset Formula $c_{j},\ j=1..k$
+ 
+\begin_inset Formula $j=1..k$
 \end_inset
 
  
@@ -1098,29 +992,29 @@ do
 \begin_layout Enumerate
 
 \series bold
-Set
+Calculate
 \series default
- 
-\begin_inset Formula $M_{j}$
-\end_inset
-
- as the number of points in 
+ the number of points in each cluster 
 \begin_inset Formula $S_{j}$
 \end_inset
 
+ and denote them as 
+\begin_inset Formula $M_{j}$
+\end_inset
 
+.
 \end_layout
 
 \begin_layout Enumerate
 
 \series bold
-Update 
+Calculate 
 \series default
-the center 
-\begin_inset Formula $c_{j}$
+every center 
+\begin_inset Formula $\overrightarrow{c_{i}}$
 \end_inset
 
- with the following equation:
+ using the equation:
 \family roman
 \series medium
 \shape up
@@ -1136,7 +1030,7 @@ the center
 
 \begin_inset Formula 
 \[
-c_{j}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
+\overrightarrow{c_{i}}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
 \]
 
 \end_inset
@@ -1157,19 +1051,33 @@ For
 
 \end_deeper
 \begin_layout Enumerate
-The algorithm terminates when 
-\begin_inset Formula $c_{j}$
+
+\series bold
+If
+\series default
+ the centers 
+\begin_inset Formula $\overrightarrow{c_{i}},j=1,\ldots,k$
 \end_inset
 
- no longer changes
+ did not change then the loop is terminated.
 \end_layout
 
 \begin_layout Enumerate
-The output of the algorithm are the 
+
+\series bold
+End Repeat
+\end_layout
+
+\begin_layout Enumerate
+The algorithm 
+\series bold
+returns
+\series default
+ as output the estimated centers 
 \begin_inset Formula $\overrightarrow{c_{i}},\ i=1,..,k$
 \end_inset
 
- centers and the corresponding variances 
+ and the associated variances 
 \begin_inset Formula $\sigma_{i},\ i=1,\ldots,k$
 \end_inset
 
@@ -1178,15 +1086,39 @@ The output of the algorithm are the
 
 \end_inset
 
-When this process is finished,
- the vector 
-\begin_inset Formula $\overrightarrow{z}$
+The set of parameters comprising the centers and variances of an RBF network with 
+\begin_inset Formula $k$
 \end_inset
 
- with the calculated parameters is formed using the function calculateZ() described in algorithm 
+ hidden units is represented by a vector of dimension
+\begin_inset Formula 
+\begin{equation}
+n=k\times d+d\label{eq:nparams}
+\end{equation}
+
+\end_inset
+
+ where 
+\begin_inset Formula $d$
+\end_inset
+
+ denotes the dimensionality of the input patterns.
+ This vector has the following structure:
+\begin_inset Formula 
+\begin{equation}
+\overrightarrow{I}=\left\{ c_{11},c_{12},c_{1d},\sigma_{1},c_{21},c_{22},\ldots,c_{2d},\sigma_{2},\ldots,c_{k1},c_{k2},\ldots,c_{kd},\sigma_{k}\right\} \label{eq:ixstructure}
+\end{equation}
+
+\end_inset
+
+For this vector of parameters the bound vectors 
+\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
+\end_inset
+
+ are constructed using the procedure depicted in Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "alg:algorithmZ"
+reference "alg:boundVectors"
 plural "false"
 caps "false"
 noprefix "false"
@@ -1209,10 +1141,14 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-The used algorithm for the calculation of the initial set of parameters for the RBF network.
+The algorithm that is used to construct the bound vectors 
+\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
+\end_inset
+
+.
 \begin_inset CommandInset label
 LatexCommand label
-name "alg:algorithmZ"
+name "alg:boundVectors"
 
 \end_inset
 
@@ -1224,34 +1160,25 @@ name "alg:algorithmZ"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Enumerate
 
 \series bold
-Function
-\series default
- calculateZ(
-\begin_inset Formula $\overrightarrow{c},\overrightarrow{\sigma},w_{0})$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\series bold
-Inputs
+Input
 \series default
 :
- The initial calculated values for centers 
-\begin_inset Formula $\overrightarrow{c},$
+ the vector 
+\begin_inset Formula $\overrightarrow{I}$
 \end_inset
 
-the initial values for variances 
-\begin_inset Formula $\overrightarrow{\sigma}$
-\end_inset
+ of Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ixstructure"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
 
- and a positive value 
-\begin_inset Formula $w_{0}$
 \end_inset
 
 .
@@ -1260,10 +1187,40 @@ the initial values for variances
 \begin_layout Enumerate
 
 \series bold
+Input
+\series default
+:
+ the scale factor used for the bound vectors denoted as 
+\begin_inset Formula $F$
+\end_inset
+
+ with 
+\begin_inset Formula $F\ge1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Input
+\series default
+:
+ a small positive number 
+\begin_inset Formula $v_{e}$
+\end_inset
+
+ used as the low limit of the variables representing the variances of the RBF network.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
 Set
 \series default
  
-\begin_inset Formula $l=1$
+\begin_inset Formula $m=1$
 \end_inset
 
 
@@ -1295,7 +1252,9 @@ For
 
  
 \series bold
-do
+do 
+\series default
+//this loop is for the variables of each center
 \end_layout
 
 \begin_deeper
@@ -1305,7 +1264,7 @@ do
 Set
 \series default
  
-\begin_inset Formula $z_{l}=c_{i,j}$
+\begin_inset Formula $L_{m}=-F\times I_{m}$
 \end_inset
 
 
@@ -1317,46 +1276,7 @@ Set
 Set
 \series default
  
-\begin_inset Formula $l=l+1$
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-
-\series bold
-End For
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-
-\series bold
-End For
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-For
-\series default
- 
-\begin_inset Formula $i=1,\ldots,k$
-\end_inset
-
- do
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
-Set
-\series default
- 
-\begin_inset Formula $z_{l}=\sigma_{i}$
+\begin_inset Formula $R_{m}=F\times I_{m}$
 \end_inset
 
 
@@ -1368,7 +1288,7 @@ Set
 Set
 \series default
  
-\begin_inset Formula $l=l+1$
+\begin_inset Formula $m=m+1$
 \end_inset
 
 
@@ -1384,31 +1304,13 @@ End For
 \begin_layout Enumerate
 
 \series bold
-For
-\series default
- 
-\begin_inset Formula $i=1,\ldots,k$
-\end_inset
-
- do
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-
-\series bold
 Set
 \series default
  
-\begin_inset Formula $z_{l}=w_{0}$
+\begin_inset Formula $L_{m}=v_{e}$
 \end_inset
 
-,
- where 
-\begin_inset Formula $w_{0}$
-\end_inset
-
- a positive double precision number.
+ //set the bounds for the variables representing the variances.
 \end_layout
 
 \begin_layout Enumerate
@@ -1417,7 +1319,19 @@ Set
 Set
 \series default
  
-\begin_inset Formula $l=l+1$
+\begin_inset Formula $R_{m}=F\times I_{m}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\begin_inset Formula $m=m+1$
 \end_inset
 
 
@@ -1433,397 +1347,11 @@ End For
 \begin_layout Enumerate
 
 \series bold
-Return
+Output
 \series default
- the vector 
-\begin_inset Formula $\overrightarrow{z}$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Enumerate
-
-\series bold
-End function
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The layout of the vector 
-\begin_inset Formula $\overrightarrow{z}$
-\end_inset
-
- is outlined in Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:The-layout-of"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
-.
- In this layout,
- the initial values of the centers are entered at the beginning of the vector,
- then the initial values for the variances are entered,
- and finally the initial values for the network weights.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-alignment document
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-The scheme of the particles in the proposed method.
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:The-layout-of"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Formula $ $
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align left
-
-\size scriptsize
-\begin_inset Tabular
-<lyxtabular version="3" rows="1" columns="21">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{11}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{12}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-...
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{1d}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{21}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{22}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-...
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{2d}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-...
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{k1}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{k2}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-...
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $c_{kd}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $\sigma_{1}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $\sigma_{2}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $\ldots$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $\sigma_{k}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $w_{1}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $w_{2}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $\ldots$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\size scriptsize
-\begin_inset Formula $w_{k}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
+:
+ The bound vectors 
+\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
 \end_inset
 
 
@@ -1839,11 +1367,26 @@ The description of the second phase
 \end_layout
 
 \begin_layout Standard
-During the second phase,
- an optimization procedure is utilized to minimize the equation 
+In the second phase of the proposed algorithm,
+ a genetic algorithm is employed to optimize the centers and variances of the RBF network within the search intervals defined by the vectors 
+\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
+\end_inset
+
+ obtained during the first phase.
+ The output weight vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ of the RBF network is subsequently computed by solving the corresponding linear system of equations.
+ Within the proposed genetic algorithm,
+ each chromosome follows the structure of the parameter vector 
+\begin_inset Formula $\overrightarrow{I}$
+\end_inset
+
+ introduced in Equation 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:RbfError"
+reference "eq:ixstructure"
 plural "false"
 caps "false"
 noprefix "false"
@@ -1851,25 +1394,17 @@ nolink "false"
 
 \end_inset
 
- considering the bound vectors 
-\begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
-\end_inset
-
- of the previous phase.
- In the proposed implementation,
- the Genetic Algorithm was incorporated during the second phase.
- Genetic algorithms are evolutionary methods that are based on randomly produced solutions of the objective problem.
-
-\series bold
+,
+ where all decision variables corresponding to the RBF centers and variances are encoded.
  
-\series default
-The candidate solutions in a genetic algorithm are typically referred to as chromosomes,
- and they evolve through operations inspired by natural processes,
- such as selection,
- crossover,
- and mutation.
- They have been incorporated into a wide series of problems,
- such as energy problems 
+\end_layout
+
+\begin_layout Standard
+A suitably modified genetic algorithm was adopted in this stage because genetic algorithms constitute robust evolutionary optimization techniques that have demonstrated their effectiveness across a broad spectrum of practical applications.
+ In addition,
+ they are particularly well suited for integration with machine learning models,
+ as they generally require only the formulation of a suitable fitness function while treating the underlying model as a black-box optimization problem.
+ For example they have been applied to energy problems 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gen_app1"
@@ -1878,7 +1413,7 @@ literal "true"
 \end_inset
 
 ,
- water distribution 
+ water distribution problems 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gen_app2"
@@ -1887,7 +1422,7 @@ literal "true"
 \end_inset
 
 ,
- problems appearing in banking transactions 
+ economic problems 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gen_app3"
@@ -1896,7 +1431,7 @@ literal "true"
 \end_inset
 
 ,
- optimization of neural networks 
+ training of of neural networks 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gen_app4"
@@ -1905,111 +1440,7 @@ literal "true"
 \end_inset
 
  etc.
- Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:The-layout-of-1"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
- illustrates the structure of the chromosomes involved in the genetic algorithm at this phase.
- In this figure the following assumptions hold:
-\end_layout
-
-\begin_layout Enumerate
-The value 
-\begin_inset Formula $c_{i,j}$
-\end_inset
-
- denotes the 
-\begin_inset Formula $j$
-\end_inset
-
- element of the 
-\begin_inset Formula $i$
-\end_inset
-
- center of the RBF network,
- with 
-\begin_inset Formula $i\in[1,k]$
-\end_inset
-
- and 
-\begin_inset Formula $j\in[1,d].$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Enumerate
-The value 
-\begin_inset Formula $\sigma_{i}$
-\end_inset
-
- represents the 
-\begin_inset Formula $\sigma$
-\end_inset
-
- parameter for the corresponding radial function.
-\end_layout
-
-\begin_layout Enumerate
-The value 
-\begin_inset Formula $w_{i},\ i\in[1,k]$
-\end_inset
-
- represents the weight for the corresponding radial function.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-alignment document
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align left
-\begin_inset Graphics
-	filename ../../../IntervalGenetic/doc/RBF_THREEPHASES/chrom_layout.png
-	scale 20
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-The figure illustrates the schematic arrangement of a chromosome in the proposed genetic algorithm.
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:The-layout-of-1"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The following steps outline the proposed genetic algorithm:
+ The steps of the used genetic algorithm have as follows:
 \end_layout
 
 \begin_layout Enumerate
@@ -2023,41 +1454,63 @@ Initialization step
 
 \begin_deeper
 \begin_layout Enumerate
-The following set of parameter are
-\series bold
- initialized:
+The algorithm has the following set of parameters:
+\end_layout
 
-\series default
- 
+\begin_deeper
+\begin_layout Enumerate
 \begin_inset Formula $N_{c}$
 \end_inset
 
- for the number of chromosomes,
- 
-\begin_inset Formula $N_{g}$
-\end_inset
-
- used to express the maximum number of allowed generations,
- 
-\begin_inset Formula $p_{s}$
-\end_inset
-
- that defines the selection rate and finally 
-\begin_inset Formula $p_{m}$
-\end_inset
-
- which is used to represent the mutation rate.
+,
+ the desired number of chromosomes.
 \end_layout
 
 \begin_layout Enumerate
-The chromosomes in the proposed genetic algorithm are 
+\begin_inset Formula $N_{g}$
+\end_inset
+
+,
+ the maximum number of allowed generations.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $p_{s}$
+\end_inset
+
+,
+ the used selection rate with 
+\begin_inset Formula $p_{s}\le1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $p_{m},$
+\end_inset
+
+ the used mutation rate with 
+\begin_inset Formula $p_{m}\le1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
 \series bold
-initialized
+Construct
 \series default
- as random decimal numbers that follow the configuration of Figure 
+ a set of chromosomes with dimension 
+\begin_inset Formula $n$
+\end_inset
+
+ as defined in Equation 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:The-layout-of-1"
+reference "eq:nparams"
 plural "false"
 caps "false"
 noprefix "false"
@@ -2065,11 +1518,8 @@ nolink "false"
 
 \end_inset
 
- and the initialization is performed within the value range of the first phase which is defined by the vectors
-\series bold
- 
-\series default
-
+.
+ Each chromosome represents the centers and variances of any given RBF network and the value of each chromosome is initialized inside the bound vectors 
 \begin_inset Formula $\overrightarrow{L},\ \overrightarrow{R}$
 \end_inset
 
@@ -2085,8 +1535,8 @@ Set
 \begin_inset Formula $k=0$
 \end_inset
 
-.
- This variable denotes the number of generations.
+,
+ which represents the current number of generations.
 \end_layout
 
 \end_deeper
@@ -2123,8 +1573,33 @@ an RBF network
 \begin_inset Formula $R_{i}=R\left(\overrightarrow{x},\overrightarrow{g_{i}}\right).$
 \end_inset
 
- The parameters of this network are stored in the chromosome 
-\begin_inset Formula $\overrightarrow{g_{i}}.$
+ The centers and variances of 
+\begin_inset Formula $R_{i}$
+\end_inset
+
+ are derived from chromosome 
+\begin_inset Formula $\overrightarrow{g_{i}}$
+\end_inset
+
+.
+ The weight vector 
+\begin_inset Formula $\overrightarrow{w}=\left(w_{1},w_{2},\ldots,w_{k}\right)$
+\end_inset
+
+ is calculated as follows:
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+\series bold
+Set
+\series default
+ 
+\series bold
+
+\begin_inset Formula $W=w_{kj}$
 \end_inset
 
 
@@ -2133,15 +1608,73 @@ an RBF network
 \begin_layout Enumerate
 
 \series bold
-Estimate
+Set
 \series default
- the related fitness 
+ 
+\series bold
+
+\begin_inset Formula $\Phi=\phi_{j}\left(x_{i}\right)$
+\end_inset
+
+
+\series default
+,
+ that denotes the outputs of the computation units.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Set 
+\begin_inset Formula $T=\left\{ t_{i}=y_{i},i=1,..,M\right\} $
+\end_inset
+
+
+\series default
+,
+ that denotes the real outputs for the training set.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Solve 
+\series default
+the following system of equations:
+
+\series bold
+ 
+\series default
+
+\begin_inset Formula 
+\begin{equation}
+\Phi^{T}\left(T-\Phi W^{T}\right)=0
+\end{equation}
+
+\end_inset
+
+The solution is:
+\begin_inset Formula 
+\begin{equation}
+W^{T}=\left(\Phi^{T}\Phi\right)^{-1}\Phi^{T}T=\Phi^{\dagger}T\label{eq:eqoutput}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Calculate
+\series default
+ the corresponding fitness value 
 \begin_inset Formula $f_{i}$
 \end_inset
 
  as
-\series bold
-
 \begin_inset Formula 
 \begin{equation}
 f_{i}=\sum_{j=1}^{M}\left(R\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
@@ -2170,35 +1703,48 @@ Genetic operations step
 
 \begin_deeper
 \begin_layout Enumerate
-Selection procedure:
- Initially,
- all chromosomes are sorted based on their fitness values.
- The top 
+
+\series bold
+Selection
+\series default
+ procedure:
+ The population is first ordered based on fitness.
+ A fraction 
+\begin_inset Formula $p_{s}$
+\end_inset
+
+ of the population,
+ corresponding to the top 
 \begin_inset Formula $p_{s}\times N_{c}$
 \end_inset
 
- chromosomes are directly carried over to the next generation without any modification.
- The remaining individuals are replaced by offspring generated through crossover and mutation operations.
+ chromosomes,
+ is retained intact for the next generation.
+ The rest of the population is regenerated by applying crossover and mutation operations to selected parent chromosomes.
 \end_layout
 
 \begin_layout Enumerate
-Crossover procedure:
- During this procedure In this procedure 
+
+\series bold
+Crossover
+\series default
+ procedure:
+ In this step 
 \begin_inset Formula $\left(1-p_{s}\right)\times N_{c}$
 \end_inset
 
- new chromosomes will be constructed.
+ new offsprings will be produced.
  For each pair 
 \begin_inset Formula $\left(\tilde{z},\tilde{w}\right)$
 \end_inset
 
- of new chromosomes,
+ of these new chromosomes,
  two chromosomes 
 \begin_inset Formula $(z,w)$
 \end_inset
 
- are chosen using tournament selection.
- The new offsprings are produced following the scheme:
+ are chosen from the current population with the assistance of tournament selection.
+ The new chromosomes will be created using the following equations:
 \begin_inset Formula 
 \begin{eqnarray}
 \tilde{z_{i}} & = & a_{i}z_{i}+\left(1-a_{i}\right)w_{i}\nonumber \\
@@ -2207,11 +1753,11 @@ Crossover procedure:
 
 \end_inset
 
-The numbers 
+In this equation the 
 \begin_inset Formula $a_{i}$
 \end_inset
 
- are considered random numbers in the range 
+ denote random numbers in the range 
 \begin_inset Formula $[-0.5,1.5]$
 \end_inset
 
@@ -2228,16 +1774,20 @@ literal "true"
 \end_layout
 
 \begin_layout Enumerate
-Mutation procedure:
- A random number 
+
+\series bold
+Mutation
+\series default
+ procedure:
+ Select a random number 
 \begin_inset Formula $r\in[0,1]$
 \end_inset
 
- is picked for each element 
-\begin_inset Formula $t_{j},j=1,\ldots,n$
+ for each element 
+\begin_inset Formula $\overrightarrow{g_{i,j}},j=1,\ldots,n$
 \end_inset
 
- and for every chromosome 
+ for the corresponding chromosome 
 \begin_inset Formula $g_{i}$
 \end_inset
 
@@ -2247,35 +1797,38 @@ Mutation procedure:
 \end_inset
 
  ,
- then this element is altered according to the following equation:
+ then this element is changed using the following scheme:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-t'_{j}=\begin{cases}
-t_{j}+\Delta\left(k,R_{j}-t_{j}\right), & t=0\\
-t_{j}-\Delta\left(k,t_{j}-L_{j}\right), & t=1
-\end{cases}\label{eq:delta1}
+\overrightarrow{g_{i,j}}=\overrightarrow{g_{i,j}}+t\times p_{c}\times\overrightarrow{g_{i,j}}\label{eq:mutation}
 \end{equation}
 
 \end_inset
 
-The value 
+where 
+\begin_inset Formula $p_{c}$
+\end_inset
+
+ is a number in range 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ that denotes the magnitude of changes applied to the current element and 
 \begin_inset Formula $t$
 \end_inset
 
- is a random number that can be either 0 or 1.
- The function function 
-\begin_inset Formula $\Delta(k,y)$
+ is randomly selected integer that could be 
+\begin_inset Formula $-1$
 \end_inset
 
- is provided by the following equation:
-\begin_inset Formula 
-\begin{equation}
-\Delta(k,y)=y\left(1-r^{\left(1-\frac{k}{N_{g}}\right)}\right)\label{eq:delta2}
-\end{equation}
-
+ or 
+\begin_inset Formula $1$
 \end_inset
 
-
+.
 \end_layout
 
 \end_deeper
@@ -2309,20 +1862,62 @@ If
 \begin_inset Formula $k<N_{g}$
 \end_inset
 
- then the procedure returns to the Fitness Calculation step.
+then 
+\series bold
+goto
+\series default
+ Fitness Calculation step.
 \end_layout
 
 \begin_layout Enumerate
 
 \series bold
-Otherwise
+Otherwise,
+ 
 \series default
-,
- the best chromosome 
-\begin_inset Formula $g^{*}$
+obtain the best chromosome 
+\begin_inset Formula $\overrightarrow{g^{*}}$
 \end_inset
 
- is returned as the result of the algorithm.
+ and create the associated RBF network 
+\begin_inset Formula $R^{*}=R\left(\overrightarrow{x},\overrightarrow{g^{*}}\right)$
+\end_inset
+
+.
+ The weight vector for this RBF network is also obtained by solving a similar system of equations as in Fitness Calculation Step.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Apply
+\series default
+ a local search procedure to minimize the error function:
+ 
+\begin_inset Formula 
+\begin{equation}
+f^{*}=\sum_{j=1}^{M}\left(R^{*}\left(\overrightarrow{x}_{j},\overrightarrow{g^{*}}\right)-y_{j}\right)^{2}\label{eq:eq1-1-1}
+\end{equation}
+
+\end_inset
+
+A modified BFGS algorithm based on the method of Powell [58] was adopted as the local optimization procedure.
+ This variant efficiently enforces the parameter bounds established during the preceding stage of the proposed methodology.
+
+\series bold
+ 
+\series default
+In this work,
+ a BFGS variant of Powell 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "powell"
+literal "false"
+
+\end_inset
+
+ was utilized as the local optimization method.
+ This variant can preserve the bounds located previously in an efficient way.
 \end_layout
 
 \end_deeper
@@ -2338,11 +1933,7 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Subsection
-Experimental datasets 
-\end_layout
-
-\begin_layout Standard
-The datasets used in the conducted experiments were obtained from the following online databases:
+Experimental datasets The datasets used in the conducted experiments were obtained from the following online databases:
 \end_layout
 
 \begin_layout Enumerate
@@ -3387,7 +2978,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3411,7 +3002,7 @@ name "tab:Experimental-settings."
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="7" columns="3">
+<lyxtabular version="3" rows="9" columns="3">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -3586,6 +3177,38 @@ Mutation rate
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset Formula $p_{c}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mutation magnitude
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.05
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Formula $F$
 \end_inset
 
@@ -3614,11 +3237,47 @@ Scale factor
 </cell>
 </row>
 <row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $v_{e}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Small value
+\begin_inset Newline newline
+\end_inset
+
+used in variances
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.01
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $H$
+\begin_inset Formula $k$
 \end_inset
 
 
@@ -9546,8 +9205,10 @@ GLASS
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Plain Layout
-51.29%
+\begin_layout Enumerate
+
+\series bold
+(OK)
 \end_layout
 
 \end_inset
@@ -18154,6 +17815,28 @@ P.
  pp.
  60-76,
  2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2004)"
+key "powell"
+literal "false"
+
+\end_inset
+
+M.J.D Powell,
+ A Tolerant Algorithm for Linearly Constrained Optimization Calculations,
+ Mathematical Programming 
+\series bold
+45
+\series default
+,
+ pp.
+ 547-566,
+ 1989.
+ 
 \end_layout
 
 \begin_layout Bibliography
