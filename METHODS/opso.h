@@ -20,21 +20,23 @@ private:
     int inertia_type;      // Τύπος αδράνειας (0-14 με βάση των κώδικα switch case από αλγόριθμο ipso στο optimus)
     int threads;           // Αριθμός νημάτων για παράλληλη επεξεργασία
     std::vector<double> lb, ub; // Όρια αναζήτησης: Lower Bound  (lb) και Upper Bound (ub)
-     
+
     // --- Κατάσταση Βέλτιστης Λύσης ---
     double besty;                // Η καλύτερη τιμή που βρέθηκε παγκοσμίως, global best από αντικειμενική συνάρτηση
     std::vector<double> bestx;   // Η θέση που αντιστοιχεί στην καλύτερη παγκόσμια τιμή besty
     std::vector<double> fitness; // Τρέχουσες τιμές fitness για κάθε σωματίδιο
 
     double prev_fitness_sum; // Κρατάει το άθροισμα fitness της προηγούμενης επανάληψης για έλεγχο σύγκλισης
-    int S_delta;             // Παγκόσμιος μετρητής στασιμότητας 
+    int S_delta;             // Παγκόσμιος μετρητής στασιμότητας
+
+    std::vector<int> stagnation_counter; // Μετρητής στασιμότητας
 
     // --- Παράμετροι Νησιών  ---
     int subPopulation;      // Ενεργοποίηση/Αριθμός υποπληθυσμών
     int sub_size;           // Μέγεθος κάθε υποπληθυσμού
     int propagationRate;    // Συχνότητα ανταλλαγής πληροφορίας μεταξύ νησιών
     int propagationNumber;  // Πλήθος ατόμων που μεταναστεύουν
-    QString propagationMethod; // Στρατηγική μετανάστευσης 
+    QString propagationMethod; // Στρατηγική μετανάστευσης
     int prop;               // Μετρητής για τον κύκλο διάδοσης (propagation)
     double localsearchRate; // Πιθανότητα εκτέλεσης τοπικής αναζήτησης
     int subPopEnable;       // σημαία ενεργοποίησης δομής νησιών
@@ -77,7 +79,7 @@ public:
     // --- Virtual μέθοδοι (πολυμορφισμός) ---
     virtual void init();                                         // Αρχικοποίηση πληθυσμού και μεταβλητών
     virtual void step();                                         // Εκτέλεση μίας επανάληψης του αλγορίθμου
-    virtual double calculateInertia(int type, int current_iter, int max_iter); // Υπολογισμός δυναμικής αδράνειας
+    virtual double calculateInertia(int type, int current_iter, int max_iter,std::mt19937& gen); // Υπολογισμός δυναμικής αδράνειας
     virtual bool terminated ();                                  // Έλεγχος συνθηκών τερματισμού
     virtual void done();                                         // Ενέργειες μετά την ολοκλήρωση
     virtual void showDebug();                                    // Εκτύπωση πληροφοριών αποσφαλμάτωσης
@@ -89,6 +91,8 @@ public:
     virtual double getBestFitness() const;                       // Επιστρέφει το καλύτερο παγκόσμιο fitness
     virtual std::vector<double> getBestPosition() const;         // Επιστρέφει τη θέση της καλύτερης λύσης
 
+
+    virtual double getLevyStep(double beta,int i); // levy flights για αποφυγη πρόωρης συγκλισης και τοπικών ελάχιστων
     virtual ~OPSO(); // Καταστροφέας της κλάσης
 };
 

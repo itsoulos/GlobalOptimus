@@ -1,3 +1,4 @@
+
 /*Konstantinos Barkas -- Parallel and Optimized Particle Swarm Optimization --- Dept. Informatics and Telecommunications UOI*/
 #include "opso.h"
 #include <omp.h>
@@ -108,13 +109,18 @@ void OPSO::init()
     bestF2xOld.resize(subPopulation, 1e+100);
     bestSamply.resize(subPopulation, std::vector<double>(dimension, 0.0));
 
+    // --- Αρχικοποίηση μηχανισμού στασιμότητας ---
+     stagnation_counter.assign(subPopulation, 0);
+
+
     // Αρχικοποίηση αντικειμένων ελέγχου τερματισμού για κάθε νήμα/νησίδα
     threadDoublebox.resize(subPopulation);
     threadSimilarity.resize(subPopulation);
     for (int k = 0; k < subPopulation; k++) {
         threadDoublebox[k].init();
         threadSimilarity[k].init();
-        threadSimilarity[k].setSimilarityIterations(50); // Ορισμός παραθύρου για το Similarity
+
+        threadSimilarity[k].setSimilarityIterations(25); // Ορισμός παραθύρου για το Similarity
     }
 
     // Προετοιμασία γεννητριών τυχαίων αριθμών για κάθε σωματίδιο (για αποφυγή ανταγωνισμού για πολυνηματικό προγραμματισμό)
@@ -155,7 +161,7 @@ void OPSO::init()
         }
     }
 
-    // Αρχικοποίηση μεταβλητών για τον έλεγχο στασιμότητας 
+    // Αρχικοποίηση μεταβλητών για τον έλεγχο στασιμότητας
     prev_fitness_sum = 0.0;
     S_delta = 0;
 }
@@ -166,6 +172,8 @@ void OPSO::init()
 void OPSO::step()
 {
     int dim = myProblem->getDimension();
+
+    double proodos = (double)iter / (double)max_iterations;
 
     // Υπολογισμός γραμμικής μεταβολής βάρους αδράνειας (inertia weight) από το w_start = 2.95 έως w_end = -0.1 με βάση το paper για OPSO
     double w_start = w;
@@ -186,7 +194,7 @@ void OPSO::step()
 
         double delta_iter = std::fabs(current_fitness_sum - prev_fitness_sum);
         prev_fitness_sum = current_fitness_sum; // Ενημέρωση για την επόμενη επανάληψη
-
+        // or delta_iter == 0
         if (iter > 0 && delta_iter == 0.0) {
             S_delta += 1; // Αύξηση μετρητή αν το σμήνος είναι στάσιμο
         }
@@ -201,6 +209,8 @@ void OPSO::step()
     #pragma omp parallel for num_threads(subPopulation)
     for (int k = 0; k < subPopulation; k++)
     {
+
+
         int start = k * sub_size; // Καθορισμός αρχικού σωματιδίου για τη νησίδα k
         int end = std::min(start + sub_size, nParticles);
 
@@ -238,9 +248,9 @@ void OPSO::step()
             for (int j = 0; j < dim; ++j)
             {
                 double r1, r2;
-                // Παραγωγή τυχαίων τιμών με περιορισμό στο [-2, 2] -- περικομμένη κανονική κατανομή 
+                // Παραγωγή τυχαίων τιμών με περιορισμό στο [-2, 2] -- περικομμένη κανονική κατανομή
                 do { r1 = normal_dist(cell_gen[i]); } while (r1 < -2.0 || r1 > 2.0); // αν η τυχαία τιμή πέσει έξω από το -2 ή το 2 απορρίπτεται
-                do { r2 = normal_dist(cell_gen[i]); } while (r2 < -2.0 || r2 > 2.0); 
+                do { r2 = normal_dist(cell_gen[i]); } while (r2 < -2.0 || r2 > 2.0);
 
                 r1 = std::fabs(r1); // Χρήση απόλυτης τιμής για τους συντελεστές
                 r2 = std::fabs(r2);
@@ -256,7 +266,7 @@ void OPSO::step()
                     if (v[i][j] >  vmax) v[i][j] =  vmax;
                     if (v[i][j] < -vmax) v[i][j] = -vmax;
                 }
-                else if (velocity_mode == "dynamic_vmax") { // Δυναμικό Vmax που μειώνεται με τις επαναλήψεις -- 
+                else if (velocity_mode == "dynamic_vmax") { // Δυναμικό Vmax που μειώνεται με τις επαναλήψεις --
                     double range = ub[j] - lb[j];
                     double proodos = (double)iter / (double)max_iterations;
                     double dynamic_v_max = (0.2 * range) * (1.0 - 0.5 * proodos);
@@ -264,8 +274,8 @@ void OPSO::step()
                     if (v[i][j] < -dynamic_v_max) v[i][j] = -dynamic_v_max;
                 }
                 else if (velocity_mode == "ipso_vmax") { // Ο δυναμικά μεταβαλλόμενος τύπος ταχύτητας με βάση το paper ideal PSO
-                    double ipso_w = calculateInertia(this->inertia_type, iter, max_iterations);
-                    const double c1_ipso = 1.0;
+                    double ipso_w = calculateInertia(this->inertia_type, iter, max_iterations, cell_gen[k]);
+                    const double c1_ipso = 2.0;    // 1.49618;
                     const double c2_ipso = 1.0;
                     v[i][j] = ipso_w * v[i][j] +
                               r1 * c1_ipso * (pbest[i][j] - x[i][j]) +
@@ -273,6 +283,68 @@ void OPSO::step()
                 }
 
                 x[i][j] += v[i][j]; // Ενημέρωση θέσης
+
+
+                /*
+
+                // ---  LÉVY FLIGHT ---
+                    // Εφαρμόζουμε το άλμα σε ένα ποσοστό (π.χ. 10%) των σωματιδίων
+                    // Χρησιμοποιούμε τη γεννήτρια i για να είναι ασφαλής με τα νήματα (κάθε thread έχει τη δική του)
+                    std::uniform_real_distribution<double> dist_chance(0.0, 1.0);
+
+                    // 1. Καθορισμός δυναμικού scaling
+                    // Ξεκινάμε με ένα μικρό scale (0.0001)
+                    double base_scaling = 0.0001;
+
+                    // 2. Ενεργοποίηση με μικρότερο ποσοστό στο πρώτο μισό της εκπαίδευσης
+                    if (proodos < 0.50) {
+
+                        base_scaling = 0.005; // Μικρότερο και πιο ασφαλές 
+                       double L = getLevyStep(1.5, i); // Κλήση της συνάρτησης με το index i
+                       double range = ub[j] - lb[j];
+
+                        x[i][j] += L * base_scaling * range; 
+                    }                   
+
+                    if (proodos < 0.85 && dist_chance(cell_gen[i]) < 0.10) {
+                        double L = getLevyStep(1.5, i); // Κλήση της συνάρτησης με το index i
+                        double range = ub[j] - lb[j];
+
+                        // Το 0.01 είναι το scale factor. Αν το δεις πολύ νευρικό, μείωσέ το στο 0.005.
+                        x[i][j] += L * base_scaling * range;
+                    }
+
+                    */
+
+                    // --- Leavy flight και guassian θόρυβος που ακολουθεί την κανονική κατανομή ---
+                    double progress = (double)iter / (double)max_iterations;
+
+                    // 1. Υπολογισμός πιθανότητας (prob) και έντασης (intensity)
+                    // Όσο προχωράμε, η πιθανότητα και η ένταση μειώνονται (Fine-tuning στο τέλος)
+                    double prob = 0.10 * (1.0 - progress);
+                    double intensity = 0.0001 * std::exp(-5.0 * progress);
+
+                    std::uniform_real_distribution<double> dist_chance(0.0, 1.0);
+
+                    if (dist_chance(cell_gen[i]) < prob) {
+                        double range = ub[j] - lb[j];
+
+                        // Στο πρώτο μισό χρησιμοποιούμε Lévy για μεγάλα άλματα (εξερεύνηση)
+                        if (progress < 0.5) {
+                            double L = getLevyStep(1.5, i);
+                            x[i][j] += L * intensity * range;
+                        }
+                        // Στο δεύτερο μισό χρησιμοποιούμε Gaussian θόρυβο για μικρές διορθώσεις (εκμετάλλευση)
+                        else {
+                            std::normal_distribution<double> norm(0.0, 1.0);
+                            x[i][j] += norm(cell_gen[i]) * intensity * range;
+                        }
+
+                        // επανεκκίνηση ταχύτητας για να "ξεκολλήσει" το σωματίδιο από την προηγούμενη πορεία
+                        v[i][j] = 0.0;
+                    }
+
+
 
                 // Επιβολή ορίων χώρου για την αποφυγή εξόδου εκτός ορίων
                 if (x[i][j] < lb[j]) {
@@ -291,7 +363,7 @@ void OPSO::step()
         updateLeadersForSubpop(k);
     }
 
-    // Διαχείριση μετανάστευσης (Propagation) εάν ενεργοποιηθεί 
+    // Διαχείριση μετανάστευσης (Propagation) εάν ενεργοποιηθεί
     if (prop && subPopulation > 1 && (iter % propagationRate == 0)) {
         propagate(); // Κλήση μηχανισμού μετανάστευσης
         for (int k = 0; k < subPopulation; k++) {
@@ -299,8 +371,31 @@ void OPSO::step()
         }
     }
 
-    // Εφαρμογή Τοπικής Αναζήτησης στον παγκόσμιο ηγέτη (bestx) βάσει στατιστικής πιθανότητας με τη βοήθεια της rand 
-    double r = (double)std::rand() / (double)RAND_MAX;
+    // Εφαρμογή Τοπικής Αναζήτησης στον παγκόσμιο ηγέτη (bestx) βάσει στατιστικής πιθανότητας με τη βοήθεια της rand
+    //  double r = (double)std::rand() / (double)RAND_MAX;
+    // για νήματα δεν πρέπει να χρησιμοποιούμε rand
+
+    // --- ΕΝΑΡΞΗ ΑΛΛΑΓΗΣ: Δυναμικό Local Search Rate ---
+    // double progress = (double)iter / (double)max_iterations;
+
+    // 1. Υπολογισμός δυναμικού rate (μειώνεται όσο πλησιάζουμε στο τέλος)
+   //  double adaptive_rate = localsearchRate * (1.0 - progress);
+
+    // 2. Ενίσχυση αν το σμήνος είναι στάσιμο (S_delta είναι ο μετρητής σου)
+    // Αν το S_delta είναι υψηλό, σημαίνει ότι δεν έχουμε βελτίωση, οπότε δίνουμε ώθηση
+    //if (S_delta > 10) {
+   // adaptive_rate = std::max(0.1, adaptive_rate);
+    //}
+
+    // 3. Κατώφλι για να μην μηδενίζει ποτέ εντελώς η πιθανότητα (fine-tuning)
+    //adaptive_rate = std::max(0.01, adaptive_rate);
+    // r < adaptive_rate
+
+    // r < localsearchRate
+
+
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    double r = dist(cell_gen[0]);
     if (r < localsearchRate) {
         #pragma omp critical(gbest_update)
         {
@@ -311,7 +406,7 @@ void OPSO::step()
         }
     }
 
-    iter++; // Αύξηση μετρητή επαναλήψεων 
+    iter++; // Αύξηση μετρητή επαναλήψεων
 }
 
 // Εύρεση του καλύτερου σωματιδίου (τοπικού ηγέτη) μέσα σε συγκεκριμένη νησίδα k
@@ -331,28 +426,74 @@ void OPSO::updateLeadersForSubpop(int k)
         }
     }
 
-    bestF2x[k] = min_fit; // Αποθήκευση βέλτιστου fitness νησίδας
-    bestSamply[k] = x[best_idx]; // Αποθήκευση θέσης του βέλτιστου σωματιδίου
+        // χρησιμοποιούμε τη γεννήτρια νησίδας
+        std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+
+          double prob = dist(cell_gen[k]);
+
+          double progress = (double)iter / (double)max_iterations;
+
+          /*
+           double wave = 0.15 * std::sin(progress * 4.0 * M_PI);
+
+           double current_prob = 0.80 * (1.0 - (progress*progress))+ wave; // Ξεκινάει με 100%, καταλήγει στο 0%
+
+           // double current_prob = 0.40 * std::exp(-3.0*progress);
+
+           if (min_fit < bestF2x[k] || prob < current_prob) {
+            bestF2x[k] = min_fit;
+            bestSamply[k] = x[best_idx];
+            }
+
+           */
+
+               // 1. Υπολογισμός διαφοράς σφάλματος
+              double delta = min_fit - bestF2x[k];
+
+              // 2. Θερμοκρασία 
+              double T = 1.0 - progress;
+              if (T < 0.0001) T = 0.0001;
+
+              //  Δυναμικό Scaling (Αυτόματη προσαρμογή)
+              // Αντί για σταθερό 0.05, χρησιμοποιούμε το τρέχον καλύτερο fitness
+              // για να κανονικοποιήσουμε το delta αυτόματα.
+              static double avg_delta = 0.01; // Αρχική τιμή, θα προσαρμοστεί μόνο του
+              if (delta > 0) avg_delta = 0.9 * avg_delta + 0.1 * delta; // μέσος
+
+
+              double p = (delta < 0) ? 1.0 : std::exp(-delta / (T * avg_delta + 1e-9));              // 4. Απόφαση
+
+              if (delta < 0 || prob < p) {
+                  bestF2x[k] = min_fit;
+                  bestSamply[k] = x[best_idx];
+
+              }
+
 }
 
-// Επιλογή και δρομολόγηση της στρατηγικής μετανάστευσης (Propagete)
+
+// Εκτέλεση και δρομολόγηση της στρατηγικής μετανάστευσης (Propagete)
 void OPSO::propagate()
 {
-    // Υλοποίηση διαφόρων στρατηγικών μετανάστευσης (1 προς 1, 1 προς πολλά, πολλά προς ένα, πολλά προς πολλά)
+    // Χρήση της γεννήτριας 0 για τις καθολικές αποφάσεις του αλγορίθμου
+    std::uniform_int_distribution<int> dist(0, subPopulation - 1);
+
+    // Υλοποίηση διαφόρων στρατηγικών μετανάστευσης
     if (propagationMethod == "1to1") {
-        int sender = rand() % subPopulation;
+        int sender = dist(cell_gen[0]);
         int receiver;
-        do { receiver = rand() % subPopulation; } while (receiver == sender);
+        do { receiver = dist(cell_gen[0]); } while (receiver == sender);
         propagateBetween(sender, receiver);
     }
     else if (propagationMethod == "1toN") {
-        int sender = rand() % subPopulation;
+        int sender = dist(cell_gen[0]);
         for (int receiver = 0; receiver < subPopulation; ++receiver) {
             if (receiver != sender) propagateBetween(sender, receiver);
         }
     }
     else if (propagationMethod == "Nto1") {
-        int receiver = rand() % subPopulation;
+        int receiver = dist(cell_gen[0]);
         for (int sender = 0; sender < subPopulation; ++sender) {
             if (sender != receiver) propagateBetween(sender, receiver);
         }
@@ -404,10 +545,11 @@ void OPSO::propagateBetween(int sender, int receiver)
 }
 
 // Υπολογισμός δυναμικής αδράνειας βάσει επιλεγμένου τύπου αδράνειας από το script (inertia_type)
-double OPSO::calculateInertia(int type, int current_iter, int max_iter) {
+double OPSO::calculateInertia(int type, int current_iter, int max_iter,std::mt19937& gen) {
     double g = (double)current_iter / (double)max_iter;
     double w = 0.7;
-    double R = (double)std::rand() / (double)RAND_MAX;
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+     double R = dist(gen); // Χρησιμοποιούμε τη γεννήτρια
 
     switch (type) {
         case 0:  w = 0.9 - g * (0.9 - 0.4); break;
@@ -442,6 +584,20 @@ double OPSO::calculateInertia(int type, int current_iter, int max_iter) {
     return w;
 }
 
+// Βοηθητική συνάρτηση για τον υπολογισμό του Lévy step
+double OPSO::getLevyStep(double beta, int i) {
+    std::normal_distribution<double> norm(0.0, 1.0);
+    double u = norm(cell_gen[i]); // Χρήση του i για αποφυγή σύγκρουσης
+    double v = norm(cell_gen[i]);
+
+    double numerator = std::tgamma(1.0 + beta) * std::sin(M_PI * beta / 2.0);
+    double denominator = std::tgamma((1.0 + beta) / 2.0) * beta * std::pow(2.0, (beta - 1.0) / 2.0);
+    double sigma_u = std::pow(numerator / denominator, 1.0 / beta);
+
+    double step = u / std::pow(std::fabs(v), 1.0 / beta);
+    return sigma_u * step;
+}
+
 // Setters και Getters
 void OPSO::setFitness(int index, double f) { if(index >= 0 && index < nParticles) fitness[index] = f; }
 double OPSO::getFitness(int index) const { return fitness[index]; }
@@ -467,18 +623,24 @@ bool OPSO::terminated()
 // Έλεγχος σύγκλισης για μεμονωμένη νησίδα βάσει της επιλεγμένης μεθόδου τερματισμού
 bool OPSO::checkSubCluster(int subCluster)
 {
-    const int miniters = 20; // Ελάχιστες επαναλήψεις πριν τον έλεγχο τερματισμού
+    const int miniters = 50; // Ελάχιστες επαναλήψεις πριν τον έλεγχο τερματισμού
     if (iter < miniters) return false;
 
     double diff = std::fabs(bestF2xOld.at(subCluster) - bestF2x.at(subCluster)); // Διαφορά καλύτερου fitness
 
-    // Τερματισμός μέσω similarity (αν το fitness δεν αλλάζει σημαντικά)
+
+
+     //   printf("DEBUG: Sub=%d, Iter=%d, Best=%e, OldBest=%e, Diff=%e\n",
+    //                   subCluster, iter, bestF2x.at(subCluster), bestF2xOld.at(subCluster), diff);
+
+
+    // Τερματισμός μέσω similarity
     if (termination.compare("Similarity", Qt::CaseInsensitive) == 0 && threadSimilarity[subCluster].terminate(diff))
-    {
-        methodLogger->printMessage(QString(">>> Νησί %1 τερματίσε με SIMILARITY στο iter=%2 με diff=%3")
-                                   .arg(subCluster).arg(iter).arg(diff));
-        return true;
-    }
+        {
+            methodLogger->printMessage(QString(">>> Νησί %1 τερματίσε με SIMILARITY στο iter=%2 με diff=%3")
+                                       .arg(subCluster).arg(iter).arg(diff));
+            return true;
+        }
 
     // Τερματισμός μέσω DoubleBox
     if (termination.compare("DoubleBox", Qt::CaseInsensitive) == 0 && threadDoublebox[subCluster].terminate(diff))
@@ -510,7 +672,7 @@ void OPSO::showDebug()
         QString::asprintf("Iter=%4d BEST VALUE=%10.4lf", iter, besty));
 }
 
-// Destructor: Καθαρισμός μνήμης όλων των διανυσμάτων 
+// Destructor: Καθαρισμός μνήμης όλων των διανυσμάτων
 OPSO::~OPSO()
 {
     x.clear();

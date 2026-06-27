@@ -120,7 +120,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     GE/cprogram.h \
-    METHOD/PEAO.h \
+    METHODS/PEAO.h \
     METHODS/pdoublegenetic.h \
     METHODS/BGWO.h \
     METHODS/opso.h \
