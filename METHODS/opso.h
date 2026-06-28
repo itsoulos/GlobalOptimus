@@ -91,7 +91,8 @@ public:
     virtual double getBestFitness() const;                       // Επιστρέφει το καλύτερο παγκόσμιο fitness
     virtual std::vector<double> getBestPosition() const;         // Επιστρέφει τη θέση της καλύτερης λύσης
 
-
+    void    localCrossover(int thread,int pos);
+    void    localMutate(int pos);
     virtual double getLevyStep(double beta,int i); // levy flights για αποφυγη πρόωρης συγκλισης και τοπικών ελάχιστων
     virtual ~OPSO(); // Καταστροφέας της κλάσης
 };

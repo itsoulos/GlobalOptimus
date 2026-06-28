@@ -166,6 +166,74 @@ void OPSO::init()
     S_delta = 0;
 }
 
+void    OPSO::localMutate(int pos)
+{
+    int s = myProblem->getDimension();
+    for(int i=0;i<s;i++)
+    {
+        double gold = x[pos][i];
+        double delta = 0.05 * rand()*1.0/RAND_MAX*gold;
+        double direction = rand() % 2==1?1.0:-1.0;
+        double gnew = gold+direction * delta;
+        x[pos][i]=gnew;
+        if(!myProblem->isPointIn(x[pos]))
+        {
+            x[pos][i]=gold;
+            continue;
+        }
+        double f = myProblem->funmin(x[pos]);
+        if(f<fitness[pos])
+        {
+            fitness[pos]=f;
+            printf("NEW BEST[%d]=%lf \n",pos,f);
+        }
+        else
+        {
+            x[pos][i]=gold;
+        }
+    }
+}
+void    OPSO::localCrossover(int thread,int pos)
+{
+    Data g;
+    g.resize(myProblem->getDimension());
+    for(int iters=1;iters<=sub_size/5;iters++)
+    {
+        int gpos=thread*sub_size+rand() % sub_size;
+        int cutpoint=rand() % x[0].size();
+        for(int j=0;j<(int)g.size();j++) g[j]=pbest[pos][j];
+        double alpha = rand() *1.0/RAND_MAX;
+        alpha = -0.5 + 2.0 * alpha;//[-0.5,1.5]
+        g[cutpoint]=alpha * pbest[pos][cutpoint]+
+                      (1.0-alpha)*pbest[gpos][cutpoint];
+        if(!myProblem->isPointIn(g)) continue;
+        double f=myProblem->statFunmin(g);
+
+        if(fabs(f)<fabs(pbest_fitness[pos]))
+        {
+            pbest[pos][cutpoint]=g[cutpoint];
+  //           printf("new FITNESS[%d]=%lf=>%lf \n",pos,fitness[pos],f);
+            pbest_fitness[pos]=f;
+
+        }
+        else
+        {
+            g[cutpoint]=alpha * pbest[gpos][cutpoint]+
+                          (1.0-alpha)*pbest[pos][cutpoint];
+            if(!myProblem->isPointIn(g)) continue;
+            double f=myProblem->statFunmin(g);
+            if(fabs(f)<fabs(pbest_fitness[pos]))
+            {
+
+                pbest[pos][cutpoint]=g[cutpoint];
+                pbest_fitness[pos]=f;
+//                printf("new FITNESS[%d]=%lf=>%lf \n",pos,fitness[pos],f);
+
+            }
+        }
+    }
+}
+
 /*
  * step: Κύριος βρόχος του αλγορίθμου.
  */
@@ -178,7 +246,8 @@ void OPSO::step()
     // Υπολογισμός γραμμικής μεταβολής βάρους αδράνειας (inertia weight) από το w_start = 2.95 έως w_end = -0.1 με βάση το paper για OPSO
     double w_start = w;
     double w_end   = -0.1;
-    double current_w = w_start - (((w_start - w_end) * (double)iter) / (double)max_iterations); // εξίσωση 2 paper για OPSO
+    double current_w =0.5 + (rand()*1.0/RAND_MAX)/2.0;
+        //w_start - (((w_start - w_end) * (double)iter) / (double)max_iterations); // εξίσωση 2 paper για OPSO
 
     // Έλεγχος στασιμότητας σμήνους για τον μηχανισμό ταχύτητας iPSO (υπολογίζεται σειριακά)
     if (velocity_mode == "ipso_vmax" && this->inertia_type == 14)
@@ -214,6 +283,17 @@ void OPSO::step()
         int start = k * sub_size; // Καθορισμός αρχικού σωματιδίου για τη νησίδα k
         int end = std::min(start + sub_size, nParticles);
 
+        if(iter%10==0)
+        {
+               //random cross items
+            for(int i=0;i<sub_size/10;i++)
+            {
+                int rand_pos = start+rand() % sub_size;
+                localCrossover(k,rand_pos);
+            }
+
+
+        }
         // Αξιολόγηση fitness και ενημέρωση προσωπικού καλύτερου / παγκόσμιου καλύτερου
         for (int i = start; i < end; i++)
         {
