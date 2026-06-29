@@ -289,7 +289,7 @@ void OPSO::step()
             for(int i=0;i<sub_size/10;i++)
             {
                 int rand_pos = start+rand() % sub_size;
-                localMutate(rand_pos);
+                localCrossover(k,rand_pos);
             }
 
 
