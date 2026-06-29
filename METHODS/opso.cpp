@@ -171,25 +171,25 @@ void    OPSO::localMutate(int pos)
     int s = myProblem->getDimension();
     for(int i=0;i<s;i++)
     {
-        double gold = x[pos][i];
+        double gold = pbest[pos][i];
         double delta = 0.05 * rand()*1.0/RAND_MAX*gold;
         double direction = rand() % 2==1?1.0:-1.0;
         double gnew = gold+direction * delta;
-        x[pos][i]=gnew;
-        if(!myProblem->isPointIn(x[pos]))
+        pbest[pos][i]=gnew;
+        if(!myProblem->isPointIn(pbest[pos]))
         {
             x[pos][i]=gold;
             continue;
         }
-        double f = myProblem->funmin(x[pos]);
-        if(f<fitness[pos])
+        double f = myProblem->funmin(pbest[pos]);
+        if(f<pbest_fitness[pos])
         {
-            fitness[pos]=f;
+            pbest_fitness[pos]=f;
             printf("NEW BEST[%d]=%lf \n",pos,f);
         }
         else
         {
-            x[pos][i]=gold;
+            pbest[pos][i]=gold;
         }
     }
 }
@@ -289,7 +289,7 @@ void OPSO::step()
             for(int i=0;i<sub_size/10;i++)
             {
                 int rand_pos = start+rand() % sub_size;
-                localCrossover(k,rand_pos);
+                localMutate(rand_pos);
             }
 
 
