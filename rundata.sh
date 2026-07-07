@@ -84,7 +84,7 @@ if [ $METHOD = "Bfgs" ]; then
   METHODPARAMS="--bfgs_iters=200"
   elif [ $METHOD = "Opso" ]
   then
-    THREADS=1
+    THREADS=10
     TOTAL_AGENTS=500
     PAGENTS=`expr $TOTAL_AGENTS/$THREADS | bc `
     # opso_particles: number of pso particles

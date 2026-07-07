@@ -29,7 +29,8 @@ private:
     double prev_fitness_sum; // Κρατάει το άθροισμα fitness της προηγούμενης επανάληψης για έλεγχο σύγκλισης
     int S_delta;             // Παγκόσμιος μετρητής στασιμότητας
 
-    std::vector<int> stagnation_counter; // Μετρητής στασιμότητας
+    std::vector<double> avg_delta_per_sub; // Κινητός μέσος όρος διαφοράς fitness ανά νησίδα (ασφάλεια νημάτων)
+
 
     // --- Παράμετροι Νησιών  ---
     int subPopulation;      // Ενεργοποίηση/Αριθμός υποπληθυσμών

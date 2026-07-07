@@ -1,5 +1,13 @@
-
 /*Konstantinos Barkas -- Parallel and Optimized Particle Swarm Optimization --- Dept. Informatics and Telecommunications UOI*/
+/**
+ * Στρατηγική Παραλληλισμού:
+ * - Κάθε νησίδα (Sub-population) αντιστοιχεί σε ένα OpenMP thread.
+ * - Η κατάσταση (state) κάθε νησίδας (π.χ. avg_delta, local bests) αποθηκεύεται
+ * σε διανύσματα μέλη της κλάσης, εξασφαλίζοντας ασφάλεια των νημάτων.
+ * - Η παραγωγή τυχαίων αριθμών γίνεται ανά σωματίδιο (cell_gen),
+ * αποφεύγοντας το lock contention στην κοινή γεννήτρια.
+ */
+
 #include "opso.h"
 #include <omp.h>
 #include <random>
@@ -109,9 +117,9 @@ void OPSO::init()
     bestF2xOld.resize(subPopulation, 1e+100);
     bestSamply.resize(subPopulation, std::vector<double>(dimension, 0.0));
 
-    // --- Αρχικοποίηση μηχανισμού στασιμότητας ---
-     stagnation_counter.assign(subPopulation, 0);
 
+    // Αρχικοποίηση του διανύσματος για κάθε νησίδα
+     avg_delta_per_sub.assign(subPopulation, 0.01);
 
     // Αρχικοποίηση αντικειμένων ελέγχου τερματισμού για κάθε νήμα/νησίδα
     threadDoublebox.resize(subPopulation);
@@ -166,69 +174,121 @@ void OPSO::init()
     S_delta = 0;
 }
 
-void    OPSO::localMutate(int pos)
+void OPSO::localMutate(int pos)
 {
     int s = myProblem->getDimension();
-    for(int i=0;i<s;i++)
+    std::uniform_real_distribution<double> dist_zero_one(0.0, 1.0);
+    std::uniform_int_distribution<int> dist_coin(0, 1);
+
+    // Δημιουργία τοπικού αντιγράφου για να μην αλλοιωθεί το pbest αν αποτύχει το mutation
+    Data mutant = pbest[pos];
+
+    for(int i = 0; i < s; i++)
     {
-        double gold = pbest[pos][i];
-        double delta = 0.05 * rand()*1.0/RAND_MAX*gold;
-        double direction = rand() % 2==1?1.0:-1.0;
-        double gnew = gold+direction * delta;
-        pbest[pos][i]=gnew;
-        if(!myProblem->isPointIn(pbest[pos]))
+        double gold = mutant[i];
+        double delta = 0.05 * dist_zero_one(cell_gen[pos]) * gold;
+        double direction = (dist_coin(cell_gen[pos]) == 1) ? 1.0 : -1.0;
+        double gnew = gold + direction * delta;
+
+        // Έλεγχος ορίων (Bounding Check)
+        if (gnew < lb[i]) gnew = lb[i];
+        if (gnew > ub[i]) gnew = ub[i];
+
+        mutant[i] = gnew;
+
+        if(!myProblem->isPointIn(mutant))
         {
-            x[pos][i]=gold;
+            mutant[i] = gold;
             continue;
         }
-        double f = myProblem->funmin(pbest[pos]);
-        if(f<pbest_fitness[pos])
+
+        double f;
+        #pragma omp critical(statfunmin_eval)
         {
-            pbest_fitness[pos]=f;
-            printf("NEW BEST[%d]=%lf \n",pos,f);
+            f = myProblem->funmin(mutant);
+        }
+
+        if (std::isnan(f) || std::isinf(f)) {
+            mutant[i] = gold;
+            continue;
+        }
+
+        if(f < pbest_fitness[pos])
+        {
+            pbest_fitness[pos] = f;
+            pbest[pos] = mutant;
+            printf("NEW BEST[%d]=%lf \n", pos, f);
         }
         else
         {
-            pbest[pos][i]=gold;
+            mutant[i] = gold; // Επαναφορά αν δεν βελτιώθηκε
         }
     }
 }
-void    OPSO::localCrossover(int thread,int pos)
+void OPSO::localCrossover(int thread, int pos)
 {
-    Data g;
-    g.resize(myProblem->getDimension());
-    for(int iters=1;iters<=sub_size/5;iters++)
+    int dim = myProblem->getDimension();
+    Data g(dim);
+    int start_of_thread = thread * sub_size;
+
+    std::uniform_real_distribution<double> dist_alpha(0.0, 1.0);
+    std::uniform_int_distribution<int> dist_dim(0, dim - 1);
+    std::uniform_int_distribution<int> dist_sub(0, sub_size - 1);
+
+    for(int iters = 1; iters <= sub_size / 5; iters++)
     {
-        int gpos=thread*sub_size+rand() % sub_size;
-        int cutpoint=rand() % x[0].size();
-        for(int j=0;j<(int)g.size();j++) g[j]=pbest[pos][j];
-        double alpha = rand() *1.0/RAND_MAX;
-        alpha = -0.5 + 2.0 * alpha;//[-0.5,1.5]
-        g[cutpoint]=alpha * pbest[pos][cutpoint]+
-                      (1.0-alpha)*pbest[gpos][cutpoint];
+        int gpos = start_of_thread + dist_sub(cell_gen[start_of_thread]);
+        if (pos == gpos) continue;
+
+        int cutpoint = dist_dim(cell_gen[start_of_thread]);
+        double rand_val = dist_alpha(cell_gen[start_of_thread]);
+        double alpha = -0.5 + 2.0 * rand_val; // [-0.5, 1.5]
+
+        // Αντιγραφή ολόκληρης της τρέχουσας pbest για αποφυγή μερικής αλλοίωσης
+        for(int j = 0; j < dim; j++) g[j] = pbest[pos][j];
+
+        g[cutpoint] = alpha * pbest[pos][cutpoint] + (1.0 - alpha) * pbest[gpos][cutpoint];
+
+        // Bound Check
+        if (g[cutpoint] < lb[cutpoint]) g[cutpoint] = lb[cutpoint];
+        if (g[cutpoint] > ub[cutpoint]) g[cutpoint] = ub[cutpoint];
+
         if(!myProblem->isPointIn(g)) continue;
-        double f=myProblem->statFunmin(g);
 
-        if(fabs(f)<fabs(pbest_fitness[pos]))
+        double f;
+        #pragma omp critical(statfunmin_eval)
         {
-            pbest[pos][cutpoint]=g[cutpoint];
-  //           printf("new FITNESS[%d]=%lf=>%lf \n",pos,fitness[pos],f);
-            pbest_fitness[pos]=f;
+            f = myProblem->statFunmin(g);
+        }
 
+        if (std::isnan(f) || std::isinf(f)) continue;
+
+        if(std::fabs(f) < std::fabs(pbest_fitness[pos]))
+        {
+            pbest[pos] = g; // Αντιγραφή ολόκληρου του χρωμοσώματος
+            pbest_fitness[pos] = f;
         }
         else
         {
-            g[cutpoint]=alpha * pbest[gpos][cutpoint]+
-                          (1.0-alpha)*pbest[pos][cutpoint];
+            // Αντίστροφη ανάμειξη
+            g[cutpoint] = alpha * pbest[gpos][cutpoint] + (1.0 - alpha) * pbest[pos][cutpoint];
+
+            if (g[cutpoint] < lb[cutpoint]) g[cutpoint] = lb[cutpoint];
+            if (g[cutpoint] > ub[cutpoint]) g[cutpoint] = ub[cutpoint];
+
             if(!myProblem->isPointIn(g)) continue;
-            double f=myProblem->statFunmin(g);
-            if(fabs(f)<fabs(pbest_fitness[pos]))
+
+            #pragma omp critical(statfunmin_eval)
             {
+                f = myProblem->statFunmin(g);
+            }
 
-                pbest[pos][cutpoint]=g[cutpoint];
-                pbest_fitness[pos]=f;
-//                printf("new FITNESS[%d]=%lf=>%lf \n",pos,fitness[pos],f);
+            if (std::isnan(f) || std::isinf(f)) continue;
 
+            if(std::fabs(f) < std::fabs(pbest_fitness[pos]))
+            {
+                pbest[pos] = g;
+                pbest_fitness[pos] = f;
             }
         }
     }
@@ -244,10 +304,13 @@ void OPSO::step()
     double proodos = (double)iter / (double)max_iterations;
 
     // Υπολογισμός γραμμικής μεταβολής βάρους αδράνειας (inertia weight) από το w_start = 2.95 έως w_end = -0.1 με βάση το paper για OPSO
-    double w_start = w;
-    double w_end   = -0.1;
-    double current_w =0.5 + (rand()*1.0/RAND_MAX)/2.0;
-        //w_start - (((w_start - w_end) * (double)iter) / (double)max_iterations); // εξίσωση 2 paper για OPSO
+   // double w_start = w;
+   // double w_end   = -0.1;
+   // double current_w =0.5 + (rand()*1.0/RAND_MAX)/2.0;
+   //w_start - (((w_start - w_end) * (double)iter) / (double)max_iterations); // εξίσωση 2 paper για OPSO
+
+   std::uniform_real_distribution<double> dist_inertia(0.0, 1.0);
+       double current_w = 0.5 + (dist_inertia(cell_gen[0])) / 2.0;
 
     // Έλεγχος στασιμότητας σμήνους για τον μηχανισμό ταχύτητας iPSO (υπολογίζεται σειριακά)
     if (velocity_mode == "ipso_vmax" && this->inertia_type == 14)
@@ -286,9 +349,10 @@ void OPSO::step()
         if(iter%10==0)
         {
                //random cross items
+            std::uniform_int_distribution<int> dist_cross(0, sub_size - 1);
             for(int i=0;i<sub_size/10;i++)
             {
-                int rand_pos = start+rand() % sub_size;
+                int rand_pos = start + dist_cross(cell_gen[start]);
                 localCrossover(k,rand_pos);
             }
 
@@ -324,43 +388,55 @@ void OPSO::step()
         std::normal_distribution<double> normal_dist(0.0, 1.0);
 
         for (int i = start; i < end; ++i)
+
         {
-            for (int j = 0; j < dim; ++j)
-            {
-                double r1, r2;
-                // Παραγωγή τυχαίων τιμών με περιορισμό στο [-2, 2] -- περικομμένη κανονική κατανομή
-                do { r1 = normal_dist(cell_gen[i]); } while (r1 < -2.0 || r1 > 2.0); // αν η τυχαία τιμή πέσει έξω από το -2 ή το 2 απορρίπτεται
-                do { r2 = normal_dist(cell_gen[i]); } while (r2 < -2.0 || r2 > 2.0);
 
-                r1 = std::fabs(r1); // Χρήση απόλυτης τιμής για τους συντελεστές
-                r2 = std::fabs(r2);
+            // Υπολογισμός του ipso_w ΕΔΩ! (Μια φορά για όλο το σωματίδιο i)
+            double ipso_w = 0.7; // δίνουμε μια default τιμή για να μην έχουμε θέμα
+                if (velocity_mode == "ipso_vmax") {
+                    ipso_w = calculateInertia(this->inertia_type, iter, max_iterations, cell_gen[i]);
+                }
+          for (int j = 0; j < dim; ++j)
+                        {
+                            double r1, r2;
+                            // Παραγωγή τυχαίων τιμών με περιορισμό στο [-2, 2] -- περικομμένη κανονική κατανομή
+                            do { r1 = normal_dist(cell_gen[i]); } while (r1 < -2.0 || r1 > 2.0); // αν η τυχαία τιμή πέσει έξω από το -2 ή το 2 απορρίπτεται
+                            do { r2 = normal_dist(cell_gen[i]); } while (r2 < -2.0 || r2 > 2.0);
 
-                // Υπολογισμός νέας ταχύτητας (με βάση το paper του OPSO -- Εξίσωση 1 προσαρμοσμένη όμως για παραλληλη υλοποίηση)
-                v[i][j] = current_w * v[i][j] +
-                          c1 * r1 * (pbest[i][j] - x[i][j]) +
-                          c2 * r2 * (bestSamply[k][j] - x[i][j]);
+                            r1 = std::fabs(r1); // Χρήση απόλυτης τιμής για τους συντελεστές
+                            r2 = std::fabs(r2);
 
-                // Επιλογή τύπου ταχύτητας ανάλογα με τον επιλεγμένο μηχανισμό  --- 3 τύποι ταχύτητας και επιλογή από το rundata.sh script
-                if (velocity_mode == "standard_vmax") {
-                    double vmax = 13.2;
-                    if (v[i][j] >  vmax) v[i][j] =  vmax;
-                    if (v[i][j] < -vmax) v[i][j] = -vmax;
-                }
-                else if (velocity_mode == "dynamic_vmax") { // Δυναμικό Vmax που μειώνεται με τις επαναλήψεις --
-                    double range = ub[j] - lb[j];
-                    double proodos = (double)iter / (double)max_iterations;
-                    double dynamic_v_max = (0.2 * range) * (1.0 - 0.5 * proodos);
-                    if (v[i][j] >  dynamic_v_max) v[i][j] =  dynamic_v_max;
-                    if (v[i][j] < -dynamic_v_max) v[i][j] = -dynamic_v_max;
-                }
-                else if (velocity_mode == "ipso_vmax") { // Ο δυναμικά μεταβαλλόμενος τύπος ταχύτητας με βάση το paper ideal PSO
-                    double ipso_w = calculateInertia(this->inertia_type, iter, max_iterations, cell_gen[k]);
-                    const double c1_ipso = 2.0;    // 1.49618;
-                    const double c2_ipso = 1.0;
-                    v[i][j] = ipso_w * v[i][j] +
-                              r1 * c1_ipso * (pbest[i][j] - x[i][j]) +
-                              r2 * c2_ipso * (bestSamply[k][j] - x[i][j]);
-                }
+                            //  Ο υπολογισμός γίνεται ΜΟΝΟ για standard και dynamic modes ---
+                            if (velocity_mode == "standard_vmax" || velocity_mode == "dynamic_vmax")
+                            {
+                                // Υπολογισμός  ταχύτητας (με βάση το paper του OPSO -- Εξίσωση 1 προσαρμοσμένη όμως για παραλληλη υλοποίηση)
+                                v[i][j] = current_w * v[i][j] +
+                                          c1 * r1 * (pbest[i][j] - x[i][j]) +
+                                          c2 * r2 * (bestSamply[k][j] - x[i][j]);
+
+                                // Επιλογή τύπου ταχύτητας ανάλογα με τον επιλεγμένο μηχανισμό  --- 3 τύποι ταχύτητας και επιλογή από το rundata.sh script
+                                if (velocity_mode == "standard_vmax") {
+                                    double range = ub[j] - lb[j];
+                                    double vmax = range * 0.50 ; // μέγιστη ταχύτητα στο μισό του εύρους του προβλήματος
+                                    if (v[i][j] >  vmax) v[i][j] =  vmax;
+                                    if (v[i][j] < -vmax) v[i][j] = -vmax;
+                                }
+                                else if (velocity_mode == "dynamic_vmax") { // Δυναμικό Vmax που μειώνεται με τις επαναλήψεις --
+                                    double range = ub[j] - lb[j];
+                                    double proodos = (double)iter / (double)max_iterations;
+                                    double dynamic_v_max = (0.2 * range) * (1.0 - 0.5 * proodos);
+                                    if (v[i][j] >  dynamic_v_max) v[i][j] =  dynamic_v_max;
+                                    if (v[i][j] < -dynamic_v_max) v[i][j] = -dynamic_v_max;
+                                }
+                            }
+                            //  Το ipso vmax υπολογίζεται μόνο του διότι υπολογίζει το ipso_w  ---
+                            else if (velocity_mode == "ipso_vmax") { // Ο δυναμικά μεταβαλλόμενος τύπος ταχύτητας με βάση το paper ideal PSO
+                                const double c1_ipso = 2.0;    // 1.49618;
+                                const double c2_ipso = 1.0;
+                                v[i][j] = ipso_w * v[i][j] +
+                                          r1 * c1_ipso * (pbest[i][j] - x[i][j]) +
+                                          r2 * c2_ipso * (bestSamply[k][j] - x[i][j]);
+                            }
 
                 x[i][j] += v[i][j]; // Ενημέρωση θέσης
 
@@ -379,12 +455,12 @@ void OPSO::step()
                     // 2. Ενεργοποίηση με μικρότερο ποσοστό στο πρώτο μισό της εκπαίδευσης
                     if (proodos < 0.50) {
 
-                        base_scaling = 0.005; // Μικρότερο και πιο ασφαλές 
+                        base_scaling = 0.005; // Μικρότερο και πιο ασφαλές
                        double L = getLevyStep(1.5, i); // Κλήση της συνάρτησης με το index i
                        double range = ub[j] - lb[j];
 
-                        x[i][j] += L * base_scaling * range; 
-                    }                   
+                        x[i][j] += L * base_scaling * range;
+                    }
 
                     if (proodos < 0.85 && dist_chance(cell_gen[i]) < 0.10) {
                         double L = getLevyStep(1.5, i); // Κλήση της συνάρτησης με το index i
@@ -531,18 +607,20 @@ void OPSO::updateLeadersForSubpop(int k)
                // 1. Υπολογισμός διαφοράς σφάλματος
               double delta = min_fit - bestF2x[k];
 
-              // 2. Θερμοκρασία 
+              // 2. Θερμοκρασία
               double T = 1.0 - progress;
               if (T < 0.0001) T = 0.0001;
 
               //  Δυναμικό Scaling (Αυτόματη προσαρμογή)
               // Αντί για σταθερό 0.05, χρησιμοποιούμε το τρέχον καλύτερο fitness
               // για να κανονικοποιήσουμε το delta αυτόματα.
-              static double avg_delta = 0.01; // Αρχική τιμή, θα προσαρμοστεί μόνο του
-              if (delta > 0) avg_delta = 0.9 * avg_delta + 0.1 * delta; // μέσος
 
+               if (delta > 0) {
+                   avg_delta_per_sub[k] = 0.9 * avg_delta_per_sub[k] + 0.1 * delta;
+                  }
 
-              double p = (delta < 0) ? 1.0 : std::exp(-delta / (T * avg_delta + 1e-9));              // 4. Απόφαση
+               // Χρήση της τιμής του συγκεκριμένου νησιού (k)
+               double p = (delta < 0) ? 1.0 : std::exp(-delta / (T * avg_delta_per_sub[k] + 1e-9));
 
               if (delta < 0 || prob < p) {
                   bestF2x[k] = min_fit;
