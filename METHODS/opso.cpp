@@ -110,7 +110,6 @@ void OPSO::init()
     bestSamply.resize(subPopulation, std::vector<double>(dimension, 0.0));
 
     // --- Αρχικοποίηση μηχανισμού στασιμότητας ---
-     stagnation_counter.assign(subPopulation, 0);
 
 
     // Αρχικοποίηση αντικειμένων ελέγχου τερματισμού για κάθε νήμα/νησίδα
