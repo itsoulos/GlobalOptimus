@@ -363,6 +363,7 @@ void OPSO::step()
                               r1 * c1_ipso * (pbest[i][j] - x[i][j]) +
                               r2 * c2_ipso * (bestSamply[k][j] - x[i][j]);
                     double range = ub[j] - lb[j];
+		    range/=16.0;
 		    v[i][j]/=range;
                 }
 
