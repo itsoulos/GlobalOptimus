@@ -43,6 +43,12 @@ OPSO::OPSO()
                             "Propagation strategy: 1to1, 1toN, Nto1, NtoN"));
 
     addParam(Parameter("subPopEnable", "1", "Number of subpopulations required to terminate."));
+
+    QStringList yesno;
+    yesno<<"no"<<"yes";
+    addParam(Parameter("enable_levy",yesno[0],yesno,"Enable or disable Levy flight"));
+
+    addParam(Parameter("enable_crossover",yesno[1],yesno,"Enable or disable local crossover"));
 }
 
 /*
@@ -140,6 +146,7 @@ void OPSO::init()
 
     // Αρχική τυχαία δειγματοληψία του χώρου αναζήτησης
     sampleFromProblem(nParticles, x, fitness);
+
 
     // Αρχικοποίηση προσωπικών καλύτερων θέσεων (pbest) παράλληλα
     #pragma omp parallel for
@@ -282,16 +289,17 @@ void OPSO::step()
         int start = k * sub_size; // Καθορισμός αρχικού σωματιδίου για τη νησίδα k
         int end = std::min(start + sub_size, nParticles);
 
-        if(iter%10==0)
+        if(getParam("enable_crossover").getValue()=="yes")
         {
-               //random cross items
-            for(int i=0;i<sub_size/10;i++)
+            if(iter%10==0)
             {
-                int rand_pos = start+rand() % sub_size;
-                localCrossover(k,rand_pos);
+               //random cross items
+                for(int i=0;i<sub_size/10;i++)
+                {
+                    int rand_pos = start+rand() % sub_size;
+                    localCrossover(k,rand_pos);
+                }
             }
-
-
         }
         // Αξιολόγηση fitness και ενημέρωση προσωπικού καλύτερου / παγκόσμιου καλύτερου
         for (int i = start; i < end; i++)
@@ -363,73 +371,31 @@ void OPSO::step()
                               r1 * c1_ipso * (pbest[i][j] - x[i][j]) +
                               r2 * c2_ipso * (bestSamply[k][j] - x[i][j]);
                     double range = ub[j] - lb[j];
-		    range/=16.0;
-		    v[i][j]/=range;
+                    v[i][j]/=range;
                 }
 
-		double oldxij=x[i][j];
-                x[i][j] += v[i][j]; // Ενημέρωση θέσης
-
-
-                /*
-
-                // ---  LÉVY FLIGHT ---
-                    // Εφαρμόζουμε το άλμα σε ένα ποσοστό (π.χ. 10%) των σωματιδίων
-                    // Χρησιμοποιούμε τη γεννήτρια i για να είναι ασφαλής με τα νήματα (κάθε thread έχει τη δική του)
-                    std::uniform_real_distribution<double> dist_chance(0.0, 1.0);
-
-                    // 1. Καθορισμός δυναμικού scaling
-                    // Ξεκινάμε με ένα μικρό scale (0.0001)
-                    double base_scaling = 0.0001;
-
-                    // 2. Ενεργοποίηση με μικρότερο ποσοστό στο πρώτο μισό της εκπαίδευσης
-                    if (proodos < 0.50) {
-
-                        base_scaling = 0.005; // Μικρότερο και πιο ασφαλές 
-                       double L = getLevyStep(1.5, i); // Κλήση της συνάρτησης με το index i
-                       double range = ub[j] - lb[j];
-
-                        x[i][j] += L * base_scaling * range; 
-                    }                   
-
-                    if (proodos < 0.85 && dist_chance(cell_gen[i]) < 0.10) {
-                        double L = getLevyStep(1.5, i); // Κλήση της συνάρτησης με το index i
-                        double range = ub[j] - lb[j];
-
-                        // Το 0.01 είναι το scale factor. Αν το δεις πολύ νευρικό, μείωσέ το στο 0.005.
-                        x[i][j] += L * base_scaling * range;
-                    }
-
-                    */
-
-                    // --- Leavy flight και guassian θόρυβος που ακολουθεί την κανονική κατανομή ---
+            double oldxij=x[i][j];
+            x[i][j] += v[i][j]; // Ενημέρωση θέσης
+            if(getParam("enable_levy").getValue()=="yes")
+            {
                     double progress = (double)iter / (double)max_iterations;
-
-                    // 1. Υπολογισμός πιθανότητας (prob) και έντασης (intensity)
-                    // Όσο προχωράμε, η πιθανότητα και η ένταση μειώνονται (Fine-tuning στο τέλος)
                     double prob = 0.10 * (1.0 - progress);
                     double intensity = 0.0001 * std::exp(-5.0 * progress);
-
                     std::uniform_real_distribution<double> dist_chance(0.0, 1.0);
-
                     if (dist_chance(cell_gen[i]) < prob) {
                         double range = ub[j] - lb[j];
-
                         // Στο πρώτο μισό χρησιμοποιούμε Lévy για μεγάλα άλματα (εξερεύνηση)
                         if (progress < 0.5) {
                             double L = getLevyStep(1.5, i);
                             x[i][j] += L * intensity * range;
                         }
-                        // Στο δεύτερο μισό χρησιμοποιούμε Gaussian θόρυβο για μικρές διορθώσεις (εκμετάλλευση)
                         else {
                             std::normal_distribution<double> norm(0.0, 1.0);
                             x[i][j] += norm(cell_gen[i]) * intensity * range;
                         }
-
-                        // επανεκκίνηση ταχύτητας για να "ξεκολλήσει" το σωματίδιο από την προηγούμενη πορεία
                         v[i][j] = 0.0;
                     }
-
+            }
 
 
                 // Επιβολή ορίων χώρου για την αποφυγή εξόδου εκτός ορίων
