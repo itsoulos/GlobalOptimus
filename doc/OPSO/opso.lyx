@@ -1,5 +1,5 @@
-#LyX 2.4 created this file. For more info see https://www.lyx.org/
-\lyxformat 620
+#LyX 2.5 created this file. For more info see https://www.lyx.org/
+\lyxformat 643
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -196,11 +196,19 @@ End
 \use_indices false
 \paperorientation portrait
 \suppress_date false
-\justification true
-\use_refstyle 0
+\justification default
+\crossref_package prettyref
 \use_formatted_ref 0
 \use_minted 0
 \use_lineno 0
+\backgroundcolor none
+\fontcolor none
+\notefontcolor lightgray
+\boxbgcolor red
+\table_border_color default
+\table_odd_row_color default
+\table_even_row_color default
+\table_alt_row_colors_start 1
 \index Index
 \shortcut idx
 \color #008000
@@ -226,6 +234,7 @@ End
 \html_be_strict false
 \docbook_table_output 0
 \docbook_mathml_prefix 1
+\docbook_mathml_version 0
 \end_header
 
 \begin_body
@@ -287,24 +296,28 @@ Correspondence:
 \end_layout
 
 \begin_layout Abstract
-A single paragraph of about 200 words maximum.
- For research articles,
- abstracts should give a pertinent overview of the work.
- We strongly encourage authors to use the following style of structured abstracts,
- but without headings:
- (1) Background:
- Place the question addressed in a broad context and highlight the purpose of the study.
- (2) Methods:
- Briefly describe the main methods or treatments applied.
- (3) Results:
- Summarize the article’s main findings.
- (4) Conclusions:
- Indicate the main conclusions or interpretations.
- The abstract should be an objective representation of the article and it must not contain results that are not presented and substantiated in the main text and should not exaggerate the main
-\begin_inset space ~
-\end_inset
-
-conclusions.
+Global optimization techniques are widely used to train and refine classification models,
+ yet many established approaches struggle on error landscapes that are irregular,
+ multimodal,
+ or otherwise ill-suited to gradient-based or single-pass heuristics.
+ This paper introduces OPSO,
+ a parallel,
+ multi-population optimization algorithm for classification tasks,
+ and evaluates it against several established machine-learning models across a broad collection of benchmark datasets drawn from the UCI and KEEL repositories.
+ Multiple configurations of OPSO,
+ varying in the number of parallel threads,
+ were compared to the baseline models using nonparametric statistical testing with post-hoc analysis.
+ Two further experiments examined the sensitivity of OPSO to its internal design choices:
+ the strategy used to propagate promising solutions among sub-populations,
+ and the number of particles per population.
+ The proposed algorithm consistently outperformed the baseline models across the majority of datasets,
+ with its advantage most pronounced on problems exhibiting complex,
+ irregular error surfaces.
+ Population size was found to meaningfully influence performance,
+ with smaller populations yielding noticeably worse results,
+ whereas the choice of propagation strategy had comparatively little overall effect.
+ These findings establish OPSO as a robust and competitive alternative to conventional classifier-training methods,
+ and offer practical guidance for configuring its key parameters.
 \end_layout
 
 \begin_layout Keywords
@@ -341,7 +354,6 @@ The UCI website,
 status open
 
 \begin_layout Plain Layout
-
 https://archive.ics.uci.edu/
 \end_layout
 
@@ -365,7 +377,6 @@ The Keel website,
 status open
 
 \begin_layout Plain Layout
-
 https://sci2s.ugr.es/keel/datasets.php
 \end_layout
 
@@ -964,16 +975,46 @@ Comparison with other methods
 \end_layout
 
 \begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Comparison-with-other"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ reports the per-dataset classification error achieved by four baseline machine-learning models (BFGS,
+ NEAT,
+ RBF,
+ GEN) and by the proposed OPSO algorithm under three thread/population configurations (
+\begin_inset Formula $T=1$
+\end_inset
+
+,
+ 
+\begin_inset Formula $T=2$
+\end_inset
+
+,
+ 
+\begin_inset Formula $T=5$
+\end_inset
+
+),
+ evaluated across 41 benchmark datasets.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement H
 alignment document
 wide false
 sideways false
 status collapsed
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -1072,6 +1113,11 @@ GEN
 
 \size footnotesize
 OPSO
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
 \begin_inset Formula $(T=1)$
 \end_inset
 
@@ -1087,6 +1133,11 @@ OPSO
 
 \size footnotesize
 OPSO
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
 \begin_inset Formula $(T=2)$
 \end_inset
 
@@ -1102,6 +1153,11 @@ OPSO
 
 \size footnotesize
 OPSO
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
 \begin_inset Formula $(T=5)$
 \end_inset
 
@@ -4821,8 +4877,1390 @@ AVERAGE
 
 \end_layout
 
+\begin_layout Standard
+A closer inspection of the per-dataset results reveals that the advantage of OPSO over the baseline models is far from uniform,
+ but instead concentrated in a specific subset of datasets where the baseline learners struggle markedly.
+ On datasets such as SEGMENT,
+ DERMATOLOGY,
+ ALCOHOL,
+ Z_F_S,
+ and ZO_NF_S,
+ the baseline models yield error rates ranging from roughly 0.31 to 0.69,
+ whereas all three OPSO variants converge to substantially lower values,
+ often below 0.20 and in several cases below 0.10.
+ This pattern suggests that OPSO is particularly effective at navigating the more irregular or multimodal error landscapes that appear to defeat gradient-based or single-pass heuristics such as BFGS and NEAT,
+ rather than offering a uniform,
+ dataset-independent improvement.Examining the behavior across the three OPSO configurations (
+\begin_inset Formula $T=1,2,5$
+\end_inset
+
+) shows that increasing the number of threads tends to produce a progressive,
+ though not strictly monotonic,
+ refinement of the solution.
+ Datasets such as WINE,
+ Z_F_S,
+ and ZO_NF_S display a clear,
+ consistent decrease in error from 
+\begin_inset Formula $T=1$
+\end_inset
+
+ to 
+\begin_inset Formula $T=5$
+\end_inset
+
+,
+ indicating that additional parallel search threads continue to yield tangible benefits even after the first configuration has already improved substantially over the baselines.
+ In a smaller number of cases,
+ such as FERT and SEGMENT,
+ the lowest error is instead observed at 
+\begin_inset Formula $T=2$
+\end_inset
+
+ rather than 
+\begin_inset Formula $T=5$
+\end_inset
+
+,
+ pointing to occasional diminishing or slightly non-monotonic returns once the population has already reached a favorable region of the search space.Not every dataset conforms to this favorable pattern,
+ however.
+ On HABERMAN,
+ POPFAILURES,
+ LIVERDISORDER,
+ and TRANSFUSION,
+ the OPSO variants perform on par with or even slightly worse than the best baseline model,
+ with differences generally confined to the second or third decimal place.
+ These are,
+ notably,
+ datasets on which the baseline models themselves already achieve comparatively low and closely clustered error rates,
+ suggesting that once a classification problem is "easy" or nearly linearly separable,
+ the additional search capacity offered by OPSO yields little to no further gain.
+ At the other extreme,
+ datasets such as CLEVELAND,
+ SATIMAGE,
+ ECOLI,
+ and OPTDIGITS remain uniformly difficult for every method tested,
+ with error rates staying above 0.40 regardless of the algorithm used,
+ an indication that the difficulty of these multi-class problems lies in the intrinsic complexity of the data itself rather than in any shortcoming specific to a particular optimization strategy.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename tbl_basic_figure.png
+	lyxscale 30
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean classification error of OPSO (
+\begin_inset Formula $T=1,2,5$
+\end_inset
+
+) versus baseline machine-learning models.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:f1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison of classification error,
+ average ranking,
+ and significance tests (Wilcoxon and paired t-test) for the six machine learning models relative to proposed method as the reference model.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:statClassification"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+
+\size scriptsize
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="11">
+<features borderColor="default" oddRowsColor="default" evenRowsColor="default" tabularvalignment="middle">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Mean
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+SD
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Min
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Max
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Avg
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Rank
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Mean Diff vs
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+OPSO (T5)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Wilcoxon
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Paired
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Significance
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+OPSO
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+T5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Proposed
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+(OPSO)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+20.78
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.53
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.68
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+50.67
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Reference
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+OPSO
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+T2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Proposed
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+(OPSO)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+21.27
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+3.02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+51.97
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.67
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-0.49
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0351
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.1351
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+n.s.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+OPSO
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+T1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Proposed
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+(OPSO)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+23.29
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+14.13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+3.66
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+56.78
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+3.58
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-2.52
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0001
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0002
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+***
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+GEN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Baseline
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+26.32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+16.84
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+4.36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+67.81
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+4.08
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-5.55
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0001
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+***
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+RBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Baseline
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+29.56
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+18.46
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+4.03
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+71.97
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+4.44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-8.78
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0002
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0002
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+***
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+NEAT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Baseline
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+32.61
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+17.56
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+5.44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+76.19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+5.38
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-11.83
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+***
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+BFGS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Baseline
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+33.79
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+19.81
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+5.24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+77.55
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+5.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-13.01
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+***
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Friedman test:
+ chi-squared = 88.36,
+ df = 6,
+ p-value = 0
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Nemenyi critical difference (alpha = 0.05):
+ 1.425
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Reference model for pairwise tests:
+ OPSO_T5 (auto-selected as the best-performing OPSO variant)
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Significance vs.
+ reference (paired t-test):
+ *** p<0.001,
+ ** p<0.01,
+ * p<0.05,
+ n.s.
+ = not significant
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Comparison of OPSO against baseline machine-learning models
+\series default
+ (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:f1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+,
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:statClassification"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+).
+ Across the 40 benchmark datasets,
+ the Friedman test revealed statistically significant differences among the seven models under comparison (
+\begin_inset Formula $χ^{2}$
+\end_inset
+
+ = 88.36,
+ df = 6,
+ p < 0.001),
+ with a Nemenyi critical difference of 1.425.
+ The OPSO variant with 
+\begin_inset Formula $T=5$
+\end_inset
+
+ threads achieved the lowest mean classification error (20.78% ± 13.53) and the best average rank (2.16),
+ closely followed by OPSO (
+\begin_inset Formula $T=2$
+\end_inset
+
+) (21.27% ± 13.18),
+ the difference between the two not reaching statistical significance (paired t-test,
+ p = 0.135).
+ In contrast,
+ OPSO (
+\begin_inset Formula $T=1$
+\end_inset
+
+) (23.29%) and all four baseline models,
+ GEN (26.32%),
+ RBF (29.56%),
+ NEAT (32.61%),
+ and BFGS (33.79%),
+ differed significantly from the best-performing variant (p < 0.001 in every case),
+ providing strong evidence for the superiority of the proposed OPSO algorithm,
+ particularly under the 
+\begin_inset Formula $T=2$
+\end_inset
+
+ and 
+\begin_inset Formula $T=5$
+\end_inset
+
+ configurations,
+ over conventional approaches.
+\end_layout
+
 \begin_layout Subsection
 Experiments with the propagation method
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:prop"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ reports the per-dataset classification error obtained by the proposed OPSO algorithm under four alternative solution-propagation strategies (NtoN,
+ 1to1,
+ 1toN,
+ Nto1),
+ evaluated across the same 41 benchmark datasets.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -6863,8 +8301,97 @@ AVERAGE
 
 \end_layout
 
-\begin_layout Subsection
-Experiments with the number of particles
+\begin_layout Standard
+The most immediately striking behavior in this table is the remarkable consistency of the four propagation strategies on the majority of datasets:
+ for cases such as BALANCE,
+ CIRCULAR,
+ MAMMOGRAPHIC,
+ TRANSFUSION,
+ and PHONEME,
+ the four strategies produce error values that agree to within one or two hundredths,
+ and in some instances within a few thousandths.
+ This tight clustering indicates that,
+ for a large share of the benchmark problems,
+ the specific topology through which good solutions are shared among islands has essentially no bearing on the final outcome,
+ implying that the search process converges to a comparable solution regardless of how information circulates once the population size and number of iterations are held fixed.
+\end_layout
+
+\begin_layout Standard
+A markedly different behavior emerges,
+ however,
+ on a smaller set of more demanding datasets.
+ SATIMAGE shows the widest spread among all strategies (from 0.3717 to a high of 0.5445),
+ and comparable,
+ if less extreme,
+ spreads appear for SEGMENT,
+ WINE,
+ Z_F_S,
+ and ZO_NF_S.
+ On most of these harder cases,
+ the full-connectivity strategy (NtoN) tends to sit at or near the lowest error observed,
+ consistent with the intuition that richer,
+ more thorough mixing of good solutions across islands becomes increasingly valuable as the underlying optimization landscape grows more rugged or deceptive,
+ while restricted propagation schemes may leave promising regions of the search space insufficiently exploited.
+\end_layout
+
+\begin_layout Standard
+At the same time,
+ no single propagation strategy dominates uniformly across the remaining,
+ moderately difficult datasets:
+ Nto1 achieves the lowest error on AUSTRALIAN,
+ PHONEME,
+ and STATHEART,
+ 1to1 is best on HOUSEVOTES,
+ and 1toN performs best on PARKINSONS and HEART,
+ with the margins separating the four strategies in each of these cases remaining small.
+ This idiosyncratic distribution of "wins" across strategies,
+ rather than a consistent ranking,
+ suggests that for datasets of intermediate difficulty the choice of propagation topology interacts with dataset-specific characteristics in ways that are not easily predictable from the properties of the strategy alone,
+ reinforcing the impression that propagation topology becomes a decisive factor mainly at the extremes of problem difficulty rather than across the board.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename tbl_prop_figure.png
+	lyxscale 30
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean classification error of OPSO under four solution-propagation strategies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:f2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6874,6 +8401,790 @@ alignment document
 wide false
 sideways false
 status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison of the four propagation strategies relative to NtoN.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:statProp"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="10">
+<features borderColor="default" oddRowsColor="default" evenRowsColor="default" tabularvalignment="middle">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Propagation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Mean
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+SD
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Min
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Max
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Avg
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Rank
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Mean Diff vs
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+NtoN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Wilcoxon
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Paired
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Significance
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+NtoN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+21.21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.68
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+50.67
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Reference
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+1toN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+21.52
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.65
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+53.19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.51
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-0.31
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.1781
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.1931
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+n.s.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+1to1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+21.75
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.51
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+3.22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+52.18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.73
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-0.54
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0241
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0411
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+*
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Nto1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+21.76
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.96
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+3.56
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+54.45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.62
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-0.55
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0874
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0571
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+n.s.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Friedman test:
+ chi-squared = 4.589,
+ df = 3,
+ p-value = 0.2045
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Nemenyi critical difference (alpha = 0.05):
+ 0.751
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Reference strategy for pairwise tests:
+ NtoN (full propagation)
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Significance vs.
+ NtoN (paired t-test):
+ *** p<0.001,
+ ** p<0.01,
+ * p<0.05,
+ n.s.
+ = not significant
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Effect of solution-propagation strategy
+\series default
+ (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:f2"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+,
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:statProp"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+).
+ Unlike the two preceding comparisons,
+ the Friedman test did not detect a statistically significant overall difference among the four propagation strategies (
+\begin_inset Formula $χ^{2}$
+\end_inset
+
+ = 4.589,
+ df = 3,
+ p = 0.205,
+ n = 39,
+ with the summary average row excluded).
+ The full-propagation strategy (NtoN) attained the marginally lowest mean error (21.21% ± 13.42) and the best average rank (2.14),
+ neither 1toN (21.52%,
+ p = 0.193) nor Nto1 (21.76%,
+ p = 0.057) differed significantly from it,
+ while 1to1 (21.75%) showed only a nominally significant difference (p = 0.041) that does not survive correction for multiple comparisons.
+ Taken together,
+ these results indicate that the topology of solution propagation exerts a comparatively limited influence on OPSO's performance relative to factors such as algorithmic variant or population size,
+ which were examined in the preceding analyses.
+\end_layout
+
+\begin_layout Subsection
+Experiments with the number of particles
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:particles"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ reports the per-dataset classification error obtained by the proposed OPSO algorithm under four different population sizes (
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+,
+ 500,
+ 1000,
+ 2000),
+ evaluated across the same 41 benchmark datasets.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -8924,8 +11235,1011 @@ AVERAGE
 
 \end_layout
 
+\begin_layout Standard
+For a substantial portion of the datasets,
+ increasing the population size from 
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+ to 
+\begin_inset Formula $N_{c}=2000$
+\end_inset
+
+ produces a visible,
+ and in several cases fairly consistent,
+ downward trend in error.
+ HEART (from 0.2114 to 0.1778),
+ STATHEART (from 0.2396 to 0.1941),
+ HEARTATTACK (from 0.2163 to 0.1933),
+ and WDBC (from 0.0561 to 0.0443) all display this steady improvement,
+ indicating that a larger population provides these problems with a genuinely richer sampling of the search space that translates into more accurate final solutions rather than merely additional computational overhead.
+\end_layout
+
+\begin_layout Standard
+A second,
+ equally prominent behavior is the near-total insensitivity of certain datasets to population size.
+ On MAMMOGRAPHIC,
+ TRANSFUSION,
+ HABERMAN,
+ SAHEART,
+ CLEVELAND,
+ BALANCE,
+ and CIRCULAR,
+ the error stays within a narrow band of no more than roughly one hundredth across all four population sizes,
+ suggesting that for these particular problems the search already converges to essentially the same solution with as few as 200 individuals,
+ and that the additional computational cost associated with larger populations offers no discernible practical benefit for this class of dataset.
+\end_layout
+
+\begin_layout Standard
+Finally,
+ a smaller subset of datasets displays behavior that runs counter to the general trend,
+ either through pronounced instability or through outright deterioration with a larger population.
+ SATIMAGE stands out with the widest fluctuation observed anywhere in the table (ranging non-monotonically from 0.5817 down to 0.3717),
+ while FERT (rising from 0.243 to 0.276 before partially recovering) and HAYES ROTH (lowest at 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+,
+ then rising steadily to 0.3769 at 
+\begin_inset Formula $N_{c}=2000$
+\end_inset
+
+) actually perform worse,
+ on balance,
+ with a larger population.
+ This behavior indicates that the relationship between population size and solution quality is not universally monotonic,
+ and that for certain datasets,
+ likely those with noisier or more deceptive fitness landscapes,
+ an overly large population may dilute selective pressure or slow convergence within a fixed number of iterations,
+ underscoring that population size should ideally be tuned per problem rather than fixed at a single "optimal" value for all datasets.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename tbl_part_figure.png
+	lyxscale 30
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean classification error of OPSO under four population sizes.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:f3"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison of the four population sizes relative to 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+ = 2000.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:statPart"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="10">
+<features borderColor="default" oddRowsColor="default" evenRowsColor="default" tabularvalignment="middle">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $N_{c}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Mean
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+SD
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Min
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Max
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Avg
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Rank
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Mean Diff vs
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+\begin_inset Formula $N_{c}$
+\end_inset
+
+= 2000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Wilcoxon
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Paired
+\end_layout
+
+\begin_layout Plain Layout
+
+\size scriptsize
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Significance
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+19.86
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.09
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.96
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+50.76
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.08
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+Reference
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+1000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+20.51
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.63
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.86
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+52.88
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.48
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-0.65
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.1428
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.1401
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+n.s.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+500
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+20.78
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.53
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.68
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+50.67
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-0.91
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0087
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0132
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+*
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+200
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+21.45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+13.86
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+3.16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+58.17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+2.95
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+-1.59
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0005
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+0.0089
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size scriptsize
+**
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Friedman test:
+ chi-squared = 9.28,
+ df = 3,
+ p-value = 0.0258
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Nemenyi critical difference (alpha = 0.05):
+ 0.742
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Reference model for pairwise tests:
+ 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+=2000 (auto-selected as the best-performing population size)
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\size scriptsize
+Significance vs.
+ reference (paired t-test):
+ *** p<0.001,
+ ** p<0.01,
+ * p<0.05,
+ n.s.
+ = not significant
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Effect of population size on OPSO performance
+\series default
+ (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:f3"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+,
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:statPart"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+).
+ The Friedman test indicated an overall statistically significant effect of population size on algorithmic performance (
+\begin_inset Formula $χ^{2}$
+\end_inset
+
+ = 9.28,
+ df = 3,
+ p = 0.026,
+ n = 40),
+ with a Nemenyi critical difference of 0.742.
+ A population size of 
+\begin_inset Formula $N_{c}=2000$
+\end_inset
+
+ yielded the lowest mean error (19.86% ± 13.09) and the best average rank (2.08),
+ while 
+\begin_inset Formula $N_{c}=1000$
+\end_inset
+
+ did not differ significantly from this reference (20.51%,
+ p = 0.140).
+ Smaller populations,
+ however,
+ performed significantly worse:
+ 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+ (20.78%,
+ p = 0.013) and,
+ more markedly,
+ 
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+ (21.45%,
+ p = 0.009).
+ The complete,
+ Holm-corrected pairwise comparisons confirmed that this effect is driven primarily by the smallest population size (
+\begin_inset Formula $N_{c}=200$
+\end_inset
+
+ vs.
+ 
+\begin_inset Formula $N_{c}=1000$
+\end_inset
+
+:
+ p = 0.011,
+ vs.
+ 
+\begin_inset Formula $N_{c}=2000$
+\end_inset
+
+:
+ p = 0.045),
+ whereas the differences among 
+\begin_inset Formula $N_{c}=500$
+\end_inset
+
+,
+ 
+\begin_inset Formula $N_{c}=1000$
+\end_inset
+
+,
+ and 
+\begin_inset Formula $N_{c}=2000$
+\end_inset
+
+ did not remain significant after correction,
+ suggesting diminishing returns beyond a population size of approximately 500-1000 individuals.
+\end_layout
+
 \begin_layout Section
 Conclusions
+\end_layout
+
+\begin_layout Standard
+This paper introduced OPSO,
+ a parallel,
+ multi-population optimization algorithm for classification tasks,
+ and evaluated it systematically against four established machine-learning models across 41 benchmark datasets drawn from the UCI and KEEL repositories.
+ Across three thread/population configurations,
+ OPSO consistently and significantly outperformed all four baseline models,
+ with the 
+\begin_inset Formula $T=5$
+\end_inset
+
+ configuration achieving the lowest overall mean error and the 
+\begin_inset Formula $T=2$
+\end_inset
+
+ configuration performing statistically indistinguishably from it.
+ Importantly,
+ this advantage was not uniform across datasets:
+ it was most pronounced on problems exhibiting irregular or multimodal error surfaces,
+ precisely the class of problems where gradient-based or single-pass heuristics are known to struggle,
+ while on datasets that were already comparatively easy for the baseline models,
+ OPSO offered little to no additional benefit.
+ This pattern suggests that the proposed method's principal strength lies not in universally improving classification accuracy,
+ but in providing a more capable search mechanism specifically for the harder,
+ more deceptive regions of the problem space.
+\end_layout
+
+\begin_layout Standard
+The two supplementary experiments clarified which internal design choices of OPSO meaningfully affect its performance and which do not.
+ Increasing the population size produced a statistically significant improvement,
+ though with clearly diminishing returns beyond roughly 500–1000 particles,
+ and with a subset of datasets showing negligible or even mildly non-monotonic sensitivity to this parameter,
+ indicating that population size,
+ while important,
+ should be regarded as a tunable,
+ problem-dependent setting rather than a fixed universal choice.
+ By contrast,
+ the solution-propagation strategy used to share promising candidates among sub-populations had no statistically significant overall effect,
+ with the full-connectivity strategy (NtoN) offering only a marginal,
+ largely non-significant advantage over more restricted topologies.
+ Taken together,
+ these results position OPSO as a robust and practically competitive alternative to conventional classifier-training approaches,
+ whose effectiveness is driven more by the number and diversity of its parallel search threads and the richness of its populations than by the specific manner in which information is exchanged among them.
+\end_layout
+
+\begin_layout Standard
+The present study,
+ while comprehensive in its comparison across baseline models and internal configurations,
+ leaves several directions open for further investigation.
+ First,
+ the observation that OPSO's advantage is concentrated in datasets with irregular or multimodal error landscapes warrants a more systematic characterization of dataset difficulty,
+ for instance,
+ through measures of class overlap,
+ intrinsic dimensionality,
+ or landscape ruggedness,
+ so that the conditions under which OPSO is expected to excel can be predicted a priori rather than identified only after the fact.
+ Second,
+ the non-monotonic or even adverse effect of increasing population size observed on a small number of datasets (e.g.,
+ FERT,
+ HAYES ROTH) suggests that an adaptive or self-tuning population size,
+ adjusted dynamically during the search based on convergence behavior,
+ may outperform any single fixed value and merits dedicated investigation.
+ Third,
+ although the propagation strategy was found to have limited overall impact,
+ its comparatively larger effect on the hardest benchmark problems (e.g.,
+ SATIMAGE,
+ SEGMENT) indicates that hybrid or adaptive propagation schemes,
+ which shift between restricted and fully connected topologies depending on the observed diversity or stagnation of the population,
+ could yield further improvements specifically on difficult problems,
+ and should be explored in future work.
+ Finally,
+ extending the evaluation beyond the 41 datasets considered here to larger-scale,
+ higher-dimensional,
+ or streaming classification problems,
+ and benchmarking OPSO against a broader range of modern evolutionary and swarm-based optimizers,
+ would help establish the generality of the conclusions reached in this study and clarify the computational trade-offs involved in deploying OPSO at scale.
 \end_layout
 
 \begin_layout Standard
@@ -9008,7 +12322,6 @@ This research was funded by NAME OF FUNDER grant number XXX
 status open
 
 \begin_layout Plain Layout
-
 https://search.crossref.org/funding
 \end_layout
 
@@ -9060,7 +12373,6 @@ We encourage all authors of articles published in MDPI journals to share their r
 status open
 
 \begin_layout Plain Layout
-
 https://www.mdpi.com/ethics
 \end_layout
 
@@ -9167,7 +12479,6 @@ literal "false"
 status collapsed
 
 \begin_layout Plain Layout
-
 https://archive.ics.uci.edu
 \end_layout
 
@@ -10014,17 +13325,14 @@ M.
 status open
 
 \begin_layout Plain Layout
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
 \begin_layout Plain Layout
-
 %% for journal Sci
 \end_layout
 
 \begin_layout Plain Layout
-
 %
 \backslash
 reviewreports{
@@ -10035,7 +13343,6 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
-
 %Reviewer 1 comments and authors' response
 \backslash
 
@@ -10044,7 +13351,6 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
-
 %Reviewer 2 comments and authors' response
 \backslash
 
@@ -10053,17 +13359,14 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
-
 %Reviewer 3 comments and authors' response
 \end_layout
 
 \begin_layout Plain Layout
-
 %}
 \end_layout
 
 \begin_layout Plain Layout
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
@@ -10077,7 +13380,6 @@ reviewreports{
 status open
 
 \begin_layout Plain Layout
-
 
 \backslash
 PublishersNote{}
