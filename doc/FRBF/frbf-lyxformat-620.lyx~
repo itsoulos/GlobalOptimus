@@ -1,5 +1,5 @@
-#LyX 2.5 created this file. For more info see https://www.lyx.org/
-\lyxformat 643
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -181,19 +181,11 @@ End
 \use_indices false
 \paperorientation portrait
 \suppress_date false
-\justification default
-\crossref_package prettyref
+\justification true
+\use_refstyle 0
 \use_formatted_ref 0
 \use_minted 0
 \use_lineno 0
-\backgroundcolor none
-\fontcolor none
-\notefontcolor lightgray
-\boxbgcolor red
-\table_border_color default
-\table_odd_row_color default
-\table_even_row_color default
-\table_alt_row_colors_start 1
 \index Index
 \shortcut idx
 \color #008000
@@ -219,7 +211,6 @@ End
 \html_be_strict false
 \docbook_table_output 0
 \docbook_mathml_prefix 1
-\docbook_mathml_version 0
 \end_header
 
 \begin_body
@@ -424,7 +415,7 @@ literal "false"
  An RBF network is commonly defined as a function:
 \begin_inset Formula 
 \begin{equation}
-R\left(\overrightarrow{x}\right)=\sum^{k}_{i=1}w_{i}\phi\left(\left\Vert \overrightarrow{x}-\overrightarrow{c_{i}}\right\Vert \right)\label{eq:firstrbf}
+R\left(\overrightarrow{x}\right)=\sum_{i=1}^{k}w_{i}\phi\left(\left\Vert \overrightarrow{x}-\overrightarrow{c_{i}}\right\Vert \right)\label{eq:firstrbf}
 \end{equation}
 
 \end_inset
@@ -609,7 +600,7 @@ Moreover,
  is defined as:
 \begin_inset Formula 
 \begin{equation}
-E\left(R\left(\overrightarrow{x}\right)\right)=\sum^{M}_{i=1}\left(R\left(\overrightarrow{x_{i}}\right)-y_{i}\right)^{2}\label{eq:RbfError}
+E\left(R\left(\overrightarrow{x}\right)\right)=\sum_{i=1}^{M}\left(R\left(\overrightarrow{x_{i}}\right)-y_{i}\right)^{2}\label{eq:RbfError}
 \end{equation}
 
 \end_inset
@@ -917,7 +908,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -951,7 +942,7 @@ Initialization
 Input
 \series default
 :
- the training set 
+ the train set 
 \begin_inset Formula $\left(\overrightarrow{x_{i}},y_{i}\right),\ i=1,...,M$
 \end_inset
 
@@ -1016,7 +1007,7 @@ do
 Set
 \series default
  
-\begin_inset Formula $j^{*}=\mbox{argmin}^{k}_{m=1}\left\{ D\left(x_{i},c_{m}\right)\right\} $
+\begin_inset Formula $j^{*}=\mbox{argmin}_{m=1}^{k}\left\{ D\left(x_{i},c_{m}\right)\right\} $
 \end_inset
 
 .
@@ -1062,7 +1053,7 @@ End For
 For
 \series default
  
-\begin_inset Formula $j=1,\ldots,k$
+\begin_inset Formula $j=1..k$
 \end_inset
 
  
@@ -1175,7 +1166,7 @@ The set of parameters comprising the centers and variances of an RBF network wit
  hidden units is represented by a vector of dimension
 \begin_inset Formula 
 \begin{equation}
-n=k\times d+k\label{eq:nparams}
+n=k\times d+d\label{eq:nparams}
 \end{equation}
 
 \end_inset
@@ -1217,7 +1208,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -1614,7 +1605,7 @@ nolink "false"
 Set
 \series default
  
-\begin_inset Formula $\mbox{it}=0$
+\begin_inset Formula $k=0$
 \end_inset
 
 ,
@@ -1759,7 +1750,7 @@ Calculate
  as
 \begin_inset Formula 
 \begin{equation}
-f_{i}=\sum^{M}_{j=1}\left(R\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
+f_{i}=\sum_{j=1}^{M}\left(R\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
 \end{equation}
 
 \end_inset
@@ -1882,7 +1873,6 @@ Mutation
  then this element is changed using the following scheme:
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
@@ -1915,7 +1905,6 @@ where
 \end_layout
 
 \end_deeper
-\end_deeper
 \begin_layout Enumerate
 
 \series bold
@@ -1931,7 +1920,7 @@ Termination check step
 Set
 \series default
  
-\begin_inset Formula $\mbox{it}=\mbox{it}+1$
+\begin_inset Formula $k=k+1$
 \end_inset
 
 
@@ -1943,7 +1932,7 @@ Set
 If
 \series default
  
-\begin_inset Formula $\mbox{it}<N_{g}$
+\begin_inset Formula $k<N_{g}$
 \end_inset
 
 then 
@@ -1980,7 +1969,7 @@ Apply
  
 \begin_inset Formula 
 \begin{equation}
-f^{*}=\sum^{M}_{j=1}\left(R^{*}\left(\overrightarrow{x}_{j},\overrightarrow{g^{*}}\right)-y_{j}\right)^{2}\label{eq:eq1-1-1}
+f^{*}=\sum_{j=1}^{M}\left(R^{*}\left(\overrightarrow{x}_{j},\overrightarrow{g^{*}}\right)-y_{j}\right)^{2}\label{eq:eq1-1-1}
 \end{equation}
 
 \end_inset
@@ -2094,11 +2083,7 @@ name "sec:Results"
 \end_layout
 
 \begin_layout Subsection
-Experimental datasets 
-\end_layout
-
-\begin_layout Standard
-The datasets used in the conducted experiments were obtained from the following online databases:
+Experimental datasets The datasets used in the conducted experiments were obtained from the following online databases:
 \end_layout
 
 \begin_layout Enumerate
@@ -2108,6 +2093,7 @@ The UCI website,
 status open
 
 \begin_layout Plain Layout
+
 https://archive.ics.uci.edu/
 \end_layout
 
@@ -2131,6 +2117,7 @@ The Keel website,
 status open
 
 \begin_layout Plain Layout
+
 https://sci2s.ugr.es/keel/datasets.php
 \end_layout
 
@@ -2153,6 +2140,7 @@ The Statlib URL
 status open
 
 \begin_layout Plain Layout
+
 ftp://lib.stat.cmu.edu/datasets/index.html 
 \end_layout
 
@@ -2865,16 +2853,6 @@ DEE
 \end_layout
 
 \begin_layout Enumerate
-The
-\series bold
- FA
-\series default
- dataset,
- which is related to fat measurements.
- 
-\end_layout
-
-\begin_layout Enumerate
 
 \series bold
 FY,
@@ -3070,6 +3048,7 @@ literal "false"
 status collapsed
 
 \begin_layout Plain Layout
+
 https://github.com/itsoulos/OPTIMUS/
 \end_layout
 
@@ -3103,7 +3082,7 @@ literal "false"
  
 \begin_inset Formula 
 \begin{equation}
-E_{C}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=100\times\frac{\sum^{N}_{i=1}\left(\mbox{class}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)\right)-y_{i}\right)}{M}
+E_{C}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=100\times\frac{\sum_{i=1}^{N}\left(\mbox{class}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)\right)-y_{i}\right)}{N}
 \end{equation}
 
 \end_inset
@@ -3114,7 +3093,7 @@ The set
 
  denotes the corresponding test set,
  with 
-\begin_inset Formula $T=\left(x_{i},y_{i}\right),\ i=1,\ldots,M$
+\begin_inset Formula $T=\left(x_{i},y_{i}\right),\ i=1,\ldots,N$
 \end_inset
 
 .
@@ -3122,7 +3101,7 @@ The set
  the average regression error is defined as follows:
 \begin_inset Formula 
 \begin{equation}
-E_{R}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\frac{\sum^{N}_{i=1}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)-y_{i}\right)^{2}}{M}
+E_{R}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=\frac{\sum_{i=1}^{N}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)-y_{i}\right)^{2}}{N}
 \end{equation}
 
 \end_inset
@@ -17827,6 +17806,7 @@ J.
 status collapsed
 
 \begin_layout Plain Layout
+
 10.1162/neco.1991.3.2.246
 \end_layout
 
@@ -18063,6 +18043,7 @@ literal "false"
 status collapsed
 
 \begin_layout Plain Layout
+
 https://archive.ics.uci.edu
 \end_layout
 
@@ -19334,14 +19315,17 @@ S.
 status open
 
 \begin_layout Plain Layout
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
 \begin_layout Plain Layout
+
 %% for journal Sci
 \end_layout
 
 \begin_layout Plain Layout
+
 %
 \backslash
 reviewreports{
@@ -19352,6 +19336,7 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
+
 %Reviewer 1 comments and authors' response
 \backslash
 
@@ -19360,6 +19345,7 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
+
 %Reviewer 2 comments and authors' response
 \backslash
 
@@ -19368,14 +19354,17 @@ reviewreports{
 \end_layout
 
 \begin_layout Plain Layout
+
 %Reviewer 3 comments and authors' response
 \end_layout
 
 \begin_layout Plain Layout
+
 %}
 \end_layout
 
 \begin_layout Plain Layout
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end_layout
 
@@ -19389,6 +19378,7 @@ reviewreports{
 status open
 
 \begin_layout Plain Layout
+
 
 \backslash
 PublishersNote{}
