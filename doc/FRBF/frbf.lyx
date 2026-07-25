@@ -565,14 +565,6 @@ The vectors
 \end_layout
 
 \begin_layout Enumerate
-The vector 
-\begin_inset Formula $\overrightarrow{w}$
-\end_inset
-
- represents the weight vector of the RBF network.
-\end_layout
-
-\begin_layout Enumerate
 The value 
 \begin_inset Formula $R\left(\overrightarrow{x}\right)$
 \end_inset
@@ -598,6 +590,23 @@ The function
 \end_inset
 
 
+\end_layout
+
+\begin_layout Enumerate
+The vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ represents the weight vector of the RBF network.
+ The vector 
+\begin_inset Formula $\overrightarrow{w}$
+\end_inset
+
+ contains the coefficients used to weight the output of each basis function 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1346,7 +1355,7 @@ do
 Set
 \series default
  
-\begin_inset Formula $L_{m}=-F\times I_{m}$
+\begin_inset Formula $L_{m}=-F\times\left|I_{m}\right|$
 \end_inset
 
 
@@ -1358,7 +1367,7 @@ Set
 Set
 \series default
  
-\begin_inset Formula $R_{m}=F\times I_{m}$
+\begin_inset Formula $R_{m}=F\times\left|I_{m}\right|$
 \end_inset
 
 
@@ -1401,7 +1410,7 @@ Set
 Set
 \series default
  
-\begin_inset Formula $R_{m}=F\times I_{m}$
+\begin_inset Formula $R_{m}=F\times\left|I_{m}\right|$
 \end_inset
 
 
@@ -1681,7 +1690,7 @@ Set
  
 \series bold
 
-\begin_inset Formula $W=w_{kj}$
+\begin_inset Formula $W=\left[w_{1},w_{2},\ldots,w_{k}\right]$
 \end_inset
 
 
@@ -2041,10 +2050,6 @@ alignment document
 wide false
 sideways false
 status collapsed
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \align center
@@ -3149,7 +3154,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3493,6 +3498,18 @@ The column DATASET represents the name of the used dataset.
 \end_layout
 
 \begin_layout Enumerate
+The ADAM column stands for the usage of the ADAM optimizer 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Adam,AdamNN"
+literal "false"
+
+\end_inset
+
+ to train a neural network with 10 processing nodes.
+\end_layout
+
+\begin_layout Enumerate
 The column BFGS stands for the results obtained when the BFGS optimization procedure 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -3513,22 +3530,6 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-The ADAM column stands for the usage of the ADAM optimizer 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Adam,AdamNN"
-literal "false"
-
-\end_inset
-
- to train a neural network with 10 processing nodes.
-\end_layout
-
-\begin_layout Enumerate
-The column RBF represents the results where the traditional training method is used to train an RBF network with 10 processing nodes.
-\end_layout
-
-\begin_layout Enumerate
 The column NEAT 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -3538,6 +3539,10 @@ literal "false"
 \end_inset
 
  is used to denote the results from NEAT (NeuroEvolution of Augmenting Topologies).
+\end_layout
+
+\begin_layout Enumerate
+The column RBF represents the results where the traditional training method is used to train an RBF network with 10 processing nodes.
 \end_layout
 
 \begin_layout Enumerate
@@ -3675,7 +3680,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -19182,6 +19187,54 @@ Hogan,
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
+key "Adam"
+literal "false"
+
+\end_inset
+
+D.
+ P.
+ Kingma,
+ J.
+ L.
+ Ba,
+ ADAM:
+ a method for stochastic optimization,
+ in:
+ Proceedings of the 3rd International Conference on Learning Representations (ICLR 2015),
+ pp.
+ 1–15,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "AdamNN"
+literal "false"
+
+\end_inset
+
+Y.
+ Xue,
+ Y.
+ Tong,
+ F.
+ Neri,
+ An ensemble of differential evolution and Adam for training feed-forward neural networks.
+ Information Sciences 
+\series bold
+608
+\series default
+,
+ pp.
+ 453-471,
+ 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
 label "(2025)"
 key "bfgs"
 literal "false"
@@ -19232,54 +19285,6 @@ G.
  pp.
  303-314,
  1989.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "Adam"
-literal "false"
-
-\end_inset
-
-D.
- P.
- Kingma,
- J.
- L.
- Ba,
- ADAM:
- a method for stochastic optimization,
- in:
- Proceedings of the 3rd International Conference on Learning Representations (ICLR 2015),
- pp.
- 1–15,
- 2015.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "AdamNN"
-literal "false"
-
-\end_inset
-
-Y.
- Xue,
- Y.
- Tong,
- F.
- Neri,
- An ensemble of differential evolution and Adam for training feed-forward neural networks.
- Information Sciences 
-\series bold
-608
-\series default
-,
- pp.
- 453-471,
- 2022.
 \end_layout
 
 \begin_layout Bibliography
