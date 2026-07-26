@@ -35,6 +35,7 @@ void    FunctionalRbf::init(QJsonObject &params)
 
 
 
+    double rbf_initrange=getParam("rbf_initrange").getValue().toDouble();
     int icount=0;
     for(int i=0;i<(int)trainx.size();i++)
     {
@@ -71,8 +72,15 @@ void    FunctionalRbf::init(QJsonObject &params)
 
                 double cx=fabs(centers[i * trainx[0].size()+j]);
                 //if(fabs(cx)<5.0) cx=5.0;
-                left[icount]=-f *cx;
-                right[icount++] = f*cx;
+                if(rbf_initrange>0)
+                {
+                    left[icount]=-rbf_initrange;
+                    right[icount]=rbf_initrange;
+                }
+                else{
+                    left[icount]=-f *cx;
+                    right[icount++] = f*cx;
+                }
             }
         }
 
@@ -89,7 +97,10 @@ void    FunctionalRbf::init(QJsonObject &params)
             left[icount]=0.01;
             if(maxvx<0.1) maxvx=0.1;
             //if(maxvx>100.0) maxvx=100.0;
-            right[icount++]=f * maxvx;
+            if(rbf_initrange>0)
+                right[icount++]=rbf_initrange;
+            else
+                right[icount++]=f * maxvx;
 
         }
 
@@ -560,6 +571,7 @@ FunctionalRbf::FunctionalRbf()
 {
     addParam(Parameter("rbf_nodes",1,1,100,"Number of rbf nodes"));
     addParam(Parameter("rbf_factor",3.0,1.0,100.0,"Rbf Scale factor"));
+    addParam(Parameter("rbf_initrange",0.0,0.0,1000.0,"Init in range instead of kmeans (0 for kmeans)"));
 }
 
 
