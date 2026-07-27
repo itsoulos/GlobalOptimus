@@ -74,8 +74,8 @@ void    FunctionalRbf::init(QJsonObject &params)
                 //if(fabs(cx)<5.0) cx=5.0;
                 if(rbf_initrange>0)
                 {
-                    left[icount]=-rbf_initrange;
-                    right[icount]=rbf_initrange;
+                    left[icount]=-1e+2;//rbf_initrange;
+                    right[icount]=1e+2;//rbf_initrange;
                 }
                 else{
                     left[icount]=-f *cx;
@@ -98,7 +98,7 @@ void    FunctionalRbf::init(QJsonObject &params)
             if(maxvx<0.1) maxvx=0.1;
             //if(maxvx>100.0) maxvx=100.0;
             if(rbf_initrange>0)
-                right[icount++]=rbf_initrange;
+                right[icount++]=1e+2;//rbf_initrange;
             else
                 right[icount++]=f * maxvx;
 
@@ -114,6 +114,7 @@ Data FunctionalRbf::getSample()
 {
 	Data xx;
 	xx.resize(dimension);
+    double rbf_initrange=getParam("rbf_initrange").getValue().toDouble();
           for(int i=0;i<dimension;i++)
           {
 		
@@ -122,6 +123,12 @@ Data FunctionalRbf::getSample()
 
 		 a= left[i];
          b  = right[i];
+
+            if(rbf_initrange>0)
+	    {
+		    a=-rbf_initrange;
+		    b= rbf_initrange;
+	    }
          double d = (b-a);
          double mid = a+d/2;
          a = mid -0.01*d;
