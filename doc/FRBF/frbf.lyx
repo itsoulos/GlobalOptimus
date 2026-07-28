@@ -16485,6 +16485,299 @@ name "fig:regressionNc"
 
 \end_layout
 
+\begin_layout Subsection
+Experiments with the major parts of the method
+\end_layout
+
+\begin_layout Standard
+An additional set of ablation experiments was conducted by removing key components of the proposed methodology to assess its robustness and quantify the contribution of each component to the overall performance.
+ In the first experiment,
+ the local optimization procedure was removed,
+ and the experiments were carried out on both the classification and regression datasets for different values of the critical parameter 
+\begin_inset Formula $F$
+\end_inset
+
+.
+ The average classification error for all classification datasets is depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:classLocal"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+.
+ Similarly,
+ figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:regressionLocal"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ presents the average regression error obtained by the application of the proposed method to the used regression datasets.
+ The column LOCAL denoted the incorporation of the BFGS optimizer in the proposed method and the column NOLOCAL represents the application of the proposed method without the BFGS optimizer.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename frbf_class_local.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average classification error of the proposed method for the series of classification datasets using different values for parameter 
+\begin_inset Formula $F$
+\end_inset
+
+ with and without local optimization.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:classLocal"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename frbf_regression_local.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average regression error of the proposed method for the regression datasets using different values for parameter 
+\begin_inset Formula $F$
+\end_inset
+
+ with and without local optimization.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:regressionLocal"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+The above plots clearly demonstrate that the incorporation of the local optimization procedure improves the performance of the proposed technique,
+ with a more pronounced improvement observed on the regression datasets than on the classification datasets.
+\end_layout
+
+\begin_layout Standard
+In the next experiment,
+ an attempt was made to evaluate the effectiveness of the k-means algorithm for estimating the initial range of values of the RBF network parameters.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:classInit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ presents the average classification error using the proposed method and different initialization ranges and Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:regresionInit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ stands for the average regression error using the proposed method and the same initialization ranges.
+ The columns presented in graphs have the following meaning:
+\end_layout
+
+\begin_layout Enumerate
+The column INIT=1 denotes the application of the proposed method,
+ where the variables of the RBF network are initialized in range 
+\begin_inset Formula $[-1,1]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column INIT=10 represents the application of the proposed method and initialization for the variables in range 
+\begin_inset Formula $[-10,10]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column INIT=20 stands for the incorporation of the proposed method and initialization for the variables in range 
+\begin_inset Formula $[-20,20]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The column PROPOSED represents the usage of the proposed method with the initialization presented in this article with the k-means technique.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename frbf_class_init.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average classification error obtained in the used classification datasets using the proposed method and different initialization ranges.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:classInit"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename frbf_regression_init.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average classification error obtained in the used regression datasets with the application of the proposed method and different initialization ranges.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:regresionInit"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+It is evident that,
+ in both cases (classification and regression),
+ the proposed initialization technique significantly improves the performance of the proposed method.
+\end_layout
+
 \begin_layout Section
 Conclusions
 \begin_inset CommandInset label
