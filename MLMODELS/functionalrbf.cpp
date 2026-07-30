@@ -74,8 +74,8 @@ void    FunctionalRbf::init(QJsonObject &params)
                 //if(fabs(cx)<5.0) cx=5.0;
                 if(rbf_initrange>0)
                 {
-                    left[icount]=-1e+2;//rbf_initrange;
-                    right[icount]=1e+2;//rbf_initrange;
+                    left[icount]=-1e+8;//rbf_initrange;
+                    right[icount]=1e+8;//rbf_initrange;
                 }
                 else{
                     left[icount]=-f *cx;
@@ -98,7 +98,7 @@ void    FunctionalRbf::init(QJsonObject &params)
             if(maxvx<0.1) maxvx=0.1;
             //if(maxvx>100.0) maxvx=100.0;
             if(rbf_initrange>0)
-                right[icount++]=1e+2;//rbf_initrange;
+                right[icount++]=1e+8;//rbf_initrange;
             else
                 right[icount++]=f * maxvx;
 

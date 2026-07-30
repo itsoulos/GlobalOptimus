@@ -54,7 +54,7 @@ elif [ $MODEL = "airbf" ]; then
 ##rbf_factor. Scale factor for rbr (default 3.0).
   MODELPARAMS="--rbf_localsearchrate=0.001 --rbf_usesigmaminmax=yes --rbf_train=optimus --opt_method=$METHOD --rbf_nodes=10 --rbf_factor=3.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
 elif [ $MODEL = "frbf" ]; then
-  MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=5.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rbf_initrange=1"
+  MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=5.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rbf_initrange=10"
 elif [ $MODEL = "gdf" ]; then
   MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --gdf_popcount=200 --gdf_popsize=100 --gdf_popgens=200 --gdf_popsrate=0.9 --gdf_popmrate=0.05"
 elif [ $MODEL = "rule" ]; then
