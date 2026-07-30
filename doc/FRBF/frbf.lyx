@@ -462,31 +462,16 @@ status open
 \begin_layout Plain Layout
 General structure of an RBF network.
  The input vector 
-\begin_inset Formula $x$
+\begin_inset Formula $\overrightarrow{x}$
 \end_inset
 
- = (
-\begin_inset Formula $x_{1}$
-\end_inset
-
-,
- 
-\begin_inset Formula $x_{2}$
-\end_inset
-
-,
- ...,
- 
-\begin_inset Formula $x_{d}$
-\end_inset
-
-) is fed to 
+ is fed to 
 \begin_inset Formula $k$
 \end_inset
 
  hidden units,
  each characterized by a center 
-\begin_inset Formula $c_{i}$
+\begin_inset Formula $\overrightarrow{c_{i}}$
 \end_inset
 
  (a reference point in the input space) and a variance 
@@ -538,14 +523,10 @@ nolink "false"
 
 \begin_layout Enumerate
 The vector 
-\begin_inset Formula $\overrightarrow{x}$
+\begin_inset Formula $\overrightarrow{x}=(x_{1},x_{2},...,x_{d})$
 \end_inset
 
- denotes the input pattern and the number of elements in this vector is denoted as 
-\begin_inset Formula $d$
-\end_inset
-
-.
+ denotes the input pattern.
 \end_layout
 
 \begin_layout Enumerate
@@ -618,7 +599,7 @@ Moreover,
  is defined as:
 \begin_inset Formula 
 \begin{equation}
-E\left(R\left(\overrightarrow{x}\right)\right)=\sum^{M}_{i=1}\left(R\left(\overrightarrow{x_{i}}\right)-y_{i}\right)^{2}\label{eq:RbfError}
+E\left(R(x)\right)=\sum^{M}_{i=1}\left(R\left(\overrightarrow{x_{i}}\right)-y_{i}\right)^{2}\label{eq:RbfError}
 \end{equation}
 
 \end_inset
@@ -1121,7 +1102,7 @@ every center
 
 \begin_inset Formula 
 \[
-\overrightarrow{c_{i}}=\frac{1}{M_{j}}\sum_{x_{i}\in S_{j}}x_{i}
+\overrightarrow{c_{i}}=\frac{1}{M_{j}}\sum_{\overrightarrow{x_{i}}\in S_{j}}\overrightarrow{x_{i}}
 \]
 
 \end_inset
@@ -1302,7 +1283,7 @@ Input
 \begin_inset Formula $v_{e}$
 \end_inset
 
- used as the low limit of the variables representing the variances of the RBF network.
+ used as the lower limit of the variables representing the variances of the RBF network.
 \end_layout
 
 \begin_layout Enumerate
@@ -1358,7 +1339,28 @@ Set
 \begin_inset Formula $L_{m}=-F\times\left|I_{m}\right|$
 \end_inset
 
+ //this denotes the 
+\begin_inset Formula $m$
+\end_inset
 
+ element of vector 
+\begin_inset Formula $\overrightarrow{L}$
+\end_inset
+
+.
+ The value 
+\begin_inset Formula $I_{m}$
+\end_inset
+
+ represents the 
+\begin_inset Formula $m$
+\end_inset
+
+ element of vector 
+\begin_inset Formula $\overrightarrow{I}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -1370,7 +1372,15 @@ Set
 \begin_inset Formula $R_{m}=F\times\left|I_{m}\right|$
 \end_inset
 
+ //this denotes the 
+\begin_inset Formula $m$
+\end_inset
 
+ element of vector 
+\begin_inset Formula $\overrightarrow{R}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -1382,7 +1392,7 @@ Set
 \begin_inset Formula $m=m+1$
 \end_inset
 
-
+ 
 \end_layout
 
 \end_deeper
@@ -1492,6 +1502,16 @@ nolink "false"
 
 \begin_layout Standard
 A suitably modified genetic algorithm was adopted in this stage because genetic algorithms constitute robust evolutionary optimization techniques that have demonstrated their effectiveness across a broad spectrum of practical applications.
+ Genetic Algorithms (GAs) are evolutionary optimization techniques designed to search for the global minimum of a multidimensional objective function.
+ To achieve this,
+ a GA maintains a population of candidate solutions,
+ referred to as chromosomes.
+ These chromosomes evolve continuously over successive iterations of the algorithm,
+ known as generations,
+ through the application of genetic operators that mimic natural evolutionary processes,
+ including selection,
+ crossover,
+ and mutation.
  In addition,
  they are particularly well suited for integration with machine learning models,
  as they generally require only the formulation of a suitable fitness function while treating the underlying model as a black-box optimization problem.
@@ -1527,6 +1547,24 @@ literal "true"
 LatexCommand cite
 key "gen_app4"
 literal "true"
+
+\end_inset
+
+,
+ statistics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gen_statistics"
+literal "false"
+
+\end_inset
+
+,
+ RBF interpolation 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gen_inter"
+literal "false"
 
 \end_inset
 
@@ -3099,8 +3137,14 @@ literal "false"
 \end_inset
 
 .
- To assess the performance and generalization capability of the proposed approach,
- a 10-fold cross-validation protocol was applied to all datasets.
+ During the experimental evaluation,
+ the 10-fold cross-validation technique was employed,
+ where each dataset was partitioned into ten folds.
+ In each iteration,
+ 90% of the instances were used as the training set,
+ while the remaining 10% constituted the test set.
+ Both the training procedure and the application of the k-means initialization method were performed exclusively on the training set,
+ with no information from the test set being used during model construction.
  Each experimental setup was repeated 30 independent times,
  with a distinct initialization seed assigned to the random number generator in every run.
  Random number generation was carried out using the drand48() function provided by the C programming language.
@@ -12905,7 +12949,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -16482,7 +16526,136 @@ name "fig:regressionNc"
 
 \end_inset
 
+Furthermore,
+ the proposed method was compared with the GRBF method on the classification datasets for a range of population sizes (i.e.,
+ different numbers of chromosomes).
+ The comparison was performed with respect to both the average classification error and the execution time.
+ The comparison for the average classification error is presented in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:classErrorNc"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
 
+\end_inset
+
+ and the comparison for the execution time is depicted in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:classTimeNc"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename frbf_class_error_nc.png
+	scale 90
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of average classification error between the proposed method and the GRBF method on the series of selected classification datasets for different values of used chromosomes.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:classErrorNc"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename frbf_class_time_nc.png
+	scale 90
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison of average execution time between the proposed method and the GRBF method on the series of classification datasets,
+ for different values of number of chromosomes.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:classTimeNc"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+The proposed method significantly outperforms the GRBF technique in terms of average classification error.
+ Moreover,
+ the classification error remains essentially unchanged for population sizes exceeding 500 chromosomes,
+ supporting the choice of this value for the parameter 
+\begin_inset Formula $N_{c}$
+\end_inset
+
+.
+ However,
+ the execution time of the proposed method is considerably higher than that of the GRBF method,
+ particularly for large population sizes.
+ This increase is expected and can be attributed to the greater computational complexity of the proposed approach compared with the GRBF method.
 \end_layout
 
 \begin_layout Subsection
@@ -18291,6 +18464,69 @@ Ding,
  Artificial intelligence review,
  36(2),
  153-162.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gen_statistics"
+literal "false"
+
+\end_inset
+
+S.
+ Chatterjee,
+ M.
+ Laudato,
+ et al.
+ Genetic algorithms and their statistical appli-cations:
+ an introduction.
+ Comput.
+ Statist.
+ Data Anal.,
+ 22 (6),
+ 633–651 (1996).
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1016/0167-9473(96)00011-4.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "gen_inter"
+literal "false"
+
+\end_inset
+
+R.
+ Cavoretto,
+ A.
+ De Rossi,
+ et al.
+ Genetic Algorithm-Based Shape Parameter Tuning for Radial Basis Function Interpolation.
+ Oper.
+ Res.
+ Forum 7,
+ 26 (2026).
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+ https://doi.org/10.1007/s43069-026-00610-9
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Bibliography
