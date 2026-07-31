@@ -837,7 +837,52 @@ literal "false"
 \end_inset
 
 .
- 
+ Beyond genetic algorithms,
+ other population-based metaheuristics have also been applied to RBF training,
+ including differential evolution [
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Bajer"
+literal "false"
+
+\end_inset
+
+] and particle swarm optimization [
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Alexandridis,Rani"
+literal "false"
+
+\end_inset
+
+].
+\end_layout
+
+\begin_layout Standard
+A third research direction recognizes that purely global metaheuristics,
+ while effective at exploration,
+ converge slowly in the vicinity of the optimum,
+ motivating hybrid or memetic algorithms that combine global search with local refinement [
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Moscato,Ong"
+literal "false"
+
+\end_inset
+
+].
+ Recent RBF-specific examples include hybrid schemes combining particle swarm optimization,
+ cuckoo search,
+ and biogeography-based optimization,
+ refined by a local BFGS step [
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Ali"
+literal "false"
+
+\end_inset
+
+].
 \end_layout
 
 \begin_layout Standard
@@ -885,6 +930,18 @@ literal "false"
 
  is employed to determine the optimal values of the centers and variances within the search intervals identified during the first phase.
  The weights of the RBF network are computed through the solution of an appropriate linear system of equations.
+\end_layout
+
+\begin_layout Standard
+The present work is positioned at the intersection of all three research directions described above:
+ the first phase draws on the initialization literature by using K-means to establish informed,
+ data-driven search bounds rather than fixed or arbitrary ranges;
+ the second phase contributes a genetic algorithm operating within these bounds,
+ following the evolutionary training paradigm;
+ and the local optimization step applied at the end of the second phase follows the hybrid/memetic paradigm.
+ Unlike prior evolutionary RBF methods that treat the search space as unconstrained,
+ and unlike prior hybrid methods that do not exploit data-driven initialization to constrain the search space before the global search begins,
+ the core contribution of the proposed method lies in this three-stage integration.
 \end_layout
 
 \begin_layout Standard
@@ -3792,6 +3849,26 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
+The column RBFCON denotes the incorporation of a recently introduced method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfcon"
+literal "false"
+
+\end_inset
+
+ that constructs RBF networks with the assistance of Grammatical Evolution 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "mainGE"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
 The column PROPOSED stands for the results obtained by the incorporation of the proposed method.
 \end_layout
 
@@ -3880,7 +3957,7 @@ nolink "false"
 \end_inset
 
 ) yielded 
-\begin_inset Formula $p=4.5×10^{-10}$
+\begin_inset Formula $p=1.69×10^{-12}$
 \end_inset
 
 ,
@@ -3889,7 +3966,7 @@ nolink "false"
  RBF,
  by approximately 24.8%.
  At the individual dataset level,
- the Proposed method ranked first in 26 out of 42 datasets (61.9%),
+ the Proposed method ranked first in 27 out of 42 datasets (61.9%),
  with particularly strong performance on RING,
  SPAMBASE,
  Z_F_S,
@@ -3939,8 +4016,9 @@ name "tab:experClass"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="44" columns="7">
+<lyxtabular version="3" rows="44" columns="8">
 <features tabularvalignment="middle">
+<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -3999,6 +4077,15 @@ RBF
 
 \begin_layout Plain Layout
 GRBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RBFCON
 \end_layout
 
 \end_inset
@@ -4068,6 +4155,15 @@ APPENDICITIS
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.60%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4129,6 +4225,15 @@ ALCOHOL
 
 \begin_layout Plain Layout
 52.45%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51.24%
 \end_layout
 
 \end_inset
@@ -4198,6 +4303,15 @@ AUSTRALIAN
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.14%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4259,6 +4373,15 @@ BALANCE
 
 \begin_layout Plain Layout
 38.02%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.94%
 \end_layout
 
 \end_inset
@@ -4328,6 +4451,15 @@ BANDS
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35.75%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4389,6 +4521,15 @@ CIRCULAR
 
 \begin_layout Plain Layout
 21.43%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.26%
 \end_layout
 
 \end_inset
@@ -4458,6 +4599,15 @@ CLEVELAND
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49.14%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4519,6 +4669,15 @@ DERMATOLOGY
 
 \begin_layout Plain Layout
 61.46%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45.20%
 \end_layout
 
 \end_inset
@@ -4588,6 +4747,15 @@ ECOLI
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+54.18%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4649,6 +4817,15 @@ FERT
 
 \begin_layout Plain Layout
 15.00%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.20%
 \end_layout
 
 \end_inset
@@ -4718,6 +4895,15 @@ GLASS
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+55.38%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4779,6 +4965,15 @@ HABERMAN
 
 \begin_layout Plain Layout
 24.37%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.27%
 \end_layout
 
 \end_inset
@@ -4848,6 +5043,15 @@ HAYES ROTH
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34.54%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -4909,6 +5113,15 @@ HEART
 
 \begin_layout Plain Layout
 28.44%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.22%
 \end_layout
 
 \end_inset
@@ -4978,6 +5191,15 @@ HEARTATTACK
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.60%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5039,6 +5261,15 @@ HOUSEVOTES
 
 \begin_layout Plain Layout
 11.99%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.05%
 \end_layout
 
 \end_inset
@@ -5108,6 +5339,15 @@ IONOSPHERE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.32%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5169,6 +5409,15 @@ LIVERDISORDER
 
 \begin_layout Plain Layout
 36.97%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.21%
 \end_layout
 
 \end_inset
@@ -5238,6 +5487,15 @@ LYMOGRAPHY
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.36%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5299,6 +5557,15 @@ MAMMOGRAPHIC
 
 \begin_layout Plain Layout
 30.41%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.67%
 \end_layout
 
 \end_inset
@@ -5368,6 +5635,15 @@ PARKINSONS
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.79%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5429,6 +5705,15 @@ PAGE BLOCKS
 
 \begin_layout Plain Layout
 10.83%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.09%
 \end_layout
 
 \end_inset
@@ -5498,6 +5783,15 @@ PHONEME
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24.58%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5559,6 +5853,15 @@ PIMA
 
 \begin_layout Plain Layout
 27.83%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24.13%
 \end_layout
 
 \end_inset
@@ -5628,6 +5931,15 @@ POPFAILURES
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.98%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5689,6 +6001,15 @@ REGIONS2
 
 \begin_layout Plain Layout
 39.98%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.34%
 \end_layout
 
 \end_inset
@@ -5758,6 +6079,15 @@ RING
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.08%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5819,6 +6149,15 @@ SAHEART
 
 \begin_layout Plain Layout
 33.90%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.52%
 \end_layout
 
 \end_inset
@@ -5888,6 +6227,15 @@ SATIMAGE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+59.16%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -5949,6 +6297,15 @@ SEGMENT
 
 \begin_layout Plain Layout
 54.25%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+62.36%
 \end_layout
 
 \end_inset
@@ -6018,6 +6375,15 @@ SONAR
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.20%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6079,6 +6445,15 @@ SPAMBASE
 
 \begin_layout Plain Layout
 35.36%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16.95%
 \end_layout
 
 \end_inset
@@ -6148,6 +6523,15 @@ SPIRAL
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+42.14%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6209,6 +6593,15 @@ STATHEART
 
 \begin_layout Plain Layout
 42.94%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.22%
 \end_layout
 
 \end_inset
@@ -6278,6 +6671,15 @@ STUDENT
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.63%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6339,6 +6741,15 @@ TRANSFUSION
 
 \begin_layout Plain Layout
 25.67%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.15%
 \end_layout
 
 \end_inset
@@ -6408,6 +6819,15 @@ WDBC
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.77%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6469,6 +6889,15 @@ WINE
 
 \begin_layout Plain Layout
 31.47%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.00%
 \end_layout
 
 \end_inset
@@ -6538,6 +6967,15 @@ Z_F_S
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.13%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6599,6 +7037,15 @@ ZO_NF_S
 
 \begin_layout Plain Layout
 22.18%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.08%
 \end_layout
 
 \end_inset
@@ -6668,6 +7115,15 @@ ZONF_S
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.14%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6729,6 +7185,15 @@ ZOO
 
 \begin_layout Plain Layout
 33.50%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.60%
 \end_layout
 
 \end_inset
@@ -6810,6 +7275,17 @@ AVERAGE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+24.96%
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -6860,7 +7336,7 @@ status collapsed
 \begin_layout Plain Layout
 Classification error distribution across the six evaluated methods (overall Friedman test:
  
-\begin_inset Formula $p=4.5×10^{-10}$
+\begin_inset Formula $p=1.69×10^{-12}$
 \end_inset
 
 )
@@ -6895,6 +7371,568 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+Mean classification error and average Friedman rank across the 42 datasets (lower rank = better).
+ Overall Friedman 
+\begin_inset Formula $χ^{2}=64.14,p=1.69×10^{-12}$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:rank1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features borderColor="default" oddRowsColor="default" evenRowsColor="default" tabularvalignment="middle">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Mean Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Avg Rank
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+PROPOSED
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+21.58285714
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+1.666666667
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+RBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+28.68428571
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+2.988095238
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+NEAT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+32.16404762
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+3.761904762
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+BFGS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+33.2547619
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+3.904761905
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ADAM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+35.17809524
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+4.142857143
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+GRBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+35.49785714
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+4.535714286
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Post-hoc pairwise comparisons (Conover test,
+ Holm-corrected) confirm that the Proposed method differs significantly (p_adj < 0.05) from all five baseline methods (ADAM,
+ BFGS,
+ NEAT,
+ RBF,
+ and GRBF).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
 Experimental results on the used regression datasets using the series of machine learning methods.
 \begin_inset CommandInset label
 LatexCommand label
@@ -6913,8 +7951,9 @@ name "tab:experRegression"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="27" columns="7">
+<lyxtabular version="3" rows="27" columns="8">
 <features tabularvalignment="middle">
+<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -6973,6 +8012,15 @@ RBF
 
 \begin_layout Plain Layout
 GRBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RBFCON
 \end_layout
 
 \end_inset
@@ -7042,6 +8090,15 @@ ABALONE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.14
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7103,6 +8160,15 @@ AIRFOIL
 
 \begin_layout Plain Layout
 0.121
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.004
 \end_layout
 
 \end_inset
@@ -7172,6 +8238,15 @@ AUTO
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.03
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7233,6 +8308,15 @@ BK
 
 \begin_layout Plain Layout
 0.023
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.02
 \end_layout
 
 \end_inset
@@ -7302,6 +8386,15 @@ BL
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.04
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7363,6 +8456,15 @@ BASEBALL
 
 \begin_layout Plain Layout
 98.91
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.74
 \end_layout
 
 \end_inset
@@ -7432,6 +8534,15 @@ CONCRETE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.012
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7493,6 +8604,15 @@ DEE
 
 \begin_layout Plain Layout
 0.25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.23
 \end_layout
 
 \end_inset
@@ -7562,6 +8682,15 @@ FA
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.013
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7623,6 +8752,15 @@ FY
 
 \begin_layout Plain Layout
 0.041
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.017
 \end_layout
 
 \end_inset
@@ -7692,6 +8830,15 @@ HO
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.013
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7753,6 +8900,15 @@ HOUSING
 
 \begin_layout Plain Layout
 95.69
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.6
 \end_layout
 
 \end_inset
@@ -7822,6 +8978,15 @@ LASER
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.06
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -7883,6 +9048,15 @@ LW
 
 \begin_layout Plain Layout
 0.057
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.011
 \end_layout
 
 \end_inset
@@ -7952,6 +9126,15 @@ MB
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.055
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8013,6 +9196,15 @@ MORTGAGE
 
 \begin_layout Plain Layout
 1.92
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.165
 \end_layout
 
 \end_inset
@@ -8082,6 +9274,15 @@ NT
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.006
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8143,6 +9344,15 @@ PLASTIC
 
 \begin_layout Plain Layout
 25.91
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.58
 \end_layout
 
 \end_inset
@@ -8212,6 +9422,15 @@ PY
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.003
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8273,6 +9492,15 @@ PL
 
 \begin_layout Plain Layout
 0.155
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.064
 \end_layout
 
 \end_inset
@@ -8342,6 +9570,15 @@ QUAKE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.036
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8403,6 +9640,15 @@ SN
 
 \begin_layout Plain Layout
 0.027
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.025
 \end_layout
 
 \end_inset
@@ -8472,6 +9718,15 @@ STOCK
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.31
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8537,6 +9792,15 @@ TREASURY
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.003
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8598,6 +9862,15 @@ VE
 
 \begin_layout Plain Layout
 0.023
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -8679,6 +9952,15 @@ AVERAGE
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -8709,7 +9991,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -8729,7 +10011,7 @@ status collapsed
 \begin_layout Plain Layout
 Regression error distribution for all evaluated methods (overall Friedman test:
  
-\begin_inset Formula $p=1.22×10^{-6}$
+\begin_inset Formula $p=6.34×10^{-9}$
 \end_inset
 
 ).
@@ -8750,6 +10032,587 @@ name "fig:regressionMethods"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean regression error (raw scale) and average Friedman rank across the 25 datasets.
+ The average rank is scale-free and is not dominated by high-magnitude datasets (e.g.,
+ STOCK,
+ BASEBALL),
+ unlike the raw mean error.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:rank2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features borderColor="default" oddRowsColor="default" evenRowsColor="default" tabularvalignment="middle">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<column alignment="center" valignment="top" color="default">
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Mean Error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Avg Rank
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+PROPOSED
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+3.361276
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+1.66
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+RBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+8.89804
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+2.88
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ADAM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+17.98032
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+3.44
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+GRBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+11.13064
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+3.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+NEAT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+19.68692
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+4.56
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row color="default">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+BFGS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+25.50152
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+4.76
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+The raw average regression error is disproportionately influenced by datasets with large target-value magnitudes (e.g.,
+ STOCK,
+ BASEBALL);
+ the scale-free average rank in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:rank2"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ confirms the same overall ordering,
+ with the Proposed method achieving the best (lowest) average rank of 1.66 across the 25 datasets.
+\end_layout
+
+\begin_layout Standard
+Post-hoc pairwise comparisons (Conover test,
+ Holm-corrected) confirm that the Proposed method differs significantly from ADAM,
+ BFGS,
+ NEAT,
+ and GRBF (p_adj < 0.05),
+ but the difference from RBF did not reach statistical significance (p_adj = 0.192),
+ indicating that its advantage over RBF specifically is directionally consistent but not conclusively established at the individual-comparison level.
 \end_layout
 
 \begin_layout Standard
@@ -8783,13 +10646,13 @@ nolink "false"
 \end_inset
 
 ) yielded 
-\begin_inset Formula $p=1.22×10^{-6}$
+\begin_inset Formula $p=6.34×10^{-9}$
 \end_inset
 
 ,
  again confirming statistically significant differences across methods.
  The Proposed method achieves a mean error of 3.36,
- representing nearly a threefold improvement over RBF (8.90) and tenfold over BFGS (25.50).
+ representing nearly threefold improvement over RBF (8.90) and tenfold over BFGS (25.50).
  Particularly notable results are observed on the STOCK dataset (1.208 versus 180.893 for ADAM),
  HOUSING (10.36 versus 97.38 for BFGS),
  and MORTGAGE (0.0096 versus 9.24 for ADAM),
@@ -8910,7 +10773,7 @@ nolink "false"
 \end_inset
 
 ) yielded 
-\begin_inset Formula $p=9.36×10^{-5}$
+\begin_inset Formula $p=6.43×10^{-5}$
 \end_inset
 
 ,
@@ -8984,7 +10847,7 @@ nolink "false"
 \end_inset
 
 ) yielding 
-\begin_inset Formula $p=9.06×10^{-4}$
+\begin_inset Formula $p=3.09×10^{-4}$
 \end_inset
 
 .
@@ -9010,7 +10873,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -11154,7 +13017,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -11174,7 +13037,7 @@ status collapsed
 \begin_layout Plain Layout
 Effect of the scale parameter F on classification accuracy of the Proposed method (overall Friedman test:
  
-\begin_inset Formula $p=9.36×10^{-5}$
+\begin_inset Formula $p=6.43×10^{-5}$
 \end_inset
 
 )
@@ -12547,7 +14410,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -12567,7 +14430,7 @@ status collapsed
 \begin_layout Plain Layout
 Sensitivity of regression performance to the scale parameter F (overall Friedman test:
  
-\begin_inset Formula $p=9.06×10^{-4}$
+\begin_inset Formula $p=3.09×10^{-4}$
 \end_inset
 
 ).
@@ -12804,7 +14667,7 @@ nolink "false"
 
 \end_inset
 
-) yielded p = 0.0037,
+) yielded p = 0.0010,
  confirming a statistically significant effect of 
 \family roman
 \series medium
@@ -13139,7 +15002,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -15283,7 +17146,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -15303,7 +17166,7 @@ status collapsed
 \begin_layout Plain Layout
 Impact of population size Nc on classification results of the Proposed method (overall Friedman test:
  
-\begin_inset Formula $p=0.0037$
+\begin_inset Formula $p=0.0010$
 \end_inset
 
 ).
@@ -16676,7 +18539,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -16753,7 +18616,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -16796,7 +18659,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -16897,7 +18760,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -16944,7 +18807,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -17056,7 +18919,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -17099,7 +18962,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -17175,6 +19038,55 @@ This paper introduced a two-phase evolutionary methodology for the effective tra
 \end_inset
 
 =4 providing a reliable and computationally efficient default configuration.
+\end_layout
+
+\begin_layout Standard
+While the Proposed method achieved the lowest error on the majority of datasets (26 of 42 classification and 14 of 25 regression benchmarks),
+ it was outperformed by at least one baseline on the remaining cases,
+ and these cases follow identifiable patterns.
+ For classification,
+ most such datasets are either small in sample size (e.g.,
+ APPENDICITIS,
+ FERT,
+ HAYES ROTH,
+ HABERMAN,
+ STUDENT) or involve a relatively large number of classes with limited samples per class (e.g.,
+ DERMATOLOGY,
+ ECOLI,
+ GLASS).
+ In these settings,
+ the fixed number of hidden units (k=10) may be insufficient to represent the underlying class structure,
+ and the limited amount of training data may not provide enough signal for the evolutionary search to consistently outperform simpler,
+ directly-optimized alternatives such as BFGS-trained neural networks.
+ Notably,
+ in several of these cases (e.g.,
+ PHONEME,
+ TRANSFUSION,
+ POPFAILURES,
+ MAMMOGRAPHIC),
+ the performance gap with the best-performing baseline was under 1 percentage point and is unlikely to be practically meaningful.
+ For regression,
+ the Proposed method was outperformed on datasets characterized by low target-value magnitude and low intrinsic noise (e.g.,
+ AIRFOIL,
+ BK,
+ FA,
+ FY,
+ QUAKE,
+ VE),
+ where traditional RBF training or direct gradient-based optimization already achieves a near-optimal fit;
+ in such cases,
+ the broader exploration performed by the genetic algorithm offers limited additional benefit and may introduce marginal variance.
+ These observations suggest that the advantage of the proposed evolutionary training is most pronounced on larger,
+ higher-dimensional,
+ or structurally complex datasets,
+ while on small-sample or low-noise problems,
+ simpler direct optimization may already be near-sufficient.
+\end_layout
+
+\begin_layout Standard
+A limitation of the present study is that only the mean error across the 30 independent runs was retained for each dataset–method combination;
+ per-run standard deviations were not stored during the original experiments and could therefore not be reported.
+ Future revisions of the experimental protocol will retain per-run results to support variability analysis alongside mean performance.
 \end_layout
 
 \begin_layout Standard
@@ -18118,21 +20030,23 @@ literal "false"
 
 \end_inset
 
-U.
- Ravale,
- N.
- Marathe,
- P.
- Padiya,
- Feature Selection Based Hybrid Anomaly Intrusion Detection System Using K Means and RBF Kernel Function,
- Procedia Computer Science 
-\series bold
-45
-\series default
-,
- pp.
- 428-435,
- 2015.
+Anyanwu,
+ G.
+ O.,
+ Nwakanma,
+ C.
+ I.,
+ Lee,
+ J.
+ M.,
+ & Kim,
+ D.
+ S.
+ (2022).
+ Optimization of RBF-SVM kernel using grid search algorithm for DDoS attack detection in SDN-based VANET.
+ IEEE Internet of Things Journal,
+ 10(10),
+ 8477-8490.
 \end_layout
 
 \begin_layout Bibliography
@@ -18636,6 +20550,127 @@ Mukherjee,
  Computers & Chemical Engineering,
  197,
  109080.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Bajer"
+literal "false"
+
+\end_inset
+
+D.
+ Bajer,
+ B.
+ Zorić,
+ G.
+ Martinović,
+ Automatic design of radial basis function networks through enhanced differential evolution,
+ in:
+ Hybrid Artificial Intelligent Systems,
+ Springer,
+ pp.
+ 244-256,
+ 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Alexandridis"
+literal "false"
+
+\end_inset
+
+A.
+ Alexandridis,
+ E.
+ Chondrodima,
+ H.
+ Sarimveis,
+ Cooperative learning for radial basis function networks using particle swarm optimization,
+ Applied Soft Computing 49,
+ pp.
+ 485-497,
+ 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Rani"
+literal "false"
+
+\end_inset
+
+H.J.
+ Rani,
+ T.A.A.
+ Victoire,
+ Training radial basis function networks for wind speed prediction using PSO enhanced differential search optimizer,
+ PLOS ONE 13(5),
+ e0196871,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Moscato"
+literal "false"
+
+\end_inset
+
+P.
+ Moscato,
+ On evolution,
+ search,
+ optimization,
+ genetic algorithms and martial arts:
+ Towards memetic algorithms,
+ Caltech Concurrent Computation Program,
+ Technical Report 826,
+ 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Ong"
+literal "false"
+
+\end_inset
+
+Y.S.
+ Ong,
+ A.J.
+ Keane,
+ Meta-Lamarckian learning in memetic algorithms,
+ IEEE Transactions on Evolutionary Computation 8(2),
+ pp.
+ 99-110,
+ 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Ali"
+literal "false"
+
+\end_inset
+
+S.
+ Ali,
+ J.A.
+ Kurz,
+ S.
+ Oughton,
+ A Novel RBF Neural Network-based Hybrid Technique and Its Applications,
+ Research Square preprint,
+ doi:10.21203/rs.3.rs-7088954/v1,
+ 2025.
 \end_layout
 
 \begin_layout Bibliography
@@ -20192,6 +22227,52 @@ S.
  pp.
  333–336,
  2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfcon"
+literal "false"
+
+\end_inset
+
+Tsoulos,
+ I.
+ G.,
+ Varvaras,
+ I.,
+ & Charilogis,
+ V.
+ (2024).
+ RbfCon:
+ construct radial basis function neural networks with grammatical evolution.
+ Software,
+ 3(4),
+ 549-568.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "mainGE"
+literal "false"
+
+\end_inset
+
+Ryan,
+ C.,
+ O'Neill,
+ M.,
+ & Collins,
+ J.
+ J.
+ (Eds.).
+ (2018).
+ Handbook of grammatical evolution (Vol.
+ 1).
+ Cham (Switzerland):
+ Springer International Publishing.
 \end_layout
 
 \begin_layout Standard
