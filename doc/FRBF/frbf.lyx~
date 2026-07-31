@@ -700,7 +700,7 @@ literal "false"
 \end_inset
 
 ,
- and wind energy production prediction 
+ wind energy production prediction 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "rbf_wind"
@@ -708,7 +708,16 @@ literal "false"
 
 \end_inset
 
-.
+,
+ constrained optimization 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbfcons1,rbfcons2"
+literal "false"
+
+\end_inset
+
+ etc.
 \end_layout
 
 \begin_layout Standard
@@ -777,6 +786,58 @@ literal "false"
 
  demonstrated that an RBF network consisting of a single hidden processing layer possesses the universal approximation property,
  being capable of approximating any continuous function with arbitrary accuracy.
+\end_layout
+
+\begin_layout Standard
+Moreover,
+ Mohammadi et al proposed 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_hybrid1"
+literal "false"
+
+\end_inset
+
+ a novel hybrid evolutionary based RBF networks method for forecasting time series that can estimate both the network architecture as well as the values for the parameters of the network.
+ Likewise,
+ Wu et al introduced 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_hybrid2"
+literal "false"
+
+\end_inset
+
+ a hybrid method that combines the Particle Swarm Optimization (PSO) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "pso_tutorial"
+literal "false"
+
+\end_inset
+
+ method as well as Genetic Algorithms to determine the parameters of RBF networks.
+ Recently,
+ Elansari proposed a new method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_hybrid3"
+literal "false"
+
+\end_inset
+
+ that utilizes Genetic Algorithms for the optimal training of RBF networks.
+ Likewise,
+ Mukherjee et al developed hybrid Gaussian Radial Basis Neural Networks (GRAB-NNs) for data-driven models in a recent study 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf_hybrid4"
+literal "false"
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -924,10 +985,7 @@ nolink "false"
 .
  This algorithm is an unsupervised clustering technique that splits a dataset into a number of predefined clusters by minimizing the within-cluster sum of squared distances.
  The algorithm iteratively assigns each data point to its nearest cluster centroid and at every generation updates the centroid as the mean of the assigned points.
- This process is repeated  until convergence,
- resulting in compact and well-separated clusters that can be used for data analysis,
- initialization,
- or preprocessing tasks.
+ This process is repeated until convergence.
 \end_layout
 
 \begin_layout Standard
@@ -1826,7 +1884,7 @@ do
 Produce 
 \series default
 an RBF network 
-\begin_inset Formula $R_{i}=R\left(\overrightarrow{x},\overrightarrow{g_{i}}\right).$
+\begin_inset Formula $R_{i}=R\left(\overrightarrow{x}\right).$
 \end_inset
 
  The centers and variances of 
@@ -1882,7 +1940,7 @@ Set
 
 \series bold
 Set 
-\begin_inset Formula $T=\left\{ t_{i}=y_{i},i=1,..,M\right\} $
+\begin_inset Formula $T=\left\{ t_{j}=y_{j},j=1,..,M\right\} $
 \end_inset
 
 
@@ -1933,7 +1991,7 @@ Calculate
  as
 \begin_inset Formula 
 \begin{equation}
-f_{i}=\sum^{M}_{j=1}\left(R\left(\overrightarrow{x}_{j},\overrightarrow{g_{i}}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
+f_{i}=\sum^{M}_{j=1}\left(R_{i}\left(\overrightarrow{x}_{j}\right)-y_{j}\right)^{2}\label{eq:eq1-1}
 \end{equation}
 
 \end_inset
@@ -2138,7 +2196,7 @@ obtain the best chromosome
 \end_inset
 
  and create the associated RBF network 
-\begin_inset Formula $R^{*}=R\left(\overrightarrow{x},\overrightarrow{g^{*}}\right)$
+\begin_inset Formula $R^{*}=R\left(\overrightarrow{x}\right)$
 \end_inset
 
 .
@@ -2154,7 +2212,7 @@ Apply
  
 \begin_inset Formula 
 \begin{equation}
-f^{*}=\sum^{M}_{j=1}\left(R^{*}\left(\overrightarrow{x}_{j},\overrightarrow{g^{*}}\right)-y_{j}\right)^{2}\label{eq:eq1-1-1}
+f^{*}=\sum^{M}_{j=1}\left(R^{*}\left(\overrightarrow{x}_{j}\right)-y_{j}\right)^{2}\label{eq:eq1-1-1}
 \end{equation}
 
 \end_inset
@@ -17765,13 +17823,16 @@ literal "false"
 
 \end_inset
 
-Nam Mai-Duy,
- Thanh Tran-Cong,
- Numerical solution of differential equations using multiquadric radial basis function networks,
- Neural Networks 14,
- pp.
- 185-199,
- 2001.
+Bhatia,
+ G.
+ S.,
+ & Arora,
+ G.
+ (2016).
+ Radial basis function methods for solving partial differential equations-a review.
+ Indian Journal of Science and Technology,
+ 9(45),
+ 1-18.
 \end_layout
 
 \begin_layout Bibliography
@@ -17782,22 +17843,15 @@ literal "false"
 
 \end_inset
 
-N.
- Mai‐Duy,
- Solving high order ordinary differential equations with radial basis function networks.
- Int.
- J.
- Numer.
- Meth.
- Engng.
- 
-\series bold
-62
-\series default
-,
- pp.
- 824-852,
- 2005.
+Cavoretto,
+ R.,
+ & De Rossi,
+ A.
+ (2020).
+ A two-stage adaptive scheme based on RBF collocation for solving elliptic PDEs.
+ Computers & Mathematics with Applications,
+ 79(11),
+ 3206-3222.
 \end_layout
 
 \begin_layout Bibliography
@@ -17808,17 +17862,15 @@ literal "false"
 
 \end_inset
 
-S.A.
- Sarra,
- Adaptive radial basis function methods for time dependent partial differential equations,
- Applied Numerical Mathematics 
-\series bold
-54
-\series default
-,
- pp.
- 79-94,
- 2005.
+Feng,
+ R.,
+ & Duan,
+ J.
+ (2018).
+ High accurate finite differences based on RBF interpolation and its application in solving differential equations.
+ Journal of Scientific Computing,
+ 76(3),
+ 1785-1812.
 \end_layout
 
 \begin_layout Bibliography
@@ -17829,18 +17881,25 @@ literal "false"
 
 \end_inset
 
-R.
- -J.
- Lian,
- Adaptive Self-Organizing Fuzzy Sliding-Mode Radial Basis-Function Neural-Network Controller for Robotic Systems,
- IEEE Transactions on Industrial Electronics 
-\series bold
-61
-\series default
-,
- pp.
- 1493-1503,
- 2014.
+Song,
+ Q.,
+ Li,
+ S.,
+ Bai,
+ Q.,
+ Yang,
+ J.,
+ Zhang,
+ A.,
+ Zhang,
+ X.,
+ & Zhe,
+ L.
+ (2021).
+ Trajectory planning of robot manipulator based on RBF neural network.
+ Entropy,
+ 23(9),
+ 1207.
 \end_layout
 
 \begin_layout Bibliography
@@ -17851,19 +17910,25 @@ literal "false"
 
 \end_inset
 
-M.
- Vijay,
- D.
- Jena,
- Backstepping terminal sliding mode control of robot manipulator using radial basis functional neural networks.
- Computers & Electrical Engineering 
-\series bold
-67
-\series default
-,
- pp.
- 690-707,
- 2018.
+Liu,
+ Q.,
+ Li,
+ D.,
+ Ge,
+ S.
+ S.,
+ Ji,
+ R.,
+ Ouyang,
+ Z.,
+ & Tee,
+ K.
+ P.
+ (2021).
+ Adaptive bias RBF neural network control for a robotic manipulator.
+ Neurocomputing,
+ 447,
+ 213-223.
 \end_layout
 
 \begin_layout Bibliography
@@ -17874,23 +17939,22 @@ literal "false"
 
 \end_inset
 
-M.J.
- Er,
+Roh,
  S.
- Wu,
+ B.,
+ Oh,
+ S.
+ K.,
+ Yoon,
  J.
- Lu,
- H.L.
- Toh,
- Face recognition with radial basis function (RBF) neural networks,
- IEEE Transactions on Neural Networks 
-\series bold
-13
-\series default
-,
- pp.
- 697-710,
- 2002.
+ H.,
+ & Seo,
+ K.
+ (2019).
+ Design of face recognition system based on fuzzy transform and radial basis function neural networks.
+ Soft Computing,
+ 23(13),
+ 4969-4985.
 \end_layout
 
 \begin_layout Bibliography
@@ -17901,20 +17965,20 @@ literal "false"
 
 \end_inset
 
-C.
- Laoudias,
- P.
- Kemppi and C.
- G.
- Panayiotou,
- Localization Using Radial Basis Function Networks and Signal Strength Fingerprints in WLAN,
- GLOBECOM 2009 - 2009 IEEE Global Telecommunications Conference,
- Honolulu,
- HI,
- 2009,
- pp.
- 1-6,
- 2009.
+Lopez-Martin,
+ M.,
+ Sanchez-Esguevillas,
+ A.,
+ Arribas,
+ J.
+ I.,
+ & Carro,
+ B.
+ (2021).
+ Network intrusion detection based on extended RBF neural network with offline reinforcement learning.
+ IEEE Access,
+ 9,
+ 153153-153170.
 \end_layout
 
 \begin_layout Bibliography
@@ -17925,22 +17989,13 @@ literal "false"
 
 \end_inset
 
-M.
- Azarbad,
- S.
- Hakimi,
- A.
- Ebrahimzadeh,
- Automatic recognition of digital communication signal,
- International journal of energy,
- information and communications 
-\series bold
-3
-\series default
-,
- pp.
- 21-33,
- 2012.
+Chen,
+ Z.
+ (2022).
+ Research on internet security situation awareness prediction technology based on improved RBF neural network algorithm.
+ Journal of Computational and Cognitive Engineering,
+ 1(3),
+ 103-108.
 \end_layout
 
 \begin_layout Bibliography
@@ -17951,21 +18006,19 @@ literal "false"
 
 \end_inset
 
-D.L.
+Tao,
+ J.,
  Yu,
- J.B.
- Gomm,
- D.
- Williams,
- Sensor fault diagnosis in a chemical process via RBF neural networks,
- Control Engineering Practice 
-\series bold
-7
-\series default
-,
- pp.
- 49-55,
- 1999.
+ Z.,
+ Zhang,
+ R.,
+ & Gao,
+ F.
+ (2021).
+ RBF neural network modeling approach using PCA based LM–GA optimization for coke furnace system.
+ Applied Soft Computing,
+ 111,
+ 107691.
 \end_layout
 
 \begin_layout Bibliography
@@ -17976,27 +18029,24 @@ literal "false"
 
 \end_inset
 
-V.
- Shankar,
- G.B.
- Wright,
- A.L.
- Fogelson,
- R.M.
- Kirby,
- A radial basis function (RBF) finite difference method for the simulation of reaction–diffusion equations on stationary platelets within the augmented forcing method,
- Int.
- J.
- Numer.
- Meth.
- Fluids 
-\series bold
-75
-\series default
-,
- pp.
- 1-22,
- 2014.
+Kanti,
+ P.,
+ Sharma,
+ K.
+ V.,
+ Yashawantha,
+ K.
+ M.,
+ Jamei,
+ M.,
+ & Said,
+ Z.
+ (2022).
+ Properties of water-based fly ash-copper hybrid nanofluid for solar energy applications:
+ Application of RBF model.
+ Solar Energy Materials and Solar Cells,
+ 234,
+ 111423.
 \end_layout
 
 \begin_layout Bibliography
@@ -18007,19 +18057,13 @@ literal "false"
 
 \end_inset
 
-W.
- Shen,
- X.
- Guo,
- C.
- Wu,
- D.
- Wu,
- Forecasting stock indices using radial basis function neural networks optimized by artificial fish swarm algorithm,
- Knowledge-Based Systems 24,
- pp.
- 378-385,
- 2011.
+Yu,
+ Y.
+ (2022).
+ GDP economic forecasting model based on improved RBF neural network.
+ Mathematical Problems in Engineering,
+ 2022(1),
+ 7630268.
 \end_layout
 
 \begin_layout Bibliography
@@ -18030,19 +18074,22 @@ literal "false"
 
 \end_inset
 
-J.
+Zhang,
+ Q.,
+ Abdullah,
  A.
- Momoh,
- S.
- S.
- Reddy,
- Combined Economic and Emission Dispatch using Radial Basis Function,
- 2014 IEEE PES General Meeting | Conference & Exposition,
- National Harbor,
- MD,
- pp.
- 1-5,
- 2014.
+ R.,
+ Chong,
+ C.
+ W.,
+ & Ali,
+ M.
+ H.
+ (2022).
+ A Study on Regional GDP Forecasting Analysis Based on Radial Basis Function Neural Network with Genetic Algorithm (RBFNN‐GA) for Shandong Economy.
+ Computational Intelligence and Neuroscience,
+ 2022(1),
+ 8235308.
 \end_layout
 
 \begin_layout Bibliography
@@ -18160,6 +18207,49 @@ G.
  1-7,
  doi:
  10.1109/PES.2007.385812.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfcons1"
+literal "false"
+
+\end_inset
+
+Regis,
+ R.
+ G.
+ (2014).
+ Constrained optimization by radial basis function interpolation for high-dimensional expensive black-box problems with infeasible initial points.
+ Engineering Optimization,
+ 46(2),
+ 218-243.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbfcons2"
+literal "false"
+
+\end_inset
+
+Wu,
+ Y.,
+ Yin,
+ Q.,
+ Jie,
+ H.,
+ Wang,
+ B.,
+ & Zhao,
+ J.
+ (2018).
+ A RBF-based constrained global optimization algorithm for problems with computationally expensive objective and constraints.
+ Structural and Multidisciplinary Optimization,
+ 58(4),
+ 1633-1655.
 \end_layout
 
 \begin_layout Bibliography
@@ -18437,6 +18527,115 @@ status collapsed
 
 .
  
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_hybrid1"
+literal "false"
+
+\end_inset
+
+Mohammadi,
+ R.,
+ Ghomi,
+ S.
+ F.,
+ & Zeinali,
+ F.
+ (2014).
+ A new hybrid evolutionary based RBF networks method for forecasting time series:
+ a case study of forecasting emergency supply demand time series.
+ Engineering Applications of Artificial Intelligence,
+ 36,
+ 204-214.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_hybrid2"
+literal "false"
+
+\end_inset
+
+Wu,
+ J.,
+ Long,
+ J.,
+ & Liu,
+ M.
+ (2015).
+ Evolving RBF neural networks for rainfall prediction using hybrid particle swarm optimization and genetic algorithm.
+ Neurocomputing,
+ 148,
+ 136-142.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso_tutorial"
+literal "false"
+
+\end_inset
+
+Marini,
+ F.,
+ & Walczak,
+ B.
+ (2015).
+ Particle swarm optimization (PSO).
+ A tutorial.
+ Chemometrics and intelligent laboratory systems,
+ 149,
+ 153-165.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_hybrid3"
+literal "false"
+
+\end_inset
+
+Elansari,
+ T.,
+ Ouanan,
+ M.,
+ & Bourray,
+ H.
+ (2023).
+ Mixed radial basis function neural network training using genetic algorithm.
+ Neural Processing Letters,
+ 55(8),
+ 10569-10587.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf_hybrid4"
+literal "false"
+
+\end_inset
+
+Mukherjee,
+ A.,
+ Gupta,
+ D.,
+ & Bhattacharyya,
+ D.
+ (2025).
+ Mass-Constrained hybrid Gaussian radial basis neural networks:
+ Development,
+ training,
+ and applications to modeling nonlinear dynamic noisy chemical processes.
+ Computers & Chemical Engineering,
+ 197,
+ 109080.
 \end_layout
 
 \begin_layout Bibliography
