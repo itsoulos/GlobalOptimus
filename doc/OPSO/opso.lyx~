@@ -123,32 +123,14 @@
 % \item Second bullet.
 % \end{itemize}
 %}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{fit, arrows.meta}
+\usepackage[font=small,labelfont=bf]{caption}
 \end_preamble
 \options journal,article,submit,moreauthors
 \use_default_options false
 \maintain_unincluded_children no
-\begin_local_layout
-#Adds an endnote inset, in addition to footnotes. You will need to add
-#\printendnotes in TeX-code where you want the endnotes to appear.
-Format 66
-Counter endnotes
-    PrettyFormat "Endnote ##"
-End
-InsetLayout Flex:Endnote
-   LyXType     custom
-   LatexName   endnote
-   LatexType   command
-   Counter     endnotes
-   Decoration  classic
-   Font
-     Size Small
-   EndFont
-   MultiPar    true
-   LabelString endnote
-   Requires    enotez
-End
-\end_local_layout
 \language english
 \language_package none
 \inputencoding utf8
@@ -169,7 +151,7 @@ End
 \use_dash_ligatures true
 \graphics default
 \default_output_format default
-\output_sync 1
+\output_sync 0
 \bibtex_command default
 \index_command default
 \float_placement class
@@ -246,7 +228,11 @@ Parallel Optimized Particle Swarm Optimization:
 
 \begin_layout Author
 Konstantinos G.
- Barkas,
+ Barkas
+\begin_inset Formula $^{*}$
+\end_inset
+
+,
  Ioannis G.
  Tsoulos
 \begin_inset Formula $,$
@@ -254,10 +240,6 @@ Konstantinos G.
 
  Vasileios Charilogis,
  and Glykeria Kyrou
-\begin_inset Formula $^{*}$
-\end_inset
-
-
 \end_layout
 
 \begin_layout Address
@@ -272,9 +254,7 @@ Department of Informatics and Telecommunications,
 \end_layout
 
 \begin_layout Corresponding Author
-Corresponding author,
- email:
- g.kyrou@uoi.gr
+Author to whom correspondence should be addressed.
 \end_layout
 
 \begin_layout Abstract
@@ -287,10 +267,7 @@ Global optimization has become a cornerstone of modern machine learning,
  OPSO integrates several advanced mechanisms:
  a simulated annealing-based acceptance criterion to escape local minima,
  adaptive inertia weights that dynamically respond to stagnation by injecting momentum,
- and a local crossover operator for enhanced information sharing.
- Furthermore,
- the search process is augmented by Lévy flights during the early stages for wide-range exploration,
- transitioning to Gaussian noise for refined exploitation in later phases.
+ and a hybrid Broyden–Fletcher–Goldfarb–Shanno (BFGS) local search phase for fine-grained convergence.
  By partitioning the swarm into interacting sub-populations and leveraging modern multi-core architectures,
  OPSO significantly reduces training time while achieving superior generalization compared to classical PSO and state-of-the-art methods.
  Experimental evaluations demonstrate that OPSO consistently converges to more robust solutions,
@@ -303,11 +280,699 @@ Parallel Metaheuristics;
  Particle Swarm Optimization (OPSO);
  Neural Network Training;
  Global Optimization;
+ Hybrid Local Search;
  Adaptive Inertia;
- Lévy Flights;
- Simulated Annealing;
- Gaussian Noise;
- Local Crossover
+ Simulated Annealing
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The training of Artificial Neural Networks (ANNs) represents one of the most critical and challenging tasks in modern machine learning and computational intelligence 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Zhang2023,Kaveh2022"
+literal "false"
+
+\end_inset
+
+.
+ From a mathematical perspective,
+ training an ANN is formulated as a large-scale global optimization problem 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2024"
+literal "false"
+
+\end_inset
+
+,
+ where the objective is to minimize an error function by adjusting the network’s weights and biases.
+ The global optimization problem is defined as:
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathbf{x}^{*}=\arg\min_{\mathbf{x}\in S}f(\mathbf{x})
+\end{equation}
+
+\end_inset
+
+where the search space 
+\begin_inset Formula $\ensuremath{S}$
+\end_inset
+
+ is defined as the high-dimensional hyper-rectangle:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+S=[a_{1},b_{1}]\otimes[a_{2},b_{2}]\otimes\cdots\otimes[a_{n},b_{n}]
+\]
+
+\end_inset
+
+In the context of neural network training,
+ the objective function 
+\begin_inset Formula $\ensuremath{\ensuremath{\ensuremath{f(\mathbf{x})}}}$
+\end_inset
+
+ represents the loss function (e.g.,
+ Mean Squared Error or Cross-Entropy),
+ and the vector 
+\begin_inset Formula $\ensuremath{\boldsymbol{x}\in\mathbb{R}^{n}}$
+\end_inset
+
+ contains the network's parameters.
+ This optimization landscape is highly non-linear,
+ non-convex,
+ and multi-modal,
+ containing an immense number of local minima 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Dauphin2014"
+literal "false"
+
+\end_inset
+
+.
+ Apart from neural network training,
+ this mathematical formulation finds critical applications in a variety of real-world problems,
+ such as physics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Metropolis1953,Carleo2017"
+literal "false"
+
+\end_inset
+
+,
+ chemistry 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Xia2025"
+literal "false"
+
+\end_inset
+
+,
+ economics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "BuenoFerrer2025"
+literal "false"
+
+\end_inset
+
+,
+ and medicine 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Andres2025,Shehata2025"
+literal "false"
+
+\end_inset
+
+.
+ Historically,
+ optimization methods are divided into two main categories:
+ deterministic and stochastic.
+ Deterministic approaches,
+ such as Interval methods 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fernandez2022,Gillner2026"
+literal "false"
+
+\end_inset
+
+ or gradient-based algorithms (e.g.,
+ Backpropagation,
+ Stochastic Gradient Descent,
+ Adam),
+ rely on mathematical proofs or gradient derivatives to navigate the search space 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Goodfellow2016"
+literal "false"
+
+\end_inset
+
+.
+ However,
+ in high-dimensional and non-convex neural network landscapes,
+ gradient-based methods are heavily prone to getting trapped in saddle points or sub-optimal local minima and are highly sensitive to initial weight configurations 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Dauphin2014,Rumelhart1986,Goodfellow2016"
+literal "false"
+
+\end_inset
+
+.
+ To overcome these limitations,
+ stochastic and metaheuristic methods have been widely adopted.
+ Guided by randomness,
+ these methods do not guarantee finding the absolute global minimum in polynomial time,
+ but they consistently locate high-quality solutions with remarkable implementation simplicity 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Yang2020"
+literal "false"
+
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Researchers have proposed numerous stochastic algorithms,
+ including Controlled Random Search 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Price1977"
+literal "false"
+
+\end_inset
+
+,
+ Simulated Annealing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kirkpatrick1983,Kuo2022"
+literal "false"
+
+\end_inset
+
+,
+ Differential Evolution 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Storn1997"
+literal "false"
+
+\end_inset
+
+,
+ Particle Swarm Optimization (PSO) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Gad2022,Poli2007"
+literal "false"
+
+\end_inset
+
+,
+ Ant Colony Optimization 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Dorigo2006"
+literal "false"
+
+\end_inset
+
+,
+ and Genetic Algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Holland1992"
+literal "false"
+
+\end_inset
+
+.
+ Furthermore,
+ modern computational paradigms have successfully ported these algorithms to multi-core and GPU architectures to accelerate high-dimensional optimization 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Essaid2019,Cano2016"
+literal "false"
+
+\end_inset
+
+,
+ with comprehensive surveys available in recent literature 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Houssein2024,Sun2022"
+literal "false"
+
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Among these metaheuristics,
+ Particle Swarm Optimization (PSO) has emerged as a highly efficient population-based algorithm inspired by the social behavior of bird flocking 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Salgotra2026"
+literal "false"
+
+\end_inset
+
+.
+ In PSO,
+ a population of candidate solutions,
+ called particles,
+ explores the search space 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ Each particle 
+\begin_inset Formula $i$
+\end_inset
+
+ is characterized by its current position 
+\begin_inset Formula $\boldsymbol{x_{i}}$
+\end_inset
+
+ and its velocity 
+\series bold
+
+\begin_inset Formula $\boldsymbol{v}_{\boldsymbol{i}}$
+\end_inset
+
+
+\series default
+.
+ The dynamic movement of each particle in a 
+\begin_inset Formula $D$
+\end_inset
+
+-dimensional space is governed by updating its velocity and position at each iteration step 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Poli2007,Kennedy1995"
+literal "false"
+
+\end_inset
+
+ according to the following formulation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+v_{i,d}=\omega\cdot v_{i,d}+c_{1}\cdot r_{1}\cdot(\mathbf{p}_{\text{best},i,d}-x_{i,d})+c_{2}\cdot r_{2}\cdot(\mathbf{g}_{\text{best},d}-x_{i,d})
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+x_{i,d}=x_{i,d}+v_{i,d}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\ensuremath{\omega}$
+\end_inset
+
+ is the inertia weight introduced to control the impact of the previous velocity 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Shi1998"
+literal "false"
+
+\end_inset
+
+,
+ 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+ are the cognitive and social acceleration coefficients,
+ and 
+\begin_inset Formula $\ensuremath{r_{1},r_{2}\sim U(0,1)}$
+\end_inset
+
+ are uniformly distributed random numbers.
+ The vector
+\begin_inset Formula $\ensuremath{\mathbf{p}_{\text{best},i}}$
+\end_inset
+
+denotes the personal best position discovered by particle 
+\begin_inset Formula $i$
+\end_inset
+
+,
+ while
+\begin_inset Formula $\ensuremath{\ensuremath{\mathbf{g}_{\text{best}}}}$
+\end_inset
+
+represents the global best position found by the entire swarm.
+ Despite its success,
+ classical PSO can suffer from premature convergence and high computational costs when optimizing complex neural network architectures,
+ falling into local minima during the exploitation phase 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Gad2022,Poli2007"
+literal "false"
+
+\end_inset
+
+.
+ Many researchers focus on dynamically adjusting the inertia weight 
+\begin_inset Formula $\ensuremath{\omega}$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Rathore2017,Charilogis2022"
+literal "false"
+
+\end_inset
+
+ or integrating hybrid and parallel implementation techniques 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Demelomenezes2022,Charilogis2023"
+literal "false"
+
+\end_inset
+
+ to tackle complex numerical optimization problems.
+ However,
+ limited attention has been given to the simultaneous enhancement of scalability,
+ multi-population parallel evolution,
+ and adaptive convergence control in large-scale optimization environments.
+ To address these challenges,
+ this paper introduces the Parallel Optimized Particle Swarm Optimization (Parallel OPSO) method,
+ specifically engineered to enhance the training efficiency and predictive accuracy of neural networks.
+ The proposed algorithm is a multi-population parallel framework that partitions the swarm into interacting sub-populations,
+ leveraging modern multi-core architectures to significantly reduce execution time.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The novelty of Parallel OPSO lies in the integration of several advanced mechanisms within a unified parallel framework:
+\end_layout
+
+\begin_layout Itemize
+Simulated Annealing Acceptance Criterion:
+ A stochastic acceptance criterion is integrated to allow particles to occasionally accept worse positions,
+ enabling the swarm to escape stubborn local minima 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kirkpatrick1983,Kuo2022"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Adaptive Inertia Weight and Momentum:
+ The inertia weight 
+\begin_inset Formula $\ensuremath{\omega}$
+\end_inset
+
+ dynamically responds to swarm stagnation by injecting momentum,
+ balancing wide-range exploration and local exploitation based on the algorithm's real-time performance 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2022"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Hybrid Local Search Phase:
+ Incorporates a deterministic BFGS quasi-Newton method to refine promising candidate solutions and significantly enhance convergence accuracy toward the global optimum 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Nocedal2006"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The main contributions of this work are summarized as follows:
+ 
+\end_layout
+
+\begin_layout Itemize
+A parallel cooperative extension of the PSO algorithm,
+ where the swarm is partitioned into multiple sub-populations evolving simultaneously on multi-core architectures using the OpenMP framework to enhance exploration in large-scale search spaces.
+\end_layout
+
+\begin_layout Itemize
+A dynamic propagation mechanism that enables structured and controlled information exchange among the independent subpopulations,
+ improving convergence speed while maintaining overall population diversity.
+\end_layout
+
+\begin_layout Itemize
+The incorporation of adaptive inertia weight 
+\begin_inset Formula $\ensuremath{\omega}$
+\end_inset
+
+ based on the framework introduced in 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2022"
+literal "false"
+
+\end_inset
+
+,
+ which dynamically responds to swarm stagnation by injecting momentum,
+ effectively balancing global exploration and local exploitation based on the algorithm's real-time performance.
+\end_layout
+
+\begin_layout Itemize
+The integration of a Simulated Annealing-based stochastic acceptance criterion 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kirkpatrick1983,Kuo2022"
+literal "false"
+
+\end_inset
+
+,
+ which allows particles to occasionally accept worse positions,
+ providing a robust mechanism to escape stubborn local minima.
+\end_layout
+
+\begin_layout Itemize
+The incorporation of a hybrid local search phase utilizing the deterministic BFGS quasi-Newton method 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Nocedal2006"
+literal "false"
+
+\end_inset
+
+ to significantly improve convergence accuracy and speed up the localization of the exact global optimum.
+\end_layout
+
+\begin_layout Itemize
+A comprehensive experimental evaluation spanning both large-scale global optimization benchmark problems and demanding neural network training tasks for classification and regression,
+ demonstrating that Parallel OPSO consistently converges to more robust solutions compared to state-of-the-art algorithms.
+\end_layout
+
+\begin_layout Standard
+The remainder of this article is organized as follows:
+ Section 2 outlines the foundational background of classical PSO alongside the detailed mathematical formulation of the proposed Parallel OPSO;
+ Section 3 presents the experimental setup,
+ benchmark functions,
+ and comparative performance analysis;
+ and finally,
+ Section 4 summarizes our key findings,
+ provides concluding remarks,
+ and outlines directions for future research.
+\end_layout
+
+\begin_layout Section
+Materials and Methods
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Classical Particle Swarm Optimization (PSO)
+\end_layout
+
+\begin_layout Standard
+The classical Particle Swarm Optimization (PSO) algorithm,
+ originally introduced by Kennedy and Eberhart 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kennedy1995"
+literal "false"
+
+\end_inset
+
+,
+ is a population-based stochastic optimization technique inspired by the social behavior of bird flocking or fish schooling.
+ The algorithm explores an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional continuous search space 
+\begin_inset Formula $\ensuremath{\mathcal{S}\subset\mathbb{R}^{n}}$
+\end_inset
+
+ using a population of 
+\begin_inset Formula $m$
+\end_inset
+
+ interacting agents called particles.
+ Each particle 
+\begin_inset Formula $i$
+\end_inset
+
+ (
+\begin_inset Formula $i\in\{1,2,\dots,m\})$
+\end_inset
+
+ is characterized by its dynamic state parameters,
+ consisting of an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional position vector 
+\begin_inset Formula $\ensuremath{\mathbf{x}_{i}}=[x_{i1},x_{i2},\dots,x_{in}]^{T}$
+\end_inset
+
+and a corresponding velocity vector 
+\begin_inset Formula $\ensuremath{\ensuremath{\ensuremath{\mathbf{v}_{i}}=[v_{i1},v_{i2},\dots,v_{in}]^{T}.}}$
+\end_inset
+
+During the optimization process,
+ each particle maintains a memory of its own historical personal best position discovered so far,
+ denoted as 
+\begin_inset Formula $\ensuremath{\mathbf{p}_{i}}=[p_{i1},p_{i2},\dots,p_{in}]^{T}$
+\end_inset
+
+.
+ Concurrently,
+ the swarm tracks the absolute global best position achieved by any particle in the entire population,
+ defined as
+\begin_inset Formula $\ensuremath{\mathbf{p}_{\text{gbest}}=\arg\min_{i\in\{1,\dots,m\}}f(\mathbf{p}_{i})}$
+\end_inset
+
+,
+ where
+\begin_inset Formula $f(\cdot)$
+\end_inset
+
+ represents the objective function under minimization.
+ To balance global exploration and localized exploitation—
+a trade-off extensively evaluated in recent metaheuristic literature 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kaveh2022,Charilogis2024"
+literal "false"
+
+\end_inset
+
+—
+Shi and Eberhart 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Shi1998"
+literal "false"
+
+\end_inset
+
+ introduced the inertia weight factor 
+\begin_inset Formula $\ensuremath{\omega}$
+\end_inset
+
+.
+ At each discrete evolutionary epoch 
+\begin_inset Formula $\text{\ensuremath{t}}$
+\end_inset
+
+,
+ the dynamic trajectories of the particles are updated according to the following stochastic kinematic equations:
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathbf{v}_{i}(t+1)=\omega(t)\cdot\mathbf{v}_{i}(t)+c_{1}\cdot\mathbf{r}_{1}\cdot(\mathbf{p}_{i}(t)-\mathbf{x}_{i}(t))+c_{2}\cdot\mathbf{r}_{2}\cdot(\mathbf{p}_{\text{gbest}}(t)-\mathbf{x}_{i}(t))
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mathbf{x}_{i}(t+1)=\mathbf{x}_{i}(t)+\mathbf{v}_{i}(t+1)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\ensuremath{\omega(t)}$
+\end_inset
+
+ is the inertia weight,
+ 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+ denote the cognitive and social acceleration coefficients,
+ respectively,
+ and
+\begin_inset Formula $\ensuremath{\mathbf{r}_{1},\mathbf{r}_{2}\sim\mathcal{U}(0,1)}$
+\end_inset
+
+ represent independent uniformly distributed random vectors injected to maintain stochastic diversity.
+ Despite its mathematical simplicity and high convergence speed,
+ the classical formulation is prone to stagnation in complex multimodal landscapes due to rapid loss of population diversity,
+ a challenge frequently highlighted in modern optimization benchmarks 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Rebello2021,Gad2022"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -317,7 +982,286 @@ status open
 \begin_layout Plain Layout
 
 \backslash
-clearpage
+begin{algorithm}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+caption{The classical PSO algorithm.}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+label{alg:classical_pso}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+DontPrintSemicolon
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+tcc{Initialization Phase}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+textbf{Set} $
+\backslash
+text{iter} 
+\backslash
+gets 0$ (iteration counter)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+textbf{Set} the population size $m$ and maximum iterations allowed $
+\backslash
+text{iter}_{
+\backslash
+max}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+textbf{Initialize} randomly the positions of the $m$ particles $x_1,
+ x_2,
+ 
+\backslash
+dots,
+ x_m$,
+ with $x_i 
+\backslash
+in 
+\backslash
+mathcal{S} 
+\backslash
+subset 
+\backslash
+mathbb{R}^n$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+textbf{Initialize} randomly the velocities of the $m$ particles $v_1,
+ v_2,
+ 
+\backslash
+dots,
+ v_m$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+For{$i 
+\backslash
+gets 1$ 
+\backslash
+KwTo $m$}{
+\end_layout
+
+\begin_layout Plain Layout
+    $p_i 
+\backslash
+gets x_i$ 
+\backslash
+tcp*{Store best personal position}
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+textbf{Find} $g = 
+\backslash
+arg
+\backslash
+min_{i 
+\backslash
+in 
+\backslash
+{1,
+ 
+\backslash
+dots,
+ m
+\backslash
+}} f(x_i)$ and 
+\backslash
+textbf{set} $p_{
+\backslash
+text{gbest}} 
+\backslash
+gets x_g$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+tcc{Main Evolutionary Loop}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+While{$
+\backslash
+text{iter} < 
+\backslash
+text{iter}_{
+\backslash
+max}$}{
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+For{$i 
+\backslash
+gets 1$ 
+\backslash
+KwTo $m$}{
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+textbf{Update} the velocity $v_i$ via Eq.~(4)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+textbf{Update} the position $x_i$ via Eq.~(5)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+textbf{Evaluate} the fitness of particle $i$,
+ $f(x_i)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+If{$f(x_i) 
+\backslash
+le f(p_i)$}{
+\end_layout
+
+\begin_layout Plain Layout
+            $p_i 
+\backslash
+gets x_i$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+textbf{Find} $g = 
+\backslash
+arg
+\backslash
+min_{i 
+\backslash
+in 
+\backslash
+{1,
+ 
+\backslash
+dots,
+ m
+\backslash
+}} f(p_i)$ and 
+\backslash
+textbf{set} $p_{
+\backslash
+text{gbest}} 
+\backslash
+gets p_g$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    $
+\backslash
+text{iter} 
+\backslash
+gets 
+\backslash
+text{iter} + 1$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+KwRet{$p_{
+\backslash
+text{gbest}},
+ f(p_{
+\backslash
+text{gbest}})$}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+end{algorithm}
 \end_layout
 
 \end_inset
@@ -325,12 +1269,2507 @@ clearpage
 
 \end_layout
 
-\begin_layout Section
-Introduction
+\begin_layout Subsection
+
+\series bold
+Parallel Optimized Particle Swarm Optimization Algorithm
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Section
-Materials and Methods
+\begin_layout Standard
+The distributed framework of the Optimized Particle Swarm Optimization (OPSO) algorithm is engineered by partitioning the global agent population into 
+\begin_inset Formula $N$
+\end_inset
+
+ distinct subpopulations.
+ Each subpopulation operates as an autonomous evolutionary unit allocated to an individual processing element,
+ enabling simultaneous execution across a shared-memory environment 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "OpenMP2024"
+literal "false"
+
+\end_inset
+
+.
+ 
+\begin_inset Float figure
+placement document
+alignment center
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename parallel_pso_islands.png
+	lyxscale 45
+	width 85col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Parallel OPSO framework illustrating thread distribution and flexible inter-island migration topologies.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ Before initiating the optimization cycle,
+ the multi-swarm configurations are established,
+ and the global termination strategy 
+\begin_inset Formula $\mathrm{(TS)}$
+\end_inset
+
+ is selected.
+ To govern decentralized convergence behavior and manage interaction dynamics between the concurrently evolving swarms,
+ the architecture introduces a set of control features:
+ a topological propagation method 
+\begin_inset Formula $(\mathrm{NM)}$
+\end_inset
+
+,
+ a generational communication rate 
+\begin_inset Formula $(\mathrm{NR)}$
+\end_inset
+
+,
+ a volumetric quantity of migrated solutions 
+\begin_inset Formula $(\mathrm{NP)}$
+\end_inset
+
+,
+ and a localized termination criterion 
+\begin_inset Formula $(\mathrm{TC)}$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The communication frequency across the multi-swarm layout is controlled by the propagation rate 
+\begin_inset Formula $(\mathrm{NR)}$
+\end_inset
+
+,
+ which establishes the exact number of generational steps between consecutive data distributions.
+ Low values for 
+\begin_inset Formula $\mathrm{NR}$
+\end_inset
+
+ enforce tight coupling and frequent interaction,
+ a configuration that can accelerate convergence velocities but risks collapsing population diversity 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kyrou2026,daSilveira2020"
+literal "false"
+
+\end_inset
+
+.
+ Conversely,
+ high values for 
+\begin_inset Formula $\mathrm{NR}$
+\end_inset
+
+ grant the individual islands extended periods of decoupled execution,
+ fostering independent exploration of unmapped solution regions.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In a similar manner,
+ the volume of shared elite information is dictated by the parameter 
+\begin_inset Formula $\mathrm{NP}$
+\end_inset
+
+,
+ which defines the number of top-performing vectors transmitted during a migration step.
+ Expanding 
+\begin_inset Formula $\mathrm{NP}$
+\end_inset
+
+ strengthens the collective exploitation capability by injecting high-quality geometric coordinates into target swarms;
+ however,
+ excessive data injection can induce premature convergence by steering all independent groups toward identical local optima 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kyrou2026,daSilveira2020,Abadlia2017"
+literal "false"
+
+\end_inset
+
+.
+ Within this framework,
+ the specific bounds for 
+\begin_inset Formula $\mathrm{NR}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathrm{NP}$
+\end_inset
+
+ are derived through systematic empirical tuning to maintain a healthy balance between localized search refinement and global space exploration,
+ with the precise values detailed in the Experimental Results section.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+During every generational step,
+ the system monitors each subpopulation to determine if it has met its localized termination criterion 
+\begin_inset Formula $\mathrm{(TC)}$
+\end_inset
+
+,
+ which is evaluated independently via an advanced convergence heuristic known as the Similarity check
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Tsoulos2021"
+literal "false"
+
+\end_inset
+
+.
+ The total number of stagnated units is then cross-referenced with a macro-level decision threshold,
+ denoted as 
+\begin_inset Formula $Q$
+\end_inset
+
+.
+ This threshold mathematically operationalizes the chosen system-wide termination strategy 
+\begin_inset Formula $\mathrm{(TS)}$
+\end_inset
+
+ to govern the macro-level optimization loop
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kyrou2026,Tsoulos2021"
+literal "false"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+Q=\begin{cases}
+1, & \text{if }TS=ANY\\
+\lfloor N/2\rfloor+1, & \text{if }TS=MAJORITY\\
+N, & \text{if }TS=ALL
+\end{cases}
+\end{equation}
+
+\end_inset
+
+Following the calculation of the threshold metrics,
+ the subpopulations proceed with their parallel evolutionary operations,
+ executing localized kinematics updates and simulated annealing leader adjustments.
+ At generational intervals matching the propagation rate 
+\begin_inset Formula $(\mathrm{NR)}$
+\end_inset
+
+,
+ the system triggers the designated migration topology 
+\begin_inset Formula $(\mathrm{NM})$
+\end_inset
+
+ to distribute 
+\begin_inset Formula $\mathrm{NP}$
+\end_inset
+
+ elite candidate vectors across the multi-threaded network
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026,Abadlia2017"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The iteration counter increments,
+ and the status of the threshold criterion 
+\begin_inset Formula $Q$
+\end_inset
+
+ is evaluated.
+ If the conditions for global termination are not fulfilled,
+ the concurrent optimization sequence continues.
+ Upon satisfying the macro-level stopping condition,
+ the framework invokes a memetic refinement sequence,
+ executing a rigorous local search directly around the global best solution
+\begin_inset Formula $\ensuremath{g_{\text{best}}}$
+\end_inset
+
+to secure high-precision mathematical accuracy before returning the final optimized result 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Petalas2007"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+From an architectural standpoint,
+ mapping each subpopulation to an isolated thread or processing core facilitates true concurrent execution.
+ Synchronization barriers are strictly confined to the scheduled propagation phases,
+ allowing the swarms to evolve independently during intermediate generations and significantly minimizing memory access latencies 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023"
+literal "false"
+
+\end_inset
+
+.
+ Resource utilization is optimized through the selection of the global termination strategies (ANY,
+ MAJORITY,
+ ALL),
+ which prevent thread starvation and idle processing states by eliminating the requirement for all processing elements to terminate at the same time.
+ The ANY strategy,
+ in particular,
+ permits rapid continuation by halting the global loop the moment early convergence is detected on any single thread via the Similarity metric 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Tsoulos2021"
+literal "false"
+
+\end_inset
+
+.
+ Furthermore,
+ the computational footprint of the migration phase remains small,
+ as it restricts communication to a limited set of elite solution coordinates.
+ This brief coordination phase introduces negligible latency relative to the overall objective function evaluation costs,
+ and it significantly enhances optimization performance by enabling effective information sharing across the parallel architecture 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Inter-Swarm Communication Protocol and Migration Topologie
+\series default
+\shape italic
+s
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Within the cooperative execution phase of the parallel framework,
+ the communication layer facilitates the distribution of high-quality parameter configurations among the concurrent islands.
+ When the scheduled migration interval conditions are satisfied,
+ the elite solution vectors identified by a specific subpopulation are transmitted across the shared-memory space to overwrite the lowest-performing coordinates of the designated target swarms.
+ The foundational objective of this information routing scheme is to optimize cross-island exploration,
+ ensuring that promising topological discoveries are rapidly assimilated into the broader optimization landscape to enhance overall convergence efficiency 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+Unlike conventional distributed metaheuristics that rely on static and rigid structural layouts—
+such as ring,
+ star,
+ or fully-mesh migration topologies—
+the proposed framework introduces a localized,
+ dynamically configurable migration model tailored for high-dimensional execution spaces.
+ Conventional geometric topologies impose strict synchronization locks and significant thread contention penalties as the execution scale grows,
+ which frequently induces severe memory access latencies within shared-memory architectures 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
+ To avoid structural complexity and eliminate excessive communication overhead,
+ the parallel architecture relies on a versatile routing protocol operating across four discrete configuration states:
+\end_layout
+
+\begin_layout Itemize
+One-to-One (
+\begin_inset Formula $1\text{to}1$
+\end_inset
+
+):
+ A single source subpopulation,
+ selected uniformly at random,
+ migrates its historical elite parameter states exclusively to a single target subpopulation,
+ which is also designated through a random uniform distribution.
+\end_layout
+
+\begin_layout Itemize
+One-to-All (
+\begin_inset Formula $1\text{to}N$
+\end_inset
+
+):
+ A randomly isolated subpopulation serves as a central broadcaster,
+ transmitting its optimal geometric updates to refresh the search vectors of all other 
+\begin_inset Formula $N-1$
+\end_inset
+
+ active swarms simultaneously.
+\end_layout
+
+\begin_layout Itemize
+All-to-One (
+\begin_inset Formula $N\text{to}1$
+\end_inset
+
+):
+ Every active computational swarm routes its current top-performing vectors toward a single,
+ randomly targeted subpopulation,
+ consolidating global directional data into a localized spatial window to catalyze structural exploitation.
+\end_layout
+
+\begin_layout Itemize
+All-to-All (
+\begin_inset Formula $N\text{to}N$
+\end_inset
+
+):
+ A dense execution mode where every individual subpopulation synchronizes and exchanges its finest candidate solutions with the historical memory matrix of every other swarm in the network.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+By adjusting the combination of these topological routing strategies 
+\begin_inset Formula $(\mathrm{NM)}$
+\end_inset
+
+ alongside the volumetric payload parameter 
+\begin_inset Formula $(\mathrm{NP)}$
+\end_inset
+
+,
+ the OPSO framework maintains a fluid balance between regional exploitation and global population diversity 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
+ This dynamic coordination mitigates structural stagnation risks while preserving the low coordination footprint required for efficient execution on multi-core compute clusters.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Adaptive Inertia weight mechanism
+\end_layout
+
+\begin_layout Standard
+To achieve a self-regulating balance between global exploration and localized exploitation,
+ each autonomous subpopulation discards static or strictly time-dependent parameter scaling.
+ Instead,
+ an Adaptive Inertia Weight Mechanism is implemented 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Rathore2017"
+literal "false"
+
+\end_inset
+
+,
+ adapting the phenotypic stagnation-tracking framework introduced in the Ideal Particle Swarm Optimization (IPSO) architecture 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2022"
+literal "false"
+
+\end_inset
+
+.
+ This framework evaluates the state of the swarm by monitoring the phenotypic convergence rate across consecutive generations.
+ When the global fitness gradient flattens,
+ indicating that the multi-swarm trajectory is confined within a local attractor,
+ the inertia weight parameter is dynamically adjusted to modulate particle momentum.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Operationally,
+ the system calculates the absolute differential progress of the collective fitness landscape at every iteration.
+ If the fitness deviation between sequential states falls below a predefined threshold,
+ a stagnation counter increments.
+ By calculating the ratio of cumulative stagnant states against the elapsed generational counter,
+ a dynamic constraint coefficient is derived.
+ Consequently,
+ when the subpopulation actively discovers novel structural minima,
+ the velocity profile maintains a high exploratory momentum.
+ Conversely,
+ when severe multi-island stagnation is detected,
+ the inertia scales down to its minimum operating boundary,
+ dampening particle velocities to focus computational resources strictly on high-precision local exploitation
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Rathore2017,Charilogis2022"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+\shape italic
+Mathematical Formulation
+\end_layout
+
+\begin_layout Standard
+The evolutionary state monitoring is governed by evaluating the global fitness volume change at each generation 
+\begin_inset Formula $\text{\ensuremath{t}}$
+\end_inset
+
+,
+ tracking structural stagnation vectors as formalized in the IPSO framework 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2022"
+literal "false"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\delta(t)=\left|\sum^{m}_{i=1}f_{i}(t)-\sum^{m}_{i=1}f_{i}(t-1)\right|
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\ensuremath{m}$
+\end_inset
+
+ denotes the number of particles within the subpopulation,
+ and 
+\begin_inset Formula $\ensuremath{f_{i}(t)}$
+\end_inset
+
+ represents the objective cost value of the 
+\begin_inset Formula $\ensuremath{i}$
+\end_inset
+
+-th particle at generation 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ The localized stagnation state indicator 
+\begin_inset Formula $\ensuremath{\zeta(t)}$
+\end_inset
+
+ is defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\zeta(t)=\begin{cases}
+1, & \text{if }\delta(t)=0\\
+0, & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\end_inset
+
+Using the real-time feedback from 
+\begin_inset Formula $\ensuremath{\zeta(t)}$
+\end_inset
+
+,
+ the cumulative stagnation tracking matrix 
+\begin_inset Formula $\ensuremath{S_{\delta}(t)}$
+\end_inset
+
+ and its corresponding density ratio 
+\begin_inset Formula $C_{\delta}(t)$
+\end_inset
+
+ are computed dynamically:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+S_{\delta}(t)=\sum^{t}_{k=1}\zeta(k)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+C_{\delta}(t)=\frac{S_{\delta}(t)}{t}
+\end{equation}
+
+\end_inset
+
+The adaptive inertia weight 
+\begin_inset Formula $\ensuremath{\omega(t)}$
+\end_inset
+
+ supplied to the velocity kinematic updating core is formally governed by the bound-constrained formulation
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2022"
+literal "false"
+
+\end_inset
+
+,
+ building upon the dynamic inertia weight control concepts introduced in 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Shi1998"
+literal "false"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\omega(t)=\max\left(\omega_{\min},\min\left(\omega_{\max},\omega_{\max}-C_{\delta}(t)\cdot(\omega_{\max}-\omega_{\min})\right)\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\omega_{\max}$
+\end_inset
+
+ and 
+\begin_inset Formula $\omega_{\min}$
+\end_inset
+
+ represent the predefined boundary coefficients governing the dynamic momentum spectrum.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Adaptive Simulated Annealing Acceptance Criterion
+\end_layout
+
+\begin_layout Standard
+To balance the exploitation of local optima with the necessity of maintaining exploratory pressure,
+ a stochastic acceptance mechanism is integrated into the leader update phase of each island.
+ Traditional PSO variants typically employ a greedy selection rule,
+ which often leads to rapid convergence toward suboptimal regions in non-convex,
+ high-dimensional landscapes 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Poli2007,Salgotra2026"
+literal "false"
+
+\end_inset
+
+.
+ To mitigate this,
+ our approach implements an Adaptive Simulated Annealing Acceptance Criterion,
+ allowing the sub-population leader (
+\begin_inset Formula $\boldsymbol{P}_{\text{best},k}$
+\end_inset
+
+) to occasionally accept inferior solutions based on a temperature-dependent probability inspired by the classic Simulated Annealing framework 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Metropolis1953,Kirkpatrick1983,Kuo2022"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+Let 
+\begin_inset Formula $\Delta=f(\mathbf{X}_{\text{best},k})-f(\mathbf{P}_{\text{best},k})$
+\end_inset
+
+ represent the fitness difference between the current best particle within sub-cluster 
+\begin_inset Formula $S_{k}$
+\end_inset
+
+ and the recorded sub-cluster leader.
+ The probability
+\begin_inset Formula $\ensuremath{P_{\text{acc}}}$
+\end_inset
+
+of accepting a potentially worse configuration is defined as:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+P_{\text{acc}}=\begin{cases}
+1.0, & \text{if }\Delta<0\\[6pt]
+\exp\left(-\frac{\Delta}{T\cdot\bar{\Delta}_{k}+\epsilon}\right), & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $T$
+\end_inset
+
+ represents the current normalized temperature under a linear cooling schedule,
+ calculated as 
+\begin_inset Formula $T=\max\left(1.0-\text{progress},10^{-4}\right)$
+\end_inset
+
+ to enforce a minimum thermal floor,
+ with
+\begin_inset Formula $\ensuremath{\text{progress}}$
+\end_inset
+
+denoting the relative execution progress (
+\begin_inset Formula $t/t_{\max}$
+\end_inset
+
+).
+ To ensure robustness across diverse objective function scales,
+ an adaptive scaling factor 
+\begin_inset Formula $\overline{\Delta}_{k}$
+\end_inset
+
+ is maintained locally for each sub-cluster 
+\begin_inset Formula $k$
+\end_inset
+
+,
+ updating incrementally via an Exponential Moving Average (EMA) as 
+\begin_inset Formula $\ensuremath{\bar{\Delta}_{k}\leftarrow0.9\cdot\bar{\Delta}_{k}+0.1\cdot\Delta}$
+\end_inset
+
+ for every positive fitness delta observed.
+ The term 
+\begin_inset Formula $\epsilon=10^{-9}$
+\end_inset
+
+ serves as a numerical stability constant to prevent division by zero.
+\begin_inset Newline newline
+\end_inset
+
+This mechanism facilitates a transition from a high-exploration phase at the onset of the optimization process—
+where the acceptance of inferior moves enables the algorithm to escape local attractors—
+to a high-exploitation phase as 
+\begin_inset Formula $T$
+\end_inset
+
+ approaches zero,
+ effectively narrowing the search towards the global optimum 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kirkpatrick1983,Kuo2022"
+literal "false"
+
+\end_inset
+
+.
+ By decoupling the leader update from strict greedy selection,
+ the algorithm exhibits enhanced resilience against the "saddle point" problem in high-dimensional spaces 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Dauphin2014"
+literal "false"
+
+\end_inset
+
+,
+ ensuring a more thorough traversal of the search space before settling into a terminal configuration 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fernandez2022,Gillner2026"
+literal "false"
+
+\end_inset
+
+.
+ This adaptive control,
+ combined with the parallel island-model paradigm,
+ provides a robust defense against premature stagnation without the prohibitive computational overhead associated with global,
+ non-localized simulated annealing schedules 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2022,Charilogis2023,daSilveira2020,Abadlia2017"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Hybrid Local Search Phase
+\end_layout
+
+\begin_layout Standard
+To balance global stochastic exploration with high-precision exploitation,
+ Parallel OPSO incorporates a memetic hybrid local search phase 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Petalas2007"
+literal "false"
+
+\end_inset
+
+ based on the deterministic Broyden–Fletcher–Goldfarb–Shanno (BFGS) quasi-Newton algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Nocedal2006"
+literal "false"
+
+\end_inset
+
+.
+ During execution,
+ the local search procedure is stochastically triggered on the global best position
+\begin_inset Formula $\ensuremath{\mathbf{g}_{\text{best}}}$
+\end_inset
+
+with a predefined probability 
+\begin_inset Formula $p_{ls}$
+\end_inset
+
+
+\begin_inset Formula $\texttt{(\texttt{local\_search\_rate}).}$
+\end_inset
+
+Additionally,
+ a final deterministic refinement step is mandatorily executed inside the 
+\begin_inset Formula $\texttt{done()}$
+\end_inset
+
+routine upon meeting the swarm stopping criteria.
+ The BFGS algorithm iteratively refines the target position vector 
+\begin_inset Formula $\ensuremath{\mathbf{x}_{k}}$
+\end_inset
+
+ along a search direction 
+\begin_inset Formula $\ensuremath{\mathbf{p}_{k}=-H_{k}\nabla f(\mathbf{x}_{k})}$
+\end_inset
+
+,
+ where 
+\begin_inset Formula $H_{k}$
+\end_inset
+
+ represents an approximate inverse Hessian matrix.
+ At each local step 
+\begin_inset Formula $k$
+\end_inset
+
+,
+ 
+\begin_inset Formula $H_{k}$
+\end_inset
+
+ is dynamically updated using the spatial difference vector
+\begin_inset Formula $\ensuremath{\mathbf{s}_{k}}=\ensuremath{\mathbf{x}_{k+1}}-\ensuremath{\mathbf{x}_{k}}$
+\end_inset
+
+ and the gradient difference vector 
+\begin_inset Formula $\ensuremath{\mathbf{y}_{k}=\nabla f(\mathbf{x}_{k+1})-\nabla f(\mathbf{x}_{k})}$
+\end_inset
+
+ according to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+H_{k+1}=(I-\rho_{k}\mathbf{s}_{k}\mathbf{y}^{T}_{k})H_{k}(I-\rho_{k}\mathbf{y}_{k}\mathbf{s}^{T}_{k})+\rho_{k}\mathbf{s}_{k}\mathbf{s}^{T}_{k}
+\end{equation}
+
+\end_inset
+
+ where 
+\begin_inset Formula $\ensuremath{\rho_{k}=(\mathbf{y}^{T}_{k}\mathbf{s}_{k})^{-1}}$
+\end_inset
+
+.
+ This gradient-based coupling guarantees superlinear local convergence characteristics,
+ refining the stochastic candidate solutions of OPSO to exact numerical optima.
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Subpopulation Termination Criterion via Similarity Check
+\end_layout
+
+\begin_layout Standard
+In parallel multi-swarm architectures,
+ determining the optimal execution boundary for each autonomous subpopulation is critical.
+ Halting an island prematurely deprives the global swarm of valuable population diversity and high-quality coordinates during migration phases 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "daSilveira2020,Abadlia2017"
+literal "false"
+
+\end_inset
+
+.
+ Conversely,
+ allowing a stagnated subpopulation to execute until the global maximum iteration limit leads to wasted processor cycles and unnecessary energy consumption 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
+ To resolve this trade-off,
+ each individual island 
+\begin_inset Formula $k$
+\end_inset
+
+ dynamically monitors its own search trajectory via a localized termination state 
+\begin_inset Formula $\mathrm{(\text{TC}_{k})}$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To ensure sufficient initial exploration and avoid false-positive termination signals caused by early stochastic fluctuations,
+ a mandatory warm-up period is enforced.
+ Localized convergence diagnostics remain inactive until the generation counter satisfies:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+t\ge t_{\min},\quad\text{where }t_{\min}=50
+\end{equation}
+
+\end_inset
+
+Upon crossing this threshold,
+ the algorithm tracks the fitness progression of island 
+\begin_inset Formula $k$
+\end_inset
+
+ at every generation 
+\begin_inset Formula $t$
+\end_inset
+
+ by calculating the absolute difference between its current and previous local best objective values:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\Delta f_{k}(t)=\left|f(\mathbf{L}_{\text{best},k}(t))-f(\mathbf{L}_{\text{best},k}(t-1))\right|
+\end{equation}
+
+\end_inset
+
+To evaluate whether 
+\begin_inset Formula $\ensuremath{\Delta f_{k}(t)}$
+\end_inset
+
+ reflects genuine mathematical convergence rather than a transient plateau,
+ the framework embeds the Similarity Check heuristic proposed by Tsoulos et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Tsoulos2021"
+literal "false"
+
+\end_inset
+
+.
+ Conventional termination metrics often rely on instantaneous point-to-point differences,
+ making them highly sensitive to noise in complex fitness landscapes.
+ In contrast,
+ the Similarity Check evaluates the convergence behavior over a sliding historical window of 
+\begin_inset Formula $\ensuremath{W=25}$
+\end_inset
+
+ consecutive iterations.
+ Specifically,
+ island 
+\begin_inset Formula $k$
+\end_inset
+
+ is declared locally converged (
+\begin_inset Formula $TC_{k}=\text{true}$
+\end_inset
+
+) when the average objective improvement falls below a predefined tolerance threshold 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{1}{W}\sum^{W-1}_{m=0}\Delta f_{k}(t-m)<\epsilon
+\end{equation}
+
+\end_inset
+
+From an implementation perspective,
+ each parallel worker thread maintains an isolated heuristic evaluator instance (
+\begin_inset Formula $\texttt{threadSimilarity[\ensuremath{k}]}$
+\end_inset
+
+).
+ This design eliminates thread contention and lock overheads,
+ enabling fully decoupled convergence checks across processing cores 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "OpenMP2024,Charilogis2023"
+literal "false"
+
+\end_inset
+
+.
+ The aggregate count of stagnated islands is continuously tracked as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+S_{\text{term}}=\sum^{K}_{k=1}\mathbb{I}(\text{TC}_{k}=\text{true})
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbb{I}(\cdot)$
+\end_inset
+
+ denotes the indicator function.
+ When 
+\begin_inset Formula $\ensuremath{S_{\text{term}}\ge Q},$
+\end_inset
+
+the global termination strategy 
+\begin_inset Formula $\ensuremath{(\text{TS})}$
+\end_inset
+
+ is triggered 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kyrou2026,Tsoulos2021"
+literal "false"
+
+\end_inset
+
+.
+ Finally,
+ the maximum iteration count 
+\begin_inset Formula $\ensuremath{t_{\max}}$
+\end_inset
+
+ serves as an absolute safety ceiling (
+\begin_inset Formula $\ensuremath{t\ge t_{\max}}$
+\end_inset
+
+),
+ guaranteeing bounded computational time under all execution conditions.
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Pseudocode and Algorithmic Summary
+\series default
+
+\begin_inset Newline newline
+\end_inset
+
+The complete metaheuristic workflow of the proposed Parallel Optimized Particle Swarm Optimization algorithm,
+ incorporating the parallel migration topologies,
+ adaptive inertia weight control mechanisms,
+ simulated annealing leader acceptance criteria,
+ and hybrid local search refinement,
+ is synthesized in the following pseudocode (Algorithm 2):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+begin{algorithm}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+caption{Optimized and Parallel Particle Swarm Optimization (OPSO)}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+label{alg:opso}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+SetKwInOut{Input}{Input}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+SetKwInOut{Output}{Output}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+Input{Search space bounds $[lb,
+ ub]$,
+ Dimension $D$,
+ Objective function $f(x)$,
+ Swarm size $N_p$,
+ Islands $K$ ($S = N_p/K$ particles/island),
+ Max iterations $N_{iter}$,
+ Acceleration constants $c_1,
+ c_2,
+ w_{start}$,
+ Flags:
+ 
+\backslash
+texttt{velocity
+\backslash
+_mode},
+ 
+\backslash
+texttt{inertia
+\backslash
+_type},
+ 
+\backslash
+texttt{prop},
+ Rates:
+ $p_{ls},
+ R_{prop},
+ M_{prop}$}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+Output{Global best solution $x_{gbest}$ and global minimum fitness $f(x_{gbest})$}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+tcc{Initialization Phase}
+\end_layout
+
+\begin_layout Plain Layout
+Initialize random seed generators 
+\backslash
+texttt{cell
+\backslash
+_gen}[i] for $i 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ N_p-1
+\backslash
+}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+ForEach{particle $i 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ N_p-1
+\backslash
+}$}{
+\end_layout
+
+\begin_layout Plain Layout
+    $x_i 
+\backslash
+sim 
+\backslash
+mathcal{U}(lb,
+ ub)$,
+ $v_i 
+\backslash
+gets 0$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    Evaluate fitness $f(x_i)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    $pbest_i 
+\backslash
+gets x_i$,
+ $f(pbest_i) 
+\backslash
+gets f(x_i)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\begin_layout Plain Layout
+Initialize shared SA scale $avg
+\backslash
+_delta 
+\backslash
+gets 0.01$,
+ $S_{
+\backslash
+delta} 
+\backslash
+gets 0$,
+ $prev
+\backslash
+_fitness
+\backslash
+_sum 
+\backslash
+gets 0$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+Partition swarm into $K$ independent islands $S_0,
+ 
+\backslash
+dots,
+ S_{K-1}$ of size $S$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+Initialize island best fitness $bestF2x[k] 
+\backslash
+gets 
+\backslash
+infty,
+ 
+\backslash
+forall k 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ K-1
+\backslash
+}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+ForEach{island $k 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ K-1
+\backslash
+}$}{
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+texttt{UpdateIslandLeader}($k$) 
+\backslash
+tcp*{Computes initial leader $bestSamply_k$}
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\begin_layout Plain Layout
+$f(x_{gbest}) 
+\backslash
+gets 
+\backslash
+min_k bestF2x[k]$ and update $x_{gbest}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+$iter 
+\backslash
+gets 0$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+While{$iter < N_{iter}$ 
+\backslash
+textbf{and not} Terminated()}{
+\end_layout
+
+\begin_layout Plain Layout
+    $progress 
+\backslash
+gets iter / N_{iter}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    $w_{curr} 
+\backslash
+sim 
+\backslash
+mathcal{U}(0.5,
+ 1.0)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+tcc{Stagnation Monitor for iPSO Mode}
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+If{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"ipso
+\backslash
+_vmax"} 
+\backslash
+textbf{and} 
+\backslash
+texttt{inertia
+\backslash
+_type} $== 14$}{
+\end_layout
+
+\begin_layout Plain Layout
+        $current
+\backslash
+_fitness
+\backslash
+_sum 
+\backslash
+gets 
+\backslash
+sum_{i=0}^{N_p-1} |f(x_i)|$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+If{$iter == 0$}{$prev
+\backslash
+_fitness
+\backslash
+_sum 
+\backslash
+gets current
+\backslash
+_fitness
+\backslash
+_sum$
+\backslash
+;}
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+If{$iter > 0$ 
+\backslash
+textbf{and} $|current
+\backslash
+_fitness
+\backslash
+_sum - prev
+\backslash
+_fitness
+\backslash
+_sum| == 0$}{
+\end_layout
+
+\begin_layout Plain Layout
+            $S_{
+\backslash
+delta} 
+\backslash
+gets S_{
+\backslash
+delta} + 1$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+        $prev
+\backslash
+_fitness
+\backslash
+_sum 
+\backslash
+gets current
+\backslash
+_fitness
+\backslash
+_sum$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+ForEach{island $k 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ K-1
+\backslash
+}$}{$bestF2xOld[k] 
+\backslash
+gets bestF2x[k]$
+\backslash
+;}
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+tcc{Parallel Region:
+ OpenMP Execution across Islands}
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+ForEach{island $k 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ K-1
+\backslash
+}$ 
+\backslash
+textbf{in parallel}}{
+\end_layout
+
+\begin_layout Plain Layout
+        $start 
+\backslash
+gets k 
+\backslash
+cdot S$,
+ $end 
+\backslash
+gets 
+\backslash
+min((k+1) 
+\backslash
+cdot S,
+ N_p)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+tcc{Fitness Evaluation 
+\backslash
+& Personal/Global Best Updates}
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+For{$i 
+\backslash
+gets start$ 
+\backslash
+KwTo $end - 1$}{
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+textbf{pragma omp critical}(statfunmin
+\backslash
+_eval)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+Begin{
+\end_layout
+
+\begin_layout Plain Layout
+                $fit 
+\backslash
+gets f(x_i)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            }
+\end_layout
+
+\begin_layout Plain Layout
+            $f(x_i) 
+\backslash
+gets fit$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+If{$fit < f(pbest_i)$}{
+\end_layout
+
+\begin_layout Plain Layout
+                $pbest_i 
+\backslash
+gets x_i$,
+ $f(pbest_i) 
+\backslash
+gets fit$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            }
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+If{$fit < f(x_{gbest})$}{
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+textbf{pragma omp critical}(gbest
+\backslash
+_update)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+Begin{
+\end_layout
+
+\begin_layout Plain Layout
+                    
+\backslash
+If{$fit < f(x_{gbest})$}{
+\end_layout
+
+\begin_layout Plain Layout
+                        $f(x_{gbest}) 
+\backslash
+gets fit$,
+ $x_{gbest} 
+\backslash
+gets x_i$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                    }
+\end_layout
+
+\begin_layout Plain Layout
+                }
+\end_layout
+
+\begin_layout Plain Layout
+            }
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+        
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+tcc{Particle Movement 
+\backslash
+& Velocity Clamping}
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+For{$i 
+\backslash
+gets start$ 
+\backslash
+KwTo $end - 1$}{
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+For{$j 
+\backslash
+gets 0$ 
+\backslash
+KwTo $D - 1$}{
+\end_layout
+
+\begin_layout Plain Layout
+                $r_1,
+ r_2 
+\backslash
+sim |
+\backslash
+mathcal{N}_{[-2,
+ 2]}(0,1)|$ 
+\backslash
+tcp*{Absolute value of truncated normal}
+\end_layout
+
+\begin_layout Plain Layout
+                $old
+\backslash
+_x 
+\backslash
+gets x_{i,j}$,
+ $old
+\backslash
+_v 
+\backslash
+gets v_{i,j}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+If{
+\backslash
+texttt{velocity
+\backslash
+_mode} $
+\backslash
+neq$ 
+\backslash
+textnormal{"ipso
+\backslash
+_max"}}{
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{i,j} 
+\backslash
+gets w_{curr} 
+\backslash
+cdot v_{i,j} + c_1 r_1 (pbest_{i,j} - x_{i,j}) + c_2 r_2 (bestSamply_{k,j} - x_{i,j})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                }
+\end_layout
+
+\begin_layout Plain Layout
+                
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+If{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"standard
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{i,j} 
+\backslash
+gets 
+\backslash
+textnormal{Clamp}(v_{i,j},
+ -13.2,
+ 13.2)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                }
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+ElseIf{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"dynamic
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{max} 
+\backslash
+gets 0.2 
+\backslash
+cdot (ub_j - lb_j) 
+\backslash
+cdot (1.0 - 0.5 
+\backslash
+cdot progress)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{i,j} 
+\backslash
+gets 
+\backslash
+textnormal{Clamp}(v_{i,j},
+ -v_{max},
+ v_{max})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                }
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+ElseIf{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"ipso
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+                    $w_{ipso} 
+\backslash
+gets 
+\backslash
+textnormal{CalculateInertia}(
+\backslash
+texttt{inertia
+\backslash
+_type},
+ iter,
+ N_{iter},
+ 
+\backslash
+texttt{cell
+\backslash
+_gen}[k])$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{i,j} 
+\backslash
+gets w_{ipso} 
+\backslash
+cdot v_{i,j} + 2.0 r_1 (pbest_{i,j} - x_{i,j}) + 1.0 r_2 (bestSamply_{k,j} - x_{i,j})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{i,j} 
+\backslash
+gets v_{i,j} / (ub_j - lb_j)$ 
+\backslash
+tcp*{Scale velocity by range}
+\end_layout
+
+\begin_layout Plain Layout
+                }
+\end_layout
+
+\begin_layout Plain Layout
+                
+\end_layout
+
+\begin_layout Plain Layout
+                $x_{i,j} 
+\backslash
+gets x_{i,j} + v_{i,j}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+tcc{Bound Enforcement}
+\end_layout
+
+\begin_layout Plain Layout
+                
+\backslash
+If{$x_{i,j} < lb_j$ 
+\backslash
+textbf{or} $x_{i,j} > ub_j$}{
+\end_layout
+
+\begin_layout Plain Layout
+                    $x_{i,j} 
+\backslash
+gets old
+\backslash
+_x$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                    $v_{i,j} 
+\backslash
+gets old
+\backslash
+_v$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+                }
+\end_layout
+
+\begin_layout Plain Layout
+            }
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+tcc{Sequential Region:
+ Simulated Annealing Leader Update}
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+ForEach{island $k 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ K-1
+\backslash
+}$}{
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+texttt{UpdateIslandLeader}($k$)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+tcc{Inter-Island Migration / Propagation}
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+If{
+\backslash
+texttt{prop} $== 1$ 
+\backslash
+textbf{and} $K > 1$ 
+\backslash
+textbf{and} $iter 
+\backslash
+pmod{R_{prop}} == 0$}{
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+texttt{Propagate}(
+\backslash
+texttt{propagationMethod})
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+ForEach{island $k 
+\backslash
+in 
+\backslash
+{0,
+ 
+\backslash
+dots,
+ K-1
+\backslash
+}$}{
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+texttt{UpdateIslandLeader}($k$)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+tcc{Global Memetic Refinement}
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+If{$
+\backslash
+mathcal{U}(0,1) < p_{ls}$}{
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+textbf{pragma omp critical}(gbest
+\backslash
+_update)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+Begin{
+\end_layout
+
+\begin_layout Plain Layout
+            $x_{ls} 
+\backslash
+gets 
+\backslash
+textnormal{LocalSearch}(x_{gbest})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+If{$f(x_{ls}) < f(x_{gbest})$}{
+\end_layout
+
+\begin_layout Plain Layout
+                $f(x_{gbest}) 
+\backslash
+gets f(x_{ls})$,
+ $x_{gbest} 
+\backslash
+gets x_{ls}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            }
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\end_layout
+
+\begin_layout Plain Layout
+    $iter 
+\backslash
+gets iter + 1$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\begin_layout Plain Layout
+$x_{gbest} 
+\backslash
+gets 
+\backslash
+textnormal{LocalSearch}(x_{gbest})$ 
+\backslash
+tcp*{Final local refinement}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+KwRet{$x_{gbest},
+ f(x_{gbest})$}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Computational Complexity Analysis
+\end_layout
+
+\begin_layout Standard
+The computational complexity of the proposed algorithm is analyzed per iteration,
+ considering the number of particles 
+\begin_inset Formula $N$
+\end_inset
+
+,
+ the dimensionality of the search space 
+\begin_inset Formula $D$
+\end_inset
+
+,
+ and the number of subpopulations (islands) 
+\begin_inset Formula $K$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $n=N/K$
+\end_inset
+
+ be the number of particles per island.
+\begin_inset Newline newline
+\end_inset
+
+The total complexity per iteration is dominated by the evaluation of the objective function,
+ the velocity/position updates,
+ the hybrid local search procedure,
+ and the communication overhead.
+ The breakdown is as follows:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Objective Function Evaluation:
+ The primary cost is associated with the evaluation of the objective function.
+ In each iteration,
+ 
+\begin_inset Formula $N$
+\end_inset
+
+ evaluations are performed.
+ If 
+\begin_inset Formula $f_{cost}$
+\end_inset
+
+ denotes the computational cost of the objective function 
+\begin_inset Formula $f(\mathbf{x})$
+\end_inset
+
+,
+ the complexity is 
+\begin_inset Formula $\mathcal{O}(N\cdot f_{cost})$
+\end_inset
+
+.
+ Due to the OpenMP parallelization,
+ this is distributed across 
+\begin_inset Formula $K$
+\end_inset
+
+ threads,
+ reducing the execution time to 
+\begin_inset Formula $\mathcal{O}(\frac{N}{K}\cdot f_{cost})$
+\end_inset
+
+ per thread,
+ assuming uniform load balancing
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,OpenMP2024"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Particle Update Mechanism:
+ The velocity and position update operations for all 
+\begin_inset Formula $N$
+\end_inset
+
+ particles across 
+\begin_inset Formula $D$
+\end_inset
+
+ dimensions require 
+\begin_inset Formula $\mathcal{O}(N\cdot D)$
+\end_inset
+
+ time.
+ Similar to the objective function,
+ this is parallelized as 
+\begin_inset Formula $\mathcal{O}(\frac{N}{K}\cdot D)$
+\end_inset
+
+ per subpopulation 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,Shi1998"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Hybrid Local Search Phase:
+ The deterministic BFGS quasi-Newton refinement is stochastically invoked on the global best solution with probability 
+\begin_inset Formula $p_{ls}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $L_{\text{evals}}$
+\end_inset
+
+ denote the average number of objective function evaluations required by the BFGS gradient calculations and line search per local execution.
+ The computational cost of matrix updates for a 
+\begin_inset Formula $D$
+\end_inset
+
+-dimensional search space is 
+\begin_inset Formula $\mathcal{O}(D^{2})$
+\end_inset
+
+.
+ Thus,
+ the amortized cost per iteration for the hybrid refinement phase is 
+\begin_inset Formula $\mathcal{O}\left(p_{ls}\cdot(L_{\text{evals}}\cdot f_{\text{cost}}+D^{2})\right)$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Petalas2007,Nocedal2006"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Inter-Island Propagation:
+ The migration mechanism involves sorting particles by fitness within subpopulations and transferring them.
+ Sorting 
+\begin_inset Formula $n$
+\end_inset
+
+ particles takes 
+\begin_inset Formula $\mathcal{O}(n\log n)$
+\end_inset
+
+.
+ Given that the migration occurs every 
+\begin_inset Formula $P$
+\end_inset
+
+ iterations (propagation rate),
+ the amortized complexity per iteration for the migration phase is 
+\begin_inset Formula $\mathcal{O}(\frac{K\cdot n\log n}{P})$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Charilogis2023,daSilveira2020,Abadlia2017"
+literal "false"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+Combining the above,
+ the total computational complexity per iteration 
+\begin_inset Formula $\ensuremath{T_{t}}$
+\end_inset
+
+ is expressed as:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+T_{t}\approx\mathcal{O}\left(\frac{N}{K}(f_{\text{cost}}+D)+p_{ls}\cdot\left(L_{\text{evals}}\cdot f_{\text{cost}}+D^{2}\right)+\frac{N\log\left(\frac{N}{K}\right)}{P}\right)
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As 
+\begin_inset Formula $P$
+\end_inset
+
+ is typically significantly larger than 1 (e.g.,
+ 
+\begin_inset Formula $P=10$
+\end_inset
+
+) and 
+\begin_inset Formula $p_{ls}$
+\end_inset
+
+ is set to a moderate rate (e.g.,
+ 
+\begin_inset Formula $p_{ls}\le0.1$
+\end_inset
+
+),
+ the propagation and local search overheads remain negligible compared to the objective function evaluations.
+ Consequently,
+ the algorithm exhibits linear scaling with respect to the number of particles and dimensions,
+ while the parallel efficiency is optimized by the factor 
+\begin_inset Formula $K$
+\end_inset
+
+,
+ allowing the algorithm to maintain high performance in high-dimensional optimization problems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Sun2022,Charilogis2023,Kyrou2026"
+literal "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -1012,7 +4451,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -12453,6 +15892,1502 @@ Keep empty!
 
 \begin_layout References Title
 References
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Zhang2023"
+literal "false"
+
+\end_inset
+
+ Zhang,
+ A.;
+ Lipton,
+ Z.C.;
+ Li,
+ M.;
+ Smola,
+ A.J.
+ Dive into Deep Learning.
+ 
+\shape italic
+arXiv
+\shape default
+ 
+\series bold
+2023
+\series default
+,
+ arXiv:2106.11342v5,
+ https://doi.org/10.48550/arXiv.2106.11342.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Kaveh2022"
+literal "false"
+
+\end_inset
+
+ Kaveh,
+ M.;
+ Mesgari,
+ M.S.
+ Application of Meta-Heuristic Algorithms for Training Neural Networks and Deep Learning Architectures:
+ A Comprehensive Review.
+ 
+\shape italic
+Neural Process.
+ Lett.
+
+\shape default
+ 
+\series bold
+2022
+\series default
+,
+ 
+\shape italic
+54
+\shape default
+,
+ 1–104,
+ https://doi.org/10.1007/s11063-022-11055-6.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Charilogis2024"
+literal "false"
+
+\end_inset
+
+ Charilogis,
+ V.;
+ Kyrou,
+ G.;
+ Tsoulos,
+ I.G.;
+ Gianni,
+ A.M.
+ An Innovative Hybrid Approach Producing Trial Solutions for Global Optimization.
+
+\shape italic
+ Appl.
+ Sci.
+
+\shape default
+ 
+\series bold
+2024
+\series default
+,
+ 
+\shape italic
+14
+\shape default
+,
+ 10567.
+ https://doi.org/10.3390/app142210567.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Dauphin2014"
+literal "false"
+
+\end_inset
+
+ Dauphin,
+ Y.N.;
+ Pascanu,
+ R.;
+ Gulcehre,
+ C.;
+ Cho,
+ K.;
+ Ganguli,
+ S.;
+ Bengio,
+ Y.
+ Identifying and attacking the saddle point problem in high-dimensional non-convex optimization.
+ 
+\shape italic
+Adv.
+ Neural Inf.
+ Process.
+ Syst.
+
+\shape default
+ 
+\series bold
+2014
+\series default
+,
+ 
+\shape italic
+27
+\shape default
+,
+ 2933–2941.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Rebello2021"
+literal "false"
+
+\end_inset
+
+ Rebello,
+ C.M.;
+ Martins,
+ M.A.F.;
+ Loureiro,
+ J.M.;
+ Rodrigues,
+ A.E.;
+ Ribeiro,
+ A.M.;
+ Nogueira,
+ I.B.R.
+ From an Optimal Point to an Optimal Region:
+ A Novel Methodology for Optimization of Multimodal Constrained Problems and a Novel Constrained Sliding Particle Swarm Optimization Strategy.
+ 
+\shape italic
+Mathematics
+\shape default
+ 
+\series bold
+2021
+\series default
+,
+ 
+\shape italic
+9
+\shape default
+,
+ 1808.
+ https://doi.org/10.3390/math9151808
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Metropolis1953"
+literal "false"
+
+\end_inset
+
+ Metropolis,
+ N.;
+ Rosenbluth,
+ A.W.;
+ Rosenbluth,
+ M.N.;
+ Teller,
+ A.H.;
+ Teller,
+ E.
+ Equation of State Calculations by Fast Computing Machines.
+ 
+\shape italic
+J.
+ Chem.
+ Phys
+\shape default
+.
+ 
+\series bold
+1953
+\series default
+,
+ 
+\shape italic
+21
+\shape default
+,
+ 1087–1092,
+ https://doi.org/10.1063/1.1699114.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Carleo2017"
+literal "false"
+
+\end_inset
+
+ Carleo,
+ G.;
+ Troyer,
+ M.
+ Solving the Quantum Many-Body Problem with Artificial Neural Networks.
+ 
+\shape italic
+Science
+\shape default
+ 
+\series bold
+2017
+\series default
+,
+ 
+\shape italic
+355
+\shape default
+,
+ 602–606,
+ https://doi.org/10.1126/science.aag2302.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Xia2025"
+literal "false"
+
+\end_inset
+
+ Xia,
+ X.;
+ Zhang,
+ Y.;
+ Zeng,
+ X.;
+ Zhang,
+ X.;
+ Zheng,
+ C.;
+ Su,
+ Y.
+ Artificial Intelligence in Molecular Optimization:
+ Current Paradigms and Future Frontiers.
+ 
+\shape italic
+Int.
+ J.
+ Mol.
+ Sci
+\shape default
+.
+ 
+\series bold
+2025
+\series default
+,
+ 
+\shape italic
+26
+\shape default
+,
+ 4878.
+ https://doi.org/10.3390/ijms26104878.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "BuenoFerrer2025"
+literal "false"
+
+\end_inset
+
+ Bueno-Ferrer,
+ Á.;
+ De Pablo Valenciano,
+ J.;
+ De Burgos Jiménez,
+ J.
+ Unveiling the Potential of Metaheuristics in Transportation:
+ A Path Towards Efficiency,
+ Optimization,
+ and Intelligent Management.
+ 
+\shape italic
+Infrastructures
+\shape default
+ 
+\series bold
+2025
+\series default
+,
+ 
+\shape italic
+10
+\shape default
+,
+ 4.
+ https://doi.org/10.3390/infrastructures10010004.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Andres2025"
+literal "false"
+
+\end_inset
+
+Andrès,
+ E.;
+ Escobar,
+ C.;
+ Doi,
+ K.
+ Machine Learning and Artificial Intelligence in Clinical Medicine—
+Trends,
+ Impact,
+ and Future Directions.
+ 
+\shape italic
+J.
+ Clin.
+ Med
+\shape default
+.
+ 
+\series bold
+2025
+\series default
+,
+ 
+\shape italic
+14
+\shape default
+,
+ 8137.
+ https://doi.org/10.3390/jcm14228137.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Shehata2025"
+literal "false"
+
+\end_inset
+
+Shehata,
+ M.;
+ Elhosseini,
+ M.
+ Advances in AI Technology in Healthcare.
+ 
+\shape italic
+Bioengineering
+\shape default
+ 
+\series bold
+2025
+\series default
+,
+ 
+\shape italic
+12
+\shape default
+,
+ 506.
+ https://doi.org/10.3390/bioengineering12050506.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Fernandez2022"
+literal "false"
+
+\end_inset
+
+ Fernández,
+ J.;
+ G.-Tóth,
+ B.
+ Interval Tools in Branch-and-Bound Methods for Global Optimization.
+ In 
+\shape italic
+The Palgrave Handbook of Operations Research
+\shape default
+;
+ Salhi,
+ S.,
+ Boylan,
+ J.,
+ Eds.;
+ Palgrave Macmillan:
+ Cham,
+ Switzerland,
+ 
+\series bold
+2022
+\series default
+;
+ pp.
+ 263–296,
+ https://doi.org/10.1007/978-3-030-96935-6_8.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Gillner2026"
+literal "false"
+
+\end_inset
+
+Gillner,
+ L.
+ Efficient acceleration strategies for interval branch-and-bound type methods.
+ 
+\shape italic
+Int.
+ J.
+ Approx.
+ Reason
+\shape default
+.
+ 
+\series bold
+2026
+\series default
+,
+ 
+\shape italic
+198
+\shape default
+,
+ 109767,
+ https://doi.org/10.1016/j.ijar.2026.109767.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Rumelhart1986"
+literal "false"
+
+\end_inset
+
+Rumelhart,
+ D.E.;
+ Hinton,
+ G.E.;
+ Williams,
+ R.J.
+ Learning representations by back-propagating errors.
+ 
+\shape italic
+Nature
+\shape default
+ 
+\series bold
+1986
+\series default
+,
+ 
+\shape italic
+323
+\shape default
+,
+ 533–536,
+ https://doi.org/10.1038/323533a0.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Goodfellow2016"
+literal "false"
+
+\end_inset
+
+Goodfellow,
+ I.;
+ Bengio,
+ Y.;
+ Courville,
+ A.
+ 
+\shape italic
+Deep Learning
+\shape default
+;
+ MIT Press:
+ Cambridge,
+ MA,
+ USA,
+ 
+\series bold
+2016
+\series default
+.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Yang2020"
+literal "false"
+
+\end_inset
+
+Yang,
+ X.-S.
+ 
+\shape italic
+Nature-Inspired Optimization Algorithms
+\shape default
+,
+ 2nd ed.;
+ Academic Press:
+ Cambridge,
+ MA,
+ USA,
+ 
+\series bold
+2020
+\series default
+.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Price1977"
+literal "false"
+
+\end_inset
+
+Price,
+ W.L.
+ A controlled random search procedure for global optimisation.
+ 
+\shape italic
+Comput.
+ J.
+
+\shape default
+ 
+\series bold
+1977
+\series default
+,
+ 
+\shape italic
+20
+\shape default
+,
+ 367–370,
+ https://doi.org/10.1093/comjnl/20.4.367.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Kirkpatrick1983"
+literal "false"
+
+\end_inset
+
+Kirkpatrick,
+ S.;
+ Gelatt,
+ C.D.,
+ Jr.;
+ Vecchi,
+ M.P.
+ Optimization by Simulated Annealing.
+ 
+\shape italic
+Science
+\shape default
+ 
+\series bold
+1983
+\series default
+,
+ 
+\shape italic
+220
+\shape default
+,
+ 671–680,
+ https://doi.org/10.1126/science.220.4598.671.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Kuo2022"
+literal "false"
+
+\end_inset
+
+Kuo,
+ C.L.;
+ Kuruoglu,
+ E.E.;
+ Chan,
+ W.K.V.
+ Neural Network Structure Optimization by Simulated Annealing.
+ 
+\shape italic
+Entropy
+\shape default
+ 
+\series bold
+2022
+\series default
+,
+ 
+\shape italic
+24
+\shape default
+,
+ 348.
+ https://doi.org/10.3390/e24030348.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Storn1997"
+literal "false"
+
+\end_inset
+
+Storn,
+ R.;
+ Price,
+ K.
+ Differential Evolution—
+A Simple and Efficient Heuristic for Global Optimization over Continuous Spaces.
+ 
+\shape italic
+J.
+ Glob.
+ Optim.
+
+\shape default
+ 
+\series bold
+1997
+\series default
+,
+ 
+\shape italic
+11
+\shape default
+,
+ 341–359,
+ https://doi.org/10.1023/A:1008202821328.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Gad2022"
+literal "false"
+
+\end_inset
+
+Gad,
+ A.G.
+ Particle Swarm Optimization Algorithm and Its Applications:
+ A Systematic Review.
+ 
+\shape italic
+Arch.
+ Comput.
+ Methods Eng.
+
+\shape default
+ 
+\series bold
+2022
+\series default
+,
+ 
+\shape italic
+29
+\shape default
+,
+ 2531–2561,
+ https://doi.org/10.1007/s11831-021-09694-4.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Poli2007"
+literal "false"
+
+\end_inset
+
+Poli,
+ R.;
+ Kennedy,
+ J.;
+ Blackwell,
+ T.
+ Particle swarm optimization.
+ 
+\shape italic
+Swarm Intell.
+
+\shape default
+ 
+\series bold
+2007
+\series default
+,
+ 
+\shape italic
+1
+\shape default
+,
+ 33–57,
+ https://doi.org/10.1007/s11721-007-0002-0.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Dorigo2006"
+literal "false"
+
+\end_inset
+
+Dorigo,
+ M.;
+ Birattari,
+ M.;
+ Stützle,
+ T.
+ Ant colony optimization.
+ 
+\shape italic
+IEEE Comput.
+ Intell.
+ Mag.
+ 
+\series bold
+\shape default
+2006
+\series default
+,
+ 
+\shape italic
+1
+\shape default
+,
+ 28–39,
+ https://doi.org/10.1109/MCI.2006.329691.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Holland1992"
+literal "false"
+
+\end_inset
+
+Holland,
+ J.H.
+ 
+\shape italic
+Adaptation in Natural and Artificial Systems:
+ An Introductory Analysis with Applications to Biology,
+ Control,
+ and Artificial Intelligence
+\shape default
+;
+ MIT Press:
+ Cambridge,
+ MA,
+ USA,
+ 
+\series bold
+1992
+\series default
+.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Essaid2019"
+literal "false"
+
+\end_inset
+
+Essaid,
+ M.;
+ Idoumghar,
+ L.;
+ Lepagnot,
+ J.;
+ Brévilliers,
+ M.
+ GPU parallelization strategies for metaheuristics:
+ a survey.
+ 
+\shape italic
+Int.
+ J.
+ Parallel Emergent Distrib.
+ Syst.
+
+\shape default
+ 
+\series bold
+2019
+\series default
+,
+ 
+\shape italic
+34
+\shape default
+,
+ 497–522,
+ https://doi.org/10.1080/17445760.2018.1428969.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Cano2016"
+literal "false"
+
+\end_inset
+
+Cano,
+ A.;
+ García-Martínez,
+ C.
+ 100 Million dimensions large-scale global optimization using distributed GPU computing.
+ In 
+\shape italic
+Proceedings of the 2016 IEEE Congress on Evolutionary Computation (CEC)
+\shape default
+,
+ 
+\series bold
+2016
+\series default
+;
+ pp.
+ 3566–3573,
+ https://doi.org/10.1109/CEC.2016.7744241.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Houssein2024"
+literal "false"
+
+\end_inset
+
+Houssein,
+ E.H.;
+ Saeed,
+ M.K.;
+ Hu,
+ G.;
+ Ibrahim,
+ I.E.
+ Metaheuristics for Solving Global and Engineering Optimization Problems:
+ Review,
+ Applications,
+ Open Issues and Challenges.
+ 
+\shape italic
+Arch.
+ Comput.
+ Methods Eng.
+
+\shape default
+ 
+\series bold
+2024
+\series default
+,
+ 
+\shape italic
+31
+\shape default
+,
+ 4485–4519,
+ https://doi.org/10.1007/s11831-024-10168-6.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Sun2022"
+literal "false"
+
+\end_inset
+
+Sun,
+ Y.;
+ Chu,
+ S.-C.;
+ Hu,
+ P.;
+ Watada,
+ J.;
+ Si,
+ M.;
+ Pan,
+ J.-S.
+ Overview of Parallel Computing for Meta-Heuristic Algorithms.
+ 
+\shape italic
+J.
+ Netw.
+ Intell.
+
+\series bold
+\shape default
+ 2022
+\series default
+,
+ 
+\shape italic
+7
+\shape default
+,
+ 656–684.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Salgotra2026"
+literal "false"
+
+\end_inset
+
+Salgotra,
+ R.;
+ Chaudhary,
+ R.;
+ Verma,
+ P.
+ The Rise of Particle Swarm Optimization:
+ A Systematic Bibliometric & Thematic Review (1995–2025).
+ 
+\shape italic
+Arch.
+ Comput.
+ Methods Eng.
+
+\shape default
+ 
+\series bold
+2026
+\series default
+,
+ https://doi.org/10.1007/s11831-026-10532-8.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Rathore2017"
+literal "false"
+
+\end_inset
+
+Rathore,
+ A.;
+ Sharma,
+ H.
+ A Review on Inertia Weight Strategies for Particle Swarm Optimization.
+ In 
+\shape italic
+Proceedings of Sixth International Conference on Soft Computing for Problem Solving
+\shape default
+;
+ Deep,
+ K.,
+ Ed.;
+ Advances in Intelligent Systems and Computing;
+ Springer:
+ Singapore,
+ 
+\series bold
+2017
+\series default
+;
+ Vol.
+ 547,
+ pp.
+ 88–98.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Charilogis2022"
+literal "false"
+
+\end_inset
+
+Charilogis,
+ V.;
+ Tsoulos,
+ I.G.
+ Toward an Ideal Particle Swarm Optimizer for Multidimensional Functions.
+ 
+\shape italic
+Information
+\shape default
+ 
+\series bold
+2022
+\series default
+,
+ 
+\series bold
+\shape italic
+13
+\series default
+\shape default
+,
+ 217.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Demelomenezes2022"
+literal "false"
+
+\end_inset
+
+de Melo Menezes,
+ B.A.;
+ Kuchen,
+ H.;
+ Buarque de Lima Neto,
+ F.
+ Parallelization of Swarm Intelligence Algorithms:
+ Literature Review.
+ 
+\shape italic
+Int.
+ J.
+ Parallel Program.
+
+\shape default
+ 
+\series bold
+2022
+\series default
+,
+ 
+\shape italic
+50
+\shape default
+,
+ 486–514,
+ https://doi.org/10.1007/s10766-022-00736-3.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Charilogis2023"
+literal "false"
+
+\end_inset
+
+Charilogis,
+ V.;
+ Tsoulos,
+ I.G.;
+ Tzallas,
+ A.
+ An Improved Parallel Particle Swarm Optimization.
+ 
+\shape italic
+SN Comput.
+ Sci
+\shape default
+.
+ 
+\series bold
+2023
+\series default
+,
+
+\shape italic
+ 4
+\shape default
+,
+ 766.
+ https://doi.org/10.1007/s42979-023-02227-9.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Nocedal2006"
+literal "false"
+
+\end_inset
+
+Nocedal,
+ J.;
+ Wright,
+ S.J.
+ 
+\shape italic
+Numerical Optimization
+\shape default
+,
+ 2nd ed.;
+ Springer:
+ New York,
+ NY,
+ USA,
+ 
+\series bold
+2006
+\series default
+.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Kennedy1995"
+literal "false"
+
+\end_inset
+
+Kennedy,
+ J.;
+ Eberhart,
+ R.
+ Particle swarm optimization.
+ In 
+\shape italic
+Proceedings of ICNN'95 - International Conference on Neural Networks
+\shape default
+,
+ Perth,
+ WA,
+ Australia,
+ 
+\series bold
+1995
+\series default
+;
+ Vol.
+ 4,
+ pp.
+ 1942–1948.
+ https://doi.org/10.1109/ICNN.1995.488968.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Shi1998"
+literal "false"
+
+\end_inset
+
+Shi,
+ Y.;
+ Eberhart,
+ R.
+ A modified particle swarm optimizer.
+ In P
+\shape italic
+roceedings of the 1998 IEEE International Conference on Evolutionary Computation Proceedings
+\shape default
+.
+ 
+\shape italic
+IEEE World Congress on Computational Intelligence
+\shape default
+,
+ Anchorage,
+ AK,
+ USA,
+ 
+\series bold
+1998
+\series default
+;
+ pp.
+ 69–73.
+ https://doi.org/10.1109/ICEC.1998.699146.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "OpenMP2024"
+literal "false"
+
+\end_inset
+
+OpenMP Architecture Review Board.
+ 
+\shape italic
+OpenMP Application Programming Interface Version 6.0
+\shape default
+;
+ OpenMP ARB:
+ Beaverton,
+ OR,
+ USA,
+ 
+\series bold
+2024
+\series default
+.
+ Available online:
+ https://www.openmp.org/wp-content/uploads/OpenMP-API-Specification-6-0.pdf (accessed on 21 July 2026).
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Kyrou2026"
+literal "false"
+
+\end_inset
+
+Kyrou,
+ G.;
+ Barkas,
+ K.G.;
+ Charilogis,
+ V.;
+ Tsoulos,
+ I.G.
+ Parallel Balanced Grey Wolf Optimizer:
+ A Cooperative Parallel Approach for Large-Scale Optimization Problems.
+ 
+\shape italic
+Foundations
+\shape default
+ 
+\series bold
+2026
+\series default
+,
+ 
+\shape italic
+6
+\shape default
+,
+ 21.
+ https://doi.org/10.3390/foundations6020021.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "daSilveira2020"
+literal "false"
+
+\end_inset
+
+da Silveira,
+ L.A.;
+ Soncco-Álvarez,
+ J.L.;
+ de Lima,
+ T.A.;
+ Ayala-Rincón,
+ M.
+ Behavior of Bioinspired Algorithms in Parallel Island Models.
+ In 
+\shape italic
+Proceedings of the 2020 IEEE Congress on Evolutionary Computation (CEC)
+\shape default
+,
+ Glasgow,
+ UK,
+ 
+\series bold
+2020
+\series default
+;
+ pp.
+ 1–8.
+ https://doi.org/10.1109/CEC48606.2020.9185732.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Abadlia2017"
+literal "false"
+
+\end_inset
+
+Abadlia,
+ H.;
+ Smairi,
+ N.;
+ Ghedira,
+ K.
+ Particle swarm optimization based on island models.
+ In 
+\shape italic
+Proceedings of the Genetic and Evolutionary Computation Conference Companion
+\shape default
+;
+ Association for Computing Machinery:
+ New York,
+ NY,
+ USA,
+
+\series bold
+ 2017
+\series default
+;
+ pp.
+ 101–102.
+ https://doi.org/10.1145/3067695.3076068.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Tsoulos2021"
+literal "false"
+
+\end_inset
+
+Tsoulos,
+ I.G.;
+ Tzallas,
+ A.;
+ Karvounis,
+ E.
+ Improving the PSO method for global optimization problems.
+ 
+\shape italic
+Evolving Systems
+\shape default
+ 
+\series bold
+2021
+\series default
+,
+ 
+\shape italic
+12
+\shape default
+,
+ 875–883.
+ https://doi.org/10.1007/s12530-020-09330-9.
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Petalas2007"
+literal "false"
+
+\end_inset
+
+Petalas,
+ Y.G.;
+ Parsopoulos,
+ K.E.;
+ Vrahatis,
+ M.N.
+ Memetic particle swarm optimization.
+ 
+\shape italic
+Ann.
+ Oper.
+ Res.
+
+\shape default
+ 
+\series bold
+2007
+\series default
+,
+ 
+\shape italic
+156
+\shape default
+,
+ 99–127.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s10479-007-0224-y.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Bibliography
