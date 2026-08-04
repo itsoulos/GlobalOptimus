@@ -626,7 +626,7 @@ literal "false"
 \end_inset
 
  are uniformly distributed random numbers.
- The vector
+ The vector 
 \begin_inset Formula $\ensuremath{\mathbf{p}_{\text{best},i}}$
 \end_inset
 
@@ -635,7 +635,7 @@ denotes the personal best position discovered by particle
 \end_inset
 
 ,
- while
+ while 
 \begin_inset Formula $\ensuremath{\ensuremath{\mathbf{g}_{\text{best}}}}$
 \end_inset
 
@@ -802,18 +802,65 @@ A comprehensive experimental evaluation spanning both large-scale global optimiz
 
 \begin_layout Standard
 The remainder of this article is organized as follows:
- Section 2 outlines the foundational background of classical PSO alongside the detailed mathematical formulation of the proposed Parallel OPSO;
- Section 3 presents the experimental setup,
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Materials-and-Methods"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ outlines the foundational background of classical PSO alongside the detailed mathematical formulation of the proposed Parallel OPSO;
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ presents the experimental setup,
  benchmark functions,
  and comparative performance analysis;
  and finally,
- Section 4 summarizes our key findings,
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ summarizes our key findings,
  provides concluding remarks,
  and outlines directions for future research.
 \end_layout
 
 \begin_layout Section
 Materials and Methods
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Materials-and-Methods"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This section initiates with the main aspects of the original PSO method and continues by presenting in detail the main parts of the proposed method.
 \end_layout
 
 \begin_layout Subsection
@@ -852,7 +899,7 @@ literal "false"
 \end_inset
 
  (
-\begin_inset Formula $i\in\{1,2,\dots,m\})$
+\begin_inset Formula $i\in\{1,2,\ldots,m\})$
 \end_inset
 
  is characterized by its dynamic state parameters,
@@ -861,24 +908,24 @@ literal "false"
 \end_inset
 
 -dimensional position vector 
-\begin_inset Formula $\ensuremath{\mathbf{x}_{i}}=[x_{i1},x_{i2},\dots,x_{in}]^{T}$
+\begin_inset Formula $\ensuremath{\mathbf{x}_{i}}=\left[x_{i1},x_{i2},\ldots,x_{in}\right]^{T}$
 \end_inset
 
-and a corresponding velocity vector 
-\begin_inset Formula $\ensuremath{\ensuremath{\ensuremath{\mathbf{v}_{i}}=[v_{i1},v_{i2},\dots,v_{in}]^{T}.}}$
+and a corresponding velocity vector
+\begin_inset Formula $\ensuremath{\ensuremath{\ensuremath{\mathbf{v}_{i}}=\left[v_{i1},v_{i2},\dots,v_{in}\right]^{T}.}}$
 \end_inset
 
 During the optimization process,
  each particle maintains a memory of its own historical personal best position discovered so far,
  denoted as 
-\begin_inset Formula $\ensuremath{\mathbf{p}_{i}}=[p_{i1},p_{i2},\dots,p_{in}]^{T}$
+\begin_inset Formula $\ensuremath{\mathbf{p}_{i}}=\left[p_{i1},p_{i2},\dots,p_{in}\right]^{T}$
 \end_inset
 
 .
  Concurrently,
  the swarm tracks the absolute global best position achieved by any particle in the entire population,
  defined as
-\begin_inset Formula $\ensuremath{\mathbf{p}_{\text{gbest}}=\arg\min_{i\in\{1,\dots,m\}}f(\mathbf{p}_{i})}$
+\begin_inset Formula $\ensuremath{\mathbf{p}_{\text{gbest}}=\arg\min_{i\in\{1,\dots,m\}}f\left(\mathbf{p}_{i}\right)}$
 \end_inset
 
 ,
@@ -887,8 +934,8 @@ During the optimization process,
 \end_inset
 
  represents the objective function under minimization.
- To balance global exploration and localized exploitation—
-a trade-off extensively evaluated in recent metaheuristic literature 
+ To balance global exploration and localized exploitation,
+ a trade-off extensively evaluated in recent metaheuristic literature 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Kaveh2022,Charilogis2024"
@@ -896,8 +943,8 @@ literal "false"
 
 \end_inset
 
-—
-Shi and Eberhart 
+,
+ Shi and Eberhart 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Shi1998"
@@ -922,7 +969,7 @@ literal "false"
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\mathbf{v}_{i}(t+1)=\omega(t)\cdot\mathbf{v}_{i}(t)+c_{1}\cdot\mathbf{r}_{1}\cdot(\mathbf{p}_{i}(t)-\mathbf{x}_{i}(t))+c_{2}\cdot\mathbf{r}_{2}\cdot(\mathbf{p}_{\text{gbest}}(t)-\mathbf{x}_{i}(t))
+\mathbf{v}_{i}(t+1)=\omega(t)\cdot\mathbf{v}_{i}(t)+c_{1}\cdot\mathbf{r}_{1}\cdot\left(\mathbf{p}_{i}(t)-\mathbf{x}_{i}(t)\right)+c_{2}\cdot\mathbf{r}_{2}\cdot\left(\mathbf{p}_{\text{gbest}}(t)-\mathbf{x}_{i}(t)\right)
 \end{equation}
 
 \end_inset
@@ -965,6 +1012,19 @@ where
 LatexCommand citep
 key "Rebello2021,Gad2022"
 literal "false"
+
+\end_inset
+
+.
+ The main parts of the original PSO method are listed in Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:classical_pso}
+\end_layout
 
 \end_inset
 
@@ -1281,10 +1341,22 @@ Parallel Optimized Particle Swarm Optimization Algorithm
 
 \begin_layout Standard
 The distributed framework of the Optimized Particle Swarm Optimization (OPSO) algorithm is engineered by partitioning the global agent population into 
-\begin_inset Formula $N$
+\begin_inset Formula $K$
 \end_inset
 
- distinct subpopulations.
+ distinct subpopulations and it is presented graphically in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Parallel-OPSO-framework"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+.
  Each subpopulation operates as an autonomous evolutionary unit allocated to an individual processing element,
  enabling simultaneous execution across a shared-memory environment 
 \begin_inset CommandInset citation
@@ -1297,7 +1369,7 @@ literal "false"
 .
  
 \begin_inset Float figure
-placement document
+placement H
 alignment center
 wide false
 sideways false
@@ -1318,6 +1390,13 @@ status open
 
 \size footnotesize
 Parallel OPSO framework illustrating thread distribution and flexible inter-island migration topologies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Parallel-OPSO-framework"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1494,8 +1573,8 @@ literal "false"
 \begin{equation}
 Q=\begin{cases}
 1, & \text{if }TS=ANY\\
-\lfloor N/2\rfloor+1, & \text{if }TS=MAJORITY\\
-N, & \text{if }TS=ALL
+\lfloor K/2\rfloor+1, & \text{if }TS=MAJORITY\\
+K, & \text{if }TS=ALL
 \end{cases}
 \end{equation}
 
@@ -1636,11 +1715,11 @@ literal "false"
 \begin_inset Newline newline
 \end_inset
 
-Unlike conventional distributed metaheuristics that rely on static and rigid structural layouts—
-such as ring,
+Unlike conventional distributed metaheuristics that rely on static and rigid structural layouts,
+ such as ring,
  star,
- or fully-mesh migration topologies—
-the proposed framework introduces a localized,
+ or fully-mesh migration topologies,
+ the proposed framework introduces a localized,
  dynamically configurable migration model tailored for high-dimensional execution spaces.
  Conventional geometric topologies impose strict synchronization locks and significant thread contention penalties as the execution scale grows,
  which frequently induces severe memory access latencies within shared-memory architectures 
@@ -1676,7 +1755,7 @@ One-to-All (
 ):
  A randomly isolated subpopulation serves as a central broadcaster,
  transmitting its optimal geometric updates to refresh the search vectors of all other 
-\begin_inset Formula $N-1$
+\begin_inset Formula $K-1$
 \end_inset
 
  active swarms simultaneously.
@@ -2060,9 +2139,8 @@ denoting the relative execution progress (
 \begin_inset Newline newline
 \end_inset
 
-This mechanism facilitates a transition from a high-exploration phase at the onset of the optimization process—
-where the acceptance of inferior moves enables the algorithm to escape local attractors—
-to a high-exploitation phase as 
+This mechanism facilitates a transition from a high-exploration phase at the onset of the optimization process,
+ where the acceptance of inferior moves enables the algorithm to escape local attractors,to a high-exploitation phase as 
 \begin_inset Formula $T$
 \end_inset
 
@@ -2208,6 +2286,13 @@ H_{k+1}=(I-\rho_{k}\mathbf{s}_{k}\mathbf{y}^{T}_{k})H_{k}(I-\rho_{k}\mathbf{y}_{
 
 \series bold
 Subpopulation Termination Criterion via Similarity Check
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:similarity-check"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2395,17 +2480,55 @@ literal "false"
 
 \series bold
 Pseudocode and Algorithmic Summary
-\series default
+\end_layout
 
-\begin_inset Newline newline
-\end_inset
-
+\begin_layout Standard
 The complete metaheuristic workflow of the proposed Parallel Optimized Particle Swarm Optimization algorithm,
  incorporating the parallel migration topologies,
  adaptive inertia weight control mechanisms,
  simulated annealing leader acceptance criteria,
  and hybrid local search refinement,
- is synthesized in the following pseudocode (Algorithm 2):
+ is synthesized in the following pseudocode,
+ presented across three parts to preserve legibility:
+ the initialization phase (Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-init}
+\end_layout
+
+\end_inset
+
+),
+ the main evolutionary loop (Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-main}
+\end_layout
+
+\end_inset
+
+),
+ and the per-island parallel update procedure invoked within it (Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-island}
+\end_layout
+
+\end_inset
+
+):
 \end_layout
 
 \begin_layout Standard
@@ -2421,13 +2544,13 @@ begin{algorithm}[H]
 \begin_layout Plain Layout
 
 \backslash
-caption{Optimized and Parallel Particle Swarm Optimization (OPSO)}
+caption{Optimized and Parallel Particle Swarm Optimization (OPSO) --- Initialization Phase}
 \end_layout
 
 \begin_layout Plain Layout
 
 \backslash
-label{alg:opso}
+label{alg:opso-init}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2478,7 +2601,10 @@ texttt{prop},
 \begin_layout Plain Layout
 
 \backslash
-Output{Global best solution $x_{gbest}$ and global minimum fitness $f(x_{gbest})$}
+Output{Initialized swarm state,
+ ready for the main evolutionary loop of Algorithm~
+\backslash
+ref{alg:opso-main}}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2662,6 +2788,87 @@ gets 0$
 \begin_layout Plain Layout
 
 \backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-init}
+\end_layout
+
+\end_inset
+
+ performs the sequential initialization of the swarm,
+ the islands,
+ and the initial leaders.
+ The resulting state is then evolved by the main loop of Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-main}
+\end_layout
+
+\end_inset
+
+,
+ which repeatedly invokes,
+ within its OpenMP parallel region,
+ the per-island update procedure detailed separately in Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-island}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+begin{algorithm}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+caption{Optimized and Parallel Particle Swarm Optimization (OPSO) --- Main Evolutionary Loop (continues from Algorithm~
+\backslash
+ref{alg:opso-init})}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+label{alg:opso-main}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
 While{$iter < N_{iter}$ 
 \backslash
 textbf{and not} Terminated()}{
@@ -2684,10 +2891,6 @@ mathcal{U}(0.5,
  1.0)$
 \backslash
 ;
-\end_layout
-
-\begin_layout Plain Layout
-    
 \end_layout
 
 \begin_layout Plain Layout
@@ -2802,10 +3005,6 @@ _sum$
 
 \begin_layout Plain Layout
     
-\end_layout
-
-\begin_layout Plain Layout
-    
 \backslash
 ForEach{island $k 
 \backslash
@@ -2822,10 +3021,6 @@ dots,
 gets bestF2x[k]$
 \backslash
 ;}
-\end_layout
-
-\begin_layout Plain Layout
-    
 \end_layout
 
 \begin_layout Plain Layout
@@ -2854,453 +3049,17 @@ textbf{in parallel}}{
 \end_layout
 
 \begin_layout Plain Layout
-        $start 
-\backslash
-gets k 
-\backslash
-cdot S$,
- $end 
-\backslash
-gets 
-\backslash
-min((k+1) 
-\backslash
-cdot S,
- N_p)$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-        
-\end_layout
-
-\begin_layout Plain Layout
         
 \backslash
-tcc{Fitness Evaluation 
+texttt{ProcessIsland}($k$) 
 \backslash
-& Personal/Global Best Updates}
-\end_layout
-
-\begin_layout Plain Layout
-        
+tcp*{Executes Algorithm~
 \backslash
-For{$i 
-\backslash
-gets start$ 
-\backslash
-KwTo $end - 1$}{
-\end_layout
-
-\begin_layout Plain Layout
-            
-\backslash
-textbf{pragma omp critical}(statfunmin
-\backslash
-_eval)
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-            
-\backslash
-Begin{
-\end_layout
-
-\begin_layout Plain Layout
-                $fit 
-\backslash
-gets f(x_i)$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-            }
-\end_layout
-
-\begin_layout Plain Layout
-            $f(x_i) 
-\backslash
-gets fit$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-            
-\backslash
-If{$fit < f(pbest_i)$}{
-\end_layout
-
-\begin_layout Plain Layout
-                $pbest_i 
-\backslash
-gets x_i$,
- $f(pbest_i) 
-\backslash
-gets fit$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-            }
-\end_layout
-
-\begin_layout Plain Layout
-            
-\backslash
-If{$fit < f(x_{gbest})$}{
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-textbf{pragma omp critical}(gbest
-\backslash
-_update)
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-Begin{
-\end_layout
-
-\begin_layout Plain Layout
-                    
-\backslash
-If{$fit < f(x_{gbest})$}{
-\end_layout
-
-\begin_layout Plain Layout
-                        $f(x_{gbest}) 
-\backslash
-gets fit$,
- $x_{gbest} 
-\backslash
-gets x_i$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                    }
-\end_layout
-
-\begin_layout Plain Layout
-                }
-\end_layout
-
-\begin_layout Plain Layout
-            }
-\end_layout
-
-\begin_layout Plain Layout
-        }
-\end_layout
-
-\begin_layout Plain Layout
-        
-\end_layout
-
-\begin_layout Plain Layout
-        
-\backslash
-tcc{Particle Movement 
-\backslash
-& Velocity Clamping}
-\end_layout
-
-\begin_layout Plain Layout
-        
-\backslash
-For{$i 
-\backslash
-gets start$ 
-\backslash
-KwTo $end - 1$}{
-\end_layout
-
-\begin_layout Plain Layout
-            
-\backslash
-For{$j 
-\backslash
-gets 0$ 
-\backslash
-KwTo $D - 1$}{
-\end_layout
-
-\begin_layout Plain Layout
-                $r_1,
- r_2 
-\backslash
-sim |
-\backslash
-mathcal{N}_{[-2,
- 2]}(0,1)|$ 
-\backslash
-tcp*{Absolute value of truncated normal}
-\end_layout
-
-\begin_layout Plain Layout
-                $old
-\backslash
-_x 
-\backslash
-gets x_{i,j}$,
- $old
-\backslash
-_v 
-\backslash
-gets v_{i,j}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-If{
-\backslash
-texttt{velocity
-\backslash
-_mode} $
-\backslash
-neq$ 
-\backslash
-textnormal{"ipso
-\backslash
-_max"}}{
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{i,j} 
-\backslash
-gets w_{curr} 
-\backslash
-cdot v_{i,j} + c_1 r_1 (pbest_{i,j} - x_{i,j}) + c_2 r_2 (bestSamply_{k,j} - x_{i,j})$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                }
-\end_layout
-
-\begin_layout Plain Layout
-                
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-If{
-\backslash
-texttt{velocity
-\backslash
-_mode} $==$ 
-\backslash
-textnormal{"standard
-\backslash
-_vmax"}}{
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{i,j} 
-\backslash
-gets 
-\backslash
-textnormal{Clamp}(v_{i,j},
- -13.2,
- 13.2)$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                }
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-ElseIf{
-\backslash
-texttt{velocity
-\backslash
-_mode} $==$ 
-\backslash
-textnormal{"dynamic
-\backslash
-_vmax"}}{
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{max} 
-\backslash
-gets 0.2 
-\backslash
-cdot (ub_j - lb_j) 
-\backslash
-cdot (1.0 - 0.5 
-\backslash
-cdot progress)$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{i,j} 
-\backslash
-gets 
-\backslash
-textnormal{Clamp}(v_{i,j},
- -v_{max},
- v_{max})$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                }
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-ElseIf{
-\backslash
-texttt{velocity
-\backslash
-_mode} $==$ 
-\backslash
-textnormal{"ipso
-\backslash
-_vmax"}}{
-\end_layout
-
-\begin_layout Plain Layout
-                    $w_{ipso} 
-\backslash
-gets 
-\backslash
-textnormal{CalculateInertia}(
-\backslash
-texttt{inertia
-\backslash
-_type},
- iter,
- N_{iter},
- 
-\backslash
-texttt{cell
-\backslash
-_gen}[k])$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{i,j} 
-\backslash
-gets w_{ipso} 
-\backslash
-cdot v_{i,j} + 2.0 r_1 (pbest_{i,j} - x_{i,j}) + 1.0 r_2 (bestSamply_{k,j} - x_{i,j})$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{i,j} 
-\backslash
-gets v_{i,j} / (ub_j - lb_j)$ 
-\backslash
-tcp*{Scale velocity by range}
-\end_layout
-
-\begin_layout Plain Layout
-                }
-\end_layout
-
-\begin_layout Plain Layout
-                
-\end_layout
-
-\begin_layout Plain Layout
-                $x_{i,j} 
-\backslash
-gets x_{i,j} + v_{i,j}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-tcc{Bound Enforcement}
-\end_layout
-
-\begin_layout Plain Layout
-                
-\backslash
-If{$x_{i,j} < lb_j$ 
-\backslash
-textbf{or} $x_{i,j} > ub_j$}{
-\end_layout
-
-\begin_layout Plain Layout
-                    $x_{i,j} 
-\backslash
-gets old
-\backslash
-_x$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                    $v_{i,j} 
-\backslash
-gets old
-\backslash
-_v$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-                }
-\end_layout
-
-\begin_layout Plain Layout
-            }
-\end_layout
-
-\begin_layout Plain Layout
-        }
+ref{alg:opso-island}}
 \end_layout
 
 \begin_layout Plain Layout
     }
-\end_layout
-
-\begin_layout Plain Layout
-    
 \end_layout
 
 \begin_layout Plain Layout
@@ -3336,10 +3095,6 @@ texttt{UpdateIslandLeader}($k$)
 
 \begin_layout Plain Layout
     }
-\end_layout
-
-\begin_layout Plain Layout
-    
 \end_layout
 
 \begin_layout Plain Layout
@@ -3402,10 +3157,6 @@ texttt{UpdateIslandLeader}($k$)
 
 \begin_layout Plain Layout
     }
-\end_layout
-
-\begin_layout Plain Layout
-    
 \end_layout
 
 \begin_layout Plain Layout
@@ -3478,10 +3229,6 @@ gets x_{ls}$
 \end_layout
 
 \begin_layout Plain Layout
-    
-\end_layout
-
-\begin_layout Plain Layout
     $iter 
 \backslash
 gets iter + 1$
@@ -3508,6 +3255,494 @@ tcp*{Final local refinement}
 \backslash
 KwRet{$x_{gbest},
  f(x_{gbest})$}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Algorithm 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+ref{alg:opso-island}
+\end_layout
+
+\end_inset
+
+ specifies the computations carried out independently and concurrently for each island during every generation of the main loop,
+ namely the fitness evaluation and personal/global best updates,
+ followed by the particle movement,
+ velocity clamping,
+ and bound enforcement steps.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+begin{algorithm}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+caption{
+\backslash
+texttt{ProcessIsland}($k$):
+ Parallel Fitness Evaluation and Particle Update for Island $k$ (invoked from the parallel region of Algorithm~
+\backslash
+ref{alg:opso-main})}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+label{alg:opso-island}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+SetKwInOut{Input}{Input}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+Input{Island index $k$}
+\end_layout
+
+\begin_layout Plain Layout
+$start 
+\backslash
+gets k 
+\backslash
+cdot S$,
+ $end 
+\backslash
+gets 
+\backslash
+min((k+1) 
+\backslash
+cdot S,
+ N_p)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+tcc{Fitness Evaluation 
+\backslash
+& Personal/Global Best Updates}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+For{$i 
+\backslash
+gets start$ 
+\backslash
+KwTo $end - 1$}{
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+textbf{pragma omp critical}(statfunmin
+\backslash
+_eval)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+Begin{
+\end_layout
+
+\begin_layout Plain Layout
+        $fit 
+\backslash
+gets f(x_i)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    $f(x_i) 
+\backslash
+gets fit$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+If{$fit < f(pbest_i)$}{
+\end_layout
+
+\begin_layout Plain Layout
+        $pbest_i 
+\backslash
+gets x_i$,
+ $f(pbest_i) 
+\backslash
+gets fit$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+If{$fit < f(x_{gbest})$}{
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+textbf{pragma omp critical}(gbest
+\backslash
+_update)
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+Begin{
+\end_layout
+
+\begin_layout Plain Layout
+            
+\backslash
+If{$fit < f(x_{gbest})$}{
+\end_layout
+
+\begin_layout Plain Layout
+                $f(x_{gbest}) 
+\backslash
+gets fit$,
+ $x_{gbest} 
+\backslash
+gets x_i$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            }
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+tcc{Particle Movement 
+\backslash
+& Velocity Clamping}
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+For{$i 
+\backslash
+gets start$ 
+\backslash
+KwTo $end - 1$}{
+\end_layout
+
+\begin_layout Plain Layout
+    
+\backslash
+For{$j 
+\backslash
+gets 0$ 
+\backslash
+KwTo $D - 1$}{
+\end_layout
+
+\begin_layout Plain Layout
+        $r_1,
+ r_2 
+\backslash
+sim |
+\backslash
+mathcal{N}_{[-2,
+ 2]}(0,1)|$ 
+\backslash
+tcp*{Absolute value of truncated normal}
+\end_layout
+
+\begin_layout Plain Layout
+        $old
+\backslash
+_x 
+\backslash
+gets x_{i,j}$,
+ $old
+\backslash
+_v 
+\backslash
+gets v_{i,j}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+If{
+\backslash
+texttt{velocity
+\backslash
+_mode} $
+\backslash
+neq$ 
+\backslash
+textnormal{"ipso
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{i,j} 
+\backslash
+gets w_{curr} 
+\backslash
+cdot v_{i,j} + c_1 r_1 (pbest_{i,j} - x_{i,j}) + c_2 r_2 (bestSamply_{k,j} - x_{i,j})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+If{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"standard
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{i,j} 
+\backslash
+gets 
+\backslash
+textnormal{Clamp}(v_{i,j},
+ -13.2,
+ 13.2)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+ElseIf{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"dynamic
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{max} 
+\backslash
+gets 0.2 
+\backslash
+cdot (ub_j - lb_j) 
+\backslash
+cdot (1.0 - 0.5 
+\backslash
+cdot progress)$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{i,j} 
+\backslash
+gets 
+\backslash
+textnormal{Clamp}(v_{i,j},
+ -v_{max},
+ v_{max})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+ElseIf{
+\backslash
+texttt{velocity
+\backslash
+_mode} $==$ 
+\backslash
+textnormal{"ipso
+\backslash
+_vmax"}}{
+\end_layout
+
+\begin_layout Plain Layout
+            $w_{ipso} 
+\backslash
+gets 
+\backslash
+textnormal{CalculateInertia}(
+\backslash
+texttt{inertia
+\backslash
+_type},
+ iter,
+ N_{iter},
+ 
+\backslash
+texttt{cell
+\backslash
+_gen}[k])$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{i,j} 
+\backslash
+gets w_{ipso} 
+\backslash
+cdot v_{i,j} + 2.0 r_1 (pbest_{i,j} - x_{i,j}) + 1.0 r_2 (bestSamply_{k,j} - x_{i,j})$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{i,j} 
+\backslash
+gets v_{i,j} / (ub_j - lb_j)$ 
+\backslash
+tcp*{Scale velocity by range}
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+        $x_{i,j} 
+\backslash
+gets x_{i,j} + v_{i,j}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+tcc{Bound Enforcement}
+\end_layout
+
+\begin_layout Plain Layout
+        
+\backslash
+If{$x_{i,j} < lb_j$ 
+\backslash
+textbf{or} $x_{i,j} > ub_j$}{
+\end_layout
+
+\begin_layout Plain Layout
+            $x_{i,j} 
+\backslash
+gets old
+\backslash
+_x$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+            $v_{i,j} 
+\backslash
+gets old
+\backslash
+_v$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+        }
+\end_layout
+
+\begin_layout Plain Layout
+    }
+\end_layout
+
+\begin_layout Plain Layout
+}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3601,7 +3836,7 @@ Objective Function Evaluation:
 \end_inset
 
  per thread,
- assuming uniform load balancing
+ assuming uniform load balancing 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Charilogis2023,OpenMP2024"
@@ -3774,6 +4009,13 @@ literal "false"
 
 \begin_layout Section
 Results
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Results"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -3781,7 +4023,7 @@ Experimental datasets
 \end_layout
 
 \begin_layout Standard
-The datasets used in the conducted experiments were obtained from the following online databases:
+The datasets used in the conducted experiments were downloaded from the following following online databases:
 \end_layout
 
 \begin_layout Enumerate
@@ -3831,7 +4073,7 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-The list of classification datasets has as follows:
+The datasets used in the conducted experiments are:
 \end_layout
 
 \begin_layout Enumerate
@@ -3852,12 +4094,13 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Alcohol
 \series default
  dataset,
- related to alcohol consumption and appeared in 
+ concerning alcohol consumption,
+ was introduced in 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "alcohol"
@@ -3886,11 +4129,13 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Balance
 \series default
- dataset 
+ dataset,
+ related to various psychological experiments,
+ was introduced in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "balance"
@@ -3898,9 +4143,7 @@ literal "false"
 
 \end_inset
 
-,
- related to various psychological experiments.
- 
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -3909,7 +4152,7 @@ literal "false"
 Circular
 \series default
  dataset,
- which is produced artificially and contains two distinct classes.
+ which represents an artificial dataset with two classes.
 \end_layout
 
 \begin_layout Enumerate
@@ -3918,7 +4161,7 @@ Circular
 Cleveland
 \series default
  dataset,
- related to the presence of heart disease 
+ that denotes a medical dataset regarding heart diseases 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "cleveland1,cleveland2"
@@ -3947,12 +4190,13 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Ecoli
 \series default
-,
- used to detect protein problems 
+ dataset,
+ used for detecting protein localization problems,
+ was introduced in 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ecoli"
@@ -3969,7 +4213,7 @@ The
 Fert
 \series default
  dataset,
- related to sperm concentration problems.
+ related to sperm concentration disorders.
 \end_layout
 
 \begin_layout Enumerate
@@ -3978,7 +4222,7 @@ Fert
 Haberman
 \series default
 ,
- a medical dataset that contains data used in the prediction of breast cancer.
+ a medical dataset related to the presence of breast cancer.
 \end_layout
 
 \begin_layout Enumerate
@@ -4011,7 +4255,7 @@ literal "false"
 \end_inset
 
 ,
- which was used to detect heart diseases.
+ a medical dataset regarding heart diseases.
 \end_layout
 
 \begin_layout Enumerate
@@ -4040,12 +4284,13 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Ionosphere
 \series default
  dataset,
- that was used to classify radar data from the ionosphere 
+ used for the classification of radar signals from the ionosphere,
+ was introduced in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ion1,ion2"
@@ -4103,7 +4348,16 @@ literal "false"
 \end_inset
 
 ,
- which is a medical dataset related to breast tumors.
+ which is a medical dataset regarding the detection of breast tumors.
+\end_layout
+
+\begin_layout Enumerate
+The 
+\series bold
+Optdigits
+\series default
+ dataset,
+ used for the recognition of handwritten digits from optical scans.
 \end_layout
 
 \begin_layout Enumerate
@@ -4112,7 +4366,7 @@ literal "false"
 Parkinsons
 \series default
  dataset,
- which is a medical dataset used to detect the presence of the Parkinson's Disease
+ which is a medical dataset regarding the Parkinson's Disease
 \begin_inset CommandInset citation
 LatexCommand cite
 key "parkinsons"
@@ -4150,7 +4404,11 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-PirVision dataset 
+
+\series bold
+PirVision
+\series default
+ dataset 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "pirvision"
@@ -4159,13 +4417,7 @@ literal "false"
 \end_inset
 
 ,
- that contains occupancy detection data that was collected from a Synchronized Low-Energy Electronically-chopped Passive Infra-Red sensing node in residential and office environments.
-
-\series bold
- 
-\series default
-The dataset contains 15302 patterns and the dimension of each pattern is 59.
- 
+ that contains occupancy detection data.
 \end_layout
 
 \begin_layout Enumerate
@@ -4225,7 +4477,7 @@ literal "false"
 \end_inset
 
 ,
- a medical dataset related to the presence of heart diseases.
+ a medical dataset used to detect the the presence of heart diseases.
  
 \end_layout
 
@@ -4277,7 +4529,7 @@ literal "false"
 Spambase 
 \series default
 dataset,
- regarding the detection of spam emails 
+ related to the detection of spam emails 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "spambase"
@@ -4299,12 +4551,13 @@ Statheart
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Student
 \series default
-,
- which contains data from various experiments in schools 
+ dataset,
+ containing data collected from various school-related studies,
+ was originally presented in 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "student"
@@ -4332,11 +4585,13 @@ literal "false"
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
-Wdbc
+WDBC
 \series default
- dataset 
+ dataset,
+ a medical dataset for breast tumor diagnosis,
+ was originally presented in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "wdbc"
@@ -4344,18 +4599,17 @@ literal "false"
 
 \end_inset
 
-,
- which is a medical dataset related the presence of breast tumors.
- 
+.
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Wine
 \series default
  dataset,
- used for the classification of the quality of wines  
+ used for wine quality classification,
+ was originally presented in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "wine1,wine2"
@@ -4387,11 +4641,13 @@ literal "true"
 \end_layout
 
 \begin_layout Enumerate
-
+The 
 \series bold
 Zoo
 \series default
- dataset 
+ dataset,
+ used for animal classification,
+ was originally presented in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "zoo"
@@ -4399,12 +4655,415 @@ literal "false"
 
 \end_inset
 
-,
- which was used to estimate the class of various animals.
+.
 \end_layout
 
 \begin_layout Subsection
 Experimental settings 
+\end_layout
+
+\begin_layout Standard
+The software used in this work was entirely coded in ANSI C++ with the support of OPTIMUS environment,
+ downloaded from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://github.com/itsoulos/OPTIMUS/
+\end_layout
+
+\end_inset
+
+(accessed on 24 June 2026)
+\begin_inset CommandInset citation
+LatexCommand citep
+key "optimus"
+literal "false"
+
+\end_inset
+
+.
+ All the experiments were conducted on
+\series bold
+ 
+\series default
+an AMD Ryzen 5950X with 128GB of RAM and the used operating system was Debian Linux.
+ During the experimental evaluation,
+ a 10-fold cross-validation procedure was applied,
+ in which each dataset was divided into ten subsets (folds).
+ In each validation round,
+ 90% of the instances were used for training,
+ whereas the remaining 10% were reserved for testing.
+ To ensure statistical reliability,
+ each experimental configuration was independently executed 30 times,
+ with a different initialization seed assigned to the random number generator for each run.
+ The random numbers required during the experiments were generated using the `drand48()` function provided by the C standard library.
+ The average classification error is defined as:
+ 
+\begin_inset Formula 
+\begin{equation}
+E_{C}\left(N\left(\overrightarrow{x},\overrightarrow{w}\right)\right)=100\times\frac{\sum^{N}_{i=1}\left(\mbox{class}\left(N\left(\overrightarrow{x_{i}},\overrightarrow{w}\right)\right)\ne y_{i}\right)}{M}
+\end{equation}
+
+\end_inset
+
+Where the set 
+\begin_inset Formula $T$
+\end_inset
+
+ represents the associated test set,
+ with 
+\begin_inset Formula $T=\left(x_{i},y_{i}\right),\ i=1,\ldots,M$
+\end_inset
+
+.
+ The settings used in the conducted experiments are shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Experimental-settings."
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ 
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Experimental settings.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Experimental-settings."
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PARAMETER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+MEANING
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+VALUE
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{c}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of 
+\begin_inset Newline newline
+\end_inset
+
+particles/chromosomes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $N_{g}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Maximum number
+\begin_inset Newline newline
+\end_inset
+
+of generations
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $k$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of weights
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Propagation method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NtoN
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" color="default" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Moreover,
+ the following notation is used in the tables presenting the experimental results:
+\end_layout
+
+\begin_layout Enumerate
+The column DATASET indicates the name of the used dataset.
+\end_layout
+
+\begin_layout Enumerate
+The column BFGS is used for the application of the BFGS optimization procedure 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "bfgs"
+literal "false"
+
+\end_inset
+
+ to train an artificial neural network 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nn1,nn2"
+literal "false"
+
+\end_inset
+
+ with 10 processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column NEAT 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "neat"
+literal "false"
+
+\end_inset
+
+ represents the results obtained by the NEAT (NeuroEvolution of Augmenting Topologies) method.
+\end_layout
+
+\begin_layout Enumerate
+The column RBF denotes the usage of a Radial Basis Function (RBF) RBF network 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "rbf1,rbf2"
+literal "false"
+
+\end_inset
+
+ with 10 processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column GEN denotes the incorporation of a genetic algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "geneticnn1"
+literal "false"
+
+\end_inset
+
+ with the same parameters as in the proposed method.
+ This algorithm was used to train an artificial neural network with 10 processing nodes.
+\end_layout
+
+\begin_layout Enumerate
+The column OPSO stands for the results obtained by the incorporation of the proposed method.
+\end_layout
+
+\begin_layout Enumerate
+The row labeled AVERAGE presents the mean classification error obtained across the entire collection of datasets.
 \end_layout
 
 \begin_layout Subsection
@@ -4442,7 +5101,7 @@ tuple "list"
 \end_inset
 
 ),
- evaluated across 41 benchmark datasets.
+ evaluated across 40 benchmark datasets.
 \end_layout
 
 \begin_layout Standard
@@ -4451,7 +5110,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -8386,7 +9045,7 @@ placement H
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -9600,11 +10259,7 @@ Significance vs.
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-Comparison of OPSO against baseline machine-learning models
-\series default
- (Figure 
+A statistical comparison of the OPSO against the other machine learning methods is depicted in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:f1"
@@ -9616,8 +10271,7 @@ tuple "list"
 
 \end_inset
 
-,
- Table 
+ and in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:statClassification"
@@ -9629,15 +10283,13 @@ tuple "list"
 
 \end_inset
 
-).
+.
  Across the 40 benchmark datasets,
- the Friedman test revealed statistically significant differences among the seven models under comparison (
-\begin_inset Formula $χ^{2}$
+ the Friedman test revealed statistically significant differences among the seven models under comparison
+\begin_inset Formula $\left(\chi^{2}=88.36,\ \mbox{df}=6,\ p<0.001\right)$
 \end_inset
 
- = 88.36,
- df = 6,
- p < 0.001),
+,
  with a Nemenyi critical difference of 1.425.
  The OPSO variant with 
 \begin_inset Formula $T=5$
@@ -9677,6 +10329,13 @@ tuple "list"
 
 \begin_layout Subsection
 Experiments with the propagation method
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:prop-experiments"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -9696,7 +10355,7 @@ tuple "list"
  1to1,
  1toN,
  Nto1),
- evaluated across the same 41 benchmark datasets.
+ evaluated across the same 40 benchmark datasets.
  
 \end_layout
 
@@ -12536,11 +13195,11 @@ Significance vs.
 \end_layout
 
 \begin_layout Standard
-
+A statistical comparison for the propagation strategy is depicted in
 \series bold
-Effect of solution-propagation strategy
+ 
 \series default
- (Figure 
+Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:f2"
@@ -12552,8 +13211,7 @@ tuple "list"
 
 \end_inset
 
-,
- Table 
+ and in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:statProp"
@@ -12565,7 +13223,7 @@ tuple "list"
 
 \end_inset
 
-).
+.
  Unlike the two preceding comparisons,
  the Friedman test did not detect a statistically significant overall difference among the four propagation strategies (
 \begin_inset Formula $χ^{2}$
@@ -12588,6 +13246,13 @@ tuple "list"
 
 \begin_layout Subsection
 Experiments with the number of particles
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:particle-experiments"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -12603,15 +13268,12 @@ tuple "list"
 
 \end_inset
 
- reports the per-dataset classification error obtained by the proposed OPSO algorithm under four different population sizes (
-\begin_inset Formula $N_{c}=200$
+ reports the per-dataset classification error obtained by the proposed OPSO algorithm under four different population sizes 
+\begin_inset Formula $\left(N_{c}=200,500,1000,2000\right)$
 \end_inset
 
 ,
- 500,
- 1000,
- 2000),
- evaluated across the same 41 benchmark datasets.
+ evaluated across the same 40 benchmark datasets.
  
 \end_layout
 
@@ -14781,7 +15443,7 @@ placement H
 alignment document
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -15494,11 +16156,7 @@ Significance vs.
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-Effect of population size on OPSO performance
-\series default
- (Figure 
+The statistical comparison for the obtained results is presented in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:f3"
@@ -15510,8 +16168,7 @@ tuple "list"
 
 \end_inset
 
-,
- Table 
+ and in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:statPart"
@@ -15523,7 +16180,7 @@ tuple "list"
 
 \end_inset
 
-).
+.
  The Friedman test indicated an overall statistically significant effect of population size on algorithmic performance (
 \begin_inset Formula $χ^{2}$
 \end_inset
@@ -15561,7 +16218,7 @@ tuple "list"
  (21.45%,
  p = 0.009).
  The complete,
- Holm-corrected pairwise comparisons confirmed that this effect is driven primarily by the smallest population size (
+ Holm-corrected pairwise comparisons (provided as Supplementary Material) confirmed that this effect is driven primarily by the smallest population size (
 \begin_inset Formula $N_{c}=200$
 \end_inset
 
@@ -15571,14 +16228,14 @@ tuple "list"
 \end_inset
 
 :
- p = 0.011,
+ paired t-test p = 0.011 (Holm-corrected);
  vs.
  
 \begin_inset Formula $N_{c}=2000$
 \end_inset
 
 :
- p = 0.045),
+ p = 0.045 (Holm-corrected)),
  whereas the differences among 
 \begin_inset Formula $N_{c}=500$
 \end_inset
@@ -15594,18 +16251,25 @@ tuple "list"
 \end_inset
 
  did not remain significant after correction,
- suggesting diminishing returns beyond a population size of approximately 500-1000 individuals.
+ suggesting diminishing returns beyond a population size of approximately 500–1000 individuals.
 \end_layout
 
 \begin_layout Section
 Conclusions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 This paper introduced OPSO,
  a parallel,
  multi-population optimization algorithm for classification tasks,
- and evaluated it systematically against four established machine-learning models across 41 benchmark datasets drawn from the UCI and KEEL repositories.
+ and evaluated it systematically against four established machine-learning models across 40 benchmark datasets drawn from the UCI and KEEL repositories.
  Across three thread/population configurations,
  OPSO consistently and significantly outperformed all four baseline models,
  with the 
@@ -15672,7 +16336,7 @@ The present study,
  could yield further improvements specifically on difficult problems,
  and should be explored in future work.
  Finally,
- extending the evaluation beyond the 41 datasets considered here to larger-scale,
+ extending the evaluation beyond the 40 datasets considered here to larger-scale,
  higher-dimensional,
  or streaming classification problems,
  and benchmarking OPSO against a broader range of modern evolutionary and swarm-based optimizers,
@@ -15687,155 +16351,63 @@ The present study,
 \end_layout
 
 \begin_layout Author Contributions
-For research articles with several authors,
- a short paragraph specifying their individual contributions must be provided.
- The following statements should be used “Conceptualization,
- X.X.
- and Y.Y.;
+“Conceptualization,
+ K.B.
+ and I.G.T.;
  methodology,
- X.X.;
+ K.B.;
  software,
- X.X.;
+ K.B.;
  validation,
- X.X.,
- Y.Y.
- and Z.Z.;
+ V.C.,
+ G.K.
+ and I.G.T..;
  formal analysis,
- X.X.;
+ V.C.;
  investigation,
- X.X.;
+ I.G.T.;
  resources,
- X.X.;
+ G.K.;
  data curation,
- X.X.;
+ K.B.;
  writing—
 original draft preparation,
- X.X.;
+ K.B..;
  writing—
 review and editing,
- X.X.;
+ I.G.T.;
  visualization,
- X.X.;
+ V.C.;
  supervision,
- X.X.;
+ I.G.T.;
  project administration,
- X.X.;
+ I.G.T.;
  funding acquisition,
- Y.Y.
- All authors have read and agreed to the published version of the manuscript.” Please turn to the 
-\begin_inset CommandInset href
-LatexCommand href
-name "CRediT taxonomy"
-target "http://img.mdpi.org/data/contributor-role-instruction.pdf"
-literal "false"
-
-\end_inset
-
- for the term explanation.
- Authorship must be limited to those who have contributed substantially to the work reported.
+ G.K..
+ All authors have read and agreed to the published version of the manuscript.
 \end_layout
 
 \begin_layout Funding
-Please add:
- 
-\begin_inset Quotes eld
-\end_inset
-
-This research received no external funding
-\begin_inset Quotes erd
-\end_inset
-
- or 
-\begin_inset Quotes eld
-\end_inset
-
-This research was funded by NAME OF FUNDER grant number XXX
-\begin_inset Quotes erd
-\end_inset
-
-.
- Check carefully that the details given are accurate and use the standard spelling of funding agency names at 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-https://search.crossref.org/funding
-\end_layout
-
-\end_inset
-
-,
- any errors may affect your future funding.
+This research has been financed by the European Union:
+ Next Generation EU through the Program Greece 2.0 National Recovery and Resilience Plan,
+ under the call RESEARCH—
+CREATE—
+INNOVATE,
+ project name “iCREW:
+ Intelligent small craft simulator for advanced crew training using Virtual Reality techniques” (project code:TAEDK-06195).
 \end_layout
 
 \begin_layout Institutional Review
-In this section,
- please add the Institutional Review Board Statement and approval number for studies involving humans or animals.
- You might choose to exclude this statement if the study did not require ethical approval.
- Please note that the Editorial Office might ask you for further information.
- Please add “The study was conducted in accordance with the Declaration of Helsinki,
- and approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies involving humans OR “The animal study protocol was approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies involving animals OR “Ethical review and approval were waived for this study due to REASON (please provide a detailed justification).” OR “Not applicable.” for studies
- not involving humans or animals.
+Not applicable.
 \end_layout
 
 \begin_layout Informed Consent
-Any research article describing a study involving humans should contain this statement.
- Please add “Informed consent was obtained from all subjects involved in the study.” OR “Patient consent was waived due to REASON (please provide a detailed justification).” OR “Not applicable.” for studies not involving humans.
- You might also choose to exclude this statement if the study did not involve humans.
- 
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-As LyX does not allow multiple paragraphs in command type environments,
- the following ERT is used to introduce a blank line in the LaTeX output.
-\end_layout
-
-\end_inset
-
-Written informed consent for publication must be obtained from participating patients who can be identified (including by the patients themselves).
- Please state “Written informed consent has been obtained from the patient(s) to publish this paper.” if applicable.
+Not applicable.
 \end_layout
 
 \begin_layout Data Availability
-We encourage all authors of articles published in MDPI journals to share their research data.
- In this section,
- please provide details regarding where data supporting reported results can be found,
- including links to publicly archived datasets analyzed or generated during the study.
- Where no new data were created,
- or where data are unavailable due to privacy or ethical restrictions,
- a statement is still required.
- Suggested Data Availability Statements are available in the section “MDPI Research Data Policies” at 
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-https://www.mdpi.com/ethics
-\end_layout
-
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Acknowledgments
-In this section,
- you can acknowledge any support given that is not covered by the author contribution or funding sections.
- This may include administrative and technical support,
- or donations in kind (e.g.,
- materials used for experiments).
- Where GenAI has been used for purposes such as generating text,
- data,
- or graphics,
- or for study design,
- data collection,
- analysis,
- or interpretation of data,
- please add “During the preparation of this manuscript/study,
- the author(s) used [tool name,
- version information] for the purposes of [description of use].
- The authors have reviewed and edited the output and take full responsibility for the content of this publication.”
+The original contributions presented in this study are included in the article.
+ Further inquiries can be directed to the corresponding author.
 \end_layout
 
 \begin_layout Conflicts of Interest
@@ -15922,7 +16494,18 @@ arXiv
 \series default
 ,
  arXiv:2106.11342v5,
- https://doi.org/10.48550/arXiv.2106.11342.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.48550/arXiv.2106.11342
+\end_layout
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Bibliography
@@ -15957,7 +16540,17 @@ Neural Process.
 \shape default
 ,
  1–104,
- https://doi.org/10.1007/s11063-022-11055-6.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s11063-022-11055-6
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -15995,7 +16588,17 @@ literal "false"
 \shape default
 ,
  10567.
- https://doi.org/10.3390/app142210567.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/app142210567
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16079,7 +16682,17 @@ Mathematics
 \shape default
 ,
  1808.
- https://doi.org/10.3390/math9151808
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/math9151808
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Bibliography
@@ -16120,7 +16733,17 @@ J.
 \shape default
 ,
  1087–1092,
- https://doi.org/10.1063/1.1699114.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1063/1.1699114
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16152,7 +16775,17 @@ Science
 \shape default
 ,
  602–606,
- https://doi.org/10.1126/science.aag2302.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1126/science.aag2302
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16197,7 +16830,17 @@ Int.
 \shape default
 ,
  4878.
- https://doi.org/10.3390/ijms26104878.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/ijms26104878
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16234,7 +16877,17 @@ Infrastructures
 \shape default
 ,
  4.
- https://doi.org/10.3390/infrastructures10010004.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/infrastructures10010004
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16274,7 +16927,17 @@ J.
 \shape default
 ,
  8137.
- https://doi.org/10.3390/jcm14228137.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/jcm14228137
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16306,7 +16969,18 @@ Bioengineering
 \shape default
 ,
  506.
- https://doi.org/10.3390/bioengineering12050506.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/bioengineering12050506
+\end_layout
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Bibliography
@@ -16343,7 +17017,17 @@ The Palgrave Handbook of Operations Research
 ;
  pp.
  263–296,
- https://doi.org/10.1007/978-3-030-96935-6_8.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/978-3-030-96935-6_8
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16377,7 +17061,17 @@ Int.
 \shape default
 ,
  109767,
- https://doi.org/10.1016/j.ijar.2026.109767.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1016/j.ijar.2026.109767
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16411,7 +17105,17 @@ Nature
 \shape default
 ,
  533–536,
- https://doi.org/10.1038/323533a0.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1038/323533a0
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16502,7 +17206,17 @@ Comput.
 \shape default
 ,
  367–370,
- https://doi.org/10.1093/comjnl/20.4.367.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1093/comjnl/20.4.367
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16537,7 +17251,17 @@ Science
 \shape default
 ,
  671–680,
- https://doi.org/10.1126/science.220.4598.671.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1126/science.220.4598.671
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16571,7 +17295,17 @@ Entropy
 \shape default
 ,
  348.
- https://doi.org/10.3390/e24030348.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.3390/e24030348
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16607,7 +17341,17 @@ J.
 \shape default
 ,
  341–359,
- https://doi.org/10.1023/A:1008202821328.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1023/A:1008202821328
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16641,7 +17385,17 @@ Arch.
 \shape default
 ,
  2531–2561,
- https://doi.org/10.1007/s11831-021-09694-4.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s11831-021-09694-4
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16676,7 +17430,17 @@ Swarm Intell.
 \shape default
 ,
  33–57,
- https://doi.org/10.1007/s11721-007-0002-0.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s11721-007-0002-0
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16712,7 +17476,17 @@ IEEE Comput.
 \shape default
 ,
  28–39,
- https://doi.org/10.1109/MCI.2006.329691.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1109/MCI.2006.329691
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16783,7 +17557,17 @@ Int.
 \shape default
 ,
  497–522,
- https://doi.org/10.1080/17445760.2018.1428969.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1080/17445760.2018.1428969
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16812,7 +17596,17 @@ Proceedings of the 2016 IEEE Congress on Evolutionary Computation (CEC)
 ;
  pp.
  3566–3573,
- https://doi.org/10.1109/CEC.2016.7744241.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1109/CEC.2016.7744241
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -16854,7 +17648,17 @@ Arch.
 \shape default
 ,
  4485–4519,
- https://doi.org/10.1007/s11831-024-10168-6.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s11831-024-10168-6
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -17034,7 +17838,17 @@ Int.
 \shape default
 ,
  486–514,
- https://doi.org/10.1007/s10766-022-00736-3.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s10766-022-00736-3
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -17134,7 +17948,17 @@ Proceedings of ICNN'95 - International Conference on Neural Networks
  4,
  pp.
  1942–1948.
- https://doi.org/10.1109/ICNN.1995.488968.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1109/ICNN.1995.488968
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -17171,7 +17995,17 @@ IEEE World Congress on Computational Intelligence
 ;
  pp.
  69–73.
- https://doi.org/10.1109/ICEC.1998.699146.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1109/ICEC.1998.699146
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -17199,7 +18033,17 @@ OpenMP Application Programming Interface Version 6.0
 \series default
 .
  Available online:
- https://www.openmp.org/wp-content/uploads/OpenMP-API-Specification-6-0.pdf (accessed on 21 July 2026).
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://www.openmp.org/wp-content/uploads/OpenMP-API-Specification-6-0.pdf
+\end_layout
+
+\end_inset
+
+ (accessed on 21 July 2026).
 \end_layout
 
 \begin_layout Bibliography
@@ -17271,7 +18115,17 @@ Proceedings of the 2020 IEEE Congress on Evolutionary Computation (CEC)
 ;
  pp.
  1–8.
- https://doi.org/10.1109/CEC48606.2020.9185732.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1109/CEC48606.2020.9185732
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -17306,7 +18160,17 @@ Proceedings of the Genetic and Evolutionary Computation Conference Companion
 ;
  pp.
  101–102.
- https://doi.org/10.1145/3067695.3076068.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1145/3067695.3076068
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -17340,7 +18204,17 @@ Evolving Systems
 \shape default
 ,
  875–883.
- https://doi.org/10.1007/s12530-020-09330-9.
+ 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+https://doi.org/10.1007/s12530-020-09330-9
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -18251,6 +19125,195 @@ M.
  pp.
  549–573,
  2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2022)"
+key "optimus"
+literal "false"
+
+\end_inset
+
+Tsoulos,
+ I.
+ G.,
+ Charilogis,
+ V.,
+ Kyrou,
+ G.,
+ Stavrou,
+ V.
+ N.,
+ & Tzallas,
+ A.
+ (2025).
+ OPTIMUS:
+ A Multidimensional Global Optimization Package.
+ Journal of Open Source Software,
+ 10(108),
+ 7584.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2025)"
+key "bfgs"
+literal "false"
+
+\end_inset
+
+Yuan,
+ Y.
+ X.
+ (1991).
+ A modified BFGS algorithm for unconstrained optimization.
+ IMA Journal of Numerical Analysis,
+ 11(3),
+ 325-332.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn1"
+literal "true"
+
+\end_inset
+
+C.
+ Bishop,
+ Neural Networks for Pattern Recognition,
+ Oxford University Press,
+ 1995.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn2"
+literal "true"
+
+\end_inset
+
+G.
+ Cybenko,
+ Approximation by superpositions of a sigmoidal function,
+ Mathematics of Control Signals and Systems 
+\series bold
+2
+\series default
+,
+ pp.
+ 303-314,
+ 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(2025)"
+key "neat"
+literal "false"
+
+\end_inset
+
+K.
+ O.
+ Stanley,
+ R.
+ Miikkulainen,
+ Evolving Neural Networks through Augmenting Topologies,
+ Evolutionary Computation 
+\series bold
+10
+\series default
+,
+ pp.
+ 99-127,
+ 2002.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "(1991)"
+key "rbf1"
+literal "false"
+
+\end_inset
+
+J.
+ Park and I.
+ W.
+ Sandberg,
+ Universal Approximation Using Radial-Basis-Function Networks,
+ Neural Computation 
+\series bold
+3
+\series default
+,
+ pp.
+ 246-257,
+ 1991.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "rbf2"
+literal "false"
+
+\end_inset
+
+G.A.
+ Montazer,
+ D.
+ Giveki,
+ M.
+ Karami,
+ H.
+ Rastegar,
+ Radial basis function neural networks:
+ A review.
+ Comput.
+ Rev.
+ J 
+\series bold
+1
+\series default
+,
+ pp.
+ 52-74,
+ 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "geneticnn1"
+literal "false"
+
+\end_inset
+
+Reynolds,
+ J.,
+ Rezgui,
+ Y.,
+ Kwan,
+ A.,
+ & Piriou,
+ S.
+ (2018).
+ A zone-level,
+ building energy optimisation combining an artificial neural network,
+ a genetic algorithm,
+ and model predictive control.
+ Energy,
+ 151,
+ 729-739.
 \end_layout
 
 \begin_layout Standard
