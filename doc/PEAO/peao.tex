@@ -2327,6 +2327,114 @@ stable optimization performance across repeated executions. Overall,
 the proposed PEAO produced competitive results on all three real-world
 optimization problems.
 
+\subsection{Statistical and Trial-Based Performance Evaluation}
+
+To evaluate the proposed PEAO against the recent state-of-the-art
+algorithms RDE \citep{key-2} and RDEx \citep{RDEx}, comparative
+experiments were conducted using the trial-based dominance methodology
+\citep{key-1}. Function F2 was excluded from the experimental evaluation
+due to its reported unstable behavior. Consequently, all reported
+results correspond to the remaining 29 benchmark functions \citep{key-3}.
+This methodology simultaneously evaluates solution quality and convergence
+speed through the computation of U-scores. Table \ref{tab:tab18}
+presents the per-problem U-scores and the corresponding rankings for
+each benchmark function, whereas table \ref{tab:tab19} summarizes
+the overall ranking obtained by aggregating the U-scores over all
+benchmark functions.
+
+\begin{table}[H]
+\caption{Per-problem U-scores and corresponding rankings of PEAO, RDE and RDEx
+on the selected CEC 2017 benchmark functions.\label{tab:tab18}}
+
+\raggedright{}{\scriptsize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline 
+{\scriptsize\textbf{FUNCTION}} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{PROPOSED }}{\scriptsize\par}
+
+{\scriptsize\textbf{U-SCORE }}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{PROPOSED}}{\scriptsize\par}
+
+{\scriptsize\textbf{RANK}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{RDE }}{\scriptsize\par}
+
+{\scriptsize\textbf{U-SCORE}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{RDE }}{\scriptsize\par}
+
+{\scriptsize\textbf{RANK}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{RDEx }}{\scriptsize\par}
+
+{\scriptsize\textbf{U-SCORE}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\scriptsize\textbf{RDEx}}{\scriptsize\par}
+
+{\scriptsize\textbf{RANK}}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\hline 
+cec2017f1 {[}d=30{]} & 0 & 3 & 879 & 2 & 996 & 1\tabularnewline
+\hline 
+cec2017f3 {[}d=30{]} & 1250 & 1 & 533 & 2 & 92 & 3\tabularnewline
+\hline 
+cec2017f4 {[}d=30{]} & 1196 & 1 & 348 & 2 & 332 & 3\tabularnewline
+\hline 
+cec2017f5 {[}d=30{]} & 0 & 3 & 1136 & 1 & 739 & 2\tabularnewline
+\hline 
+cec2017f6 {[}d=30{]} & 0 & 3 & 748 & 2 & 1127 & 1\tabularnewline
+\hline 
+cec2017f7 {[}d=30{]} & 0 & 3 & 1063 & 1 & 812 & 2\tabularnewline
+\hline 
+cec2017f8 {[}d=30{]} & 0 & 3 & 1181 & 1 & 694 & 2\tabularnewline
+\hline 
+cec2017f9 {[}d=30{]} & 0 & 3 & 904 & 2 & 971 & 1\tabularnewline
+\hline 
+\end{tabular}}{\scriptsize\par}
+\end{table}
+Table \ref{tab:tab18} presents the per-problem U-scores and the corresponding
+rankings of PEAO, RDE and RDEx on the selected CEC 2017 benchmark
+functions. The U-scores were computed according to the trial-based
+dominance methodology proposed by Price et al. \citep{key-1}, which
+simultaneously considers both convergence speed and solution accuracy.
+The results indicate that the recent state-of-the-art algorithms RDE
+and RDEx consistently achieve higher U-scores than PEAO on most benchmark
+functions, highlighting their superior overall performance on this
+benchmark suite.
+
+\begin{table}[H]
+\caption{Overall ranking based on the aggregated U-scores and rank sums.\label{tab:tab19}}
+
+\raggedright{}{\scriptsize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\scriptsize\textbf{Algorithm}} & {\scriptsize\textbf{Ranking}} & {\scriptsize\textbf{Sum (U-score)}} & {\scriptsize\textbf{RS (rank-sum)}}\tabularnewline
+\hline 
+\hline 
+RDE & 1 & 28018 & 39\tabularnewline
+\hline 
+RDEx & 2 & 20078 & 58\tabularnewline
+\hline 
+PEAO & 3 & 6280 & 77\tabularnewline
+\hline 
+\end{tabular}}{\scriptsize\par}
+\end{table}
+
+Table \ref{tab:tab19} summarizes the overall ranking obtained by
+aggregating the per-problem U-scores over all benchmark functions.
+According to this evaluation, RDE achieves the highest overall U-score
+and is ranked first, followed by RDEx, while PEAO is ranked third.
+These results are consistent with the reported performance of RDE
+and RDEx as top-performing algorithms in the IEEE CEC 2025 competition.
+
 \section{Discussion\label{sec:Discussion}}
 
 \subsection{Effect of the Cooperative Cluster Structure}
@@ -2795,8 +2903,8 @@ function evaluations over 30 runs (success rate in parentheses).\label{tab:A.2 E
 \end{table}
 }{\scriptsize\par}
 
-\ref{tab:A.2 Effect of the Propagation Mechanism} presents the complete
-comparison of PEAO with and without the propagation mechanism. 
+Table \ref{tab:A.2 Effect of the Propagation Mechanism} presents
+the complete comparison of PEAO with and without the propagation mechanism. 
 
 \subsection{Effect of Communication Strategies}
 
@@ -2949,7 +3057,7 @@ using 10 subpopulations.\label{tab:A.3 Effect of the Information-Exchange Topolo
 \end{table}
 }{\scriptsize\par}
 
-\ref{tab:A.3 Effect of the Information-Exchange Topology} reports
+Table \ref{tab:A.3 Effect of the Information-Exchange Topology} reports
 the complete results obtained using the 1-to-1, 1-to-N, N-to-1 and
 N-to-N information-exchange topologies with 10 subpopulations. 
 
@@ -3105,16 +3213,16 @@ runs. Values in parentheses denote the success rate.\label{tab:A.4 Complete Comp
 \end{table}
 }{\scriptsize\par}
 
-\ref{tab:A.4 Complete Comparison with Competing Algorithms} provides
-the complete function-by-function comparison between PEAO and the
-competing metaheuristic algorithms. 
+Table \ref{tab:A.4 Complete Comparison with Competing Algorithms}
+provides the complete function-by-function comparison between PEAO
+and the competing metaheuristic algorithms.
 
 \subsection{Complete experimental results using different high-dimensional optimization
 methods}
 
 \begin{table}[H]
 \caption{Average objective function evaluations on additional high-dimensional
-benchmark problems.\textbf{\label{tab:table8-1}}}
+benchmark problems.\textbf{\label{tab:table24}}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -3151,7 +3259,7 @@ benchmark problems.\textbf{\label{tab:table8-1}}}
 
 \begin{table}[H]
 \caption{Average objective function evaluations on additional high-dimensional
-benchmark problems.\textbf{\label{tab:table9-1}}}
+benchmark problems.\textbf{\label{tab:table25}}}
 
 \centering{}%
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -3186,13 +3294,16 @@ benchmark problems.\textbf{\label{tab:table9-1}}}
 \end{tabular}
 \end{table}
 
+Tables \ref{tab:table24} and \ref{tab:table25} provide the complete
+function-by-function comparison between PEAO and the competing metaheuristic
+algorithms on high-dimensional problems.
 
 \subsection{Complete experimental results using mean and standard deviation for
 for optimization methods.}
 
 \begin{table}[H]
 \caption{Mean objective function values (standard deviation) for additional
-high-dimensional optimization problems.\label{tab:tab8-2-3-1}}
+high-dimensional optimization problems.\label{tab:tab26}}
 
 \centering{}{\footnotesize{}%
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -3277,7 +3388,7 @@ high-dimensional optimization problems.\label{tab:tab8-2-3-1}}
 
 \begin{table}[H]
 \caption{Mean objective function values (standard deviation) for additional
-high-dimensional optimization problems.\label{tab:tab8-1-1-1-1}}
+high-dimensional optimization problems.\label{tab:tab27}}
 
 \centering{}{\footnotesize{}%
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -3516,6 +3627,189 @@ high-dimensional optimization problems.\label{tab:tab8-1-1-1-1}}
 \end{tabular}}{\footnotesize\par}
 \end{table}
 
+Tables \ref{tab:tab26} and \ref{tab:tab27} provide the complete
+function-by-function comparison between PEAO and the competing metaheuristic
+algorithms on high-dimensional problems.
+
+\subsection{Statistical and Trial-Based Performance Evaluation}
+
+\begin{table}[H]
+\caption{Performance comparison of PEAO, RDE and RDEx on selected CEC 2017
+benchmark functions based on best objective value over 30 independent
+runs.\label{tab:tab28}}
+
+\raggedright{}{\scriptsize{}%
+\begin{tabular}{|c|c|c|c|}
+\hline 
+{\scriptsize\textbf{FUNCTION}} & {\scriptsize\textbf{PROPOSED }} & {\scriptsize\textbf{RDE }} & {\scriptsize\textbf{RDEx }}\tabularnewline
+\hline 
+\hline 
+cec2017f1 {[}d=30{]} & 100.53 & 100 & 100\tabularnewline
+\hline 
+cec2017f3 {[}d=30{]} & 300 & 300 & 300\tabularnewline
+\hline 
+cec2017f4 {[}d=30{]} & 400 & 400 & 400\tabularnewline
+\hline 
+cec2017f5 {[}d=30{]} & 712.91 & 506.07 & 509.36\tabularnewline
+\hline 
+cec2017f6 {[}d=30{]} & 644.58 & 600 & 600\tabularnewline
+\hline 
+cec2017f7 {[}d=30{]} & 1128.04 & 738.1 & 742.65\tabularnewline
+\hline 
+cec2017f8 {[}d=30{]} & 973.12 & 806.96 & 809.97\tabularnewline
+\hline 
+cec2017f9 {[}d=30{]} & 1811.38 & 900 & 900\tabularnewline
+\hline 
+cec2017f10 {[}d=30{]} & 3372.76 & 2682.29 & 3229.98\tabularnewline
+\hline 
+cec2017f11 {[}d=30{]} & 1156.71 & 1101.56 & 1103.6\tabularnewline
+\hline 
+cec2017f12 {[}d=30{]} & 5632.46 & 1215.45 & 1354.27\tabularnewline
+\hline 
+cec2017f13 {[}d=30{]} & 1471.75 & 1302.04 & 1304.82\tabularnewline
+\hline 
+cec2017f14 {[}d=30{]} & 1474.72 & 1421.64 & 1424.29\tabularnewline
+\hline 
+cec2017f15 {[}d=30{]} & 1527.45 & 1502.62 & 1505.33\tabularnewline
+\hline 
+cec2017f16 {[}d=30{]} & 1963.32 & 1614.34 & 1634.26\tabularnewline
+\hline 
+cec2017f17 {[}d=30{]} & 1827.31 & 1730.71 & 1734.95\tabularnewline
+\hline 
+cec2017f18 {[}d=30{]} & 1860.75 & 1800.91 & 1820.93\tabularnewline
+\hline 
+cec2017f19 {[}d=30{]} & 1986.29 & 1903.08 & 1911.9\tabularnewline
+\hline 
+cec2017f20 {[}d=30{]} & 2229.34 & 2027.72 & 2042.64\tabularnewline
+\hline 
+cec2017f21 {[}d=30{]} & 2503.04 & 2308.1 & 2310.16\tabularnewline
+\hline 
+cec2017f22 {[}d=30{]} & 2300 & 2300 & 2300\tabularnewline
+\hline 
+cec2017f23 {[}d=30{]} & 2930.99 & 2639.01 & 2640.76\tabularnewline
+\hline 
+cec2017f24 {[}d=30{]} & 2990.85 & 2819.6 & 2822\tabularnewline
+\hline 
+cec2017f25 {[}d=30{]} & 2875.86 & 2886.69 & 2886.71\tabularnewline
+\hline 
+cec2017f26 {[}d=30{]} & 2800 & 2900 & 3426.57\tabularnewline
+\hline 
+cec2017f27 {[}d=30{]} & 3146.24 & 3172.45 & 3188.99\tabularnewline
+\hline 
+cec2017f28 {[}d=30{]} & 3100 & 3100 & 3100\tabularnewline
+\hline 
+cec2017f29 {[}d=30{]} & 3336.74 & 3342,.88 & 3366.07\tabularnewline
+\hline 
+cec2017f30 {[}d=30{]} & 3714.37 & 4971.7 & 4960.45\tabularnewline
+\hline 
+\end{tabular}}{\scriptsize\par}
+\end{table}
+
+\begin{table}[H]
+\caption{U-score and rank comparison of PEAO, RDE and RDEx on the selected
+CEC 2017 benchmark functions based on the trial-based dominance methodology.\label{tab:tab29}}
+
+\raggedright{}{\footnotesize{}%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline 
+{\footnotesize\textbf{FUNCTION}} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{PROPOSED}}{\footnotesize\par}
+
+{\footnotesize\textbf{U-SCORE}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{PROPOSED }}{\footnotesize\par}
+
+{\footnotesize\textbf{RANK}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{RDE }}{\footnotesize\par}
+
+{\footnotesize\textbf{U-SCORE}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{RDE }}{\footnotesize\par}
+
+{\footnotesize\textbf{RANK}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{RDEx }}{\footnotesize\par}
+
+{\footnotesize\textbf{U-SCORE}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{RDEx }}{\footnotesize\par}
+
+{\footnotesize\textbf{RANK}}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\hline 
+{\footnotesize cec2017f1 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 879} & {\footnotesize 2} & {\footnotesize 996} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize cec2017f3 {[}d=30{]}} & {\footnotesize 1250} & {\footnotesize 1} & {\footnotesize 533} & {\footnotesize 2} & {\footnotesize 92} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize cec2017f4 {[}d=30{]}} & {\footnotesize 1196} & {\footnotesize 1} & {\footnotesize 348} & {\footnotesize 2} & {\footnotesize 332} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize cec2017f5 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1136} & {\footnotesize 1} & {\footnotesize 739} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f6 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 748} & {\footnotesize 2} & {\footnotesize 1127} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize cec2017f7 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1063} & {\footnotesize 1} & {\footnotesize 812} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f8 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1181} & {\footnotesize 1} & {\footnotesize 694} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f9 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 904} & {\footnotesize 2} & {\footnotesize 971} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize cec2017f10 {[}d=30{]}} & {\footnotesize 135} & {\footnotesize 3} & {\footnotesize 984} & {\footnotesize 1} & {\footnotesize 756} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f11 {[}d=30{]}} & {\footnotesize 25} & {\footnotesize 3} & {\footnotesize 1068} & {\footnotesize 1} & {\footnotesize 782} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f12 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1184} & {\footnotesize 1} & {\footnotesize 691} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f13 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1205} & {\footnotesize 1} & {\footnotesize 670} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f14 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1212} & {\footnotesize 1} & {\footnotesize 663} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f15 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1214} & {\footnotesize 1} & {\footnotesize 661} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f16 {[}d=30{]}} & {\footnotesize 10} & {\footnotesize 3} & {\footnotesize 1166} & {\footnotesize 1} & {\footnotesize 699} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f17 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1116} & {\footnotesize 1} & {\footnotesize 759} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f18 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1132} & {\footnotesize 1} & {\footnotesize 743} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f19 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1250} & {\footnotesize 1} & {\footnotesize 625} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f20 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1128} & {\footnotesize 1} & {\footnotesize 747} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f21 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1024} & {\footnotesize 1} & {\footnotesize 851} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f22 {[}d=30{]}} & {\footnotesize 150} & {\footnotesize 3} & {\footnotesize 550} & {\footnotesize 2} & {\footnotesize 1175} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize cec2017f23 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1147} & {\footnotesize 1} & {\footnotesize 728} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f24 {[}d=30{]}} & {\footnotesize 0} & {\footnotesize 3} & {\footnotesize 1126} & {\footnotesize 1} & {\footnotesize 749} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f25 {[}d=30{]}} & {\footnotesize 1250} & {\footnotesize 1} & {\footnotesize 558} & {\footnotesize 2} & {\footnotesize 68} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize cec2017f26 {[}d=30{]}} & {\footnotesize 150} & {\footnotesize 3} & {\footnotesize 862} & {\footnotesize 2} & {\footnotesize 864} & {\footnotesize 1}\tabularnewline
+\hline 
+{\footnotesize cec2017f27 {[}d=30{]}} & {\footnotesize 1250} & {\footnotesize 1} & {\footnotesize 593} & {\footnotesize 2} & {\footnotesize 32} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize cec2017f28 {[}d=30{]}} & {\footnotesize 765} & {\footnotesize 1} & {\footnotesize 580} & {\footnotesize 2} & {\footnotesize 531} & {\footnotesize 3}\tabularnewline
+\hline 
+{\footnotesize cec2017f29 {[}d=30{]}} & {\footnotesize 50} & {\footnotesize 3} & {\footnotesize 1126} & {\footnotesize 1} & {\footnotesize 699} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize cec2017f30 {[}d=30{]}} & {\footnotesize 50} & {\footnotesize 3} & {\footnotesize 1002} & {\footnotesize 1} & {\footnotesize 823} & {\footnotesize 2}\tabularnewline
+\hline 
+{\footnotesize Sum / RS} & {\footnotesize 6280} & {\footnotesize 77} & {\footnotesize 28018} & {\footnotesize 39} & {\footnotesize 20078} & {\footnotesize 58}\tabularnewline
+\hline 
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+Tables \ref{tab:tab28} and \ref{tab:tab29} provide the complete
+function-by-function comparison between PEAO, RDE and RDEx.
 
 \begin{adjustwidth}{-\extralength}{0cm}{}
 
@@ -3742,6 +4036,21 @@ power apparatus and systems, (7), 1688-1697.
 \bibitem[47]{transmissionpricing2}Schweppe, F. C., Caramanis, M.
 C., Tabors, R. D., \& Bohn, R. E. (2013). Spot pricing of electricity.
 Springer Science \& Business Media.
+
+\bibitem{key-1}Price, K. V., Kumar, A., \& Suganthan, P. N. (2023).
+Trial-based dominance for comparing both the speed and accuracy of
+stochastic optimizers with standard non-parametric tests. Swarm and
+Evolutionary Computation, 78, 101287.
+
+\bibitem{key-2}Tao, S., Zhao, R., Wang, K., \& Gao, S. (2024). An
+efficient reconstructed differential evolution variant by some of
+the current state-of-the-art strategies for solving single objective
+bound constrained problems. arXiv preprint arXiv:2404.16280.
+
+\bibitem{key-3}Dehghani, M., Trojovská, E., \& Zuščák, T. (2022).
+A new human-inspired metaheuristic algorithm for solving optimization
+problems based on mimicking sewing training. Scientific reports, 12(1),
+17387.
 
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
