@@ -1,7 +1,9 @@
-%% LyX 2.4.3 created this file.  For more info, see https://www.lyx.org/.
+%% LyX 2.5.1 created this file.  For more info, see https://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+\usepackage{textcomp}
 \usepackage[utf8]{inputenc}
+\usepackage{colortbl}
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{float}
@@ -22,10 +24,10 @@
 
 \TitleCitation{A Comparative Evaluation of SPARQ Against Leading Metaheuristics}
 
-\Author{Vasileios Charilogis$^{1}$, Ioannis G. Tsoulos$^{2,*}$ and Anna
-Maria Gianni$^{3}$}
+\Author{Vasileios Charilogis$^{1}$, Ioannis G. Tsoulos$^{2,*}$ and Gianni
+Anna Maria$^{3}$}
 
-\AuthorNames{Vasileios Charilogis, Ioannis G. Tsoulos and Anna Maria Gianni.}
+\AuthorNames{Vasileios Charilogis, Ioannis G. Tsoulos and Gianni Anna Maria.}
 
 \AuthorCitation{Charilogis, V., Tsoulos, I.G., Gianni, A. M.}
 
@@ -55,9 +57,12 @@ average. Its escape-from-stagnation mechanisms come in graduated strength,
 from a gentle nudge to a deeper partial restart. It also adds capabilities
 its predecessor never had, including a dedicated phase that locally
 polishes the current best solution using its own memory of productive
-directions. Every addition is kept only where it has been proven to
-genuinely help. The result is markedly more reliable than its predecessor,
-while staying grounded in the same battle-tested core.}
+directions. Every addition is kept only where it showed an overall
+benefit during development, though a subsequent component-wise analysis
+shows this benefit varies markedly in size and statistical significance
+across mechanisms. The result is more reliable than its predecessor
+on the large majority of tested problems, while staying grounded in
+the same battle-tested core.}
 
 
 \keyword{SPARQ; Continuous optimization; Evolutionary algorithm; Adaptive
@@ -202,7 +207,7 @@ of global optimization:
 where $f:\Omega\rightarrow\mathbb{R}$ is accessed only through pointwise
 evaluations, and derivative information may be unavailable. Given
 an evaluation budget $N_{fe}$\LyXZeroWidthSpace , an algorithm produces
-a sequence of iterates $\{\mathbf{x}_{t}\}_{t=1}^{N_{fe}}$ and tracks
+a sequence of iterates $\{\mathbf{x}_{t}\}^{N_{fe}}_{t=1}$ and tracks
 the best-so-far value
 
 \[
@@ -229,14 +234,14 @@ to population-based metaheuristics, which explore the search space
 with many candidate solutions simultaneously. Early and influential
 examples include simulated annealing \citep{SA}, genetic algorithms
 \citep{GA}, together with more recent refinements to their initialization
-strategies such as k-means-based seeding \citep{GiantArmadillo},
+strategies such as k-means-based seeding \citep{ClusterInitDE,InitialDistribution},
 particle swarm optimization \citep{PSO}, and the Covariance Matrix
 Adaptation Evolution Strategy (CMA-ES) \citep{CMAES}, later extended
 to large-scale problems via limited-memory variants such as LM-CMA-ES
 \citep{LMCMAES}. More recently, a growing number of bio-inspired
 metaheuristics have been proposed and subsequently refined through
 hybridization with local search and modern termination criteria, as
-in the case of the Giant-Armadillo Optimization method \citep{InitialDistribution}.
+in the case of the Giant-Armadillo Optimization method \citep{GAO_original,GiantArmadillo}.
 
 Among population-based metaheuristics, Differential Evolution (DE),
 introduced by Storn and Price \citep{DE} and since surveyed extensively
@@ -255,7 +260,7 @@ in choosing difference vectors \citep{LSHADE2}, culminating in NL-SHADE-RSP
 with rank-based selection and adaptive archiving. A parallel line
 of research explored hybridizing DE with other search paradigms and
 enriching its crossover operator: CoBiDE \citep{CoBiDE} introduced
-covariance-guided, bimodal parameter sampling; individual-dependent
+covariance-guided, bimodal parameter sampling, individual-dependent
 DE variants (IDE) proposed alternative generation-based scheduling
 \citep{DEp}, eigenvector-based (\textquotedbl eigen\textquotedbl )
 crossover, aligning the crossover operation with the population's
@@ -445,13 +450,13 @@ recommended setting outside of this controlled comparison.
 \textbf{SHADE-Style Historical Memory for F and CR}\label{subsec:3.2. SHADEStyle}
 
 ARQ2 keeps a single, continuously-updated pair of running means ($\mu_{F},\mu_{CR}$).
-SPARQ instead maintains a circular memory of size $H$, $\{(M_{F}^{k},M_{CR}^{k})\}_{k=1}^{H}$,
+SPARQ instead maintains a circular memory of size $H$, $\{(M^{k}_{F},M^{k}_{CR})\}^{H}_{k=1}$,
 one slot of which (the \textquotedbl terminal\textquotedbl{} slot,
-following jSO) is permanently pinned to a high value ($M_{F}^{H}=M_{CR}^{H}=0.9$)
+following jSO) is permanently pinned to a high value ($M^{H}_{F}=M^{H}_{CR}=0.9$)
 rather than being overwritten. Before generating each trial, a memory
 slot $r$ is drawn uniformly at random, and
 \[
-CR\sim\mathcal{N}(M_{CR}^{r},0.1),\qquad F\sim\text{Cauchy}(M_{F}^{r},0.1),
+CR\sim\mathcal{N}(M^{r}_{CR},0.1),\qquad F\sim\text{Cauchy}(M^{r}_{F},0.1),
 \]
 both resampled/clamped to their valid ranges ($CR\in[0,1]CR\in[0,1]CR\in[0,1],F\in[F_{lo},F_{hi}]$).
 Two jSO-style schedules further constrain these draws early in the
@@ -501,12 +506,14 @@ factors, and refreshes this basis every $\texttt{eig\_period}$ iterations
 (or whenever the population is resorted or resized). With probability
 $p_{eig}=0.40$, and whenever $D$ stays within a practical cap ($D\le100$,
 since the Jacobi decomposition is $\mathcal{O}(D^{3})$ per sweep),
-the binomial crossover of Equation (10) in ARQ2's formulation is instead
-applied in the rotated coordinate system: both the parent and the
-mutant are projected onto the eigenbasis ($x_{e}=B^{\top}x$), crossover
-is performed there, and the result is rotated back ($u=B\,u_{e}$).
-This lets the operator recombine along the population's natural axes
-of variation rather than the arbitrary problem axes.
+the standard binomial crossover inherited from ARQ2's formulation,
+under which $u_{ij}=v_{ij}$ whenever $\text{rand}_{ij}\le CR_{i}$
+or $j=j_{rand}$, and $u_{ij}=x_{ij}$ otherwise, is instead applied
+in the rotated coordinate system: both the parent and the mutant are
+projected onto the eigenbasis ($x_{e}=B^{\top}x$), crossover is performed
+there, and the result is rotated back ($u=B\,u_{e}$). This lets the
+operator recombine along the population's natural axes of variation
+rather than the arbitrary problem axes.
 
 \textbf{Thompson Sampling Bandit for Strategy Selection}\label{subsec:Thompson}
 
@@ -580,7 +587,7 @@ slightly stale) eigenbasis of Section 3.4, scaled per-axis by the
 square root of the corresponding eigenvalue, so that steps are long
 along the population's natural \textquotedbl valley\textquotedbl{}
 and short across it
-\item Trajectory echo (described in Section \ref{subsec:TrajectoryEcho});
+\item Trajectory echo (described in Section \ref{subsec:TrajectoryEcho})
 \item Solis-Wets adaptive random search (described in Section \ref{SolisWets}
 below, integrated as the fourth probe mode).
 \end{enumerate}
@@ -630,11 +637,11 @@ based on the classical adaptive random search method of Solis and
 Wets (1981), anchored at the current incumbent. A bias vector $b$
 (initialized at zero) accumulates a memory of productive directions.
 Each attempt draws a random perturbation $\delta$ and first tries
-$x_{best}+b+\delta$; if that fails to improve, it tries the exact
+$x_{best}+b+\delta$, if that fails to improve, it tries the exact
 reflection $x_{best}-b-\delta$ using the same random draw before
 giving up. A success in the biased direction grows $b$ toward that
 direction and expands the step scale, a success only in the reflected
-direction shrinks $b$ and partially reverses it; and a failure in
+direction shrinks $b$ and partially reverses it, and a failure in
 both directions decays $b$ toward zero and contracts the step, the
 classical Solis-Wets rule for avoiding wasted wandering. Because this
 probe mode only ever evolves a single trajectory from the current
@@ -650,7 +657,7 @@ system. A survival trigger fires whenever the population's fitness
 spread has collapsed to near-zero (a looser condition than any typical
 similarity-based stopping rule), and re-seeds only a small sliver
 (about 5\%) of the population uniformly at \ref{subsec:HardStagnationRejuvenation}random,
-at each iteration if needed; its purpose is purely to keep the population
+at each iteration if needed, its purpose is purely to keep the population
 from appearing fully converged to an external stopping rule while
 genuine progress is still possible. A hard-stagnation trigger fires
 only once the incumbent has failed to improve for a much longer interval
@@ -673,7 +680,7 @@ to encode useful parameter statistics for the refreshed population.
 \textbf{Overall Control Flow}\label{subsec:OverallControlFlow}
 
 Each SPARQ iteration proceeds as follows. The archive is trimmed to
-its capacity; a branch (ARQ or IDE) is selected, either by the initial
+its capacity, a branch (ARQ or IDE) is selected, either by the initial
 bootstrap or by the Thompson bandit of Section \ref{subsec:Thompson},
 and executed, with the ARQ branch additionally followed by Lévy-flight
 quarantine (Section \ref{subsec:L=0000E9vyFlight}). Two independent
@@ -711,7 +718,7 @@ size, circular memories, and F bounds}{\footnotesize\par}
 
 {\footnotesize - $p_{\max},\ p_{\min}$: jSO-style pbest fraction schedule}{\footnotesize\par}
 
-{\footnotesize - $k_{r}^{0},\ k_{r}^{1}$: LSHADE-RSP rank-selection
+{\footnotesize - $k^{0}_{r},\ k^{1}_{r}$: LSHADE-RSP rank-selection
 pressure schedule}{\footnotesize\par}
 
 {\footnotesize - $p_{\mathrm{eig}},\ T_{\mathrm{eig}},\ \rho_{\mathrm{eig}}$:
@@ -719,7 +726,7 @@ eigen-crossover probability, refresh period, and top-fraction}{\footnotesize\par
 
 {\footnotesize - $\alpha_{A}$: archive-rate coefficient}{\footnotesize\par}
 
-{\footnotesize - $\{(a_{k},b_{k})\}_{k=1}^{2},\ \gamma_{b},\ n_{bs}$:
+{\footnotesize - $\{(a_{k},b_{k})\}^{2}_{k=1},\ \gamma_{b},\ n_{bs}$:
 Thompson bandit priors (ARQ/IDE), decay rate, bootstrap length}{\footnotesize\par}
 
 {\footnotesize - $\alpha_{q},\ \rho_{q},\ \beta_{L},\ \sigma_{L}$:
@@ -743,7 +750,7 @@ factor, keep-fraction, cooldown}{\footnotesize\par}
 {\footnotesize INITIALIZATION}{\footnotesize\par}
 
 {\footnotesize - Set $N\leftarrow N_{\mathrm{init}}$, initialize population
-$X=\{x_{i}\}_{i=1}^{N}\subset\Omega$ and evaluate all individuals}{\footnotesize\par}
+$X=\{x_{i}\}^{N}_{i=1}\subset\Omega$ and evaluate all individuals}{\footnotesize\par}
 
 {\footnotesize - Set archive $A\leftarrow\varnothing$}{\footnotesize\par}
 
@@ -758,7 +765,7 @@ the terminal slot fixed at 0.9}{\footnotesize\par}
 {\footnotesize - Initialize the bandit state $(a_{1},b_{1})\leftarrow(2,1)$,
 $(a_{2},b_{2})\leftarrow(1,1)$, and the bootstrap counter $n_{bs}$}{\footnotesize\par}
 
-{\footnotesize - Initialize the individual IDE memories $\{F_{i}^{\mathrm{IDE}},CR_{i}^{\mathrm{IDE}}\}_{i=1}^{N}$}{\footnotesize\par}
+{\footnotesize - Initialize the individual IDE memories $\{F^{\mathrm{IDE}}_{i},CR^{\mathrm{IDE}}_{i}\}^{N}_{i=1}$}{\footnotesize\par}
 
 {\footnotesize - Invalidate the eigen-basis and set $e\leftarrow N$}{\footnotesize\par}
 
@@ -776,7 +783,7 @@ set $n_{bs}\leftarrow n_{bs}-1$}{\footnotesize\par}
 {\footnotesize 05 \hspace{0.5cm}Else}{\footnotesize\par}
 
 {\footnotesize 06 \hspace{0.5cm}\hspace{0.5cm}Sample branch $k$
-via Thompson sampling from $\{(a_{k},b_{k})\}_{k=1}^{2}$}{\footnotesize\par}
+via Thompson sampling from $\{(a_{k},b_{k})\}^{2}_{k=1}$}{\footnotesize\par}
 
 {\footnotesize 07 \hspace{0.5cm}Endif}{\footnotesize\par}
 
@@ -878,7 +885,7 @@ stopping state is updated and the current incumbent reported (lines
 \begin{algorithm}[H]
 {\footnotesize INPUT}{\footnotesize\par}
 
-{\footnotesize - $X=\{x_{i}\}_{i=1}^{N}$: current population}{\footnotesize\par}
+{\footnotesize - $X=\{x_{i}\}^{N}_{i=1}$: current population}{\footnotesize\par}
 
 {\footnotesize - $f,\ \Omega$: objective function and feasible domain}{\footnotesize\par}
 
@@ -886,7 +893,7 @@ stopping state is updated and the current incumbent reported (lines
 progress index, horizon, phase threshold, patience window, low-success
 counter}{\footnotesize\par}
 
-{\footnotesize - $\{F_{i}^{\mathrm{IDE}},CR_{i}^{\mathrm{IDE}}\}_{i=1}^{N}$:
+{\footnotesize - $\{F^{\mathrm{IDE}}_{i},CR^{\mathrm{IDE}}_{i}\}^{N}_{i=1}$:
 individual IDE parameter memories}{\footnotesize\par}
 
 {\footnotesize OUTPUT}{\footnotesize\par}
@@ -913,27 +920,27 @@ set $S_{th}\leftarrow0.1$}{\footnotesize\par}
 {\footnotesize 07 \hspace{0.5cm}Set $m(g)\leftarrow\max\{2,\mathrm{round}(\varepsilon(g)N)\}$}{\footnotesize\par}
 
 {\footnotesize 08 \hspace{0.5cm}If $g\leq g_{t}$ then with probability
-$0.9\,\varepsilon(g)$ choose $r_{1}^{\star}$ from the best $m(g)$
-individuals; otherwise $r_{1}^{\star}\leftarrow r_{1}$}{\footnotesize\par}
+$0.9\,\varepsilon(g)$ choose $r^{\star}_{1}$ from the best $m(g)$
+individuals; otherwise $r^{\star}_{1}\leftarrow r_{1}$}{\footnotesize\par}
 
 {\footnotesize 09 \hspace{0.5cm}Else with probability $0.5$ choose
-$r_{1}^{\star}$ from the best $m(g)$ individuals; otherwise $r_{1}^{\star}\leftarrow r_{1}$}{\footnotesize\par}
+$r^{\star}_{1}$ from the best $m(g)$ individuals; otherwise $r^{\star}_{1}\leftarrow r_{1}$}{\footnotesize\par}
 
 {\footnotesize 10 \hspace{0.5cm}If $g>g_{t}$ and a Bernoulli($0.5$)
 trial succeeds then}{\footnotesize\par}
 
-{\footnotesize 11 \hspace{0.5cm}\hspace{0.5cm}Set $v_{i}\leftarrow x_{i}+F_{i}^{\mathrm{IDE}}(x_{r_{1}^{\star}}-x_{o})+F_{i}^{\mathrm{IDE}}(x_{r_{2}}-x_{r_{3}})$}{\footnotesize\par}
+{\footnotesize 11 \hspace{0.5cm}\hspace{0.5cm}Set $v_{i}\leftarrow x_{i}+F^{\mathrm{IDE}}_{i}(x_{r^{\star}_{1}}-x_{o})+F^{\mathrm{IDE}}_{i}(x_{r_{2}}-x_{r_{3}})$}{\footnotesize\par}
 
 {\footnotesize 12 \hspace{0.5cm}Else}{\footnotesize\par}
 
-{\footnotesize 13 \hspace{0.5cm}\hspace{0.5cm}Set $v_{i}\leftarrow x_{o}+F_{i}^{\mathrm{IDE}}(x_{r_{1}^{\star}}-x_{o})+F_{i}^{\mathrm{IDE}}(x_{r_{2}}-x_{r_{3}})$}{\footnotesize\par}
+{\footnotesize 13 \hspace{0.5cm}\hspace{0.5cm}Set $v_{i}\leftarrow x_{o}+F^{\mathrm{IDE}}_{i}(x_{r^{\star}_{1}}-x_{o})+F^{\mathrm{IDE}}_{i}(x_{r_{2}}-x_{r_{3}})$}{\footnotesize\par}
 
 {\footnotesize 14 \hspace{0.5cm}Endif}{\footnotesize\par}
 
 {\footnotesize 15 \hspace{0.5cm}Repair $v_{i}$ to $\Omega$}{\footnotesize\par}
 
 {\footnotesize 16 \hspace{0.5cm}Construct $y_{i}$ by binomial crossover
-of $x_{i}$ and $v_{i}$ with rate $CR_{i}^{\mathrm{IDE}}$}{\footnotesize\par}
+of $x_{i}$ and $v_{i}$ with rate $CR^{\mathrm{IDE}}_{i}$}{\footnotesize\par}
 
 {\footnotesize 17 \hspace{0.5cm}Repair $y_{i}$ to $\Omega$, evaluate
 $f(y_{i})$}{\footnotesize\par}
@@ -1028,7 +1035,7 @@ dimension, domain}{\footnotesize\par}
 {\footnotesize - $H,\ M_{F},\ M_{CR},\ F_{lo},\ F_{hi}$: SHADE memory
 and F bounds}{\footnotesize\par}
 
-{\footnotesize - $p_{\max},\ p_{\min},\ k_{r}^{0},\ k_{r}^{1}$: pbest
+{\footnotesize - $p_{\max},\ p_{\min},\ k^{0}_{r},\ k^{1}_{r}$: pbest
 and rank-pressure schedules}{\footnotesize\par}
 
 {\footnotesize - $B,\ p_{\mathrm{eig}}$: eigen-basis (Algorithm 3)
@@ -1501,7 +1508,7 @@ would almost never allow the polish phase to activate.
 Three activation gates follow, always evaluated in the same order
 within a given iteration, and not mutually exclusive. The first concerns
 the elite polish, which is triggered once the second counter exceeds
-its stagnation threshold; once activated, it runs a short burst of
+its stagnation threshold, once activated, it runs a short burst of
 local probes, alternating among single-coordinate probing, anisotropic
 eigen-aligned steps, replay from the trajectory-echo memory, and the
 classical Solis-Wets adaptive search, all protected by three independent
@@ -1512,7 +1519,7 @@ polish to stand down whenever the core DE search proves the better
 use of the same evaluations. The second gate concerns the opposition-based
 basin-escape mechanism, which fires only when prolonged non-improvement
 and a visible collapse in population spread occur simultaneously,
-and only once its own cooldown has elapsed; if it produces no improvement,
+and only once its own cooldown has elapsed, if it produces no improvement,
 the cooldown is renewed without resetting the stagnation counter.
 The third gate, hard-stagnation rejuvenation, is not a simple binary
 decision but a hierarchical one: it internally evaluates whether only
@@ -1564,10 +1571,27 @@ the termination criterion adopted by the CEC 2011 real-world optimization
 benchmark \citep{de_CEC2011} and allowing direct comparison with
 prior work. The best and mean objective values obtained at termination,
 averaged over the 30 independent runs per problem, are reported as
-the primary performance measures throughout the results section. Table
-\ref{tab:settings} summarizes the SPARQ parameter settings actually
-used in these experiments, expressed in the notation introduced in
-Algorithm $\ref{alg:sparq-main}$ and Sections $\ref{subsec:NLPSR}$--$\ref{subsec:HardStagnationRejuvenation}$,
+the primary performance measures throughout the results section.
+
+The success rate (\textquotedbl Rate\%\textquotedbl ) reported in
+Table \ref{tab:comparison1} onward is defined, for each problem-method
+combination, as the percentage of the 30 independent runs whose final
+best value falls within an adaptive tolerance of the best value obtained
+across that same batch of runs (\textquotedbl best-of-runs\textquotedbl ):
+a run is counted as successful if $\left|f-f_{\text{best-of-runs}}\right|\le\max\left(10^{-12},\,10^{-9}\left|f_{\text{best-of-runs}}\right|\right)$.
+This criterion measures within-method, within-problem consistency
+across repeated runs rather than proximity to the problem's true global
+optimum, which is not always known in closed form for the real-world
+engineering benchmarks, on problems where the best-of-runs value coincides
+with the known optimum, a high Rate\% also reflects repeated convergence
+to that optimum. Feasibility is enforced at every evaluation by the
+repair and clamping procedures described in Section \ref{subsec:ARQandARQ2}
+onward, so all reported solutions already satisfy the problem's box
+constraints and no separate feasibility rate is needed.
+
+ Table \ref{tab:settings} summarizes the SPARQ parameter settings
+actually used in these experiments, expressed in the notation introduced
+in Algorithm $\ref{alg:sparq-main}$ and Sections $\ref{subsec:NLPSR}$--$\ref{subsec:HardStagnationRejuvenation}$,
 while Table \ref{tab:constants} lists the internal constants that
 remain fixed at compile time and are therefore not exposed through
 the configuration interface.
@@ -1587,14 +1611,14 @@ introduced in Algorithm \ref{alg:sparq-main} and Sections \ref{subsec:NLPSR}--\
 {\scriptsize Runs} & {\scriptsize 30} & {\scriptsize Independent repeated runs}\tabularnewline
 {\scriptsize Initialization} & {\scriptsize uniform} & {\scriptsize Population initialization distribution}\tabularnewline
 \multicolumn{3}{l}{{\scriptsize\textit{Population / NLPSR (Section~\ref{subsec:NLPSR})}}}\tabularnewline
-{\scriptsize$N_{init}$} & {\scriptsize 100} & {\scriptsize Initial population size (a good choice would be $N_{init}=18D$)}\tabularnewline
+{\scriptsize$N_{init}$} & {\scriptsize 100} & {\scriptsize Initial population size}\tabularnewline
 {\scriptsize$N_{min}$} & {\scriptsize 4} & {\scriptsize Minimum population size}\tabularnewline
 {\scriptsize$\alpha_{NL}$} & {\scriptsize 0.5} & {\scriptsize NLPSR shrink-shape exponent}\tabularnewline
 \addlinespace
 \multicolumn{3}{l}{{\scriptsize\textit{SHADE memory for $F$/$CR$ (Section~\ref{subsec:3.2. SHADEStyle})}}}\tabularnewline
 {\scriptsize$H$} & {\scriptsize 6} & {\scriptsize SHADE circular memory size}\tabularnewline
-{\scriptsize$M_{F}^{H}$} & {\scriptsize 0.9} & {\scriptsize Terminal memory slot for $F$}\tabularnewline
-{\scriptsize$M_{CR}^{H}$} & {\scriptsize 0.9} & {\scriptsize Terminal memory slot for $CR$}\tabularnewline
+{\scriptsize$M^{H}_{F}$} & {\scriptsize 0.9} & {\scriptsize Terminal memory slot for $F$}\tabularnewline
+{\scriptsize$M^{H}_{CR}$} & {\scriptsize 0.9} & {\scriptsize Terminal memory slot for $CR$}\tabularnewline
 {\scriptsize$F_{lo}$} & {\scriptsize 0.05} & {\scriptsize Lower bound for $F$ sampling}\tabularnewline
 {\scriptsize$F_{hi}$} & {\scriptsize 1.40} & {\scriptsize Upper bound for $F$ sampling}\tabularnewline
 \addlinespace
@@ -1613,7 +1637,7 @@ Algorithm~\ref{alg:sparq-eigen})}}}\tabularnewline
 \addlinespace
 \multicolumn{3}{l}{{\scriptsize\textit{RTR selection / archive (Algorithm~\ref{alg:sparq-arq})}}}\tabularnewline
 {\scriptsize$n_{pool}$} & {\scriptsize 14} & {\scriptsize RTR neighbor pool size}\tabularnewline
-{\scriptsize --} & {\scriptsize 0.10} & {\scriptsize Dynamic pool fraction of $N$ (not named in the article)}\tabularnewline
+{\scriptsize$\rho_{m}$} & {\scriptsize 0.10} & {\scriptsize Dynamic pool fraction of $N$ (not named in the article)}\tabularnewline
 {\scriptsize$\alpha_{A}$} & {\scriptsize 1.5} & {\scriptsize Archive size factor}\tabularnewline
 \addlinespace
 \multicolumn{3}{l}{{\scriptsize\textit{Thompson-sampling bandit (Section~\ref{subsec:Thompson})}}}\tabularnewline
@@ -1638,7 +1662,7 @@ Algorithm~\ref{alg:sparq-obl})}}}\tabularnewline
 line~3)}}}\tabularnewline
 {\scriptsize --} & {\scriptsize 0.5} & {\scriptsize Fraction of parents tried per generation ($m$ in Alg.~4;
 no dedicated symbol)}\tabularnewline
-{\scriptsize --} & {\scriptsize 100} & {\scriptsize Dimension above which this fraction applies fully (not
+{\scriptsize$D_{m}$} & {\scriptsize 100} & {\scriptsize Dimension above which this fraction applies fully (not
 named in the article)}\tabularnewline
 \addlinespace
 \multicolumn{3}{l}{{\scriptsize\textit{Stagnation-gated elite polish (Section~\ref{subsec:StagnationPolish},
@@ -1655,9 +1679,9 @@ Algorithm~\ref{alg:sparq-obl})}}}\tabularnewline
 {\scriptsize$m_{r}$} & {\scriptsize 4} & {\scriptsize Hard-stagnation threshold multiplier}\tabularnewline
 {\scriptsize$\kappa_{r}$} & {\scriptsize 0.25} & {\scriptsize Elite fraction preserved}\tabularnewline
 {\scriptsize$C_{r}$} & {\scriptsize 150} & {\scriptsize Cooldown after rejuvenation}\tabularnewline
-{\scriptsize --} & {\scriptsize 8} & {\scriptsize Failed weak-reseed streak limit (not named in the article)}\tabularnewline
-{\scriptsize --} & {\scriptsize 2} & {\scriptsize Failed hard-reseed streak limit (not named in the article)}\tabularnewline
-{\scriptsize --} & {\scriptsize 0.90} & {\scriptsize Progress fraction beyond which disabled (not named in
+{\scriptsize$\kappa_{ws}$} & {\scriptsize 8} & {\scriptsize Failed weak-reseed streak limit (not named in the article)}\tabularnewline
+{\scriptsize$\kappa_{hs}$} & {\scriptsize 2} & {\scriptsize Failed hard-reseed streak limit (not named in the article)}\tabularnewline
+{\scriptsize$\pi_{off}$} & {\scriptsize 0.90} & {\scriptsize Progress fraction beyond which disabled (not named in
 the article)}\tabularnewline
 \addlinespace
 \multicolumn{3}{l}{{\scriptsize\textit{CR-sorting (Section~3.3)}}}\tabularnewline
@@ -1676,20 +1700,20 @@ the article)}\tabularnewline
 {\footnotesize$\sigma_{c}$} & {\footnotesize 0.10} & {\footnotesize Single-coordinate probe step (Algorithm \ref{alg:sparq-polish})}\tabularnewline
 {\footnotesize$\rho_{sw}$} & {\footnotesize 0.02} & {\footnotesize Solis--Wets probe step (Algorithm \ref{alg:sparq-polish})}\tabularnewline
 {\footnotesize$\sigma_{e}$} & {\footnotesize 1.0} & {\footnotesize Trajectory-echo scale (Algorithm \ref{alg:sparq-polish})}\tabularnewline
-{\footnotesize --} & {\footnotesize$10^{-9}$ / $0.25$} & {\footnotesize Min./max. clamp for adaptive probe steps (not named
+{\footnotesize$\sigma_{lo},\sigma_{hi}$} & {\footnotesize$10^{-9}$ / $0.25$} & {\footnotesize Min./max. clamp for adaptive probe steps (not named
 in the article)}\tabularnewline
-{\footnotesize --} & {\footnotesize$10^{-3}$} & {\footnotesize Backoff threshold for low relative gain (not named in
+{\footnotesize$\varepsilon_{bo}$} & {\footnotesize$10^{-3}$} & {\footnotesize Backoff threshold for low relative gain (not named in
 the article)}\tabularnewline
-{\footnotesize --} & {\footnotesize 8} & {\footnotesize Trajectory-echo buffer size (described in Section \ref{subsec:TrajectoryEcho}
+{\footnotesize$L_{echo}$} & {\footnotesize 8} & {\footnotesize Trajectory-echo buffer size (described in Section \ref{subsec:TrajectoryEcho}
 as ``eight entries'', no symbol)}\tabularnewline
-{\footnotesize --} & {\footnotesize$10^{-6}$} & {\footnotesize Meaningful-gain threshold for the $s_{p}$ counter (not
+{\footnotesize$\varepsilon_{s_{p}}$} & {\footnotesize$10^{-6}$} & {\footnotesize Meaningful-gain threshold for the $s_{p}$ counter (not
 named in the article)}\tabularnewline
 \bottomrule
 \end{tabular}}
 \end{table}
 
 
-\subsection{Comparative Results on Standard-Dimensionality Benchmark Problems}
+\subsection{Comparative Results on Standard-Dimensionality Benchmark Problems\label{subsec:firstComparison}}
 
 This subsection presents the outcome of the comparative evaluation
 on the standard-dimensionality portion of the benchmark suite. SPARQ
@@ -1717,7 +1741,7 @@ in absolute terms and relative to its competitors, and both in terms
 of peak performance and average-case consistency.
 \begin{center}
 \begin{landscape}
-\begin{longtable}[c]{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{longtable}[c]{cccccccccccc}
 \caption{Detailed Performance Comparison of SPARQ Against Seven State-of-the-Art
 Optimizers on Standard and Real-World Benchmark Problems\label{tab:comparison1}}
 \tabularnewline
@@ -2399,7 +2423,6 @@ Optimizers on Standard and Real-World Benchmark Problems\label{tab:comparison1}}
  & {\scriptsize\textbf{SD}} & {\scriptsize 0.00042572} & {\scriptsize 5.5557e-05} & {\scriptsize 0.000114485} & {\scriptsize 0.0435639} & {\scriptsize 0.000136866} & {\scriptsize 0.00117242} & {\scriptsize 0.00072299} & {\scriptsize 1.0713e-06} & {\scriptsize 0.000153368} & {\scriptsize 0.000136866}\tabularnewline
 \cline{2-12}
  & {\scriptsize\textbf{Time(s)}} & {\scriptsize 7.885} & {\scriptsize 4.239} & {\scriptsize 3.139} & {\scriptsize 0.928} & {\scriptsize 3.237} & {\scriptsize 1.543} & {\scriptsize 10.487} & {\scriptsize 2.66} & {\scriptsize 35.607} & {\scriptsize 21.123}\tabularnewline
-\hline 
 \end{longtable}
 \end{landscape}
 \par\end{center}
@@ -2439,52 +2462,51 @@ set.
 the Full Benchmark Suite\label{tab:bestRankin1}}
 
 \begin{centering}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{ccccccccccc}
 \hline 
 {\tiny\textbf{PROBLEM}} & {\tiny\textbf{arq2}} & {\tiny\textbf{ea4eig}} & {\tiny\textbf{jso}} & {\tiny\textbf{lmcmaes}} & {\tiny\textbf{mlshaderl}} & {\tiny\textbf{nlshadelbc}} & {\tiny\textbf{sfcde}} & {\tiny\textbf{sparq}} & {\tiny\textbf{tridentde}} & {\tiny\textbf{ude3}}\tabularnewline
 \hline 
+{\tiny\textbf{alpine1}} & {\tiny 3} & {\tiny 6} & {\tiny 3} & {\tiny 3} & {\tiny 3} & {\tiny 10} & {\tiny 7} & {\tiny 3} & {\tiny 9} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{alpine1}} & {\tiny 1} & {\tiny 6} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 7} & {\tiny 1} & {\tiny 9} & {\tiny 8}\tabularnewline
+{\tiny\textbf{antennaarray}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
-{\tiny\textbf{antennaarray}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{antennaula}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
-{\tiny\textbf{antennaula}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{bucherastrigin}} & {\tiny 3} & {\tiny 6} & {\tiny 5} & {\tiny 1.5} & {\tiny 8} & {\tiny 7} & {\tiny 4} & {\tiny 1.5} & {\tiny 10} & {\tiny 9}\tabularnewline
 \hline 
-{\tiny\textbf{bucherastrigin}} & {\tiny 3} & {\tiny 6} & {\tiny 5} & {\tiny 1} & {\tiny 8} & {\tiny 7} & {\tiny 4} & {\tiny 1} & {\tiny 10} & {\tiny 9}\tabularnewline
-\hline 
-{\tiny\textbf{cosinemixture}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{cosinemixture}} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5}\tabularnewline
 \hline 
 {\tiny\textbf{ded1}} & {\tiny 4} & {\tiny 5} & {\tiny 1} & {\tiny 8} & {\tiny 2} & {\tiny 10} & {\tiny 7} & {\tiny 3} & {\tiny 9} & {\tiny 6}\tabularnewline
 \hline 
 {\tiny\textbf{ded2}} & {\tiny 4} & {\tiny 3} & {\tiny 1} & {\tiny 9} & {\tiny 6} & {\tiny 10} & {\tiny 8} & {\tiny 5} & {\tiny 7} & {\tiny 2}\tabularnewline
 \hline 
-{\tiny\textbf{eld1}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{eld1}} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5}\tabularnewline
 \hline 
-{\tiny\textbf{eld2}} & {\tiny 1} & {\tiny 2} & {\tiny 8} & {\tiny 10} & {\tiny 3} & {\tiny 8} & {\tiny 6} & {\tiny 5} & {\tiny 4} & {\tiny 7}\tabularnewline
+{\tiny\textbf{eld2}} & {\tiny 1} & {\tiny 2} & {\tiny 8.5} & {\tiny 10} & {\tiny 3} & {\tiny 8.5} & {\tiny 6} & {\tiny 5} & {\tiny 4} & {\tiny 7}\tabularnewline
 \hline 
-{\tiny\textbf{eld3}} & {\tiny 1} & {\tiny 5} & {\tiny 8} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 7} & {\tiny 5} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{eld3}} & {\tiny 2.5} & {\tiny 5.5} & {\tiny 8} & {\tiny 10} & {\tiny 2.5} & {\tiny 9} & {\tiny 7} & {\tiny 5.5} & {\tiny 2.5} & {\tiny 2.5}\tabularnewline
 \hline 
-{\tiny\textbf{eld4}} & {\tiny 2} & {\tiny 5} & {\tiny 7} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 8} & {\tiny 5} & {\tiny 4} & {\tiny 3}\tabularnewline
+{\tiny\textbf{eld4}} & {\tiny 2} & {\tiny 5.5} & {\tiny 7} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 8} & {\tiny 5.5} & {\tiny 4} & {\tiny 3}\tabularnewline
 \hline 
 {\tiny\textbf{eld5}} & {\tiny 5} & {\tiny 3} & {\tiny 1} & {\tiny 10} & {\tiny 2} & {\tiny 9} & {\tiny 8} & {\tiny 4} & {\tiny 7} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{fmsynth}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 8} & {\tiny 7} & {\tiny 6} & {\tiny 1} & {\tiny 8} & {\tiny 5}\tabularnewline
+{\tiny\textbf{fmsynth}} & {\tiny 2.5} & {\tiny 2.5} & {\tiny 2.5} & {\tiny 10} & {\tiny 8.5} & {\tiny 7} & {\tiny 6} & {\tiny 2.5} & {\tiny 8.5} & {\tiny 5}\tabularnewline
 \hline 
-{\tiny\textbf{gallagher101}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 7} & {\tiny 7} & {\tiny 9} & {\tiny 1} & {\tiny 9} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{gallagher101}} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 7.5} & {\tiny 7.5} & {\tiny 9.5} & {\tiny 3.5} & {\tiny 9.5} & {\tiny 3.5} & {\tiny 3.5}\tabularnewline
 \hline 
-{\tiny\textbf{gallagher21}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{gallagher21}} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5} & {\tiny 5.5}\tabularnewline
 \hline 
 {\tiny\textbf{griewankrosenbrock}} & {\tiny 3} & {\tiny 7} & {\tiny 4} & {\tiny 5} & {\tiny 9} & {\tiny 1} & {\tiny 6} & {\tiny 2} & {\tiny 8} & {\tiny 10}\tabularnewline
 \hline 
-{\tiny\textbf{heatexchanger}} & {\tiny 7} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 7} & {\tiny 7} & {\tiny 7} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{heatexchanger}} & {\tiny 8.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 8.5} & {\tiny 8.5} & {\tiny 8.5} & {\tiny 3.5} & {\tiny 3.5}\tabularnewline
 \hline 
 {\tiny\textbf{hydrothermal}} & {\tiny 2} & {\tiny 5} & {\tiny 4} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 8} & {\tiny 3} & {\tiny 7} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{katsuura}} & {\tiny 9} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 8} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{katsuura}} & {\tiny 9} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 8} & {\tiny 10} & {\tiny 4} & {\tiny 4} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{levy}} & {\tiny 6} & {\tiny 1} & {\tiny 4} & {\tiny 8} & {\tiny 5} & {\tiny 9} & {\tiny 10} & {\tiny 2} & {\tiny 7} & {\tiny 3}\tabularnewline
 \hline 
-{\tiny\textbf{messenger}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{messenger}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
 {\tiny\textbf{michalewicz}} & {\tiny 3} & {\tiny 8} & {\tiny 5} & {\tiny 6} & {\tiny 4} & {\tiny 1} & {\tiny 7} & {\tiny 2} & {\tiny 9} & {\tiny 10}\tabularnewline
 \hline 
@@ -2496,19 +2518,19 @@ the Full Benchmark Suite\label{tab:bestRankin1}}
 \hline 
 {\tiny\textbf{rosenbrock}} & {\tiny 2} & {\tiny 6} & {\tiny 1} & {\tiny 3} & {\tiny 4} & {\tiny 10} & {\tiny 7} & {\tiny 5} & {\tiny 9} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{rosetta}} & {\tiny 1} & {\tiny 1} & {\tiny 8} & {\tiny 10} & {\tiny 1} & {\tiny 8} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{rosetta}} & {\tiny 4} & {\tiny 4} & {\tiny 8.5} & {\tiny 10} & {\tiny 4} & {\tiny 8.5} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{rotatedrosenbrock}} & {\tiny 7} & {\tiny 10} & {\tiny 2} & {\tiny 1} & {\tiny 3} & {\tiny 8} & {\tiny 4} & {\tiny 5} & {\tiny 6} & {\tiny 9}\tabularnewline
 \hline 
-{\tiny\textbf{salomon}} & {\tiny 3} & {\tiny 7} & {\tiny 5} & {\tiny 1} & {\tiny 8} & {\tiny 10} & {\tiny 4} & {\tiny 1} & {\tiny 9} & {\tiny 5}\tabularnewline
+{\tiny\textbf{salomon}} & {\tiny 3} & {\tiny 7} & {\tiny 5.5} & {\tiny 1.5} & {\tiny 8} & {\tiny 10} & {\tiny 4} & {\tiny 1.5} & {\tiny 9} & {\tiny 5.5}\tabularnewline
 \hline 
-{\tiny\textbf{schwefel}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 9}\tabularnewline
+{\tiny\textbf{schwefel}} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 10} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 9}\tabularnewline
 \hline 
-{\tiny\textbf{sinusoidal}} & {\tiny 3} & {\tiny 5} & {\tiny 4} & {\tiny 1} & {\tiny 6} & {\tiny 10} & {\tiny 7} & {\tiny 1} & {\tiny 9} & {\tiny 8}\tabularnewline
+{\tiny\textbf{sinusoidal}} & {\tiny 3} & {\tiny 5} & {\tiny 4} & {\tiny 1.5} & {\tiny 6} & {\tiny 10} & {\tiny 7} & {\tiny 1.5} & {\tiny 9} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{stirredtankreactor}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{stirredtankreactor}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
-{\tiny\textbf{tandem}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 8} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{tandem}} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 10} & {\tiny 4} & {\tiny 9} & {\tiny 8} & {\tiny 4} & {\tiny 4} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{tersoffb}} & {\tiny 1} & {\tiny 7} & {\tiny 3} & {\tiny 10} & {\tiny 4} & {\tiny 6} & {\tiny 9} & {\tiny 5} & {\tiny 8} & {\tiny 2}\tabularnewline
 \hline 
@@ -2516,64 +2538,64 @@ the Full Benchmark Suite\label{tab:bestRankin1}}
 \hline 
 {\tiny\textbf{test2n}} & {\tiny 4} & {\tiny 3} & {\tiny 7} & {\tiny 10} & {\tiny 5} & {\tiny 2} & {\tiny 8} & {\tiny 1} & {\tiny 9} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{test30n}} & {\tiny 4} & {\tiny 5} & {\tiny 3} & {\tiny 1} & {\tiny 6} & {\tiny 10} & {\tiny 7} & {\tiny 1} & {\tiny 9} & {\tiny 8}\tabularnewline
+{\tiny\textbf{test30n}} & {\tiny 4} & {\tiny 5} & {\tiny 3} & {\tiny 1.5} & {\tiny 6} & {\tiny 10} & {\tiny 7} & {\tiny 1.5} & {\tiny 9} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{tnep}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{tnep}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
 {\tiny\textbf{transmissionpricing}} & {\tiny 1} & {\tiny 4} & {\tiny 2} & {\tiny 7} & {\tiny 5} & {\tiny 10} & {\tiny 3} & {\tiny 6} & {\tiny 9} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{trid}} & {\tiny 4} & {\tiny 3} & {\tiny 1} & {\tiny 1} & {\tiny 7} & {\tiny 10} & {\tiny 9} & {\tiny 5} & {\tiny 8} & {\tiny 6}\tabularnewline
+{\tiny\textbf{trid}} & {\tiny 4} & {\tiny 3} & {\tiny 1.5} & {\tiny 1.5} & {\tiny 7} & {\tiny 10} & {\tiny 9} & {\tiny 5} & {\tiny 8} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{vibratingplatform}} & {\tiny 7} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 9} & {\tiny 7} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{vibratingplatform}} & {\tiny 7.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 10} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 9} & {\tiny 7.5} & {\tiny 3.5} & {\tiny 3.5}\tabularnewline
 \hline 
-{\tiny\textbf{weatherirrigation}} & {\tiny 1} & {\tiny 1} & {\tiny 7} & {\tiny 9} & {\tiny 1} & {\tiny 10} & {\tiny 8} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{weatherirrigation}} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 7} & {\tiny 9} & {\tiny 3.5} & {\tiny 10} & {\tiny 8} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5}\tabularnewline
 \hline 
-{\tiny\textbf{weierstrass}} & {\tiny 5} & {\tiny 3} & {\tiny 4} & {\tiny 1} & {\tiny 7} & {\tiny 10} & {\tiny 8} & {\tiny 1} & {\tiny 9} & {\tiny 6}\tabularnewline
+{\tiny\textbf{weierstrass}} & {\tiny 5} & {\tiny 3} & {\tiny 4} & {\tiny 1.5} & {\tiny 7} & {\tiny 10} & {\tiny 8} & {\tiny 1.5} & {\tiny 9} & {\tiny 6}\tabularnewline
 \hline 
 {\tiny\textbf{whitley}} & {\tiny 4} & {\tiny 6} & {\tiny 5} & {\tiny 10} & {\tiny 7} & {\tiny 9} & {\tiny 2} & {\tiny 1} & {\tiny 3} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{wirelesscoverage}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
-\hline 
+{\tiny\textbf{wirelesscoverage}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \end{tabular}
 \par\end{centering}
 \end{table}
 
 Table \ref{tab:bestRankin1} reports the ranking of each method according
-to its best-value result. It covers the same ten methods and forty-five
-problems. SPARQ attains rank 1, whether shared or exclusive, on 25
-of the 45 problems. This corresponds to 55.6\%, the highest share
-among all ten methods. If only cases where SPARQ is the sole method
-at rank 1 are counted, with no ties, this figure falls to 4 of 45,
-or 8.9\%. By comparison, jSO achieves 5 of 45 exclusive first places,
-and ARQ2 achieves 3 of 45. This indicates that a substantial part
-of SPARQ's rank-1 share arises from problems where several methods
-jointly reach the global optimum, rather than from unique dominance.
-The mean rank across all forty-five problems is 2.64 for SPARQ. This
-is the lowest, and therefore best, mean rank of the ten methods. It
-sits ahead of jSO at 2.80 and ARQ2 at 2.91. At the other extreme,
-LM-CMA-ES and NL-SHADE-RSP average 6.38 and 6.29 respectively. They
-register the worst rank, 10th, on 20 problems (44.4\%) and 11 problems
-(24.4\%) respectively.
+to its best-value result, with tied values assigned the average of
+the ranks they jointly occupy: for example, five methods tied for
+first place each receive rank 3, the mean of ranks 1 through 5, rather
+than all five being assigned rank 1. It covers the same ten methods
+and forty-five problems. Under this convention, SPARQ is the sole
+first-place method, with no ties, on 4 of the 45 problems (8.9\%).
+jSO attains sole first place more often, on 5 of 45 (11.1\%), the
+highest exclusive share among the ten methods, and ARQ2 on 3 of 45
+(6.7\%). SPARQ's advantage instead lies in its average rank across
+the full set: its mean rank of 4.02 is the lowest of the ten methods,
+ahead of jSO at 4.13 and ARQ2 at 4.22, indicating that SPARQ participates
+in the many-way ties for first place, chiefly on separable problems
+where several methods jointly reach the global optimum, at least as
+consistently as its closest competitors, even though it is not the
+most frequent sole winner. At the other extreme, NL-SHADE-LBC and
+LM-CMA-ES average 7.32 and 6.92 respectively. They register the worst
+rank, 10th, on 11 problems (24.4\%) and 20 problems (44.4\%) respectively.
 
 \begin{table}[H]
 \caption{Mean-Value Ranking of SPARQ and Nine Competing Metaheuristics Across
 the Full Benchmark Suite\label{tab:meanRanking1}}
 
 \centering{}%
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{ccccccccccc}
 \hline 
 {\tiny\textbf{PROBLEM}} & {\tiny\textbf{arq2}} & {\tiny\textbf{ea4eig}} & {\tiny\textbf{jso}} & {\tiny\textbf{lmcmaes}} & {\tiny\textbf{mlshaderl}} & {\tiny\textbf{nlshadelbc}} & {\tiny\textbf{sfcde}} & {\tiny\textbf{sparq}} & {\tiny\textbf{tridentde}} & {\tiny\textbf{ude3}}\tabularnewline
 \hline 
+{\tiny\textbf{alpine1}} & {\tiny 7} & {\tiny 5} & {\tiny 3} & {\tiny 1.5} & {\tiny 4} & {\tiny 10} & {\tiny 8} & {\tiny 1.5} & {\tiny 9} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{alpine1}} & {\tiny 7} & {\tiny 5} & {\tiny 3} & {\tiny 1} & {\tiny 4} & {\tiny 10} & {\tiny 8} & {\tiny 1} & {\tiny 9} & {\tiny 6}\tabularnewline
+{\tiny\textbf{antennaarray}} & {\tiny 8} & {\tiny 3} & {\tiny 3} & {\tiny 10} & {\tiny 3} & {\tiny 6} & {\tiny 9} & {\tiny 3} & {\tiny 7} & {\tiny 3}\tabularnewline
 \hline 
-{\tiny\textbf{antennaarray}} & {\tiny 8} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 6} & {\tiny 9} & {\tiny 1} & {\tiny 7} & {\tiny 1}\tabularnewline
+{\tiny\textbf{antennaula}} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 10} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 4.5} & {\tiny 9} & {\tiny 4.5}\tabularnewline
 \hline 
-{\tiny\textbf{antennaula}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 9} & {\tiny 1}\tabularnewline
+{\tiny\textbf{bucherastrigin}} & {\tiny 4} & {\tiny 3} & {\tiny 6} & {\tiny 1.5} & {\tiny 7} & {\tiny 9} & {\tiny 5} & {\tiny 1.5} & {\tiny 10} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{bucherastrigin}} & {\tiny 4} & {\tiny 3} & {\tiny 6} & {\tiny 1} & {\tiny 7} & {\tiny 9} & {\tiny 5} & {\tiny 1} & {\tiny 10} & {\tiny 8}\tabularnewline
-\hline 
-{\tiny\textbf{cosinemixture}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 7} & {\tiny 8} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 1}\tabularnewline
+{\tiny\textbf{cosinemixture}} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 7} & {\tiny 8} & {\tiny 10} & {\tiny 3.5} & {\tiny 9} & {\tiny 3.5}\tabularnewline
 \hline 
 {\tiny\textbf{ded1}} & {\tiny 5} & {\tiny 4} & {\tiny 1} & {\tiny 8} & {\tiny 2} & {\tiny 9} & {\tiny 7} & {\tiny 3} & {\tiny 10} & {\tiny 6}\tabularnewline
 \hline 
@@ -2597,15 +2619,15 @@ the Full Benchmark Suite\label{tab:meanRanking1}}
 \hline 
 {\tiny\textbf{griewankrosenbrock}} & {\tiny 3} & {\tiny 7} & {\tiny 4} & {\tiny 6} & {\tiny 9} & {\tiny 1} & {\tiny 5} & {\tiny 2} & {\tiny 8} & {\tiny 10}\tabularnewline
 \hline 
-{\tiny\textbf{heatexchanger}} & {\tiny 6} & {\tiny 4} & {\tiny 5} & {\tiny 10} & {\tiny 1} & {\tiny 6} & {\tiny 6} & {\tiny 6} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{heatexchanger}} & {\tiny 7.5} & {\tiny 4} & {\tiny 5} & {\tiny 10} & {\tiny 2} & {\tiny 7.5} & {\tiny 7.5} & {\tiny 7.5} & {\tiny 2} & {\tiny 2}\tabularnewline
 \hline 
 {\tiny\textbf{hydrothermal}} & {\tiny 2} & {\tiny 5} & {\tiny 4} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 8} & {\tiny 3} & {\tiny 7} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{katsuura}} & {\tiny 8} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 9} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{katsuura}} & {\tiny 8} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 9} & {\tiny 10} & {\tiny 4} & {\tiny 4} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{levy}} & {\tiny 6} & {\tiny 1} & {\tiny 3} & {\tiny 10} & {\tiny 5} & {\tiny 8} & {\tiny 9} & {\tiny 4} & {\tiny 7} & {\tiny 2}\tabularnewline
 \hline 
-{\tiny\textbf{messenger}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{messenger}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
 {\tiny\textbf{michalewicz}} & {\tiny 4} & {\tiny 8} & {\tiny 5} & {\tiny 7} & {\tiny 3} & {\tiny 1} & {\tiny 6} & {\tiny 2} & {\tiny 9} & {\tiny 10}\tabularnewline
 \hline 
@@ -2617,19 +2639,19 @@ the Full Benchmark Suite\label{tab:meanRanking1}}
 \hline 
 {\tiny\textbf{rosenbrock}} & {\tiny 3} & {\tiny 5} & {\tiny 1} & {\tiny 2} & {\tiny 4} & {\tiny 10} & {\tiny 6} & {\tiny 7} & {\tiny 9} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{rosetta}} & {\tiny 6} & {\tiny 7} & {\tiny 8} & {\tiny 10} & {\tiny 3} & {\tiny 9} & {\tiny 1} & {\tiny 1} & {\tiny 5} & {\tiny 4}\tabularnewline
+{\tiny\textbf{rosetta}} & {\tiny 6} & {\tiny 7} & {\tiny 8} & {\tiny 10} & {\tiny 3} & {\tiny 9} & {\tiny 1.5} & {\tiny 1.5} & {\tiny 5} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{rotatedrosenbrock}} & {\tiny 4} & {\tiny 6} & {\tiny 1} & {\tiny 2} & {\tiny 5} & {\tiny 3} & {\tiny 9} & {\tiny 8} & {\tiny 7} & {\tiny 10}\tabularnewline
 \hline 
-{\tiny\textbf{salomon}} & {\tiny 7} & {\tiny 6} & {\tiny 5} & {\tiny 1} & {\tiny 8} & {\tiny 10} & {\tiny 4} & {\tiny 1} & {\tiny 9} & {\tiny 3}\tabularnewline
+{\tiny\textbf{salomon}} & {\tiny 7} & {\tiny 6} & {\tiny 5} & {\tiny 1.5} & {\tiny 8} & {\tiny 10} & {\tiny 4} & {\tiny 1.5} & {\tiny 9} & {\tiny 3}\tabularnewline
 \hline 
-{\tiny\textbf{schwefel}} & {\tiny 1} & {\tiny 1} & {\tiny 7} & {\tiny 10} & {\tiny 6} & {\tiny 5} & {\tiny 1} & {\tiny 1} & {\tiny 8} & {\tiny 9}\tabularnewline
+{\tiny\textbf{schwefel}} & {\tiny 2.5} & {\tiny 2.5} & {\tiny 7} & {\tiny 10} & {\tiny 6} & {\tiny 5} & {\tiny 2.5} & {\tiny 2.5} & {\tiny 8} & {\tiny 9}\tabularnewline
 \hline 
 {\tiny\textbf{sinusoidal}} & {\tiny 5} & {\tiny 3} & {\tiny 2} & {\tiny 10} & {\tiny 4} & {\tiny 9} & {\tiny 7} & {\tiny 1} & {\tiny 8} & {\tiny 6}\tabularnewline
 \hline 
-{\tiny\textbf{stirredtankreactor}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{stirredtankreactor}} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 10} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5} & {\tiny 5}\tabularnewline
 \hline 
-{\tiny\textbf{tandem}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 8} & {\tiny 1} & {\tiny 1} & {\tiny 1}\tabularnewline
+{\tiny\textbf{tandem}} & {\tiny 4} & {\tiny 4} & {\tiny 4} & {\tiny 10} & {\tiny 4} & {\tiny 9} & {\tiny 8} & {\tiny 4} & {\tiny 4} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{tersoffb}} & {\tiny 2} & {\tiny 4} & {\tiny 3} & {\tiny 10} & {\tiny 6} & {\tiny 1} & {\tiny 8} & {\tiny 5} & {\tiny 7} & {\tiny 9}\tabularnewline
 \hline 
@@ -2639,7 +2661,7 @@ the Full Benchmark Suite\label{tab:meanRanking1}}
 \hline 
 {\tiny\textbf{test30n}} & {\tiny 5} & {\tiny 2} & {\tiny 3} & {\tiny 1} & {\tiny 6} & {\tiny 10} & {\tiny 8} & {\tiny 4} & {\tiny 9} & {\tiny 7}\tabularnewline
 \hline 
-{\tiny\textbf{tnep}} & {\tiny 1} & {\tiny 1} & {\tiny 1} & {\tiny 10} & {\tiny 1} & {\tiny 9} & {\tiny 7} & {\tiny 1} & {\tiny 8} & {\tiny 1}\tabularnewline
+{\tiny\textbf{tnep}} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 3.5} & {\tiny 10} & {\tiny 3.5} & {\tiny 9} & {\tiny 7} & {\tiny 3.5} & {\tiny 8} & {\tiny 3.5}\tabularnewline
 \hline 
 {\tiny\textbf{transmissionpricing}} & {\tiny 4} & {\tiny 3} & {\tiny 1} & {\tiny 9} & {\tiny 2} & {\tiny 10} & {\tiny 7} & {\tiny 5} & {\tiny 8} & {\tiny 6}\tabularnewline
 \hline 
@@ -2649,31 +2671,127 @@ the Full Benchmark Suite\label{tab:meanRanking1}}
 \hline 
 {\tiny\textbf{weatherirrigation}} & {\tiny 4} & {\tiny 1} & {\tiny 3} & {\tiny 9} & {\tiny 6} & {\tiny 10} & {\tiny 8} & {\tiny 2} & {\tiny 7} & {\tiny 5}\tabularnewline
 \hline 
-{\tiny\textbf{weierstrass}} & {\tiny 7} & {\tiny 3} & {\tiny 6} & {\tiny 1} & {\tiny 5} & {\tiny 10} & {\tiny 8} & {\tiny 1} & {\tiny 9} & {\tiny 4}\tabularnewline
+{\tiny\textbf{weierstrass}} & {\tiny 7} & {\tiny 3} & {\tiny 6} & {\tiny 1.5} & {\tiny 5} & {\tiny 10} & {\tiny 8} & {\tiny 1.5} & {\tiny 9} & {\tiny 4}\tabularnewline
 \hline 
 {\tiny\textbf{whitley}} & {\tiny 1} & {\tiny 3} & {\tiny 4} & {\tiny 9} & {\tiny 7} & {\tiny 10} & {\tiny 5} & {\tiny 2} & {\tiny 6} & {\tiny 8}\tabularnewline
 \hline 
-{\tiny\textbf{wirelesscoverage}} & {\tiny 6} & {\tiny 2} & {\tiny 3} & {\tiny 10} & {\tiny 4} & {\tiny 9} & {\tiny 8} & {\tiny 1} & {\tiny 7} & {\tiny 4}\tabularnewline
-\hline 
+{\tiny\textbf{wirelesscoverage}} & {\tiny 6} & {\tiny 2} & {\tiny 3} & {\tiny 10} & {\tiny 4.5} & {\tiny 9} & {\tiny 8} & {\tiny 1} & {\tiny 7} & {\tiny 4.5}\tabularnewline
 \end{tabular}
 \end{table}
 
-Table \ref{tab:meanRanking1}reports the corresponding ranking based
-on mean value. This is a stricter criterion, since it rewards consistency
-across repeated runs rather than a single strong result. Under this
-criterion, SPARQ ranks first on 20 of 45 problems, or 44.4\%. This
-is a lower share than the 55.6\% obtained under the best-value criterion.
-Its exclusive, untied first-place count rises slightly to 6 of 45,
-compared with 7 of 45 for jSO. Despite this lower first-place frequency,
-SPARQ's mean rank across the benchmark set is 3.02. This is marginally
-better than EA4Eig at 3.04, and it is the best mean rank among all
-ten methods. SPARQ never registers the worst rank, 10th, on any problem.
-The divergence between the best-value and mean-value criteria is most
-pronounced on rotatedrosenbrock. There, SPARQ's rank worsens from
-5th to 8th. On tersoffc it worsens from 7th to 8th. On potential,
-by contrast, it improves from 2nd to 1st.
+Table \ref{tab:meanRanking1} reports the corresponding ranking based
+on mean value, with the same average-rank convention for ties. This
+is a stricter criterion, since it rewards consistency across repeated
+runs rather than a single strong result. Under this criterion, SPARQ
+is the sole first-place method on 6 of 45 problems (13.3\%), behind
+jSO's 7 of 45 (15.6\%) but ahead of EA4Eig's 4 of 45 (8.9\%). SPARQ's
+mean rank across the benchmark set is 3.69, narrowly behind EA4Eig
+at 3.62 and ahead of jSO at 3.86, under this stricter, tie-corrected
+criterion, EA4Eig therefore attains the best average rank of the ten
+methods by a small margin, with SPARQ a close second. As under the
+best-value criterion, SPARQ never registers the worst rank, 10th,
+on any problem, the same holds for EA4Eig, jSO, ARQ2, and mLSHADE-RL.
+The divergence between the best-value and mean-value criteria for
+SPARQ specifically is most pronounced on rotatedrosenbrock, where
+its rank worsens from 5th to 8th. On tersoffc it worsens from 7th
+to 8th. On potential, by contrast, it improves from 2nd to 1st.
 
-\subsection{Comparative Results on Large-Scale, High-Dimensional Benchmark Problems}
+Because SPARQ is presented as a direct evolution of ARQ2, a focused
+pairwise comparison between the two methods specifically is of particular
+interest. A paired Wilcoxon signed-rank test across the 45 standard-dimensionality
+problems, using each method's mean value per problem as the paired
+observation, shows that SPARQ attains a lower, better, mean value
+than ARQ2 on 37 of 45 problems, a higher one on only 1, and ties on
+the remaining 7, a difference that is highly statistically significant
+($3.4\times10^{-7}$). Under the best-value criterion, by contrast,
+the same test shows no significant difference between the two methods
+(SPARQ better on 21 problems, ARQ2 on 24, p = 0.36). Taken together,
+these results indicate that SPARQ's advantage over its immediate predecessor
+lies specifically in run-to-run consistency, mirroring the pattern
+already reported for ARQ2 over ARQ (Section \ref{subsec:ARQ2}), rather
+than in raw best-case performance, where the two methods are statistically
+indistinguishable.
+
+\begin{landscape}
+\begin{figure}[H]
+\begin{centering}
+\begin{tabular}{ccc}
+\begin{cellvarwidth}[t]
+\centering
+\includegraphics[scale=0.35]{convergence_salomon_100}
+
+{\scriptsize (a) salomon {[}D=100{]}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\includegraphics[scale=0.35]{convergence_potential_38}
+
+{\scriptsize (b) potential {[}D=38{]}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\includegraphics[scale=0.35]{convergence_michalewicz_100}
+
+{\scriptsize (c) michalewicz {[}D=100{]}}
+\end{cellvarwidth}\tabularnewline
+\begin{cellvarwidth}[t]
+\centering
+\includegraphics[scale=0.35]{convergence_weierstrass_70}
+
+{\scriptsize (d) weierstrass {[}D=70{]}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\includegraphics[scale=0.35]{convergence_test2n_200}
+
+{\scriptsize (e) test2n {[}D=200{]}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\includegraphics[scale=0.35]{convergence_zakharov_10000}
+
+{\scriptsize (f) zakharov {[}D=10,000{]}}
+\end{cellvarwidth}\tabularnewline
+\end{tabular}
+\par\end{centering}
+\caption{Best-so-far convergence trajectories of all 30 individual runs of
+ARQ2 (red) and SPARQ (teal) on six representative problems, at their
+full evaluation budget of 150,000 (population 100 for both methods).\label{fig:convergence}}
+\end{figure}
+\end{landscape}
+
+{\small\textit{Each of the approximately 30 overlapping lines per
+color represents one independent run; red denotes ARQ2 and teal denotes
+SPARQ. The vertical axis range and scale differ across panels to accommodate
+the very different objective-value magnitudes of each problem (e.g.,
+zakharov reaches values on the order of 10\textthreesuperior\textonesuperior ,
+while weierstrass and salomon remain in the low hundreds), so panels
+should not be compared directly against one another on the y-axis.}}{\small\par}
+
+Figure \ref{fig:convergence} shows the best-so-far trajectory of
+every one of the 30 individual runs of ARQ2 and SPARQ, rather than
+only their aggregate statistics, on six representative problems spanning
+both the standard-dimensionality and large-scale benchmarks. On salomon,
+potential, michalewicz, and zakharov, both methods progress smoothly
+throughout the run, without the abrupt, step-like discontinuities
+that would indicate a hard restart mechanism dominating progress,
+SPARQ's trajectories are visibly tighter, converging to a narrower
+band than ARQ2's on michalewicz in particular, consistent with the
+consistency advantage reported in Section \ref{subsec:generalsettings}.
+On test2n (D=200), by contrast, a substantial fraction of SPARQ's
+runs show a sharp, synchronized drop late in the search, around 125,000
+evaluations, where the best-so-far value falls abruptly from approximately
+-6,600 to -7,833, this is precisely the kind of event a restart or
+rejuvenation mechanism would produce, and we attribute it to the hard-stagnation
+rejuvenation mechanism of Section \ref{subsec:HardStagnationRejuvenation}
+firing once a large fraction of the population has collapsed without
+further progress. ARQ2 shows a smaller version of the same late-stage
+drop on this problem, consistent with test2n triggering the corresponding
+micro-restart mechanism it inherits from ARQ. This confirms that at
+least part of SPARQ's advantage on specific, deceptive landscapes
+such as test2n derives from its escape and rejuvenation mechanisms
+rather than from smoother search dynamics alone, while on the other
+five problems shown here no such effect is visible and the observed
+gains instead reflect steadier, more consistent convergence.
+
+\subsection{Larger Comparative Results on Large-Scale, \label{subsec:HighD}imensional
+Benchmark Problems}
 
 This subsection presents the outcome of the comparative evaluation
 on the large-scale portion of the benchmark suite. SPARQ is compared
@@ -2688,17 +2806,48 @@ landscapes, allowing both the accuracy and the computational scalability
 of each method to be assessed as the number of variables grows by
 an order of magnitude. As in the previous subsection, every method
 was executed independently over a fixed number of repeated runs under
-an identical evaluation budget. Three complementary tables report
-the results. Table \ref{tab:comparison2} presents detailed statistics
-for each method and problem-dimension combination, namely the best
-value found, the mean value, the success rate, the standard deviation,
-and the execution time. Table \ref{tab:bestRankin2} reports the ranking
-of all six methods according to the best value achieved, and Table
-\ref{tab:meanRanking2} reports the corresponding ranking according
-to the mean value.
+an identical evaluation budget.
+
+This evaluation budget was deliberately held at the same absolute
+value used throughout the standard-dimensionality comparison of Section
+\ref{subsec:firstComparison}, $N_{fe}$=150,000, rather than scaled
+with dimension, so that every method compared in this subsection,
+including the five optimizers developed specifically for large-scale
+search, is assessed under an identical, directly comparable resource
+constraint. This choice is not without cost: expressed per dimension,
+the budget falls from 150 evaluations per variable at d=1000 to only
+15 at d=10,000, low enough that some of the compared methods have
+barely completed their initial population evaluation, let alone any
+substantial adaptation, before the run terminates. Under such a tight
+per-dimension budget, the comparison necessarily emphasizes each method's
+behavior during initialization and early convergence rather than its
+asymptotic performance, a bias toward fast early convergence that
+likely disadvantages methods whose own design assumes a larger evaluation
+budget relative to dimension.
+
+A further consequence of testing exclusively at d=1000 and d=10,000
+is that SPARQ's eigen-coordinate crossover, which is disabled outright
+above D=100 (Section \ref{subsec:EigenCrossover}), plays no role
+whatsoever in any of the results reported in this subsection. The
+SPARQ results discussed below therefore reflect its adaptive population
+sizing, SHADE-style memory, Thompson-sampling branch selection, and
+other mechanisms that remain active at every dimension, without any
+contribution from eigen-crossover. This is consistent with the ablation
+study of Section \ref{subsec:Ablation} (Table \ref{tab:ablationStats}),
+where removing eigen-crossover altogether was already found to have
+a comparatively small and largely non-significant effect on the lower-dimensional
+subset tested there.
+
+ Three complementary tables report the results. Table \ref{tab:comparison2}
+presents detailed statistics for each method and problem-dimension
+combination, namely the best value found, the mean value, the success
+rate, the standard deviation, and the execution time. Table \ref{tab:bestRankin2}
+reports the ranking of all six methods according to the best value
+achieved, and Table \ref{tab:meanRanking2} reports the corresponding
+ranking according to the mean value.
 \begin{center}
 \begin{landscape}
-\begin{longtable}[c]{|c|c|c|c|c|c|c|c|}
+\begin{longtable}[c]{cccccccc}
 \caption{Detailed Performance Comparison of SPARQ Against Large-Scale Optimization
 Methods on High-Dimensional Problems (d = 1000, 10,000)\label{tab:comparison2}}
 \tabularnewline
@@ -3210,7 +3359,6 @@ Methods on High-Dimensional Problems (d = 1000, 10,000)\label{tab:comparison2}}
  & \textbf{SD} & 14567.4 & 3.7902e+29 & 1.7509e+28 & 2590.91 & 0 & 25296.3\tabularnewline
 \cline{2-8}
  & \textbf{Time(s)} & 3400.22 & 37.846 & 11.877 & 9.248 & 9.805 & 136.596\tabularnewline
-\hline 
 \end{longtable}
 \end{landscape}
 \par\end{center}
@@ -3222,29 +3370,47 @@ six methods. The closest competitor by average success rate is LM-CMA-ES
 at 77.2\%, followed by CCDG2 at 75.9\%, MMES at 72.6\%, and RMES at
 71.8\%. VkD-CMA-ES trails markedly at 48.6\%. On twelve separable,
 low-difficulty problems, all six methods reach an exact mean error
-of 0 at 100\% success. Here the differentiation rests entirely on
-runtime. On bucherastrigin (d=10,000), CCDG2 requires 1702.33 seconds,
-against 58.26 for LM-CMA-ES, 35.49 for MMES, 34.97 for RMES, and 27.65
-for SPARQ. On alpine1 (d=10,000), CCDG2 requires 1528.92 seconds against
-13.85 for SPARQ, a difference exceeding two orders of magnitude. Summed
-across all thirty-four combinations, CCDG2's cumulative runtime reaches
-29,284.4 seconds, against 258.6 for SPARQ, making CCDG2 roughly 113
-times slower overall. On the harder, non-separable problems the accuracy
-gap becomes substantial. On zakharov (d=10,000), SPARQ attains a mean
-error of 0 at 100\% success, while LM-CMA-ES registers $1.82\times10^{30}$,
-MMES $2.65\times10^{28}$, VkD-CMA-ES $4.67\times10^{5}$, CCDG2 $2.13\times10^{5}$,
-and RMES $1.48\times10^{5}$, all at 3\% success. On powell (d=10,000),
-SPARQ again reaches 0 at 100\% success, against $7.56\times10^{6}$
-for VkD-CMA-ES, 75,781 for LM-CMA-ES (itself at 100\% success but
-converging to a far inferior value), 75,751 for CCDG2 at 93\% success,
-10,051 for RMES, and 2436 for MMES. A notable nuance emerges on powell
-(d=1000) and rotatedrosenbrock at both dimensions, where VkD-CMA-ES
-also reports a 100\% success rate with a standard deviation of exactly
-0, yet with mean values many orders of magnitude worse than SPARQ's:
-7578.1 on powell (d=1000), and $1.407\times10^{6}$ and $1.163\times10^{9}$
+of 0 at 100\% success. These twelve problems, namely alpine1, bucherastrigin,
+cigar, cosine mixture, different powers, the Dirac-like spike, ellipsoidal,
+exponential, rastrigin, salomon, sphere, and step-ellipsoidal, are
+unshifted, unrotated benchmark functions whose known global optimum
+sits exactly at the origin and is exactly representable in double-precision
+arithmetic. Eleven of them are provably non-negative everywhere, and
+cosine mixture is provably bounded below by -0.1D, exactly its declared
+optimum, consequently, a reported mean equal to that bound over 30
+runs is only possible if every individual run reached the bound exactly,
+since a set of values each at or above a bound cannot average to that
+bound unless all of them equal it. We confirmed this directly against
+the raw per-run results for a representative sample of these problems:
+all 30 runs of every method checked reach the exact floating-point
+optimum, using a fully deterministic, reproducible seeding scheme
+in which a fixed base seed is incremented by the run index. Here the
+differentiation rests entirely on runtime. On bucherastrigin (d=10,000),
+CCDG2 requires 1702.33 seconds, against 58.26 for LM-CMA-ES, 35.49
+for MMES, 34.97 for RMES, and 27.65 for SPARQ. On alpine1 (d=10,000),
+CCDG2 requires 1528.92 seconds against 13.85 for SPARQ, a difference
+exceeding two orders of magnitude. Summed across all thirty-four combinations,
+CCDG2's cumulative runtime reaches 29,284.4 seconds, against 258.6
+for SPARQ, making CCDG2 roughly 113 times slower overall. On the harder,
+non-separable problems the accuracy gap becomes substantial. On zakharov
+(d=10,000), SPARQ attains a mean error of 0 at 100\% success, while
+LM-CMA-ES registers $1.82\times10^{30}$, MMES $2.65\times10^{28}$,
+VkD-CMA-ES $4.67\times10^{5}$, CCDG2 $2.13\times10^{5}$, and RMES
+$1.48\times10^{5}$, all at 3\% success. On powell (d=10,000), SPARQ
+again reaches 0 at 100\% success, against $7.56\times10^{6}$ for
+VkD-CMA-ES, 75,781 for LM-CMA-ES (itself at 100\% success but converging
+to a far inferior value), 75,751 for CCDG2 at 93\% success, 10,051
+for RMES, and 2436 for MMES. A notable nuance emerges on powell (d=1000)
+and rotatedrosenbrock at both dimensions, where VkD-CMA-ES also reports
+a 100\% success rate with a standard deviation of exactly 0, yet with
+mean values many orders of magnitude worse than SPARQ's: 7578.1 on
+powell (d=1000), and $1.407\times10^{6}$ and $1.163\times10^{9}$
 on rotatedrosenbrock. This indicates that VkD-CMA-ES converges highly
 consistently to a markedly suboptimal point, rather than failing to
-converge at all. The one problem on which SPARQ is clearly outperformed
+converge at all. This behavior is consistent with premature convergence
+under the tight per-dimension evaluation budget discussed above, rather
+than necessarily indicating a departure from the method's own recommended
+configuration. The one problem on which SPARQ is clearly outperformed
 is vincent. At d=1000, MMES reaches the exact optimum, with a mean
 of -1 at 40\% success, and RMES likewise reaches -1 at 13\% success,
 against SPARQ's mean of -0.976 at 3\% success. This gap narrows in
@@ -3256,42 +3422,41 @@ RMES -0.855, and SPARQ -0.614.
 Dimensionality\label{tab:bestRankin2}}
 
 \begin{centering}
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\begin{tabular}{cccccccc}
 \hline 
 PROBLEM & DIM & ccdg2 & lmcmaes & mmes & rmes & sparq & vkdcmaes\tabularnewline
 \hline 
+alpine1 & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-alpine1 & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+alpine1 & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-alpine1 & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+bucherastrigin & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-bucherastrigin & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+bucherastrigin  & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-bucherastrigin  & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+cigar & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-cigar & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+cigar & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-cigar & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+cosinemixture & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-cosinemixture & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+cosinemixture & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-cosinemixture & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+differentpowers & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-differentpowers & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+differentpowers & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-differentpowers & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+diracproblem & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-diracproblem & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+diracproblem & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-diracproblem & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+ellipsoidal & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-ellipsoidal & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+ellipsoidal & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-ellipsoidal & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+exponential & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-exponential & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
-\hline 
-exponential & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+exponential & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
 lunacekbirastrigin & 1000 & 5 & 2 & 3 & 4 & 1 & 6\tabularnewline
 \hline 
@@ -3301,96 +3466,95 @@ powell & 1000 & 5 & 4 & 2 & 3 & 1 & 6\tabularnewline
 \hline 
 powell & 10000 & 4 & 5 & 2 & 3 & 1 & 6\tabularnewline
 \hline 
-rastrigin & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+rastrigin & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-rastrigin & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+rastrigin & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
 rotatedrosenbrock & 1000 & 5 & 4 & 3 & 2 & 1 & 6\tabularnewline
 \hline 
 rotatedrosenbrock & 10000 & 4 & 5 & 2 & 3 & 1 & 6\tabularnewline
 \hline 
-salomon & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+salomon & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-salomon & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+salomon & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-sphere & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+sphere & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-sphere & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+sphere & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-stepellipsoidal & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+stepellipsoidal & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-stepellipsoidal & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+stepellipsoidal & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-vincent & 1000 & 5 & 4 & 1 & 1 & 3 & 6\tabularnewline
+vincent & 1000 & 5 & 4 & 1.5 & 1.5 & 3 & 6\tabularnewline
 \hline 
 vincent & 10000 & 5 & 4 & 1 & 2 & 3 & 6\tabularnewline
 \hline 
 zakharov & 1000 & 2 & 6 & 4 & 3 & 1 & 5\tabularnewline
 \hline 
 zakharov & 10000 & 3 & 6 & 5 & 2 & 1 & 4\tabularnewline
-\hline 
 \end{tabular}
 \par\end{centering}
 \end{table}
 
 Table \ref{tab:bestRankin2} reports the best-value ranking of the
 same six large-scale methods across the thirty-four problem-dimension
-combinations. SPARQ achieves rank 1, shared or exclusive, in 31 of
-34 cases, or 91.2\%. This is the highest share among all six methods.
-Its exclusive, untied first-place count is 7 of 34, or 20.6\%. This
-is higher than any competitor. MMES attains 2 of 34 exclusively, and
-all others attain 0. SPARQ's mean rank across the thirty-four cases
-is 1.15, the best of the six methods. MMES follows at 1.41 and RMES
-at 1.47. There are two exceptions to SPARQ's first-place standing.
-On lunacekbirastrigin (d=10,000) it ranks 2nd. On vincent, at both
-dimensions, it ranks 3rd. VkD-CMA-ES, by contrast, shares rank 1 with
-the other five methods on every problem at d=1000. It drops to rank
-6, the worst position, on every single problem at d=10,000. Overall
-it registers the worst rank in 20 of 34 cases, or 58.8\%. This pattern
-indicates a pronounced scalability limitation at the highest dimensionality
-tested.
+combinations, again using average ranks for ties. SPARQ is the sole
+first-place method in 7 of 34 cases (20.6\%), the highest exclusive
+share among the six methods, MMES attains 2 of 34 exclusively (5.9\%),
+and all others attain none. SPARQ's mean rank across the thirty-four
+cases is 2.74, the best of the six methods, ahead of MMES at 3.02
+and RMES at 3.07. There are two exceptions to SPARQ's first-place
+standing: on lunacekbirastrigin (d=10,000) it ranks 2nd, and on vincent,
+at both dimensions, it ranks 3rd. VkD-CMA-ES, by contrast, ties with
+all five other methods on every problem at d=1000, so that every method
+receives the shared mid-table average rank of 3.5 there rather than
+a first-place rank, since all six reach the same value, at d=10,000
+it drops to rank 6, the worst position, on every single problem. Overall
+it registers the worst rank in 20 of 34 cases (58.8\%), a pattern
+that indicates a pronounced scalability limitation at the highest
+dimensionality tested.
 
 \begin{table}[H]
 \caption{Mean-Value Ranking of SPARQ and Five Large-Scale Optimizers at High
 Dimensionality\label{tab:meanRanking2}}
 
 \centering{}%
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\begin{tabular}{cccccccc}
 \hline 
 PROBLEM & DIM & ccdg2 & lmcmaes & mmes & rmes & sparq & vkdcmaes\tabularnewline
 \hline 
+alpine1 & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-alpine1 & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+alpine1 & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-alpine1 & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+bucherastrigin & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-bucherastrigin & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+bucherastrigin & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-bucherastrigin & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+cigar & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-cigar & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+cigar & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-cigar & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+cosinemixture & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-cosinemixture & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+cosinemixture & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-cosinemixture & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+differentpowers & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-differentpowers & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+differentpowers & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-differentpowers & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+diracproblem & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-diracproblem & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+diracproblem & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-diracproblem & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+ellipsoidal & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-ellipsoidal & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+ellipsoidal & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-ellipsoidal & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+exponential & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-exponential & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
-\hline 
-exponential & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+exponential & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
 lunacekbirastrigin & 1000 & 5 & 2 & 3 & 4 & 1 & 6\tabularnewline
 \hline 
@@ -3400,25 +3564,25 @@ powell & 1000 & 5 & 4 & 2 & 3 & 1 & 6\tabularnewline
 \hline 
 powell & 10000 & 4 & 5 & 2 & 3 & 1 & 6\tabularnewline
 \hline 
-rastrigin & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+rastrigin & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-rastrigin & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+rastrigin & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
 rotatedrosenbrock & 1000 & 5 & 4 & 3 & 2 & 1 & 6\tabularnewline
 \hline 
 rotatedrosenbrock & 10000 & 4 & 5 & 2 & 3 & 1 & 6\tabularnewline
 \hline 
-salomon & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+salomon & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-salomon & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+salomon & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-sphere & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+sphere & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-sphere & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+sphere & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
-stepellipsoidal & 1000 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+stepellipsoidal & 1000 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5 & 3.5\tabularnewline
 \hline 
-stepellipsoidal & 10000 & 1 & 1 & 1 & 1 & 1 & 6\tabularnewline
+stepellipsoidal & 10000 & 3 & 3 & 3 & 3 & 3 & 6\tabularnewline
 \hline 
 vincent & 1000 & 5 & 4 & 1 & 2 & 3 & 6\tabularnewline
 \hline 
@@ -3427,24 +3591,26 @@ vincent & 10000 & 4 & 5 & 1 & 2 & 3 & 6\tabularnewline
 zakharov & 1000 & 2 & 6 & 4 & 3 & 1 & 5\tabularnewline
 \hline 
 zakharov & 10000 & 3 & 6 & 5 & 2 & 1 & 4\tabularnewline
-\hline 
 \end{tabular}
 \end{table}
 
 Table \ref{tab:meanRanking2} reports the corresponding mean-value
 ranking for the same six methods. The resulting figures are nearly
-identical to those of Table 5. SPARQ again ranks first in 31 of 34
-cases, or 91.2\%. Its exclusive first-place count is again 7 of 34.
-It holds the lowest mean rank of the six methods, at 1.18, against
-1.41 for MMES. The same two exceptions persist. On lunacekbirastrigin
-(d=10,000), SPARQ's rank is 3rd rather than the 2nd observed under
-the best-value criterion. On vincent, at both dimensions, it again
-ranks 3rd. The best-value and mean-value rankings nearly coincide
-at this scale. This contrasts with the more pronounced divergence
-observed between Tables \ref{tab:bestRankin1} and \ref{tab:meanRanking1}
-at lower dimensionality. It indicates that SPARQ's behavior becomes
-markedly more consistent as dimensionality, and the corresponding
-evaluation budget, increases.
+identical to those of Table \ref{tab:bestRankin2}. SPARQ again attains
+the highest exclusive first-place count, 7 of 34 (20.6\%), and again
+holds the lowest mean rank of the six methods, at 2.77, against 3.00
+for MMES. The same two exceptions persist: on lunacekbirastrigin (d=10,000),
+SPARQ's rank is 3rd rather than the 2nd observed under the best-value
+criterion, on vincent, at both dimensions, it again ranks 3rd. The
+best-value and mean-value rankings nearly coincide at this scale,
+in contrast to the standard-dimensionality comparison, where the two
+criteria not only diverge on individual problems but identify different
+overall leaders: SPARQ under the best-value criterion (Table \ref{tab:bestRankin1})
+and EA4Eig, by a narrow margin, under the mean-value criterion (Table
+\ref{tab:meanRanking1}). At large scale, by contrast, SPARQ leads
+clearly and identically under both criteria, indicating that its advantage
+becomes more consistent, not less, as dimensionality and the corresponding
+evaluation budget increase.
 
 \subsection{Computational Complexity and Scalability with Dimension\label{subsec:Complexity}}
 
@@ -3458,12 +3624,18 @@ mean, and standard deviation values to be verified as identically
 zero across all tested dimensions, with a 100\% success rate in every
 case. This removes search difficulty as a confounding factor and isolates
 raw per-evaluation computational overhead as the sole quantity of
-interest. Each function was evaluated at six problem dimensions, D
-= 100, 2000, 4000, 6000, 8000, and 10,000, with the reported execution
-time corresponding to the total wall-clock time required to complete
-30 independent runs per dimension, executed in parallel mode. Figure
-\ref{fig:complexity} reports the resulting execution time, in seconds,
-as a function of D for each of the five functions.
+interest. This deliberately narrow selection serves only to isolate
+computational overhead from search difficulty in the present subsection,
+the accuracy of SPARQ and its five large-scale competitors on hard,
+non-separable, and multimodal large-scale problems, including lunacekbirastrigin,
+rotatedrosenbrock, vincent, and zakharov itself under the full evaluation
+budget, is reported separately in Table 6 in the preceding subsection.
+Each function was evaluated at six problem dimensions, D = 100, 2000,
+4000, 6000, 8000, and 10,000, with the reported execution time corresponding
+to the total wall-clock time required to complete 30 independent runs
+per dimension, executed in parallel mode. Figure \ref{fig:complexity}
+reports the resulting execution time, in seconds, as a function of
+D for each of the five functions.
 
 \begin{figure}[H]
 \begin{centering}
@@ -3481,26 +3653,1163 @@ for all five functions, but the growth is distinctly non-linear: the
 increase from D = 100 to D = 2000 is comparatively modest, whereas
 each subsequent step of 2000 dimensions contributes a progressively
 larger absolute increment, with the steepest rise occurring between
-D = 8000 and D = 10,000. This pattern is consistent with a per-iteration
-cost that is dominated by operations scaling worse than linearly in
-D, such as the periodic eigen-basis refresh (Section \ref{subsec:EigenCrossover}),
-whose cost grows with the square or cube of the dimension whenever
-it is triggered, rather than by the $O(D)$ cost of the core DE mutation
-and crossover operators alone. Despite this super-linear trend, the
-absolute spread between the fastest and slowest functions remains
-narrow throughout the tested range, from under 0.2 s at D = 100 to
-under 7 s at D = 10,000, indicating that SPARQ's runtime is governed
-primarily by dimension rather than by the specific separable landscape
-being optimized. Among the five functions, Salomon and Zakharov consistently
-exhibit the lowest execution times at high dimension, while Exponential
-and Ellipsoidal are consistently the most expensive, a difference
-attributable to their internal evaluation cost per call rather than
-to any additional search effort, since all five problems are solved
-to the exact global optimum with a 100\% success rate throughout.
-These findings indicate that SPARQ's computational overhead scales
-predictably and remains practically manageable even at D = 10,000,
-supporting its applicability to large-scale optimization tasks without
-a disproportionate increase in wall-clock cost.
+D = 8000 and D = 10,000. This pattern is not attributable to the eigen-basis
+refresh (Section \ref{subsec:EigenCrossover}), since that mechanism
+is disabled outright for D\textgreater 100 and is therefore inactive
+at every dimension tested here beyond the smallest, nor to the population
+size, which was held fixed at Ninit=100 throughout this experiment,
+as in the main comparison of Section 4.2, rather than scaled with
+dimension. It is instead consistent with the stagnation-gated elite
+polish (Section \ref{subsec:StagnationPolish}): its single-coordinate
+probing mode visits dimensions in round-robin fashion so that every
+coordinate is eventually covered even at high D, and its burst size
+is explicitly enlarged late in the run to ensure this coverage. Since
+each individual probe itself costs $O(D)$ (a vector-valued step or
+direction combination), a burst size that grows with D to cover all
+D coordinates yields an $O(D^{2})$ cost per activation, independent
+of population size and without requiring the eigen-basis at all. Despite
+this super-linear trend, the absolute spread between the fastest and
+slowest functions remains narrow throughout the tested range, from
+under 0.2 s at D = 100 to under 7 s at D = 10,000, indicating that
+SPARQ's runtime is governed primarily by dimension rather than by
+the specific separable landscape being optimized. Among the five functions,
+Salomon and Zakharov consistently exhibit the lowest execution times
+at high dimension, while Exponential and Ellipsoidal are consistently
+the most expensive, a difference attributable to their internal evaluation
+cost per call rather than to any additional search effort, since all
+five problems are solved to the exact global optimum with a 100\%
+success rate throughout. These findings indicate that SPARQ's computational
+overhead scales predictably and remains practically manageable even
+at D = 10,000, supporting its applicability to large-scale optimization
+tasks without a disproportionate increase in wall-clock cost.
+
+\subsection{Ablation Study\label{subsec:Ablation}}
+
+To isolate the contribution of SPARQ's individual mechanisms, a leave-one-out
+ablation study was conducted on a representative subset of ten problems
+drawn from the standard-dimensionality benchmark suite of Section
+\ref{subsec:generalsettings}: alpine1 (d=100), rosenbrock (d=50),
+rotatedrosenbrock (d=50), katsuura (d=50), michalewicz (d=100), gallagher101
+(d=16), antennaarray (d=12), eld3 (d=15), hydrothermal (d=120), and
+weierstrass (d=70). This subset spans separable and non-separable
+landscapes, unimodal and highly multimodal functions, and three real-world
+engineering problems, so that no single mechanism's contribution is
+assessed on a single problem type alone. Starting from the full SPARQ
+configuration (Table \ref{tab:settings}), eleven variants were constructed
+by disabling, in turn, a single mechanism while leaving every other
+mechanism and every parameter setting unchanged: the external archive
+inherited from ARQ (Section \ref{subsec:ARQ}), the trajectory-echo
+memory (Section \ref{subsec:TrajectoryEcho}), the eigen-coordinate
+crossover (Section \ref{subsec:EigenCrossover}), the auxiliary IDE
+branch (Section \ref{subsec:ARQ2}), the Lévy-flight quarantine (Section
+\ref{subsec:L=0000E9vyFlight}), the non-linear population-size reduction
+(Section \ref{subsec:NLPSR}), the opposition-based basin escape (Section
+\ref{subsec:ODOBB}), the stagnation-gated elite polish (Section \ref{subsec:StagnationPolish}),
+the hard-stagnation rejuvenation (Section \ref{subsec:HardStagnationRejuvenation}),
+the restricted tournament replacement inherited from ARQ (Section
+\ref{subsec:ARQ}), and the SHADE-style historical memory for F and
+CR (Section \ref{subsec:3.2. SHADEStyle}). Each of the resulting
+twelve configurations, the full method together with the eleven single-mechanism
+removals, was executed for 30 independent runs per problem under the
+same evaluation budget of 150,000 function evaluations used throughout
+Section \ref{subsec:generalsettings}.
+
+Table \ref{tab:ablation} reports the best value, mean value, success
+rate, and standard deviation obtained by each of the twelve configurations
+on each of the ten problems. Two mechanisms show a clear and broadly
+consistent contribution. Disabling the auxiliary IDE branch degrades
+the mean objective value on eight of the ten problems, most severely
+on weierstrass (mean rising from 0 to 0.0209 as the success rate drops
+from 100\% to 3\%), katsuura (0 to 1.505, 100\% to 3\%), and michalewicz
+(-97.07 to -84.46). Disabling the non-linear population-size reduction
+(NLPSR) produces a similar pattern: alpine1, katsuura, michalewicz,
+and weierstrass all fall from a 100\% success rate to 3\%. The SHADE-style
+historical memory shows a narrower but equally clear effect, concentrated
+on the non-separable and real-world problems: disabling it worsens
+rosenbrock (mean 24.71 to 33.09), rotatedrosenbrock (27.67 to 39.58),
+and hydrothermal (141,669 to 141,734), while leaving the six problems
+on which SPARQ already attains 100\% success unaffected. The remaining
+mechanisms, namely the external archive, the eigen-coordinate crossover,
+the Lévy-flight quarantine, the restricted tournament replacement,
+the opposition-based basin escape, the stagnation-gated elite polish,
+the trajectory-echo memory, and the hard-stagnation rejuvenation,
+show smaller and less consistent effects on this ten-problem subset.
+On several problems, most visibly rosenbrock, gallagher101, antennaarray,
+and eld3, disabling one of these mechanisms yields a slightly better
+mean value or success rate than the full method, a pattern discussed
+further below together with Table \ref{tab:ablationStats}.
+\begin{flushleft}
+{\tiny{}%
+\begin{longtable}[c]{cccccc}
+\caption{Leave-one-out ablation study of SPARQ on ten representative benchmark
+problems: the full method against eleven single-mechanism removals
+(30 independent runs per configuration, evaluation budget of 150,000
+function evaluations).\label{tab:ablation}}
+\tabularnewline
+\toprule 
+{\footnotesize\textbf{PROBLEM}} & {\footnotesize\textbf{VARIANT}} & {\footnotesize\textbf{BEST}} & {\footnotesize\textbf{MEAN}} & {\footnotesize\textbf{RATE\%}} & {\footnotesize\textbf{SD}}\tabularnewline
+\midrule
+\endhead
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{alpine1 {[}d=100{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 5.8991e-08} & {\footnotesize 1.7888e-06} & {\footnotesize 3\%} & {\footnotesize 2.09175e-06}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 7.31e-10} & {\footnotesize 0.000104234} & {\footnotesize 3\%} & {\footnotesize 0.000459485}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{rosenbrock {[}d=50{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 14.951} & {\footnotesize 24.7064} & {\footnotesize 3\%} & {\footnotesize 3.1607}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 43.3637} & {\footnotesize 44.1394} & {\footnotesize 3\%} & {\footnotesize 0.391539}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 15.9152} & {\footnotesize 24.9966} & {\footnotesize 3\%} & {\footnotesize 2.97674}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 13.7821} & {\footnotesize 23.0353} & {\footnotesize 3\%} & {\footnotesize 3.09409}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 21.7969} & {\footnotesize 24.9184} & {\footnotesize 3\%} & {\footnotesize 1.70362}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 14.951} & {\footnotesize 25.0305} & {\footnotesize 3\%} & {\footnotesize 3.44912}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 9.33552} & {\footnotesize 19.9828} & {\footnotesize 3\%} & {\footnotesize 5.5115}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 14.951} & {\footnotesize 24.7059} & {\footnotesize 3\%} & {\footnotesize 3.16036}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 15.4138} & {\footnotesize 25.3338} & {\footnotesize 3\%} & {\footnotesize 2.89873}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 10.679} & {\footnotesize 23.3134} & {\footnotesize 3\%} & {\footnotesize 6.82782}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 19.9343} & {\footnotesize 24.7286} & {\footnotesize 3\%} & {\footnotesize 1.69453}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 28.9718} & {\footnotesize 33.0904} & {\footnotesize 3\%} & {\footnotesize 1.85621}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{rotatedrosenbrock {[}d=50{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 0.000444079} & {\footnotesize 27.671} & {\footnotesize 3\%} & {\footnotesize 15.0013}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 0.00513018} & {\footnotesize 28.0117} & {\footnotesize 3\%} & {\footnotesize 23.8711}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 0.000360242} & {\footnotesize 27.6591} & {\footnotesize 3\%} & {\footnotesize 15.0134}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 0.161477} & {\footnotesize 29.134} & {\footnotesize 3\%} & {\footnotesize 14.0647}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 0.0778156} & {\footnotesize 41.2235} & {\footnotesize 3\%} & {\footnotesize 27.3308}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 0.000444079} & {\footnotesize 26.7279} & {\footnotesize 3\%} & {\footnotesize 15.7891}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 0.251263} & {\footnotesize 27.4945} & {\footnotesize 3\%} & {\footnotesize 15.8381}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 0.00041234} & {\footnotesize 27.6688} & {\footnotesize 3\%} & {\footnotesize 15.0017}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 0.000403265} & {\footnotesize 27.836} & {\footnotesize 3\%} & {\footnotesize 15.2236}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 4.24684e-05} & {\footnotesize 22.43} & {\footnotesize 3\%} & {\footnotesize 16.7989}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 0.054141} & {\footnotesize 26.759} & {\footnotesize 3\%} & {\footnotesize 12.4589}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 17.8763} & {\footnotesize 39.583} & {\footnotesize 3\%} & {\footnotesize 9.30305}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{katsuura {[}d=50{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 0.0117707} & {\footnotesize 1.5055} & {\footnotesize 3\%} & {\footnotesize 1.11423}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 0.00528541} & {\footnotesize 0.0529445} & {\footnotesize 3\%} & {\footnotesize 0.0466569}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{michalewicz {[}d=100{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize -98.6917} & {\footnotesize -97.0668} & {\footnotesize 3\%} & {\footnotesize 0.964969}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize -98.9678} & {\footnotesize -96.6435} & {\footnotesize 3\%} & {\footnotesize 1.62852}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize -98.9658} & {\footnotesize -97.1417} & {\footnotesize 3\%} & {\footnotesize 1.07609}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize -98.4484} & {\footnotesize -96.8152} & {\footnotesize 3\%} & {\footnotesize 1.90256}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize -89.6453} & {\footnotesize -84.4597} & {\footnotesize 3\%} & {\footnotesize 3.25365}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize -98.6917} & {\footnotesize -97.0668} & {\footnotesize 3\%} & {\footnotesize 0.964969}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize -96.666} & {\footnotesize -94.4865} & {\footnotesize 3\%} & {\footnotesize 1.66468}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize -98.6917} & {\footnotesize -97.069} & {\footnotesize 3\%} & {\footnotesize 0.976472}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize -98.7536} & {\footnotesize -96.9725} & {\footnotesize 3\%} & {\footnotesize 1.25347}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize -98.6927} & {\footnotesize -96.9901} & {\footnotesize 3\%} & {\footnotesize 1.03407}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize -97.559} & {\footnotesize -95.6051} & {\footnotesize 3\%} & {\footnotesize 1.40489}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize -98.7987} & {\footnotesize -97.0878} & {\footnotesize 3\%} & {\footnotesize 1.0147}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{gallagher101 {[}d=16{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 0.929997} & {\footnotesize 3.11339} & {\footnotesize 37\%} & {\footnotesize 2.73578}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 0} & {\footnotesize 1.96751} & {\footnotesize 7\%} & {\footnotesize 1.59172}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 0.929997} & {\footnotesize 3.11134} & {\footnotesize 37\%} & {\footnotesize 2.73667}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 0} & {\footnotesize 2.07356} & {\footnotesize 7\%} & {\footnotesize 1.62773}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 0} & {\footnotesize 2.49089} & {\footnotesize 7\%} & {\footnotesize 2.78982}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 0.929997} & {\footnotesize 3.11339} & {\footnotesize 37\%} & {\footnotesize 2.73578}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 0} & {\footnotesize 2.27801} & {\footnotesize 7\%} & {\footnotesize 1.70772}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 0.929997} & {\footnotesize 2.70515} & {\footnotesize 37\%} & {\footnotesize 1.7552}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 0.691857} & {\footnotesize 3.1034} & {\footnotesize 3\%} & {\footnotesize 2.74355}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 0.929997} & {\footnotesize 3.11339} & {\footnotesize 37\%} & {\footnotesize 2.73578}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 0} & {\footnotesize 2.23772} & {\footnotesize 3\%} & {\footnotesize 1.70831}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 0} & {\footnotesize 2.1132} & {\footnotesize 7\%} & {\footnotesize 1.7514}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{antennaarray {[}d=12{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 83\%} & {\footnotesize 1.79781e-10}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 0.00680964} & {\footnotesize 0.00681029} & {\footnotesize 3\%} & {\footnotesize 1.86769e-06}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 77\%} & {\footnotesize 1.4658e-09}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 70\%} & {\footnotesize 1.57082e-08}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 100\%} & {\footnotesize 1.76438e-18}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 77\%} & {\footnotesize 2.33886e-08}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 97\%} & {\footnotesize 1.1493e-09}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 77\%} & {\footnotesize 6.8219e-10}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 67\%} & {\footnotesize 2.33486e-09}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 0.00680964} & {\footnotesize 0.00680966} & {\footnotesize 67\%} & {\footnotesize 5.29474e-08}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 0.00680964} & {\footnotesize 0.00680964} & {\footnotesize 100\%} & {\footnotesize 1.76438e-18}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 0.00680964} & {\footnotesize 0.00681008} & {\footnotesize 47\%} & {\footnotesize 1.37869e-06}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{eld3 {[}d=15{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 32375.3} & {\footnotesize 32440.5} & {\footnotesize 7\%} & {\footnotesize 47.9137}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 32375.3} & {\footnotesize 32470.7} & {\footnotesize 7\%} & {\footnotesize 64.885}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 32375.3} & {\footnotesize 32438.4} & {\footnotesize 7\%} & {\footnotesize 41.3663}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 32375.3} & {\footnotesize 32440.4} & {\footnotesize 10\%} & {\footnotesize 51.9031}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 32455.1} & {\footnotesize 32639.5} & {\footnotesize 3\%} & {\footnotesize 105.906}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 32375.3} & {\footnotesize 32458.2} & {\footnotesize 7\%} & {\footnotesize 68.6467}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 32384.8} & {\footnotesize 32467.8} & {\footnotesize 3\%} & {\footnotesize 67.6989}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 32375.3} & {\footnotesize 32440.5} & {\footnotesize 7\%} & {\footnotesize 47.9137}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 32375.3} & {\footnotesize 32418.1} & {\footnotesize 13\%} & {\footnotesize 38.8383}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 32375.3} & {\footnotesize 32440.5} & {\footnotesize 7\%} & {\footnotesize 47.9137}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 32384.8} & {\footnotesize 32478.1} & {\footnotesize 7\%} & {\footnotesize 54.877}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 32375.3} & {\footnotesize 32429.9} & {\footnotesize 17\%} & {\footnotesize 58.0312}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{hydrothermal {[}d=120{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 141656} & {\footnotesize 141669} & {\footnotesize 3\%} & {\footnotesize 9.8093}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 141732} & {\footnotesize 141771} & {\footnotesize 3\%} & {\footnotesize 22.6661}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 141658} & {\footnotesize 141673} & {\footnotesize 3\%} & {\footnotesize 7.94773}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 141656} & {\footnotesize 141673} & {\footnotesize 3\%} & {\footnotesize 12.1503}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 141656} & {\footnotesize 141665} & {\footnotesize 3\%} & {\footnotesize 5.26733}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 141658} & {\footnotesize 141672} & {\footnotesize 3\%} & {\footnotesize 9.89036}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 141656} & {\footnotesize 141672} & {\footnotesize 3\%} & {\footnotesize 10.7125}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 141656} & {\footnotesize 141671} & {\footnotesize 3\%} & {\footnotesize 11.3225}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 141657} & {\footnotesize 141672} & {\footnotesize 3\%} & {\footnotesize 10.481}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 141656} & {\footnotesize 141663} & {\footnotesize 7\%} & {\footnotesize 12.5519}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 141659} & {\footnotesize 141676} & {\footnotesize 3\%} & {\footnotesize 12.4236}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 141683} & {\footnotesize 141734} & {\footnotesize 3\%} & {\footnotesize 38.7719}\tabularnewline
+\midrule 
+\multirow{12}{*}{{\footnotesize\textbf{weierstrass {[}d=70{]}}}} & {\footnotesize\textbf{Full-SPARQ}} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Archive} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Trajectory-Echo} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Eigen-crossover} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o IDE-branch} & {\footnotesize 0.000196385} & {\footnotesize 0.0209183} & {\footnotesize 3\%} & {\footnotesize 0.0363285}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Levy-quarantine} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o NLPSR} & {\footnotesize 3.113e-09} & {\footnotesize 1.60916} & {\footnotesize 3\%} & {\footnotesize 1.64724}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o OBL-basin-escape} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Elite-polish} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o RTR} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\cmidrule{2-6}
+ & {\footnotesize w/o SHADE-memory} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 100\%} & {\footnotesize 0}\tabularnewline
+\end{longtable}}{\tiny\par}
+\par\end{flushleft}
+
+To assess whether the differences observed in Table \ref{tab:ablation}
+are statistically meaningful rather than run-to-run noise, a paired
+Wilcoxon signed-rank test, matched by random seed across 30 pairs,
+was carried out between the full method and each of the eleven variants,
+independently on each of the ten problems. Table \ref{tab:ablationStats}
+summarizes the outcome, reporting for each variant the mean rank obtained
+under the mean-value criterion across the ten problems, together with
+the number of problems on which the full method is significantly better
+(p\textless 0.05), the number on which the variant is significantly
+better, and the number showing no significant difference. Removing
+the IDE branch or the external archive produces a significant degradation
+on six and four of the ten problems respectively, and never a significant
+improvement, confirming both as structurally important contributors
+rather than optional refinements. The SHADE-style memory follows the
+same pattern on four problems. Removing the opposition-based basin
+escape produces no statistically significant difference on any of
+the ten problems, and the trajectory-echo memory only one, indicating
+that, on this particular problem subset, their contribution is not
+reliably distinguishable from the noise floor of the comparison, consistent
+with their intended role as rare-activation safety mechanisms rather
+than components exercised on every run. Notably, the full method does
+not obtain the lowest, and therefore best, mean rank overall: 5.65,
+against 5.00 for the variant without the opposition-based basin escape.
+The graduated, stagnation-driven mechanisms occasionally trade a small
+amount of average-case performance on some problems for the robustness
+against pathological stagnation that motivated their inclusion in
+the first place, an interaction effect that a component-wise comparison
+of this kind is precisely intended to expose.
+
+\begin{table}[H]
+\begin{centering}
+{\footnotesize\caption{Statistical comparison (paired Wilcoxon signed-rank test, n = 30,
+significance threshold p\textless 0.05) between the full SPARQ method
+and each leave-one-out variant, aggregated over the ten ablation problems.\label{tab:ablationStats}}
+}{\footnotesize\par}
+\par\end{centering}
+\centering{}{\footnotesize{}%
+\begin{tabular}{ccccc}
+\toprule 
+{\footnotesize\textbf{Variant}} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{Mean rank}}{\footnotesize\par}
+
+{\footnotesize\textbf{(mean-value)}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{Full sig.}}{\footnotesize\par}
+
+{\footnotesize\textbf{better}}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize\textbf{Variant sig.}}{\footnotesize\par}
+
+{\footnotesize\textbf{better}}
+\end{cellvarwidth} & {\footnotesize\textbf{No significant diff.}}\tabularnewline
+\midrule
+\midrule 
+{\footnotesize\textbf{Full-SPARQ}} & {\footnotesize\textbf{5.65}} &  &  & \tabularnewline
+\midrule 
+{\footnotesize w/o OBL-basin-escape} & {\footnotesize 5.00} & {\footnotesize 0} & {\footnotesize 0} & {\footnotesize 10}\tabularnewline
+\midrule 
+{\footnotesize w/o Trajectory-Echo} & {\footnotesize 5.40} & {\footnotesize 1} & {\footnotesize 0} & {\footnotesize 9}\tabularnewline
+\midrule 
+{\footnotesize w/o Hard-stag-rejuv.} & {\footnotesize 5.45} & {\footnotesize 2} & {\footnotesize 2} & {\footnotesize 6}\tabularnewline
+\midrule 
+{\footnotesize w/o Eigen-crossover} & {\footnotesize 6.00} & {\footnotesize 0} & {\footnotesize 1} & {\footnotesize 9}\tabularnewline
+\midrule 
+{\footnotesize w/o RTR} & {\footnotesize 6.40} & {\footnotesize 2} & {\footnotesize 0} & {\footnotesize 8}\tabularnewline
+\midrule 
+{\footnotesize w/o Elite-polish} & {\footnotesize 6.45} & {\footnotesize 3} & {\footnotesize 1} & {\footnotesize 6}\tabularnewline
+\midrule 
+{\footnotesize w/o Levy-quarantine} & {\footnotesize 6.55} & {\footnotesize 1} & {\footnotesize 0} & {\footnotesize 9}\tabularnewline
+\midrule 
+{\footnotesize w/o SHADE-memory} & {\footnotesize 6.75} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 5}\tabularnewline
+\midrule 
+{\footnotesize w/o NLPSR} & {\footnotesize 7.35} & {\footnotesize 4} & {\footnotesize 2} & {\footnotesize 4}\tabularnewline
+\midrule 
+{\footnotesize w/o Archive} & {\footnotesize 8.15} & {\footnotesize 4} & {\footnotesize 1} & {\footnotesize 5}\tabularnewline
+\midrule 
+{\footnotesize w/o IDE-branch} & {\footnotesize 8.85} & {\footnotesize 6} & {\footnotesize 0} & {\footnotesize 4}\tabularnewline
+\end{tabular}}{\footnotesize\par}
+\end{table}
+
+These results should be read as a lower bound on, rather than a complete
+accounting of, each mechanism's contribution. The ten-problem subset
+was chosen for coverage of separable, non-separable, multimodal, and
+real-world landscapes rather than for exhaustiveness, and mechanisms
+whose benefit is concentrated on problems outside this subset, or
+that interact non-additively with one another, may be under- or over-represented
+here. In particular, the graduated stagnation-driven mechanisms, namely
+the elite polish, the basin escape, and the hard-stagnation rejuvenation,
+are by design dormant for most of a run and are therefore expected
+to show their effect mainly on problems where stagnation is severe
+enough to trigger them repeatedly, a subset weighted more heavily
+toward such problems would likely show a more consistently favourable
+effect for these three mechanisms than observed here.
+
+\subsection{Fairness of Population-Size Settings\label{subsec:PopFairness}}
+
+The comparative evaluation of Section \ref{subsec:generalsettings}
+fixed the initial population size at Ninit=100 for every population-based
+method, including SPARQ, so that observed performance differences
+would reflect the search mechanisms themselves rather than differences
+in initial population sizing. To assess whether this common-population
+choice is itself a source of bias, the ten-problem subset used in
+Section \ref{subsec:Ablation} was re-evaluated with each competing
+method reconfigured to its own literature-recommended, dimension-dependent
+default population size, wherever that default differs from 100. Four
+of the nine competitors, ARQ2, EA4Eig, TridentDE, and UDE3, already
+recommend a population of 100 in their own original publications,
+so their results are unchanged from Section \ref{subsec:generalsettings}.
+The remaining five, jSO, LM-CMA-ES, mLSHADE-RL, NL-SHADE-LBC, and
+SFCDE, were instead run with their published defaults: jSO and NL-SHADE-LBC
+with NPinit=$\lceil25\sqrt{D}\ln D\rceil$ (Brest et al., 2017), LM-CMA-ES
+with $\lambda=4+\lfloor3\ln D\rfloor$ (the standard CMA-ES-family
+default), mLSHADE-RL with NPinit=18D (inherited from the LSHADE lineage,
+Tanabe and Fukunaga, 2014), and SFCDE with NP=10D. SPARQ itself was
+kept at its Section \ref{subsec:generalsettings} setting of Ninit=100
+throughout, rather than its own dimension-scaled default of 18D, so
+that this experiment isolates the effect of the competitors' population
+settings alone, without confounding it with a simultaneous change
+to SPARQ's own configuration. Table \ref{tab:popfair} reports the
+resulting best value, mean value, success rate, and standard deviation
+for all ten methods on all ten problems, together with the population
+size N actually used in each case.
+\begin{flushleft}
+{\tiny{}%
+\begin{longtable}[c]{ccccccc}
+\caption{Effect of population-size fairness on the ten-problem comparison subset:
+SPARQ and the four competitors whose own recommended default already
+equals 100 (ARQ2, EA4Eig, TridentDE, UDE3) keep N=100; the remaining
+five competitors (jSO, LM-CMA-ES, mLSHADE-RL, NL-SHADE-LBC, SFCDE)
+are run with their own literature-recommended, dimension-dependent
+population size N.\label{tab:popfair}}
+\tabularnewline
+\toprule 
+{\scriptsize\textbf{PROBLEM}} & {\scriptsize\textbf{METHOD}} & {\scriptsize\textbf{N}} & {\scriptsize\textbf{BEST}} & {\scriptsize\textbf{MEAN}} & {\scriptsize\textbf{RATE\%}} & {\scriptsize\textbf{SD}}\tabularnewline
+\midrule
+\endhead
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{alpine1 {[}d=100{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 6.6e-11} & {\scriptsize 0.000176474} & {\scriptsize 3\%} & {\scriptsize 0.000615062}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 5.38e-09} & {\scriptsize 2.46729e-07} & {\scriptsize 3\%} & {\scriptsize 6.83272e-07}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 1152} & {\scriptsize 4.42049e-05} & {\scriptsize 0.000173113} & {\scriptsize 3\%} & {\scriptsize 0.000136112}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 17} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 1800} & {\scriptsize 0.00720578} & {\scriptsize 0.0158878} & {\scriptsize 3\%} & {\scriptsize 0.00961447}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 1151} & {\scriptsize 0.0106417} & {\scriptsize 0.034156} & {\scriptsize 3\%} & {\scriptsize 0.0109434}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 1000} & {\scriptsize 0.0510569} & {\scriptsize 0.130605} & {\scriptsize 3\%} & {\scriptsize 0.0708536}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 0.000274789} & {\scriptsize 0.00345885} & {\scriptsize 3\%} & {\scriptsize 0.00245338}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 1.86152e-07} & {\scriptsize 1.93529e-06} & {\scriptsize 3\%} & {\scriptsize 3.43857e-06}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{antennaarray {[}d=12{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 0.00680964} & {\scriptsize 0.00681202} & {\scriptsize 67\%} & {\scriptsize 7.46751e-06}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 0.00680964} & {\scriptsize 0.00680964} & {\scriptsize 100\%} & {\scriptsize 1.76438e-18}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 216} & {\scriptsize 0.00680964} & {\scriptsize 0.00680964} & {\scriptsize 100\%} & {\scriptsize 1.76438e-18}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 11} & {\scriptsize 0.233659} & {\scriptsize 0.356811} & {\scriptsize 3\%} & {\scriptsize 0.0550951}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 216} & {\scriptsize 0.00680964} & {\scriptsize 0.00680964} & {\scriptsize 100\%} & {\scriptsize 1.76438e-18}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 215} & {\scriptsize 0.00680964} & {\scriptsize 0.00680964} & {\scriptsize 27\%} & {\scriptsize 1.71645e-09}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 120} & {\scriptsize 0.00680964} & {\scriptsize 0.0106825} & {\scriptsize 97\%} & {\scriptsize 0.0212125}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 0.00680964} & {\scriptsize 0.00680964} & {\scriptsize 83\%} & {\scriptsize 1.79781e-10}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 0.00680964} & {\scriptsize 0.00680972} & {\scriptsize 43\%} & {\scriptsize 3.64591e-07}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 0.00680964} & {\scriptsize 0.00680964} & {\scriptsize 100\%} & {\scriptsize 1.76438e-18}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{eld3 {[}d=15{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 32367.6} & {\scriptsize 32399.4} & {\scriptsize 7\%} & {\scriptsize 29.7244}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 32375.3} & {\scriptsize 32425.9} & {\scriptsize 3\%} & {\scriptsize 40.967}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 263} & {\scriptsize 32455.1} & {\scriptsize 32519.4} & {\scriptsize 10\%} & {\scriptsize 27.9086}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 12} & {\scriptsize 32760.6} & {\scriptsize 33110} & {\scriptsize 3\%} & {\scriptsize 208.751}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 270} & {\scriptsize 32367.6} & {\scriptsize 32371.8} & {\scriptsize 87\%} & {\scriptsize 13.0884}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 262} & {\scriptsize 32496.2} & {\scriptsize 32677.2} & {\scriptsize 3\%} & {\scriptsize 107.089}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 150} & {\scriptsize 32375.3} & {\scriptsize 32456.8} & {\scriptsize 3\%} & {\scriptsize 45.806}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 32375.3} & {\scriptsize 32440.5} & {\scriptsize 7\%} & {\scriptsize 47.9137}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 32367.6} & {\scriptsize 32465.9} & {\scriptsize 10\%} & {\scriptsize 70.9402}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 32367.6} & {\scriptsize 32434.2} & {\scriptsize 33\%} & {\scriptsize 73.6464}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{gallagher101 {[}d=16{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 1.81765} & {\scriptsize 13\%} & {\scriptsize 1.59835}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 1.88988} & {\scriptsize 10\%} & {\scriptsize 1.6648}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 278} & {\scriptsize 0} & {\scriptsize 2.73397} & {\scriptsize 3\%} & {\scriptsize 1.91028}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 12} & {\scriptsize 0.691857} & {\scriptsize 9.20322} & {\scriptsize 7\%} & {\scriptsize 10.2299}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 288} & {\scriptsize 0.929997} & {\scriptsize 1.69704} & {\scriptsize 70\%} & {\scriptsize 1.41571}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 277} & {\scriptsize 0.929997} & {\scriptsize 3.61425} & {\scriptsize 27\%} & {\scriptsize 1.71841}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 160} & {\scriptsize 0} & {\scriptsize 2.78013} & {\scriptsize 10\%} & {\scriptsize 2.79247}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 0.929997} & {\scriptsize 3.11339} & {\scriptsize 37\%} & {\scriptsize 2.73578}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 2.67881} & {\scriptsize 13\%} & {\scriptsize 2.17633}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 2.21648} & {\scriptsize 3\%} & {\scriptsize 1.61107}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{hydrothermal {[}d=120{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 141656} & {\scriptsize 141660} & {\scriptsize 3\%} & {\scriptsize 6.43564}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 141670} & {\scriptsize 141694} & {\scriptsize 3\%} & {\scriptsize 11.5562}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 1312} & {\scriptsize 141716} & {\scriptsize 141760} & {\scriptsize 3\%} & {\scriptsize 24.1435}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 18} & {\scriptsize 231975} & {\scriptsize 351889} & {\scriptsize 3\%} & {\scriptsize 67903}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 2160} & {\scriptsize 141910} & {\scriptsize 141965} & {\scriptsize 3\%} & {\scriptsize 33.2413}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 1311} & {\scriptsize 145439} & {\scriptsize 147983} & {\scriptsize 3\%} & {\scriptsize 1571.56}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 1200} & {\scriptsize 161522} & {\scriptsize 168787} & {\scriptsize 3\%} & {\scriptsize 4997.88}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 141656} & {\scriptsize 141669} & {\scriptsize 3\%} & {\scriptsize 9.8093}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 141763} & {\scriptsize 141850} & {\scriptsize 3\%} & {\scriptsize 44.677}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 141672} & {\scriptsize 141704} & {\scriptsize 3\%} & {\scriptsize 18.8546}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{katsuura {[}d=50{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 0.019147} & {\scriptsize 0.0712054} & {\scriptsize 3\%} & {\scriptsize 0.0768892}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 6.33333e-13} & {\scriptsize 97\%} & {\scriptsize 3.28511e-12}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 692} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 15} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 900} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 692} & {\scriptsize 0.0891748} & {\scriptsize 0.163035} & {\scriptsize 3\%} & {\scriptsize 0.114289}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 500} & {\scriptsize 203.839} & {\scriptsize 260.411} & {\scriptsize 3\%} & {\scriptsize 26.6728}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{michalewicz {[}d=100{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize -96.0326} & {\scriptsize -93.0301} & {\scriptsize 3\%} & {\scriptsize 3.12945}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize -77.4438} & {\scriptsize -69.5914} & {\scriptsize 3\%} & {\scriptsize 3.34186}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 1152} & {\scriptsize -64.8424} & {\scriptsize -58.998} & {\scriptsize 3\%} & {\scriptsize 2.20284}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 17} & {\scriptsize -79.5563} & {\scriptsize -72.7176} & {\scriptsize 3\%} & {\scriptsize 4.43642}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 1800} & {\scriptsize -35.1957} & {\scriptsize -31.0584} & {\scriptsize 3\%} & {\scriptsize 1.27761}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 1151} & {\scriptsize -97.6209} & {\scriptsize -96.8704} & {\scriptsize 3\%} & {\scriptsize 0.580958}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 1000} & {\scriptsize -34.8401} & {\scriptsize -33.2714} & {\scriptsize 3\%} & {\scriptsize 0.845144}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize -98.6917} & {\scriptsize -97.0668} & {\scriptsize 3\%} & {\scriptsize 0.964969}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize -65.0093} & {\scriptsize -59.4128} & {\scriptsize 3\%} & {\scriptsize 2.37862}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize -43.2703} & {\scriptsize -39.8999} & {\scriptsize 3\%} & {\scriptsize 1.40427}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{rosenbrock {[}d=50{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 4.29661} & {\scriptsize 13.6938} & {\scriptsize 3\%} & {\scriptsize 6.40239}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 17.7119} & {\scriptsize 21.4993} & {\scriptsize 3\%} & {\scriptsize 1.87024}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 692} & {\scriptsize 26.9656} & {\scriptsize 29.1152} & {\scriptsize 3\%} & {\scriptsize 1.13551}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 15} & {\scriptsize 8.81167} & {\scriptsize 12.4255} & {\scriptsize 3\%} & {\scriptsize 2.48772}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 900} & {\scriptsize 34.9874} & {\scriptsize 36.9924} & {\scriptsize 3\%} & {\scriptsize 0.782584}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 692} & {\scriptsize 44.8596} & {\scriptsize 45.4138} & {\scriptsize 3\%} & {\scriptsize 0.330367}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 500} & {\scriptsize 42.5664} & {\scriptsize 42.9479} & {\scriptsize 3\%} & {\scriptsize 0.57513}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 14.951} & {\scriptsize 24.7064} & {\scriptsize 3\%} & {\scriptsize 3.1607}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 35.9227} & {\scriptsize 37.2389} & {\scriptsize 3\%} & {\scriptsize 0.922804}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 29.2749} & {\scriptsize 31.35} & {\scriptsize 3\%} & {\scriptsize 0.852551}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{rotatedrosenbrock {[}d=50{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 0.00604507} & {\scriptsize 18.4717} & {\scriptsize 3\%} & {\scriptsize 17.4377}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 17.1324} & {\scriptsize 24.1876} & {\scriptsize 3\%} & {\scriptsize 10.0064}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 692} & {\scriptsize 28.0699} & {\scriptsize 30.7051} & {\scriptsize 3\%} & {\scriptsize 1.04521}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 15} & {\scriptsize 1.9e-11} & {\scriptsize 9.01549} & {\scriptsize 3\%} & {\scriptsize 5.33793}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 900} & {\scriptsize 36.5399} & {\scriptsize 37.7887} & {\scriptsize 3\%} & {\scriptsize 0.613311}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 692} & {\scriptsize 0.0796359} & {\scriptsize 0.466404} & {\scriptsize 3\%} & {\scriptsize 0.29581}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 500} & {\scriptsize 41.1462} & {\scriptsize 78.3944} & {\scriptsize 3\%} & {\scriptsize 31.2707}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 0.000444079} & {\scriptsize 27.671} & {\scriptsize 3\%} & {\scriptsize 15.0013}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 0.00370444} & {\scriptsize 31.8263} & {\scriptsize 3\%} & {\scriptsize 38.7057}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 0.037282} & {\scriptsize 43.6173} & {\scriptsize 3\%} & {\scriptsize 33.4042}\tabularnewline
+\midrule 
+\multirow{10}{*}{{\scriptsize\textbf{weierstrass {[}d=70{]}}}} & {\scriptsize arq2} & {\scriptsize 100} & {\scriptsize 0.0444884} & {\scriptsize 3.11574} & {\scriptsize 3\%} & {\scriptsize 2.21603}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ea4eig} & {\scriptsize 100} & {\scriptsize 0.00735326} & {\scriptsize 0.2273} & {\scriptsize 3\%} & {\scriptsize 0.251044}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize jso} & {\scriptsize 889} & {\scriptsize 0.0379418} & {\scriptsize 0.123304} & {\scriptsize 3\%} & {\scriptsize 0.0751082}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize lmcmaes} & {\scriptsize 16} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize mlshaderl} & {\scriptsize 1260} & {\scriptsize 0.0350367} & {\scriptsize 0.0624252} & {\scriptsize 3\%} & {\scriptsize 0.0167006}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize nlshadelbc} & {\scriptsize 889} & {\scriptsize 1.64097} & {\scriptsize 2.78678} & {\scriptsize 3\%} & {\scriptsize 0.555759}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize sfcde} & {\scriptsize 700} & {\scriptsize 0.120609} & {\scriptsize 0.639522} & {\scriptsize 3\%} & {\scriptsize 0.412534}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize\textbf{sparq}} & {\scriptsize 100} & {\scriptsize 0} & {\scriptsize 0} & {\scriptsize 100\%} & {\scriptsize 0}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize tridentde} & {\scriptsize 100} & {\scriptsize 1.33079} & {\scriptsize 5.02133} & {\scriptsize 3\%} & {\scriptsize 2.10635}\tabularnewline
+\cmidrule{2-7}
+ & {\scriptsize ude3} & {\scriptsize 100} & {\scriptsize 0.166803} & {\scriptsize 0.776516} & {\scriptsize 3\%} & {\scriptsize 0.432902}\tabularnewline
+\end{longtable}}{\tiny\par}
+\par\end{flushleft}
+
+Table \ref{tab:popfairSummary} summarizes the outcome, reporting
+the mean rank under the mean-value criterion and the average success
+rate for each method across the ten problems. SPARQ retains the best
+mean rank, 3.55, and the highest average success rate, 43.9\%, even
+after every eligible competitor is given its own recommended, and
+in most cases substantially larger, population. EA4Eig follows closely
+in mean rank, 3.65, but with a markedly lower average success rate,
+22.8\%, reflecting the same distinction between rank-based and success-rate-based
+comparison already observed in Section \ref{subsec:generalsettings}.
+Two competitors improve their own standing relative to the fixed-100
+comparison, most visibly mLSHADE-RL, whose average success rate rises
+from its Section \ref{subsec:generalsettings} figure once it is allowed
+its own NPinit=18D, and jSO, which likewise benefits from its larger
+recommended population on the higher-dimensional problems in this
+subset. Neither change alters the overall ordering at the top: SPARQ
+and EA4Eig remain the two best-ranked methods under either population
+convention.
+
+{\footnotesize{}
+\begin{table}[H]
+\begin{centering}
+{\footnotesize\caption{Mean rank (mean-value criterion) and average success rate of each
+method on the ten-problem population-fairness subset, with the population
+rule actually used.\label{tab:popfairSummary}}
+}{\footnotesize\par}
+\par\end{centering}
+\centering{}{\footnotesize{}%
+\begin{tabular}{cccc}
+\toprule 
+{\footnotesize\textbf{Method}} & {\footnotesize\textbf{Population rule used}} & {\footnotesize\textbf{Mean rank (mean-value)}} & {\footnotesize\textbf{Avg. success rate (\%)}}\tabularnewline
+\midrule
+\midrule 
+{\footnotesize\textbf{sparq}} & {\footnotesize$N=100$ (unchanged control)} & {\footnotesize 3.55} & {\footnotesize 43.9}\tabularnewline
+\midrule 
+{\footnotesize ea4eig} & {\footnotesize$N=100$ (own default)} & {\footnotesize 3.65} & {\footnotesize 22.8}\tabularnewline
+\midrule 
+{\footnotesize arq2} & {\footnotesize$N=100$ (own default)} & {\footnotesize 4.40} & {\footnotesize 10.8}\tabularnewline
+\midrule 
+{\footnotesize mlshaderl} & {\footnotesize$N=18D$} & {\footnotesize 5.25} & {\footnotesize 37.5}\tabularnewline
+\midrule 
+{\footnotesize jso} & {\footnotesize$N=ceil(25*sqrt(D)*lnD)$} & {\footnotesize 5.35} & {\footnotesize 23.1}\tabularnewline
+\midrule 
+{\footnotesize ude3} & {\footnotesize$N=100$ (own default)} & {\footnotesize 5.35} & {\footnotesize 25.4}\tabularnewline
+\midrule 
+{\footnotesize lmcmaes} & {\footnotesize$N=4+floor(3lnD)$} & {\footnotesize 5.40} & {\footnotesize 32.5}\tabularnewline
+\midrule 
+{\footnotesize tridentde} & {\footnotesize$N=100$ (own default)} & {\footnotesize 6.70} & {\footnotesize 18.4}\tabularnewline
+\midrule 
+{\footnotesize nlshadelbc} & {\footnotesize$N=ceil(25*sqrt(D)*lnD)$} & {\footnotesize 6.85} & {\footnotesize 7.8}\tabularnewline
+\midrule 
+{\footnotesize sfcde} & {\footnotesize$N=10D$} & {\footnotesize 8.50} & {\footnotesize 13.1}\tabularnewline
+\end{tabular}}{\footnotesize\par}
+\end{table}
+}{\footnotesize\par}
+
+This experiment indicates that the common-population convention adopted
+in Section \ref{subsec:generalsettings} does not by itself account
+for SPARQ's comparative advantage. Giving five of the nine competitors
+their own, often much larger, recommended population size changes
+their individual results, sometimes favourably, but does not change
+which method attains the best mean rank or the highest success rate
+on this subset. As with the ablation study, this check was restricted
+to the same ten-problem subset for computational tractability, and
+a full re-evaluation across the entire forty-five-problem benchmark
+under each method's own recommended settings remains outside the scope
+of the present study.
+
+\subsection{Sensitivity Analysis of Key Parameters\label{subsec:Sensitivity}}
+
+SPARQ exposes close to thirty configurable parameters (Table \ref{tab:settings}),
+far more than can be swept exhaustively, a sensitivity analysis therefore
+requires a principled way to select a small, defensible subset. We
+selected the four mechanisms identified in Section \ref{subsec:Ablation}
+as having the clearest, statistically significant contribution on
+the ablation subset, on the reasoning that a parameter governing a
+mechanism already shown to matter is more informative to test than
+one governing a mechanism whose overall contribution is itself uncertain:
+the external archive, controlled by the archive-rate parameter $\alpha_{A}$
+(significant on 4 of 10 problems in Table \ref{tab:ablationStats}),
+the auxiliary IDE branch, whose usage is governed by the Thompson-sampling
+bootstrap length $n_{bs}$ and posterior decay rate $\gamma_{b}$
+(IDE was significant on 6 of 10 problems, the largest count of any
+mechanism tested), and the SHADE-style memory, controlled by the NLPSR
+shrink-shape exponent $\alpha_{NL}$ governing the population schedule
+alongside it. An initial sweep additionally included the SHADE memory
+size $H$, but this was withdrawn after the collected results showed
+byte-identical outcomes across all four tested values on every one
+of the ten problems, including problems on which the other parameters
+clearly do vary, this pattern is inconsistent with $H$ genuinely
+having no effect under a stochastic algorithm and points instead to
+a data-collection issue in that particular sweep, so it was replaced
+with the bandit decay rate $\gamma_{b}$ as a second, independent
+dial on the IDE-branch mechanism. Each of the four retained parameters,
+$\alpha_{A}$, $n_{bs}$, $\alpha_{NL}$, and $\gamma_{b}$, was swept
+over four candidate values, including its Table \ref{tab:settings}
+default, on the same ten-problem subset used for the ablation study,
+with every other parameter held at its default and 30 independent
+runs per value-problem combination.
+\begin{flushleft}
+{\tiny{}%
+\begin{longtable}[c]{ccccccccc}
+\caption{Sensitivity of SPARQ to four parameters on the ten-problem ablation
+subset (30 runs per value-problem combination; all other parameters
+at their Table 1 defaults; default value of each parameter shown in
+bold).\label{tab:sensitivity}}
+\tabularnewline
+\toprule 
+{\tiny\textbf{PARAMETER}} & {\tiny\textbf{PROBLEM}} & {\tiny\textbf{VALUE}} & {\tiny\textbf{MEAN}} & {\tiny\textbf{SD}} & {\tiny\textbf{MIN}} & {\tiny\textbf{MAX}} & {\tiny\textbf{MAIN EFFECT}} & {\tiny\textbf{RANK}}\tabularnewline
+\midrule
+\endhead
+\midrule 
+{\tiny\textbf{alphaA}} & {\tiny\textbf{alpine1 {[}d=100{]}}} & {\tiny 0.5} & {\tiny 2.95621e-09} & {\tiny 6.44244e-08} & {\tiny 0} & {\tiny 1.41258e-06} & {\tiny 4.46618e-09} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 4.6639e-11} & {\tiny 1.02101e-09} & {\tiny 0} & {\tiny 2.2387e-08} & {\tiny 4.46618e-09} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{4.08727e-09}} & {\tiny\textbf{6.98328e-08}} & {\tiny\textbf{0}} & {\tiny\textbf{1.45131e-06}} & {\tiny\textbf{4.46618e-09}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 4.51282e-09} & {\tiny 9.36744e-08} & {\tiny 0} & {\tiny 2.05091e-06} & {\tiny 4.46618e-09} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rosenbrock {[}d=50{]}}} & {\tiny 0.5} & {\tiny 30.8818} & {\tiny 2.44486} & {\tiny 22.4713} & {\tiny 37.2821} & {\tiny 8.53762} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 26.5553} & {\tiny 2.95205} & {\tiny 17.7903} & {\tiny 34.166} & {\tiny 8.53762} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{24.4109}} & {\tiny\textbf{3.38834}} & {\tiny\textbf{12.6066}} & {\tiny\textbf{32.117}} & {\tiny\textbf{8.53762}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 22.3442} & {\tiny 3.92339} & {\tiny 10.3281} & {\tiny 31.8682} & {\tiny 8.53762} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rotatedrosenbrock {[}d=50{]}}} & {\tiny 0.5} & {\tiny 31.6445} & {\tiny 17.1922} & {\tiny 5.30923e-05} & {\tiny 79.3638} & {\tiny 6.09867} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 27.7785} & {\tiny 15.9357} & {\tiny 2.99216e-08} & {\tiny 81.9867} & {\tiny 6.09867} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{25.5458}} & {\tiny\textbf{14.4953}} & {\tiny\textbf{4.79067e-06}} & {\tiny\textbf{82.9222}} & {\tiny\textbf{6.09867}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 25.8389} & {\tiny 12.1488} & {\tiny 0.0124478} & {\tiny 84.445} & {\tiny 6.09867} & {\tiny 2}\tabularnewline
+\midrule 
+ & {\tiny\textbf{katsuura {[}d=50{]}}} & {\tiny 0.5} & {\tiny 4.38266e-09} & {\tiny 6.46704e-08} & {\tiny 0} & {\tiny 1.33446e-06} & {\tiny 3.33005e-09} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 1.05261e-09} & {\tiny 2.17262e-08} & {\tiny 0} & {\tiny 4.75909e-07} & {\tiny 3.33005e-09} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{1.07543e-09}} & {\tiny\textbf{2.05351e-08}} & {\tiny\textbf{0}} & {\tiny\textbf{4.48515e-07}} & {\tiny\textbf{3.33005e-09}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 2.01786e-09} & {\tiny 3.56689e-08} & {\tiny 0} & {\tiny 7.56872e-07} & {\tiny 3.33005e-09} & {\tiny 3}\tabularnewline
+\midrule 
+ & {\tiny\textbf{michalewicz {[}d=100{]}}} & {\tiny 0.5} & {\tiny -96.9699} & {\tiny 1.24534} & {\tiny -98.9542} & {\tiny -91.3617} & {\tiny 0.0643073} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny -96.9056} & {\tiny 1.23683} & {\tiny -98.9133} & {\tiny -90.659} & {\tiny 0.0643073} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{-96.9545}} & {\tiny\textbf{1.22561}} & {\tiny\textbf{-99.1026}} & {\tiny\textbf{-91.4756}} & {\tiny\textbf{0.0643073}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny -96.9541} & {\tiny 1.06503} & {\tiny -98.8759} & {\tiny -92.7143} & {\tiny 0.0643073} & {\tiny 3}\tabularnewline
+\midrule 
+ & {\tiny\textbf{gallagher101 {[}d=16{]}}} & {\tiny 0.5} & {\tiny 2.10022} & {\tiny 1.66466} & {\tiny 0} & {\tiny 4.71372} & {\tiny 0.377587} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 2.36787} & {\tiny 2.19535} & {\tiny 0} & {\tiny 14.2467} & {\tiny 0.377587} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{2.37155}} & {\tiny\textbf{2.37385}} & {\tiny\textbf{0}} & {\tiny\textbf{14.2467}} & {\tiny\textbf{0.377587}} & {\tiny\textbf{4}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 1.99396} & {\tiny 1.57924} & {\tiny 0} & {\tiny 4.71372} & {\tiny 0.377587} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{antennaarray {[}d=12{]}}} & {\tiny 0.5} & {\tiny 0.00680964} & {\tiny 2.89894e-09} & {\tiny 0.00680964} & {\tiny 0.0068097} & {\tiny 8.29233e-05} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 0.00680964} & {\tiny 3.5091e-08} & {\tiny 0.00680964} & {\tiny 0.00681041} & {\tiny 8.29233e-05} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{2.85157e-08}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{0.00681007}} & {\tiny\textbf{8.29233e-05}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 0.00689256} & {\tiny 0.00135662} & {\tiny 0.00680964} & {\tiny 0.03358} & {\tiny 8.29233e-05} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{eld3 {[}d=15{]}}} & {\tiny 0.5} & {\tiny 32454.3} & {\tiny 59.6682} & {\tiny 32375.3} & {\tiny 32712.4} & {\tiny 17.0472} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 32443.4} & {\tiny 55.2389} & {\tiny 32367.6} & {\tiny 32675.7} & {\tiny 17.0472} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{32447.5}} & {\tiny\textbf{57.578}} & {\tiny\textbf{32375.3}} & {\tiny\textbf{32848}} & {\tiny\textbf{17.0472}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 32437.3} & {\tiny 50.916} & {\tiny 32367.6} & {\tiny 32644.9} & {\tiny 17.0472} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{hydrothermal {[}d=120{]}}} & {\tiny 0.5} & {\tiny 141682} & {\tiny 12.3102} & {\tiny 141659} & {\tiny 141733} & {\tiny 8.87414} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 141676} & {\tiny 11.1823} & {\tiny 141656} & {\tiny 141734} & {\tiny 8.87414} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{141673}} & {\tiny\textbf{11.2709}} & {\tiny\textbf{141656}} & {\tiny\textbf{141731}} & {\tiny\textbf{8.87414}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 141674} & {\tiny 13.5404} & {\tiny 141656} & {\tiny 141744} & {\tiny 8.87414} & {\tiny 2}\tabularnewline
+\midrule 
+ & {\tiny\textbf{weierstrass {[}d=70{]}}} & {\tiny 0.5} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{1.5}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 2.5} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\midrule 
+{\tiny\textbf{nbs}} & {\tiny\textbf{alpine1 {[}d=100{]}}} & {\tiny 0} & {\tiny 7.22895e-09} & {\tiny 1.13466e-07} & {\tiny 0} & {\tiny 2.05091e-06} & {\tiny 7.18775e-09} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{4.11993e-11}} & {\tiny\textbf{9.01925e-10}} & {\tiny\textbf{0}} & {\tiny\textbf{1.9776e-08}} & {\tiny\textbf{7.18775e-09}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 4.09271e-09} & {\tiny 6.98341e-08} & {\tiny 0} & {\tiny 1.45131e-06} & {\tiny 7.18775e-09} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 2.4008e-10} & {\tiny 5.25578e-09} & {\tiny 0} & {\tiny 1.15239e-07} & {\tiny 7.18775e-09} & {\tiny 2}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rosenbrock {[}d=50{]}}} & {\tiny 0} & {\tiny 26.2657} & {\tiny 4.46691} & {\tiny 10.3281} & {\tiny 35.6352} & {\tiny 0.475091} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{26.2339}} & {\tiny\textbf{4.43431}} & {\tiny\textbf{13.9996}} & {\tiny\textbf{37.2821}} & {\tiny\textbf{0.475091}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 25.9019} & {\tiny 4.63933} & {\tiny 11.1169} & {\tiny 36.8478} & {\tiny 0.475091} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 25.7907} & {\tiny 4.50538} & {\tiny 12.6066} & {\tiny 36.4015} & {\tiny 0.475091} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rotatedrosenbrock {[}d=50{]}}} & {\tiny 0} & {\tiny 28.0288} & {\tiny 14.5015} & {\tiny 0.0015193} & {\tiny 84.445} & {\tiny 2.95305} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{28.2143}} & {\tiny\textbf{15.3843}} & {\tiny\textbf{4.79067e-06}} & {\tiny\textbf{77.4062}} & {\tiny\textbf{2.95305}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 25.8058} & {\tiny 15.6221} & {\tiny 2.91692e-05} & {\tiny 82.9222} & {\tiny 2.95305} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 28.7588} & {\tiny 15.3233} & {\tiny 2.99216e-08} & {\tiny 81.9867} & {\tiny 2.95305} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{katsuura {[}d=50{]}}} & {\tiny 0} & {\tiny 1.05244e-09} & {\tiny 1.68426e-08} & {\tiny 0} & {\tiny 3.54472e-07} & {\tiny 3.52307e-09} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{4.49552e-09}} & {\tiny\textbf{6.61282e-08}} & {\tiny\textbf{0}} & {\tiny\textbf{1.33446e-06}} & {\tiny\textbf{3.52307e-09}} & {\tiny\textbf{4}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 2.00816e-09} & {\tiny 3.56665e-08} & {\tiny 0} & {\tiny 7.56872e-07} & {\tiny 3.52307e-09} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 9.72449e-10} & {\tiny 2.04644e-08} & {\tiny 0} & {\tiny 4.48515e-07} & {\tiny 3.52307e-09} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{michalewicz {[}d=100{]}}} & {\tiny 0} & {\tiny -96.9423} & {\tiny 1.19598} & {\tiny -98.9667} & {\tiny -91.9293} & {\tiny 0.160434} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{-96.8647}} & {\tiny\textbf{1.20539}} & {\tiny\textbf{-98.8759}} & {\tiny\textbf{-92.3297}} & {\tiny\textbf{0.160434}} & {\tiny\textbf{4}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny -96.9518} & {\tiny 1.23933} & {\tiny -99.1026} & {\tiny -91.3617} & {\tiny 0.160434} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny -97.0252} & {\tiny 1.13453} & {\tiny -98.9045} & {\tiny -90.659} & {\tiny 0.160434} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{gallagher101 {[}d=16{]}}} & {\tiny 0} & {\tiny 1.69774} & {\tiny 1.41969} & {\tiny 0} & {\tiny 4.71372} & {\tiny 0.785357} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{2.4831}} & {\tiny\textbf{2.22188}} & {\tiny\textbf{0}} & {\tiny\textbf{14.2467}} & {\tiny\textbf{0.785357}} & {\tiny\textbf{4}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 2.31389} & {\tiny 1.9852} & {\tiny 0} & {\tiny 14.2467} & {\tiny 0.785357} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 2.33887} & {\tiny 2.13815} & {\tiny 0} & {\tiny 14.2467} & {\tiny 0.785357} & {\tiny 3}\tabularnewline
+\midrule 
+ & {\tiny\textbf{antennaarray {[}d=12{]}}} & {\tiny 0} & {\tiny 0.00680964} & {\tiny 4.11624e-08} & {\tiny 0.00680964} & {\tiny 0.00681025} & {\tiny 5.57777e-05} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{0.00686542}} & {\tiny\textbf{0.00122094}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{0.03358}} & {\tiny\textbf{5.57777e-05}} & {\tiny\textbf{4}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 0.00683677} & {\tiny 0.000593937} & {\tiny 0.00680964} & {\tiny 0.0198323} & {\tiny 5.57777e-05} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 0.00680964} & {\tiny 7.2643e-08} & {\tiny 0.00680964} & {\tiny 0.0068109} & {\tiny 5.57777e-05} & {\tiny 2}\tabularnewline
+\midrule 
+ & {\tiny\textbf{eld3 {[}d=15{]}}} & {\tiny 0} & {\tiny 32448.3} & {\tiny 57.4612} & {\tiny 32367.6} & {\tiny 32701.8} & {\tiny 5.58767} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{32442.7}} & {\tiny\textbf{57.3835}} & {\tiny\textbf{32367.6}} & {\tiny\textbf{32848}} & {\tiny\textbf{5.58767}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 32443.9} & {\tiny 54.8841} & {\tiny 32367.6} & {\tiny 32675.7} & {\tiny 5.58767} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 32447.6} & {\tiny 55.1698} & {\tiny 32375.3} & {\tiny 32667.1} & {\tiny 5.58767} & {\tiny 3}\tabularnewline
+\midrule 
+ & {\tiny\textbf{hydrothermal {[}d=120{]}}} & {\tiny 0} & {\tiny 141676} & {\tiny 13.2705} & {\tiny 141656} & {\tiny 141733} & {\tiny 0.446012} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{141676}} & {\tiny\textbf{11.7193}} & {\tiny\textbf{141656}} & {\tiny\textbf{141734}} & {\tiny\textbf{0.446012}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 141676} & {\tiny 12.5791} & {\tiny 141656} & {\tiny 141731} & {\tiny 0.446012} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 141676} & {\tiny 12.8963} & {\tiny 141656} & {\tiny 141744} & {\tiny 0.446012} & {\tiny 2}\tabularnewline
+\midrule 
+ & {\tiny\textbf{weierstrass {[}d=70{]}}} & {\tiny 0} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{2}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 5} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 10} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\midrule 
+{\tiny\textbf{alphaNL}} & {\tiny\textbf{alpine1 {[}d=100{]}}} & {\tiny 0.2} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1.02937e-08} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{1.02937e-08}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 1.30922e-09} & {\tiny 2.30026e-08} & {\tiny 0} & {\tiny 4.90802e-07} & {\tiny 1.02937e-08} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 1.02937e-08} & {\tiny 1.31195e-07} & {\tiny 0} & {\tiny 2.05091e-06} & {\tiny 1.02937e-08} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rosenbrock {[}d=50{]}}} & {\tiny 0.2} & {\tiny 28.0182} & {\tiny 4.13349} & {\tiny 14.2042} & {\tiny 37.2821} & {\tiny 3.49553} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{26.5127}} & {\tiny\textbf{4.39123}} & {\tiny\textbf{12.9785}} & {\tiny\textbf{35.1944}} & {\tiny\textbf{3.49553}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 25.1388} & {\tiny 4.46483} & {\tiny 11.1169} & {\tiny 36.4015} & {\tiny 3.49553} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 24.5227} & {\tiny 4.24851} & {\tiny 10.3281} & {\tiny 33.7528} & {\tiny 3.49553} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rotatedrosenbrock {[}d=50{]}}} & {\tiny 0.2} & {\tiny 29.3564} & {\tiny 14.0555} & {\tiny 0.000329929} & {\tiny 48.4022} & {\tiny 2.99601} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{28.0438}} & {\tiny\textbf{14.329}} & {\tiny\textbf{2.91692e-05}} & {\tiny\textbf{70.1072}} & {\tiny\textbf{2.99601}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 27.0472} & {\tiny 15.7016} & {\tiny 2.99216e-08} & {\tiny 84.445} & {\tiny 2.99601} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 26.3604} & {\tiny 16.6255} & {\tiny 6.22551e-05} & {\tiny 82.9222} & {\tiny 2.99601} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{katsuura {[}d=50{]}}} & {\tiny 0.2} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 7.5267e-09} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{7.5267e-09}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 1.00186e-09} & {\tiny 2.05059e-08} & {\tiny 0} & {\tiny 4.48515e-07} & {\tiny 7.5267e-09} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 7.5267e-09} & {\tiny 7.6783e-08} & {\tiny 0} & {\tiny 1.33446e-06} & {\tiny 7.5267e-09} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{michalewicz {[}d=100{]}}} & {\tiny 0.2} & {\tiny -96.9036} & {\tiny 1.11853} & {\tiny -98.9133} & {\tiny -91.4756} & {\tiny 0.0645788} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{-96.9682}} & {\tiny\textbf{1.23899}} & {\tiny\textbf{-99.1026}} & {\tiny\textbf{-90.659}} & {\tiny\textbf{0.0645788}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny -96.9675} & {\tiny 1.21391} & {\tiny -98.9542} & {\tiny -91.3617} & {\tiny 0.0645788} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny -96.9447} & {\tiny 1.20699} & {\tiny -98.8759} & {\tiny -91.6953} & {\tiny 0.0645788} & {\tiny 3}\tabularnewline
+\midrule 
+ & {\tiny\textbf{gallagher101 {[}d=16{]}}} & {\tiny 0.2} & {\tiny 2.21919} & {\tiny 1.9606} & {\tiny 0} & {\tiny 14.2467} & {\tiny 0.047313} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{2.20712}} & {\tiny\textbf{2.04543}} & {\tiny\textbf{0}} & {\tiny\textbf{14.2467}} & {\tiny\textbf{0.047313}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 2.17999} & {\tiny 1.89946} & {\tiny 0} & {\tiny 14.2467} & {\tiny 0.047313} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 2.2273} & {\tiny 2.04758} & {\tiny 0} & {\tiny 14.2467} & {\tiny 0.047313} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{antennaarray {[}d=12{]}}} & {\tiny 0.2} & {\tiny 0.00680965} & {\tiny 1.15286e-07} & {\tiny 0.00680964} & {\tiny 0.00681156} & {\tiny 8.29056e-05} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{0.00680965}} & {\tiny\textbf{8.05359e-08}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{0.00681122}} & {\tiny\textbf{8.29056e-05}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 0.00680964} & {\tiny 1.22382e-08} & {\tiny 0.00680964} & {\tiny 0.00680988} & {\tiny 8.29056e-05} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 0.00689254} & {\tiny 0.00135662} & {\tiny 0.00680964} & {\tiny 0.03358} & {\tiny 8.29056e-05} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{eld3 {[}d=15{]}}} & {\tiny 0.2} & {\tiny 32448.3} & {\tiny 59.1472} & {\tiny 32375.3} & {\tiny 32848} & {\tiny 5.11361} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{32445.1}} & {\tiny\textbf{53.821}} & {\tiny\textbf{32367.6}} & {\tiny\textbf{32649.9}} & {\tiny\textbf{5.11361}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 32445.8} & {\tiny 58.4534} & {\tiny 32367.6} & {\tiny 32712.4} & {\tiny 5.11361} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 32443.2} & {\tiny 53.3646} & {\tiny 32367.6} & {\tiny 32675.4} & {\tiny 5.11361} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{hydrothermal {[}d=120{]}}} & {\tiny 0.2} & {\tiny 141680} & {\tiny 13.5136} & {\tiny 141656} & {\tiny 141731} & {\tiny 5.07982} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{141676}} & {\tiny\textbf{12.6256}} & {\tiny\textbf{141656}} & {\tiny\textbf{141744}} & {\tiny\textbf{5.07982}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 141675} & {\tiny 11.97} & {\tiny 141656} & {\tiny 141734} & {\tiny 5.07982} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 141675} & {\tiny 11.6667} & {\tiny 141656} & {\tiny 141721} & {\tiny 5.07982} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{weierstrass {[}d=70{]}}} & {\tiny 0.2} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.5}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.8} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny 1} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\midrule 
+{\tiny\textbf{gammab}} & {\tiny\textbf{alpine1 {[}d=100{]}}} & {\tiny 0.9} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rosenbrock {[}d=50{]}}} & {\tiny 0.9} & {\tiny 25.7995} & {\tiny 3.66568} & {\tiny 16.0684} & {\tiny 31.3148} & {\tiny 1.51732} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 24.3949} & {\tiny 3.48478} & {\tiny 16.7474} & {\tiny 30.3828} & {\tiny 1.51732} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{24.7064}} & {\tiny\textbf{3.1607}} & {\tiny\textbf{14.951}} & {\tiny\textbf{32.1077}} & {\tiny\textbf{1.51732}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 24.2822} & {\tiny 2.44077} & {\tiny 18.9412} & {\tiny 28.3387} & {\tiny 1.51732} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{rotatedrosenbrock {[}d=50{]}}} & {\tiny 0.9} & {\tiny 33.9536} & {\tiny 13.7696} & {\tiny 3.87226} & {\tiny 48.4808} & {\tiny 6.50744} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 30.2473} & {\tiny 12.6282} & {\tiny 0.385814} & {\tiny 48.4929} & {\tiny 6.50744} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{27.671}} & {\tiny\textbf{15.0013}} & {\tiny\textbf{0.000444079}} & {\tiny\textbf{48.7565}} & {\tiny\textbf{6.50744}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 27.4462} & {\tiny 10.4656} & {\tiny 0.0149223} & {\tiny 48.6187} & {\tiny 6.50744} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{katsuura {[}d=50{]}}} & {\tiny 0.9} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{michalewicz {[}d=100{]}}} & {\tiny 0.9} & {\tiny -96.4399} & {\tiny 1.13209} & {\tiny -98.4282} & {\tiny -92.8158} & {\tiny 1.12419} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny -97.0213} & {\tiny 0.976817} & {\tiny -98.3477} & {\tiny -95.3237} & {\tiny 1.12419} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{-97.0668}} & {\tiny\textbf{0.964969}} & {\tiny\textbf{-98.6917}} & {\tiny\textbf{-95.0356}} & {\tiny\textbf{1.12419}} & {\tiny\textbf{2}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny -97.5641} & {\tiny 0.851981} & {\tiny -98.7876} & {\tiny -95.2536} & {\tiny 1.12419} & {\tiny 1}\tabularnewline
+\midrule 
+ & {\tiny\textbf{gallagher101 {[}d=16{]}}} & {\tiny 0.9} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{antennaarray {[}d=12{]}}} & {\tiny 0.9} & {\tiny 0.00680965} & {\tiny 4.134e-08} & {\tiny 0.00680964} & {\tiny 0.00680986} & {\tiny 8.466e-09} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 0.00680964} & {\tiny 4.15439e-09} & {\tiny 0.00680964} & {\tiny 0.00680966} & {\tiny 8.466e-09} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{1.79729e-10}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{0.00680964}} & {\tiny\textbf{8.466e-09}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 0.00680964} & {\tiny 1.39913e-08} & {\tiny 0.00680964} & {\tiny 0.00680971} & {\tiny 8.466e-09} & {\tiny 3}\tabularnewline
+\midrule 
+ & {\tiny\textbf{eld3 {[}d=15{]}}} & {\tiny 0.9} & {\tiny 32450.4} & {\tiny 52.8995} & {\tiny 32375.3} & {\tiny 32628.4} & {\tiny 20.536} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 32450.6} & {\tiny 52.1123} & {\tiny 32375.3} & {\tiny 32544.4} & {\tiny 20.536} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{32440.5}} & {\tiny\textbf{47.9137}} & {\tiny\textbf{32375.3}} & {\tiny\textbf{32541}} & {\tiny\textbf{20.536}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 32461} & {\tiny 91.2458} & {\tiny 32375.3} & {\tiny 32799.7} & {\tiny 20.536} & {\tiny 4}\tabularnewline
+\midrule 
+ & {\tiny\textbf{hydrothermal {[}d=120{]}}} & {\tiny 0.9} & {\tiny 141678} & {\tiny 12.5879} & {\tiny 141659} & {\tiny 141716} & {\tiny 8.347} & {\tiny 4}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 141671} & {\tiny 9.69727} & {\tiny 141657} & {\tiny 141698} & {\tiny 8.347} & {\tiny 3}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{141669}} & {\tiny\textbf{9.8093}} & {\tiny\textbf{141656}} & {\tiny\textbf{141696}} & {\tiny\textbf{8.347}} & {\tiny\textbf{1}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 141670} & {\tiny 11.5006} & {\tiny 141656} & {\tiny 141701} & {\tiny 8.347} & {\tiny 2}\tabularnewline
+\midrule 
+ & {\tiny\textbf{weierstrass {[}d=70{]}}} & {\tiny 0.9} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 1}\tabularnewline
+\midrule 
+ &  & {\tiny 0.95} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 2}\tabularnewline
+\midrule 
+ &  & {\tiny\textbf{0.97}} & {\tiny\textbf{0}} & {\tiny\textbf{n/a}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{0}} & {\tiny\textbf{3}}\tabularnewline
+\midrule 
+ &  & {\tiny 0.99} & {\tiny 0} & {\tiny n/a} & {\tiny 0} & {\tiny 0} & {\tiny 0} & {\tiny 4}\tabularnewline
+\end{longtable}}{\tiny\par}
+\par\end{flushleft}
+
+Table \ref{tab:sensitivity} reports the mean, standard deviation,
+range, a one-way main-effect statistic, and the resulting rank (1=best)
+for each tested value of each parameter on each problem. For all four
+parameters, the main-effect statistic is non-zero, and therefore the
+ranking meaningful, on nine of the ten problems. The exception is
+consistent across all four: alpine1, katsuura, gallagher101, and weierstrass
+together account for every remaining zero-effect case, since SPARQ
+already reaches the exact global optimum on every run on these four
+problems regardless of the setting tested (Section \ref{subsec:generalsettings}),
+leaving no room for any parameter to make a measurable difference
+there.
+
+Averaged across the ten problems, the archive rate $\alpha_{A}$ obtains
+nearly indistinguishable mean ranks for its four candidate values,
+2.70, 2.40, 2.40, and 2.50 for 0.5, 1, 1.5, and 2.5 respectively,
+the Table \ref{tab:settings} default, 1.5, ties for the best average
+rank with the smaller value of 1. The bootstrap length $n_{bs}$ shows
+a mild preference for longer values, with mean ranks of 2.60, 2.70,
+2.40, and 2.30 for 0, 2, 5, and 10 respectively, the default, 2, is
+in fact the worst-performing of the four values on average, ranking
+last on 4 of the 10 problems and best on only 3. The NLPSR shrink-shape
+exponent $\alpha_{NL}$ shows mean ranks of 2.90, 2.20, 2.20, and
+2.70 for 0.2, 0.5, 0.8, and 1 respectively, the default, 0.5, ties
+for the best average rank with 0.8 and is never the worst. The bandit
+decay rate $\gamma_{b}$ shows mean ranks of 2.60, 2.40, 2.20, and
+2.80 for 0.9, 0.95, 0.97, and 0.99 respectively, the default, 0.97,
+obtains the best average rank of the four, is the single best-ranked
+choice on 3 of the 10 problems, and is never the worst-ranked choice
+on any of them.
+
+Taken together, three of the four defaults, $\alpha_{A}$, $\alpha_{NL}$,
+and $\gamma_{b}$, are reasonably well chosen: each ties for, or outright
+obtains, the best average rank among the tested alternatives, and
+none is ever the single worst choice on any of the ten problems. The
+bootstrap length is the exception: its default value is, on average,
+the weakest of the four settings tested, suggesting that a longer
+forced-ARQ warm-up before the Thompson bandit takes over may be preferable
+to the current setting of 2 iterations. As with the ablation study,
+this sensitivity analysis was restricted to the same ten-problem subset
+for computational tractability, and a full sweep across the entire
+benchmark suite, together with a corrected re-run for the SHADE memory
+size $H$, remains outside the scope of the present study.
 
 \section{Conclusions\label{sec:conclusions}}
 
@@ -3517,8 +4826,9 @@ formulations.
 
 Across the standard-dimensionality benchmark, SPARQ achieved the highest
 average success rate and the lowest mean rank among ten competing
-methods, both under the best-value and the mean-value criterion. Its
-advantage was most pronounced on problems where competing methods
+methods under the best-value criterion, and a closely contested second-lowest
+mean rank, narrowly behind EA4Eig, under the stricter mean-value criterion.
+Its advantage was most pronounced on problems where competing methods
 were confined to low single-digit success rates, while on real-world
 problems with intrinsically difficult landscapes, such as the economic
 load dispatch family and several chemical-engineering formulations,
@@ -3542,7 +4852,15 @@ come at a disproportionate computational cost: despite the substantially
 larger number of mechanisms it coordinates relative to its predecessor
 and to several competing methods, SPARQ's execution times remained
 among the lowest recorded in both parts of the study, rather than
-scaling upward with the added algorithmic complexity.
+scaling upward with the added algorithmic complexity. This premise
+is further supported by the population-size fairness check of Section
+\ref{subsec:PopFairness}: when five of the nine standard-dimensionality
+competitors are reconfigured to their own literature-recommended,
+and in most cases substantially larger, population sizes, SPARQ retains
+both the best mean rank and the highest average success rate on the
+ten-problem subset tested, indicating that its advantage is not an
+artifact of the common population-size convention adopted elsewhere
+in the study.
 
 At the same time, the results also delineate the boundaries of this
 approach. SPARQ's reliability advantage narrows or disappears on a
@@ -3550,7 +4868,14 @@ specific subset of problems, most notably vincent among the large-scale
 functions and several real-world load-dispatch and material-potential
 problems among the standard-dimensionality set, suggesting that the
 current balance of its exploration and exploitation mechanisms is
-better suited to some landscape types than others.
+better suited to some landscape types than others. The ablation results
+of Section \ref{subsec:Ablation} reinforce this picture: several
+individual mechanisms show no statistically significant contribution
+on the tested subset, and the full method does not always obtain the
+best mean rank among its own leave-one-out variants, indicating that
+SPARQ's robustness should be understood as an aggregate property of
+the full configuration rather than a guaranteed contribution from
+every constituent mechanism.
 
 Several directions follow naturally from the present findings. First,
 the subset of problems on which SPARQ's advantage narrows, particularly
@@ -3558,20 +4883,21 @@ vincent and the economic load dispatch family, warrants closer examination
 to determine whether their difficulty stems from deceptive multimodality,
 ill-conditioning, or a mismatch with the current elite-polish and
 quarantine mechanisms, and whether a targeted adjustment could close
-this gap without weakening performance elsewhere. Second, the individual
-contribution of each of SPARQ's adaptive components was not isolated
-in this study; a systematic ablation analysis would help identify
-which mechanisms drive the bulk of the observed improvement over ARQ2
-and which contribute only marginally, informing a leaner variant of
-the algorithm. Third, the present evaluation was limited to box-constrained,
-single-objective continuous problems; extending SPARQ to handle general
-nonlinear constraints, multiple objectives, or mixed-integer variables
-would broaden its applicability to a wider range of engineering design
-problems. Finally, given that several of SPARQ's mechanisms, such
-as the SHADE-style memory and the Thompson-sampling bandit, involve
-internally tunable hyperparameters, an empirical sensitivity study
-of these settings across problem classes would clarify the robustness
-of the default configuration used in this work.
+this gap without weakening performance elsewhere. Second, a first
+leave-one-out ablation analysis is now reported in Section \ref{subsec:Ablation}
+on a representative ten-problem subset, extending it to the full benchmark
+suite would help confirm which mechanisms drive the bulk of the observed
+improvement over ARQ2 across a wider range of landscapes, informing
+a leaner variant of the algorithm. Third, the present evaluation was
+limited to box-constrained, single-objective continuous problems,
+extending SPARQ to handle general nonlinear constraints, multiple
+objectives, or mixed-integer variables would broaden its applicability
+to a wider range of engineering design problems. Finally, given that
+several of SPARQ's mechanisms, such as the SHADE-style memory and
+the Thompson-sampling bandit, involve internally tunable hyperparameters,
+an empirical sensitivity study of these settings across problem classes
+would clarify the robustness of the default configuration used in
+this work.
 
 \appendixtitles{no}
 
@@ -3597,6 +4923,12 @@ Systems. University of Michigan Press.
 G. (2024). Improving the Giant-Armadillo Optimization Method. Analytics,
 3(2), 225--240. DOI: 10.3390/analytics3020013
 
+\bibitem{GAO_original}Alsayyed, O., Hamadneh, T., Al-Tarawneh, H.,
+Alqudah, M., Gochhait, S., Leonova, I., Malik, O. P., \& Dehghani,
+M. (2023). Giant Armadillo Optimization: A New Bio-Inspired Metaheuristic
+Algorithm for Solving Optimization Problems. Biomimetics, 8(8), 619.
+DOI: 10.3390/biomimetics8080619
+
 \bibitem{PSO}Kennedy, J., \& Eberhart, R. (1995). Particle swarm
 optimization. Proceedings of the IEEE International Conference on
 Neural Networks, 4, 1942--1948. DOI: 10.1109/ICNN.1995.488968
@@ -3613,6 +4945,10 @@ DOI: 10.1145/2576768.2598294
 \bibitem{InitialDistribution}Charilogis, V., Tsoulos, I. G., \& Stavrou,
 V. N. (2023). An Intelligent Technique for Initial Distribution of
 Genetic Algorithms. Axioms, 12(10), 980. DOI: 10.3390/axioms12100980
+
+\bibitem{ClusterInitDE}Poikolainen, I., Neri, F., \& Caraffini, F.
+(2015). Cluster-based population initialization for differential evolution
+frameworks. Information Sciences, 297, 216--235. DOI: 10.1016/j.ins.2014.11.026
 
 \bibitem{DE}Storn, R., \& Price, K. (1997). Differential evolution
 --- A simple and efficient heuristic for global optimization over
