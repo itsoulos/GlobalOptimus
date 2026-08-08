@@ -296,7 +296,31 @@ two mechanisms with no counterpart in ARQ2 or the algorithms above:
 a stagnation-gated local polishing phase based on the classical Solis-Wets
 adaptive random search, and a short-term memory of recently successful
 search directions (\textquotedbl trajectory echo\textquotedbl )
-that is replayed during this local phase.
+that is replayed during this local phase. The primary evidence for
+this framing comes from the leave-one-out ablation study (Section
+\ref{subsec:Ablation}): removing the individual-dependent-evolution
+branch or the external archive produces a statistically significant
+degradation on six and four of the ten tested problems respectively,
+and the non-linear population-size reduction and the SHADE-style memory
+follow the same four-of-ten pattern; these four mechanisms show the
+largest mean-rank impact of any component tested and are accordingly
+the most reliably load-bearing components of the design. The two mechanisms
+introduced without a direct counterpart in ARQ2 or the DE literature
+surveyed above, the trajectory-echo memory and the opposition-based
+basin escape, show markedly weaker individual evidence under the same
+test, reaching significance on only one and zero of the ten problems
+respectively. The contribution of this work should accordingly be
+read primarily as the systematic, adaptive extension of established
+mechanisms into a single cohesive framework, with these two additional
+heuristics offered as complementary safeguards against pathological
+stagnation rather than as central drivers of the reported performance
+gains. This assessment is necessarily scoped to the ten-problem ablation
+subset, and does not rule out a larger, more clearly identifiable
+benefit for either mechanism on other problem classes, particularly
+ones exhibiting the kind of pathological stagnation they were designed
+to address more severely than the problems sampled here; clarifying
+this is left to future work that broadens the ablation beyond the
+present subset.
 
 The remainder of this article is organized as follows. Section \ref{subsec:ARQandARQ2}
 describes the architecture inherited from ARQ2 in detail. Section
@@ -1562,16 +1586,22 @@ framework, developed by Vasileios Charilogis and publicly available
 at \url{https://github.com/charilog/optimsolution} (accessed 18 July
 2026). All experiments were compiled and executed under Debian 12.12
 with GCC 13.4, on a workstation equipped with an AMD Ryzen 9 9950X3D
-processor (16 cores, 32 threads) and 64 GB of DDR4 memory. To account
-for the stochastic nature of the algorithms, each benchmark problem
-was solved over 30 independent runs, every run initialized with a
-distinct random seed. Across all runs and all methods, the evaluation
-budget was fixed at 150,000 function evaluations, consistent with
-the termination criterion adopted by the CEC 2011 real-world optimization
-benchmark \citep{de_CEC2011} and allowing direct comparison with
-prior work. The best and mean objective values obtained at termination,
-averaged over the 30 independent runs per problem, are reported as
-the primary performance measures throughout the results section.
+processor (16 cores, 32 threads) and 64 GB of DDR4 memory. All competing
+methods were reimplemented natively within this same C++ codebase,
+rather than invoked through each method's original, and often differently-implemented,
+reference code; reported execution times therefore reflect differences
+in per-evaluation and per-iteration computational cost under a common
+implementation and hardware setting, not differences in programming
+language, compiler, or external library overhead. To account for the
+stochastic nature of the algorithms, each benchmark problem was solved
+over 30 independent runs, every run initialized with a distinct random
+seed. Across all runs and all methods, the evaluation budget was fixed
+at 150,000 function evaluations, consistent with the termination criterion
+adopted by the CEC 2011 real-world optimization benchmark \citep{de_CEC2011}
+and allowing direct comparison with prior work. The best and mean
+objective values obtained at termination, averaged over the 30 independent
+runs per problem, are reported as the primary performance measures
+throughout the results section.
 
 The success rate (\textquotedbl Rate\%\textquotedbl ) reported in
 Table \ref{tab:comparison1} onward is defined, for each problem-method
@@ -1584,10 +1614,22 @@ across repeated runs rather than proximity to the problem's true global
 optimum, which is not always known in closed form for the real-world
 engineering benchmarks, on problems where the best-of-runs value coincides
 with the known optimum, a high Rate\% also reflects repeated convergence
-to that optimum. Feasibility is enforced at every evaluation by the
-repair and clamping procedures described in Section \ref{subsec:ARQandARQ2}
-onward, so all reported solutions already satisfy the problem's box
-constraints and no separate feasibility rate is needed.
+to that optimum. Because Rate\% is anchored to each method's own best-of-runs
+outcome rather than to the problem's true optimum, it should not be
+interpreted as a direct success-rate comparison across algorithms:
+a method can register a high Rate\% by converging consistently to
+a point that is itself far from the global optimum (an example is
+discussed in Section \ref{subsec:HighD}, where VkD-CMA-ES attains
+a 100\% Rate\% with mean values orders of magnitude worse than SPARQ's).
+Cross-method comparisons of solution quality therefore rely primarily
+on the Best and Mean columns; Rate\% figures reported alongside them
+describe how consistently each method reproduces its own outcome,
+and any statement that one method's Rate\% exceeds another's should
+be read in that narrower, within-method sense. Feasibility is enforced
+at every evaluation by the repair and clamping procedures described
+in Section \ref{subsec:ARQandARQ2} onward, so all reported solutions
+already satisfy the problem's box constraints and no separate feasibility
+rate is needed.
 
  Table \ref{tab:settings} summarizes the SPARQ parameter settings
 actually used in these experiments, expressed in the notation introduced
@@ -2430,32 +2472,36 @@ Optimizers on Standard and Real-World Benchmark Problems\label{tab:comparison1}}
 Table \ref{tab:comparison1} reports Best, Mean, Rate\%, SD, and execution
 time for all ten methods on each of the forty-five problems. Aggregated
 across the full set, SPARQ attains a success rate of 100\% on 15 problems,
-or 33.3\% of the total. Its average success rate is 46.6\%, the highest
-figure among the ten methods. The next-best average success rates
-are 31.4\% for mLSHADE-RL, 30.4\% for EA4Eig, and 27.6\% for UDE3.
-ARQ2, LM-CMA-ES, SFCDE, TridentDE, and NL-SHADE-RSP each average below
-25\%. The magnitude of this advantage is clearly visible on individual
-problems. On alpine1 (d=100), bucherastrigin (d=50), salomon (d=100),
-and weierstrass (d=70), SPARQ and LM-CMA-ES jointly reach a mean error
-of 0 at 100\% success. The remaining eight methods are confined to
-3 to 7\% success. Their mean errors on bucherastrigin, for instance,
-range from 18.46 for EA4Eig to 87.45 for TridentDE. On powell (d=100)
-and sinusoidal (d=200), SPARQ alone reaches 100\% success, with a
-mean error of 0 and -3.5 respectively. Every other method is held
-to 3 to 20\% success on these two problems. LM-CMA-ES in particular
-sees its sinusoidal mean collapse to -1.02. On the real-world load-dispatch
-and engineering problems, namely eld2 through eld5, hydrothermal,
-tersoffb, tersoffc, and transmissionpricing, every method in the comparison
-records success rates no higher than 3 to 10\%. SPARQ is no exception
-here. This pattern indicates that the difficulty is intrinsic to these
-landscapes rather than a shortcoming of any single method. In terms
-of computational cost, SPARQ's cumulative execution time across all
-forty-five problems is 22.04 seconds. This is the second-lowest total
-among the ten methods, behind only LM-CMA-ES at 13.47 seconds. ARQ2
-requires 60.95 seconds, SFCDE 78.01 seconds, EA4Eig 102.45 seconds,
-UDE3 157.60 seconds, and TridentDE 254.43 seconds. TridentDE alone
-requires roughly eleven times SPARQ's total runtime for the same benchmark
-set.
+or 33.3\% of the total. Its average Rate\% across all forty-five problems
+is 46.6\%, higher than the average Rate\% of every other method in
+the comparison --- 31.4\% for mLSHADE-RL, 30.4\% for EA4Eig, 27.6\%
+for UDE3, and below 25\% for ARQ2, LM-CMA-ES, SFCDE, TridentDE, and
+NL-SHADE-RSP. As noted in Section \ref{subsec:generalsettings}, this
+higher within-method consistency should be read together with the
+Mean and Best columns discussed below, which confirm that SPARQ's
+consistency coincides with lower, not merely repeated, error values
+on the great majority of problems. The magnitude of this advantage
+is clearly visible on individual problems. On alpine1 (d=100), bucherastrigin
+(d=50), salomon (d=100), and weierstrass (d=70), SPARQ and LM-CMA-ES
+jointly reach a mean error of 0 at 100\% success. The remaining eight
+methods are confined to 3 to 7\% success. Their mean errors on bucherastrigin,
+for instance, range from 18.46 for EA4Eig to 87.45 for TridentDE.
+On powell (d=100) and sinusoidal (d=200), SPARQ alone reaches 100\%
+success, with a mean error of 0 and -3.5 respectively. Every other
+method is held to 3 to 20\% success on these two problems. LM-CMA-ES
+in particular sees its sinusoidal mean collapse to -1.02. On the real-world
+load-dispatch and engineering problems, namely eld2 through eld5,
+hydrothermal, tersoffb, tersoffc, and transmissionpricing, every method
+in the comparison records success rates no higher than 3 to 10\%.
+SPARQ is no exception here. This pattern indicates that the difficulty
+is intrinsic to these landscapes rather than a shortcoming of any
+single method. In terms of computational cost, SPARQ's cumulative
+execution time across all forty-five problems is 22.04 seconds. This
+is the second-lowest total among the ten methods, behind only LM-CMA-ES
+at 13.47 seconds. ARQ2 requires 60.95 seconds, SFCDE 78.01 seconds,
+EA4Eig 102.45 seconds, UDE3 157.60 seconds, and TridentDE 254.43 seconds.
+TridentDE alone requires roughly eleven times SPARQ's total runtime
+for the same benchmark set.
 
 \begin{table}[H]
 \caption{Best-Value Ranking of SPARQ and Nine Competing Metaheuristics Across
@@ -2819,11 +2865,23 @@ the budget falls from 150 evaluations per variable at d=1000 to only
 15 at d=10,000, low enough that some of the compared methods have
 barely completed their initial population evaluation, let alone any
 substantial adaptation, before the run terminates. Under such a tight
-per-dimension budget, the comparison necessarily emphasizes each method's
-behavior during initialization and early convergence rather than its
-asymptotic performance, a bias toward fast early convergence that
-likely disadvantages methods whose own design assumes a larger evaluation
-budget relative to dimension.
+per-dimension budget, the comparison could in principle emphasize
+each method's behavior during initialization rather than its asymptotic
+performance, penalizing methods whose own design assumes a larger
+evaluation budget relative to dimension. Examining the raw per-run
+convergence trajectories, however, we find no evidence that this occurs
+in the results reported below: on zakharov (d=10,000), for example,
+where SPARQ reaches the exact optimum while LM-CMA-ES, MMES, RMES,
+and VkD-CMA-ES each converge to errors between $10^{5}$ and $10^{30}$,
+every one of these four competitors' best-so-far curves plateaus by
+roughly half the evaluation budget and shows no further improvement
+thereafter, rather than being cut off while still progressing. Their
+shortfall on this and similarly hard problems therefore reflects a
+genuine limitation of the search at this scale under this budget,
+not budget starvation mid-search; the concern raised above would be
+substantially more pressing for a method still improving steadily
+at the 150,000-evaluation cutoff, a pattern we did not observe among
+the competitors examined here.
 
 A further consequence of testing exclusively at d=1000 and d=10,000
 is that SPARQ's eigen-coordinate crossover, which is disabled outright
@@ -3365,29 +3423,44 @@ Methods on High-Dimensional Problems (d = 1000, 10,000)\label{tab:comparison2}}
 
 Table \ref{tab:comparison2} shows that, aggregated across all thirty-four
 cases, SPARQ achieves a success rate of 100\% on 28 combinations,
-or 82.4\%. Its average success rate is 82.9\%, the highest among the
-six methods. The closest competitor by average success rate is LM-CMA-ES
-at 77.2\%, followed by CCDG2 at 75.9\%, MMES at 72.6\%, and RMES at
-71.8\%. VkD-CMA-ES trails markedly at 48.6\%. On twelve separable,
-low-difficulty problems, all six methods reach an exact mean error
-of 0 at 100\% success. These twelve problems, namely alpine1, bucherastrigin,
-cigar, cosine mixture, different powers, the Dirac-like spike, ellipsoidal,
-exponential, rastrigin, salomon, sphere, and step-ellipsoidal, are
-unshifted, unrotated benchmark functions whose known global optimum
+or 82.4\%. Its average Rate\% is 82.9\%, higher than the average Rate\%
+recorded by LM-CMA-ES (77.2\%), CCDG2 (75.9\%), MMES (72.6\%), RMES
+(71.8\%), and VkD-CMA-ES (48.6\%). As the paradox discussed below
+illustrates --- where VkD-CMA-ES's own 100\% Rate\% on individual
+problems coincides with markedly worse mean values than SPARQ's ---
+a higher average Rate\% here indicates broader within-method consistency
+across the benchmark set rather than, by itself, superior solution
+quality; the latter is established separately through the mean-error
+comparisons that follow. On twelve separable, low-difficulty problems,
+five of the six methods reach an exact mean error of 0 at 100\% success
+at both d=1,000 and d=10,000. These twelve problems, namely alpine1,
+bucherastrigin, cigar, cosine mixture, different powers, the Dirac-like
+spike, ellipsoidal, exponential, rastrigin, salomon, sphere, and step-ellipsoidal,
+are unshifted, unrotated benchmark functions whose known global optimum
 sits exactly at the origin and is exactly representable in double-precision
 arithmetic. Eleven of them are provably non-negative everywhere, and
 cosine mixture is provably bounded below by -0.1D, exactly its declared
 optimum, consequently, a reported mean equal to that bound over 30
 runs is only possible if every individual run reached the bound exactly,
 since a set of values each at or above a bound cannot average to that
-bound unless all of them equal it. We confirmed this directly against
-the raw per-run results for a representative sample of these problems:
-all 30 runs of every method checked reach the exact floating-point
-optimum, using a fully deterministic, reproducible seeding scheme
-in which a fixed base seed is incremented by the run index. Here the
-differentiation rests entirely on runtime. On bucherastrigin (d=10,000),
-CCDG2 requires 1702.33 seconds, against 58.26 for LM-CMA-ES, 35.49
-for MMES, 34.97 for RMES, and 27.65 for SPARQ. On alpine1 (d=10,000),
+bound unless all of them equal it. VkD-CMA-ES is the exception: it
+reaches this same exact optimum at d=1,000, but at d=10,000 it converges
+to it on none of the twelve problems, with mean errors ranging from
+exactly 1 on the Dirac-like spike and exponential problems, both reached
+with 100\% consistency and zero standard deviation, up to $5.15\times10^{9}$
+on ellipsoidal and $7.37\times10^{10}$ on cigar. As with the powell
+and rotatedrosenbrock cases discussed below, this indicates consistent
+convergence to a markedly suboptimal point rather than a failure to
+converge at all. We confirmed the exact-zero results directly against
+the raw per-run outcomes for all twelve problems, at both dimensions,
+for every method: all 30 runs reach the exact floating-point optimum
+in every case except the twelve VkD-CMA-ES/d=10,000 combinations just
+described, using a fully deterministic, reproducible seeding scheme
+(base seed 4242) in which the base seed is incremented by the run
+index. Among the five methods that reach this exact optimum at both
+dimensions, the differentiation rests entirely on runtime. On bucherastrigin
+(d=10,000), CCDG2 requires 1702.33 seconds, against 58.26 for LM-CMA-ES,
+35.49 for MMES, 34.97 for RMES, and 27.65 for SPARQ. On alpine1 (d=10,000),
 CCDG2 requires 1528.92 seconds against 13.85 for SPARQ, a difference
 exceeding two orders of magnitude. Summed across all thirty-four combinations,
 CCDG2's cumulative runtime reaches 29,284.4 seconds, against 258.6
@@ -3712,7 +3785,21 @@ CR (Section \ref{subsec:3.2. SHADEStyle}). Each of the resulting
 twelve configurations, the full method together with the eleven single-mechanism
 removals, was executed for 30 independent runs per problem under the
 same evaluation budget of 150,000 function evaluations used throughout
-Section \ref{subsec:generalsettings}.
+Section \ref{subsec:generalsettings}. This leave-one-out design tests
+each mechanism's contribution one at a time, holding all others fixed
+at their full-method setting, and is accordingly better suited to
+detecting whether a mechanism is individually dispensable than to
+disentangling redundancy or interaction between mechanisms: if two
+mechanisms serve a partially overlapping purpose, removing either
+one alone, with the other still present to compensate, can understate
+both mechanisms' combined importance relative to removing them together.
+A single-order additive construction, built up from the ARQ2 baseline
+instead of down from the full method, would face the same limitation
+from the opposite direction and is not, by itself, a more rigorous
+alternative; fully characterizing these interactions would require
+a design that samples multiple mechanism combinations or orderings,
+such as a fractional-factorial or Plackett--Burman screening study,
+which we leave to future work.
 
 Table \ref{tab:ablation} reports the best value, mean value, success
 rate, and standard deviation obtained by each of the twelve configurations
@@ -4009,18 +4096,42 @@ improvement, confirming both as structurally important contributors
 rather than optional refinements. The SHADE-style memory follows the
 same pattern on four problems. Removing the opposition-based basin
 escape produces no statistically significant difference on any of
-the ten problems, and the trajectory-echo memory only one, indicating
-that, on this particular problem subset, their contribution is not
-reliably distinguishable from the noise floor of the comparison, consistent
-with their intended role as rare-activation safety mechanisms rather
-than components exercised on every run. Notably, the full method does
-not obtain the lowest, and therefore best, mean rank overall: 5.65,
-against 5.00 for the variant without the opposition-based basin escape.
-The graduated, stagnation-driven mechanisms occasionally trade a small
-amount of average-case performance on some problems for the robustness
-against pathological stagnation that motivated their inclusion in
-the first place, an interaction effect that a component-wise comparison
-of this kind is precisely intended to expose.
+the ten problems, and the trajectory-echo memory only one; the stagnation-gated
+elite polish shows a mixed record, with the full method significantly
+better on three problems, the ablated variant significantly better
+on one, and no significant difference on the remaining six, so it
+is not reliably dominant either. Notably, the full method does not
+obtain the lowest, and therefore best, mean rank overall: 5.65, against
+5.00 for the variant without the opposition-based basin escape and
+5.40 for the variant without trajectory-echo. Taken at face value,
+this ten-problem ablation does not provide positive evidence for these
+three mechanisms, and for two of them mildly favors their removal.
+Their inclusion was motivated by a design rationale that this particular
+test is not well suited to confirm: they are intended to activate
+rarely, specifically under pathological stagnation, with an expected
+benefit in avoiding occasional severe failures rather than in improving
+typical-case mean performance, a property that a mean-value comparison
+across a fixed ten-problem subset cannot directly measure. We did
+not conduct a dedicated worst-case or tail-focused evaluation, for
+example comparing the frequency of severely stagnated runs with and
+without each mechanism, that would be needed to substantiate this
+rationale, and its absence should be read as a genuine gap in the
+evidence for these three components rather than as implicit support
+for their inclusion.
+
+This procedure involves 110 independent Wilcoxon tests --- eleven
+variants across ten problems --- each evaluated at the conventional
+p\textless 0.05 threshold without correction for multiple comparisons.
+At this threshold and this number of tests, a handful of nominally
+significant results would be expected by chance alone even in the
+absence of any true effect. The counts reported above, and the significance
+markers in Table \ref{tab:ablationStats}, should accordingly be read
+as supporting evidence for each component's contribution rather than
+as conclusive statistical proof, particularly for mechanisms such
+as the trajectory-echo memory and the opposition-based basin escape,
+whose significant-improvement counts (one of ten and zero of ten,
+respectively) are themselves within the range attributable to chance
+under uncorrected multiple testing.
 
 \begin{table}[H]
 \begin{centering}
@@ -4109,15 +4220,24 @@ SFCDE, were instead run with their published defaults: jSO and NL-SHADE-LBC
 with NPinit=$\lceil25\sqrt{D}\ln D\rceil$ (Brest et al., 2017), LM-CMA-ES
 with $\lambda=4+\lfloor3\ln D\rfloor$ (the standard CMA-ES-family
 default), mLSHADE-RL with NPinit=18D (inherited from the LSHADE lineage,
-Tanabe and Fukunaga, 2014), and SFCDE with NP=10D. SPARQ itself was
-kept at its Section \ref{subsec:generalsettings} setting of Ninit=100
-throughout, rather than its own dimension-scaled default of 18D, so
-that this experiment isolates the effect of the competitors' population
-settings alone, without confounding it with a simultaneous change
-to SPARQ's own configuration. Table \ref{tab:popfair} reports the
-resulting best value, mean value, success rate, and standard deviation
-for all ten methods on all ten problems, together with the population
-size N actually used in each case.
+Tanabe and Fukunaga, 2014), and SFCDE with NP=10D. In each of these
+five implementations, internal settings that the original algorithms
+define relative to population size, such as jSO's and NL-SHADE-LBC's
+archive size and p-best fraction and mLSHADE-RL's archive size, are
+computed from the current population size rather than fixed independently
+of it, so raising NPinit to each method's own recommended default
+causes these dependent settings to scale accordingly, without any
+additional reconfiguration; each competitor is accordingly run with
+its full published strategy at its own recommended population size,
+not with population size adjusted in isolation from the rest of its
+configuration. SPARQ itself was kept at its Section \ref{subsec:generalsettings}
+setting of Ninit=100 throughout, rather than its own dimension-scaled
+default of 18D, so that this experiment isolates the effect of the
+competitors' population settings alone, without confounding it with
+a simultaneous change to SPARQ's own configuration. Table \ref{tab:popfair}
+reports the resulting best value, mean value, success rate, and standard
+deviation for all ten methods on all ten problems, together with the
+population size N actually used in each case.
 \begin{flushleft}
 {\tiny{}%
 \begin{longtable}[c]{ccccccc}
@@ -4336,35 +4456,50 @@ population size N.\label{tab:popfair}}
 \par\end{flushleft}
 
 Table \ref{tab:popfairSummary} summarizes the outcome, reporting
-the mean rank under the mean-value criterion and the average success
-rate for each method across the ten problems. SPARQ retains the best
-mean rank, 3.55, and the highest average success rate, 43.9\%, even
-after every eligible competitor is given its own recommended, and
-in most cases substantially larger, population. EA4Eig follows closely
-in mean rank, 3.65, but with a markedly lower average success rate,
-22.8\%, reflecting the same distinction between rank-based and success-rate-based
-comparison already observed in Section \ref{subsec:generalsettings}.
-Two competitors improve their own standing relative to the fixed-100
-comparison, most visibly mLSHADE-RL, whose average success rate rises
-from its Section \ref{subsec:generalsettings} figure once it is allowed
-its own NPinit=18D, and jSO, which likewise benefits from its larger
-recommended population on the higher-dimensional problems in this
-subset. Neither change alters the overall ordering at the top: SPARQ
-and EA4Eig remain the two best-ranked methods under either population
-convention.
+the mean rank under the mean-value criterion and the average Rate\%
+for each method across the ten problems. SPARQ retains the best mean
+rank, 3.55 --- the primary, directly comparable performance criterion
+in this subsection --- and continues to show the highest average
+Rate\% (within-method consistency), 43.9\%, even after every eligible
+competitor is given its own recommended, and in most cases substantially
+larger, population. EA4Eig follows closely in mean rank, 3.65, but
+with a markedly lower average Rate\%, 22.8\%, reflecting the same
+distinction between rank-based and success-rate-based comparison already
+observed in Section \ref{subsec:generalsettings}. Two competitors
+improve their own standing relative to the fixed-100 comparison, most
+visibly mLSHADE-RL, whose average Rate\% rises from its Section \ref{subsec:generalsettings}
+figure once it is allowed its own NPinit=18D, and jSO, which likewise
+benefits from its larger recommended population on the higher-dimensional
+problems in this subset. Neither change alters the overall ordering
+at the top: SPARQ and EA4Eig remain the two best-ranked methods under
+either population convention.
+
+Two scope limitations should be kept in mind when interpreting this
+check. First, it covers only the ten-problem ablation subset rather
+than the full seventy-nine-problem suite, so it does not establish
+that the fixed-100 convention is neutral on every problem reported
+elsewhere in this study; extending this check to the full benchmark,
+for every affected competitor, is a direct and worthwhile extension
+that we leave to future work rather than attempt within the present
+study. Second, SPARQ itself was kept at Ninit=100 throughout, rather
+than being allowed its own dimension-scaled default of 18D; the check
+therefore shows that SPARQ's advantage survives giving competitors
+their own recommended settings, not that it survives a fully symmetric
+comparison in which every method, including SPARQ, uses its own preferred
+population size.
 
 {\footnotesize{}
 \begin{table}[H]
 \begin{centering}
-{\footnotesize\caption{Mean rank (mean-value criterion) and average success rate of each
-method on the ten-problem population-fairness subset, with the population
+{\footnotesize\caption{Mean rank (mean-value criterion) and average Rate\% of each method
+on the ten-problem population-fairness subset, with the population
 rule actually used.\label{tab:popfairSummary}}
 }{\footnotesize\par}
 \par\end{centering}
 \centering{}{\footnotesize{}%
 \begin{tabular}{cccc}
 \toprule 
-{\footnotesize\textbf{Method}} & {\footnotesize\textbf{Population rule used}} & {\footnotesize\textbf{Mean rank (mean-value)}} & {\footnotesize\textbf{Avg. success rate (\%)}}\tabularnewline
+{\footnotesize\textbf{Method}} & {\footnotesize\textbf{Population rule used}} & {\footnotesize\textbf{Mean rank (mean-value)}} & {\footnotesize\textbf{Avg. Rate\%}}\tabularnewline
 \midrule
 \midrule 
 {\footnotesize\textbf{sparq}} & {\footnotesize$N=100$ (unchanged control)} & {\footnotesize 3.55} & {\footnotesize 43.9}\tabularnewline
@@ -4395,7 +4530,7 @@ in Section \ref{subsec:generalsettings} does not by itself account
 for SPARQ's comparative advantage. Giving five of the nine competitors
 their own, often much larger, recommended population size changes
 their individual results, sometimes favourably, but does not change
-which method attains the best mean rank or the highest success rate
+which method attains the best mean rank or the highest average Rate\%
 on this subset. As with the ablation study, this check was restricted
 to the same ten-problem subset for computational tractability, and
 a full re-evaluation across the entire forty-five-problem benchmark
@@ -4432,7 +4567,11 @@ $\alpha_{A}$, $n_{bs}$, $\alpha_{NL}$, and $\gamma_{b}$, was swept
 over four candidate values, including its Table \ref{tab:settings}
 default, on the same ten-problem subset used for the ablation study,
 with every other parameter held at its default and 30 independent
-runs per value-problem combination.
+runs per value-problem combination. As with the ablation study on
+which the choice of tested parameters was based, this analysis is
+restricted to the ten-problem subset for computational tractability;
+the reported trends should not be assumed to generalize without qualification
+to the full benchmark suite.
 \begin{flushleft}
 {\tiny{}%
 \begin{longtable}[c]{ccccccccc}
@@ -4824,23 +4963,26 @@ comprising a combined total of seventy-nine problem instances and
 spanning synthetic test functions alongside real-world engineering
 formulations.
 
-Across the standard-dimensionality benchmark, SPARQ achieved the highest
-average success rate and the lowest mean rank among ten competing
-methods under the best-value criterion, and a closely contested second-lowest
-mean rank, narrowly behind EA4Eig, under the stricter mean-value criterion.
-Its advantage was most pronounced on problems where competing methods
-were confined to low single-digit success rates, while on real-world
-problems with intrinsically difficult landscapes, such as the economic
-load dispatch family and several chemical-engineering formulations,
-no method in the comparison, SPARQ included, achieved consistently
-high success rates, indicating that the difficulty in these cases
-is a property of the problem rather than of any particular optimizer.
-A similar pattern held on the large-scale benchmark, where SPARQ was
-compared against five optimizers developed specifically for high-dimensional
-search: it attained the highest success rate and the lowest mean rank
-of the six methods, with the one clear exception being the vincent
-function, on which two competing methods reached the exact optimum
-more reliably.
+Across the standard-dimensionality benchmark, SPARQ achieved the lowest
+mean rank among ten competing methods under the best-value criterion
+--- the primary cross-method performance measure --- together with
+the highest average Rate\%, indicating that this rank advantage was
+also the most consistently reproduced across independent runs, and
+a closely contested second-lowest mean rank, narrowly behind EA4Eig,
+under the stricter mean-value criterion. Its advantage was most pronounced
+on problems where competing methods were confined to low single-digit
+success rates, while on real-world problems with intrinsically difficult
+landscapes, such as the economic load dispatch family and several
+chemical-engineering formulations, no method in the comparison, SPARQ
+included, achieved consistently high success rates, indicating that
+the difficulty in these cases is a property of the problem rather
+than of any particular optimizer. A similar pattern held on the large-scale
+benchmark, where SPARQ was compared against five optimizers developed
+specifically for high-dimensional search: it attained the lowest mean
+rank of the six methods, together with the highest average Rate\%,
+again reflecting the most consistent reproduction of that ranking
+across runs, with the one clear exception being the vincent function,
+on which two competing methods reached the exact optimum more reliably.
 
 The results support the central premise of this work, namely that
 extending nearly every component of ARQ2's architecture with an adaptive
@@ -4857,10 +4999,9 @@ is further supported by the population-size fairness check of Section
 \ref{subsec:PopFairness}: when five of the nine standard-dimensionality
 competitors are reconfigured to their own literature-recommended,
 and in most cases substantially larger, population sizes, SPARQ retains
-both the best mean rank and the highest average success rate on the
-ten-problem subset tested, indicating that its advantage is not an
-artifact of the common population-size convention adopted elsewhere
-in the study.
+both the best mean rank and the highest average Rate\% on the ten-problem
+subset tested, indicating that its advantage is not an artifact of
+the common population-size convention adopted elsewhere in the study.
 
 At the same time, the results also delineate the boundaries of this
 approach. SPARQ's reliability advantage narrows or disappears on a
@@ -4876,6 +5017,54 @@ best mean rank among its own leave-one-out variants, indicating that
 SPARQ's robustness should be understood as an aggregate property of
 the full configuration rather than a guaranteed contribution from
 every constituent mechanism.
+
+A related point concerns the number of configurable parameters in
+SPARQ's design: Table \ref{tab:settings} lists close to thirty of
+them, spanning population scheduling, historical memory, strategy
+selection, and the stagnation-response mechanisms introduced in this
+work. Only four of these --- selected as the mechanisms with the
+clearest ablation-supported contribution --- were empirically varied
+in the sensitivity analysis of Section \ref{subsec:Sensitivity};
+the remainder retain the default values inherited from the SHADE,
+jSO, and NL-SHADE-RSP literature that motivated each mechanism, rather
+than being independently tuned for SPARQ through an exhaustive search.
+Practitioners can therefore adopt the reported defaults directly,
+as with the source methods themselves, without solving a high-dimensional
+tuning problem from scratch. What this breadth does complicate is
+scientific attribution rather than practical use: the leave-one-out
+ablation of Section \ref{subsec:Ablation} tests the removal of one
+mechanism at a time rather than the full space of pairwise and higher-order
+interactions among them, and is consequently better suited to identifying
+which mechanisms are individually dispensable than to fully disentangling
+which specific combination of settings is responsible for the reported
+gains. A more exhaustive interaction study, potentially combined with
+pruning the parameters shown here to have the weakest individual evidence,
+remains a natural direction for future work aimed at clarifying this
+attribution more precisely. In particular, the four mechanisms with
+the largest mean-rank impact in Table \ref{tab:ablationStats} ---
+the IDE branch, the external archive, NLPSR, and the SHADE-style memory
+--- are separated from the remaining seven by a visible margin, and
+it is plausible that the ARQ2 baseline extended with only these four
+adaptations would recover most of SPARQ's advantage over ARQ2. The
+present leave-one-out design, which removes one mechanism at a time
+from the full method, cannot by itself confirm or rule out this possibility,
+since it does not test the complementary, additive construction of
+starting from ARQ2 and introducing mechanisms one at a time. That
+complementary test, however, would not by itself be conclusive either:
+as discussed in Section \ref{subsec:Ablation}, both an additive,
+one-at-a-time construction and the present leave-one-out removal are
+single, order-dependent paths through the same space of mechanism
+combinations, and neither can distinguish a mechanism's individual
+contribution from a redundancy or interaction it shares with another;
+two mechanisms that are individually dispensable given the other's
+presence could each appear load-bearing, or dispensable, depending
+on which order they are added or removed in. Directly resolving this
+would call for a design that samples multiple orderings or combinations
+rather than a single path, such as a fractional-factorial or Plackett--Burman
+screening design over the eleven mechanisms tested here; we leave
+this more demanding analysis to future work and treat the ordering
+used in the present ablation as one informative, but not exhaustive,
+view of the design's structure.
 
 Several directions follow naturally from the present findings. First,
 the subset of problems on which SPARQ's advantage narrows, particularly
