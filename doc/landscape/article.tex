@@ -1,8 +1,7 @@
-%% LyX 2.5.1 created this file.  For more info, see https://www.lyx.org/.
+%% LyX 2.5.2 created this file.  For more info, see https://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 \usepackage[utf8]{inputenc}
-\usepackage{colortbl}
 \usepackage{float}
 \usepackage{varwidth}
 \usepackage{graphicx}
@@ -229,21 +228,22 @@ The natural response is therefore not to search for a universally
 superior algorithm, but to select, for a given unseen problem, the
 method most likely to perform well on it: the algorithm selection
 problem, originally formalized by Rice \citep{Rice} and later surveyed
-extensively from a meta-learning perspective \citep{SmithMiles}.
-Exploratory Landscape Analysis (ELA) \citep{Mersmann} operationalizes
-this idea for continuous black-box optimization: a modest sample of
-the search space is used to compute a compact set of numerical descriptors,
-related to convexity, level-set structure, local-versus-global information,
-and similar properties, that summarize how difficult or structured
-a landscape is, without requiring the objective function to be evaluated
-exhaustively. Coupled with supervised machine learning, ELA features
-have been shown capable of predicting which solver from a portfolio
-is likely to perform best on a new problem instance, closing part
-of the gap between naive and oracle solver selection \citep{Bischl},
-\citep{Kerschke2019a}, \citep{Kerschke2019b}, and this line of work
-has been placed within the broader landscape of algorithm-selection
-methods for black-box continuous optimization in dedicated surveys
-\citep{Munoz}.
+extensively from a meta-learning perspective \citep{SmithMiles},
+\citep{Cenikj2024}. Exploratory Landscape Analysis (ELA) \citep{Mersmann}
+operationalizes this idea for continuous black-box optimization: a
+modest sample of the search space is used to compute a compact set
+of numerical descriptors, related to convexity, level-set structure,
+local-versus-global information, and similar properties, that summarize
+how difficult or structured a landscape is, without requiring the
+objective function to be evaluated exhaustively. Coupled with supervised
+machine learning, ELA features have been shown capable of predicting
+which solver from a portfolio is likely to perform best on a new problem
+instance, closing part of the gap between naive and oracle solver
+selection \citep{Bischl}, \citep{Cenikj2024}, \citep{Kerschke2019a},
+\citep{Kerschke2019b}, and this line of work has been placed within
+the broader landscape of algorithm-selection methods for black-box
+continuous optimization in dedicated surveys \citep{Munoz}, \citep{Malan2021},
+\citep{Tanabe2022}.
 
 Realizing this landscape-aware selection pipeline in practice is largely
 an infrastructural problem: it requires (i) a means of running many
@@ -258,10 +258,10 @@ four stages: batch execution and statistical ranking, including Friedman
 omnibus testing \citep{Friedman} and Holm-corrected \citep{Holm}
 pairwise Wilcoxon signed-rank tests \citep{Wilcoxon}, following established
 practice for comparing evolutionary and swarm-intelligence algorithms
-\citep{Garcia}, \citep{Demsar}. The pipeline then performs landscape
-sampling, ELA feature computation \citep{Mersmann}, and, finally,
-trains a landscape-aware selection model with a Random Forest classifier
-\citep{Breiman}.
+\citep{Garcia}, \citep{Carrasco2020}, \citep{Demsar}. The pipeline
+then performs landscape sampling, ELA feature computation \citep{Mersmann},
+and, finally, trains a landscape-aware selection model with a Random
+Forest classifier \citep{Breiman}.
 
 The purpose of this paper is to demonstrate, using this pipeline,
 that a machine-learning model trained on landscape features can predict
@@ -373,7 +373,80 @@ measures, and level-set classification errors, corresponding to the
 feature families reported in Table \ref{sec:ExperimentalResults},
 is deliberately delegated to the established pflacco library \citep{Prager2024}
 rather than re-implemented, so that the study relies on independently
-validated statistics rather than a bespoke reimplementation.
+validated statistics \citep{Skvorc2020} rather than a bespoke reimplementation.
+
+To make the pipeline's inputs, preprocessing, and evaluation protocol
+fully explicit alongside the descriptive account above, Figure \ref{fig:pipeline}separates
+the pipeline into two phases with very different computational cost:
+an OFFLINE phase (Stages 1-4), run once over the 35 benchmark problems
+to produce and validate a trained model, and an ONLINE phase, run
+once per new, unseen problem to obtain a recommendation from that
+already-trained model without running any of the eight candidate optimizers
+on it. The online phase only draws a landscape sample and computes
+ELA features from it, orders of magnitude cheaper than running even
+a single optimizer to convergence, let alone all eight.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[width=0.95\textwidth]{pipeline_diagram}
+\par\end{centering}
+\caption{The landscape-aware selection pipeline, separated into an OFFLINE
+phase (training and Leave-One-Problem-Out validation over the 35 known
+benchmark problems) and an ONLINE phase (algorithm selection for a
+single new, unseen problem, using the model already trained offline).
+The dashed arrow indicates that the deployed model is reused as-is,
+with no retraining per query.\label{fig:pipeline}}
+\end{figure}
+
+\textit{Note: the 35-fold LOPO loop (Stage 4) exists purely to produce
+an honest, out-of-fold accuracy estimate (Tables \ref{tab:lopo}-\ref{tab:sigtest}).
+None of the 35 fold-specific classifiers is the one actually deployed
+-- the deployed model (right) is a single Random Forest fit once
+on all 97 instances.}
+
+\medskip{}
+
+The feature set consists of 53 numeric ELA descriptors per (problem,
+dimension) instance, computed by pflacco \citep{Prager2024} from
+the same 100xD-point landscape sample described above, drawn across
+six feature families: ela\_distr (3 descriptors), ela\_meta (9), ela\_level
+(9), nbc (5), disp (16), and ic (5), together with one per-family
+\textquotedbl costs\_runtime\textquotedbl{} diagnostic column that
+pflacco reports alongside its descriptors (6 in total, one per family).
+These six runtime columns are retained as ordinary numeric features
+rather than excluded; Table \ref{tab:features}'s feature-importance
+ranking indicates the model does not rely materially on any of them.
+A small number of features take NaN or infinite values for degenerate
+instances (e.g. the ela\_level LDA warning noted during extraction);
+these are imputed with the corresponding feature's median value across
+the dataset before training. No additional feature scaling is applied,
+since the Random Forest's axis-aligned splits are invariant to monotonic
+per-feature rescaling.
+
+The training label for a (problem, dimension) instance is constructed
+in two stages. First, the set of tied best-performing methods (those
+attaining is\_best = 1 in the Stage 1 ranking) is fixed once, since
+it depends only on the batch/ranking stage and not on any tie-break
+policy. Second, because a standard multi-class classifier requires
+one canonical label per instance, ties are broken in favour of whichever
+tied method has the better average rank, computed, within each Leave-One-Problem-Out
+fold, from that fold's training problems only (Section \ref{sec:Discussion}
+discusses why this must exclude the held-out problem, and the consequence
+of getting it wrong). Evaluation itself remains lenient throughout:
+a prediction is scored correct if it names any member of the tied
+set, not only the canonical label chosen for training.
+
+The Random Forest itself uses scikit-learn's default splitting criterion
+with 200 trees, maximum depth 4, a minimum of 1 sample per leaf, and
+balanced class weighting, fit independently within each of the 35
+Leave-One-Problem-Out folds purely for evaluation (Tables \ref{tab:lopo}
+and \ref{tab:sigtest}). None of these 35 fold-specific classifiers
+is the model actually used for algorithm selection: the deployed model
+is a separate, final fit (300 trees, otherwise the identical configuration)
+on all 97 instances, using the analogous, full-dataset tie-break for
+its own training labels; this same final fit also yields the Gini
+feature importances reported in Table \ref{tab:features} (Section
+\ref{sec:ExperimentalResults}).
 
 The labelled performance table and the extracted landscape features
 are finally joined on (problem, dimension) and used to train a Random
@@ -580,18 +653,23 @@ method receives, placing it in direct contention with sparq and ea4eig.
 cmaes forms a clearly separated fourth tier on its own (average rank
 3.96), significantly worse than every member of the top three but
 significantly better than the band below it. lmcmaes, acor, and gwo
-occupy a mutually indistinguishable middle band (average ranks 5.10
-to 5.72), none of the three pairwise comparisons among them reaching
-significance in Table \ref{tab:wilcoxon}, while sa closes the table
-alone, significantly worse than every other method and, as Table \ref{tab:compute}
-already showed, with a success rate that barely varies across the
-entire benchmark suite. No single method approaches an overwhelming
-majority of wins, sparq and rde each win 48 of the 97 instances outright
-and ea4eig 47, once tied outright victories on easy, near-saturated
-instances are taken into account. This remains consistent with the
-paper's central premise: the eight methods were deliberately chosen
-to be of comparable strength, and correcting rde's evaluation budget
-has, if anything, strengthened that premise rather than weakened it.
+occupy a middle band that pairwise Wilcoxon testing cannot statistically
+separate (average ranks 5.10 to 5.72), none of the three pairwise
+comparisons among them reaching significance in Table \ref{tab:wilcoxon}.
+This absence of a significant pairwise difference reflects insufficient
+evidence, at this sample size, to distinguish these three methods,
+not a demonstration that their true performance is equal -- a stronger
+claim that would require a dedicated equivalence test rather than
+a non-significant result. While sa closes the table alone, significantly
+worse than every other method and, as Table \ref{tab:compute} already
+showed, with a success rate that barely varies across the entire benchmark
+suite. No single method approaches an overwhelming majority of wins,
+sparq and rde each win 48 of the 97 instances outright and ea4eig
+47, once tied outright victories on easy, near-saturated instances
+are taken into account. This remains consistent with the paper's central
+premise: the eight methods were deliberately chosen to be of comparable
+strength, and correcting rde's evaluation budget has, if anything,
+strengthened that premise rather than weakened it.
 
 \begin{figure}[H]
 \begin{centering}
@@ -603,19 +681,23 @@ instances (lower is better), corresponding to the values in Table
 \end{figure}
 
 Figure \ref{fig:rankings} renders the same average-rank values as
-a bar chart, with the vertical axis inverted so that a taller bar
-corresponds to a better (lower) rank. sparq, highlighted, is tallest,
-but only marginally so: the visual effect makes the four-tier structure
-discussed above immediately apparent as a staircase, a barely perceptible
-step separates the three leading bars (sparq, rde, ea4eig) from one
-another, a clearer step sets cmaes apart on its own, a further step
-drops to the three roughly equal mid-table bars (lmcmaes, acor, gwo),
-and a final, largest step isolates sa at the far right. This kind
-of visual separation is a useful sanity check before any formal test
-is run: a benchmark in which the bars formed a smooth, even slope,
-rather than distinct steps, would suggest a continuum of near-equivalent
-methods rather than the tiered structure that the Wilcoxon results
-in Table \ref{tab:wilcoxon} subsequently confirm.
+a bar chart, using a conventional, non-inverted axis: bar height increases
+directly with average rank, so a taller bar corresponds to a worse
+(higher) rank, and the chart states this explicitly with its own \textquotedbl Lower
+bar is better\textquotedbl{} annotation rather than leaving the direction
+to be inferred. sparq, highlighted, has the shortest bar, but only
+marginally so: the visual effect makes the four-tier structure discussed
+above immediately apparent as a staircase, a barely perceptible step
+separates the three leading, shortest bars (sparq, rde, ea4eig) from
+one another, a clearer step sets cmaes apart on its own, a further
+step rises to the three roughly equal mid-table bars (lmcmaes, acor,
+gwo), and a final, largest step isolates sa's markedly taller bar
+at the far right. This kind of visual separation is a useful sanity
+check before any formal test is run: a benchmark in which the bars
+formed a smooth, even slope, rather than distinct steps, would suggest
+a continuum of near-equivalent methods rather than the tiered structure
+that the Wilcoxon results in Table \ref{tab:wilcoxon} subsequently
+confirm.
 
 These same average-rank values are the statistic underlying the omnibus
 Friedman test that licenses the pairwise comparisons in Table \ref{tab:wilcoxon}.
@@ -635,11 +717,11 @@ does.
 \caption{Computational cost and behaviour of each optimizer, aggregated over
 all 97 (problem, dimension) instances from the raw batch-execution
 log, with all eight methods receiving the same dimension-scaled evaluation
-budget (Section 3), averaging 275,876 evaluations per instance over
-the actual mix of dimensions in the benchmark suite. SD success rate
-reflects consistency across instances. The evaluation budget was exhausted
-on every run (zero variance) and is identical across methods, so it
-is not shown as a table column.\label{tab:compute}}
+budget (Section \ref{sec:ExperimentalDesign}), averaging 275,876
+evaluations per instance over the actual mix of dimensions in the
+benchmark suite. SD success rate reflects consistency across instances.
+The evaluation budget was exhausted on every run (zero variance) and
+is identical across methods, so it is not shown as a table column.\label{tab:compute}}
 
 \centering{}%
 \begin{tabular}{ccccc}
@@ -707,6 +789,166 @@ in speed: lmcmaes is the fastest method overall per iteration, consistent
 with its limited-memory design deliberately avoiding the full covariance-matrix
 factorization that makes standard cmaes markedly slower despite comparable
 memory use.
+
+Table \ref{tab:compute} reports per-iteration cost for each candidate
+optimizer, but does not by itself answer a different, practical question
+a reviewer raised: how does the wall-clock cost of the landscape-aware
+selection pipeline itself compare with simply running one or more
+of these candidates directly, under a comparable budget? We measured
+this directly, using the framework's own per-stage timing log. Table
+\ref{tab:pipelinecost}reports the wall-clock cost of landscape sampling
+(Stage 2), ELA feature extraction (Stage 3), and Random Forest training
+(Stage 4), aggregated over all 97 (problem, dimension) instances;
+Table \ref{tab:optcost}reports the corresponding cost of running
+each of the eight candidate optimizers once, to its full budget, across
+the same 97 instances, derived analytically from the validated per-iteration
+timings underlying Table \ref{tab:compute}(mean evaluations divided
+by population size, times mean iteration time). We use this derived
+figure rather than a freshly re-measured Stage 1 wall-clock time because
+re-running Stage 1 on an already-complete batch\_master.csv only re-executes
+the fast statistical ranking step and skips the (already cached) optimizer
+runs themselves, so a fresh Stage-1 timer would understate the true
+cost of the 8 x 30 x 97 optimizer runs rather than measure it.
+
+\begin{table}[H]
+\caption{Wall-clock cost of the landscape-aware selection pipeline, aggregated
+over all 97 (problem, dimension) instances, measured directly from
+the framework's per-stage timing log. Online inference cost is measured
+separately, for a single new instance.\label{tab:pipelinecost}}
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+{\footnotesize\textbf{Pipeline component}} & {\footnotesize\textbf{Total (97 instances)}} & {\footnotesize\textbf{Per instance}} & {\footnotesize\textbf{Cost type}}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\footnotesize Landscape sampling}{\footnotesize\par}
+
+{\footnotesize (Stage 2)}
+\end{cellvarwidth} & {\footnotesize 7.7 s} & {\footnotesize 0.08 s} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize Offline}{\footnotesize\par}
+
+{\footnotesize repeated per new problem}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\footnotesize ELA feature extraction}{\footnotesize\par}
+
+{\footnotesize (Stage 3)}
+\end{cellvarwidth} & {\footnotesize 2416.7 s} & {\footnotesize 24.9 s} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize Offline}{\footnotesize\par}
+
+{\footnotesize repeated per new problem}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\footnotesize Random Forest training}{\footnotesize\par}
+
+{\footnotesize (Stage 4)}
+\end{cellvarwidth} & {\footnotesize 4.8 s} & {\footnotesize n/a} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize Offline}{\footnotesize\par}
+
+{\footnotesize one-time, not repeated}
+\end{cellvarwidth}\tabularnewline
+\hline 
+\begin{cellvarwidth}[t]
+\centering
+{\footnotesize Online inference}{\footnotesize\par}
+
+{\footnotesize (single prediction)}
+\end{cellvarwidth} & {\footnotesize n/a} & {\footnotesize 0.014 s} & \begin{cellvarwidth}[t]
+\centering
+{\footnotesize Online}{\footnotesize\par}
+
+{\footnotesize per new problem}
+\end{cellvarwidth}\tabularnewline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Wall-clock cost of running each candidate optimizer once, to its full
+dimension-scaled budget, across all 97 (problem, dimension) instances,
+derived from the per-iteration timings underlying Table \ref{tab:compute}.
+\textquotedbl Brute-force\textquotedbl{} totals the cost of running
+every one of the eight candidates once on every instance, the exhaustive
+alternative to landscape-aware selection.\label{tab:optcost}}
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+\textbf{Method} & \textbf{Total (97 instances)} & \textbf{Per instance}\tabularnewline
+\hline 
+lmcmaes & 40.6 s & 0.42 s\tabularnewline
+\hline 
+sparq & 54.5 s & 0.56 s\tabularnewline
+\hline 
+gwo & 135.9 s & 1.40 s\tabularnewline
+\hline 
+ea4eig & 140.9 s & 1.45 s\tabularnewline
+\hline 
+acor & 182.9 s & 1.89 s\tabularnewline
+\hline 
+rde & 213.1 s & 2.20 s\tabularnewline
+\hline 
+cmaes & 917.0 s & 9.45 s\tabularnewline
+\hline 
+sa & 2657.6 s & 27.40 s\tabularnewline
+\hline 
+\textbf{Brute-force (all 8 once)} & \textbf{4342.5 s} & \textbf{44.77 s}\tabularnewline
+\end{tabular}
+\end{table}
+
+Two conclusions follow directly from Tables \ref{tab:pipelinecost}
+and \ref{tab:optcost}. First, ELA feature extraction, not landscape
+sampling, dominates the pipeline's offline cost: at 24.9 s per instance
+it accounts for more than 99.6\% of the combined Stage 2 + Stage 3
+time, while drawing the 100xD-point sample itself costs a fraction
+of a second. Second, whether landscape-aware selection is worth its
+cost depends entirely on what it is being compared against. Against
+the exhaustive alternative, running every one of the eight candidates
+once to see which wins, it is cheaper: 2424.4 s (Stages 2-3) versus
+4342.5 s brute-force, a 44\% reduction. Against simply trusting a
+single, cheap default, however, it is far more expensive: roughly
+25 s of offline computation per new problem, against 0.56 s to run
+sparq (the Single Best Solver baseline, Table \ref{tab:lopo}) or
+0.42 s for the cheapest candidate, lmcmaes. The case for paying this
+cost is therefore an accuracy argument, not a speed argument: it is
+justified when closing part of the 44.3-percentage-point gap between
+SBS and the landscape-aware model's 67.0\% accuracy (Table \ref{tab:lopo})
+is worth roughly 45-60 times the wall-clock cost of simply running
+a strong default optimizer once, for instance because the selected
+optimizer will itself be run for a much larger downstream budget,
+or applied repeatedly, amortizing the one-time selection cost. A practitioner
+who only needs a single, reasonably strong recommendation and cannot
+amortize this cost is better served by SBS alone.
+
+On whether the sampling budget can be reused rather than treated as
+pure overhead: five of the eight candidates in this study, acor, ea4eig,
+gwo, sa, and sparq, use a population of exactly 100 individuals (Section
+\ref{sec:ExperimentalDesign}), identical to the number of points
+drawn for landscape sampling. For these five methods, the landscape
+sample computed for ELA feature extraction could, in principle, be
+reused directly as the selected optimizer's initial population, at
+no additional function-evaluation cost: the two stages currently draw
+independent samples of the same size from the same distribution, purely
+because the pipeline treats landscape analysis and optimization as
+separate stages. The remaining three methods would benefit only partially:
+cmaes and lmcmaes use a much smaller, dimension-scaled population
+(10-15 in this study), so only a subset of the landscape sample would
+be needed, while rde's population scales up to several hundred individuals,
+so the landscape sample alone would not be sufficient and additional
+evaluations would still be required. The present pipeline does not
+implement this reuse; doing so would not reduce the ELA extraction
+cost that dominates Table \ref{tab:pipelinecost} but would eliminate
+the separate cost of initializing the selected optimizer for the five
+methods above, a modest, low-risk optimization left for future implementation
+work rather than attempted here.
 
 Table \ref{tab:wilcoxon} reports the full set of pairwise Wilcoxon
 signed-rank comparisons between the eight optimizers, with Holm-corrected
@@ -790,22 +1032,23 @@ sa & sparq & 97 & 7.93 & 5.46e-14 & Yes\tabularnewline
 \end{tabular}
 \end{table}
 
-Of the 28 pairwise comparisons in Table \ref{tab:wilcoxon}, 26 remain
-statistically significant after Holm correction. Only two pairs do
-not: acor versus sa (z = 1.09, Holm-corrected p = 0.548) and lmcmaes
-versus rde (z = 0.19, Holm-corrected p = 0.849). These are precisely
-the two pairs whose average ranks in Table \ref{tab:rankings} are
-closest together, acor and sa differ by only 0.04 ranks, lmcmaes and
-rde by 0.41, which is a useful consistency check: the pairwise test
-is not manufacturing artificial separations between methods whose
-performance is genuinely similar, and conversely is not failing to
-detect real differences elsewhere. In practice this means that, within
-the present benchmark suite, distinguishing acor from sa, or lmcmaes
-from rde, is not a meaningful sub-problem for a selection model to
-solve, since the underlying performance data itself does not support
-such a distinction. The number of paired instances entering each test
-(the n column) is not always 97, since the Wilcoxon signed-rank test
-excludes ties (pairs with identical performance are uninformative
+Of the 28 pairwise comparisons in Table \ref{tab:wilcoxon}, 23 remain
+statistically significant after Holm correction. The remaining five
+are the pairs already identified above: acor versus gwo, acor versus
+lmcmaes, ea4eig versus rde, gwo versus lmcmaes, and rde versus sparq.
+Four of these five are among the pairs whose average ranks in Table
+\ref{tab:rankings} are closest together (rank gaps of 0.16--0.35),
+the exception being gwo versus lmcmaes (gap of 0.62); by contrast,
+the single closest pair overall, sparq versus ea4eig (gap of only
+0.07), is nonetheless statistically significant, showing that closeness
+in average rank does not by itself guarantee non-significance. In
+practice this means that, within the present benchmark suite, distinguishing
+acor from gwo, acor from lmcmaes, gwo from lmcmaes, ea4eig from rde,
+or rde from sparq is not a meaningful sub-problem for a selection
+model to solve, since the underlying performance data itself does
+not support such a distinction. The number of paired instances entering
+each test (the n column) is not always 97, since the Wilcoxon signed-rank
+test excludes ties (pairs with identical performance are uninformative
 for a signed-rank comparison), so pairs involving two closely matched
 top-tier methods, such as cmaes and lmcmaes, contribute noticeably
 fewer usable comparisons than pairs drawn from more clearly separated
@@ -868,7 +1111,7 @@ gloss of what each feature measures.\label{tab:features}}
 \hline 
 ela\_level.mmce\_lda\_50 & 0.0557 & Separability of good points\tabularnewline
 \hline 
-ela\_meta.lin\_simple.adj\_r2 & 0.0553 & Overall landscape linearity\tabularnewline
+ela\_meta.lin\_simple.adj\_r2 & 0.05 & Overall landscape linearity\tabularnewline
 \hline 
 ela\_meta.lin\_simple.coef.max\_by\_min & 0.0520 & Uneven variable sensitivity\tabularnewline
 \hline 
@@ -916,8 +1159,279 @@ family, measures the proportion of essentially flat steps along a
 random walk across the landscape and is the fourth most important
 predictor overall. Taken together, the model's strongest predictors
 describe how separable, how linear, how funnel-shaped, and how flat
-a landscape is, four largely independent structural properties that
-jointly determine algorithm selection on this suite.
+a landscape is, four largely independent structural properties the
+trained Random Forest relies on most heavily when predicting algorithm
+selection on this suite. Gini importance reflects how useful a feature
+was for splitting nodes in the fitted trees, a measure of predictive
+association within this particular model, not a causal test of which
+landscape properties actually determine optimizer performance; establishing
+a causal role would require a separate, targeted analysis, such as
+controlled ablation of individual landscape properties, beyond the
+scope of this study.
+
+For completeness, and to give the full, reproducible feature specification
+a reviewer or future user of this pipeline would need, Table \ref{tab:allfeatures}lists
+all 53 ELA features used to train the Random Forest, grouped by feature
+family and ranked by Gini importance, extending the top-10 view already
+given in Table \ref{tab:features}. Six of the 53 (one per family)
+are the \textquotedbl costs\_runtime\textquotedbl{} diagnostics discussed
+in Section \ref{sec:Framework}; all six rank among the ten least
+important features, consistent with the model deriving its predictive
+signal from landscape structure rather than incidental computation
+cost.
+
+\begin{table}[H]
+\caption{Complete list of all 53 ELA features used to train the Random Forest,
+grouped by feature family and ranked by Gini importance (descending).\label{tab:allfeatures}}
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+{\footnotesize\textbf{Rank}} & {\footnotesize\textbf{Feature}} & {\footnotesize\textbf{Family}} & {\footnotesize\textbf{Gini importance}}\tabularnewline
+\hline 
+{\footnotesize 1} & {\footnotesize ela\_level.mmce\_lda\_50} & {\footnotesize ela\_level} & {\footnotesize 0.0566}\tabularnewline
+\hline 
+{\footnotesize 2} & {\footnotesize ela\_meta.lin\_simple.adj\_r2} & {\footnotesize ela\_meta} & {\footnotesize 0.0545}\tabularnewline
+\hline 
+{\footnotesize 3} & {\footnotesize ela\_meta.lin\_simple.coef.max\_by\_min} & {\footnotesize ela\_meta} & {\footnotesize 0.0519}\tabularnewline
+\hline 
+{\footnotesize 4} & {\footnotesize ic.m0} & {\footnotesize ic} & {\footnotesize 0.0459}\tabularnewline
+\hline 
+{\footnotesize 5} & {\footnotesize ela\_meta.lin\_w\_interact.adj\_r2} & {\footnotesize ela\_meta} & {\footnotesize 0.0399}\tabularnewline
+\hline 
+{\footnotesize 6} & {\footnotesize disp.diff\_mean\_02} & {\footnotesize disp} & {\footnotesize 0.0366}\tabularnewline
+\hline 
+{\footnotesize 7} & {\footnotesize disp.diff\_median\_02} & {\footnotesize disp} & {\footnotesize 0.0344}\tabularnewline
+\hline 
+{\footnotesize 8} & {\footnotesize ela\_level.mmce\_lda\_25} & {\footnotesize ela\_level} & {\footnotesize 0.0339}\tabularnewline
+\hline 
+{\footnotesize 9} & {\footnotesize disp.diff\_median\_10} & {\footnotesize disp} & {\footnotesize 0.0293}\tabularnewline
+\hline 
+{\footnotesize 10} & {\footnotesize ela\_level.mmce\_qda\_50} & {\footnotesize ela\_level} & {\footnotesize 0.0293}\tabularnewline
+\hline 
+{\footnotesize 11} & {\footnotesize ela\_level.mmce\_qda\_25} & {\footnotesize ela\_level} & {\footnotesize 0.0283}\tabularnewline
+\hline 
+{\footnotesize 12} & {\footnotesize disp.diff\_mean\_10} & {\footnotesize disp} & {\footnotesize 0.0283}\tabularnewline
+\hline 
+{\footnotesize 13} & {\footnotesize disp.diff\_median\_05} & {\footnotesize disp} & {\footnotesize 0.0271}\tabularnewline
+\hline 
+{\footnotesize 14} & {\footnotesize disp.diff\_mean\_25} & {\footnotesize disp} & {\footnotesize 0.0271}\tabularnewline
+\hline 
+{\footnotesize 15} & {\footnotesize nbc.nb\_fitness.cor} & {\footnotesize nbc} & {\footnotesize 0.0244}\tabularnewline
+\hline 
+{\footnotesize 16} & {\footnotesize ela\_level.mmce\_lda\_10} & {\footnotesize ela\_level} & {\footnotesize 0.0228}\tabularnewline
+\hline 
+{\footnotesize 17} & {\footnotesize ela\_distr.skewness} & {\footnotesize ela\_distr} & {\footnotesize 0.0223}\tabularnewline
+\hline 
+{\footnotesize 18} & {\footnotesize disp.diff\_median\_25} & {\footnotesize disp} & {\footnotesize 0.0211}\tabularnewline
+\hline 
+{\footnotesize 19} & {\footnotesize disp.diff\_mean\_05} & {\footnotesize disp} & {\footnotesize 0.0200}\tabularnewline
+\hline 
+{\footnotesize 20} & {\footnotesize ela\_level.mmce\_qda\_10} & {\footnotesize ela\_level} & {\footnotesize 0.0196}\tabularnewline
+\hline 
+{\footnotesize 21} & {\footnotesize ela\_level.lda\_qda\_10} & {\footnotesize ela\_level} & {\footnotesize 0.0160}\tabularnewline
+\hline 
+{\footnotesize 22} & {\footnotesize nbc.nn\_nb.sd\_ratio} & {\footnotesize nbc} & {\footnotesize 0.0155}\tabularnewline
+\hline 
+{\footnotesize 23} & {\footnotesize disp.ratio\_mean\_10} & {\footnotesize disp} & {\footnotesize 0.0153}\tabularnewline
+\hline 
+{\footnotesize 24} & {\footnotesize ic.h\_max} & {\footnotesize ic} & {\footnotesize 0.0151}\tabularnewline
+\hline 
+{\footnotesize 25} & {\footnotesize disp.ratio\_median\_10} & {\footnotesize disp} & {\footnotesize 0.0141}\tabularnewline
+\hline 
+{\footnotesize 26} & {\footnotesize ela\_level.lda\_qda\_50} & {\footnotesize ela\_level} & {\footnotesize 0.0139}\tabularnewline
+\hline 
+{\footnotesize 27} & {\footnotesize ela\_meta.lin\_simple.intercept} & {\footnotesize ela\_meta} & {\footnotesize 0.0136}\tabularnewline
+\hline 
+{\footnotesize 28} & {\footnotesize disp.ratio\_mean\_02} & {\footnotesize disp} & {\footnotesize 0.0126}\tabularnewline
+\hline 
+{\footnotesize 29} & {\footnotesize ela\_distr.kurtosis} & {\footnotesize ela\_distr} & {\footnotesize 0.0118}\tabularnewline
+\hline 
+{\footnotesize 30} & {\footnotesize ela\_meta.lin\_simple.coef.min} & {\footnotesize ela\_meta} & {\footnotesize 0.0117}\tabularnewline
+\hline 
+{\footnotesize 31} & {\footnotesize nbc.nn\_nb.cor} & {\footnotesize nbc} & {\footnotesize 0.0112}\tabularnewline
+\hline 
+{\footnotesize 32} & {\footnotesize ic.costs\_runtime} & {\footnotesize ic} & {\footnotesize 0.0110}\tabularnewline
+\hline 
+{\footnotesize 33} & {\footnotesize ela\_meta.quad\_w\_interact.adj\_r2} & {\footnotesize ela\_meta} & {\footnotesize 0.0109}\tabularnewline
+\hline 
+{\footnotesize 34} & {\footnotesize disp.costs\_runtime} & {\footnotesize disp} & {\footnotesize 0.0108}\tabularnewline
+\hline 
+{\footnotesize 35} & {\footnotesize nbc.dist\_ratio.coeff\_var} & {\footnotesize nbc} & {\footnotesize 0.0108}\tabularnewline
+\hline 
+{\footnotesize 36} & {\footnotesize nbc.nn\_nb.mean\_ratio} & {\footnotesize nbc} & {\footnotesize 0.0107}\tabularnewline
+\hline 
+{\footnotesize 37} & {\footnotesize disp.ratio\_median\_25} & {\footnotesize disp} & {\footnotesize 0.0105}\tabularnewline
+\hline 
+{\footnotesize 38} & {\footnotesize ic.eps\_max} & {\footnotesize ic} & {\footnotesize 0.0101}\tabularnewline
+\hline 
+{\footnotesize 39} & {\footnotesize ela\_level.costs\_runtime} & {\footnotesize ela\_level} & {\footnotesize 0.0100}\tabularnewline
+\hline 
+{\footnotesize 40} & {\footnotesize disp.ratio\_mean\_05} & {\footnotesize disp} & {\footnotesize 0.0098}\tabularnewline
+\hline 
+{\footnotesize 41} & {\footnotesize ela\_level.lda\_qda\_25} & {\footnotesize ela\_level} & {\footnotesize 0.0097}\tabularnewline
+\hline 
+{\footnotesize 42} & {\footnotesize disp.ratio\_mean\_25} & {\footnotesize disp} & {\footnotesize 0.0092}\tabularnewline
+\hline 
+{\footnotesize 43} & {\footnotesize ic.eps\_ratio} & {\footnotesize ic} & {\footnotesize 0.0091}\tabularnewline
+\hline 
+{\footnotesize 44} & {\footnotesize ic.eps\_s} & {\footnotesize ic} & {\footnotesize 0.0090}\tabularnewline
+\hline 
+{\footnotesize 45} & {\footnotesize ela\_meta.lin\_simple.coef.max} & {\footnotesize ela\_meta} & {\footnotesize 0.0087}\tabularnewline
+\hline 
+{\footnotesize 46} & {\footnotesize ela\_meta.quad\_simple.cond} & {\footnotesize ela\_meta} & {\footnotesize 0.0087}\tabularnewline
+\hline 
+{\footnotesize 47} & {\footnotesize nbc.costs\_runtime} & {\footnotesize nbc} & {\footnotesize 0.0086}\tabularnewline
+\hline 
+{\footnotesize 48} & {\footnotesize disp.ratio\_median\_02} & {\footnotesize disp} & {\footnotesize 0.0083}\tabularnewline
+\hline 
+{\footnotesize 49} & {\footnotesize ela\_meta.quad\_simple.adj\_r2} & {\footnotesize ela\_meta} & {\footnotesize 0.0071}\tabularnewline
+\hline 
+{\footnotesize 50} & {\footnotesize disp.ratio\_median\_05} & {\footnotesize disp} & {\footnotesize 0.0070}\tabularnewline
+\hline 
+{\footnotesize 51} & {\footnotesize ela\_meta.costs\_runtime} & {\footnotesize ela\_meta} & {\footnotesize 0.0065}\tabularnewline
+\hline 
+{\footnotesize 52} & {\footnotesize ela\_distr.number\_of\_peaks} & {\footnotesize ela\_distr} & {\footnotesize 0.0061}\tabularnewline
+\hline 
+{\footnotesize 53} & {\footnotesize ela\_distr.costs\_runtime} & {\footnotesize ela\_distr} & {\footnotesize 0.0033}\tabularnewline
+\end{tabular}
+\end{table}
+
+Table \ref{tab:allfeatures}'s Gini importance ranking identifies
+which features the trained Random Forest relies on, but, as Section
+\ref{sec:ExperimentalResults}already notes, this reflects association
+within one fitted model rather than a controlled test of necessity
+or sufficiency. Table \ref{tab:ablation}reports exactly such a test:
+the same fold-safe Leave-One-Problem-Out protocol, repeated once per
+ELA feature family, once with that family excluded from the other
+52 features (a necessity check) and once with only that family's features
+available (a sufficiency check), holding every other aspect of the
+pipeline, folds, tie-break policy, and classifier hyperparameters,
+fixed.
+
+\begin{table}[H]
+\caption{Feature-group ablation (Reviewer 2, comment 4): Leave-One-Problem-Out
+lenient accuracy when each ELA feature family is excluded (necessity)
+or used alone (sufficiency), against the full, 53-feature model (Table
+\ref{tab:lopo}). Every row uses the identical fold-safe LOPO protocol,
+differing only in which feature columns are available to the classifier.\label{tab:ablation}}
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+\textbf{Configuration} & \textbf{n features} & \textbf{Lenient accuracy (\%)} & \textbf{$\Delta$ vs. full (pp)}\tabularnewline
+\hline 
+\textbf{full (all 6 families)} & \textbf{53} & \textbf{67.0} & \textbf{0.0}\tabularnewline
+\hline 
+minus disp & 36 & 72.2 & +5.2\tabularnewline
+\hline 
+only disp & 17 & 62.9 & -4.1\tabularnewline
+\hline 
+minus ela\_distr & 49 & 66.0 & -1.0\tabularnewline
+\hline 
+only ela\_distr & 4 & 49.5 & -17.5\tabularnewline
+\hline 
+minus ela\_level & 43 & 67.0 & 0.0\tabularnewline
+\hline 
+only ela\_level & 10 & 70.1 & +3.1\tabularnewline
+\hline 
+minus ela\_meta & 43 & 66.0 & -1.0\tabularnewline
+\hline 
+only ela\_meta & 10 & 73.2 & +6.2\tabularnewline
+\hline 
+minus ic & 47 & 63.9 & -3.1\tabularnewline
+\hline 
+only ic & 6 & 62.9 & -4.1\tabularnewline
+\hline 
+minus nbc & 47 & 64.9 & -2.1\tabularnewline
+\hline 
+only nbc & 6 & 61.9 & -5.2\tabularnewline
+\end{tabular}
+\end{table}
+
+Two patterns stand out. First, no single family is strictly necessary:
+excluding any one family costs at most 3.1 percentage points (ic),
+and excluding ela\_level or disp actually improves accuracy (by 0.0
+and 5.2 points respectively), indicating the six families carry substantially
+redundant signal rather than each contributing an indispensable, disjoint
+piece. Second, the families are far from equally sufficient on their
+own: ela\_meta alone, using only 10 of the 53 features, reaches 73.2\%,
+6.2 points above the full model, and ela\_level alone reaches 70.1\%;
+both exceed every disp/ic/nbc configuration and every exclusion configuration.
+At the other extreme, ela\_distr alone, with only 4 features, collapses
+to 49.5\%, a 17.5-point drop, though still comfortably above the 30.9\%
+Single Best Solver baseline (Table \ref{tab:lopo}). This concentration
+of predictive signal in ela\_meta and, to a lesser extent, ela\_level
+is consistent with, and independently corroborates, the Gini importance
+ranking in Table \ref{tab:features}, where features from exactly
+these two families occupy 6 of the top 10 positions, using a methodology
+(ablation) that does not share any of the assumptions behind Gini
+importance.
+
+That two configurations, minus disp and only ela\_meta, outperform
+the full 53-feature model is itself informative: with only 97 training
+instances, adding features beyond a certain point appears to dilute
+rather than help the Random Forest, consistent with a mild curse-of-dimensionality
+effect rather than every additional feature contributing genuine signal.
+This suggests that feature selection, for instance restricting the
+model to the ela\_meta and ela\_level families identified here, is
+a concrete, testable direction for improving on the 67.0\% headline
+accuracy in future work, rather than a claim we pursue further in
+the present study.
+
+A further part of Reviewer 2, comment 4 asks for comparison with alternative
+selection models, to establish whether the Random Forest used throughout
+this study is actually the strongest available choice, rather than
+an unexamined default. Table \ref{tab:classifiers}reports three alternatives,
+an RBF-kernel support vector machine, gradient boosting, and multinomial
+logistic regression, each run through the identical fold-safe Leave-One-Problem-Out
+protocol, on the same 53 features and the same folds as the Random
+Forest, differing only in the classifier itself and, for the two scale-sensitive
+alternatives, whether features are standardized (a scaler fit on each
+fold's training data only, to avoid the same kind of leakage Section
+\ref{sec:Discussion}discusses for the tie-break policy).
+
+\begin{table}[H]
+\caption{Comparison with alternative selection models (Reviewer 2, comment
+4): Leave-One-Problem-Out lenient accuracy for three alternative classifiers
+against this study's Random Forest (Table \ref{tab:lopo}), all on
+the same 53 features and folds. \textquotedbl Scaled features\textquotedbl{}
+indicates a per-fold StandardScaler fit on training data only.\label{tab:classifiers}}
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+\textbf{Classifier} & \textbf{Scaled features} & \textbf{Lenient accuracy (\%)} & \textbf{$\Delta$ vs. RF (pp)}\tabularnewline
+\hline 
+\textbf{Random Forest (this study)} & \textbf{No} & \textbf{67.0} & \textbf{0.0}\tabularnewline
+\hline 
+Gradient Boosting & No & 63.9 & -3.1\tabularnewline
+\hline 
+SVM (RBF kernel) & Yes & 59.8 & -7.2\tabularnewline
+\hline 
+Logistic Regression & Yes & 56.7 & -10.3\tabularnewline
+\end{tabular}
+\end{table}
+
+This study's Random Forest is, in fact, the strongest of the four:
+gradient boosting, the closest competitor, trails by 3.1 percentage
+points, and the two scale-sensitive linear/kernel methods trail by
+considerably more (7.2 and 10.3 points for SVM and logistic regression
+respectively). All four, however, comfortably exceed the 30.9\% Single
+Best Solver baseline (Table \ref{tab:lopo}), so the choice of classifier
+changes how much of the SBS-to-VBS gap is closed, not whether landscape-aware
+selection helps at all: even the weakest alternative, logistic regression,
+still closes the majority of that gap. The ordering, tree-based ensembles
+ahead of a kernel method ahead of a linear model, is consistent with
+a landscape-selection decision boundary that is not well approximated
+by a single linear separator in the 53-dimensional feature space,
+and with tree ensembles' well-documented robustness on small, tabular
+datasets of exactly this size. We did not tune any of the three alternatives
+beyond their scikit-learn defaults (Section \ref{sec:ExperimentalResults}reports
+the Random Forest's own hyperparameters, which were similarly taken
+from common practice rather than tuned for this dataset); a fully
+tuned comparison across classifiers, like the feature-selection direction
+noted above, is left for future work rather than pursued here.
 
 \begin{table}[H]
 \caption{Descriptive statistics, across all 97 problem instances, of the ten
@@ -1071,7 +1585,7 @@ baseline and the oracle Virtual Best Solver upper bound, across all
 \hline 
 \textbf{Selection strategy} & \textbf{Accuracy (\%)}\tabularnewline
 \hline 
-Random Forest (landscape-aware) & 75.3\tabularnewline
+Random Forest (landscape-aware) & 67.0\tabularnewline
 \hline 
 Single Best Solver (SBS) & 30.9\tabularnewline
 \hline 
@@ -1084,14 +1598,14 @@ and validated under the Leave-One-Problem-Out protocol described in
 the same section, so that every dimension of a given problem is withheld
 from training as a single block, the Random Forest classifier correctly
 identifies the best-performing optimizer, or one of the tied best,
-for 75.3\% of the 97 held-out instances. This exceeds the Single Best
+for 67.0\% of the 97 held-out instances. This exceeds the Single Best
 Solver baseline, which within each training fold recommends whichever
 single method has the best average rank among the remaining training
 instances, in practice sparq in the great majority of folds (79 of
 97) and ea4eig in the rest (18 of 97), consistent with their standing
 as the top two methods by average rank in Table \ref{tab:rankings}.
-The model exceeds this baseline by 44.3 percentage points (30.9\%),
-and closes 64.2\% of the gap between that baseline and the oracle
+The model exceeds this baseline by 36.1 percentage points (30.9\%),
+and closes 52.2\% of the gap between that baseline and the oracle
 Virtual Best Solver's 100\% upper bound, the accuracy a hypothetical
 selector that always chose correctly would achieve. This margin is
 neither large nor guaranteed by the experimental design, and that
@@ -1104,38 +1618,176 @@ selection on this suite. That the model does exceed SBS, without approaching
 the VBS ceiling, places the result appropriately between the two extremes
 the introduction identified as the boundaries of a meaningful algorithm-selection
 experiment, neither trivial, since SBS alone would already be adequate
-in that case, nor unachievable, since VBS remains a further 24.7 percentage
+in that case, nor unachievable, since VBS remains a further 33.0 percentage
 points away. The tie-breaking procedure used to construct training
 labels, discussed further in Section 5, means this figure is best
 read as a first, methodologically sound estimate of what landscape-aware
 selection can achieve on this suite, rather than as a ceiling on what
 the approach could ultimately deliver with further tuning.
 
+The 67.0\% versus 30.9\% comparison in Table \ref{tab:lopo} is a
+paired comparison, since both the Random Forest and the Single Best
+Solver are evaluated on the same 97 held-out instances, which makes
+McNemar's test the appropriate significance test. Of the 97 instances,
+the Random Forest is correct and the Single Best Solver is wrong on
+35 instances, while the reverse, the Single Best Solver correct and
+the Random Forest wrong, never occurs. The exact binomial form of
+McNemar's test on this 35-to-0 split is decisively significant (p
+$=5.8\times10^{-11}$; continuity-corrected $\chi^{2}(1)=33.0$, p
+$=9.1\times10^{-9}$), confirming that the Random Forest's advantage
+over the Single Best Solver baseline is not attributable to chance.
+Table \ref{tab:sigtest} further reports two class-imbalance-aware
+metrics computed against the single canonical training label used
+for each instance (Section \ref{sec:Discussion} discusses how this
+label is chosen): balanced accuracy, the average per-class recall
+across the eight optimizers, and macro-averaged F1. Both metrics drop
+substantially relative to the lenient accuracy reported in Table \ref{tab:lopo}
+for the Random Forest (balanced accuracy 36.1\%, macro-F1 34.5\%),
+and drop even further for the Single Best Solver (balanced accuracy
+12.5\%, macro-F1 9.4\%), which by construction can only ever predict
+sparq or ea4eig and therefore has zero recall on every other class.
+The Random Forest still outperforms the Single Best Solver by a wide
+margin on both class-imbalance-aware metrics, but its own per-class
+recall is zero on the two rarest labels in the training data, cmaes
+(1 instance) and sa (3 instances): the model never predicts either
+method, even on the instances where one of them is the actual best
+performer. This confirms, concretely rather than speculatively, the
+class-imbalance concern raised in Section \ref{sec:Discussion} the
+model's lenient accuracy is a genuine improvement over the baseline,
+but it is also, in part, an artifact of the training-label imbalance,
+and a practitioner relying on this model should not expect it to ever
+recommend cmaes or sa, regardless of the landscape features of a new
+problem.
+
+\begin{table}[H]
+\caption{Significance test and class-imbalance-aware evaluation of the Random
+Forest landscape-aware selection model against the Single Best Solver
+baseline, computed from the per-instance Leave-One-Problem-Out prediction
+record underlying Table \ref{tab:lopo}. McNemar's test on the paired
+correctness record (35 instances correct for Random Forest and wrong
+for SBS, 0 the reverse) gives $p=5.8\times10^{-11}$ (exact binomial).
+Balanced accuracy and macro-F1 are computed against the single canonical
+training label per instance (see Section \ref{sec:Discussion}).\label{tab:sigtest}}
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+\textbf{Metric} & \textbf{Random Forest} & \textbf{Single Best Solver}\tabularnewline
+\hline 
+Lenient accuracy (\%) {[}Table 8 criterion{]} & 67.0 & 30.9\tabularnewline
+\hline 
+Strict single-label accuracy (\%) & 57.7 & 30.9\tabularnewline
+\hline 
+Balanced accuracy (\%) & 36.1 & 12.5\tabularnewline
+\hline 
+Macro-averaged F1 (\%) & 34.5 & 9.4\tabularnewline
+\end{tabular}
+\end{table}
+
+
 \section{Discussion and Limitations\label{sec:Discussion}}
 
-Taken together, the results in Section 4 support a coherent picture.
-The eight optimizers separate into four statistically distinguishable
-performance tiers rather than a single clear winner, the differences
-between all but five of the 28 pairs of methods are robust to Holm-corrected
-pairwise testing, the three methods that anchor the top tier divide
-the benchmark suite between them rather than one simply dominating
-the others, and a landscape-aware Random Forest model trained on this
-structure is intended to predict the best-performing optimizer for
-a previously unseen problem more accurately than the naive strategy
-of always recommending the same method (Table \ref{tab:lopo}). Each
-of these findings depends on the others: the four-tier structure establishes
-that no single method makes the comparison trivial, and the family-level
-specialization in Table \ref{tab:familyspec} supplies the landscape-dependent
-signal a selection model could plausibly learn. The accuracy result
-in Table \ref{tab:lopo} reflects rde competitive at the top of the
-ranking (Table \ref{tab:compute}). The Single Best Solver baseline
-the model is compared against is, correspondingly, sparq or ea4eig
-depending on the training fold, the same two methods that lead Table
-\ref{tab:rankings} by average rank, since ties in the training labels
-are broken in favour of whichever tied method has the better overall
-average rank rather than arbitrarily, as discussed further below.
-The remainder of this section discusses this and other limitations
-that qualify how far the picture in this paper should be generalized.
+Taken together, the results in Section \ref{sec:ExperimentalResults}
+support a coherent picture. The eight optimizers separate into four
+statistically distinguishable performance tiers rather than a single
+clear winner, the differences between all but five of the 28 pairs
+of methods are robust to Holm-corrected pairwise testing, the three
+methods that anchor the top tier divide the benchmark suite between
+them rather than one simply dominating the others, and a landscape-aware
+Random Forest model trained on this structure is intended to predict
+the best-performing optimizer for a previously unseen problem more
+accurately than the naive strategy of always recommending the same
+method (Table \ref{tab:lopo}). Each of these findings depends on
+the others: the four-tier structure establishes that no single method
+makes the comparison trivial, and the family-level specialization
+in Table \ref{tab:familyspec} supplies the landscape-dependent signal
+a selection model could plausibly learn. The accuracy result in Table
+\ref{tab:lopo} reflects rde competitive at the top of the ranking
+(Table \ref{tab:compute}). The Single Best Solver baseline the model
+is compared against is, correspondingly, sparq or ea4eig depending
+on the training fold, the same two methods that lead Table \ref{tab:rankings}
+by average rank, since ties in the training labels are broken in favour
+of whichever tied method has the better overall average rank rather
+than arbitrarily, as discussed further below. The remainder of this
+section discusses this and other limitations that qualify how far
+the picture in this paper should be generalized.
+
+A further methodological question concerns the independence assumption
+underlying the Friedman and Wilcoxon tests in Table \ref{tab:rankings}
+and Table \ref{tab:wilcoxon}, which treat all 97 (problem, dimension)
+instances as exchangeable blocks. Different dimensions of the same
+problem are not strictly independent, since they share the same underlying
+function and are optimized by the same method under the same protocol;
+a genuinely independent-blocks design would instead treat each of
+the 35 problems as a single block. As a robustness check, we repeated
+the ranking analysis with each method's instance-level rank averaged
+across all evaluated dimensions of a given problem, then re-ranked
+within each problem, yielding 35 independent blocks (Table \ref{tab:blockcheck}).
+The resulting average-rank ordering reproduces the same four-tier
+structure reported in Table \ref{tab:rankings}, and the Friedman
+test remains highly significant ($\chi^{2}(7)=122.7$, p $=2.1\times10^{-23}$),
+compared with $\chi^{2}(7)=320.6$, p $<10^{-64}$ at the instance
+level. As expected with fewer, coarser blocks, more pairwise Wilcoxon
+comparisons lose significance after Holm correction at the problem
+level (9 of 28, versus 5 at the instance level), reflecting reduced
+statistical power rather than a qualitative change in the ranking;
+critically, the five pairs non-significant at the instance level remain
+non-significant here, and no pair reverses tier membership. We therefore
+report the instance-level analysis in Table \ref{tab:rankings} and
+Table \ref{tab:wilcoxon} as the primary result, since it uses the
+full resolution of the experimental design, while treating Table \ref{tab:blockcheck}
+as confirmation that the tiering it reveals is not an artifact of
+treating dependent dimensions as independent blocks.
+
+\begin{table}[H]
+\caption{Robustness check: problem-level re-analysis (35 independent blocks,
+one per problem) against the instance-level analysis reported in Table
+\ref{tab:rankings} (97 blocks). Problem-level ranks are obtained
+by averaging each method's instance-level rank across a problem's
+evaluated dimensions, then re-ranking within each problem.\label{tab:blockcheck}}
+
+\centering{}%
+\begin{tabular}{ccccc}
+\hline 
+\textbf{Method} & \begin{cellvarwidth}[t]
+\centering
+\textbf{Avg. rank}
+
+\textbf{(97 instances)}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\textbf{Avg. rank}
+
+\textbf{(35 problems)}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\textbf{Wins}
+
+\textbf{(97)}
+\end{cellvarwidth} & \begin{cellvarwidth}[t]
+\centering
+\textbf{Wins}
+
+\textbf{(35)}
+\end{cellvarwidth}\tabularnewline
+\hline 
+sparq & 2.78 & 2.77 & 48 & 15\tabularnewline
+\hline 
+ea4eig & 2.85 & 2.77 & 47 & 17\tabularnewline
+\hline 
+rde & 3.01 & 2.77 & 48 & 16\tabularnewline
+\hline 
+cmaes & 3.96 & 3.91 & 37 & 11\tabularnewline
+\hline 
+lmcmaes & 5.10 & 5.17 & 29 & 9\tabularnewline
+\hline 
+acor & 5.37 & 5.54 & 18 & 4\tabularnewline
+\hline 
+gwo & 5.72 & 5.86 & 9 & 2\tabularnewline
+\hline 
+sa & 7.22 & 7.20 & 3 & 0\tabularnewline
+\end{tabular}
+\end{table}
 
 The clearest remaining subtlety concerns how ties were broken when
 constructing the training labels used to fit the selection model.
@@ -1147,29 +1799,51 @@ method. Ties are common in this dataset, roughly half of the 97 instances
 (50) have more than one method sharing the best recorded performance.
 Rather than breaking these ties by an arbitrary rule such as alphabetical
 order, the single training label is chosen as whichever tied method
-has the best overall average rank in Table \ref{tab:rankings}, so
-the label reflects genuine relative strength rather than an accident
-of spelling. In practice this means sparq, the method with the best
-average rank overall, wins all 41 of the ties it participates in,
-ea4eig, ranked second, wins the 7 ties where sparq is absent, and
-rde, ranked third, wins the remaining 2. This does not affect the
-fairness of the accuracy figures reported in Table \ref{tab:lopo},
-since evaluation credits any tied method equally regardless of which
-one was chosen as the canonical label, but it does mean the training
-label distribution is weighted toward the strongest methods rather
-than distributed arbitrarily. The same rank-based rule also determines
-the identity of the Single Best Solver baseline: rather than the most
-frequent alphabetically tie-broken label, SBS is defined directly
-from each training fold's raw performance data as the method with
-the best average rank in that fold, which is sparq in 79 of the 97
-folds and ea4eig in the remaining 18, exactly the two methods that
-lead Table \ref{tab:rankings} by average rank. A residual simplification
-remains: a single canonical label is still required to train a standard
-multi-class classifier, so an instance where several methods are genuinely
-equivalent still contributes one label rather than several. Training
-the classifier directly on all tied labels as simultaneously correct
-targets, rather than collapsing them to one before training, remains
-a natural direction for further refinement.
+has the best average rank, so the label reflects genuine relative
+strength rather than an accident of spelling. An earlier version of
+this pipeline computed that average rank once, globally, over the
+full 97-instance table, before the Leave-One-Problem-Out loop began,
+and reused the same preference order in every fold. This let a held-out
+problem's own performance data help decide the tie-break preference
+order used to label the OTHER problems the model was trained on for
+the very fold being tested on that problem: a narrow but genuine form
+of train/test leakage, since a training label should never depend
+on the instance it will later be evaluated against. We thank a reviewer
+for pointing this out. The fix, applied throughout this revision,
+computes the tie-break preference order separately inside each fold,
+from that fold's training problems only, so the held-out problem never
+influences any label used to train the model tested on it. A canonical
+label can therefore now legitimately differ across folds for the same
+instance: of the 50 tied instances, 22 have a canonical label that
+alternates between sparq and ea4eig depending on which problem is
+held out, reflecting how close these two methods' average ranks are
+(2.78 and 2.85 in Table \ref{tab:rankings}); the remaining 28 are
+stable across every fold (19 sparq, 7 ea4eig, 2 rde). This does not
+affect the fairness of the accuracy figures reported in Table \ref{tab:lopo}
+itself, since evaluation credits any tied method equally regardless
+of which one was chosen as the canonical label for training; what
+the leakage affected was which instances' labels a given fold's classifier
+was trained on, which in turn affects what that classifier learns
+to predict. Correcting it lowers the Random Forest's Leave-One-Problem-Out
+accuracy from an earlier, leakage-affected 75.3\% to the 67.0\% now
+reported in Table \ref{tab:lopo} the model still exceeds the Single
+Best Solver baseline by a wide and statistically decisive margin (Table
+\ref{tab:sigtest} Section \ref{sec:ExperimentalResults}), but by
+a smaller, and now leakage-free, margin than originally reported.
+The same rank-based rule also determines the identity of the Single
+Best Solver baseline: rather than the most frequent alphabetically
+tie-broken label, SBS is defined directly from each training fold's
+raw performance data as the method with the best average rank in that
+fold, which is sparq in 79 of the 97 folds and ea4eig in the remaining
+18, exactly the two methods that lead Table \ref{tab:rankings} by
+average rank; this definition was already computed fold-by-fold from
+training data only and is unaffected by the fix above. A residual
+simplification remains: a single canonical label is still required
+to train a standard multi-class classifier, so an instance where several
+methods are genuinely equivalent still contributes one label rather
+than several. Training the classifier directly on all tied labels
+as simultaneously correct targets, rather than collapsing them to
+one before training, remains a natural direction for further refinement.
 
 A second point worth noting concerns the classical Powell function,
 the only one of the 35 benchmark problems whose declared dimension
@@ -1223,23 +1897,28 @@ commonly used in the algorithm-selection literature rather than optimized
 for this specific dataset through a nested cross-validation search,
 so the figures in Table \ref{tab:lopo} should be read as an achievable
 accuracy under a reasonable, literature-consistent configuration rather
-than the best accuracy this approach could in principle reach. No
-formal statistical test was applied to the difference between the
-Random Forest and Single Best Solver accuracies, since a paired significance
-test over 97 instances, while feasible in principle, requires the
-per-instance prediction record at a level of detail that falls outside
-the present study's scope. The training labels are also imbalanced,
-sparq, rde, and ea4eig together account for the large majority of
-best-performing outcomes (Table \ref{tab:rankings}), a three-way
-imbalance, which means a portion of any reported accuracy could in
-principle be attributable to the model learning this base-rate imbalance
-rather than genuine landscape-feature structure, a concern the family-level
-specialization result in Table \ref{tab:familyspec} partially, but
-not completely, addresses. Extending the evaluation with a class-imbalance-aware
-baseline, alternative classifiers trained on the same ELA features,
-and a properly powered significance test are natural next steps that
-would strengthen, without altering, the qualitative conclusion drawn
-here.
+than the best accuracy this approach could in principle reach. A paired
+McNemar's test on the per-instance predictions underlying Table \ref{tab:lopo}
+confirms that this advantage is statistically decisive rather than
+attributable to chance (Table \ref{tab:sigtest}, Section \ref{sec:ExperimentalResults}),
+which also reports balanced accuracy and macro-F1 to address class
+imbalance directly rather than relying on the lenient accuracy figure
+alone. The training labels are also imbalanced, sparq, rde, and ea4eig
+together account for the large majority of best-performing outcomes
+(Table \ref{tab:rankings}), a three-way imbalance, which means a
+portion of any reported accuracy could in principle be attributable
+to the model learning this base-rate imbalance rather than genuine
+landscape-feature structure, a concern the family-level specialization
+result in Table \ref{tab:familyspec} partially, but not completely,
+addresses. Table \ref{tab:sigtest} confirms this concretely rather
+than merely as a theoretical possibility: the trained model has zero
+recall on cmaes and sa, the two rarest training labels, and never
+predicts either method regardless of a new problem's landscape features.
+Extending the evaluation with a class-imbalance-aware training procedure,
+such as class-weighted or resampled Random Forests, and alternative
+classifiers trained on the same ELA features remain natural next steps
+that would strengthen, without altering, the qualitative conclusion
+drawn here.
 
 \section{Conclusions\label{sec:conclusions}}
 
@@ -1270,7 +1949,7 @@ model needs in order to add value over a fixed recommendation. Third,
 a Random Forest classifier trained on Exploratory Landscape Analysis
 features and validated under a Leave-One-Problem-Out protocol identifies
 the best-performing optimizer more accurately than the naive Single
-Best Solver baseline, 75.3\% against 30.9\%, closing 64.2\% of the
+Best Solver baseline, 67.0\% against 30.9\%, closing 52.2\% of the
 gap toward the oracle Virtual Best Solver's 100\% upper bound. As
 discussed in Section \ref{sec:Discussion}, the Single Best Solver
 baseline is defined directly from each training fold's average rank
@@ -1308,6 +1987,15 @@ additional benchmark suites, or alternative meta-learning models,
 and doing so is the most direct path toward establishing how far the
 encouraging result reported here generalizes.
 
+\dataavailability{The code implementing the OptimSolution framework used to conduct the experiments in this study is openly available at 
+\url{https://github.com/charilog/optimsolution}
+. The benchmark problems used to generate the performance data are drawn entirely from publicly available sources: the classical scalable functions and the CEC2017 
+\citep{Awad}
+ and CEC2022 
+\citep{Kumar}
+ competition benchmark suites. The R script and underlying per-instance Leave-One-Problem-Out prediction record used to compute the McNemar significance test and the balanced-accuracy/macro-F1 metrics reported in Table 
+\ref{tab:sigtest}
+ are provided as Supplementary Materials.}
 \begin{thebibliography}{999}
 \bibitem{Goldberg}Goldberg, D. E. (1989). Genetic algorithms in search,
 optimization, and machine learning. Addison-Wesley.
@@ -1422,6 +2110,7 @@ https://doi.org/10.1080/01621459.1937.10503522
 
 \bibitem{Holm}Holm, S. (1979). A simple sequentially rejective multiple
 test procedure. Scandinavian Journal of Statistics, 6(2), 65--70.
+http://www.jstor.org/stable/4615733
 
 \bibitem{Wilcoxon}Wilcoxon, F. (1945). Individual comparisons by
 ranking methods. Biometrics Bulletin, 1(6), 80--83. https://doi.org/10.2307/3001968
@@ -1434,7 +2123,7 @@ session on real parameter optimization. Journal of Heuristics, 15(6),
 
 \bibitem{Demsar}Demšar, J. (2006). Statistical comparisons of classifiers
 over multiple data sets. Journal of Machine Learning Research, 7,
-1--30.
+1--30. https://www.jmlr.org/papers/v7/demsar06a.html
 
 \bibitem{Breiman}Breiman, L. (2001). Random forests. Machine Learning,
 45(1), 5--32. \newline{https://doi.org/10.1023/A:1010933404324}
@@ -1443,7 +2132,7 @@ over multiple data sets. Journal of Machine Learning Research, 7,
 Suganthan, P. N. (2016). Problem definitions and evaluation criteria
 for the CEC 2017 special session and competition on single objective
 bound constrained real-parameter numerical optimization (Technical
-Report). Nanyang Technological University, Singapore.
+Report). Nanyang Technological University, Singapore. 
 
 \bibitem{Kumar}Kumar, A., Price, K. V., Mohamed, A. W., Hadi, A.
 A., \& Suganthan, P. N. (2021). Problem definitions and evaluation
@@ -1454,6 +2143,30 @@ Nanyang Technological University, Singapore.
 \bibitem{Prager2024}Prager, R. P., \& Trautmann, H. (2024). Pflacco:
 Feature-based landscape analysis of continuous and constrained optimization
 problems in Python. Evolutionary Computation, 32(3), 211--216. https://doi.org/10.1162/evco\_a\_00341
+
+\bibitem{Malan2021}Malan, K. M. (2021). A survey of advances in landscape
+analysis for optimisation. Algorithms, 14(2), 40. https://doi.org/10.3390/a14020040
+
+\bibitem{Tanabe2022}Tanabe, R. (2022). Benchmarking feature-based
+algorithm selection systems for black-box numerical optimization.
+IEEE Transactions on Evolutionary Computation, 26(6), 1321--1335.
+https://doi.org/10.1109/TEVC.2022.3169770
+
+\bibitem{Skvorc2020}Škvorc, U., Eftimov, T., \& Korošec, P. (2020).
+Understanding the problem space in single-objective numerical optimization
+using exploratory landscape analysis. Applied Soft Computing, 90,
+106138. https://doi.org/10.1016/j.asoc.2020.106138
+
+\bibitem{Cenikj2024}Cenikj, G., Nikolikj, A., Petelin, G., van Stein,
+N., Doerr, C., \& Eftimov, T. (2024). A survey of meta-features used
+for automated selection of algorithms for black-box single-objective
+continuous optimization. arXiv preprint arXiv:2406.06629. https://arxiv.org/abs/2406.06629
+
+\bibitem{Carrasco2020}Carrasco, J., García, S., Rueda, M. M., Das,
+S., \& Herrera, F. (2020). Recent trends in the use of statistical
+tests for comparing swarm and evolutionary computing algorithms: Practical
+guidelines and a critical review. Swarm and Evolutionary Computation,
+54, 100665. https://doi.org/10.1016/j.swevo.2020.100665
 
 \end{thebibliography}
 

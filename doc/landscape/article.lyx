@@ -533,6 +533,15 @@ literal "false"
 
 \end_inset
 
+,
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Cenikj2024"
+literal "false"
+
+\end_inset
+
 .
  Exploratory Landscape Analysis (ELA) 
 \begin_inset CommandInset citation
@@ -564,6 +573,15 @@ literal "false"
  
 \begin_inset CommandInset citation
 LatexCommand citep
+key "Cenikj2024"
+literal "false"
+
+\end_inset
+
+,
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
 key "Kerschke2019a"
 literal "false"
 
@@ -583,6 +601,24 @@ literal "false"
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Munoz"
+literal "false"
+
+\end_inset
+
+,
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Malan2021"
+literal "false"
+
+\end_inset
+
+,
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Tanabe2022"
 literal "false"
 
 \end_inset
@@ -639,6 +675,15 @@ literal "false"
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Garcia"
+literal "false"
+
+\end_inset
+
+,
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Carrasco2020"
 literal "false"
 
 \end_inset
@@ -1017,7 +1062,252 @@ literal "false"
 \end_inset
 
  rather than re-implemented,
- so that the study relies on independently validated statistics rather than a bespoke reimplementation.
+ so that the study relies on independently validated statistics 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Skvorc2020"
+literal "false"
+
+\end_inset
+
+ rather than a bespoke reimplementation.
+\end_layout
+
+\begin_layout Standard
+To make the pipeline's inputs,
+ preprocessing,
+ and evaluation protocol fully explicit alongside the descriptive account above,
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pipeline"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+separates the pipeline into two phases with very different computational cost:
+ an OFFLINE phase (Stages 1-4),
+ run once over the 35 benchmark problems to produce and validate a trained model,
+ and an ONLINE phase,
+ run once per new,
+ unseen problem to obtain a recommendation from that already-trained model without running any of the eight candidate optimizers on it.
+ The online phase only draws a landscape sample and computes ELA features from it,
+ orders of magnitude cheaper than running even a single optimizer to convergence,
+ let alone all eight.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename pipeline_diagram.png
+	lyxscale 30
+	width 95text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The landscape-aware selection pipeline,
+ separated into an OFFLINE phase (training and Leave-One-Problem-Out validation over the 35 known benchmark problems) and an ONLINE phase (algorithm selection for a single new,
+ unseen problem,
+ using the model already trained offline).
+ The dashed arrow indicates that the deployed model is reused as-is,
+ with no retraining per query.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:pipeline"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+Note:
+ the 35-fold LOPO loop (Stage 4) exists purely to produce an honest,
+ out-of-fold accuracy estimate (Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sigtest"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+).
+ None of the 35 fold-specific classifiers is the one actually deployed – the deployed model (right) is a single Random Forest fit once on all 97 instances.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The feature set consists of 53 numeric ELA descriptors per (problem,
+ dimension) instance,
+ computed by pflacco 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Prager2024"
+literal "false"
+
+\end_inset
+
+ from the same 100xD-point landscape sample described above,
+ drawn across six feature families:
+ ela_distr (3 descriptors),
+ ela_meta (9),
+ ela_level (9),
+ nbc (5),
+ disp (16),
+ and ic (5),
+ together with one per-family "costs_runtime" diagnostic column that pflacco reports alongside its descriptors (6 in total,
+ one per family).
+ These six runtime columns are retained as ordinary numeric features rather than excluded;
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:features"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+'s feature-importance ranking indicates the model does not rely materially on any of them.
+ A small number of features take NaN or infinite values for degenerate instances (e.g.
+ the ela_level LDA warning noted during extraction);
+ these are imputed with the corresponding feature's median value across the dataset before training.
+ No additional feature scaling is applied,
+ since the Random Forest's axis-aligned splits are invariant to monotonic per-feature rescaling.
+\end_layout
+
+\begin_layout Standard
+The training label for a (problem,
+ dimension) instance is constructed in two stages.
+ First,
+ the set of tied best-performing methods (those attaining is_best = 1 in the Stage 1 ranking) is fixed once,
+ since it depends only on the batch/ranking stage and not on any tie-break policy.
+ Second,
+ because a standard multi-class classifier requires one canonical label per instance,
+ ties are broken in favour of whichever tied method has the better average rank,
+ computed,
+ within each Leave-One-Problem-Out fold,
+ from that fold's training problems only (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ discusses why this must exclude the held-out problem,
+ and the consequence of getting it wrong).
+ Evaluation itself remains lenient throughout:
+ a prediction is scored correct if it names any member of the tied set,
+ not only the canonical label chosen for training.
+\end_layout
+
+\begin_layout Standard
+The Random Forest itself uses scikit-learn's default splitting criterion with 200 trees,
+ maximum depth 4,
+ a minimum of 1 sample per leaf,
+ and balanced class weighting,
+ fit independently within each of the 35 Leave-One-Problem-Out folds purely for evaluation (Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sigtest"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ None of these 35 fold-specific classifiers is the model actually used for algorithm selection:
+ the deployed model is a separate,
+ final fit (300 trees,
+ otherwise the identical configuration) on all 97 instances,
+ using the analogous,
+ full-dataset tie-break for its own training labels;
+ this same final fit also yields the Gini feature importances reported in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:features"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalResults"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Standard
@@ -3956,7 +4246,7 @@ noprefix "false"
  significantly worse than every member of the top three but significantly better than the band below it.
  lmcmaes,
  acor,
- and gwo occupy a mutually indistinguishable middle band (average ranks 5.10 to 5.72),
+ and gwo occupy a middle band that pairwise Wilcoxon testing cannot statistically separate (average ranks 5.10 to 5.72),
  none of the three pairwise comparisons among them reaching significance in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3967,8 +4257,12 @@ noprefix "false"
 
 \end_inset
 
-,
- while sa closes the table alone,
+.
+ This absence of a significant pairwise difference reflects insufficient evidence,
+ at this sample size,
+ to distinguish these three methods,
+ not a demonstration that their true performance is equal – a stronger claim that would require a dedicated equivalence test rather than a non-significant result.
+ While sa closes the table alone,
  significantly worse than every other method and,
  as Table 
 \begin_inset CommandInset ref
@@ -4061,21 +4355,26 @@ noprefix "false"
 \end_inset
 
  renders the same average-rank values as a bar chart,
- with the vertical axis inverted so that a taller bar corresponds to a better (lower) rank.
+ using a conventional,
+ non-inverted axis:
+ bar height increases directly with average rank,
+ so a taller bar corresponds to a worse (higher) rank,
+ and the chart states this explicitly with its own "Lower bar is better" annotation rather than leaving the direction to be inferred.
  sparq,
  highlighted,
- is tallest,
+ has the shortest bar,
  but only marginally so:
  the visual effect makes the four-tier structure discussed above immediately apparent as a staircase,
- a barely perceptible step separates the three leading bars (sparq,
+ a barely perceptible step separates the three leading,
+ shortest bars (sparq,
  rde,
  ea4eig) from one another,
  a clearer step sets cmaes apart on its own,
- a further step drops to the three roughly equal mid-table bars (lmcmaes,
+ a further step rises to the three roughly equal mid-table bars (lmcmaes,
  acor,
  gwo),
  and a final,
- largest step isolates sa at the far right.
+ largest step isolates sa's markedly taller bar at the far right.
  This kind of visual separation is a useful sanity check before any formal test is run:
  a benchmark in which the bars formed a smooth,
  even slope,
@@ -4148,7 +4447,19 @@ status collapsed
 Computational cost and behaviour of each optimizer,
  aggregated over all 97 (problem,
  dimension) instances from the raw batch-execution log,
- with all eight methods receiving the same dimension-scaled evaluation budget (Section 3),
+ with all eight methods receiving the same dimension-scaled evaluation budget (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalDesign"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+),
  averaging 275,876 evaluations per instance over the actual mix of dimensions in the benchmark suite.
  SD success rate reflects consistency across instances.
  The evaluation budget was exhausted on every run (zero variance) and is identical across methods,
@@ -4681,6 +4992,891 @@ noprefix "false"
  but diverge sharply in speed:
  lmcmaes is the fastest method overall per iteration,
  consistent with its limited-memory design deliberately avoiding the full covariance-matrix factorization that makes standard cmaes markedly slower despite comparable memory use.
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:compute"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ reports per-iteration cost for each candidate optimizer,
+ but does not by itself answer a different,
+ practical question a reviewer raised:
+ how does the wall-clock cost of the landscape-aware selection pipeline itself compare with simply running one or more of these candidates directly,
+ under a comparable budget?
+ We measured this directly,
+ using the framework's own per-stage timing log.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:pipelinecost"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+reports the wall-clock cost of landscape sampling (Stage 2),
+ ELA feature extraction (Stage 3),
+ and Random Forest training (Stage 4),
+ aggregated over all 97 (problem,
+ dimension) instances;
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:optcost"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+reports the corresponding cost of running each of the eight candidate optimizers once,
+ to its full budget,
+ across the same 97 instances,
+ derived analytically from the validated per-iteration timings underlying Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:compute"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+(mean evaluations divided by population size,
+ times mean iteration time).
+ We use this derived figure rather than a freshly re-measured Stage 1 wall-clock time because re-running Stage 1 on an already-complete batch_master.csv only re-executes the fast statistical ranking step and skips the (already cached) optimizer runs themselves,
+ so a fresh Stage-1 timer would understate the true cost of the 8 x 30 x 97 optimizer runs rather than measure it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Wall-clock cost of the landscape-aware selection pipeline,
+ aggregated over all 97 (problem,
+ dimension) instances,
+ measured directly from the framework's per-stage timing log.
+ Online inference cost is measured separately,
+ for a single new instance.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:pipelinecost"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Pipeline component
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Total (97 instances)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Per instance
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Cost type
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Landscape sampling
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+(Stage 2)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+7.7 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.08 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Offline
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+repeated per new problem
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ELA feature extraction
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+(Stage 3)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+2416.7 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+24.9 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Offline
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+repeated per new problem
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Random Forest training
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+(Stage 4)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+4.8 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+n/a
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Offline
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+one-time,
+ not repeated
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Online inference
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+(single prediction)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+n/a
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.014 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Online
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+per new problem
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Wall-clock cost of running each candidate optimizer once,
+ to its full dimension-scaled budget,
+ across all 97 (problem,
+ dimension) instances,
+ derived from the per-iteration timings underlying Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:compute"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ "Brute-force" totals the cost of running every one of the eight candidates once on every instance,
+ the exhaustive alternative to landscape-aware selection.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:optcost"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="10" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Total (97 instances)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Per instance
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lmcmaes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40.6 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.42 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sparq
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+54.5 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.56 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+gwo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+135.9 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.40 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ea4eig
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+140.9 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.45 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+acor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+182.9 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.89 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+rde
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+213.1 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.20 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cmaes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+917.0 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.45 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sa
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2657.6 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.40 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Brute-force (all 8 once)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+4342.5 s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+44.77 s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Two conclusions follow directly from Tables 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:pipelinecost"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:optcost"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ First,
+ ELA feature extraction,
+ not landscape sampling,
+ dominates the pipeline's offline cost:
+ at 24.9 s per instance it accounts for more than 99.6% of the combined Stage 2 + Stage 3 time,
+ while drawing the 100xD-point sample itself costs a fraction of a second.
+ Second,
+ whether landscape-aware selection is worth its cost depends entirely on what it is being compared against.
+ Against the exhaustive alternative,
+ running every one of the eight candidates once to see which wins,
+ it is cheaper:
+ 2424.4 s (Stages 2-3) versus 4342.5 s brute-force,
+ a 44% reduction.
+ Against simply trusting a single,
+ cheap default,
+ however,
+ it is far more expensive:
+ roughly 25 s of offline computation per new problem,
+ against 0.56 s to run sparq (the Single Best Solver baseline,
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+) or 0.42 s for the cheapest candidate,
+ lmcmaes.
+ The case for paying this cost is therefore an accuracy argument,
+ not a speed argument:
+ it is justified when closing part of the 44.3-percentage-point gap between SBS and the landscape-aware model's 67.0% accuracy (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+) is worth roughly 45-60 times the wall-clock cost of simply running a strong default optimizer once,
+ for instance because the selected optimizer will itself be run for a much larger downstream budget,
+ or applied repeatedly,
+ amortizing the one-time selection cost.
+ A practitioner who only needs a single,
+ reasonably strong recommendation and cannot amortize this cost is better served by SBS alone.
+\end_layout
+
+\begin_layout Standard
+On whether the sampling budget can be reused rather than treated as pure overhead:
+ five of the eight candidates in this study,
+ acor,
+ ea4eig,
+ gwo,
+ sa,
+ and sparq,
+ use a population of exactly 100 individuals (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalDesign"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+),
+ identical to the number of points drawn for landscape sampling.
+ For these five methods,
+ the landscape sample computed for ELA feature extraction could,
+ in principle,
+ be reused directly as the selected optimizer's initial population,
+ at no additional function-evaluation cost:
+ the two stages currently draw independent samples of the same size from the same distribution,
+ purely because the pipeline treats landscape analysis and optimization as separate stages.
+ The remaining three methods would benefit only partially:
+ cmaes and lmcmaes use a much smaller,
+ dimension-scaled population (10-15 in this study),
+ so only a subset of the landscape sample would be needed,
+ while rde's population scales up to several hundred individuals,
+ so the landscape sample alone would not be sufficient and additional evaluations would still be required.
+ The present pipeline does not implement this reuse;
+ doing so would not reduce the ELA extraction cost that dominates Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:pipelinecost"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ but would eliminate the separate cost of initializing the selected optimizer for the five methods above,
+ a modest,
+ low-risk optimization left for future implementation work rather than attempted here.
 \end_layout
 
 \begin_layout Standard
@@ -6477,12 +7673,14 @@ noprefix "false"
 \end_inset
 
 ,
- 26 remain statistically significant after Holm correction.
- Only two pairs do not:
- acor versus sa (z = 1.09,
- Holm-corrected p = 0.548) and lmcmaes versus rde (z = 0.19,
- Holm-corrected p = 0.849).
- These are precisely the two pairs whose average ranks in Table 
+ 23 remain statistically significant after Holm correction.
+ The remaining five are the pairs already identified above:
+ acor versus gwo,
+ acor versus lmcmaes,
+ ea4eig versus rde,
+ gwo versus lmcmaes,
+ and rde versus sparq.
+ Four of these five are among the pairs whose average ranks in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:rankings"
@@ -6492,17 +7690,20 @@ noprefix "false"
 
 \end_inset
 
- are closest together,
- acor and sa differ by only 0.04 ranks,
- lmcmaes and rde by 0.41,
- which is a useful consistency check:
- the pairwise test is not manufacturing artificial separations between methods whose performance is genuinely similar,
- and conversely is not failing to detect real differences elsewhere.
+ are closest together (rank gaps of 0.16–0.35),
+ the exception being gwo versus lmcmaes (gap of 0.62);
+ by contrast,
+ the single closest pair overall,
+ sparq versus ea4eig (gap of only 0.07),
+ is nonetheless statistically significant,
+ showing that closeness in average rank does not by itself guarantee non-significance.
  In practice this means that,
  within the present benchmark suite,
- distinguishing acor from sa,
- or lmcmaes from rde,
- is not a meaningful sub-problem for a selection model to solve,
+ distinguishing acor from gwo,
+ acor from lmcmaes,
+ gwo from lmcmaes,
+ ea4eig from rde,
+ or rde from sparq is not a meaningful sub-problem for a selection model to solve,
  since the underlying performance data itself does not support such a distinction.
  The number of paired instances entering each test (the n column) is not always 97,
  since the Wilcoxon signed-rank test excludes ties (pairs with identical performance are uninformative for a signed-rank comparison),
@@ -6785,7 +7986,7 @@ ela_meta.lin_simple.adj_r2
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.0553
+0.05
 \end_layout
 
 \end_inset
@@ -7098,7 +8299,3679 @@ mmce_qda_50
  how linear,
  how funnel-shaped,
  and how flat a landscape is,
- four largely independent structural properties that jointly determine algorithm selection on this suite.
+ four largely independent structural properties the trained Random Forest relies on most heavily when predicting algorithm selection on this suite.
+ Gini importance reflects how useful a feature was for splitting nodes in the fitted trees,
+ a measure of predictive association within this particular model,
+ not a causal test of which landscape properties actually determine optimizer performance;
+ establishing a causal role would require a separate,
+ targeted analysis,
+ such as controlled ablation of individual landscape properties,
+ beyond the scope of this study.
+\end_layout
+
+\begin_layout Standard
+For completeness,
+ and to give the full,
+ reproducible feature specification a reviewer or future user of this pipeline would need,
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:allfeatures"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+lists all 53 ELA features used to train the Random Forest,
+ grouped by feature family and ranked by Gini importance,
+ extending the top-10 view already given in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:features"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ Six of the 53 (one per family) are the "costs_runtime" diagnostics discussed in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Framework"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+;
+ all six rank among the ten least important features,
+ consistent with the model deriving its predictive signal from landscape structure rather than incidental computation cost.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Complete list of all 53 ELA features used to train the Random Forest,
+ grouped by feature family and ranked by Gini importance (descending).
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:allfeatures"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="54" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Rank
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Feature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Family
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+Gini importance
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.mmce_lda_50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0566
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.lin_simple.adj_r2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0545
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.lin_simple.coef.max_by_min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0519
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic.m0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0459
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.lin_w_interact.adj_r2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0399
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_mean_02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0366
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_median_02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0344
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.mmce_lda_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0339
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_median_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0293
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.mmce_qda_50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0293
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.mmce_qda_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0283
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_mean_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0283
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_median_05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0271
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_mean_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0271
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc.nb_fitness.cor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0244
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.mmce_lda_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0228
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr.skewness
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0223
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_median_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0211
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.diff_mean_05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0200
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.mmce_qda_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0196
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.lda_qda_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0160
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc.nn_nb.sd_ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0155
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+23
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_mean_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0153
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic.h_max
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0151
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_median_10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0141
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+26
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.lda_qda_50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0139
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+27
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.lin_simple.intercept
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0136
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+28
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_mean_02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0126
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+29
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr.kurtosis
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0118
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+30
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.lin_simple.coef.min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0117
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+31
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc.nn_nb.cor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0112
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic.costs_runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0110
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+33
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.quad_w_interact.adj_r2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0109
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+34
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.costs_runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0108
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc.dist_ratio.coeff_var
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0108
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc.nn_nb.mean_ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0107
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_median_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0105
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+38
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic.eps_max
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0101
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+39
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.costs_runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0100
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_mean_05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0098
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+41
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level.lda_qda_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0097
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_mean_25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0092
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic.eps_ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0091
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic.eps_s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0090
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.lin_simple.coef.max
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0087
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+46
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.quad_simple.cond
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0087
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+47
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc.costs_runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0086
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+48
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_median_02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0083
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+49
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.quad_simple.adj_r2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0071
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp.ratio_median_05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0070
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+51
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta.costs_runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0065
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+52
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr.number_of_peaks
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0061
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+53
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr.costs_runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ela_distr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0.0033
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:allfeatures"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+'s Gini importance ranking identifies which features the trained Random Forest relies on,
+ but,
+ as Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalResults"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+already notes,
+ this reflects association within one fitted model rather than a controlled test of necessity or sufficiency.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:ablation"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+reports exactly such a test:
+ the same fold-safe Leave-One-Problem-Out protocol,
+ repeated once per ELA feature family,
+ once with that family excluded from the other 52 features (a necessity check) and once with only that family's features available (a sufficiency check),
+ holding every other aspect of the pipeline,
+ folds,
+ tie-break policy,
+ and classifier hyperparameters,
+ fixed.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Feature-group ablation (Reviewer 2,
+ comment 4):
+ Leave-One-Problem-Out lenient accuracy when each ELA feature family is excluded (necessity) or used alone (sufficiency),
+ against the full,
+ 53-feature model (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ Every row uses the identical fold-safe LOPO protocol,
+ differing only in which feature columns are available to the classifier.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:ablation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="14" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Configuration
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+n features
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Lenient accuracy (%)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Formula $Δ$
+\end_inset
+
+ vs.
+ full (pp)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+full (all 6 families)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+53
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+67.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minus disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+72.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++5.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+only disp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+62.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-4.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minus ela_distr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-1.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+only ela_distr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-17.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minus ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+67.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+only ela_level
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+70.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++3.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minus ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-1.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+only ela_meta
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+73.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++6.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minus ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+63.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-3.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+only ic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+62.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-4.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minus nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+64.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-2.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+only nbc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-5.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Two patterns stand out.
+ First,
+ no single family is strictly necessary:
+ excluding any one family costs at most 3.1 percentage points (ic),
+ and excluding ela_level or disp actually improves accuracy (by 0.0 and 5.2 points respectively),
+ indicating the six families carry substantially redundant signal rather than each contributing an indispensable,
+ disjoint piece.
+ Second,
+ the families are far from equally sufficient on their own:
+ ela_meta alone,
+ using only 10 of the 53 features,
+ reaches 73.2%,
+ 6.2 points above the full model,
+ and ela_level alone reaches 70.1%;
+ both exceed every disp/ic/nbc configuration and every exclusion configuration.
+ At the other extreme,
+ ela_distr alone,
+ with only 4 features,
+ collapses to 49.5%,
+ a 17.5-point drop,
+ though still comfortably above the 30.9% Single Best Solver baseline (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ This concentration of predictive signal in ela_meta and,
+ to a lesser extent,
+ ela_level is consistent with,
+ and independently corroborates,
+ the Gini importance ranking in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:features"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+ where features from exactly these two families occupy 6 of the top 10 positions,
+ using a methodology (ablation) that does not share any of the assumptions behind Gini importance.
+\end_layout
+
+\begin_layout Standard
+That two configurations,
+ minus disp and only ela_meta,
+ outperform the full 53-feature model is itself informative:
+ with only 97 training instances,
+ adding features beyond a certain point appears to dilute rather than help the Random Forest,
+ consistent with a mild curse-of-dimensionality effect rather than every additional feature contributing genuine signal.
+ This suggests that feature selection,
+ for instance restricting the model to the ela_meta and ela_level families identified here,
+ is a concrete,
+ testable direction for improving on the 67.0% headline accuracy in future work,
+ rather than a claim we pursue further in the present study.
+\end_layout
+
+\begin_layout Standard
+A further part of Reviewer 2,
+ comment 4 asks for comparison with alternative selection models,
+ to establish whether the Random Forest used throughout this study is actually the strongest available choice,
+ rather than an unexamined default.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:classifiers"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+reports three alternatives,
+ an RBF-kernel support vector machine,
+ gradient boosting,
+ and multinomial logistic regression,
+ each run through the identical fold-safe Leave-One-Problem-Out protocol,
+ on the same 53 features and the same folds as the Random Forest,
+ differing only in the classifier itself and,
+ for the two scale-sensitive alternatives,
+ whether features are standardized (a scaler fit on each fold's training data only,
+ to avoid the same kind of leakage Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+discusses for the tie-break policy).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison with alternative selection models (Reviewer 2,
+ comment 4):
+ Leave-One-Problem-Out lenient accuracy for three alternative classifiers against this study's Random Forest (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+),
+ all on the same 53 features and folds.
+ "Scaled features" indicates a per-fold StandardScaler fit on training data only.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:classifiers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Classifier
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Scaled features
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Lenient accuracy (%)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Formula $Δ$
+\end_inset
+
+ vs.
+ RF (pp)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Random Forest (this study)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+67.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gradient Boosting
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+63.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-3.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SVM (RBF kernel)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Yes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+59.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-7.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Logistic Regression
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Yes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+56.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-10.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This study's Random Forest is,
+ in fact,
+ the strongest of the four:
+ gradient boosting,
+ the closest competitor,
+ trails by 3.1 percentage points,
+ and the two scale-sensitive linear/kernel methods trail by considerably more (7.2 and 10.3 points for SVM and logistic regression respectively).
+ All four,
+ however,
+ comfortably exceed the 30.9% Single Best Solver baseline (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+),
+ so the choice of classifier changes how much of the SBS-to-VBS gap is closed,
+ not whether landscape-aware selection helps at all:
+ even the weakest alternative,
+ logistic regression,
+ still closes the majority of that gap.
+ The ordering,
+ tree-based ensembles ahead of a kernel method ahead of a linear model,
+ is consistent with a landscape-selection decision boundary that is not well approximated by a single linear separator in the 53-dimensional feature space,
+ and with tree ensembles' well-documented robustness on small,
+ tabular datasets of exactly this size.
+ We did not tune any of the three alternatives beyond their scikit-learn defaults (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalResults"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+reports the Random Forest's own hyperparameters,
+ which were similarly taken from common practice rather than tuned for this dataset);
+ a fully tuned comparison across classifiers,
+ like the feature-selection direction noted above,
+ is left for future work rather than pursued here.
 \end_layout
 
 \begin_layout Standard
@@ -8356,7 +13229,7 @@ Random Forest (landscape-aware)
 \begin_inset Text
 
 \begin_layout Plain Layout
-75.3
+67.0
 \end_layout
 
 \end_inset
@@ -8432,7 +13305,7 @@ tuple "list"
  so that every dimension of a given problem is withheld from training as a single block,
  the Random Forest classifier correctly identifies the best-performing optimizer,
  or one of the tied best,
- for 75.3% of the 97 held-out instances.
+ for 67.0% of the 97 held-out instances.
  This exceeds the Single Best Solver baseline,
  which within each training fold recommends whichever single method has the best average rank among the remaining training instances,
  in practice sparq in the great majority of folds (79 of 97) and ea4eig in the rest (18 of 97),
@@ -8447,8 +13320,8 @@ noprefix "false"
 \end_inset
 
 .
- The model exceeds this baseline by 44.3 percentage points (30.9%),
- and closes 64.2% of the gap between that baseline and the oracle Virtual Best Solver's 100% upper bound,
+ The model exceeds this baseline by 36.1 percentage points (30.9%),
+ and closes 52.2% of the gap between that baseline and the oracle Virtual Best Solver's 100% upper bound,
  the accuracy a hypothetical selector that always chose correctly would achieve.
  This margin is neither large nor guaranteed by the experimental design,
  and that is what makes it informative rather than a foregone conclusion:
@@ -8460,12 +13333,337 @@ noprefix "false"
  neither trivial,
  since SBS alone would already be adequate in that case,
  nor unachievable,
- since VBS remains a further 24.7 percentage points away.
+ since VBS remains a further 33.0 percentage points away.
  The tie-breaking procedure used to construct training labels,
  discussed further in Section 5,
  means this figure is best read as a first,
  methodologically sound estimate of what landscape-aware selection can achieve on this suite,
  rather than as a ceiling on what the approach could ultimately deliver with further tuning.
+\end_layout
+
+\begin_layout Standard
+The 67.0% versus 30.9% comparison in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ is a paired comparison,
+ since both the Random Forest and the Single Best Solver are evaluated on the same 97 held-out instances,
+ which makes McNemar's test the appropriate significance test.
+ Of the 97 instances,
+ the Random Forest is correct and the Single Best Solver is wrong on 35 instances,
+ while the reverse,
+ the Single Best Solver correct and the Random Forest wrong,
+ never occurs.
+ The exact binomial form of McNemar's test on this 35-to-0 split is decisively significant (p 
+\begin_inset Formula $=5.8\times10^{-11}$
+\end_inset
+
+;
+ continuity-corrected 
+\begin_inset Formula $\chi^{2}(1)=33.0$
+\end_inset
+
+,
+ p 
+\begin_inset Formula $=9.1\times10^{-9}$
+\end_inset
+
+),
+ confirming that the Random Forest's advantage over the Single Best Solver baseline is not attributable to chance.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sigtest"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ further reports two class-imbalance-aware metrics computed against the single canonical training label used for each instance (Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ discusses how this label is chosen):
+ balanced accuracy,
+ the average per-class recall across the eight optimizers,
+ and macro-averaged F1.
+ Both metrics drop substantially relative to the lenient accuracy reported in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ for the Random Forest (balanced accuracy 36.1%,
+ macro-F1 34.5%),
+ and drop even further for the Single Best Solver (balanced accuracy 12.5%,
+ macro-F1 9.4%),
+ which by construction can only ever predict sparq or ea4eig and therefore has zero recall on every other class.
+ The Random Forest still outperforms the Single Best Solver by a wide margin on both class-imbalance-aware metrics,
+ but its own per-class recall is zero on the two rarest labels in the training data,
+ cmaes (1 instance) and sa (3 instances):
+ the model never predicts either method,
+ even on the instances where one of them is the actual best performer.
+ This confirms,
+ concretely rather than speculatively,
+ the class-imbalance concern raised in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the model's lenient accuracy is a genuine improvement over the baseline,
+ but it is also,
+ in part,
+ an artifact of the training-label imbalance,
+ and a practitioner relying on this model should not expect it to ever recommend cmaes or sa,
+ regardless of the landscape features of a new problem.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Significance test and class-imbalance-aware evaluation of the Random Forest landscape-aware selection model against the Single Best Solver baseline,
+ computed from the per-instance Leave-One-Problem-Out prediction record underlying Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ McNemar's test on the paired correctness record (35 instances correct for Random Forest and wrong for SBS,
+ 0 the reverse) gives 
+\begin_inset Formula $p=5.8\times10^{-11}$
+\end_inset
+
+ (exact binomial).
+ Balanced accuracy and macro-F1 are computed against the single canonical training label per instance (see Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:sigtest"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Metric
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Random Forest
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Single Best Solver
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Lenient accuracy (%) [Table 8 criterion]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+67.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30.9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Strict single-label accuracy (%)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+57.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30.9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Balanced accuracy (%)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Macro-averaged F1 (%)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -8481,7 +13679,19 @@ name "sec:Discussion"
 
 \begin_layout Standard
 Taken together,
- the results in Section 4 support a coherent picture.
+ the results in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalResults"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+tuple "list"
+
+\end_inset
+
+ support a coherent picture.
  The eight optimizers separate into four statistically distinguishable performance tiers rather than a single clear winner,
  the differences between all but five of the 28 pairs of methods are robust to Holm-corrected pairwise testing,
  the three methods that anchor the top tier divide the benchmark suite between them rather than one simply dominating the others,
@@ -8550,15 +13760,47 @@ noprefix "false"
 \end_layout
 
 \begin_layout Standard
-The clearest remaining subtlety concerns how ties were broken when constructing the training labels used to fit the selection model.
- When two or more methods share the best recorded performance on a given instance,
- evaluation of the trained model is lenient,
- a prediction is scored correct if it names any one of the tied methods,
- but the single label used during training still has to name one representative method.
- Ties are common in this dataset,
- roughly half of the 97 instances (50) have more than one method sharing the best recorded performance.
- Rather than breaking these ties by an arbitrary rule such as alphabetical order,
- the single training label is chosen as whichever tied method has the best overall average rank in Table 
+A further methodological question concerns the independence assumption underlying the Friedman and Wilcoxon tests in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:rankings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:wilcoxon"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+ which treat all 97 (problem,
+ dimension) instances as exchangeable blocks.
+ Different dimensions of the same problem are not strictly independent,
+ since they share the same underlying function and are optimized by the same method under the same protocol;
+ a genuinely independent-blocks design would instead treat each of the 35 problems as a single block.
+ As a robustness check,
+ we repeated the ranking analysis with each method's instance-level rank averaged across all evaluated dimensions of a given problem,
+ then re-ranked within each problem,
+ yielding 35 independent blocks (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:blockcheck"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ The resulting average-rank ordering reproduces the same four-tier structure reported in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:rankings"
@@ -8569,16 +13811,633 @@ noprefix "false"
 \end_inset
 
 ,
+ and the Friedman test remains highly significant (
+\begin_inset Formula $\chi^{2}(7)=122.7$
+\end_inset
+
+,
+ p 
+\begin_inset Formula $=2.1\times10^{-23}$
+\end_inset
+
+),
+ compared with 
+\begin_inset Formula $\chi^{2}(7)=320.6$
+\end_inset
+
+,
+ p 
+\begin_inset Formula $<10^{-64}$
+\end_inset
+
+ at the instance level.
+ As expected with fewer,
+ coarser blocks,
+ more pairwise Wilcoxon comparisons lose significance after Holm correction at the problem level (9 of 28,
+ versus 5 at the instance level),
+ reflecting reduced statistical power rather than a qualitative change in the ranking;
+ critically,
+ the five pairs non-significant at the instance level remain non-significant here,
+ and no pair reverses tier membership.
+ We therefore report the instance-level analysis in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:rankings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:wilcoxon"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ as the primary result,
+ since it uses the full resolution of the experimental design,
+ while treating Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:blockcheck"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ as confirmation that the tiering it reveals is not an artifact of treating dependent dimensions as independent blocks.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Robustness check:
+ problem-level re-analysis (35 independent blocks,
+ one per problem) against the instance-level analysis reported in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:rankings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (97 blocks).
+ Problem-level ranks are obtained by averaging each method's instance-level rank across a problem's evaluated dimensions,
+ then re-ranking within each problem.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:blockcheck"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="5">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Avg.
+ rank
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+(97 instances)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Avg.
+ rank
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+(35 problems)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Wins
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+(97)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Wins
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+(35)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sparq
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.78
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.77
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ea4eig
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.85
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.77
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+rde
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.01
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.77
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cmaes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.96
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.91
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lmcmaes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+acor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.54
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+gwo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.72
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.86
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sa
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The clearest remaining subtlety concerns how ties were broken when constructing the training labels used to fit the selection model.
+ When two or more methods share the best recorded performance on a given instance,
+ evaluation of the trained model is lenient,
+ a prediction is scored correct if it names any one of the tied methods,
+ but the single label used during training still has to name one representative method.
+ Ties are common in this dataset,
+ roughly half of the 97 instances (50) have more than one method sharing the best recorded performance.
+ Rather than breaking these ties by an arbitrary rule such as alphabetical order,
+ the single training label is chosen as whichever tied method has the best average rank,
  so the label reflects genuine relative strength rather than an accident of spelling.
- In practice this means sparq,
- the method with the best average rank overall,
- wins all 41 of the ties it participates in,
- ea4eig,
- ranked second,
- wins the 7 ties where sparq is absent,
- and rde,
- ranked third,
- wins the remaining 2.
+ An earlier version of this pipeline computed that average rank once,
+ globally,
+ over the full 97-instance table,
+ before the Leave-One-Problem-Out loop began,
+ and reused the same preference order in every fold.
+ This let a held-out problem's own performance data help decide the tie-break preference order used to label the OTHER problems the model was trained on for the very fold being tested on that problem:
+ a narrow but genuine form of train/test leakage,
+ since a training label should never depend on the instance it will later be evaluated against.
+ We thank a reviewer for pointing this out.
+ The fix,
+ applied throughout this revision,
+ computes the tie-break preference order separately inside each fold,
+ from that fold's training problems only,
+ so the held-out problem never influences any label used to train the model tested on it.
+ A canonical label can therefore now legitimately differ across folds for the same instance:
+ of the 50 tied instances,
+ 22 have a canonical label that alternates between sparq and ea4eig depending on which problem is held out,
+ reflecting how close these two methods' average ranks are (2.78 and 2.85 in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:rankings"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+);
+ the remaining 28 are stable across every fold (19 sparq,
+ 7 ea4eig,
+ 2 rde).
  This does not affect the fairness of the accuracy figures reported in Table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -8589,9 +14448,45 @@ noprefix "false"
 
 \end_inset
 
-,
- since evaluation credits any tied method equally regardless of which one was chosen as the canonical label,
- but it does mean the training label distribution is weighted toward the strongest methods rather than distributed arbitrarily.
+ itself,
+ since evaluation credits any tied method equally regardless of which one was chosen as the canonical label for training;
+ what the leakage affected was which instances' labels a given fold's classifier was trained on,
+ which in turn affects what that classifier learns to predict.
+ Correcting it lowers the Random Forest's Leave-One-Problem-Out accuracy from an earlier,
+ leakage-affected 75.3% to the 67.0% now reported in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the model still exceeds the Single Best Solver baseline by a wide and statistically decisive margin (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sigtest"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalResults"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+),
+ but by a smaller,
+ and now leakage-free,
+ margin than originally reported.
  The same rank-based rule also determines the identity of the Single Best Solver baseline:
  rather than the most frequent alphabetically tie-broken label,
  SBS is defined directly from each training fold's raw performance data as the method with the best average rank in that fold,
@@ -8606,7 +14501,8 @@ noprefix "false"
 
 \end_inset
 
- by average rank.
+ by average rank;
+ this definition was already computed fold-by-fold from training data only and is unaffected by the fix above.
  A residual simplification remains:
  a single canonical label is still required to train a standard multi-class classifier,
  so an instance where several methods are genuinely equivalent still contributes one label rather than several.
@@ -8770,10 +14666,39 @@ noprefix "false"
 
  should be read as an achievable accuracy under a reasonable,
  literature-consistent configuration rather than the best accuracy this approach could in principle reach.
- No formal statistical test was applied to the difference between the Random Forest and Single Best Solver accuracies,
- since a paired significance test over 97 instances,
- while feasible in principle,
- requires the per-instance prediction record at a level of detail that falls outside the present study's scope.
+ A paired McNemar's test on the per-instance predictions underlying Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:lopo"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ confirms that this advantage is statistically decisive rather than attributable to chance (Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sigtest"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:ExperimentalResults"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+),
+ which also reports balanced accuracy and macro-F1 to address class imbalance directly rather than relying on the lenient accuracy figure alone.
  The training labels are also imbalanced,
  sparq,
  rde,
@@ -8803,9 +14728,23 @@ noprefix "false"
  partially,
  but not completely,
  addresses.
- Extending the evaluation with a class-imbalance-aware baseline,
- alternative classifiers trained on the same ELA features,
- and a properly powered significance test are natural next steps that would strengthen,
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:sigtest"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ confirms this concretely rather than merely as a theoretical possibility:
+ the trained model has zero recall on cmaes and sa,
+ the two rarest training labels,
+ and never predicts either method regardless of a new problem's landscape features.
+ Extending the evaluation with a class-imbalance-aware training procedure,
+ such as class-weighted or resampled Random Forests,
+ and alternative classifiers trained on the same ELA features remain natural next steps that would strengthen,
  without altering,
  the qualitative conclusion drawn here.
 \end_layout
@@ -8856,8 +14795,8 @@ The results support three main conclusions.
  suite-level evidence for exactly the kind of landscape-dependent performance a selection model needs in order to add value over a fixed recommendation.
  Third,
  a Random Forest classifier trained on Exploratory Landscape Analysis features and validated under a Leave-One-Problem-Out protocol identifies the best-performing optimizer more accurately than the naive Single Best Solver baseline,
- 75.3% against 30.9%,
- closing 64.2% of the gap toward the oracle Virtual Best Solver's 100% upper bound.
+ 67.0% against 30.9%,
+ closing 52.2% of the gap toward the oracle Virtual Best Solver's 100% upper bound.
  As discussed in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -8929,6 +14868,64 @@ tuple "list"
 \end_layout
 
 \begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+dataavailability{The code implementing the OptimSolution framework used to conduct the experiments in this study is openly available at 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+url{https://github.com/charilog/optimsolution}
+\end_layout
+
+\begin_layout Plain Layout
+.
+ The benchmark problems used to generate the performance data are drawn entirely from publicly available sources:
+ the classical scalable functions and the CEC2017 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+citep{Awad}
+\end_layout
+
+\begin_layout Plain Layout
+ and CEC2022 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+citep{Kumar}
+\end_layout
+
+\begin_layout Plain Layout
+ competition benchmark suites.
+ The R script and underlying per-instance Leave-One-Problem-Out prediction record used to compute the McNemar significance test and the balanced-accuracy/macro-F1 metrics reported in Table 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+ref{tab:sigtest}
+\end_layout
+
+\begin_layout Plain Layout
+ are provided as Supplementary Materials.}
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -9557,6 +15554,7 @@ Holm,
  Scandinavian Journal of Statistics,
  6(2),
  65–70.
+ http://www.jstor.org/stable/4615733
 \end_layout
 
 \begin_layout Bibliography
@@ -9620,6 +15618,7 @@ Demšar,
  Journal of Machine Learning Research,
  7,
  1–30.
+ https://www.jmlr.org/papers/v7/demsar06a.html
 \end_layout
 
 \begin_layout Bibliography
@@ -9681,6 +15680,7 @@ Awad,
  Problem definitions and evaluation criteria for the CEC 2017 special session and competition on single objective bound constrained real-parameter numerical optimization (Technical Report).
  Nanyang Technological University,
  Singapore.
+ 
 \end_layout
 
 \begin_layout Bibliography
@@ -9733,6 +15733,124 @@ Prager,
  32(3),
  211–216.
  https://doi.org/10.1162/evco_a_00341
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Malan2021"
+literal "false"
+
+\end_inset
+
+Malan,
+ K.
+ M.
+ (2021).
+ A survey of advances in landscape analysis for optimisation.
+ Algorithms,
+ 14(2),
+ 40.
+ https://doi.org/10.3390/a14020040
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Tanabe2022"
+literal "false"
+
+\end_inset
+
+Tanabe,
+ R.
+ (2022).
+ Benchmarking feature-based algorithm selection systems for black-box numerical optimization.
+ IEEE Transactions on Evolutionary Computation,
+ 26(6),
+ 1321–1335.
+ https://doi.org/10.1109/TEVC.2022.3169770
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Skvorc2020"
+literal "false"
+
+\end_inset
+
+Škvorc,
+ U.,
+ Eftimov,
+ T.,
+ & Korošec,
+ P.
+ (2020).
+ Understanding the problem space in single-objective numerical optimization using exploratory landscape analysis.
+ Applied Soft Computing,
+ 90,
+ 106138.
+ https://doi.org/10.1016/j.asoc.2020.106138
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Cenikj2024"
+literal "false"
+
+\end_inset
+
+Cenikj,
+ G.,
+ Nikolikj,
+ A.,
+ Petelin,
+ G.,
+ van Stein,
+ N.,
+ Doerr,
+ C.,
+ & Eftimov,
+ T.
+ (2024).
+ A survey of meta-features used for automated selection of algorithms for black-box single-objective continuous optimization.
+ arXiv preprint arXiv:2406.06629.
+ https://arxiv.org/abs/2406.06629
+\end_layout
+
+\begin_layout Bibliography
+\labelwidthstring 999
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Carrasco2020"
+literal "false"
+
+\end_inset
+
+Carrasco,
+ J.,
+ García,
+ S.,
+ Rueda,
+ M.
+ M.,
+ Das,
+ S.,
+ & Herrera,
+ F.
+ (2020).
+ Recent trends in the use of statistical tests for comparing swarm and evolutionary computing algorithms:
+ Practical guidelines and a critical review.
+ Swarm and Evolutionary Computation,
+ 54,
+ 100665.
+ https://doi.org/10.1016/j.swevo.2020.100665
 \end_layout
 
 \end_body
