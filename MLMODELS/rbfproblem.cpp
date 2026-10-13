@@ -9,8 +9,8 @@ RbfProblem::RbfProblem()
     addParam(Parameter("rbf_factor",3.0,1.0,100.0,"Rbf Scale factor"));
     QStringList yesno;
     yesno<<"no"<<"yes";
-    addParam(Parameter("rbf_originaltrain",yesno[0],yesno,"Enable or disable the original RBF Training"));
-    addParam(Parameter("rbf_weightbound",10.0,1.0,100000.0,"The margins for weights"));
+    addParam(Parameter("rbf_originaltrain",yesno[0],yesno,"Enable or disable the                                                                                                              original RBF Training"));
+    addParam(Parameter("rbf_weightbound",10.0,1.0,100000.0,"The margins for weig                                                                                                             hts"));
     trainA.resize(0);
 }
 
@@ -35,16 +35,20 @@ double  RbfProblem::getDerivative(Data &x,int pos)
 double      RbfProblem::gaussianDerivative(Data &x,Data &m,double v,int pos)
 {
     double hx = gaussian(x,m,v);
-    return hx * (-2.0/v)*(x[pos]-m[pos]);
+    // return hx * (-2.0/v)*(x[pos]-m[pos]); 
+    return hx * (-(x[pos] - m[pos]) / (v*v));  // Πρώτη παράγωγος : Δφ / Δχ = φ(χ) . (-Xp - Mp / v*v)
 }
 
 double      RbfProblem::gaussianSecondDerivative(Data &x,Data &m,double v,int pos)
 {
-
-
     double hx = gaussian(x,m,v);
-    double phixx = (-2.0/v)*(x[pos]-m[pos]);
-    return hx *(phixx  * phixx +(-2.0/v));
+    //double phixx = (-2.0/v)*(x[pos]-m[pos]);
+    double difference = x[pos] - m[pos];
+    double v2 = v*v;
+    double v4 = v2*v2;
+    //return hx *(phixx  * phixx +(-2.0/v));
+    return hx * ((difference*difference) / v4 - (1.0 / v2)); // Δεύτερη παράγωγος : Δ2φ / Δ2χ = φ(χ). (((Xp-Mp)*(Xp-Mp) / v4) - 1.0 / v2)
+
 }
 double  RbfProblem::getSecondDerivative(Data &x,int pos)
 {
@@ -124,7 +128,7 @@ void    RbfProblem::getVarianceDerivative(int index,Data &x,double &g)
     double val =  gaussian(x,centers[index],variances[index]);
     double v3 = variances[index];
     double d2 = getDistance(x,centers[index]);
-    g = val * d2*d2 /( v3 * v3 * v3);
+    g = weight[index] * val * d2*d2 /( v3 * v3 * v3);
 }
 
 void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
@@ -133,7 +137,7 @@ void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
     int d = trainDataset->dimension();
     for(int j=0;j<d;j++)
     {
-        g[j]=val *  (x[j]-centers[index][j])*
+        g[j]=weight[index] * val * (x[j]-centers[index][j])*
                 (1.0/(variances[index]*variances[index]));
     }
 }
@@ -152,122 +156,91 @@ static double dmax(double a,double b)
 
 #ifdef OPTIMUS_ARMADILLO
 
-adept::adouble RbfProblem::aneuronOutput( vector<adept::adouble> &x, vector<double> &patt, unsigned pattDim, unsigned offset )
+adept::adouble RbfProblem::aneuronOutput(vector<adept::adouble> &x,
+                                          vector<double> &patt,
+                                          unsigned pattDim,
+                                          unsigned offset)
 {
-    int nodes = weight.size();
-
-    adept::adouble out = 0;
-    for(unsigned i = 0; i < pattDim;i++){
-        out += (patt[i] - x[offset*pattDim + i]) * (patt[i] - x[offset*pattDim + i]);
+    const int nodes = (int)weight.size();
+    adept::adouble dist2 = 0.0;
+    for (unsigned j = 0; j < pattDim; ++j) {
+        adept::adouble diff = patt[j] - x[offset * pattDim + j];
+        dist2 += diff * diff;
     }
-    adept::adouble darg = out / (x[nodes*pattDim + offset] * x[nodes*pattDim + offset]);
-    return exp(-out / (x[nodes*pattDim + offset] * x[nodes*pattDim + offset]) );
-
+    adept::adouble sigma = x[nodes * pattDim + offset];
+    return exp(-dist2 / (2.0 * sigma * sigma));
 }
-adept::adouble RbfProblem::afunmin( vector<adept::adouble> &x, vector<double> &x1 ){
-    adept::adouble errorSum=0.0;
 
-    setParameters(x1);
-    int nodes = weight.size();
-
+adept::adouble RbfProblem::afunmin(vector<adept::adouble> &x,
+                                   vector<double> &x1)
+{
+    (void)x1; // Keep the existing header signature.
+    const int nodes = (int)weight.size();
     Matrix trainx = trainDataset->getAllXpoint();
     Data trainy = trainDataset->getAllYPoints();
-    for(unsigned i = 0; i < trainx.size(); i++){
-        Data pattern = trainx[i];
-        vector<adept::adouble> neuronOuts(nodes);
-        for(unsigned j = 0; j < nodes;j++){
-            neuronOuts[j] = aneuronOutput(x,pattern,pattern.size(),j);
+    adept::adouble errorSum = 0.0;
+    for (unsigned p = 0; p < trainx.size(); ++p) {
+        Data pattern = trainx[p];
+        const unsigned d = (unsigned)pattern.size();
+        adept::adouble output = 0.0;
+        for (int j = 0; j < nodes; ++j) {
+            adept::adouble phi = aneuronOutput(x, pattern, d, j);
+            output += x[nodes * d + nodes + j] * phi;
         }
-        adept::adouble tempOut = 0;
-        for(int j = 0; j < nodes; j++) tempOut+= neuronOuts[j]*weight[j];
-        errorSum += ( tempOut - trainy[i] ) * ( tempOut - trainy[i] );
+        adept::adouble error = output - trainy[p];
+        errorSum += error * error;
     }
-
     return errorSum;
 }
 #endif
 
-Data    RbfProblem::gradient(Data &x)
+Data RbfProblem::gradient(Data &x)
 {
-#ifdef OPTIMUS_ARMADILLO
-    Data g;
-    g.resize(dimension);
+    Data g(x.size(), 0.0);
+    if (trainDataset == NULL)
+        return g;
 
-
-    g = vector<double>(x.size(),0.0);
-    adept::Stack s;
-    std::vector<adept::adouble> ax(g.size());
-    for(unsigned i = 0; i < x.size(); i++) ax[i] = x[i];
-    s.new_recording();
-
-    adept::adouble error = afunmin(ax, x);
-
-    error.set_gradient(1.0);
-
-    s.compute_adjoint();
-
-    for(unsigned i = 0; i < x.size();i++) {
-        g[i] = ax[i].get_gradient();
-    }
-    return g;
-#else
-    Data g;
     setParameters(x);
-    g.resize(x.size());
-    
-    if(trainDataset==NULL) return g;
-   for(int i=0;i<g.size();i++)
-        g[i]=0.0;
-   Data gtemp ;
-    gtemp.resize(dimension);
-    Data g1;
-    int d = trainDataset->dimension();
-    int h = weight.size();
-    g1.resize(d );
-    int tcount = trainDataset->count();
-int nodes =weight.size();
-/*
-    for(int i=0;i<tcount;i++)
-    {
-        Data xx = trainDataset->getXPoint(i);
-        double per=getOutput(xx)-trainDataset->getYPoint(i);
-        int icount = 0;
-        for(int j=0;j<nodes;j++)
-        {
-            getCenterDerivative(j,xx,g1);
-            for(int l=0;l<d;l++)
-                gtemp[icount++]=g1[l];
-        }
-        for(int j=0;j<nodes;j++)
-        {
-            double gx;
-            getVarianceDerivative(j,xx,gx);
-            gtemp[icount++]=gx;
-        }
-        for(int j=0;j<nodes;j++)
-        {
-            double gx;
-            getWeightDerivative(j,xx,gx);
-            gtemp[icount++]=gx;
-        }
-        for(int j=0;j<dimension;j++)	g[j]+=gtemp[j]*per;
-    }
-    for(int j=0;j<x.size();j++) g[j]*=2.0;
+    const int d = trainDataset->dimension();
+    const int nodes = (int)weight.size();
+    const int n = trainDataset->count();
+    const int varianceOffset = nodes * d;
+    const int weightOffset = varianceOffset + nodes;
 
-   return g;
-*/
-    for(int i=0;i<dimension;i++)
-    {
-        double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
-        x[i]+=eps;
-        double v1=funmin(x);
-        x[i]-=2.0 *eps;
-        double v2=funmin(x);
-        g[i]=(v1-v2)/(2.0 * eps);
-        x[i]+=eps;
+    // Analytic gradient of sum_p (getOutput(x_p) - y_p)^2.
+    for (int p = 0; p < n; ++p) {
+        Data xx = trainDataset->getXPoint(p);
+        double yy = trainDataset->getYPoint(p);
+        Data phi(nodes, 0.0);
+        Data dist2(nodes, 0.0);
+        double output = 0.0;
+
+        for (int i = 0; i < nodes; ++i) {
+            double r2 = 0.0;
+            for (int j = 0; j < d; ++j) {
+                double diff = xx[j] - centers[i][j];
+                r2 += diff * diff;
+            }
+            double v = variances[i];
+            double v2 = v * v;
+            dist2[i] = r2;
+            phi[i] = exp(-r2 / (2.0 * v2));
+            output += weight[i] * phi[i];
+        }
+
+        double factor = 2.0 * (output - yy);
+        for (int i = 0; i < nodes; ++i) {
+            double v = variances[i];
+            double v2 = v * v;
+            double common = factor * weight[i] * phi[i];
+            for (int j = 0; j < d; ++j) {
+                g[i * d + j] += common * (xx[j] - centers[i][j]) / v2;
+            }
+            g[varianceOffset + i] += common * dist2[i] / (v2 * v);
+            g[weightOffset + i] += factor * phi[i];
+        }
     }
     return g;
-#endif
 }
 
 double  RbfProblem::getOutput(double *x)
@@ -453,7 +426,7 @@ Data    RbfProblem::getSample()
 
         a= left[i];
         b  = right[i];
-	
+
         double d = (b-a);
         double mid = a+d/2;
         a = mid -0.2*d;
