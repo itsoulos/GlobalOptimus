@@ -17,7 +17,10 @@ RastriginProblem::RastriginProblem()
 
 double RastriginProblem::funmin(Data &x)
 {
-    return x[0] * x[0] + x[1] * x[1] - cos(18.0 * x[0]) - cos(18.0 * x[1]);
+    //x^2+y^2-cos(18x)-cos(18y)
+    //pow(x[0],2)
+    return x[0] * x[0] + x[1] * x[1]
+           - cos(18.0 * x[0]) - cos(18.0 * x[1]);
 }
 
 Data RastriginProblem::gradient(Data &x)
