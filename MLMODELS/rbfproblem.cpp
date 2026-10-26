@@ -1,5 +1,8 @@
 #include "rbfproblem.h"
 #include <random>
+#include <cmath>
+#include <limits>
+#include <algorithm>
 using namespace std;
 
 RbfProblem::RbfProblem()
@@ -11,6 +14,7 @@ RbfProblem::RbfProblem()
     yesno<<"no"<<"yes";
     addParam(Parameter("rbf_originaltrain",yesno[0],yesno,"Enable or disable the                                                                                                              original RBF Training"));
     addParam(Parameter("rbf_weightbound",10.0,1.0,100000.0,"The margins for weig                                                                                                             hts"));
+    addParam(Parameter("rbf_trainseparate",yesno[0],yesno,"Enable / disable the separate train of rbf weights"));
     trainA.resize(0);
 }
 
@@ -94,6 +98,9 @@ void    RbfProblem::setParameters(Data &x)
     }
     for(int i=0;i<nodes;i++)
         variances[i]=x[icount++];
+      if(separateTrain)
+        phase2();
+      else
     for(int i=0;i<nodes;i++)
     {
         weight[i]=x[icount++];
@@ -113,6 +120,7 @@ void    RbfProblem::getParameters(Data &x)
     }
     for(int i=0;i<nodes;i++)
         x[icount++]=variances[i];
+    if(separateTrain) return;
     for(int i=0;i<nodes;i++)
         x[icount++]=weight[i];
 }
@@ -145,8 +153,9 @@ void    RbfProblem::getCenterDerivative(int index,Data &x,Data &g)
 double  RbfProblem::funmin(Data &x)
 {
     setParameters(x);
-    double f =  getTrainError();
-    return f;
+    if (separateTrain && error_flag) return 1e100;
+    double f = getTrainError();
+    return std::isfinite(f) ? f : 1e100;
 }
 
 static double dmax(double a,double b)
@@ -201,6 +210,8 @@ Data RbfProblem::gradient(Data &x)
         return g;
 
     setParameters(x);
+    if (separateTrain && error_flag) return g;
+
     const int d = trainDataset->dimension();
     const int nodes = (int)weight.size();
     const int n = trainDataset->count();
@@ -237,6 +248,7 @@ Data RbfProblem::gradient(Data &x)
                 g[i * d + j] += common * (xx[j] - centers[i][j]) / v2;
             }
             g[varianceOffset + i] += common * dist2[i] / (v2 * v);
+            if(separateTrain) continue;
             g[weightOffset + i] += factor * phi[i];
         }
     }
@@ -388,7 +400,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
             }
         }
         for(int j=0;j<d;j++)
-            variances[i]+=dvar[j]/teamElements[i];
+            variances[i]+=dvar[j];
     }
     for(int i=0;i<variances.size();i++)
         {
@@ -410,7 +422,7 @@ void  RbfProblem::runKmeans(vector<Data> &point, int K,vector<Data> &centers,
 
     if(var_diag<0.00000001) var_diag=0.001;
     for(int i=0;i<variances.size();i++)
-        variances[i]=var_diag;
+        if (!std::isfinite(variances[i]) || variances[i]<0.01) variances[i]=0.01;
 
 
 }
@@ -438,17 +450,24 @@ Data    RbfProblem::getSample()
 
 void    RbfProblem::initModel()
 {
+    separateTrain = getParam("rbf_trainseparate").getValue()=="yes"?true:false;
     int nodes        = getParam("rbf_nodes").getValue().toInt();
+
 
     QJsonObject xx;
     xx["model_trainfile"]=getParam("model_trainfile").getValue();
     xx["model_testfile"]=getParam("model_testfile").getValue();
     xx["rbf_nodes"]=getParam("rbf_nodes").getValue();
+
     init(xx);
     weight.resize(nodes);
     int d = trainDataset->dimension();
     int k = (d*nodes)+
             nodes+nodes;
+
+    if(separateTrain)
+        k-=nodes;
+
     setDimension(k);
     left.resize(k);
     right.resize(k);
@@ -498,6 +517,7 @@ void    RbfProblem::initModel()
 
         icount++;
     }
+    if(separateTrain) return;
     //weights bounds
     double rb = getParam("rbf_weightbound").getValue().toDouble();
     for(int i=0;i<nodes;i++)
@@ -586,74 +606,33 @@ void  RbfProblem::matrix_mult(Matrix &x,Matrix &y,Matrix &z)
 
 void RbfProblem::matrix_inverse(Matrix &x,bool &error_flag,Matrix &c)
 {
-
-    error_flag =false;
-    int npivot;
-    double det;
-    int pass, row, col, maxrow, i, j;
-    double temp, pivot, mult;
-    int n=x.size();
-     for(i=0; i<n; ++i) {
-        for(j=0; j<n; ++j) {
-            if(i==j) {
-            c[i][j] = 1.0;
-            } else {
-            c[i][j] = 0.0;
-              }
+    const int n = static_cast<int>(x.size());
+    error_flag = false;
+    if (n == 0 || static_cast<int>(c.size()) != n) { error_flag = true; return; }
+    for (int i=0;i<n;++i) {
+        if (static_cast<int>(x[i].size()) != n || static_cast<int>(c[i].size()) != n) {
+            error_flag = true; return;
         }
-       }
-
-       det=1.0;
-       npivot=0;
-
-
-       for(pass=0; pass<n; ++pass) {
-        maxrow=pass;
-        for(row=pass; row<n; ++row)
-            if(fabs(x[row][pass]) > fabs(x[maxrow][pass]))
-            maxrow=row;
-
-        if(maxrow != pass)
-            ++npivot;
-
-        for(col=0; col<n; ++col) {
-            temp=x[pass][col];
-            x[pass][col] = x[maxrow][col];
-            x[maxrow][col] = temp;
-            temp = c[pass][col];
-            c[pass][col] = c[maxrow][col];
-            c[maxrow][col] = temp;
+        for (int j=0;j<n;++j) c[i][j] = (i==j ? 1.0 : 0.0);
+    }
+    for (int k=0;k<n;++k) {
+        int pivotRow=k;
+        for (int i=k+1;i<n;++i)
+            if (std::fabs(x[i][k])>std::fabs(x[pivotRow][k])) pivotRow=i;
+        double rowScale=0.0;
+        for (int j=k;j<n;++j) rowScale=std::max(rowScale,std::fabs(x[pivotRow][j]));
+        if (!std::isfinite(rowScale) || rowScale==0.0 ||
+            std::fabs(x[pivotRow][k]) <= 1e-14*rowScale) {
+            error_flag=true; return;
         }
-
-
-        pivot = x[pass][pass];
-        det *= pivot;
-
-        if(fabs(det) < 1.0e-40) {
-            error_flag =true;
-
+        if (pivotRow!=k) { std::swap(x[pivotRow],x[k]); std::swap(c[pivotRow],c[k]); }
+        const double pivot=x[k][k];
+        for (int j=0;j<n;++j) { x[k][j]/=pivot; c[k][j]/=pivot; }
+        for (int i=0;i<n;++i) if (i!=k) {
+            const double t=x[i][k];
+            for (int j=0;j<n;++j) { x[i][j]-=t*x[k][j]; c[i][j]-=t*c[k][j]; }
         }
-
-
-        for(col=0; col<n; ++col) {
-            x[pass][col] = x[pass][col]/pivot;
-            c[pass][col] = c[pass][col]/pivot;
-        }
-
-        for(row=0; row<n; ++row) {
-            if(row != pass) {
-                mult = x[row][pass];
-                for(col=0; col<n; ++col) {
-                    x[row][col] = x[row][col] - x[pass][col] * mult;
-                    c[row][col] = c[row][col] - c[pass][col] * mult;
-                }
-            }
-        }
-
-       }
-
-       if(npivot % 2 != 0)
-        det = det * (-1.0);
+    }
 }
 
 void  RbfProblem::matrix_pseudoinverse(Matrix &a,bool &error_flag)
@@ -683,6 +662,85 @@ void  RbfProblem::matrix_transpose(Matrix &x,Matrix &xx)
     }
 }
 
+// Least-squares solution by Householder QR, with a tiny ridge fallback.
+// This routine does not depend on matrixC/matrixD or on the number of patterns.
+static bool rbfSolveWeights(const Matrix &a, const Data &y, Data &w, double ridge)
+{
+    const int n=static_cast<int>(a.size());
+    const int k=static_cast<int>(w.size());
+    if (n==0 || k==0 || static_cast<int>(y.size())!=n) return false;
+    const int m=n+(ridge>0.0 ? k : 0);
+    Matrix q(m,Data(k,0.0));
+    Data rhs(m,0.0);
+    for (int i=0;i<n;++i) {
+        if (static_cast<int>(a[i].size())!=k || !std::isfinite(y[i])) return false;
+        rhs[i]=y[i];
+        for (int j=0;j<k;++j) {
+            if (!std::isfinite(a[i][j])) return false;
+            q[i][j]=a[i][j];
+        }
+    }
+    if (ridge>0.0) for (int j=0;j<k;++j) q[n+j][j]=std::sqrt(ridge);
+    if (m<k) return false;
+    for (int j=0;j<k;++j) {
+        double norm=0.0;
+        for (int i=j;i<m;++i) norm=std::hypot(norm,q[i][j]);
+        if (!(norm>1e-14) || !std::isfinite(norm)) return false;
+        const double alpha=(q[j][j]>=0.0 ? -norm : norm);
+        Data v(m-j);
+        for (int i=j;i<m;++i) v[i-j]=q[i][j];
+        v[0]-=alpha;
+        double vv=0.0;
+        for (double z:v) vv+=z*z;
+        if (!(vv>0.0) || !std::isfinite(vv)) return false;
+        const double beta=2.0/vv;
+        for (int col=j;col<k;++col) {
+            double dot=0.0;
+            for (int i=j;i<m;++i) dot+=v[i-j]*q[i][col];
+            for (int i=j;i<m;++i) q[i][col]-=beta*v[i-j]*dot;
+        }
+        double dot=0.0;
+        for (int i=j;i<m;++i) dot+=v[i-j]*rhs[i];
+        for (int i=j;i<m;++i) rhs[i]-=beta*v[i-j]*dot;
+    }
+    for (int j=k-1;j>=0;--j) {
+        double sum=rhs[j];
+        for (int h=j+1;h<k;++h) sum-=q[j][h]*w[h];
+        if (!std::isfinite(q[j][j]) || std::fabs(q[j][j])<1e-14) return false;
+        w[j]=sum/q[j][j];
+        if (!std::isfinite(w[j])) return false;
+    }
+    return true;
+}
+
+void RbfProblem::phase2()
+{
+    const int n=trainDataset->count();
+    const int k=static_cast<int>(centers.size());
+    error_flag=true;
+    std::fill(weight.begin(),weight.end(),0.0);
+    if (n<=0 || k<=0) return;
+    Matrix a(n,Data(k,0.0));
+    Data y(n,0.0);
+    for (int p=0;p<n;++p) {
+        Data xp=trainDataset->getXPoint(p);
+        y[p]=trainDataset->getYPoint(p);
+        for (int j=0;j<k;++j) a[p][j]=gaussian(xp,centers[j],variances[j]);
+    }
+    Data candidate(k,0.0);
+    // Prefer unregularized least squares; fall back to a small ridge term
+    // when the system is rank-deficient or has fewer rows than columns.
+    if (!rbfSolveWeights(a,y,candidate,0.0)) {
+        double scale=0.0;
+        for (const auto &row:a) for (double v:row) scale+=v*v;
+        scale=std::max(1.0,scale/static_cast<double>(k));
+        std::fill(candidate.begin(),candidate.end(),0.0);
+        if (!rbfSolveWeights(a,y,candidate,1e-10*scale)) return;
+    }
+    weight=candidate;
+    error_flag=false;
+}
+
 void    RbfProblem::originalTrain()
 {
     //phase1
@@ -690,53 +748,8 @@ void    RbfProblem::originalTrain()
     vector<Data> xpoint = trainDataset->getAllXpoint();
     vector<int> teamElements;
     runKmeans(xpoint,nodes,centers,variances,teamElements);
+    phase2();
 
-
-    //phase2
-
-    if(trainA.size()==0)
-    {
-        RealOutput.resize(trainDataset->count());
-        trainA.resize(trainDataset->count());
-        trA.resize(centers.size());
-        for(int i=0;i<trainA.size();i++)
-        {
-            trainA[i].resize(centers.size());
-            RealOutput[i].resize(1);
-           }
-        for(int i=0;i<trA.size();i++)
-            trA[i].resize(trainDataset->count());
-        matrixE.resize(centers.size());
-        matrixC.resize(centers.size());
-        matrixD.resize(centers.size());
-        for(int i=0;i<matrixE.size();i++)
-        {
-            matrixE[i].resize(centers.size());
-            matrixD[i].resize(centers.size());
-            matrixC[i].resize(trainDataset->count());
-        }
-
-    }
-    int i,j;
-    for(i=0;i<trainA.size();i++)
-    {
-
-        RealOutput[i][0]=trainDataset->getYPoint(i);
-        for(j=0;j<centers.size();j++)
-        {
-          trainA[i][j]=gaussian(xpoint[i],centers[j],variances[j]);
-        }
-    }
-    matrix_pseudoinverse(trainA,error_flag);
-    if(error_flag) return;
-
-    Matrix pw;
-    pw.resize(centers.size());
-    for(int i=0;i<pw.size();i++)
-        pw[i].resize(1);
-    matrix_mult(matrixC,RealOutput,pw);
-    for(i=0;i<pw.size();i++)
-        weight[i]=pw[i][0];
 
 }
 

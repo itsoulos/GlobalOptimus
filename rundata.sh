@@ -3,9 +3,9 @@ METHOD=Genetic
 #Available local search methods: bfgs, lbfgs, gradient, nelderMead, adam
 LOCALSEARCH=bfgs
 #Available samplers: uniform, mlp, rbf, maxwell, triangular, kmeans, dist
-SAMPLER=dist
+SAMPLER=uniform
 #Available stopping rules: maxiters, doublebox, similarity
-TERMINATION=similarity
+TERMINATION=doublebox
 #Available values: mlp, rbf, frbf,gdf, nnc, rule
 MODEL=rbf
 
@@ -47,7 +47,7 @@ elif [ $MODEL = "fc" ]; then
   MODELPARAMS="--model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --fc_createmodel=$CREATEMODEL --fc_evaluatemodel=$EVALUATEMODEL --fc_popcount=500 --fc_popsize=200 --fc_popgens=200 --fc_features=$FEATURES --fc_createparams=$CREATEPARAMS --fc_evaluateparams=$EVALPARAMS --fc_balanceclass=no"
   
 elif [ $MODEL = "rbf" ]; then
-  MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test"
+  MODELPARAMS="--opt_method=$METHOD --rbf_nodes=10 --rbf_factor=2.0 --model_trainfile=$DATAPATH/$1.train --model_testfile=$DATAPATH/$1.test --rbf_trainseparate=yes"
 elif [ $MODEL = "airbf" ]; then
 ##rbf_train.  Rbf trainig method. Possible values: optimus (default), rbf_gd, rbf_adam, rbf_bfgs
 ##rbf_nodes.  Number of rbf nodes (default 10).
@@ -170,7 +170,7 @@ elif [ $METHOD = "Genetic" ]; then
   #gen_count:		number of chromosomes
   #gen_maxiters:		maximum number of generations
 
-  METHODPARAMS="--gen_lrate=0.000 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=500 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
+  METHODPARAMS="--gen_lrate=0.001 --gen_srate=0.1 --gen_mrate=0.05 --gen_tsize=8 --gen_selection=tournament --gen_crossover=double --gen_mutation=double --gen_count=500 --gen_maxiters=500 --gen_lsearchmethod=none --gen_lsearchgens=20 --gen_lsearchitems=20"
 elif [ $METHOD = "Multistart" ]; then
 
   #ms_samples: number of multistart samples

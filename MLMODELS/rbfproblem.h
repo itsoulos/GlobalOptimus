@@ -19,6 +19,7 @@ private:
     Data weight;
     vector<Data> centers;
     Data variances;
+    bool separateTrain=false;
     /**
      * @brief gaussianDerivative
      * @param x
@@ -201,6 +202,8 @@ public:
     adept::adouble aneuronOutput( vector<adept::adouble> &x, vector<double> &patt, unsigned pattDim, unsigned offset);
     adept::adouble afunmin( vector<adept::adouble> &x, vector<double> &x1 );
 #endif
+
+    void phase2();
     virtual ~RbfProblem();
 };
 
